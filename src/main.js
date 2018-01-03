@@ -4,6 +4,7 @@ import Vue from 'vue'
 // import FastClick from 'fastclick'
 import router from '@/router/index'
 import './util/flexible'
+import './components' // 全局组件
 import App from './App'
 
 // FastClick.attach(document.body)

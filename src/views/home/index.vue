@@ -1,17 +1,27 @@
 <template>
-  <div class="home">
-    <div style="text-align: center">这是首页要</div>
+  <div class="p-home-index">
+    <community-card />
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import Component from 'vue-class-component'
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
-  @Component()
-  export default class notFound extends Vue {
+import CommunityCard from '@/components/communityCard'
 
+@Component({
+  name: 'home-index',
+  components: {
+    CommunityCard
   }
+})
+export default class HomeIndex extends Vue {
+
+}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+.p-home-index {
+
+}
 </style>
