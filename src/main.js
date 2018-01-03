@@ -3,9 +3,21 @@
 import Vue from 'vue'
 // import FastClick from 'fastclick'
 import router from '@/router/index'
-import './util/flexible'
 import './components' // 全局组件
 import App from './App'
+import './filters'
+import './util/flexible'
+
+import store from './store/'
+
+// import { AlertPlugin, ToastPlugin, WechatPlugin } from 'vux'
+
+// Vue.use(AlertPlugin)
+// Vue.use(ToastPlugin)
+// Vue.use(WechatPlugin)
+// Vue.use(ConfirmPlugin, {
+//   $layout: 'VIEW_BOX'
+// })
 
 // FastClick.attach(document.body)
 
