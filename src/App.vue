@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
+    <!-- <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
             @on-index-change="goSomeWhere">
       <tabbar-item :selected="isSelected(tab.src)"
                    :key="index"
@@ -11,7 +11,7 @@
         <img slot="icon-active" :src="tab.selectIcon">
         <span slot="label">{{tab.label}}</span>
       </tabbar-item>
-    </tabbar>
+    </tabbar> -->
   </div>
 </template>
 
