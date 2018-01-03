@@ -1,9 +1,6 @@
 <template>
-  <div class="not-found">
-    <div class="bg-img">
-      <img src="./../../assets/page/404@3x.png" alt="">
-      <p class="fs30">页面走丢了，等一下再试试吧</p>
-    </div>
+  <div class="home">
+    <div style="text-align: center">这是首页</div>
   </div>
 </template>
 <script>
