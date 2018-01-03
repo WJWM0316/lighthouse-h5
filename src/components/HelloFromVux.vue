@@ -36,6 +36,7 @@ export default {
 
   & > h1 {
     font-size: 16px;
+    border-bottom: solid 1px #ccc; /* no */
   }
 }
 .logo {
