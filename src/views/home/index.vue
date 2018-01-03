@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div style="text-align: center">这是首页</div>
+    <div style="text-align: center">这是首页要</div>
   </div>
 </template>
 <script>

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // 引入模块路由
 import homes from './home'
-import tests from './test'
 import store from './../store'
 // 请求接口
 // import {isLoginApi} from '@/api/page/account'
@@ -11,7 +10,6 @@ Vue.use(Router)
 
 const routes = [
   ...homes, // 首页
-  ...tests // test
 ]
 
 const router = new Router({
