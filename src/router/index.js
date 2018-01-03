@@ -5,7 +5,7 @@ import homes from './home'
 import tests from './test'
 import store from './../store'
 // 请求接口
-import {isLoginApi} from '@/api/page/account'
+// import {isLoginApi} from '@/api/page/account'
 
 Vue.use(Router)
 

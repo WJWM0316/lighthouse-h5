@@ -3,7 +3,7 @@
 import Vue from 'vue'
 // import FastClick from 'fastclick'
 import router from '@/router/index'
-import './util/flexiable'
+import './util/flexible'
 import App from './App'
 
 // FastClick.attach(document.body)

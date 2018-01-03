@@ -33,4 +33,3 @@ export const UPDATE_NOVICE_LIST = 'UPDATE_NOVICE_LIST'
 
 // 显示首页banner
 export const UPDATE_NOVICE_HOME = 'UPDATE_NOVICE_HOME'
-
