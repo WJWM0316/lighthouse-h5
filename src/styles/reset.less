@@ -1,14 +1,41 @@
 // ======== 全局样式reset ========
+@import "./variables";
+@import "./mixins";
 
 html,
 body {
   height: 100%;
   width: 100%;
+  line-height: 1.42857143;
   overflow-x: hidden;
-  word-break:break-all;
 }
 
-input {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-appearance: none;
+button,
+input,
+optgroup,
+select,
+textarea {
+    color: inherit;
+    font: inherit;
+    margin: 0;
+    box-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+}
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+    vertical-align: middle;
+}
+
+audio,
+canvas,
+video,
+img {
+    max-width: 100%;
+    height: auto;
 }

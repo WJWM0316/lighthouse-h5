@@ -13,7 +13,6 @@
   "dependencies": {
     "fastclick": "^1.0.6",
     "moment": "^2.20.1",
-    "node-gyp": "^3.6.2",
     "vue": "^2.5.2",
     "vue-class-component": "^6.1.2",
     "vue-router": "^3.0.1",
