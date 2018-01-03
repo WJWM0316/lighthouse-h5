@@ -1,0 +1,49 @@
+// ======== 表单 ========
+@import "./variables";
+@import "./mixins";
+
+.form-group {
+  .setClearfix();
+  margin-left: auto;
+  margin-right: auto;
+
+  .select,
+  .input,
+  .textarea {
+    width: 100%;
+  }
+}
+
+// ==== 文件 ====
+.u-form-file {
+  position: relative;
+  overflow: hidden;
+
+  & > input[type="file"] {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+}
+
+// ==== 单选按钮 ====
+[class*="u-radio"] {
+  .setCheck(@type: radio);
+}
+
+.u-radio {
+  // &-1 === u-radio-1
+}
+
+// ==== 复选框 ====
+[class*="u-checkbox"] {
+  .setCheck(@type: checkbox);
+}
+
+.u-checkbox {
+  // &-1 === u-checkbox-1
+}

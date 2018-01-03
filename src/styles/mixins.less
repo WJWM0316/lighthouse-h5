@@ -153,9 +153,49 @@
   word-break: break-all;
 }
 
+// 富文本容器
+.setRichTextWrap () {
+  .setTextWrap();
+  text-align: justify;
+
+  img,
+  table,
+  video,
+  audio {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
 // 英文连字号断行
 .setHyphens () {
   word-wrap: break-word;
   -webkit-hyphens: auto;
   hyphens: auto;
+}
+
+// 设置flex
+.setFlex () {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+// 单选、复选框初始化
+.setCheck (@type: radio) {
+  position: relative;
+  display: inline-block;
+
+  & > input[type="@{type}"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+
+  & > label {
+    display: inline-block;
+  }
 }
