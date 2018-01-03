@@ -1,0 +1,80 @@
+// ======== mixins ========
+
+// 背景初始化
+.initBg (@color: transparent, @image: none, @pos: center, @repeat: no-repeat, @size: contain) {
+  background-color: @color;
+  background-image: @imageUrl;
+  background-position: @posw;
+  background-repeat: @repeat;
+  background-size: @bgSize;
+}
+
+// icon初始化
+.setIcon () {
+  .initBg();
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  vertical-align: middle;
+
+  &.no-offset {
+    position: static;
+    top: auto;
+  }
+}
+
+// button初始化
+.setBtn () {
+  .initBg();
+  display: inline-block;
+  border: none;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-appearance: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// 图片初始化
+.setImage (@round: 0) {
+  display: inline-block;
+  font-size: 0;
+  line-height: 1;
+  border-radius: @round;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+
+  & > img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  &.vertical > img {
+    width: auto;
+    max-height: 100%;
+  }
+
+  &.auto > img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+// 清除浮动
+.setClearfix () {
+  &::before,
+  &::after {
+    content: " ";
+    display: table;
+  }
+
+  &::after {
+    clear: both;
+  }
+}
