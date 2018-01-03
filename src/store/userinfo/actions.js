@@ -1,0 +1,34 @@
+import * as types from './mutations_types'
+
+export default {
+
+  update_userinfo: ({commit}, {userinfo}) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_USERINFO, {
+        userinfo
+      })
+      resolve()
+    })
+  },
+  update_userinfo_field: ({commit}, newField) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_USERINFO_FIELD, newField)
+      resolve()
+    })
+  },
+
+  remove_userinfo: ({commit}) => {
+    return new Promise((resolve, reject) => {
+      commit(types.REMOVE_USERINFO)
+      resolve()
+    })
+  },
+
+  update_first_reading: ({commit}) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_FIRSTREADING)
+      resolve()
+    })
+  }
+
+}
