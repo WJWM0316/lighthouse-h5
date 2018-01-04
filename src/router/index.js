@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import homes from './home'
 import centers from './center'
 import messages from './message'
+import login from './login'
 import store from './../store'
 // 请求接口
 // import {isLoginApi} from '@/api/page/account'
@@ -14,6 +15,7 @@ const routes = [
   ...homes, // 首页
   ...centers, // 我的
   ...messages, // 消息
+  ...login // 登录
 ]
 
 const router = new Router({
