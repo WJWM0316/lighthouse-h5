@@ -10,6 +10,29 @@
       </div>
       <slot name="cover-addon"></slot>
     </div>
+
+    <div class="info" :class="{ 'type-2': type === 2 }">
+      <h3 class="title" v-text="community.title"></h3>
+      <p class="desc" v-text="community.simpleIntro"></p>
+      <div class="bottom">
+        <div class="left">
+          <!-- 已结束 -->
+          <p v-if="community.isEnd">课堂已关闭</p>
+          <!-- 已加入 -->
+          <p class="time-range" v-else-if="community.isAuthor === 1 || community.isJoined === 1">开课时间：{{community.startTime * 1000 | date('YYYY年MM月DD日')}}-{{community.endTime * 1000 | date('YYYY年MM月DD日')}}</p>
+          <!-- 未加入且未开社 -->
+          <p class="countdown" v-else-if="community.duration">{{community.duration | duration}}后开启</p>
+          <!-- 未加入且已开社 -->
+          <p v-else>课堂已开启</p>
+        </div>
+        <div class="right">
+          <template v-if="community.isAuthor !== 1 && community.isJoined !== 1 && !community.isEnd">
+            <text class="residue" v-if="community.remainingJoinNum <= 0">已满员</text>
+            <text class="residue" v-else>剩余 <text class="number">{{community.remainingJoinNum}}</text> 个学位</text>
+          </template>
+        </div>
+      </div>
+    </div>
   </a>
 </template>
 <script>
@@ -38,16 +61,77 @@ export default class CommunityCard extends Vue {
   // 卡片类名集合
   cardClasses = {
     [`type-${this.type}`]: true,
-    'z-joined': this.community.isJoined === 1,
+    'z-joined': this.community.isAuthor === 1 || this.community.isJoined === 1,
     'z-full': this.community.remainingJoinNum <= 0,
     'z-unread': this.community.newMessage
   }
+
+  // 是否已结束
+  get isEnd () {
+    return this.community.endTime * 1000 < new Date().getTime()
+  }
+
+  created () {
+    if (this.community.isAuthor !== 1 && this.community.isJoined !== 1 && !this.isEnd) {
+      // 启用倒计时
+      const countdown = this.getCountdown()
+      countdown.start(this.community.startTime * 1000, (timestamp) => {
+        if (timestamp > 0) {
+          this.community.duration = timestamp
+        } else {
+          this.community.duration = 0
+        }
+      })
+    }
+  }
+
   /**
    * 点击卡片
    */
   handleTap (e) {
     // 列表页才触发点击
     this.$emit('tap-card', this.community)
+  }
+
+  /**
+   * 获取倒计时对象
+   * 先调用函数获取
+   */
+  getCountdown () {
+    let t = null
+
+    // 停止倒计时
+    const stop = (t) => {
+      if (t) {
+        clearInterval(t)
+      }
+    }
+
+    // 启动倒计时
+    const start = (endTimestamp, callback) => {
+      callback = callback && typeof callback === 'function' ? callback : function (timestamp) {}
+      stop(t) // 先停止存在的倒计时
+      const now = new Date().getTime()
+      const timestamp = endTimestamp - now >= 0 ? endTimestamp - now : 0
+      callback(timestamp)
+      if (timestamp > 0) {
+        t = setInterval(() => {
+          const cNow = new Date().getTime()
+          const cTimestamp = endTimestamp - cNow >= 0 ? endTimestamp - cNow : 0
+          callback(cTimestamp)
+          if (cTimestamp <= 0) {
+            stop(t)
+          }
+        }, 1000)
+      }
+
+      return t
+    }
+
+    return {
+      start,
+      stop
+    }
   }
 }
 </script>
@@ -152,6 +236,7 @@ export default class CommunityCard extends Vue {
         box-sizing: border-box;
         line-height: 1;
         font-size: 0;
+        font-weight: normal;
 
         .text {
           display: inline-block;
