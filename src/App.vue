@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <!-- <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
+    <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
             @on-index-change="goSomeWhere">
       <tabbar-item :selected="isSelected(tab.src)"
                    :key="index"
@@ -11,7 +11,7 @@
         <img slot="icon-active" :src="tab.selectIcon">
         <span slot="label">{{tab.label}}</span>
       </tabbar-item>
-    </tabbar> -->
+    </tabbar>
   </div>
 </template>
 
@@ -34,9 +34,6 @@ import settings from '@/config/index'
     isNavShow: function () { // 导航条是否展示
       return this.$store.getters.navIsShow
     },
-    isSelected (src) {
-      return this.$route.path === src
-    }
   },
   watch: {
   }
@@ -44,36 +41,33 @@ import settings from '@/config/index'
 export default class App extends Vue {
   tabList = [
     {
-      icon: require('./assets/home/home@3x.png'),
-      selectIcon: require('./assets/home/home_selected@3x.png'),
+      icon: require('./assets/icon/tab-lighthouse-2@3x.png'),
+      selectIcon: require('./assets/icon/invalid-name@3x.png'),
       src: '/index',
-      label: '首页'
+      label: '灯塔'
     },
     {
-      icon: require('./assets/home/zike@3x.png'),
-      selectIcon: require('./assets/home/zike_selected@3x.png'),
-      src: settings.urlService,
-      label: '约见'
+      icon: require('./assets/icon/tab-massage-2@3x.png'),
+      selectIcon: require('./assets/icon/tab-massage-1@3x.png'),
+      src: '/message',
+      label: '消息'
     },
     {
-      icon: require('./assets/home/purchased@3x.png'),
-      selectIcon: require('./assets/home/purchased_selected@3x.png'),
-      src: '/buy/course',
-      label: '已购'
-    },
-    {
-      icon: require('./assets/home/me@3x.png'),
-      selectIcon: require('./assets/home/me_selected@3x.png'),
-      src: '/user/index',
+      icon: require('./assets/icon/tab-me-2@3x.png'),
+      selectIcon: require('./assets/icon/tab-me-1@3x.png'),
+      src: '/center',
       label: '我的'
     }
   ]
   goSomeWhere (index) {
-    if (index === 1) {
-      window.location.href = this.tabList[1].src
-      return
-    }
+//    if (index === 1) {
+//      window.location.href = this.tabList[1].src
+//      return
+//    }
     this.$router.replace(this.tabList[index].src)
+  }
+  isSelected (src) {
+    return this.$route.path === src
   }
 }
 </script>
