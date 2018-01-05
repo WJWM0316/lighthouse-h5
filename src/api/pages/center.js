@@ -7,7 +7,7 @@ import { request } from '../require'
  * @param {*} data
  */
 export const getInformationApi = data => request({
-  url: '/wx/my/getInformation',
+  url: '/wap/my/getInformation',
   data
 })
 
@@ -16,6 +16,6 @@ export const getInformationApi = data => request({
  * @param {*} data
  */
 export const editInformationApi = data => request({
-  url: '/wx/my/editInformation',
+  url: '/wap/my/editInformation',
   data
 })

@@ -5,7 +5,7 @@ import { request } from '../require'
  * @param {*} data
  */
 export const getProblemListApi = data => request({
-  url: '/wx/problem/getMasterInfo',
+  url: '/wap/problem/getMasterInfo',
   data
 })
 
@@ -14,7 +14,7 @@ export const getProblemListApi = data => request({
  * @param {*} data
  */
 export const getProblemInfoApi = data => request({
-  url: '/wx/problem/getMasterProblemInfo',
+  url: '/wap/problem/getMasterProblemInfo',
   data
 })
 
@@ -23,6 +23,6 @@ export const getProblemInfoApi = data => request({
  * @param {*} data
  */
 export const replyApi = data => request({
-  url: '/wx/problem/getMasterAnswer',
+  url: '/wap/problem/getMasterAnswer',
   data
 })

@@ -51,6 +51,7 @@ import Component from 'vue-class-component'
 import { Group, XInput, XButton } from 'vux'
 import uuid from 'uuid'
 import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
+import {testApi} from '@/api/pages/login'
 
 @Component({
   name: 'login-index',
@@ -77,10 +78,22 @@ export default class LoginIndex extends Vue {
     from: '' // 1 注册 2 登录
   }
   // life cycle
-  created () {
+  async created () {
+    try {
+      const resp = await testApi({type: 1})
+      console.log(resp)
+    } catch (e) {
+      console.log(e)
+    }
     this.refreshCode()
   }
+  get sendSmsType () { // 短信验证码-类型
+    return this.isLogin ? 2 : 1 // 1自客注册 2自客登录
+  }
 
+  onSend () { // 显示图片验证码
+    this.refreshCode()
+  }
   mounted () {
   }
   refreshCode () {

@@ -5,7 +5,7 @@ import { request } from '../require'
  * @param {*} data
  */
 export const publishApi = data => request({
-  url: '/wx/beacon/publish',
+  url: '/wap/beacon/publish',
   isLoading: false,
   data
 })

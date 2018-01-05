@@ -6,7 +6,7 @@ import { request } from '../require'
  */
 export const getBeaconsApi = data => request({
   method: 'get',
-  url: '/wx/beacon',
+  url: '/wap/beacon',
   needUserInfo: false,
   data
 })

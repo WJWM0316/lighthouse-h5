@@ -3,7 +3,7 @@ import {request} from '../require.js'
 // 获取集call页面信息
 export const getCallInfoApi = (data) => {
   return request({
-    url: '/wx/call/getInfo',
+    url: '/wap/call/getInfo',
     data,
     needUserInfo: false,
     isLoading: true
@@ -13,7 +13,7 @@ export const getCallInfoApi = (data) => {
 // 点击打call
 export const clickCallApi = (data) => {
   return request({
-    url: '/wx/call/click',
+    url: '/wap/call/click',
     data,
     isLoading: true
   })
@@ -22,7 +22,7 @@ export const clickCallApi = (data) => {
 // 社区基本信息
 export const getCommunityApi = (data) => {
   return request({
-    url: '/wx/beacon/community',
+    url: '/wap/beacon/community',
     data,
     isLoading: true
   })
@@ -31,7 +31,7 @@ export const getCommunityApi = (data) => {
 // 朋友圈
 export const getCirclesApi = (data) => {
   return request({
-    url: '/wx/beacon/circles',
+    url: '/wap/beacon/circles',
     data,
     isLoading: true
   })
@@ -40,7 +40,7 @@ export const getCirclesApi = (data) => {
 // 交流社区
 export const getCommunicationsApi = (data) => {
   return request({
-    url: '/wx/beacon/communications',
+    url: '/wap/beacon/communications',
     data,
     isLoading: true
   })
@@ -49,7 +49,7 @@ export const getCommunicationsApi = (data) => {
 // 个人详情
 export const getPersonalDetailsApi = (data) => {
   return request({
-    url: '/wx/my/personalDetails',
+    url: '/wap/my/personalDetails',
     data,
     isLoading: true
   })
@@ -57,7 +57,7 @@ export const getPersonalDetailsApi = (data) => {
 // 朋友列表
 export const classmatesApi = (data) => {
   return request({
-    url: '/wx/beacon/classmates',
+    url: '/wap/beacon/classmates',
     data,
   })
 }
@@ -65,7 +65,7 @@ export const classmatesApi = (data) => {
 // 提问详情
 export const getAskInfoApi = (data) => {
   return request({
-    url: '/wx/problem/getInfo',
+    url: '/wap/problem/getInfo',
     data,
     isLoading: true
   })
@@ -74,7 +74,7 @@ export const getAskInfoApi = (data) => {
 // 点赞
 export const setFavorApi = (data) => {
   return request({
-    url: '/wx/currency/favor',
+    url: '/wap/currency/favor',
     data,
     isLoading: true
   })
@@ -83,7 +83,7 @@ export const setFavorApi = (data) => {
 // 评论
 export const setSubmitCommentApi = (data) => {
   return request({
-    url: '/wx/comment/submitComment',
+    url: '/wap/comment/submitComment',
     data,
   })
 }
@@ -91,7 +91,7 @@ export const setSubmitCommentApi = (data) => {
 // 删除
 export const delCommontApi = (data) => {
   return request({
-    url: '/wx/beacon/commonDel',
+    url: '/wap/beacon/commonDel',
     data,
   })
 }
@@ -99,7 +99,7 @@ export const delCommontApi = (data) => {
 // 提问
 export const submitProblemApi = (data) => {
   return request({
-    url: '/wx/problem/click',
+    url: '/wap/problem/click',
     data,
     isLoading: true
   })
@@ -108,7 +108,7 @@ export const submitProblemApi = (data) => {
 // 追问
 export const submitAnswerApi = (data) => {
   return request({
-    url: '/wx/problem/answer',
+    url: '/wap/problem/answer',
     data,
     isLoading: true
   })
@@ -117,7 +117,7 @@ export const submitAnswerApi = (data) => {
 // 播放音频
 export const playAudioApi = (data) => {
   return request({
-    url: '/wx/beacon/clicked',
+    url: '/wap/beacon/clicked',
     data,
     isLoading: true
   })
@@ -128,7 +128,7 @@ export const playAudioApi = (data) => {
 // 获取评论列表
 export const getCommentListApi = (data) => {
   return request({
-    url: '/wx/comment/list',
+    url: '/wap/comment/list',
     data,
     isLoading: true
   })
@@ -137,7 +137,7 @@ export const getCommentListApi = (data) => {
 // 问题详情
 export const getProblemDetailApi = (data) => {
   return request({
-    url: '/wx/problem/detail',
+    url: '/wap/problem/detail',
     data,
     isLoading: true
   })
@@ -146,7 +146,7 @@ export const getProblemDetailApi = (data) => {
 // 朋友圈详情
 export const getCircleDetailApi = (data) => {
   return request({
-    url: '/wx/beacon/circleInfo',
+    url: '/wap/beacon/circleInfo',
     data,
     isLoading: true
   })
@@ -155,7 +155,7 @@ export const getCircleDetailApi = (data) => {
 // 帖子详情
 export const getPostDetailApi = (data) => {
   return request({
-    url: '/wx/post/detail',
+    url: '/wap/post/detail',
     data,
     isLoading: true
   })
@@ -164,7 +164,7 @@ export const getPostDetailApi = (data) => {
 // 帖子详情
 export const getCommentDetailApi = (data) => {
   return request({
-    url: '/wx/comment/info',
+    url: '/wap/comment/info',
     data,
     isLoading: true
   })

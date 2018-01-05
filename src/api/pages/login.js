@@ -1,9 +1,9 @@
 import {request} from '../require.js'
 
-// 注册
+// test
 export const testApi = (data) => {
   return request({
-    url: '/test',
+    url: '/wap/currency/getGeneralList',
     data
   })
 }
@@ -11,7 +11,7 @@ export const testApi = (data) => {
 // 登录
 export const loginApi = (data) => {
   return request({
-    url: '/wx/login',
+    url: '/wap/login',
     data
   })
 }
@@ -19,7 +19,7 @@ export const loginApi = (data) => {
 export const grantInformationApi = (data) => {
   console.log(data)
   return request({
-    url: '/wx/my/grantInformation',
+    url: '/wap/my/grantInformation',
     data,
     isLoading: false
   })
@@ -27,7 +27,7 @@ export const grantInformationApi = (data) => {
 // code 给后端去换session_key
 export const getSessionKeyApi = (data) => {
   return request({
-    url: '/wx/my/getSessionKey',
+    url: '/wap/my/getSessionKey',
     data,
     isLoading: false
   })
@@ -35,14 +35,14 @@ export const getSessionKeyApi = (data) => {
 // 是否绑定手机
 export const isBindPhoneApi = (data) => {
   return request({
-    url: '/wx/my/isBindPhone',
+    url: '/wap/my/isBindPhone',
     data
   })
 }
 // 获取短信验
 export const smsApi = (data) => {
   return request({
-    url: '/wx/sms',
+    url: '/wap/sms',
     data
   })
 }
@@ -50,7 +50,9 @@ export const smsApi = (data) => {
 // 获取短信验
 export const getCodeImg = (data) => {
   return request({
-    url: '/wx/captchas',
+    url: '/wap/captchas',
     data
   })
 }
+
+

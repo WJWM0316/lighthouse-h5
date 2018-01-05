@@ -7,6 +7,6 @@ import { request } from '../require'
  * @param {*} data
  */
 export const messageListApi = data => request({
-  url: '/wx/my/messageList',
+  url: '/wap/my/messageList',
   data
 })

@@ -8,9 +8,10 @@ import router from '../router/index.js'
 
 Vue.use(VueAxios, axios)
 // 动态设置本地和线上接口域名
-Vue.axios.defaults.baseURL = settings.host + '/wap'
+Vue.axios.defaults.baseURL = settings.host
 
 export const request = ({type = 'post', url, data = {}, config = {}, globalLoading = false} = {}) => {
+  console.log('url', url)
   let datas = type === 'get' ? {params: data} : data
   return Vue.axios[type](url, datas, config)
     .catch(response => {
