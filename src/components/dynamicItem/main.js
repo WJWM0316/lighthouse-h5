@@ -179,13 +179,21 @@ export default class dynamicItem extends Vue {
    * 发表评论
    */
   comment () {
-    console.log('发表评论')
+    const itemIndex = this.itemIndex
+    this.$emit('operation', {
+      eventType: 'comment',
+      itemIndex
+    })
   }
   /**
    * 点赞
    */
   praise () {
-    console.log('点赞')
+    const itemIndex = this.itemIndex
+    this.$emit('operation', {
+      eventType: 'praise',
+      itemIndex
+    })
   }
   /**
    * 播放对应音频
@@ -195,13 +203,10 @@ export default class dynamicItem extends Vue {
     const itemIndex = this.itemIndex
     if (problemIndex >= 0) {
       url = this.item.answers[problemIndex].file.fileUrl
-      console.log('音频播放: 问答 路径: ', url)
     } else {
       url = this.item.files[0].fileUrl
-      console.log('音频播放: 帖子/朋友圈 路径: ', url)
     }
 
-    console.log('index: ', itemIndex)
     this.$emit('audioEvent', {
       eventType: 'play',
       url,
@@ -236,7 +241,11 @@ export default class dynamicItem extends Vue {
    * 删除
    */
   del () {
-    console.log('删除')
+    const itemIndex = this.itemIndex
+    this.$emit('operation', {
+      eventType: 'del',
+      itemIndex
+    })
   }
 
   // -------------------- 页面跳转 ------------------------
