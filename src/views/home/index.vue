@@ -57,6 +57,10 @@ export default class HomeIndex extends Vue {
     { url: '/center', img: 'https://zike-uploads-pro.oss-cn-shenzhen.aliyuncs.com/Uploads/static/beacon/sanyue.jpg' }
   ]
 
+  created () {
+    console.log(this)
+  }
+
   handleTapBanner (item) {
     this.$router.push(item.url)
   }
