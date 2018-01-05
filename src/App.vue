@@ -1,12 +1,11 @@
 <template>
-  <div id="app">
+  <div id="app" style="height: 100%">
     <router-view></router-view>
     <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
             @on-index-change="goSomeWhere">
       <tabbar-item :selected="isSelected(tab.src)"
                    :key="index"
-                   v-for="tab,index in tabList"
-      >
+                   v-for="(tab, index) in tabList">
         <img slot="icon" :src="tab.icon">
         <img slot="icon-active" :src="tab.selectIcon">
         <span slot="label">{{tab.label}}</span>
@@ -72,6 +71,12 @@ export default class App extends Vue {
 }
 </script>
 
-<style lang="less" type="text/less">
+<style lang="less">
 @import "./styles/index";
+
+.home-nav {
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 375px;
+}
 </style>
