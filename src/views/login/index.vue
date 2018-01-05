@@ -32,12 +32,6 @@
                       :type="sendSmsType"></time-btn>
           </span>
         </x-input>
-        <!--<input  maxlength="4" type="number" placeholder="短信验证码"-->
-                <!--class="input-common short-input"-->
-                <!--bindinput="bindKeyInput('sms')"-->
-                <!--value="{{loginInfo.sms}}"-->
-        <!--/>-->
-        <!--<button class="counter button-reset"  @tap="getSmsCode" disabled="{{countDisable}}">{{text}}</button>-->
       </div>
       <!--<button class="{{loginBtnValid ? 'login-btn' : 'login-btn btn-disabled'}}" hover-class="login-btn-hover" @tap="login"-->
               <!--disabled="{{!loginBtnValid}}">登录-->
@@ -63,6 +57,7 @@ import {testApi} from '@/api/pages/login'
   }
 })
 export default class LoginIndex extends Vue {
+  sendSmsType = 9 // 6.小程序登录,9微信浏览器小灯塔登录
   isComplete = false // 是否显示完善资料页面
   showClear = false // 输入框是否显示清空的按钮
   isLogin = true // 是否为登录
@@ -87,9 +82,6 @@ export default class LoginIndex extends Vue {
     }
     this.refreshCode()
   }
-  get sendSmsType () { // 短信验证码-类型
-    return this.isLogin ? 2 : 1 // 1自客注册 2自客登录
-  }
 
   onSend () { // 显示图片验证码
     this.refreshCode()
@@ -113,7 +105,7 @@ export default class LoginIndex extends Vue {
     }
     .img-container{
       text-align: center;
-      margin-top: 50px;
+      padding-top: 50px;
       .lh-logo{
         width: 70px;
         height: 70px;
