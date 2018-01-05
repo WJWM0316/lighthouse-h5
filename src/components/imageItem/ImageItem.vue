@@ -52,8 +52,12 @@ export default class Image extends Vue {}
     border-radius: 50%;
   }
 
+  & > img {
+    max-width: none;
+  }
+
   &.horizontal > img {
-    max-width: 100%;
+    width: 100%;
     height: auto;
   }
 
