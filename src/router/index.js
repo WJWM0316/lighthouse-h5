@@ -16,7 +16,7 @@ const routes = [
   ...homes, // 首页
   ...centers, // 我的
   ...messages, // 消息
-  ...page
+  ...page,
   ...login // 登录
 ]
 
