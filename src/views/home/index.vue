@@ -1,34 +1,30 @@
 <template>
   <div class="p-body p-home-index">
-    <scroller
-      :on-refresh="refresh"
-      :on-infinite="infinite">
-      <div class="banners">
-        <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="4000" :aspect-ratio="290 / 345">
-          <swiper-item v-for="(item, index) in banners" :key="`banner_${index}`">
-            <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item :src="item.img" mode="horizontal" /></a>
-          </swiper-item>
-        </swiper>
+    <div class="banners">
+      <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="4000" :aspect-ratio="290 / 345">
+        <swiper-item v-for="(item, index) in banners" :key="`banner_${index}`">
+          <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item :src="item.img" mode="horizontal" /></a>
+        </swiper-item>
+      </swiper>
+    </div>
+    <div class="communities">
+      <h3 class='title'>我开设的灯塔</h3>
+      <div class="list">
+        <community-card />
       </div>
-      <div class="communities">
-        <h3 class='title'>我开设的灯塔</h3>
-        <div class="list">
-          <community-card />
-        </div>
+    </div>
+    <div class="communities">
+      <h3 class='title'>我加入的灯塔</h3>
+      <div class="list">
+        <community-card />
       </div>
-      <div class="communities">
-        <h3 class='title'>我加入的灯塔</h3>
-        <div class="list">
-          <community-card />
-        </div>
+    </div>
+    <div class="communities">
+      <h3 class='title'>精选灯塔</h3>
+      <div class="list">
+        <community-card />
       </div>
-      <div class="communities">
-        <h3 class='title'>精选灯塔</h3>
-        <div class="list">
-          <community-card />
-        </div>
-      </div>
-    </scroller>
+    </div>
 
     <!-- <bottom-loading :end="pagination.isLastPage" /> -->
   </div>
@@ -52,6 +48,7 @@ import ListMixin from '@/mixins/list'
   mixins: [ListMixin]
 })
 export default class HomeIndex extends Vue {
+
   // banner图片列表
   banners = [
     { url: '/message', img: 'https://zike-uploads-pro.oss-cn-shenzhen.aliyuncs.com/Uploads/static/beacon/head-banner.png' },
@@ -59,6 +56,7 @@ export default class HomeIndex extends Vue {
   ]
 
   created () {
+    console.log(this.scroller)
   }
 
   handleTapBanner (item) {
