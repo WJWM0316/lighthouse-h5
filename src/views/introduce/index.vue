@@ -1,11 +1,9 @@
 <template>
   <div class="big-shot-introduce">
-    <dynamic :hideCommentBtn="true"
-             :hidePraiseBtn="true"
-             :hideCommentArea="true"
+    <dynamic :hideCommentArea="false"
              :showDelBtn="true"
-             :showIdentification="true"
-             :showLightHouseInfo="true"
+             :showIdentification="false"
+             :showLightHouseInfo="false"
     ></dynamic>
   </div>
 </template>

@@ -16,7 +16,41 @@
 
       <!-- 问答类型 -->
       <!-- 发表内容 -->
-      <div v-if="item.modelType === 'problem'" class="publish-content problem"></div>
+      <div v-if="item.modelType === 'problem'" class="publish-content problem">
+
+        <p class="content-text">问：{{item.content}}</p>
+
+        <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
+
+          <!-- 追问 -->
+          <div class="content-problem" v-if="problemItem.answerType === 1">
+            <p>追问: {{problemItem.content}}</p>
+          </div>
+          <!-- 回答 -->
+          <div class="content-problem" v-else>
+            <img class="user-image" :src="problemItem.releaseUser.avatar" />
+            <!-- 纯文本 -->
+            <p v-if="problemItem.type === 1">{{problemItem.content}}</p>
+            <!-- 音频 -->
+            <div v-else :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">
+              <div class="progress-container">
+                <div class="progress" :style="{width: (problemItem.progress ? problemItem.progress : 0) + '%'}"></div>
+              </div>
+              <div class="audio-controller-container">
+                <div class="audio-controller">
+                  <div :class="{play: !problemItem.musicState, playing: problemItem.musicState === 1, loading: problemItem.musicState === 2}">
+                    <img class="icon-play" src="./../../assets/icon/music_play.png">
+                    <img class="icon-loading rotateZ" src="./../../assets/icon/music_loading.png">
+                    <img class="icon-playing" src="./../../assets/icon/music_listen.gif">
+                  </div>
+                  <span class="duration">{{problemItem.file.duration}}s</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
 
       <!-- 帖子类型 -->
       <!-- 发表内容 类型:0.无文件 1.音频 2.视频 3.图片 4.文件 -->
@@ -26,9 +60,9 @@
         <p class="content-text" v-if="item.circleType === 0">{{item.content}}</p>
 
         <!-- 音频 -->
-        <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}">
+        <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
           <div class="progress-container">
-            <div class="progress" style="width: 50%"></div>
+            <div class="progress" :style="{width: (item.progress ? item.progress : 0) + '%'}"></div>
           </div>
           <div class="audio-controller-container">
             <div class="audio-controller">
@@ -57,12 +91,12 @@
           <div class="content-images">
             <!-- 图片为 1 张时 -->
             <div class="item-image one" v-if="item.files.length === 1">
-              <img :src="item.files[0].fileUrl || '../../assets/icon/img_head_default.png'" />
+              <img :src="item.files[0].fileUrl || '../../assets/icon/img_head_default.png'" @click.stop="previewImage(item.files[0].fileUrl)" />
             </div>
 
             <!--  图片为 多 张时  -->
             <div class="item-image" v-for="file in picList" v-else>
-              <img :src="file.fileUrl || '../../assets/icon/img_head_default.png'" v-if="!file.holder" />
+              <img :src="file.fileUrl || '../../assets/icon/img_head_default.png'" v-if="!file.holder" @click.stop="previewImage(file.fileUrl)" />
             </div>
           </div>
         </div>
