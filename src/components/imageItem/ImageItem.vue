@@ -36,7 +36,7 @@ import Component from 'vue-class-component'
 export default class Image extends Vue {}
 </script>
 
-<style lang="less" scoped>
+<style lang="less" scoped type="text/less">
 // @import "../../styles/variables";
 // @import "../../styles/mixins";
 
