@@ -33,9 +33,12 @@
           </span>
         </x-input>
       </div>
-      <!--<button class="{{loginBtnValid ? 'login-btn' : 'login-btn btn-disabled'}}" hover-class="login-btn-hover" @tap="login"-->
-              <!--disabled="{{!loginBtnValid}}">登录-->
-      <!--</button>-->
+      <x-button type="primary" class="login-btn"
+                :class="loginBtnValid ? '' : 'btn-disabled'"
+                :disabled="!loginBtnValid"
+                @click.native="goSubmit"
+             >登录
+      </x-button>
     </div>
   </div>
 </template>
@@ -94,6 +97,9 @@ export default class LoginIndex extends Vue {
 //    const productUrl = `${window.location.origin}/zikeserver/wap/captchas?t=${this.requestId}`
     const randonNum = new Date().getTime()
     this.codeImgUrl = `https://www.zike.com/zikeserver/wap/captchas?t=${randonNum}`
+  }
+  get loginBtnValid() {
+    return this.info.mobile && this.info.sms
   }
 }
 </script>
@@ -155,7 +161,7 @@ export default class LoginIndex extends Vue {
         font-size: 15px;
         margin-top: 40px;
         text-align: center;
-
+        color: rgba(0, 0, 0, 0.3);
         &::after {
           content: none;
         }
