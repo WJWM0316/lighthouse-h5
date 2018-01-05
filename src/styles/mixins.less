@@ -147,10 +147,9 @@
 }
 
 // 设置flex
-.setFlex () {
+.setFlex (@direction: row, @wrap: nowrap) {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  flex-grow: @direction @wrap;
 }
 
 // 单选、复选框初始化
