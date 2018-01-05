@@ -10,11 +10,11 @@ import './util/flexible'
 
 import store from './store/'
 
-// import { AlertPlugin, ToastPlugin, WechatPlugin } from 'vux'
+import { AlertPlugin, ToastPlugin, WechatPlugin } from 'vux'
 
-// Vue.use(AlertPlugin)
-// Vue.use(ToastPlugin)
-// Vue.use(WechatPlugin)
+Vue.use(AlertPlugin)
+Vue.use(ToastPlugin)
+Vue.use(WechatPlugin)
 // Vue.use(ConfirmPlugin, {
 //   $layout: 'VIEW_BOX'
 // })

@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/zike_wap': {
-        target: 'http://demo2016.thetiger.com.cn/zikeserver',
+        target: 'https://light.house.api.ziwork.com',
         changeOrigin: true,
         pathRewrite: {
           '^/zike_wap': '/'

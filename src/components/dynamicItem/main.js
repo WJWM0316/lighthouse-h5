@@ -1,0 +1,257 @@
+
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import moment from 'moment'
+
+@Component({
+  name: 'dynamic-item',
+  props: {
+    item: {
+      type: Object,
+      required: true
+    },
+    // 对象下标
+    itemIndex: {
+      type: Number
+    },
+    // 是否隐藏评论按钮
+    hideCommentBtn: {
+      type: Boolean,
+      default: false
+    },
+    // 是否隐藏点赞按钮
+    hidePraiseBtn: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示社区信息
+    showLightHouseInfo: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示标识
+    showIdentification: {
+      type: Boolean,
+      default: false
+    },
+    // 是否删除按钮
+    showDelBtn: {
+      type: Boolean,
+      default: false
+    },
+    // 是否隐藏边框
+    hideBorder: {
+      type: Boolean,
+      default: false
+    },
+    // 是否隐藏评论区域
+    hideCommentArea: {
+      type: Boolean,
+      default: false
+    },
+
+    // 禁止内容点击事件
+    disableContentClick: {
+      type: Boolean,
+      default: false
+    },
+    // 禁止头像名字点击
+    disableUserClick: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    picList () {
+      let list = []
+      const files = this.item.files
+      if (files.length === 4) {
+        for (let i = 1; i <= files.length; i++) {
+          if (i % 3 === 0) {
+            list.push({holder: true})
+          }
+          list.push(files[i - 1])
+        }
+      } else {
+        list = files
+      }
+      return list
+    },
+    // 获取后缀对应类型
+    fileType () {
+      const fileName = this.item.files[0].fileName || ''
+      let type = 'other'
+      if (fileName) {
+        // 所有后缀类型
+        const fileTypeArr = {
+          'pdf': ['pdf'],
+          'ppt': ['ppt', 'pptx'],
+          'word': ['doc', 'docx'],
+          'xls': ['xls', 'xlsx']
+        }
+        const fileNames = fileName.split('.') // 分割字符串
+        const fileSuffix = fileNames[fileNames.length - 1] // 取得后缀
+        for (let suffix in fileTypeArr) {
+          const suffixs = fileTypeArr[suffix]
+          if (suffixs.indexOf(fileSuffix) > -1) {
+            type = suffix
+            break
+          }
+        }
+      }
+      return type
+    },
+    // 转换字节单位
+    byteStr () {
+      const fileSize = this.item.files[0].size || 0
+      let size = 0
+      if (fileSize) {
+        const company = ['B', 'KB', 'MB']
+        for (let index = 0; index < company.length; index++) {
+          const sizes = Math.pow(1024, index)
+          if (fileSize >= sizes) {
+            size = parseInt(fileSize / sizes) + ' ' + company[index]
+          }
+        }
+      } else {
+        size = '0 B'
+      }
+      return size
+    },
+    // 朋友圈发表时间展示规则
+    timeStr () {
+      let releaseTime = this.item.releaseTime || 0
+      const now = this.serverTime ? new Date(this.serverTime * 1000) : new Date()
+      let timeStr = '刚刚'
+      if (releaseTime) {
+        releaseTime = new Date(releaseTime * 1000)
+        let differ = parseInt((now.getTime() - releaseTime.getTime()) / 1000)
+        const timeCompany = {
+          m: 60,
+          h: 60 * 60,
+          d: 60 * 60 * 24
+        }
+
+        // 是否跨年 and 超过两天
+        const nowDate = {
+          y: now.getFullYear(),
+          m: now.getMonth(),
+          d: now.getDate()
+        }
+        const releaseTimeDate = {
+          y: releaseTime.getFullYear(),
+          m: releaseTime.getMonth(),
+          d: releaseTime.getDate()
+        }
+        // 是否当天
+        if (nowDate.y === releaseTimeDate.y && nowDate.m === releaseTimeDate.m && nowDate.d === releaseTimeDate.d) {
+          if (differ < timeCompany.m) { // 一分钟以内
+            timeStr = '刚刚'
+          } else if (differ < timeCompany.h) { // 一小时以内
+            timeStr = parseInt(differ / timeCompany.m) + '分钟前'
+          } else {
+            timeStr = parseInt(differ / timeCompany.h) + '小时前'
+          }
+        } else {
+          differ = parseInt((new Date(nowDate.y, nowDate.m, nowDate.d).getTime() - releaseTime.getTime()) / 1000)
+          if (differ < timeCompany.d) { // 昨天
+            timeStr = '昨天'
+          } else if (differ < timeCompany.d * 2) {
+            timeStr = '前天'
+          } else {
+            if (now.getFullYear() > releaseTime.getFullYear()) { // 超过两天且跨年
+              timeStr = moment(releaseTime).format('YY-MM-DD HH:mm')
+            } else {
+              timeStr = moment(releaseTime).format('MM-DD HH:mm')
+            }
+          }
+        }
+      }
+      return timeStr
+    },
+  }
+})
+export default class dynamicItem extends Vue {
+
+  created () {
+  }
+
+  /**
+   * 发表评论
+   */
+  comment () {
+    console.log('发表评论')
+  }
+  /**
+   * 点赞
+   */
+  praise () {
+    console.log('点赞')
+  }
+  /**
+   * 播放对应音频
+   */
+  audioPlay () {
+  }
+  /**
+   * 点击预览图片
+   */
+  previewImage () {
+  }
+  /**
+   * 打开文件
+   */
+  fileOpen () {
+  }
+  videoPlay () {
+  }
+
+  /**
+   * 删除
+   */
+  del () {
+    console.log('删除')
+  }
+
+  // -------------------- 页面跳转 ------------------------
+  toUserInfo (userId) { // 去个人详情
+    if (this.disableUserClick) {
+      return
+    }
+    console.log('去个人详情: ', userId)
+  }
+  toDetails () { // 去朋友圈、帖子、问题详情
+    if (this.disableContentClick) {
+      return
+    }
+    const item = this.item
+    console.log('item item', item)
+    const {modelType, circleId, problemId, isCanSee} = item
+    console.log('isCanSee', isCanSee)
+    if (isCanSee === 0) {
+      alert('您未加入该灯塔，不能查看。')
+      return
+    }
+    let type = 0
+    switch (modelType) {
+      case 'circle':
+        console.log('circleId')
+        type = 1
+        break
+      case 'post':
+        type = 2
+        break
+      case 'problem':
+        type = 3
+        break
+    }
+    if (type) {
+      // 跳转详情页 sourceId type
+      const sourceId = circleId || problemId
+      console.log('跳转详情页: ', sourceId, type)
+    }
+  }
+  toCommunity () { // 去大咖介绍页
+    console.log('去大咖介绍页')
+  }
+}
