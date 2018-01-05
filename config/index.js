@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/zike_wap': {
-        target: 'http://demo2016.thetiger.com.cn/zikeserver',
+      '/lighthouse_wap': {
+        target: 'https://light.house.api.ziwork.com',
         changeOrigin: true,
         pathRewrite: {
-          '^/zike_wap': '/'
+          '^/lighthouse_wap': '/'
         },
         logLevel: 'debug',
       }
@@ -62,7 +62,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/zikeweb/',
+    assetsPublicPath: '/lighthouse/',
 
     /**
      * Source Maps
