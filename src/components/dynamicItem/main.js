@@ -49,7 +49,6 @@ import moment from 'moment'
       type: Boolean,
       default: false
     },
-
     // 禁止内容点击事件
     disableContentClick: {
       type: Boolean,
@@ -168,7 +167,7 @@ import moment from 'moment'
         }
       }
       return timeStr
-    },
+    }
   }
 })
 export default class dynamicItem extends Vue {
@@ -191,12 +190,39 @@ export default class dynamicItem extends Vue {
   /**
    * 播放对应音频
    */
-  audioPlay () {
+  audioPlay (problemIndex) {
+    let url = ''
+    const itemIndex = this.itemIndex
+    if (problemIndex >= 0) {
+      url = this.item.answers[problemIndex].file.fileUrl
+      console.log('音频播放: 问答 路径: ', url)
+    } else {
+      url = this.item.files[0].fileUrl
+      console.log('音频播放: 帖子/朋友圈 路径: ', url)
+    }
+
+    console.log('index: ', itemIndex)
+    this.$emit('audioEvent', {
+      eventType: 'play',
+      url,
+      itemIndex,
+      problemIndex
+    })
   }
   /**
    * 点击预览图片
    */
-  previewImage () {
+  previewImage (img) {
+    const files = this.item.files
+    let urls = []
+    files.forEach((item) => {
+      urls.push(item.fileUrl)
+    })
+    console.log('当前图片: ', img, '图片数组: ', urls)
+    // wx.previewImage({
+    //   current: img,
+    //   urls: urls
+    // })
   }
   /**
    * 打开文件

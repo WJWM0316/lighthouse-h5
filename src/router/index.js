@@ -6,6 +6,7 @@ import centers from './center'
 import messages from './message'
 import login from './login'
 import page from './page'
+import exchange from './exchange'
 import store from './../store'
 // 请求接口
 // import {isLoginApi} from '@/api/page/account'
@@ -17,12 +18,13 @@ const routes = [
   ...centers, // 我的
   ...messages, // 消息
   ...page,
-  ...login // 登录
+  ...login, // 登录
+  ...exchange // 交换微信
 ]
 
 const router = new Router({
   mode: 'history',
-  base: '/zikeweb/',
+  base: '/lighthouse/',
   routes
 })
 
