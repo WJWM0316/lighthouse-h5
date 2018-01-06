@@ -42,8 +42,34 @@
 //      this.pagination.end = false
 //      this.getList({ page: 1 })
     }
-
+    async getList ({ page, pageSize } = {}) { // 请求列表
+      page = page || this.pagination.page || 1
+      pageSize = pageSize || this.pagination.pageSize
+      const params = {
+        page: page,
+        pageCount: pageSize
+      }
+      try {
+        const {list, total} = await applyListApi({...params, type: this.applyType})
+        this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
+        this.pagination.page = page
+        this.pagination.pageSize = pageSize
+        this.pagination.total = total
+        this.pagination.end = this.isLastPage()
+        this.pagination.busy = false
+      } catch (e) {
+        this.$vux.toast.text(e.message, 'middle')
+      }
+    }
     created () {
+      this.getList()
+      this.$vux.confirm.show({
+        // 组件除show外的属性
+        onCancel () {
+          console.log(this) // 非当前 vm
+        },
+        onConfirm () {}
+      })
     }
 
     mounted () {
