@@ -45,6 +45,25 @@ import PullTo from 'vue-pull-to'
     pullupable: {
       type: Boolean,
       default: true
+    },
+
+    // 是否没有更多数据加载了
+    isNoneData: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  watch: {
+    isNoneData: {
+      handler (val) {
+        if (this.isNoneData) {
+          this.scroller.bottomConfig = Object.assign({}, this.scroller.bottomConfig, { doneText: '没有更多内容了~' })
+        } else {
+          this.scroller.bottomConfig = Object.assign({}, this.scroller.bottomConfig, { doneText: '加载完成' })
+        }
+      },
+      immediate: true
     }
   }
 })
@@ -73,7 +92,9 @@ export default class Scroller extends Vue {
    * 上拉加载更多
    */
   handlePullup (loaded) {
-    this.$emit('pullup', loaded)
+    this.$nextTick(() => {
+      this.$emit('pullup', loaded)
+    })
   }
 }
 </script>

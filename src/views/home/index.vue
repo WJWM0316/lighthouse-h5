@@ -1,6 +1,6 @@
 <template>
   <div class="p-body p-home-index">
-    <scroller @refresh="handleRefresh" @pullup="handlePullup">
+    <scroller @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
       <div class="banners">
         <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
           <swiper-item v-for="(item, index) in banners" :key="`banner_${index}`">
@@ -8,22 +8,22 @@
           </swiper-item>
         </swiper>
       </div>
-      <div class="communities">
+      <div class="communities" v-if="creations && creations.length > 0">
         <h3 class='title'>我开设的灯塔</h3>
         <div class="list">
-          <community-card />
+          <community-card class="community-item" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
         </div>
       </div>
-      <div class="communities">
+      <div class="communities" v-if="joins && joins.length > 0">
         <h3 class='title'>我加入的灯塔</h3>
         <div class="list">
-          <community-card />
+          <community-card class="community-item" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
         </div>
       </div>
-      <div class="communities">
+      <div class="communities" v-if="communities && communities.length > 0">
         <h3 class='title'>精选灯塔</h3>
         <div class="list">
-          <community-card />
+          <community-card class="community-item" v-for="item in communities" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
         </div>
       </div>
     </scroller>
@@ -126,17 +126,14 @@ export default class HomeIndex extends Vue {
     }
   }
 
-  handleTapBanner (item) {
-    this.$router.push(item.url)
-  }
-
   /**
    * 下拉刷新
    */
   handleRefresh (loaded) {
     setTimeout(() => {
+      this.init()
       loaded('done')
-    }, 1000)
+    }, 500)
   }
 
   /**
@@ -144,8 +141,27 @@ export default class HomeIndex extends Vue {
    */
   handlePullup (loaded) {
     setTimeout(() => {
+      this.loadNext()
       loaded('done')
-    }, 1000)
+    }, 500)
+  }
+
+  /**
+   * 点击banner
+   */
+  handleTapBanner (item) {
+    this.$router.push(item.url)
+  }
+
+  /**
+   * 点击卡片
+   */
+  handleTapCard (item) {
+    if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
+      this.$router.push(`/introduce/community?communityId=${item.communityId}`)
+    } else { // 未入社跳到未入社页面
+      this.$router.push(`/introduce/index?communityId=${item.communityId}`)
+    }
   }
 }
 </script>
