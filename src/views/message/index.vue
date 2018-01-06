@@ -64,7 +64,6 @@
   .p-message-outer {
     .exchange-wx {
       font-weight: 500;
-      border-bottom: 1px solid #ededed; /* no */
       margin: 0px 15px;
       padding: 15px 0;
       .red-dot {

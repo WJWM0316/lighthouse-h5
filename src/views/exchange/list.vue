@@ -77,6 +77,7 @@
     async getList ({ page, pageSize } = {}) { // 请求列表
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
+      if (this.isLastPage && page !== 1) return
       const params = {
         page: page,
         pageCount: pageSize
@@ -94,19 +95,18 @@
     /**
      * 下拉刷新
      */
-    handleRefresh (loaded) {
-      setTimeout(() => {
-        loaded('done')
-      }, 1000)
+    async handleRefresh (loaded) {
+      await this.getList({ page: 1 })
+      loaded('done')
     }
 
     /**
      * 上拉加载
      */
-    handlePullup (loaded) {
-      setTimeout(() => {
-        loaded('done')
-      }, 1000)
+    async handlePullup (loaded) {
+      const nextPage = this.pagination.page + 1
+      await this.getList({ page: nextPage })
+      loaded('done')
     }
     created () {
       this.getList()
