@@ -4,6 +4,7 @@
     <dynamic-item v-for="item,index in dynamicList"
                   :item="item"
                   :key="index"
+                  :itemIndex="index"
                   :hideCommentBtn="hideCommentBtn"
                   :hidePraiseBtn="hidePraiseBtn"
                   :showLightHouseInfo="showLightHouseInfo"
@@ -13,6 +14,8 @@
                   :hideCommentArea="hideCommentArea"
                   :disableContentClick="disableContentClick"
                   :disableUserClick="disableUserClick"
+                  @audioEvent="audioEvent"
+                  @operation="operation"
     ></dynamic-item>
   </div>
 </template>
@@ -24,6 +27,10 @@
   @Component({
     name: 'dynamic-list',
     props: {
+      dynamicList: {
+        type: Array,
+        required: true
+      },
       // 是否隐藏评论按钮
       hideCommentBtn: {
         type: Boolean,
@@ -75,467 +82,207 @@
     }
   })
   export default class dynamicList extends Vue {
-    dynamicList = []
+
+    currentPlay = {
+      itemIndex: -1,
+      problemIndex: -1
+    }
+    music = ''
 
     created () {
-      this.dynamicList.push({
-        musicState: 0,
-        circleId: '1233214578321',
-        content: '这是一条朋友圈信息 - 纯文本',
-        circleType: 0, // 朋友圈资源类型:0.无文件 1.音频 2.视频 3.图片 4.文件
-        releaseTime: new Date().getTime() / 1000, // 发布时间
-        modelType: 'post',
-        commentTotal: 1, // 评论数量
-        favorTotal: 1, // 喜爱数量
-        Lighthouse: '毛爷爷的社区',
-        isFavor: 1, // 是否喜爱，1已点击，0未点击
-        isSelf: 1, // 是否属于本人：0.不属于；1.属于
-        releaseUser: { // 发布人信息
-          userId: '111',
-          realName: '习大大',
-          avatar: ''
-        },
-        comments: [ // 评论列表
-          {
-            userId: '',
-            realName: '毛泽东',
-            content: '啊啊啊啊',
-            isSelf: 0,
-            receiver: { // 评论指定回复用户
-              userId: '',
-              realName: ''
+    }
+
+    mounted () {
+      const music = new Audio()
+      music.autoplay = true
+
+      /**
+       * 音频加载中
+       */
+      music.onloadstart = () => {
+        this.audioStateSet('loading')
+      }
+      /**
+       * 可获取音频总时长
+       */
+      music.ondurationchange = () => {
+      }
+      /**
+       * 缓冲时触发
+       */
+      music.onprogress = () => {
+      }
+      /**
+       * 音频处于可播放状态
+       */
+      music.oncanplay = () => {
+        this.audioStateSet('playing')
+      }
+      /**
+       * 当媒介能够无需因缓冲而停止即可播放至结尾时运行脚本
+       */
+      music.oncanplaythrough = () => {
+        this.audioStateSet('playing')
+      }
+      /**
+       * 播放中
+       */
+      music.ontimeupdate = () => {
+        let progress = parseInt((music.currentTime / music.duration).toFixed(2) * 100)
+        this.audioProgressSet(progress)
+      }
+      /**
+       * 播放完成
+       */
+      music.onended = () => {
+        this.audioStateSet()
+        this.audioProgressSet()
+      }
+      /**
+       * 等待数据
+       */
+      music.onwaiting = () => {
+        this.audioStateSet('loading')
+      }
+      /**
+       * 错误
+       */
+      music.onerror = (e) => {
+      }
+      this.music = music
+    }
+
+    /**
+     * 设置当前播放状态
+     * @param state play | playing | loading
+     */
+    audioStateSet (state) {
+      const {itemIndex, problemIndex} = this.currentPlay
+      const item = this.dynamicList[itemIndex]
+
+      if (itemIndex < 0) {
+        return
+      }
+
+      let musicState = 0
+      switch (state) {
+        case 'playing':
+          musicState = 1
+          break
+        case 'loading':
+          musicState = 2
+          break
+        default:
+          musicState = 0
+          break
+      }
+
+      if (item.modelType && item.modelType === 'problem') {
+        this.dynamicList[itemIndex].answers[problemIndex].musicState = musicState
+      } else {
+        this.dynamicList[itemIndex].musicState = musicState
+      }
+    }
+
+    /**
+     * 播放进度设置
+     */
+    audioProgressSet (progress) {
+      const {itemIndex, problemIndex} = this.currentPlay
+      const item = this.dynamicList[itemIndex]
+
+      if (itemIndex < 0) {
+        return
+      }
+
+      if (item.modelType && item.modelType === 'problem') {
+        this.dynamicList[itemIndex].answers[problemIndex].progress = progress || 0
+      } else {
+        this.dynamicList[itemIndex].progress = progress || 0
+      }
+    }
+
+    audioEvent (e) {
+      const {eventType, itemIndex, problemIndex} = e
+      const temp = this.dynamicList[itemIndex]
+      let item = temp
+      if (temp.modelType === 'problem') {
+        item = temp.answers[problemIndex]
+      }
+      console.log(eventType, item)
+
+      switch (eventType) {
+        case 'play':
+          const {itemIndex: lastItemIndex, problemIndex: lastProblemIndex} = this.currentPlay
+          if (lastItemIndex !== itemIndex) {
+            this.music['src'] = e.url
+            this.audioStateSet()
+            this.audioProgressSet()
+          } else if (temp.modelType === 'problem' && lastProblemIndex !== problemIndex) {
+            this.music['src'] = e.url
+            this.audioStateSet()
+            this.audioProgressSet()
+          } else {
+            console.log(this.music.paused)
+            if (this.music.paused) {
+              this.music.play()
+              this.audioStateSet('playing')
+            } else {
+              this.music.pause()
+              this.audioStateSet()
             }
           }
-        ],
-        favors: [ // 喜爱列表
-          {
-            userId: '',
-            realName: '毛泽东'
+          this.currentPlay = {
+            itemIndex,
+            problemIndex
           }
-        ],
-        peoples: [ // 社区同学列表
-          {
-            userId: '',
-            avatar: ''
+          break
+      }
+    }
+
+    operation (e) {
+      const {eventType, itemIndex} = e
+      switch (eventType) {
+        case 'comment':
+          // :todo 评论请求
+          this.dynamicList.splice(itemIndex, 1)
+          console.log(this.dynamicList, itemIndex)
+          break
+        case 'praise':
+          // :todo 点赞请求
+          const {modelType, problemId, circleId, isFavor, favorTotal} = this.dynamicList[itemIndex]
+          let favorId = circleId || problemId || ''
+          let favorType = 0
+          switch (modelType) {
+            case 'circle':
+              favorType = 7
+              break
+            case 'post':
+              favorType = 5
+              break
+            case 'problem':
+              favorType = 4
+              break
           }
-        ]
-      })
-      this.dynamicList.push({
-        musicState: 0,
-        circleId: '',
-        content: '这是一条朋友圈信息 - 音频',
-        circleType: 1, // 朋友圈资源类型:0.无文件 1.音频 2.视频 3.图片 4.文件
-        releaseTime: new Date().getTime() / 1000, // 发布时间
-        commentTotal: 1, // 评论数量
-        favorTotal: 1, // 喜爱数量
-        isFavor: 1, // 是否喜爱，1已点击，0未点击
-        isSelf: 1, // 是否属于本人：0.不属于；1.属于
-        releaseUser: { // 发布人信息
-          userId: '111',
-          realName: '习大大',
-          avatar: ''
-        },
-        files: [ // 资源文件
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '这是一个pdf文件.pdf',
-            size: 1000,
-            duration: 10,
-            isPlayed: true
+          const params = {
+            favorId,    // 喜爱的id
+            favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
+            isFavor: isFavor ? 0 : 1     // 是否喜欢：0取消喜欢，1喜欢
           }
-        ],
-        comments: [ // 评论列表
-          {
-            userId: '',
-            realName: '毛泽东',
-            content: '啊啊啊啊',
-            isSelf: 0,
-            receiver: { // 评论指定回复用户
-              userId: '',
-              realName: ''
-            }
-          }
-        ],
-        favors: [ // 喜爱列表
-          {
-            userId: '',
-            realName: '毛泽东'
-          }
-        ],
-        peoples: [ // 社区同学列表
-          {
-            userId: '',
-            avatar: ''
-          }
-        ]
-      })
-      this.dynamicList.push({
-        musicState: 0,
-        circleId: '',
-        content: '这是一条朋友圈信息 - 视频',
-        circleType: 2, // 朋友圈资源类型:0.无文件 1.音频 2.视频 3.图片 4.文件
-        releaseTime: new Date().getTime() / 1000, // 发布时间
-        commentTotal: 1, // 评论数量
-        favorTotal: 1, // 喜爱数量
-        isFavor: 1, // 是否喜爱，1已点击，0未点击
-        isSelf: 0, // 是否属于本人：0.不属于；1.属于
-        releaseUser: { // 发布人信息
-          userId: '',
-          realName: '习大大',
-          avatar: ''
-        },
-        files: [ // 资源文件
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '这是一个pdf文件.pdf',
-            size: 1000,
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          }
-        ],
-        comments: [ // 评论列表
-          {
-            userId: '',
-            realName: '毛泽东',
-            content: '啊啊啊啊',
-            isSelf: 0,
-            receiver: { // 评论指定回复用户
-              userId: '',
-              realName: ''
-            }
-          }
-        ],
-        favors: [ // 喜爱列表
-          {
-            userId: '',
-            realName: '毛泽东'
-          }
-        ],
-        peoples: [ // 社区同学列表
-          {
-            userId: '',
-            avatar: ''
-          }
-        ]
-      })
-      this.dynamicList.push({
-        musicState: 0,
-        circleId: '',
-        content: '这是一条朋友圈信息 - 单张大图',
-        circleType: 3, // 朋友圈资源类型:0.无文件 1.音频 2.视频 3.图片 4.文件
-        releaseTime: new Date().getTime() / 1000, // 发布时间
-        commentTotal: 1, // 评论数量
-        favorTotal: 1, // 喜爱数量
-        isFavor: 1, // 是否喜爱，1已点击，0未点击
-        isSelf: 0, // 是否属于本人：0.不属于；1.属于
-        releaseUser: { // 发布人信息
-          userId: '',
-          realName: '习大大',
-          avatar: ''
-        },
-        files: [ // 资源文件
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '这是一个pdf文件.pdf',
-            size: 1000,
-            duration: 10,
-            isPlayed: true
-          }
-        ],
-        comments: [ // 评论列表
-          {
-            userId: '',
-            realName: '毛泽东',
-            content: '啊啊啊啊',
-            isSelf: 0,
-            receiver: { // 评论指定回复用户
-              userId: '',
-              realName: ''
-            }
-          }
-        ],
-        favors: [ // 喜爱列表
-          {
-            userId: '',
-            realName: '毛泽东'
-          }
-        ],
-        peoples: [ // 社区同学列表
-          {
-            userId: '',
-            avatar: ''
-          }
-        ]
-      })
-      this.dynamicList.push({
-        musicState: 0,
-        circleId: '',
-        content: '这是一条朋友圈信息 - 4格图',
-        circleType: 3, // 朋友圈资源类型:0.无文件 1.音频 2.视频 3.图片 4.文件
-        releaseTime: new Date('2017-12-30').getTime() / 1000, // 发布时间
-        commentTotal: 1, // 评论数量
-        favorTotal: 1, // 喜爱数量
-        isFavor: 1, // 是否喜爱，1已点击，0未点击
-        isSelf: 0, // 是否属于本人：0.不属于；1.属于
-        releaseUser: { // 发布人信息
-          userId: '',
-          realName: '习大大',
-          avatar: ''
-        },
-        files: [ // 资源文件
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '这是一个pdf文件.pdf',
-            size: 1000,
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          }
-        ],
-        comments: [ // 评论列表
-          {
-            userId: '',
-            realName: '毛泽东',
-            content: '啊啊啊啊',
-            isSelf: 0,
-            receiver: { // 评论指定回复用户
-              userId: '',
-              realName: ''
-            }
-          }
-        ],
-        favors: [ // 喜爱列表
-          {
-            userId: '',
-            realName: '毛泽东'
-          }
-        ],
-        peoples: [ // 社区同学列表
-          {
-            userId: '',
-            avatar: ''
-          }
-        ]
-      })
-      this.dynamicList.push({
-        musicState: 0,
-        circleId: '',
-        content: '这是一条朋友圈信息 - 9宫图',
-        circleType: 3, // 朋友圈资源类型:0.无文件 1.音频 2.视频 3.图片 4.文件
-        releaseTime: new Date().getTime() / 1000, // 发布时间
-        commentTotal: 1, // 评论数量
-        favorTotal: 1, // 喜爱数量
-        isFavor: 1, // 是否喜爱，1已点击，0未点击
-        isSelf: 0, // 是否属于本人：0.不属于；1.属于
-        releaseUser: { // 发布人信息
-          userId: '111',
-          realName: '习大大',
-          avatar: ''
-        },
-        files: [ // 资源文件
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '这是一个pdf文件.pdf',
-            size: 1000,
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          },
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '',
-            size: '',
-            duration: 10,
-            isPlayed: true
-          }
-        ],
-        comments: [ // 评论列表
-          {
-            userId: '',
-            realName: '毛泽东',
-            content: '啊啊啊啊',
-            isSelf: 0,
-            receiver: { // 评论指定回复用户
-              userId: '',
-              realName: ''
-            }
-          }
-        ],
-        favors: [ // 喜爱列表
-          {
-            userId: '',
-            realName: '毛泽东'
-          }
-        ],
-        peoples: [ // 社区同学列表
-          {
-            userId: '',
-            avatar: ''
-          }
-        ]
-      })
-      this.dynamicList.push({
-        musicState: 0,
-        circleId: '',
-        content: '这是一条朋友圈信息 - 文件',
-        circleType: 4, // 朋友圈资源类型:0.无文件 1.音频 2.视频 3.图片 4.文件
-        releaseTime: new Date().getTime() / 1000, // 发布时间
-        commentTotal: 1, // 评论数量
-        favorTotal: 1, // 喜爱数量
-        isFavor: 1, // 是否喜爱，1已点击，0未点击
-        isSelf: 0, // 是否属于本人：0.不属于；1.属于
-        releaseUser: { // 发布人信息
-          userId: '111',
-          realName: '习大大',
-          avatar: ''
-        },
-        files: [ // 资源文件
-          {
-            fileId: '',
-            fileUrl: 'http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@2o.jpg',
-            fileName: '这是一个pdf文件.pdf',
-            size: 1000,
-            duration: 10,
-            isPlayed: true
-          }
-        ],
-        comments: [ // 评论列表
-          {
-            userId: '',
-            realName: '毛泽东',
-            content: '啊啊啊啊',
-            isSelf: 0,
-            receiver: { // 评论指定回复用户
-              userId: '',
-              realName: ''
-            }
-          }
-        ],
-        favors: [ // 喜爱列表
-          {
-            userId: '',
-            realName: '毛泽东'
-          }
-        ],
-        peoples: [ // 社区同学列表
-          {
-            userId: '',
-            avatar: ''
-          }
-        ]
-      })
+
+          console.log('点赞参数：', params)
+          this.dynamicList[itemIndex].isFavor = isFavor ? 0 : 1
+          this.dynamicList[itemIndex].favorTotal += isFavor ? -1 : 1
+          break
+        case 'del':
+          // :todo 删除请求
+          this.dynamicList.splice(itemIndex, 1)
+          console.log(this.dynamicList, itemIndex)
+          break
+      }
     }
   }
 </script>
-
 <style lang="less" scoped>
   .m-community {
   }

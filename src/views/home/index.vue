@@ -1,12 +1,10 @@
 <template>
   <div class="p-body p-home-index">
-    <scroller
-      :on-refresh="refresh"
-      :on-infinite="infinite">
+    <scroller @refresh="handleRefresh" @pullup="handlePullup">
       <div class="banners">
         <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="4000" :aspect-ratio="290 / 345">
           <swiper-item v-for="(item, index) in banners" :key="`banner_${index}`">
-            <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item :src="item.img" mode="horizontal" /></a>
+            <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item class="image-item" :src="item.img" mode="horizontal" /></a>
           </swiper-item>
         </swiper>
       </div>
@@ -29,7 +27,6 @@
         </div>
       </div>
     </scroller>
-
     <!-- <bottom-loading :end="pagination.isLastPage" /> -->
   </div>
 </template>
@@ -39,6 +36,7 @@ import Component from 'vue-class-component'
 
 import { Swiper, SwiperItem } from 'vux'
 import CommunityCard from '@/components/communityCard'
+import Scroller from '@/components/scroller'
 
 import ListMixin from '@/mixins/list'
 
@@ -47,7 +45,8 @@ import ListMixin from '@/mixins/list'
   components: {
     Swiper,
     SwiperItem,
-    CommunityCard
+    CommunityCard,
+    Scroller
   },
   mixins: [ListMixin]
 })
@@ -59,23 +58,37 @@ export default class HomeIndex extends Vue {
   ]
 
   created () {
+    console.log(this)
   }
 
   handleTapBanner (item) {
     this.$router.push(item.url)
   }
 
-  refresh () {
-    console.log('refresh')
+  /**
+   * 下拉刷新
+   */
+  handleRefresh (loaded) {
+    setTimeout(() => {
+      loaded('done')
+    }, 1000)
   }
 
-  infinite () {
-    console.log('infinite')
+  /**
+   * 上拉加载
+   */
+  handlePullup (loaded) {
+    setTimeout(() => {
+      loaded('done')
+    }, 1000)
   }
 }
 </script>
 
 <style lang="less" scoped>
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
 .p-home-index {
   padding-bottom: 50px;
 
@@ -89,6 +102,11 @@ export default class HomeIndex extends Vue {
       height: 290px;
       border-radius: 3px;
       overflow: hidden;
+
+      .image-item {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 

@@ -49,7 +49,6 @@ import moment from 'moment'
       type: Boolean,
       default: false
     },
-
     // 禁止内容点击事件
     disableContentClick: {
       type: Boolean,
@@ -168,7 +167,7 @@ import moment from 'moment'
         }
       }
       return timeStr
-    },
+    }
   }
 })
 export default class dynamicItem extends Vue {
@@ -180,23 +179,55 @@ export default class dynamicItem extends Vue {
    * 发表评论
    */
   comment () {
-    console.log('发表评论')
+    const itemIndex = this.itemIndex
+    this.$emit('operation', {
+      eventType: 'comment',
+      itemIndex
+    })
   }
   /**
    * 点赞
    */
   praise () {
-    console.log('点赞')
+    const itemIndex = this.itemIndex
+    this.$emit('operation', {
+      eventType: 'praise',
+      itemIndex
+    })
   }
   /**
    * 播放对应音频
    */
-  audioPlay () {
+  audioPlay (problemIndex) {
+    let url = ''
+    const itemIndex = this.itemIndex
+    if (problemIndex >= 0) {
+      url = this.item.answers[problemIndex].file.fileUrl
+    } else {
+      url = this.item.files[0].fileUrl
+    }
+
+    this.$emit('audioEvent', {
+      eventType: 'play',
+      url,
+      itemIndex,
+      problemIndex
+    })
   }
   /**
    * 点击预览图片
    */
-  previewImage () {
+  previewImage (img) {
+    const files = this.item.files
+    let urls = []
+    files.forEach((item) => {
+      urls.push(item.fileUrl)
+    })
+    console.log('当前图片: ', img, '图片数组: ', urls)
+    // wx.previewImage({
+    //   current: img,
+    //   urls: urls
+    // })
   }
   /**
    * 打开文件
@@ -210,7 +241,11 @@ export default class dynamicItem extends Vue {
    * 删除
    */
   del () {
-    console.log('删除')
+    const itemIndex = this.itemIndex
+    this.$emit('operation', {
+      eventType: 'del',
+      itemIndex
+    })
   }
 
   // -------------------- 页面跳转 ------------------------
