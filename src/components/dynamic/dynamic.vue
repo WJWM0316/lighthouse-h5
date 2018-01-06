@@ -245,8 +245,6 @@
       switch (eventType) {
         case 'comment':
           // :todo 评论请求
-          this.dynamicList.splice(itemIndex, 1)
-          console.log(this.dynamicList, itemIndex)
           break
         case 'praise':
           // :todo 点赞请求
