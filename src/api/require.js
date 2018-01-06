@@ -23,22 +23,22 @@ export const request = ({type = 'post', url, data = {}, config = {}, globalLoadi
       if (typeof data === 'string') { // 转换返回json
         data = JSON.parse(data)
       }
-      if (data && data.status_code === 200) {
+      if (data && data.statusCode === 200) {
         return data.data === undefined ? {} : data.data
       }
-      if (data && data.status_code === 255) { // 登录时openId cookie失效
+      if (data && data.statusCode === 255) { // 登录时openId cookie失效
         store.dispatch('remove_userinfo')
         location.href = `/zikeserver/wap/weixin/index?zike_from=${location.href}`
         return data.data === undefined ? {} : data.data
       }
-      if (data && data.status_code === 401) { // 没有登录权限
+      if (data && data.statusCode === 401) { // 没有登录权限
         store.dispatch('remove_userinfo')
         router.replace({
           name: 'login',
           query: {redirect: router.currentRoute.path}
         })
       }
-      if (data && data.status_code === 264) { // 内容找不到
+      if (data && data.statusCode === 264) { // 内容找不到
         router.replace({
           name: 'undefined'
         })
