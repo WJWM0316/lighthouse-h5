@@ -81,6 +81,9 @@ export default class HomeIndex extends Vue {
     }
   }
 
+  /**
+   * 创建灯塔
+   */
   handleCreate () {
     this.$vux.alert.show({
       title: '开课请联系',

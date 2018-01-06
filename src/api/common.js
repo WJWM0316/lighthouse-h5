@@ -34,20 +34,20 @@ export const getUploadFileConfig = data => request({
  * @param {*} filePath 微信临时文件路径，只能是一个
  * @param {*} data oss上传配置对象集
  */
-export const uploadFileToOSS = (filePath, data, setting) => {
-  console.log('filePath', filePath)
-  const { ossConfig, systemConfig } = data
-  return upload({
-    url: ossConfig.host,
-    data: {
-      key: `${ossConfig.dir}${systemConfig.fileName}.${systemConfig.suffix}`,
-      policy: ossConfig.policy,
-      OSSAccessKeyId: ossConfig.accessid,
-      success_action_status: '200',
-      callback: ossConfig.callback,
-      signature: ossConfig.signature,
-    },
-    filePath,
-    setting
-  })
-}
+// export const uploadFileToOSS = (filePath, data, setting) => {
+//   console.log('filePath', filePath)
+//   const { ossConfig, systemConfig } = data
+//   return upload({
+//     url: ossConfig.host,
+//     data: {
+//       key: `${ossConfig.dir}${systemConfig.fileName}.${systemConfig.suffix}`,
+//       policy: ossConfig.policy,
+//       OSSAccessKeyId: ossConfig.accessid,
+//       success_action_status: '200',
+//       callback: ossConfig.callback,
+//       signature: ossConfig.signature,
+//     },
+//     filePath,
+//     setting
+//   })
+// }
