@@ -2,12 +2,17 @@
   <div class="p-exchange-list">
     <div class="toggle-tab fs15" :class="typeClassList[applyType -1]">
       <div @click="toggle(1)">我收到的申请</div>
-      <div @clickp="toggle(2)">我发出的申请</div>
+      <div @click="toggle(2)">我发出的申请</div>
     </div>
     <div class="apply-list">
       <scroller @refresh="handleRefresh" @pullup="handlePullup">
-      <div v-for='(item, index) in dataList'>
-        <apply-item class='community-item'></apply-item>
+      <div v-for='item in dataList'>
+        <apply-item class='community-item'
+                    @tap-one='goApplyDetail'
+                    @tap-two='goUserDetail'
+                    @tap-three='goCommunityDetail'
+                    @tap-four='handleDetails'
+                    :item="item"></apply-item>
       </div>
       </scroller>
     </div>
@@ -17,6 +22,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import ApplyItem from '@/components/applyItem/applyItem'
+  import Scroller from '@/components/scroller'
   import { XInput, XButton } from 'vux'
   import ListMixin from '@/mixins/list'
   import { applyListApi, handleDetailsApi } from '../../api/pages/exchange.js'
@@ -26,50 +32,93 @@
     components: {
       XInput,
       XButton,
-      ApplyItem
+      ApplyItem,
+      Scroller
     },
     mixins: [ListMixin]
   })
   export default class ExchangeListIndex extends Vue {
     applyType = 1 // 类型：1我收到的申请，2我发出的申请
     typeClassList = ['one', 'two']
-    dataList = [1, 2, 3, 4]
+    dataList = []
     iconSrc = 'http://cdnstatic.zike.com/Uploads/static/beacon/404.png'
-
+    goApplyDetail (id, userId) {
+      console.log('id userId', id, userId)
+      this.$router.push({name: 'exchange-detail', query: {id, userId}})
+//      wx.navigateTo({
+//        url: `/pages/exchange/detail?id=${id}&userId=${userId}&type=${this.applyType}`
+//      })
+    }
+    goUserDetail (userId, LighthouseId) {
+      console.log('id userId', userId, LighthouseId)
+//      wx.navigateTo({
+//        url: `/pages/introduce/details?userId=${userId}&communityId=${LighthouseId}`
+//      })
+    }
+    goCommunityDetail (LighthouseId) {
+//      wx.navigateTo({
+//        url: `/pages/introduce/community?LighthouseId=${LighthouseId}`
+//      })
+    }
+    handleDetails (id, LighthouseId) {
+      console.log('id userId', id, LighthouseId)
+//      handleDetailsApi({id, LighthouseId, handleStatus: 1, refuseReason: this.refuseReason})
+//        .then(res => {
+//          this.$broadcast('show-message', '已同意申请')
+//          this.init()
+//        }).catch(e => {
+//        this.$broadcast('show-message', { content: e.message })
+//      })
+    }
     toggle (type) {
-//      this.dataList = []
-//      this.applyType = Number.parseInt(type)
-//      this.pagination.end = false
-//      this.getList({ page: 1 })
+      this.dataList = []
+      this.pagination.end = false
+      this.applyType = Number.parseInt(type)
+      this.getList({ page: 1 })
     }
     async getList ({ page, pageSize } = {}) { // 请求列表
+      if (this.pagination.end || this.pagination.busy) {
+        // 防止多次加载
+        return
+      }
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
+      if (this.isLastPage && page !== 1) return
       const params = {
         page: page,
         pageCount: pageSize
       }
+      this.pagination.busy = true
       try {
         const {list, total} = await applyListApi({...params, type: this.applyType})
         this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
         this.pagination.page = page
         this.pagination.pageSize = pageSize
         this.pagination.total = total
-        this.pagination.end = this.isLastPage()
+        this.pagination.end = this.isLastPage
         this.pagination.busy = false
       } catch (e) {
         this.$vux.toast.text(e.message, 'middle')
       }
     }
+    /**
+     * 下拉刷新
+     */
+    async handleRefresh (loaded) {
+      await this.getList({ page: 1 })
+      loaded('done')
+    }
+
+    /**
+     * 上拉加载
+     */
+    async handlePullup (loaded) {
+      const nextPage = this.pagination.page + 1
+      await this.getList({ page: nextPage })
+      loaded('done')
+    }
     created () {
       this.getList()
-      this.$vux.confirm.show({
-        // 组件除show外的属性
-        onCancel () {
-          console.log(this) // 非当前 vm
-        },
-        onConfirm () {}
-      })
     }
 
     mounted () {

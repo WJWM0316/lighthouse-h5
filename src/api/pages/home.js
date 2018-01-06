@@ -5,7 +5,7 @@ import { request } from '../require'
  * @param {*} data
  */
 export const getBeaconsApi = data => request({
-  method: 'get',
+  type: 'get',
   url: '/wap/beacon',
   needUserInfo: false,
   data
