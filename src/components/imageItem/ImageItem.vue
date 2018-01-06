@@ -21,7 +21,7 @@ import Component from 'vue-class-component'
       type: String,
       default: ''
     },
-    // 图片铺开模式，auto：完全展示，horizontal：宽度100%高度自适应，vertical：高度100%宽度自适应
+    // 图片铺开模式，auto：完全展示，horizontal：宽度100%高度自适应，vertical：高度100%宽度自适应，full：铺满，会变形
     mode: {
       type: String,
       default: 'auto'
@@ -71,6 +71,11 @@ export default class Image extends Vue {}
     height: auto;
     max-width: 100%;
     max-height: 100%;
+  }
+
+  &.full > img {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

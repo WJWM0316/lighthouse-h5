@@ -1,12 +1,12 @@
 <template>
   <a href="#" class="m-community" :class="cardClasses" @click.prevent.stop="handleTap">
     <div class="cover-container">
-      <image-item class="cover" :src="''" mode="horizontal" />
+      <image-item class="cover" :src="community.detailImg" mode="full" />
       <div class="master">
         <h3 class="name" :class="{ round: type === 1 }">
-          <span class="text">名字</span>
+          <span class="text" v-text="community.master.realName"></span>
         </h3>
-        <p class="career">头衔</p>
+        <p class="career" v-text="community.master.career"></p>
       </div>
       <slot name="cover-addon"></slot>
     </div>
@@ -21,7 +21,7 @@
           <!-- 已加入 -->
           <p class="time-range" v-else-if="community.isAuthor === 1 || community.isJoined === 1">开课时间：{{community.startTime * 1000 | date('YYYY年MM月DD日')}}-{{community.endTime * 1000 | date('YYYY年MM月DD日')}}</p>
           <!-- 未加入且未开社 -->
-          <p class="countdown" v-else-if="community.duration">{{community.duration | duration}}后开启</p>
+          <p class="countdown" v-else-if="duration">{{duration | duration}}后开启</p>
           <!-- 未加入且已开社 -->
           <p v-else>课堂已开启</p>
         </div>
@@ -66,6 +66,8 @@ export default class CommunityCard extends Vue {
     'z-unread': this.community.newMessage
   }
 
+  duration = 0
+
   // 是否已结束
   get isEnd () {
     return this.community.endTime * 1000 < new Date().getTime()
@@ -77,9 +79,9 @@ export default class CommunityCard extends Vue {
       const countdown = this.getCountdown()
       countdown.start(this.community.startTime * 1000, (timestamp) => {
         if (timestamp > 0) {
-          this.community.duration = timestamp
+          this.duration = timestamp
         } else {
-          this.community.duration = 0
+          this.duration = 0
         }
       })
     }
@@ -288,6 +290,7 @@ export default class CommunityCard extends Vue {
       line-height: 24px;
       font-weight: normal;
       font-size: 18px;
+      color: @font-color-default;
     }
 
     .desc {
