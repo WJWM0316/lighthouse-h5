@@ -15,6 +15,8 @@ export default {
   computed: {
     // 是否是最后一页
     isLastPage () {
+      console.log('this.pagination.page', this.pagination.page)
+      console.log('Math.ceil(this.pagination.total / this.pagination.pageSize)', Math.ceil(this.pagination.total / this.pagination.pageSize))
       return this.pagination.page >= Math.ceil(this.pagination.total / this.pagination.pageSize)
     }
   }
