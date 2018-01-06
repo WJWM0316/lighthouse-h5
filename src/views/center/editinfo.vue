@@ -46,8 +46,8 @@
           <span class="text">工作年限</span>
         </label>
         <div class="control-container">
-          <!-- <popup-picker :show.sync="showPopupPicker" :show-cell="false" :data="[['1', '2', '3', '4', '5']]" v-model="value5"> -->
-          <input id="workTime" class="control" type="text" placeholder="请选择工作年限" v-model="form.workTime" readonly />
+          <popup-picker :show.sync="showWorkTimePopupPicker" :show-cell="false" :data="workYears" v-model="form.workTime" />
+          <input id="workTime" class="control" type="text" placeholder="请选择工作年限" :value="workTimeText" readonly @click="handleShowWorkTimePopupPicker" />
         </div>
       </div>
 
@@ -93,7 +93,7 @@
     </div>
 
     <div class="btn-container">
-      <button class="u-btn-save" @tap="handleSave">保存</button>
+      <button class="u-btn-save" @click="handleSave">保存</button>
     </div>
   </div>
 </template>
@@ -105,6 +105,7 @@ import { genderOptions } from '@/config/options'
 
 import { PopupPicker } from 'vux'
 
+import { getInformationApi, editInformationApi } from '@/api/pages/center'
 import { getGeneralListApi } from '@/api/common'
 
 @Component({
@@ -118,8 +119,8 @@ export default class CenterEditinfo extends Vue {
   form = {
     avatarUrl: '', // 头像
     realName: '', // 用户姓名
-    gender: [0], // 性别(0保密，1男，2女)
-    workTime: '', // 自客工作年限id
+    gender: [], // 性别(0保密，1男，2女)
+    workTime: [], // 自客工作年限id
     career: '', // 职业，头衔
     office: '', // 任职公司
     phone: '', // 手机号
@@ -138,30 +139,152 @@ export default class CenterEditinfo extends Vue {
     }
   ]]
 
-  showGenderPopupPicker = false
+  // 工作年限列表
+  workYearsSource = []
 
+  showGenderPopupPicker = false
+  showWorkTimePopupPicker = false
+
+  // 性别
   get genderText () {
     return genderOptions[this.form.gender[0]]
+  }
+
+  // 工作年限
+  get workTimeText () {
+    let result = ''
+    for (let [, item] of this.workYearsSource.entries()) {
+      if (item.id === parseInt(this.form.workTime[0])) {
+        result = item.name
+        break
+      }
+    }
+    return result
+  }
+
+  // 工作年限选项
+  get workYears () {
+    const list = this.workYearsSource.map(item => {
+      return {
+        name: item.name,
+        value: item.id
+      }
+    })
+    return list && list.length > 0 ? [list] : []
   }
 
   created () {
     this.getPageData()
   }
 
+  /**
+   * 获取表单数据
+   */
   async getPageData () {
     try {
-      const res = await getGeneralListApi({ type: 3 })
-      console.log(res)
+      this.workYearsSource = await getGeneralListApi({ type: 3 })
+      this.form = await getInformationApi()
+      this.form.gender = [this.form.gender]
+      this.form.workTime = [this.form.workTime]
     } catch (error) {
       this.$vux.toast.text(error.message, 'middle')
     }
   }
 
+  /**
+   * 验证表单数据
+   * @return {Boolean}
+   */
+  validate () {
+    let valid = true
+    const form = this.form
+    if (!form.avatarUrl) {
+      // 头像
+      this.$vux.toast.text('请上传头像', 'middle')
+      valid = false
+    } else if (!form.realName) {
+      // 用户姓名
+      this.$vux.toast.text('请填写姓名', 'middle')
+      valid = false
+    } else if (!form.gender || !form.gender[0]) {
+      // 性别
+      this.$vux.toast.text('请选择性别', 'middle')
+      valid = false
+    } else if (!form.workTime || !form.workTime[0]) {
+      // 工作年限
+      this.$vux.toast.text('请选择工作年限', 'middle')
+      valid = false
+    } else if (!form.career) {
+      // 职位
+      this.$vux.toast.text('请填写职位', 'middle')
+      valid = false
+    } else if (!form.office) {
+      // 最近任职公司
+      this.$vux.toast.text('请填写任职公司', 'middle')
+      valid = false
+    } else if (!form.phone) {
+      // 手机号码
+      this.$vux.toast.text('请填写手机号', 'middle')
+      valid = false
+    } else if (!/^1[34578]\d{9}$/.test(form.phone)) {
+      // 手机号码正则验证
+      this.$vux.toast.text('手机号格式不正确', 'middle')
+      valid = false
+    } else if (!form.weChat) {
+      // 微信号
+      this.$vux.toast.text('请填写微信号', 'middle')
+      valid = false
+    }
+
+    return valid
+  }
+
+  /**
+   * 转换表单数据
+   */
+  transformData (form) {
+    const newForm = JSON.parse(JSON.stringify(form))
+    newForm.gender = newForm.gender && parseInt(newForm.gender[0])
+    newForm.workTime = newForm.workTime && parseInt(newForm.workTime[0])
+    return newForm
+  }
+
+  /**
+   * 保存
+   */
+  async save () {
+    try {
+      const params = this.transformData(this.form)
+      await editInformationApi(params)
+      this.$vux.toast.text('保存成功', 'middle')
+      this.$router.go(-1)
+    } catch (error) {
+      this.$vux.toast.text(error.message, 'middle')
+    }
+  }
+
+  /**
+   * 选择性别
+   */
   handleShowGenderPopupPicker () {
     this.showGenderPopupPicker = true
   }
 
-  handleSave () {}
+  /**
+   * 选择性别
+   */
+  handleShowWorkTimePopupPicker () {
+    this.showWorkTimePopupPicker = true
+  }
+
+  /**
+   * 保存
+   */
+  handleSave () {
+    if (this.validate()) {
+      this.save()
+    }
+  }
 }
 </script>
 
