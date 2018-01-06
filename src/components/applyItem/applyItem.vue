@@ -1,14 +1,14 @@
 <template>
-  <div class="apply-item">
-    <img class="item-left" catchtap="handleTwo"
+  <div class="apply-item" @click="handleOne">
+    <img class="item-left" @click.stop="handleTwo"
          :src="item.avatarUrl || '../../static/icon/img_head_default.png'">
     <div class="item-middle">
-      <div class="item-middle-top fs15" catchtap="handleTwo">{{item.realName}}</div>
+      <div class="item-middle-top fs15" @click.stop="handleTwo">{{item.realName}}</div>
       <div class="item-middle-middle fs15">{{item.reason}}</div>
     </div>
     <XButton
       :class="item.handleStatus === 0 && type === 1 ? 'item-right  btn-common' : 'item-right not-btn button-reset'"
-      @click="handleFour">{{type === 1 ? otherToMeList[item.handleStatus] : meToOtherList[item.handleStatus]}}
+      @click.stop="handleFour">{{type === 1 ? otherToMeList[item.handleStatus] : meToOtherList[item.handleStatus]}}
     </XButton>
   </div>
 </template>

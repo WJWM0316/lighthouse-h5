@@ -44,6 +44,7 @@
     iconSrc = 'http://cdnstatic.zike.com/Uploads/static/beacon/404.png'
     goApplyDetail (id, userId) {
       console.log('id userId', id, userId)
+      this.$router.push({name: 'exchange-detail', query: {id, userId}})
 //      wx.navigateTo({
 //        url: `/pages/exchange/detail?id=${id}&userId=${userId}&type=${this.applyType}`
 //      })
@@ -71,10 +72,15 @@
     }
     toggle (type) {
       this.dataList = []
+      this.pagination.end = false
       this.applyType = Number.parseInt(type)
       this.getList({ page: 1 })
     }
     async getList ({ page, pageSize } = {}) { // 请求列表
+      if (this.pagination.end || this.pagination.busy) {
+        // 防止多次加载
+        return
+      }
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
       if (this.isLastPage && page !== 1) return
@@ -82,12 +88,15 @@
         page: page,
         pageCount: pageSize
       }
+      this.pagination.busy = true
       try {
         const {list, total} = await applyListApi({...params, type: this.applyType})
         this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
         this.pagination.page = page
         this.pagination.pageSize = pageSize
         this.pagination.total = total
+        this.pagination.end = this.isLastPage
+        this.pagination.busy = false
       } catch (e) {
         this.$vux.toast.text(e.message, 'middle')
       }
