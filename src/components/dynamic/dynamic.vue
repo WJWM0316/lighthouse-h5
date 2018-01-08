@@ -75,6 +75,10 @@
       disableUserClick: {
         type: Boolean,
         default: false
+      },
+      // 拦截操作 传入拦截事件名称
+      disableOperationArr: {
+        type: Array
       }
     },
     components: {
@@ -256,6 +260,17 @@
 
     operation (e) {
       const {eventType, itemIndex} = e
+
+      if (this.disableOperationArr && this.disableOperationArr.length > 0) {
+        const isTrue = this.disableOperationArr.map((typeName) => { return typeName === eventType })
+        if (isTrue) {
+          this.$emit('disableOperationEvents', {
+            eventType
+          })
+          return
+        }
+      }
+
       switch (eventType) {
         case 'comment':
           // :todo 评论请求
