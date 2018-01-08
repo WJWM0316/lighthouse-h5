@@ -54,6 +54,7 @@
       videoEvent () {},
       handleDetails () {},
       goDetail (item) {
+        console.log('goDetail', item)
 //        switch (item.type) {
 //          case 1: // 回答我的提问
 //          case 2: // 回答我的追问
@@ -82,11 +83,13 @@
 //        }
       },
       goUserDetail (userId, LighthouseId) {
+        this.$router.push({name: 'introduce-detail'})
 //        wx.navigateTo({
 //          url: `/pages/introduce/details?userId=${userId}&communityId=${LighthouseId}`
 //        })
       },
       goCommunityDetail (LighthouseId) {
+        this.$router.push({name: 'community', params: {communityId: LighthouseId}})
 //        console.log('communityId', LighthouseId)
 //        wx.navigateTo({
 //          url: `/pages/introduce/community?communityId=${LighthouseId}`

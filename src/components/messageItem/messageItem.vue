@@ -1,16 +1,17 @@
 <template>
   <div class="message-item" @click="handleOne">
     <div class="userInfo-img">
-      <img class="headImg" @click="handleTwo" :src="item.avatarUrl || '../../static/icon/img_head_default.png'">
+      <img class="headImg" @click.stop="handleTwo" :src="item.avatarUrl || '../../static/icon/img_head_default.png'">
     </div>
     <div class="userInfo-desc">
       <div class="desc-top">
-        <div :class="item.replyIdentify === 1 ? 'name name-gold': 'name'" @click="handleTwo">{{item.realName}}</div>
+        <div :class="item.replyIdentify === 1 ? 'name name-gold': 'name'" @click.stop="handleTwo">{{item.realName}}</div>
         <div class="after-name">{{item.afterNameStr}}</div>
       </div>
       <!--文字-->
       <div class="desc-middle" v-if="item.contentType === 1">{{item.replyContent}}</div>
       <!--音频-->
+      <div>{{item.circleType}}</div>
       <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
         <div class="progress-container">
 
@@ -28,15 +29,15 @@
         </div>
       </div>
 
-      <!--<div class="desc-middle-return">-->
-        <!--<img class="icon-zhuang" src="./../../assets/icon/icon_original.png">-->
-        <!--<div class="{{item.beReturnedTypeStr ? 'desc-middle-return-text' : 'desc-middle-return-text-long'}}">-->
-          <!--<div style="margin-right: 8px;font-size: 26px;">{{item.beReturnedTypeStr}}</div>{{item.beReturnedContents}} </div>-->
-      <!--</div>-->
-      <!--<div class="desc-bottom">-->
-        <!--<div class="send-time">{{item.replyTimeStr}}</div>-->
-        <!--<div class="linght-house" @click="handleThree">{{item.manito + '的' +item.Lighthouse}}</div>-->
-      <!--</div>-->
+      <div class="desc-middle-return">
+        <img class="icon-zhuang" src="./../../assets/icon/icon_original.png">
+        <div :class="item.beReturnedTypeStr ? 'desc-middle-return-text' : 'desc-middle-return-text-long'">
+          <div style="margin-right: 8px;font-size: 26px;">{{item.beReturnedTypeStr}}</div>{{item.beReturnedContents}} </div>
+      </div>
+      <div class="desc-bottom">
+        <div class="send-time">{{moment(item.replyTime * 1000).format('MM月DD日 HH:mm:ss')}}</div>
+        <div class="linght-house" @click.stop="handleThree">{{item.manito + '的' +item.Lighthouse}}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -46,6 +47,7 @@
   import Component from 'vue-class-component'
   import { XInput, XButton } from 'vux'
   import { testApi } from '@/api/pages/login'
+  import moment from 'moment'
   @Component({
     name: 'messageItme-component',
     components: {
@@ -72,21 +74,32 @@
       }
     },
     methods: {
+      moment,
       handleOne (e) { // 点击跳转回复详情
-        console.log('handleOne')
-//        this.$emit('tap-one', this.item)
+        this.$emit('tap-one', this.item)
       },
       handleTwo (e) { // 点击跳转个人详情
-        console.log('handleTwo')
-//        this.$emit('tap-two', this.item.userId, this.item.LighthouseId)
+        this.$emit('tap-two', this.item.userId, this.item.LighthouseId)
       },
       handleThree (e) { // 跳转大咖社区
-//        this.$emit('tap-three', this.item.LighthouseId)
-        console.log('handleThree')
+        this.$emit('tap-three', this.item.LighthouseId)
       },
-      audioPlay (item, index) {
-        console.log('audioPlay')
-      },
+      audioPlay (problemIndex) {
+        let url = ''
+        const itemIndex = this.itemIndex
+        if (problemIndex >= 0) {
+          url = this.item.answers[problemIndex].file.fileUrl
+        } else {
+          url = this.item.files[0].fileUrl
+        }
+
+        this.$emit('audioEvent', {
+          eventType: 'play',
+          url,
+          itemIndex,
+          problemIndex
+        })
+      }
     }
   })
   export default class ApplyIndex extends Vue {
@@ -186,9 +199,8 @@
       padding: 20px 0;
       border-bottom: 1px solid #ededed;
       .desc-top{
-        width: 285px;
         margin-bottom: 7px;
-        .setEllipsis();
+        .setEllipsis(285px);
         .name {
           font-size: 15px;
           line-height: 19px;
@@ -206,9 +218,7 @@
           }
         }
       .desc-middle{
-
-        width: 285px;
-        .setEllipsis();
+        .setEllipsis(285px);
       }
       .desc-middle-return{
         display: flex;
@@ -217,8 +227,7 @@
         margin-top: 7px;
         color: #929292;
         .desc-middle-return-text{
-          .setEllipsis();
-          width: 265px;
+          .setEllipsis(265px);
           height: 20px;
         }
         .desc-middle-return-text-long{
@@ -238,8 +247,7 @@
         }
         .linght-house{
           text-align: right;
-          width: 130px;
-          .setEllipsis();
+          .setEllipsis(130px);
         }
       }
       .persion-info{
@@ -247,8 +255,7 @@
         font-size: 13px;
         line-height: 17px;
         color: #929292;
-        width: 295px;
-        .setEllipsis();
+        .setEllipsis(295px);
       }
     }
     .content-audio {
