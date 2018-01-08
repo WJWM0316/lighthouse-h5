@@ -171,9 +171,9 @@ export default class HomeIndex extends Vue {
 @import "../../styles/mixins";
 
 .p-home-index {
-  padding-bottom: 50px;
 
-  .banners {
+  padding-bottom: 50px;
+.banners {
     padding: 10px 15px 0;
     margin-bottom: 43px;
     border-radius: 3px;
