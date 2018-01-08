@@ -51,3 +51,12 @@ export const getUploadFileConfig = data => request({
 //     setting
 //   })
 // }
+
+/**
+ * 获取微信jssdk签名
+ * @param {*} data
+ */
+export const getWechatSign = data => request({
+  url: '/wap/currency/getWxSign',
+  data
+})

@@ -46,7 +46,9 @@ import Component from 'vue-class-component'
     community: {
       type: Object,
       default () {
-        return {}
+        return {
+          master: {}
+        }
       }
     },
 
