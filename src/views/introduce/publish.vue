@@ -17,7 +17,7 @@
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
     </div>
 
-    <actionsheet v-model="addActionsConfig.show" :menus="addActionsConfig.menus" :close-on-clicking-mask="false" show-cancel />
+    <actionsheet v-model="addActionsConfig.show" :menus="addActionsConfig.menus" :close-on-clicking-mask="false" show-cancel @on-click-menu="handleAddActoinItem" />
   </div>
 </template>
 
@@ -57,11 +57,11 @@ export default class PublishContent extends Vue {
     menus: [
       {
         label: '图片',
-        value: 'handleAddImage'
+        value: 'image'
       },
       {
         label: '视频',
-        value: 'handleAddVideo'
+        value: 'video'
       }
     ]
   }
@@ -93,6 +93,57 @@ export default class PublishContent extends Vue {
   }
 
   /**
+   * 选择用户图片上传
+   */
+  async chooseCustomImages () {
+    try {
+      const params = {
+        count: this.lengths.imageMax - this.images.length
+      }
+      const res = await this.wechatChooseImage(params)
+      console.log('localIds：', res)
+      this.uploadCustomImages(res.localIds)
+    } catch (error) {
+      console.log(error)
+    }
+    this.wechatChooseImage({
+      count: this.lengths.imageMax - this.images.length
+    }).then(res => {
+      console.log(res)
+      this.$parent.showLoading('上传中...')
+      this.uploadImages(res.tempFiles, {
+        onItemSuccess: (resp, file, index) => {
+          this.images.push(file)
+          this.$apply()
+        }
+      }).then(res => {
+        console.log('全部上传成功')
+        this.$parent.hideLoading()
+      }).catch((e, index) => {
+        console.log(`第${index}张上传失败`, e)
+        this.$parent.hideLoading()
+        this.$broadcast('show-message', { content: e.message })
+      })
+    }).catch(() => {})
+  }
+
+  /**
+   * 上传多上图片
+   */
+  async uploadCustomImages (localIds) {
+    try {
+      const serverIds = []
+      localIds.forEach(item => {
+        const { serverId } = this.wechatUploadImage(item)
+        serverIds.push(serverId)
+      })
+    } catch (error) {
+      console.log(error)
+      this.$vux.toast.text(error.message || '网络异常，请重试')
+    }
+  }
+
+  /**
    * 删除图片
    */
   handleDeleteImage (index, image) {
@@ -107,8 +158,31 @@ export default class PublishContent extends Vue {
       this.addActionsConfig.show = true
     } else {
       if (this.images.length < this.lengths.imageMax) {
-        // this.chooseCustomImages()
+        this.chooseCustomImages()
       }
+    }
+  }
+
+  /**
+   * 添加图片
+   * @param {*} key
+   * @param {*} item
+   */
+  handleAddActoinItem (key, item) {
+    console.log(key, item)
+    switch (key) {
+      case 'image':
+        this.chooseCustomImages()
+        break
+      case 'video':
+        this.$vux.alert.show({
+          title: '小程序',
+          content: '小灯塔客服：020-28163063或添加客服微信：zike02',
+          buttonText: '好的'
+        })
+        break
+      default:
+        break
     }
   }
 
