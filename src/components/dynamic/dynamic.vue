@@ -27,7 +27,7 @@
   @Component({
     name: 'dynamic-list',
     props: {
-      data: {
+      dynamicList: {
         type: Array,
         required: true
       },
@@ -81,20 +81,20 @@
       dynamicItem
     },
     watch: {
-      data (data) {
-        const temp = new Array(...data)
-        temp.forEach((item) => {
-          item.musicState = 1
-          item.progress = 50
-        })
-        console.log(temp)
-        this.dynamicList = temp
-      }
+//      data (data) {
+//        const temp = new Array(...data)
+//        temp.forEach((item) => {
+//          item.musicState = 1
+//          item.progress = 50
+//        })
+//        console.log(temp)
+//        this.dynamicList = temp
+//      }
     }
   })
   export default class dynamicList extends Vue {
 
-    dynamicList = []
+//    dynamicList = []
     currentPlay = {
       itemIndex: -1,
       problemIndex: -1

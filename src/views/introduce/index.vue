@@ -1,7 +1,10 @@
 <template>
   <div class="big-shot-introduce">
-    <dynamic :data="dynamicList"
-             :hideCommentArea="true"
+    <dynamic :dynamicList="dynamicList"
+             :hideCommentArea="false"
+             :showDelBtn="true"
+             :showIdentification="false"
+             :showLightHouseInfo="false"
     ></dynamic>
   </div>
 </template>
@@ -15,15 +18,11 @@
     name: 'big-shot-introduce',
     components: {
       dynamic
-    },
-    computed: {
-      dynamicList () {
-        return this.pageInfo.circles || []
-      }
     }
   })
   export default class introduce extends Vue {
     pageInfo = {}
+    dynamicList = []
 
     created () {
       this.pageInit().then(() => {})
@@ -32,7 +31,20 @@
     async pageInit () {
       const { communityId } = this.$route.params
       const res = await getCommunityInfoApi(communityId)
-      console.log(res)
+
+      const temp = new Array(...res.circles)
+      temp.forEach((item) => {
+        if (item['modelType'] === 'problem') {
+          item['answers'].forEach((answer) => {
+            answer.musicState = 0
+            answer.progress = 0
+          })
+        } else if (item['circleType'] === 1) {
+          item.musicState = 0
+          item.progress = 0
+        }
+      })
+      this.dynamicList = temp
       this.pageInfo = res
     }
   }
