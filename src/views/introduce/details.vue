@@ -181,9 +181,9 @@
       const { sourceId, type } = this.$route.params
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = ''
-      if (type === 1) {
+      if (type === '1') {
         res = await this.getCircleDetailApi(sourceId)
-      } else if (type === 2) {
+      } else if (type === '2') {
         res = await this.getPostDetailApi(sourceId)
       } else {
         res = await this.getProblemDetailApi(sourceId)
