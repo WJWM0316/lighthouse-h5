@@ -16,12 +16,16 @@ export default {
      * 获取微信签名
      */
     async getWechatSign () {
-      const params = {
-        url: location.href.split('#')[0]
+      try {
+        const params = {
+          url: location.href.split('#')[0]
+        }
+        const res = await getWechatSign(params)
+        this.wechatConfig = Object.assign({}, this.wechatConfig, res)
+        this.setWechatConfig()
+      } catch (error) {
+        this.$vux.toast.text(error.message, 'middle')
       }
-      const res = await getWechatSign(params)
-      this.wechatConfig = Object.assign({}, this.wechatConfig, res)
-      this.setWechatConfig()
     },
 
     /**
@@ -60,8 +64,8 @@ export default {
     wechatUploadImage (localId, options = {}) {
       return new Promise((resolve, reject) => {
         this.$wechat.uploadImage({
-          localId: '',
-          isShowProgressTips: 1, // 默认为1，显示进度提示
+          localId: localId,
+          isShowProgressTips: options.isShowProgressTips || 0, // sdk默认为1，显示进度提示
           success: function (res) {
             resolve(res)
             // const serverId = res.serverId // 返回图片的服务器端ID
