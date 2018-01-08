@@ -23,6 +23,13 @@ const routers = [
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/replys'], resolve),
   },
+  {
+    // 评论详情页
+    path: '/publish/:communityId',
+    name: 'publish-content',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/publish'], resolve),
+  }
 ]
 
 export default routers
