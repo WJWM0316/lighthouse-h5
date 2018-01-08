@@ -10,6 +10,13 @@ const routers = [
     component: resolve => require(['@/views/introduce/index'], resolve),
   },
   {
+    // 大咖精选页
+    path: '/introduce/:communityId/community',
+    name: 'community',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/community'], resolve),
+  },
+  {
     // 朋友圈、帖子、问题 详情页
     path: '/details/:sourceId/:type',
     name: 'all-details',
