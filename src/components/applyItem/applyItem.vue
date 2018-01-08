@@ -17,7 +17,6 @@
   import Component from 'vue-class-component'
   import { XInput, XButton } from 'vux'
   import { testApi } from '@/api/pages/login'
-
   @Component({
     name: 'login-index',
     components: {
