@@ -4,9 +4,9 @@
       <image-item class="cover" :src="community.detailImg" mode="full" />
       <div class="master">
         <h3 class="name" :class="{ round: type === 1 }">
-          <span class="text" v-text="community.master.realName"></span>
+          <span class="text" v-text="community.master && community.master.realName"></span>
         </h3>
-        <p class="career" v-text="community.master.career"></p>
+        <p class="career" v-text="community.master && community.master.career"></p>
       </div>
       <slot name="cover-addon"></slot>
     </div>
@@ -46,7 +46,9 @@ import Component from 'vue-class-component'
     community: {
       type: Object,
       default () {
-        return {}
+        return {
+          master: {}
+        }
       }
     },
 
