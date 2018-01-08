@@ -23,6 +23,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
+  import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi} from '@/api/pages/pageInfo.js'
 
   @Component({
     name: 'dynamic-list',
@@ -258,7 +259,7 @@
       }
     }
 
-    operation (e) {
+    async operation (e) {
       const {eventType, itemIndex} = e
 
       if (this.disableOperationArr && this.disableOperationArr.length > 0) {
@@ -276,8 +277,7 @@
           // :todo 评论请求
           break
         case 'praise':
-          // :todo 点赞请求
-          const {modelType, problemId, circleId, isFavor, favorTotal} = this.dynamicList[itemIndex]
+          const {modelType, problemId, circleId, isFavor} = this.dynamicList[itemIndex]
           let favorId = circleId || problemId || ''
           let favorType = 0
           switch (modelType) {
@@ -291,15 +291,30 @@
               favorType = 4
               break
           }
+          const favor = isFavor ? 0 : 1
           const params = {
             favorId,    // 喜爱的id
             favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-            isFavor: isFavor ? 0 : 1     // 是否喜欢：0取消喜欢，1喜欢
+            isFavor: favor    // 是否喜欢：0取消喜欢，1喜欢
           }
 
-          console.log('点赞参数：', params)
-          this.dynamicList[itemIndex].isFavor = isFavor ? 0 : 1
-          this.dynamicList[itemIndex].favorTotal += isFavor ? -1 : 1
+          const res = await setFavorApi(params)
+
+          this.dynamicList[itemIndex].isFavor = favor
+          this.dynamicList[itemIndex].favorTotal += favor ? 1 : -1
+          if (favor) {
+            this.dynamicList[itemIndex].favors = this.dynamicList[itemIndex].favors || []
+            this.dynamicList[itemIndex].favors.splice(0, 0, res)
+          } else {
+            let tempIndex = ''
+            this.dynamicList[itemIndex].favors.forEach((item, index) => {
+              if (item.userId === res.userId) {
+                tempIndex = index
+              }
+            })
+            this.dynamicList[itemIndex].favors.splice(tempIndex, 1)
+          }
+          console.log(this.dynamicList[itemIndex])
           break
         case 'del':
           // :todo 删除请求

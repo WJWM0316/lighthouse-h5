@@ -35,14 +35,15 @@
         <!-- 主体内容块 -->
         <div class="fixed-box">
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed': isCommunityTitleFixed}">
-            <span @tap.stop="toggle('circles')">导师内容</span>
-            <span @tap.stop="toggle('forum')">学员交流</span>
+            <span @click="toggle(1)">导师内容</span>
+            <span @click="toggle(0)">学员交流</span>
           </div>
         </div>
         <div class="big-shot-community-content">
           <div class="module-content" v-if="dynamicList.length > 0">
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
+                     :showIdentification="showIdentification"
             ></dynamic>
           </div>
           <!--<div class='u-bottom-loading'>-->
@@ -56,7 +57,21 @@
         </div>
 
       </div>
-      
+
+      <!-- footer -->
+      <div :class="{footer: true, author: isAuthor}">
+        <div v-if="isAuthor" class="author-operation">
+          <button>
+            <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
+          </button>
+          <button>发布动态</button>
+        </div>
+        <div class="ask-btn" v-else>
+          <img v-if="showType" src="./../../assets/icon/icon_question.png" />
+          <img v-else src="./../../assets/icon/icon_writing.png" />
+          <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>
+        </div>
+      </div>
     </scroll>
   </div>
 </template>
@@ -79,8 +94,8 @@
       Confirm
     },
     computed: {
-      item () {
-        return this.dynamicList[0] || {}
+      isAuthor () {
+        return this.pageInfo.isAuthor
       }
     },
     mixins: [ListMixin]
@@ -92,6 +107,7 @@
     showType = 1 // 1 朋友圈 0 交流社区
     isShowPumpBtn = false
     isCommunityTitleFixed = false
+    showIdentification = false
 
     created () {
       this.pageInit().then(() => {})
@@ -186,6 +202,17 @@
       await this.getList({page: 1})
     }
 
+    toggle (type) {
+      if (this.showType !== type) {
+        this.showType = type
+
+        this.showIdentification = !type
+
+        this.pagination.end = false // 初始化数据，必定不是最后一页
+        this.getList({page: 1}).then(() => {})
+      }
+    }
+
     // ------------------------------------------------
     /**
      * 获取社区基本信息
@@ -240,7 +267,6 @@
       } else {
         this.dynamicList = this.dynamicList.concat((this.showType ? circles : lists) || [])
       }
-      console.log(this.dynamicList)
 
       this.pagination.page = page
       this.pagination.pageSize = pageSize
@@ -454,6 +480,29 @@
       }
     }
 
+    & .footer .ask-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 30px;
+      width: 65px;
+      height: 65px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+      border-radius: 50%;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+      align-items: center;
+      font-size: 11px;
+      color: #d7ab70;
+
+      & img {
+        width: 26px;
+        height: 25px;
+        margin-top: 4px;
+      }
+    }
+    
     & .footer .author-operation {
       position: fixed;
       bottom: 0;
