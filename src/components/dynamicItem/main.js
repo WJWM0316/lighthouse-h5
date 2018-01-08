@@ -284,6 +284,7 @@ export default class dynamicItem extends Vue {
       // 跳转详情页 sourceId type
       const sourceId = circleId || problemId
       console.log('跳转详情页: ', sourceId, type)
+      this.$router.push({name: 'all-details', params: {sourceId, type}})
     }
   }
   toCommunity () { // 去大咖介绍页
