@@ -27,7 +27,7 @@
   @Component({
     name: 'dynamic-list',
     props: {
-      dynamicList: {
+      data: {
         type: Array,
         required: true
       },
@@ -79,10 +79,22 @@
     },
     components: {
       dynamicItem
+    },
+    watch: {
+      data (data) {
+        const temp = new Array(...data)
+        temp.forEach((item) => {
+          item.musicState = 1
+          item.progress = 50
+        })
+        console.log(temp)
+        this.dynamicList = temp
+      }
     }
   })
   export default class dynamicList extends Vue {
 
+    dynamicList = []
     currentPlay = {
       itemIndex: -1,
       problemIndex: -1
@@ -188,6 +200,8 @@
      * 播放进度设置
      */
     audioProgressSet (progress) {
+      progress = progress || 0
+      console.log(progress)
       const {itemIndex, problemIndex} = this.currentPlay
       const item = this.dynamicList[itemIndex]
 
@@ -196,9 +210,9 @@
       }
 
       if (item.modelType && item.modelType === 'problem') {
-        this.dynamicList[itemIndex].answers[problemIndex].progress = progress || 0
+        this.dynamicList[itemIndex].answers[problemIndex].progress = progress
       } else {
-        this.dynamicList[itemIndex].progress = progress || 0
+        this.dynamicList[itemIndex].progress = progress
       }
     }
 

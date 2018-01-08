@@ -4,7 +4,7 @@
 const routers = [
   {
     // 大咖介绍页
-    path: '/introduce',
+    path: '/introduce/:communityId',
     name: 'introduce',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/index'], resolve),

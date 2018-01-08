@@ -160,7 +160,7 @@ export default class HomeIndex extends Vue {
     if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
       this.$router.push(`/introduce/community?communityId=${item.communityId}`)
     } else { // 未入社跳到未入社页面
-      this.$router.push(`/introduce/index?communityId=${item.communityId}`)
+      this.$router.push(`/introduce/${item.communityId}`)
     }
   }
 }

@@ -28,6 +28,15 @@ export const getCommunityApi = (data) => {
   })
 }
 
+// 大咖介绍页
+export const getCommunityInfoApi = (communityId) => {
+  return request({
+    url: '/wap/beacon/' + communityId,
+    type: 'get',
+    isLoading: true
+  })
+}
+
 // 朋友圈
 export const getCirclesApi = (data) => {
   return request({

@@ -56,12 +56,14 @@
       <!-- 发表内容 类型:0.无文件 1.音频 2.视频 3.图片 4.文件 -->
       <div v-else class="publish-content">
 
+        <p>进度{{item.progress}}</p>
         <!-- 只有文字 -->
         <p class="content-text" v-if="item.circleType === 0">{{item.content}}</p>
 
         <!-- 音频 -->
         <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
           <div class="progress-container">
+
             <div class="progress" :style="{width: (item.progress ? item.progress : 0) + '%'}"></div>
           </div>
           <div class="audio-controller-container">
