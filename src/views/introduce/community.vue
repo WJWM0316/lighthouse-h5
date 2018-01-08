@@ -57,22 +57,22 @@
         </div>
 
       </div>
-
-      <!-- footer -->
-      <div :class="{footer: true, author: isAuthor}">
-        <div v-if="isAuthor" class="author-operation">
-          <button>
-            <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
-          </button>
-          <button>发布动态</button>
-        </div>
-        <div class="ask-btn" v-else>
-          <img v-if="showType" src="./../../assets/icon/icon_question.png" />
-          <img v-else src="./../../assets/icon/icon_writing.png" />
-          <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>
-        </div>
-      </div>
     </scroll>
+
+    <!-- footer -->
+    <div :class="{footer: true, author: isAuthor}">
+      <div v-if="isAuthor" class="author-operation">
+        <button>
+          <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
+        </button>
+        <button>发布动态</button>
+      </div>
+      <div class="ask-btn" v-else>
+        <img v-if="showType" src="./../../assets/icon/icon_question.png" />
+        <img v-else src="./../../assets/icon/icon_writing.png" />
+        <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
