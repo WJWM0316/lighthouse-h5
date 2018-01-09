@@ -12,7 +12,9 @@ Vue.axios.defaults.baseURL = settings.host
 
 export const request = ({type = 'post', url, data = {}, config = {}, globalLoading = false} = {}) => {
   console.log('url', url)
-  let datas = type === 'get' ? {params: data} : data
+  // 正常请
+  // let datas = type === 'get' ? {params: data} :data
+  let datas = type === 'get' ? {params: data} : {...data, TestUid: 1}
   return Vue.axios[type](url, datas, config)
     .catch(response => {
       /* eslint-disable prefer-promise-reject-errors */

@@ -43,7 +43,7 @@
     }
 
     handleTwo (e) { // 点击跳转个人详情
-//        this.$emit('tap-two', this.item.userId, this.item.LighthouseId)
+        this.$emit('tap-two', this.item.userId, this.item.LighthouseId)
     }
 
     handleThree (e) { // 跳转大咖社区

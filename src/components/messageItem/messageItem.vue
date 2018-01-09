@@ -1,51 +1,58 @@
 <template>
-  <view class="message-item" catchtap="handleOne">
-    <view class="userInfo-img">
-      <image class="headImg" catchtap="handleTwo" src="{{item.avatarUrl || '../../static/icon/img_head_default.png'}}" catchtap="handleOne">
-      </image>
-    </view>
-    <view class="userInfo-desc">
-      <view class="desc-top"><text class="{{item.replyIdentify === 1 ? 'name name-gold': 'name'}}" catchtap="handleTwo">{{item.realName}}</text><text class="after-name">{{item.afterNameStr}}</text></view>
+  <div class="message-item" @click="handleOne">
+    <div class="userInfo-img">
+      <img class="headImg" @click.stop="handleTwo" :src="item.avatarUrl || '../../static/icon/img_head_default.png'">
+    </div>
+    <div class="userInfo-desc">
+      <div class="desc-top">
+        <div :class="item.replyIdentify === 1 ? 'name name-gold': 'name'" @click.stop="handleTwo">{{item.realName}}</div>
+        <div class="after-name">{{afterNameStr[item.type]}}</div>
+      </div>
       <!--文字-->
-      <block wx:if="{{item.contentType === 1}}">
-        <view class="desc-middle">{{item.replyContent}}</view>
-      </block>
+      <div class="desc-middle" v-if="item.contentType === 1">{{item.replyContent}}</div>
       <!--音频-->
-      <block wx:else>
-        <view class="content-audio not-played" :class="{'not-played': !item.files[0].isPlayed}" @tap.stop="audioPlay({{item}}, {{itemIndex}})">
-          <view class="progress-container">
-            <view class="progress" style="width: {{item.progress}}%"></view>
-          </view>
-          <view class="audio-controller-container">
-            <view class="audio-controller">
-              <view :class="{play: !item.musicState, playing: item.musicState === 1, loading: item.musicState === 2}">
-                <image class="icon-play" src="./../../static/icon/music_play.png"></image>
-                <image class="icon-loading rotateZ" src="./../../static/icon/music_loading.png"></image>
-                <image class="icon-playing" src="./../../static/icon/music_listen.gif"></image>
-              </view>
-              <text class="duration">{{item.files[0].duration}}s</text>
-            </view>
-          </view>
-        </view>
-      </block>
-      <view class="desc-middle-return">
-        <image class="icon-zhuang" src="./../../static/icon/icon_original.png"></image>
-        <text class="{{item.beReturnedTypeStr ? 'desc-middle-return-text' : 'desc-middle-return-text-long'}}"><text style="margin-right: 8rpx;font-size: 26rpx;">{{item.beReturnedTypeStr}}</text>{{item.beReturnedContents}} </text>
-      </view>
-      <view class="desc-bottom">
-        <view class="send-time">{{item.replyTimeStr}}</view>
-        <view class="linght-house" catchtap="handleThree">{{item.manito + '的' +item.Lighthouse}}</view>
-      </view>
-    </view>
-  </view>
+      <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
+        <div class="progress-container">
+          <div class="progress" :style="{width: (item.progress ? item.progress : 0) + '%'}"></div>
+        </div>
+        <div class="audio-controller-container">
+          <div class="audio-controller">
+            <div :class="{play: !item.musicState, playing: item.musicState === 1, loading: item.musicState === 2}">
+              <img class="icon-play" src="./../../assets/icon/music_play.png">
+              <img class="icon-loading rotateZ" src="./../../assets/icon/music_loading.png">
+              <img class="icon-playing" src="./../../assets/icon/music_listen.gif">
+            </div>
+            <span class="duration">{{item.files[0].duration}}s</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="desc-middle-return">
+        <img class="icon-zhuang" src="./../../assets/icon/icon_original.png">
+        <div :class="typeStr[item.beReturnedType] ? 'desc-middle-return-text' : 'desc-middle-return-text-long'">
+          <div style="margin-right: 8px;font-size: 26px;">{{typeStr[item.beReturnedType]}}</div>{{item.beReturnedContents}} </div>
+      </div>
+      <div class="desc-bottom">
+        <div class="send-time">{{moment(item.replyTime * 1000).format('MM月DD日 HH:mm:ss')}}</div>
+        <div class="linght-house" @click.stop="handleThree">{{item.manito + '的' +item.Lighthouse}}</div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-  import wepy from 'wepy'
-  export default class Index extends wepy.component {
-    components = {
-    }
-    props = {
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import { XInput, XButton } from 'vux'
+  import { testApi } from '@/api/pages/login'
+  import moment from 'moment'
+  @Component({
+    name: 'messageItme-component',
+    components: {
+      XInput,
+      XButton,
+    },
+    props: {
       item: {
         type: Object,
         twoWay: true
@@ -54,16 +61,18 @@
       itemIndex: {
         type: Number
       },
-    }
-    data = {
-      audio: '',
-      audioTimer: '',
-      video: '',
-      currVideoIndex: '',
-      isAudio: true
-    }
-
-    methods = {
+    },
+    data () {
+      return {
+        audio: '',
+        audioTimer: '',
+        video: '',
+        currVideoIndex: '',
+        isAudio: true
+      }
+    },
+    methods: {
+      moment,
       handleOne (e) { // 点击跳转回复详情
         this.$emit('tap-one', this.item)
       },
@@ -73,202 +82,45 @@
       handleThree (e) { // 跳转大咖社区
         this.$emit('tap-three', this.item.LighthouseId)
       },
-      audioPlay (item, index) {
-        if (!this.isAudio) {
-          wx.showModal({
-            title: '提示',
-            content: '当前微信版本过低，无法使用音频功能，请升级到最新微信版本后重试。'
-          })
-          return
+      audioPlay (problemIndex) {
+        let url = ''
+        const itemIndex = this.itemIndex
+        if (problemIndex >= 0) {
+          url = this.item.answers[problemIndex].file.fileUrl
+        } else {
+          url = this.item.files[0].fileUrl
         }
-        let state = 0
-        // 播放状态 0 未播放 1 playing 2 loading
-        clearInterval(this.audioTimer)
-        if (item.musicState) { // 已播放
-          this.audio.pause()
-          state = 0
-        } else { // 未播放
-          if (item.progress) { // 如果播放为上次暂停音频 继续播放
-            this.audio.play()
-          } else {
-            if (this.audio.src) { // 如果播放为其他音频 中止播放 切换音频
-              this.audio.stop()
-            }
-            console.log('item.files[0].fileUrl', item.files[0].fileUrl)
-            this.audio.src = item.files[0].fileUrl
-          }
-          state = 1
-          this.audioTimer = setInterval(() => {
-            const {currentTime, duration} = this.audio
-            if (currentTime <= duration) {
-              this.$emit('audioEvent', {
-                eventType: 'time-update',
-                currentTime,
-                duration,
-                index
-              })
-            } else {
-              clearInterval(this.audioTimer)
-            }
-          }, 300)
-        }
-        this.$emit('audioState', {
-          index,
-          state
-        })
-      },
-    }
-    computed = {
-    }
 
-    events = {
-      'page-destroy': ($event) => {
-        this.audio.stop()
-        clearInterval(this.audioTimer)
-        this.audio = ''
-        this.video = ''
-        this.currVideoIndex = ''
-      }
-    }
-
-    onLoad () {
-      console.log('onload item')
-      if (wx.createInnerAudioContext) {
-        // 音频控制器
-        const audio = wx.createInnerAudioContext()
-        audio.autoplay = true
-        audio.onWaiting(() => {
-          this.$emit('audioEvent', {
-            eventType: 'waiting'
-          })
-        })
-        audio.onCanplay(() => {
-          this.$emit('audioEvent', {
-            eventType: 'canPlay'
-          })
-        })
-        audio.onEnded(() => {
-          audio.pause()
-          clearInterval(this.audioTimer)
-          this.$emit('audioEvent', {
-            eventType: 'end'
-          })
-        })
-        // audio.onTimeUpdate(() => {
-        // })
-        this.audio = audio
-      } else {
-        this.isAudio = false
-        // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
-        wx.showModal({
-          title: '提示',
-          content: '当前微信版本过低，无法使用音频功能，请升级到最新微信版本后重试。'
+        this.$emit('audioEvent', {
+          eventType: 'play',
+          url,
+          itemIndex,
+          problemIndex
         })
       }
     }
-    onShow () {
+  })
+  export default class ApplyIndex extends Vue {
+    typeStr = ['', '[音频]', '[视频]', '[图片]', '[文件]', '评论导师内容']
+    afterNameStr = ['回答了我的提问', '回答了我的追问', '评论了我的问答', '评论了我的帖子', '回复了我的评论', '评论导师内容']
+    created () {
+
+    }
+
+    mounted () {
     }
   }
 </script>
 
-<style lang="less">
+<style lang="less" type="text/less">
   @import "../../styles/mixins";
   .message-item {
-    padding: 0rpx 30rpx;
-    display: flex;
-
-    .userInfo-img {
-      padding: 40rpx 0;
-      position: relative;
-      .headImg{
-        width: 100rpx;
-        height: 100rpx;
-        background: pink;
-        border-radius: 50%;
-      }
-      & .sex {
-        position: absolute;
-        width: 36rpx;
-        height: 36rpx;
-        bottom: 0;
-        right: 0;
-        border-radius: 50%;
-      }
-    }
-
-    .userInfo-desc {
-      margin-left: 30rpx;
-      padding: 40rpx 0;
-      border-bottom: 1rpx solid #ededed;
-      .desc-top{
-        width: 570rpx;
-        margin-bottom: 14rpx;
-        .setSingleLine();
-        .name {
-          font-size: 30rpx;
-          line-height: 38rpx;
-          font-weight: 600;
-          width: 590rpx;
-          color: #576b95;
-        }
-        .name-gold{
-          color: #d7ab70;
-        }
-        .after-name{
-          margin-left: 10rpx;
-          font-size: 28rpx;
-          color: #929292;
-          }
-        }
-      .desc-middle{
-
-        width: 570rpx;
-        .setSingleLine();
-      }
-      .desc-middle-return{
-        display: flex;
-        align-items: center;
-        font-size: 26rpx;
-        margin-top: 14rpx;
-        color: #929292;
-        .desc-middle-return-text{
-          .setSingleLine();
-          width: 530rpx;
-          height: 40rpx;
-        }
-        .desc-middle-return-text-long{
-          .setSingleLine();
-          width: 530rpx;
-          height: 40rpx;
-        }
-      }
-      .desc-bottom{
-        font-size: 26rpx;
-        color: #929292;
-        margin-top: 14rpx;
-        display: flex;
-        justify-content: space-between;
-        .send-time{
-
-        }
-        .linght-house{
-          text-align: right;
-          width: 260rpx;
-          .setSingleLine();
-        }
-      }
-      .persion-info{
-        padding-top: 10rpx;
-        font-size: 26rpx;
-        line-height: 34rpx;
-        color: #929292;
-        width: 590rpx;
-        .setSingleLine();
-      }
-    }
+    padding: 0px 15px;
+    display: -webkit-box;
     .content-audio {
-      width: 480rpx;
-      height: 80rpx;
+      margin-top: 8px;
+      width: 240px;
+      height: 40px;
       position: relative;
 
       & .progress-container, & .audio-controller-container {
@@ -277,7 +129,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        border-radius: 0 40rpx 40rpx 40rpx;
+        border-radius: 0 20px 20px 20px;
       }
 
       & .progress-container {
@@ -295,7 +147,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 30rpx;
+        padding: 0 15px;
       }
 
       & .play .icon-play{
@@ -309,16 +161,158 @@
       }
       & .duration {
         color: #666666;
-        font-size: 30rpx;
+        font-size: 15px;
       }
 
       &.not-played:after {
         content: '';
         position: absolute;
-        right: -15rpx;
+        right: -8px;
         top: 0;
-        width: 15rpx;
-        height: 15rpx;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ff3434;
+      }
+    }
+    .userInfo-img {
+      padding: 20px 0;
+      position: relative;
+      .headImg{
+        width: 50px;
+        height: 50px;
+        background: pink;
+        border-radius: 50%;
+        .sex {
+          position: absolute;
+          width: 18px;
+          height: 18px;
+          bottom: 0;
+          right: 0;
+          border-radius: 50%;
+        }
+      }
+    }
+
+    .userInfo-desc {
+      margin-left: 15px;
+      padding: 20px 0;
+      border-bottom: 1px solid #ededed;
+      .desc-top{
+        margin-bottom: 7px;
+        .setEllipsis(285px);
+        .name {
+          display: inline;
+          font-size: 15px;
+          line-height: 19px;
+          font-weight: 600;
+          width: 295px;
+          color: #576b95;
+        }
+        .name-gold{
+          color: #d7ab70;
+        }
+        .after-name{
+          display: inline;
+          margin-left: 5px;
+          font-size: 14px;
+          color: #929292;
+          }
+        }
+      .desc-middle{
+        .setEllipsis(285px);
+      }
+      .desc-middle-return{
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        margin-top: 7px;
+        color: #929292;
+        .desc-middle-return-text{
+          .setEllipsis(265px);
+          height: 20px;
+        }
+        .desc-middle-return-text-long{
+          .setEllipsis();
+          width: 265px;
+          height: 20px;
+        }
+      }
+      .desc-bottom{
+        font-size: 13px;
+        color: #929292;
+        margin-top: 7px;
+        display: flex;
+        justify-content: space-between;
+        .send-time{
+
+        }
+        .linght-house{
+          text-align: right;
+          .setEllipsis(130px);
+        }
+      }
+      .persion-info{
+        padding-top: 5px;
+        font-size: 13px;
+        line-height: 17px;
+        color: #929292;
+        .setEllipsis(295px);
+      }
+    }
+    .content-audio {
+      width: 240px;
+      height: 40px;
+      position: relative;
+
+      & .progress-container, & .audio-controller-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 0 20px 20px 20px;
+      }
+
+      & .progress-container {
+        background-color: rgba(255, 226, 102, 0.4);
+        overflow: hidden;
+      }
+      & .progress {
+        background-color: #ffe266;
+        height: 100%;
+        width: 0;
+      }
+
+      & .audio-controller {
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 15px;
+      }
+
+      & .play .icon-play{
+        display: block;
+      }
+      & .loading .icon-loading{
+        display: block;
+      }
+      & .playing .icon-playing{
+        display: block;
+      }
+      & .duration {
+        color: #666666;
+        font-size: 15px;
+      }
+
+      &.not-played:after {
+        content: '';
+        position: absolute;
+        right: -7px;
+        top: 0;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
         background: #ff3434;
       }
@@ -326,31 +320,31 @@
     .not-played:after {
       content: '';
       position: absolute;
-      right: -15rpx;
+      right: -7px;
       top: 0;
-      width: 15rpx;
-      height: 15rpx;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #ff3434;
     }
     & .icon-zan, & .icon-pinglun {
       display: inline-block;
-      width: 30rpx;
-      height: 30rpx;
-      margin-right: 4px;
+      width: 15px;
+      height: 15px;
+      margin-right: 2px;
     }
     & .icon-loading, & .icon-play, & .icon-playing {
       display: none;
-      width: 36rpx;
-      height: 36rpx;
+      width: 18px;
+      height: 18px;
     }
     & .rotateZ {
       animation: rotateZ linear 1s infinite;
     }
     .icon-zhuang{
-      margin-right: 8rpx;
-      width: 30rpx;
-      height: 30rpx;
+      margin-right: 4px;
+      width: 15px;
+      height: 15px;
     }
   }
 

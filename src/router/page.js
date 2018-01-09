@@ -43,6 +43,13 @@ const routers = [
     name: 'publish-voice',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/publishVoice'], resolve),
+  },
+  {
+    // 同学列表
+    path: '/classmates',
+    name: 'classmates',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/classmates'], resolve),
   }
 ]
 

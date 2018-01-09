@@ -10,16 +10,17 @@
             <!--介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
           <!--</a>-->
         </community-card>
-        <!--<button class="share-btn">-->
-          <!--<img class="share-icon" src="./../../assets/icon/icon_share.png" />分享-->
-        <!--</button>-->
+        <div class="share-btn">
+          <img class="share-icon" src="./../../assets/icon/icon_share.png" />
+          <span>分享</span>
+        </div>
       </div>
       
       <!-- container -->
       <div class="container">
 
         <!-- 同学的列表 -->
-        <div class="classmate-list" v-if="pageInfo.peoples && pageInfo.peoples.length > 0">
+        <div class="classmate-list" v-if="pageInfo.peoples && pageInfo.peoples.length > 0" @click="toMemberList">
           <div class="flex-1">
             <img :src="item['avatar']" v-for="(item, index) in pageInfo['peoples']" v-if="index < 6" />
             <img src="./../../assets/icon/firends-call-more.png" v-else-if="pageInfo.remainingJoinNum > 7" />
@@ -57,22 +58,22 @@
         </div>
 
       </div>
-
-      <!-- footer -->
-      <div :class="{footer: true, author: isAuthor}">
-        <div v-if="isAuthor" class="author-operation">
-          <button>
-            <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
-          </button>
-          <button>发布动态</button>
-        </div>
-        <div class="ask-btn" v-else>
-          <img v-if="showType" src="./../../assets/icon/icon_question.png" />
-          <img v-else src="./../../assets/icon/icon_writing.png" />
-          <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>
-        </div>
-      </div>
     </scroll>
+
+    <!-- footer -->
+    <div :class="{footer: true, author: isAuthor}">
+      <div v-if="isAuthor" class="author-operation">
+        <button @click="question">
+          <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
+        </button>
+        <button @click="release">发布动态</button>
+      </div>
+      <div class="ask-btn" @click="askBtnClick" v-else>
+        <img src="./../../assets/icon/icon_question.png" v-if="showType" />
+        <img src="./../../assets/icon/icon_writing.png" v-else />
+        <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -105,7 +106,6 @@
     dynamicList = []
     discussItemList = []
     showType = 1 // 1 朋友圈 0 交流社区
-    isShowPumpBtn = false
     isCommunityTitleFixed = false
     showIdentification = false
 
@@ -211,6 +211,22 @@
         this.pagination.end = false // 初始化数据，必定不是最后一页
         this.getList({page: 1}).then(() => {})
       }
+    }
+    askBtnClick () {
+      if (this.showType) {
+        // :todo 提问
+      } else {
+        // :todo 发帖
+      }
+    }
+    question () {
+      // :todo 回答问题
+    }
+    release () {
+      // :todo 发布
+    }
+    toMemberList () {
+      // :todo 去同学列表
     }
 
     // ------------------------------------------------
@@ -324,12 +340,14 @@
         font-size: 15px;
         line-height: 32px;
         color: #d7ab70;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         & .share-icon {
           width: 15px;
           height: 15px;
           margin-right: 5px;
-          transform:translate(0, 2px);
         }
 
         &::after {
@@ -518,6 +536,7 @@
         line-height: 50px;
         color: #666666;
         font-size: 16px;
+        border-style: none;
         & .desc {
           position: relative;
         }
@@ -528,9 +547,6 @@
           font-size: 10px;
           transform: translate(100%, -50%);
         }
-      }
-      & button:after {
-        border-style: none;
       }
       & button:last-of-type {
         background-color: #ffe266;
