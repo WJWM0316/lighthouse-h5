@@ -8,19 +8,14 @@
         <button type="button" class="control btn" @click="handleStart">
           <i class="icon u-icon-btn-recorder-start"></i>
           <!-- <image-item class="icon" src="../static/icon/btn_record_start.png" /> -->
-          <span class="text">最多录制10分钟，点击开始</span>
+          <span class="text">最多录制60秒，点击开始</span>
         </button>
       </template>
       <!-- 录制中 -->
       <template v-if="status === 'recording'">
-        <button type="button" class="control btn" @click="handlePause">
-          <i class="icon u-icon-btn-recorder-pause"></i>
+        <button type="button" class="control btn" @click="handleFinish">
+          <i class="icon u-icon-btn-recorder-stop"></i>
           <!-- <image-item class="icon" src="../static/icon/btn_record_pause.png" /> -->
-          <span class="text">暂停</span>
-        </button>
-        <button type="button" class="finish btn right" @click="handleFinish">
-          <i class="icon u-icon-btn-recorder-finish"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_finish.png" /> -->
           <span class="text">完成</span>
         </button>
       </template>
@@ -119,7 +114,6 @@ import wechatMixin from '@/mixins/wechat'
 })
 export default class Recorder extends Vue {
   manager = null // 录音管理器
-  file = null // 录音完成后生成的文件
   duration = 0 // 录音总长度
   progress = 0 // 录音进度||播放进度
   status = 'default'
@@ -158,18 +152,21 @@ export default class Recorder extends Vue {
     this.manager.onPlayVoice = () => {
       this.status = 'listening'
       this.progress = 0
+      this.startInterval()
       this.$emit('listen-play')
     }
 
     this.manager.onStopVoice = () => {
       this.status = 'finish'
       this.progress = 0
+      this.stopInterval()
       this.$emit('listen-stop')
     }
 
     this.manager.onPlayVoiceEnded = () => {
       this.status = 'finish'
       this.progress = 0
+      this.stopInterval()
       this.$emit('listen-ended')
     }
   }
@@ -181,7 +178,9 @@ export default class Recorder extends Vue {
     this.stopInterval()
     this.recorderInterval = setInterval(() => {
       this.progress += 100
-      this.$apply()
+      if (this.duration > 0 && this.progress > this.duration) {
+        this.progress = this.duration
+      }
     }, 100)
   }
 
@@ -196,11 +195,22 @@ export default class Recorder extends Vue {
 
   async upload () {
     try {
-      const res = await self.wechatUploadVoice(self.localId)
-      console.log(res)
+      const res = await this.wechatUploadVoice(this.localId)
     } catch (error) {
       this.$vux.toast.text(error.message, 'middle')
     }
+  }
+
+  /**
+   * 清除
+   */
+  clear () {
+    this.localId = ''
+    this.status = 'default'
+    this.manager && this.manager.stopVoice({ callStopVoice: false })
+    this.duration = 0
+    this.progress = 0
+    this.stopInterval()
   }
 
   /**
@@ -246,11 +256,13 @@ export default class Recorder extends Vue {
    * 重新录制
    */
   handleRestart () {
+    const self = this
     this.$vux.confirm.show({
       content: '确定要重录？',
       onConfirm () {
-        this.progress = 0
-        this.status = 'default'
+        self.progress = 0
+        self.status = 'default'
+        self.clear()
       }
     })
   }
@@ -277,7 +289,7 @@ export default class Recorder extends Vue {
     this.$vux.confirm.show({
       content: this.publishConfirmContent,
       onConfirm () {
-        this.upload()
+        self.upload()
       }
     })
     // this.$root.$parent.showConfirm(this.publishConfirmContent, () => {
