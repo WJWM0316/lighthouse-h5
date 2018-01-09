@@ -162,6 +162,7 @@ export default {
           self.$wechat.playVoice({
             localId: localId, // 需要播放的音频的本地ID，由stopRecord接口获得
             success: () => {
+              console.log('播放语音回调')
               this.triggerCallback('onPlayVoice')
             }
           })

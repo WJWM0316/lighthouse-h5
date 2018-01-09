@@ -153,18 +153,21 @@ export default class Recorder extends Vue {
     this.manager.onPlayVoice = () => {
       this.status = 'listening'
       this.progress = 0
+      this.startInterval()
       this.$emit('listen-play')
     }
 
     this.manager.onStopVoice = () => {
       this.status = 'finish'
       this.progress = 0
+      this.stopInterval()
       this.$emit('listen-stop')
     }
 
     this.manager.onPlayVoiceEnded = () => {
       this.status = 'finish'
       this.progress = 0
+      this.stopInterval()
       this.$emit('listen-ended')
     }
   }
