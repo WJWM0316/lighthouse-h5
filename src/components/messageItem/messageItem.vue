@@ -6,15 +6,13 @@
     <div class="userInfo-desc">
       <div class="desc-top">
         <div :class="item.replyIdentify === 1 ? 'name name-gold': 'name'" @click.stop="handleTwo">{{item.realName}}</div>
-        <div class="after-name">{{item.afterNameStr}}</div>
+        <div class="after-name">{{afterNameStr[item.type]}}</div>
       </div>
       <!--文字-->
       <div class="desc-middle" v-if="item.contentType === 1">{{item.replyContent}}</div>
       <!--音频-->
-      <div>{{item.circleType}}</div>
-      <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
+      <div v-else :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
         <div class="progress-container">
-
           <div class="progress" :style="{width: (item.progress ? item.progress : 0) + '%'}"></div>
         </div>
         <div class="audio-controller-container">
@@ -31,8 +29,9 @@
 
       <div class="desc-middle-return">
         <img class="icon-zhuang" src="./../../assets/icon/icon_original.png">
-        <div :class="item.beReturnedTypeStr ? 'desc-middle-return-text' : 'desc-middle-return-text-long'">
-          <div style="margin-right: 8px;font-size: 26px;">{{item.beReturnedTypeStr}}</div>{{item.beReturnedContents}} </div>
+        <div class="desc-middle-return-two" :class="typeStr[item.beReturnedType] ? 'desc-middle-return-text' : 'desc-middle-return-text-long'">
+          {{typeStr[item.beReturnedType]}} {{item.beReturnedContents}}
+        </div>
       </div>
       <div class="desc-bottom">
         <div class="send-time">{{moment(item.replyTime * 1000).format('MM月DD日 HH:mm:ss')}}</div>
@@ -84,6 +83,9 @@
       handleThree (e) { // 跳转大咖社区
         this.$emit('tap-three', this.item.LighthouseId)
       },
+      /**
+       * 播放对应音频
+       */
       audioPlay (problemIndex) {
         let url = ''
         const itemIndex = this.itemIndex
@@ -103,6 +105,8 @@
     }
   })
   export default class ApplyIndex extends Vue {
+    typeStr = ['', '[音频]', '[视频]', '[图片]', '[文件]', '评论导师内容']
+    afterNameStr = ['回答了我的提问', '回答了我的追问', '评论了我的问答', '评论了我的帖子', '回复了我的评论', '评论导师内容']
     created () {
 
     }
@@ -202,6 +206,7 @@
         margin-bottom: 7px;
         .setEllipsis(285px);
         .name {
+          display: inline;
           font-size: 15px;
           line-height: 19px;
           font-weight: 600;
@@ -212,6 +217,7 @@
           color: #d7ab70;
         }
         .after-name{
+          display: inline;
           margin-left: 5px;
           font-size: 14px;
           color: #929292;
@@ -231,9 +237,12 @@
           height: 20px;
         }
         .desc-middle-return-text-long{
-          .setEllipsis();
-          width: 265px;
+          .setEllipsis(265px);
           height: 20px;
+        }
+        .desc-middle-return-two{
+          margin-right: 4px;
+          font-size: 13px
         }
       }
       .desc-bottom{

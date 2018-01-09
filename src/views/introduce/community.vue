@@ -15,7 +15,7 @@
           <span>分享</span>
         </div>
       </div>
-      
+
       <!-- container -->
       <div class="container">
 
@@ -160,7 +160,7 @@
       // :todo 发布
     }
     toMemberList () {
-      // :todo 去同学列表
+      this.$router.push({name: 'classmates', communityId: this.$route.params.communityId})
     }
 
     // ------------------------------------------------
@@ -469,7 +469,7 @@
         margin-top: 4px;
       }
     }
-    
+
     & .footer .author-operation {
       position: fixed;
       bottom: 0;

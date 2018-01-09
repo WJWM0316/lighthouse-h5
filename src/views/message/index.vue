@@ -18,8 +18,6 @@
                         @tap-three='goCommunityDetail'
                         @tap-four='handleDetails'
                         @audioEvent="audioEvent"
-                        @audioState="audioState"
-                        @videoEvent="videoEvent"
           ></message-item>
         </div>
       </div>
@@ -54,105 +52,49 @@
       videoEvent () {},
       handleDetails () {},
       goDetail (item) {
-        console.log('goDetail', item)
-//        switch (item.type) {
-//          case 1: // 回答我的提问
-//          case 2: // 回答我的追问
-//          case 3: // 评论我的问答
+        switch (item.type) {
+          case 1: // 回答我的提问
+          case 2: // 回答我的追问
+          case 3: // 评论我的问答
 //            wx.navigateTo({
 //              url: `/pages/introduce/ask?communityId=${item.LighthouseId}`
 //            })
-//            break
-//          case 4: // 评论我帖子
-//            wx.navigateTo({
-//              url: `/pages/details/circle?sourceId=${item.beReturnedId}&type=2`
-//            })
-//            break
-//          case 5: // 回复我的评论
-//            wx.navigateTo({
-//              url: `/pages/details/commentList?commentId=${item.beReturnedId}`
-//            })
-//            break
-//          case 6: // 6评论导师内容（朋友圈）
-//            console.log('评论导师内容（朋友圈）')
-//            console.log('问题的id', item.beReturnedId, '提问类型', item.type)
-//            wx.navigateTo({ // 我是大咖 直接跳转到问答或帖子或朋友圈的详情页
-//              url: `/pages/details/circle?sourceId=${item.beReturnedId}&type=1`
-//            })
-//            break
-//        }
+            break
+          case 4: // 评论我帖子
+            this.$router.push({name: 'all-details', params: {sourceId: item.beReturnedId, type: 2}})
+            break
+          case 5: // 回复我的评论
+            this.$router.push({name: 'all-reply', params: {commentId: item.LighthouseId}})
+            break
+          case 6: // 6评论导师内容（朋友圈）
+            this.$router.push({name: 'all-details', params: {sourceId: item.beReturnedId, type: 1}})
+            break
+        }
       },
       goUserDetail (userId, LighthouseId) {
-        this.$router.push({name: 'introduce-detail'})
-//        wx.navigateTo({
-//          url: `/pages/introduce/details?userId=${userId}&communityId=${LighthouseId}`
-//        })
+        this.$router.push({name: 'introduce-detail', params: {}})
       },
       goCommunityDetail (LighthouseId) {
         this.$router.push({name: 'community', params: {communityId: LighthouseId}})
-//        console.log('communityId', LighthouseId)
-//        wx.navigateTo({
-//          url: `/pages/introduce/community?communityId=${LighthouseId}`
-//        })
-      },
-      /**
-       * 音频事件监听
-       * @param e
-       */
-      audioEvent (e) {
-//        const {eventType} = e
-//        switch (eventType) {
-//          case 'canPlay':
-//            this.dataList[this.currentAudio.index].musicState = 1
-//            break
-//          case 'waiting':
-//            this.dataList[this.currentAudio.index].musicState = 2
-//            break
-//          case 'time-update':
-//            if (this.dataList[this.currentAudio.index].musicState === 2) {
-//              this.dataList[this.currentAudio.index].musicState = 1
-//            }
-//            this.dataList[this.currentAudio.index].progress = (e.currentTime / e.duration).toFixed(2) * 100
-//            break
-//          case 'pause':
-//            this.dataList[this.currentAudio.index].musicState = 0
-//            break
-//          case 'end':
-//            this.dataList[this.currentAudio.index].progress = 0
-//            this.dataList[this.currentAudio.index].musicState = 0
-//            break
-//        }
       },
       /**
        * 音频状态监听
        * @param audio
        */
-      audioState (audio) {
-//        const {index, state, that} = audio
-//        const self = that || this
-//        const {index: currIndex} = self.currentAudio
-//        // 如果不是操作 同一段音频
-//        if (currIndex && index !== currIndex) {
-//          self.dataList[currIndex].musicState = 0 // 播放状态初始
-//          self.dataList[currIndex].progress = 0   // 播放进度初始
-//        }
-//        self.dataList[index].musicState = state
-//        self.currentAudio = {
-//          index,
-//          item: self.dataList[index]
-//        }
-//        self.$apply()
-      },
     }
   })
   export default class ApplyIndex extends Vue {
-    isRead = true
+    currentPlay = {
+      itemIndex: -1,
+      problemIndex: -1
+    }
+    music = ''
+    isRead = false
     iconSrc = 'http://cdnstatic.zike.com/Uploads/static/beacon/404.png'
     dataList = []
 
     goexChangeList () {
       this.$router.push({name: 'exchange-list'})
-      console.log('goexChangeList')
     }
 
     async getList ({page, pageSize} = {}) { // 请求列表
@@ -169,7 +111,15 @@
       }
       this.pagination.busy = true
       try {
-        const {list, total} = await messageListApi(params)
+        const {list, total, isRead} = await messageListApi(params)
+        this.isRead = isRead
+        const temp = new Array(...list)
+        temp.forEach((item) => {
+          if (item['contentType'] === 2) {
+            item.musicState = 0
+            item.progress = 0
+          }
+        })
         this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
         this.pagination.page = page
         this.pagination.pageSize = pageSize
@@ -200,6 +150,156 @@
 
     created () {
       this.getList()
+    }
+
+    mounted () {
+      const music = new Audio()
+      music.autoplay = true
+
+      /**
+       * 音频加载中
+       */
+      music.onloadstart = () => {
+        this.audioStateSet('loading')
+      }
+      /**
+       * 可获取音频总时长
+       */
+      music.ondurationchange = () => {
+      }
+      /**
+       * 缓冲时触发
+       */
+      music.onprogress = () => {
+      }
+      /**
+       * 音频处于可播放状态
+       */
+      music.oncanplay = () => {
+        this.audioStateSet('playing')
+      }
+      /**
+       * 当媒介能够无需因缓冲而停止即可播放至结尾时运行脚本
+       */
+      music.oncanplaythrough = () => {
+        this.audioStateSet('playing')
+      }
+      /**
+       * 播放中
+       */
+      music.ontimeupdate = () => {
+        let progress = parseInt((music.currentTime / music.duration).toFixed(2) * 100)
+        this.audioProgressSet(progress)
+      }
+      /**
+       * 播放完成
+       */
+      music.onended = () => {
+        this.audioStateSet()
+        this.audioProgressSet()
+      }
+      /**
+       * 等待数据
+       */
+      music.onwaiting = () => {
+        this.audioStateSet('loading')
+      }
+      /**
+       * 错误
+       */
+      music.onerror = (e) => {
+      }
+      this.music = music
+    }
+
+    /**
+     * 设置当前播放状态
+     * @param state play | playing | loading
+     */
+    audioStateSet (state) {
+      const {itemIndex, problemIndex} = this.currentPlay
+      const item = this.dataList[itemIndex]
+
+      if (itemIndex < 0) {
+        return
+      }
+
+      let musicState = 0
+      switch (state) {
+        case 'playing':
+          musicState = 1
+          break
+        case 'loading':
+          musicState = 2
+          break
+        default:
+          musicState = 0
+          break
+      }
+
+      if (item.modelType && item.modelType === 'problem') {
+        this.dataList[itemIndex].answers[problemIndex].musicState = musicState
+      } else {
+        this.dataList[itemIndex].musicState = musicState
+      }
+    }
+
+    /**
+     * 播放进度设置
+     */
+    audioProgressSet (progress) {
+      progress = progress || 0
+      console.log(progress)
+      const {itemIndex, problemIndex} = this.currentPlay
+      const item = this.dataList[itemIndex]
+
+      if (itemIndex < 0) {
+        return
+      }
+
+      if (item.modelType && item.modelType === 'problem') {
+        this.dataList[itemIndex].answers[problemIndex].progress = progress
+      } else {
+        this.dataList[itemIndex].progress = progress
+      }
+    }
+
+    audioEvent (e) {
+      const {eventType, itemIndex, problemIndex} = e
+      const temp = this.dataList[itemIndex]
+      let item = temp
+      if (temp.modelType === 'problem') {
+        item = temp.answers[problemIndex]
+      }
+      console.log(eventType, item)
+
+      switch (eventType) {
+        case 'play':
+          const {itemIndex: lastItemIndex, problemIndex: lastProblemIndex} = this.currentPlay
+          if (lastItemIndex !== itemIndex) {
+            this.music['src'] = e.url
+            this.audioStateSet()
+            this.audioProgressSet()
+          } else if (temp.modelType === 'problem' && lastProblemIndex !== problemIndex) {
+            this.music['src'] = e.url
+            this.audioStateSet()
+            this.audioProgressSet()
+          } else {
+            console.log(this.music.paused)
+            if (this.music.paused) {
+              this.music.play()
+              this.audioStateSet('playing')
+            } else {
+              this.music.pause()
+              this.audioStateSet()
+            }
+          }
+          this.currentPlay = {
+            itemIndex,
+            problemIndex
+          }
+          break
+      }
     }
   }
 </script>
