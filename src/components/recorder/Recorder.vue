@@ -249,7 +249,7 @@ export default class Recorder extends Vue {
       onConfirm () {
         self.progress = 0
         self.status = 'default'
-        self.handleStop()
+        self.handleStop(false)
       }
     })
   }
