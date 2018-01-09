@@ -48,7 +48,7 @@ export default class PublishContent extends Vue {
 
   form = {
     communityId: '', // 社区id
-    content: '' // 文本内容
+    content: '', // 文本内容
   }
 
   // 添加操作
@@ -65,6 +65,8 @@ export default class PublishContent extends Vue {
       }
     ]
   }
+
+  serverIds = [] // 上传到微信服务器的serverId数组
 
   // 图文类型： 0:无文件(文本) 1:音频 2:视频 3:图片
   get addonType () {
@@ -106,37 +108,40 @@ export default class PublishContent extends Vue {
     } catch (error) {
       console.log(error)
     }
-    this.wechatChooseImage({
-      count: this.lengths.imageMax - this.images.length
-    }).then(res => {
-      console.log(res)
-      this.$parent.showLoading('上传中...')
-      this.uploadImages(res.tempFiles, {
-        onItemSuccess: (resp, file, index) => {
-          this.images.push(file)
-          this.$apply()
-        }
-      }).then(res => {
-        console.log('全部上传成功')
-        this.$parent.hideLoading()
-      }).catch((e, index) => {
-        console.log(`第${index}张上传失败`, e)
-        this.$parent.hideLoading()
-        this.$broadcast('show-message', { content: e.message })
-      })
-    }).catch(() => {})
+    // this.wechatChooseImage({
+    //   count: this.lengths.imageMax - this.images.length
+    // }).then(res => {
+    //   console.log(res)
+    //   this.$parent.showLoading('上传中...')
+    //   this.uploadImages(res.tempFiles, {
+    //     onItemSuccess: (resp, file, index) => {
+    //       this.images.push(file)
+    //       this.$apply()
+    //     }
+    //   }).then(res => {
+    //     console.log('全部上传成功')
+    //     this.$parent.hideLoading()
+    //   }).catch((e, index) => {
+    //     console.log(`第${index}张上传失败`, e)
+    //     this.$parent.hideLoading()
+    //     this.$broadcast('show-message', { content: e.message })
+    //   })
+    // }).catch(() => {})
   }
 
   /**
-   * 上传多上图片
+   * 上传多张图片
    */
-  async uploadCustomImages (localIds) {
+  async uploadCustomImages (localIds = []) {
     try {
-      const serverIds = []
-      localIds.forEach(item => {
-        const { serverId } = this.wechatUploadImage(item)
-        serverIds.push(serverId)
-      })
+      const localId = localIds.pop()
+      if (localId) {
+        const { serverId } = this.wechatUploadImage(localId)
+        this.serverIds.push(serverId)
+      }
+      if (localIds && localIds.length > 0) {
+        this.uploadCustomImages(localIds)
+      }
     } catch (error) {
       console.log(error)
       this.$vux.toast.text(error.message || '网络异常，请重试')

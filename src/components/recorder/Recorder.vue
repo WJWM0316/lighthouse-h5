@@ -178,6 +178,9 @@ export default class Recorder extends Vue {
     this.stopInterval()
     this.recorderInterval = setInterval(() => {
       this.progress += 100
+      if (this.duration > 0 && this.progress > this.duration) {
+        this.progress = this.duration
+      }
     }, 100)
   }
 
@@ -199,9 +202,9 @@ export default class Recorder extends Vue {
   }
 
   /**
-   * 销毁组件信息
+   * 清除
    */
-  destroy () {
+  clear () {
     this.localId = ''
     this.status = 'default'
     this.manager && this.manager.stopVoice({ callStopVoice: false })
@@ -259,7 +262,7 @@ export default class Recorder extends Vue {
       onConfirm () {
         self.progress = 0
         self.status = 'default'
-        self.destroy()
+        self.clear()
       }
     })
   }
