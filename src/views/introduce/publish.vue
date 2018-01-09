@@ -103,30 +103,15 @@ export default class PublishContent extends Vue {
         count: this.lengths.imageMax - this.images.length
       }
       const res = await this.wechatChooseImage(params)
-      console.log('localIds：', res)
+      this.images = res.localIds.map(item => {
+        return {
+          path: item
+        }
+      })
       this.uploadCustomImages(res.localIds)
     } catch (error) {
       console.log(error)
     }
-    // this.wechatChooseImage({
-    //   count: this.lengths.imageMax - this.images.length
-    // }).then(res => {
-    //   console.log(res)
-    //   this.$parent.showLoading('上传中...')
-    //   this.uploadImages(res.tempFiles, {
-    //     onItemSuccess: (resp, file, index) => {
-    //       this.images.push(file)
-    //       this.$apply()
-    //     }
-    //   }).then(res => {
-    //     console.log('全部上传成功')
-    //     this.$parent.hideLoading()
-    //   }).catch((e, index) => {
-    //     console.log(`第${index}张上传失败`, e)
-    //     this.$parent.hideLoading()
-    //     this.$broadcast('show-message', { content: e.message })
-    //   })
-    // }).catch(() => {})
   }
 
   /**
@@ -136,14 +121,17 @@ export default class PublishContent extends Vue {
     try {
       const localId = localIds.pop()
       if (localId) {
-        const { serverId } = this.wechatUploadImage(localId)
+        const { serverId } = await this.wechatUploadImage(localId)
         this.serverIds.push(serverId)
       }
       if (localIds && localIds.length > 0) {
         this.uploadCustomImages(localIds)
+      } else {
+        // todo 全部上传到微信服务器成功，通知服务器
+        alert('全部上传到微信服务器成功，通知服务器')
+        // this.uploadWechatSuccess()
       }
     } catch (error) {
-      console.log(error)
       this.$vux.toast.text(error.message || '网络异常，请重试')
     }
   }
