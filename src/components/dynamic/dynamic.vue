@@ -17,12 +17,21 @@
                   @audioEvent="audioEvent"
                   @operation="operation"
     ></dynamic-item>
+
+    <!-- 悬浮输入框 -->
+    <suspension-input v-model="displaySuspensionInput"
+                      :placeholder="suspensionInputPlaceholder"
+                      :commentIndex="commentIndex"
+                      :sendText="'发送'"
+                      @send="sendComment"
+    ></suspension-input>
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
+  import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi} from '@/api/pages/pageInfo.js'
 
   @Component({
@@ -83,7 +92,8 @@
       }
     },
     components: {
-      dynamicItem
+      dynamicItem,
+      suspensionInput
     },
     watch: {
 //      data (data) {
@@ -98,13 +108,15 @@
     }
   })
   export default class dynamicList extends Vue {
-
-//    dynamicList = []
     currentPlay = {
       itemIndex: -1,
       problemIndex: -1
     }
     music = ''
+
+    commentIndex = -1
+    suspensionInputPlaceholder = '写评论'
+    displaySuspensionInput = false
 
     created () {
     }
@@ -230,6 +242,18 @@
       }
       console.log(eventType, item)
 
+      // 是否听过
+      const {isPlayed, fileId} = item.file || item.files[0]
+      if (!isPlayed && fileId) {
+        playAudioApi({fileId}).then(res => {
+          if (temp.modelType === 'problem') {
+            this.dynamicList[itemIndex].answers[problemIndex].file.isPlayed = true
+          } else {
+            this.dynamicList[itemIndex].files[0].isPlayed = true
+          }
+        })
+      }
+
       switch (eventType) {
         case 'play':
           const {itemIndex: lastItemIndex, problemIndex: lastProblemIndex} = this.currentPlay
@@ -259,7 +283,11 @@
       }
     }
 
-    async operation (e) {
+    /**
+     * 操作事件
+     * @param e :{eventType, itemIndex} eventType: 事件名称 itemIndex: 触发对象下标
+     */
+    operation (e) {
       const {eventType, itemIndex} = e
 
       if (this.disableOperationArr && this.disableOperationArr.length > 0) {
@@ -272,55 +300,144 @@
         }
       }
 
+      const item = this.dynamicList[itemIndex]
+
       switch (eventType) {
         case 'comment':
-          // :todo 评论请求
+          this.comment({item, itemIndex}).then()
           break
         case 'praise':
-          const {modelType, problemId, circleId, isFavor} = this.dynamicList[itemIndex]
-          let favorId = circleId || problemId || ''
-          let favorType = 0
-          switch (modelType) {
-            case 'circle':
-              favorType = 7
-              break
-            case 'post':
-              favorType = 5
-              break
-            case 'problem':
-              favorType = 4
-              break
-          }
-          const favor = isFavor ? 0 : 1
-          const params = {
-            favorId,    // 喜爱的id
-            favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-            isFavor: favor    // 是否喜欢：0取消喜欢，1喜欢
-          }
-
-          const res = await setFavorApi(params)
-
-          this.dynamicList[itemIndex].isFavor = favor
-          this.dynamicList[itemIndex].favorTotal += favor ? 1 : -1
-          if (favor) {
-            this.dynamicList[itemIndex].favors = this.dynamicList[itemIndex].favors || []
-            this.dynamicList[itemIndex].favors.splice(0, 0, res)
-          } else {
-            let tempIndex = ''
-            this.dynamicList[itemIndex].favors.forEach((item, index) => {
-              if (item.userId === res.userId) {
-                tempIndex = index
-              }
-            })
-            this.dynamicList[itemIndex].favors.splice(tempIndex, 1)
-          }
-          console.log(this.dynamicList[itemIndex])
+          this.praise({item, itemIndex}).then()
           break
         case 'del':
-          // :todo 删除请求
-          this.dynamicList.splice(itemIndex, 1)
-          console.log(this.dynamicList, itemIndex)
+          this.del({item, itemIndex}).then()
           break
+      }
+    }
+
+    /**
+     * 评论
+     * @param item
+     * @param itemIndex
+     * @returns {Promise.<void>}
+     */
+    async comment ({item, itemIndex}) {
+      if (item.modelType !== 'circle') {
+        this.suspensionInputPlaceholder = '回复' + item.releaseUser.realName + ':'
+      }
+      this.displaySuspensionInput = true
+      this.commentIndex = itemIndex
+    }
+    /**
+     * 点赞
+     * @param item
+     * @param itemIndex
+     * @returns {Promise.<void>}
+     */
+    async praise ({item, itemIndex}) {
+      const {modelType, problemId, circleId, isFavor} = item
+      let favorId = circleId || problemId || ''
+      let favorType = 0
+      switch (modelType) {
+        case 'circle':
+          favorType = 7
+          break
+        case 'post':
+          favorType = 5
+          break
+        case 'problem':
+          favorType = 4
+          break
+      }
+      const favor = isFavor ? 0 : 1
+      const params = {
+        favorId,    // 喜爱的id
+        favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
+        isFavor: favor    // 是否喜欢：0取消喜欢，1喜欢
+      }
+
+      const res = await setFavorApi(params)
+
+      this.dynamicList[itemIndex].isFavor = favor
+      this.dynamicList[itemIndex].favorTotal += favor ? 1 : -1
+      if (favor) {
+        this.dynamicList[itemIndex].favors = this.dynamicList[itemIndex].favors || []
+        this.dynamicList[itemIndex].favors.splice(0, 0, res)
+      } else {
+        let tempIndex = ''
+        this.dynamicList[itemIndex].favors.forEach((item, index) => {
+          if (item.userId === res.userId) {
+            tempIndex = index
+          }
+        })
+        this.dynamicList[itemIndex].favors.splice(tempIndex, 1)
+      }
+    }
+    /**
+     * 删除
+     * @param item
+     * @param itemIndex
+     * @returns {Promise.<void>}
+     */
+    async del ({item, itemIndex}) {
+      const {modelType, problemId, circleId} = item
+      const _this = this
+      let id = circleId || problemId || ''
+      const params = {
+        id,    // 删除id
+        modelType,  // 类型：circle:朋友圈,post:帖子,comment:评论
+      }
+
+      this.$vux.confirm.show({
+        content: '确定要删除吗？',
+        confirmText: '确定',
+        cancelText: '取消',
+        onCancel () {
+        },
+        onConfirm () {
+          delCommontApi(params).then(res => {
+            _this.dynamicList.splice(itemIndex, 1)
+          }).catch(e => {
+          })
+        }
+      })
+      console.log(this.dynamicList, itemIndex)
+    }
+
+    /**
+     * 发送评论
+     * @param data
+     */
+    async sendComment ({value, commentIndex}) {
+      const item = this.dynamicList[commentIndex]
+      const {problemId, circleId} = item
+      let sourceType = 4
+      switch (item.modelType) {
+        case 'circle':
+          sourceType = 1
+          break
+        case 'post':
+          sourceType = 2
+          break
+        case 'problem':
+          sourceType = 3
+          break
+      }
+
+      const params = {
+        sourceId: circleId || problemId,     // 对应评论类型id
+        sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
+        content: value       // 评论内容
+      }
+
+      const res = await setSubmitCommentApi(params)
+
+      if (this.dynamicList[commentIndex] && this.dynamicList[commentIndex].comments) {
+        this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
+        this.dynamicList[commentIndex].commentTotal += 1
+      } else {
+        this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
+        this.dynamicList[commentIndex].commentTotal = 1
       }
     }
   }
