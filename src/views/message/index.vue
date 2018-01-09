@@ -54,46 +54,30 @@
       videoEvent () {},
       handleDetails () {},
       goDetail (item) {
-        console.log('goDetail', item)
-//        switch (item.type) {
-//          case 1: // 回答我的提问
-//          case 2: // 回答我的追问
-//          case 3: // 评论我的问答
+        switch (item.type) {
+          case 1: // 回答我的提问
+          case 2: // 回答我的追问
+          case 3: // 评论我的问答
 //            wx.navigateTo({
 //              url: `/pages/introduce/ask?communityId=${item.LighthouseId}`
 //            })
-//            break
-//          case 4: // 评论我帖子
-//            wx.navigateTo({
-//              url: `/pages/details/circle?sourceId=${item.beReturnedId}&type=2`
-//            })
-//            break
-//          case 5: // 回复我的评论
-//            wx.navigateTo({
-//              url: `/pages/details/commentList?commentId=${item.beReturnedId}`
-//            })
-//            break
-//          case 6: // 6评论导师内容（朋友圈）
-//            console.log('评论导师内容（朋友圈）')
-//            console.log('问题的id', item.beReturnedId, '提问类型', item.type)
-//            wx.navigateTo({ // 我是大咖 直接跳转到问答或帖子或朋友圈的详情页
-//              url: `/pages/details/circle?sourceId=${item.beReturnedId}&type=1`
-//            })
-//            break
-//        }
+            break
+          case 4: // 评论我帖子
+            this.$router.push({name: 'all-details', params: {sourceId: item.beReturnedId, type: 2}})
+            break
+          case 5: // 回复我的评论
+            this.$router.push({name: 'all-reply', params: {commentId: item.LighthouseId}})
+            break
+          case 6: // 6评论导师内容（朋友圈）
+            this.$router.push({name: 'all-details', params: {sourceId: item.beReturnedId, type: 1}})
+            break
+        }
       },
       goUserDetail (userId, LighthouseId) {
-        this.$router.push({name: 'introduce-detail'})
-//        wx.navigateTo({
-//          url: `/pages/introduce/details?userId=${userId}&communityId=${LighthouseId}`
-//        })
+        this.$router.push({name: 'introduce-detail', params: {}})
       },
       goCommunityDetail (LighthouseId) {
         this.$router.push({name: 'community', params: {communityId: LighthouseId}})
-//        console.log('communityId', LighthouseId)
-//        wx.navigateTo({
-//          url: `/pages/introduce/community?communityId=${LighthouseId}`
-//        })
       },
       /**
        * 音频事件监听
@@ -152,7 +136,6 @@
 
     goexChangeList () {
       this.$router.push({name: 'exchange-list'})
-      console.log('goexChangeList')
     }
 
     async getList ({page, pageSize} = {}) { // 请求列表

@@ -36,6 +36,13 @@ const routers = [
     name: 'publish-content',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/publish'], resolve),
+  },
+  {
+    // 同学列表
+    path: '/classmates',
+    name: 'classmates',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/classmates'], resolve),
   }
 ]
 
