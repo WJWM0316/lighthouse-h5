@@ -39,7 +39,7 @@ const routers = [
   },
   {
     // 同学列表
-    path: '/classmates',
+    path: '/classmates/:communityId',
     name: 'classmates',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/classmates'], resolve),

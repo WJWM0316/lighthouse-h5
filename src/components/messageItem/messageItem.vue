@@ -11,7 +11,7 @@
       <!--文字-->
       <div class="desc-middle" v-if="item.contentType === 1">{{item.replyContent}}</div>
       <!--音频-->
-      <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
+      <div v-else :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
         <div class="progress-container">
           <div class="progress" :style="{width: (item.progress ? item.progress : 0) + '%'}"></div>
         </div>
@@ -29,8 +29,9 @@
 
       <div class="desc-middle-return">
         <img class="icon-zhuang" src="./../../assets/icon/icon_original.png">
-        <div :class="typeStr[item.beReturnedType] ? 'desc-middle-return-text' : 'desc-middle-return-text-long'">
-          <div style="margin-right: 8px;font-size: 26px;">{{typeStr[item.beReturnedType]}}</div>{{item.beReturnedContents}} </div>
+        <div class="desc-middle-return-two" :class="typeStr[item.beReturnedType] ? 'desc-middle-return-text' : 'desc-middle-return-text-long'">
+          {{typeStr[item.beReturnedType]}} {{item.beReturnedContents}}
+        </div>
       </div>
       <div class="desc-bottom">
         <div class="send-time">{{moment(item.replyTime * 1000).format('MM月DD日 HH:mm:ss')}}</div>
@@ -82,6 +83,9 @@
       handleThree (e) { // 跳转大咖社区
         this.$emit('tap-three', this.item.LighthouseId)
       },
+      /**
+       * 播放对应音频
+       */
       audioPlay (problemIndex) {
         let url = ''
         const itemIndex = this.itemIndex
@@ -233,9 +237,12 @@
           height: 20px;
         }
         .desc-middle-return-text-long{
-          .setEllipsis();
-          width: 265px;
+          .setEllipsis(265px);
           height: 20px;
+        }
+        .desc-middle-return-two{
+          margin-right: 4px;
+          font-size: 13px
         }
       }
       .desc-bottom{

@@ -3,7 +3,7 @@
     <div class="userInfo-img">
       <img class="headImg" :src="item.avatarUrl || '../../assets/icon/img_head_default.png'">
       <img class="sex" v-if="item.gender"
-             :src="item.gender === 1 ? '../../assets/icon/icon_boy.png' : '../../assets/icon/icon_girl.png'">
+             :src="item.gender === 1 ? '../../../assets/icon/icon_boy.png' : '../ ../../assets/icon/icon_girl.png'">
     </div>
     <div class="userInfo-desc">
       <div class="name">{{item.realName}}</div>

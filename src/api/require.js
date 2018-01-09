@@ -14,7 +14,8 @@ export const request = ({type = 'post', url, data = {}, config = {}, globalLoadi
   console.log('url', url)
   // 正常请
   // let datas = type === 'get' ? {params: data} :data
-  let datas = type === 'get' ? {params: data} : {...data, TestUid: 1}
+  let datas = type === 'get' ? {params: data} : {...data, TestUid: 2}
+  console.log('require params', datas)
   return Vue.axios[type](url, datas, config)
     .catch(response => {
       /* eslint-disable prefer-promise-reject-errors */
