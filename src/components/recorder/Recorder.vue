@@ -193,7 +193,6 @@ export default class Recorder extends Vue {
   async upload () {
     try {
       const res = await this.wechatUploadVoice(this.localId)
-      console.log(res)
     } catch (error) {
       this.$vux.toast.text(error.message, 'middle')
     }
