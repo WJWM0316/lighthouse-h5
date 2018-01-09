@@ -240,11 +240,13 @@ export default class Recorder extends Vue {
    * 重新录制
    */
   handleRestart () {
+    const self = this
     this.$vux.confirm.show({
       content: '确定要重录？',
       onConfirm () {
-        this.progress = 0
-        this.status = 'default'
+        self.progress = 0
+        self.status = 'default'
+        self.handleStop()
       }
     })
   }
@@ -271,7 +273,7 @@ export default class Recorder extends Vue {
     this.$vux.confirm.show({
       content: this.publishConfirmContent,
       onConfirm () {
-        this.upload()
+        self.upload()
       }
     })
     // this.$root.$parent.showConfirm(this.publishConfirmContent, () => {
