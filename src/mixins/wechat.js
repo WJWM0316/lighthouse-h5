@@ -152,8 +152,9 @@ export default {
 
         /**
          * 微信播放录音
+         * @param {*} localId
          */
-        playVoice (localId) {
+        playVoice ({ localId } = {}) {
           localId = localId || _localId
           if (!localId) {
             console.log('没有找到localId')
@@ -178,7 +179,7 @@ export default {
          * 微信暂停录音
          * @param {*} localId
          */
-        pauseVoice (localId) {
+        pauseVoice ({ localId } = {}) {
           localId = localId || _localId
           if (!localId) {
             console.log('没有找到localId')
@@ -195,8 +196,9 @@ export default {
         /**
          * 微信停止录音
          * @param {*} localId
+         * @param {*} callStopVoice 是否调用回调函数
          */
-        stopVoice (localId) {
+        stopVoice ({ localId, callStopVoice = true } = {}) {
           localId = localId || _localId
           if (!localId) {
             console.log('没有找到localId')
@@ -205,7 +207,9 @@ export default {
           self.$wechat.stopVoice({
             localId: localId, // 需要停止的音频的本地ID，由stopRecord接口获得
             success: () => {
-              this.triggerCallback('onStopVoice')
+              if (callStopVoice) {
+                this.triggerCallback('onStopVoice')
+              }
             }
           })
         }

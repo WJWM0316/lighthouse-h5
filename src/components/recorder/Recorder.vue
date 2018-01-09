@@ -264,8 +264,8 @@ export default class Recorder extends Vue {
   /**
    * 停止播放
    */
-  handleStop () {
-    this.manager && this.manager.stopVoice()
+  handleStop (callStopVoice = true) {
+    this.manager && this.manager.stopVoice({ callStopVoice: callStopVoice })
   }
 
   /**
