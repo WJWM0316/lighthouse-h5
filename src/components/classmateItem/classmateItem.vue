@@ -3,7 +3,7 @@
     <div class="userInfo-img">
       <img class="headImg" :src="item.avatarUrl || '../../assets/icon/img_head_default.png'">
       <img class="sex" v-if="item.gender"
-             :src="item.gender === 1 ? '../../../assets/icon/icon_boy.png' : '../ ../../assets/icon/icon_girl.png'">
+             :src="item.gender === 1 ? boyImg : girlImg">
     </div>
     <div class="userInfo-desc">
       <div class="name">{{item.realName}}</div>
@@ -34,7 +34,10 @@
       },
     }
   })
-  export default class ApplyIndex extends Vue {
+  export default class ClassMatesItemIndex extends Vue {
+    girlImg = require('../../assets/icon/icon_girl.png') || ''
+    boyImg = require('../../assets/icon/icon_boy.png') || ''
+    defaultImg = require('../../assets/icon/img_head_default.png') || ''
     handleOne (e) { // 点击跳转个人详情
       this.$emit('tap-one', this.item.userId)
     }
@@ -82,14 +85,14 @@
     .name {
       font-size: 15px;
       line-height: 19px;
-      .setEllipsis(295px);
+      .setEllipsis(285px);
     }
     .persion-info{
       padding-top: 5px;
       font-size: 13px;
       line-height: 17px;
       color: #929292;
-      .setEllipsis(295px);
+      .setEllipsis(285px);
     }
   }
 </style>

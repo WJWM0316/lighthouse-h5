@@ -71,7 +71,7 @@ export default class App extends Vue {
 }
 </script>
 
-<style lang="less">
+<style lang="less" type="text/less">
 @import "./styles/index";
 
 .home-nav {
