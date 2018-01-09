@@ -114,7 +114,6 @@ import wechatMixin from '@/mixins/wechat'
 })
 export default class Recorder extends Vue {
   manager = null // 录音管理器
-  file = null // 录音完成后生成的文件
   duration = 0 // 录音总长度
   progress = 0 // 录音进度||播放进度
   status = 'default'
@@ -201,6 +200,18 @@ export default class Recorder extends Vue {
   }
 
   /**
+   * 销毁组件信息
+   */
+  destroy () {
+    this.localId = ''
+    this.status = 'default'
+    this.manager && this.manager.stopVoice(false)
+    this.duration = 0
+    this.progress = 0
+    this.stopInterval()
+  }
+
+  /**
    * 开始录音
    */
   handleStart () {
@@ -249,7 +260,7 @@ export default class Recorder extends Vue {
       onConfirm () {
         self.progress = 0
         self.status = 'default'
-        self.handleStop(false)
+        self.destroy()
       }
     })
   }
