@@ -29,6 +29,8 @@ import WechatMixin from '@/mixins/wechat'
 
 import { Actionsheet } from 'vux'
 
+import { publishApi } from '@/api/pages/content'
+
 @Component({
   name: 'publish-content',
   components: {
@@ -67,6 +69,7 @@ export default class PublishContent extends Vue {
   }
 
   serverIds = [] // 上传到微信服务器的serverId数组
+  uploadSuccess = true
 
   // 图文类型： 0:无文件(文本) 1:音频 2:视频 3:图片
   get addonType () {
@@ -91,7 +94,7 @@ export default class PublishContent extends Vue {
   }
 
   created () {
-    this.form.communityId = this.$route.communityId
+    this.form.communityId = this.$route.params.communityId
   }
 
   /**
@@ -121,9 +124,11 @@ export default class PublishContent extends Vue {
     try {
       const localId = localIds.pop()
       if (localId) {
+        this.uploadSuccess = false
         const { serverId } = await this.wechatUploadImage(localId)
         this.serverIds.push(serverId)
       }
+
       if (localIds && localIds.length > 0) {
         this.uploadCustomImages(localIds)
       } else {
@@ -140,6 +145,59 @@ export default class PublishContent extends Vue {
    */
   uploadWechatSuccess () {
     alert('全部上传到微信服务器成功，通知服务器')
+    setTimeout()
+  }
+
+  /**
+   * 准备发布
+   */
+  readyPublish () {
+    let fileId = []
+    if (this.addonType === 2) {
+      fileId = this.videos.map(item => item.fileId)
+    } else if (this.addonType === 3) {
+      fileId = this.images.map(item => item.fileId)
+    }
+
+    const params = {
+      communityId: this.form.communityId,
+      content: this.form.content,
+      type: this.addonType,
+      fileId: fileId
+    }
+
+    if (this.uploadSuccess) {
+      Vue.$vux.loading.show({
+        text: '上传中...'
+      })
+      this.publish(params)
+    } else {
+      this.$watch('uploadSuccess', function (val) {
+        if (val) {
+          this.publish(params)
+        }
+      })
+    }
+  }
+
+  /**
+   * 最终发布
+   */
+  async publish (params) {
+    try {
+      Vue.$vux.loading.show({
+        text: '发布中...'
+      })
+      await publishApi(params)
+      Vue.$vux.loading.show({
+        text: '发布成功'
+      })
+      this.$router.go(-1)
+    } catch (error) {
+      this.$vux.toast.text(error.message, 'middle')
+    } finally {
+      Vue.$vux.loading.hide()
+    }
   }
 
   /**
@@ -188,7 +246,13 @@ export default class PublishContent extends Vue {
    * 提交表单
    */
   handleSubmit (e) {
-    this.publish()
+    const self = this
+    this.$vux.confirm.show({
+      content: '确定要发布？',
+      onConfirm () {
+        self.readyPublish()
+      }
+    })
   }
 }
 </script>

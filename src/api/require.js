@@ -9,12 +9,34 @@ import router from '../router/index.js'
 Vue.use(VueAxios, axios)
 // 动态设置本地和线上接口域名
 Vue.axios.defaults.baseURL = settings.host
+/**
+ * 显示loading
+ * @param {*} open 是否开启loading
+ */
+function showLoading (open) {
+  if (open) {
+    Vue.$vux.loading.show({
+      text: '加载中...'
+    })
+  }
+}
+
+/**
+ * 隐藏loading
+ * @param {*} open 是否开启loading
+ */
+function hideLoading (open) {
+  if (open) {
+    Vue.$vux.loading.hide()
+  }
+}
 
 export const request = ({type = 'post', url, data = {}, config = {}, globalLoading = false} = {}) => {
   console.log('url', url)
   // 正常请
   // let datas = type === 'get' ? {params: data} :data
   let datas = type === 'get' ? {params: {...data, TestUid: 2}} : {...data, TestUid: 2}
+  showLoading(globalLoading)
   console.log('require params', datas)
   return Vue.axios[type](url, datas, config)
     .catch(response => {
@@ -27,28 +49,35 @@ export const request = ({type = 'post', url, data = {}, config = {}, globalLoadi
         data = JSON.parse(data)
       }
       if (data && data.statusCode === 200) {
+        hideLoading(globalLoading)
         return data.data === undefined ? {} : data.data
       }
       if (data && data.statusCode === 255) { // 登录时openId cookie失效
         store.dispatch('remove_userinfo')
+        hideLoading(globalLoading)
         location.href = `/zikeserver/wap/weixin/index?zike_from=${location.href}`
         return data.data === undefined ? {} : data.data
       }
       if (data && data.statusCode === 401) { // 没有登录权限
         store.dispatch('remove_userinfo')
+        hideLoading(globalLoading)
         router.replace({
           name: 'login',
           query: {redirect: router.currentRoute.path}
         })
       }
       if (data && data.statusCode === 264) { // 内容找不到
+        hideLoading(globalLoading)
         router.replace({
           name: 'undefined'
         })
       }
+
+      hideLoading(globalLoading)
       return Promise.reject(data)
     })
     .catch(err => {
+      hideLoading(globalLoading)
       return Promise.reject(err)
     })
 }
