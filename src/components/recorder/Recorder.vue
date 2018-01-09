@@ -8,19 +8,14 @@
         <button type="button" class="control btn" @click="handleStart">
           <i class="icon u-icon-btn-recorder-start"></i>
           <!-- <image-item class="icon" src="../static/icon/btn_record_start.png" /> -->
-          <span class="text">最多录制10分钟，点击开始</span>
+          <span class="text">最多录制60秒，点击开始</span>
         </button>
       </template>
       <!-- 录制中 -->
       <template v-if="status === 'recording'">
         <button type="button" class="control btn" @click="handlePause">
-          <i class="icon u-icon-btn-recorder-pause"></i>
+          <i class="icon u-icon-btn-recorder-stop"></i>
           <!-- <image-item class="icon" src="../static/icon/btn_record_pause.png" /> -->
-          <span class="text">暂停</span>
-        </button>
-        <button type="button" class="finish btn right" @click="handleFinish">
-          <i class="icon u-icon-btn-recorder-finish"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_finish.png" /> -->
           <span class="text">完成</span>
         </button>
       </template>

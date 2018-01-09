@@ -110,9 +110,9 @@ export default {
          * 触发回调
          * @param {*} callback
          */
-        triggerCallback (callback) {
+        triggerCallback (callback, ...options) {
           if (this[callback] && this[callback] instanceof Function) {
-            this[callback]()
+            this[callback](...options)
           }
         },
 
