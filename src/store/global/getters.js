@@ -25,5 +25,8 @@ export default {
   },
   showNoviceHome: function (state) {
     return state.showNoviceHomeBanner
+  },
+  wechatReady: function (state) {
+    return state.wechatReady
   }
 }

@@ -105,5 +105,10 @@ export default {
       commit(types.UPDATE_NOVICE_HOME, isShow)
       resolve()
     })
-  }
+  },
+
+  wechat_ready: ({ commit }) => new Promise((resolve, reject) => {
+    commit(types.WECHAT_READY)
+    resolve()
+  })
 }

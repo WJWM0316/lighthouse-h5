@@ -169,7 +169,6 @@ export default class PublishContent extends Vue {
    * @param {*} item
    */
   handleAddActoinItem (key, item) {
-    console.log(key, item)
     switch (key) {
       case 'image':
         this.chooseCustomImages()
