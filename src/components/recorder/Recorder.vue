@@ -13,7 +13,7 @@
       </template>
       <!-- 录制中 -->
       <template v-if="status === 'recording'">
-        <button type="button" class="control btn" @click="handlePause">
+        <button type="button" class="control btn" @click="handleFinish">
           <i class="icon u-icon-btn-recorder-stop"></i>
           <!-- <image-item class="icon" src="../static/icon/btn_record_pause.png" /> -->
           <span class="text">完成</span>
