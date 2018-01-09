@@ -67,15 +67,13 @@
   import Component from 'vue-class-component'
   import CommunityCard from '@/components/communityCard'
   import dynamic from '@/components/dynamic/dynamic'
-  import { Confirm } from 'vux'
   import {getCommunityInfoApi} from '@/api/pages/pageInfo.js'
 
   @Component({
     name: 'big-shot-introduce',
     components: {
       dynamic,
-      CommunityCard,
-      Confirm
+      CommunityCard
     },
     computed: {
       // 剩余免费名额
@@ -142,8 +140,8 @@
       this.$vux.confirm.show({
         title: '评论点赞',
         content: '您还没有加入，暂时不能操作',
-        'confirm-text': '付费加入',
-        'cancel-text': '我知道了',
+        confirmText: '付费加入',
+        cancelText: '我知道了',
         onCancel () {
         },
         onConfirm () {

@@ -36,7 +36,7 @@ class Flexible {
       this.docEl.firstElementChild.appendChild(this.metaEl)
     }
 
-    this.dpr = window.devicePixelRatio || 1
+    this.dpr = Math.floor(window.devicePixelRatio) || 1
     this.scale = 1 / this.dpr
     this.setBodyFontSize()
     this.setRem()

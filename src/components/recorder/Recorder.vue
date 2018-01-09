@@ -7,7 +7,6 @@
       <template v-if="status === 'default'">
         <button type="button" class="control btn" @click="handleStart">
           <i class="icon u-icon-btn-recorder-start"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_start.png" /> -->
           <span class="text">最多录制60秒，点击开始</span>
         </button>
       </template>
@@ -15,38 +14,32 @@
       <template v-if="status === 'recording'">
         <button type="button" class="control btn" @click="handleFinish">
           <i class="icon u-icon-btn-recorder-stop"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_pause.png" /> -->
           <span class="text">完成</span>
         </button>
       </template>
       <!-- 暂停中 -->
-      <template v-if="status === 'pause'">
+      <!-- <template v-if="status === 'pause'">
         <button type="button" class="control btn" @click="handleResume">
           <i class="icon u-icon-btn-recorder-start"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_start.png" /> -->
           <span class="text">继续</span>
         </button>
         <button type="button" class="finish btn right" @click="handleFinish">
           <i class="icon u-icon-btn-recorder-finish"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_finish.png" /> -->
           <span class="text">完成</span>
         </button>
-      </template>
+      </template> -->
       <!-- 完成录制 -->
       <template v-if="status === 'finish'">
         <button type="button" class="restart btn left" @click="handleRestart">
           <i class="icon u-icon-btn-recorder-restart"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_restart.png" /> -->
           <span class="text">重录</span>
         </button>
         <button type="button" class="control btn" @click="handlePlay">
           <i class="icon u-icon-btn-recorder-play"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_play.png" /> -->
           <span class="text">试听</span>
         </button>
         <button type="button" class="publish btn right" @click="handlePublish">
           <i class="icon u-icon-btn-recorder-publish"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_publish.png" /> -->
           <span class="text">{{publishBtnText}}</span>
         </button>
       </template>
@@ -54,17 +47,14 @@
       <template v-if="status === 'listening'">
         <button type="button" class="restart btn left" @click="handleRestart">
           <i class="icon u-icon-btn-recorder-restart"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_restart.png" /> -->
           <span class="text">重录</span>
         </button>
         <button type="button" class="control btn" @click="handleStop">
           <i class="icon u-icon-btn-recorder-stop"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_stop.png" /> -->
           <span class="text">停止</span>
         </button>
         <button type="button" class="publish btn right" @click="handlePublish">
           <i class="icon u-icon-btn-recorder-publish"></i>
-          <!-- <image-item class="icon" src="../static/icon/btn_record_publish.png" /> -->
           <span class="text">{{publishBtnText}}</span>
         </button>
       </template>
@@ -196,9 +186,18 @@ export default class Recorder extends Vue {
   async upload () {
     try {
       const res = await this.wechatUploadVoice(this.localId)
+      this.uploadWechatSuccess(res)
     } catch (error) {
       this.$vux.toast.text(error.message, 'middle')
     }
+  }
+
+  /**
+   * 文件成功上传到微信服务器
+   */
+  uploadWechatSuccess (res) {
+    // todo 上传微信服务器成功，通知服务器，并发布
+    alert('全部上传到微信服务器成功，通知服务器')
   }
 
   /**
@@ -217,38 +216,13 @@ export default class Recorder extends Vue {
    * 开始录音
    */
   handleStart () {
-    // this.manager && this.manager.start({
-    //   duration: 600000,
-    //   format: 'mp3'
-    // })
     this.manager && this.manager.startRecord()
-  }
-
-  /**
-   * 暂停录音
-   */
-  handlePause () {
-    // this.manager && this.manager.pause()
-  }
-
-  /**
-   * 继续录音
-   */
-  handleResume () {
-    // this.manager && this.manager.resume()
-    // this.status = 'recording'
-    // this.$apply()
-    // this.startInterval()
   }
 
   /**
    * 完成录音
    */
   handleFinish () {
-    // if (this.status === 'pause') {
-    //   // 如果是暂停录音状态直接完成，会导致录音文件长度增加一倍，所以先继续再停止录制
-    //   this.manager && this.manager.resume()
-    // }
     this.manager && this.manager.stopRecord()
   }
 
@@ -292,27 +266,6 @@ export default class Recorder extends Vue {
         self.upload()
       }
     })
-    // this.$root.$parent.showConfirm(this.publishConfirmContent, () => {
-    //   this.file.path = this.file.tempFilePath
-    //   this.$root.$parent.showLoading('上传中（0%）')
-    //   this.uploadAudio(this.file, {
-    //     onProgress: res => {
-    //       if (res.progress >= 100) {
-    //         this.$root.$parent.showLoading(`上传完成`)
-    //       } else {
-    //         this.$root.$parent.showLoading(`上传中（${res.progress}%）`)
-    //       }
-    //     }
-    //   }).then(res => {
-    //     console.log('上传完成：', res)
-    //     this.$root.$parent.hideLoading()
-    //     this.$emit('upload-success', res)
-    //   }).catch(e => {
-    //     console.log('上传失败', e)
-    //     this.$root.$parent.hideLoading()
-    //     this.$emit('upload-error', e)
-    //   })
-    // })
   }
 }
 </script>
