@@ -1,5 +1,5 @@
 <template>
-  <div class="p-exchange-list">
+  <div class="p-body p-exchange-list">
     <div class="toggle-tab fs15" :class="typeClassList[applyType -1]">
       <div @click="toggle(1)">我收到的申请</div>
       <div @click="toggle(2)">我发出的申请</div>
@@ -12,6 +12,7 @@
                     @tap-two='goUserDetail'
                     @tap-three='goCommunityDetail'
                     @tap-four='handleDetails'
+                    :type='applyType'
                     :item="item"></apply-item>
       </div>
       </scroller>
@@ -43,32 +44,24 @@
     dataList = []
     iconSrc = 'http://cdnstatic.zike.com/Uploads/static/beacon/404.png'
     goApplyDetail (id, userId) {
-      console.log('id userId', id, userId)
-      this.$router.push({name: 'exchange-detail', query: {id, userId}})
-//      wx.navigateTo({
-//        url: `/pages/exchange/detail?id=${id}&userId=${userId}&type=${this.applyType}`
-//      })
+      this.$router.push({name: 'exchange-detail', params: {id, userId, type: this.applyType}})
     }
     goUserDetail (userId, LighthouseId) {
-      console.log('id userId', userId, LighthouseId)
-//      wx.navigateTo({
-//        url: `/pages/introduce/details?userId=${userId}&communityId=${LighthouseId}`
-//      })
+      console.log('跳去用户详情，暂时不要的')
     }
     goCommunityDetail (LighthouseId) {
-//      wx.navigateTo({
-//        url: `/pages/introduce/community?LighthouseId=${LighthouseId}`
-//      })
+      console.log('跳去社区详情，暂时不要的')
     }
-    handleDetails (id, LighthouseId) {
-      console.log('id userId', id, LighthouseId)
-//      handleDetailsApi({id, LighthouseId, handleStatus: 1, refuseReason: this.refuseReason})
-//        .then(res => {
-//          this.$broadcast('show-message', '已同意申请')
-//          this.init()
-//        }).catch(e => {
-//        this.$broadcast('show-message', { content: e.message })
-//      })
+    async handleDetails (id, LighthouseId) { // 直接同意申请
+      console.log('LighthouseId', LighthouseId)
+      try {
+        await handleDetailsApi({id, LighthouseId, handleStatus: 1, refuseReason: this.refuseReason})
+        this.$vux.toast.text('已同意申请', 'bottom')
+        this.getList()
+      } catch (e) {
+        this.$vux.toast.text(e.message, 'bottom')
+      }
+      console.log('直接同意申请', id, LighthouseId)
     }
     toggle (type) {
       this.dataList = []
@@ -128,6 +121,8 @@
 
 <style lang="less" type="text/less">
   .p-exchange-list {
+    padding-top: 44px;
+    height: 100%;
     .toggle-tab {
       position: fixed;
       left: 15px;
@@ -180,7 +175,7 @@
       }
     }
     .apply-list {
-      padding-top: 44px;
+      height: 100%;
     }
   }
 </style>

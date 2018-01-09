@@ -1,81 +1,76 @@
 <template>
   <div class="p-exchange-detail">
-    <div>申请详情页</div>
-    <!--<div class="header" v-if="!showRejectModal">-->
-      <!--<div class="userInfo">-->
-        <!--<div class="userInfo-img">-->
-          <!--<img class="headImg" :src="pageInfo.avatarUrl || '../../static/icon/img_head_default.png'">-->
-          <!--<img class="sex"-->
-               <!--:src="pageInfo.gender === 1 ? '../../static/icon/icon_boy.png' : '../../static/icon/icon_girl.png'">-->
-        <!--</div>-->
-        <!--<div class="userInfo-desc">-->
-          <!--<div class="name">{{pageInfo.realName}}</div>-->
-          <!--<div class="persion-info">{{pageInfo.identify === 0 ? userCareer: pageInfo.career}}</div>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="item-list">-->
-        <!--<div class="item-info">-->
-          <!--<div class="item-info-left">-->
-            <!--申请理由-->
-          <!--</div>-->
-          <!--<div class="item-info-right item-border-top">-->
-            <!--{{pageInfo.reason}}-->
-          <!--</div>-->
-        <!--</div>-->
-        <!--<div class="item-info" v-if="!(pageInfo.handleStatus === 0 && queryParams.type === 1)">-->
-          <!--<div class="item-info-left">申请状态</div>-->
-          <!--<div class="item-info-right">-->
-            <!--{{queryParams.type === 1 ? otherToMeList[pageInfo.handleStatus] : meToOtherList[pageInfo.handleStatus]}}-->
-          <!--</div>-->
-        <!--</div>-->
-        <!--<div class="item-info" v-if="pageInfo.handleStatus === 1">-->
-          <!--<div class="item-info-left">对方微信</div>-->
-          <!--<div class="item-info-right">-->
-            <!--{{pageInfo.wechat}}-->
-          <!--</div>-->
-          <!--<div class="copy-btn" @tap="copyWx">复制</div>-->
-        <!--</div>-->
-        <!--<div class="item-info" v-if="pageInfo.handleStatus === 2 && queryParams.type === 2">-->
-          <!--<div class="item-info-left">拒绝理由</div>-->
-          <!--<div class="item-info-right">-->
-            <!--{{pageInfo.refuseReason}}-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--&lt;!&ndash;我收到的申请 并且是等我同意&ndash;&gt;-->
-      <!--<div class="btn-group" v-if="pageInfo.handleStatus === 0 && queryParams.type === 1">-->
-        <!--<XButton class="btn-item" @click=="showReject(true)">拒绝</XButton>-->
-        <!--<XButton  class="btn-item yellow-tan-bg" @click="handleDetails(1)">同意</XButton>-->
-      <!--</div>-->
-    <!--</div>-->
+    <div class="header" v-if="!showRejectModal">
+      <div class="userInfo">
+        <div class="userInfo-img">
+          <img class="headImg" :src="pageInfo.avatarUrl || defaultImg">
+          <img class="sex"
+               :src="pageInfo.gender === 1 ? boyImg : girlImg">
+        </div>
+        <div class="userInfo-desc">
+          <div class="name">{{pageInfo.realName}}</div>
+          <div class="persion-info">{{pageInfo.identify === 0 ? userCareer: pageInfo.career}}</div>
+        </div>
+      </div>
+      <div class="item-list">
+        <div class="item-info">
+          <div class="item-info-left">申请理由</div>
+          <div class="item-info-right item-border-top">
+            {{pageInfo.reason}}
+          </div>
+        </div>
+        <div class="item-info" v-if="!(pageInfo.handleStatus === 0 && queryParams.type === 1)">
+          <div class="item-info-left">申请状态</div>
+          <div class="item-info-right">
+            {{queryParams.type === 1 ? otherToMeList[pageInfo.handleStatus] : meToOtherList[pageInfo.handleStatus]}}
+          </div>
+        </div>
+        <div class="item-info" v-if="pageInfo.handleStatus === 1">
+          <div class="item-info-left">对方微信</div>
+          <div class="item-info-right">
+            {{pageInfo.wechat}}
+          </div>
+          <div class="copy-btn">复制</div>
+        </div>
+        <div class="item-info" v-if="pageInfo.handleStatus === 2 && queryParams.type === 2">
+          <div class="item-info-left">拒绝理由</div>
+          <div class="item-info-right">
+            {{pageInfo.refuseReason}}
+          </div>
+        </div>
+      </div>
+      <!--我收到的申请 并且是等我同意-->
+      <div class="btn-group" v-if="pageInfo.handleStatus === 0 && queryParams.type === 1">
+        <div class="btn-item" @click="showReject(true)">拒绝</div>
+        <div class="btn-item yellow-tan-bg" @click="handleDetails(1)">同意</div>
+      </div>
+    </div>
     <!--拒绝确认的框-->
     <!--<div class="reject-container" v-else>-->
-    <!--<div class="user-input-s">-->
-    <!--<imgarea placeholder="请填写拒绝理由"-->
-    <!--class="user-input-img"-->
-    <!--placeholder-style="color: #bcbcbc;"-->
-    <!--maxlength="100"-->
-    <!--bindinput="bindKeyInput"-->
-    <!--value="{{refuseReason}}"/>-->
-    <!--<img class="user-input-length">{{strLength}}/100</img>-->
-    <!--</div>-->
-    <!--<div class="btn-group">-->
-    <!--<button class="btn-item" @tap="showReject(false)">取消</button>-->
-    <!--<form report-submit="{{report}}" @submit="handleDetails(2)">-->
-    <!--<button form-type="submit" class="btn-item yellow-tan-bg">确定拒绝</button>-->
-    <!--</form>-->
-    <!--</div>-->
-    <!--</div>-->
-  </div>
+      <!--<div class="user-input-s">-->
+        <!--<textarea placeholder="请填写拒绝理由"-->
+                 <!--class="user-input-img"-->
+                 <!--placeholder-style="color: #bcbcbc;"-->
+                 <!--maxlength="100"-->
+                 <!--bindinput="bindKeyInput"-->
+                 <!--value="{{refuseReason}}"/>-->
+        <!--<img class="user-input-length">{{strLength}}/100</img>-->
+      <!--</div>-->
+      <!--<div class="btn-group">-->
+        <!--<div class="btn-item" @click="showReject(false)">取消</div>-->
+        <!--<div class="btn-item yellow-tan-bg" @click="handleDetails(2)">确定拒绝</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    </div>
 </template>
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { XInput, XButton } from 'vux'
-  import { testApi } from '@/api/pages/login'
+  import { applyDetailsApi, handleDetailsApi } from '../../api/pages/exchange.js'
 
   @Component({
-    name: 'login-index',
+    name: 'exchange-detail-index',
     components: {
       XInput,
       XButton,
@@ -91,17 +86,13 @@
           userId: '',
           type: 1
         },
-        pageInfo: {
-          LighthouseId: ''
-        },
         refuseReason: ''
       }
     },
     computed: {
-      'userCareer': () => {
+      'userCareer': function () {
         console.log('this.pageInfo', this.pageInfo)
         const {workTimeName, career, office} = this.pageInfo
-        console.log('career', career)
         let careerStr = ''
 
         if (workTimeName) {
@@ -126,10 +117,51 @@
     }
   })
   export default class ExchangeDetailIndex extends Vue {
+    girlImg = require('../../assets/icon/icon_girl.png') || ''
+    boyImg = require('../../assets/icon/icon_boy.png') || ''
+    defaultImg = require('../../assets/icon/img_head_default.png') || ''
+    pageInfo = {
+      LighthouseId: '',
+      workTimeName: '',
+      career: '',
+      office: ''
+    }
     created () {
+      this.getDetail()
     }
 
     mounted () {
+    }
+    showReject (isShow) {
+      if (isShow === 'true') {
+        this.refuseReason = ''
+        this.showRejectModal = true
+      } else {
+        this.refuseReason = ''
+        this.showRejectModal = false // 隐藏拒绝框
+      }
+    }
+    async handleDetails (id, LighthouseId) { // 直接同意申请
+      console.log('LighthouseId', LighthouseId)
+      try {
+        await handleDetailsApi({id, LighthouseId, handleStatus: 1, refuseReason: this.refuseReason})
+        this.$vux.toast.text('已同意申请', 'bottom')
+        this.getList()
+      } catch (e) {
+        this.$vux.toast.text(e.message, 'bottom')
+      }
+      console.log('直接同意申请', id, LighthouseId)
+    }
+    async getDetail () {
+      const {id, userId, type} = this.$route.params
+      console.log(id, userId, type)
+      try {
+        const resp = await applyDetailsApi({id, applyFrom: type})
+        console.log('resp', resp)
+        this.pageInfo = resp
+      } catch (e) {
+        this.$vux.toast.text(e.message, 'bottom')
+      }
     }
   }
 </script>
@@ -146,63 +178,62 @@
     }
 
     .header {
-      padding: 40px 30px;
+      padding: 20px 15px;
       background-color: #fff;
 
-      &.userInfo {
+      .userInfo {
         display: flex;
-        font-size: 26px;
+        font-size: 13px;
         color: #929292;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
+        div:first-of-type {
+          font-size: 18px;
+          margin-bottom: 8px;
+          color: #354048;
+          font-weight: 600;
+        }
 
-        &
-        img:first-of-type {
-          font-size: 36px;
-          margin-bottom: 16px;
+        .userInfo-img {
+          position: relative;
+          .headImg {
+            width: 60px;
+            height: 60px;
+            background: pink;
+            border-radius: 50%;
+          }
+          .sex {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            bottom: 0;
+            right: 0;
+            border-radius: 50%;
+          }
+        }
+
+        & img:first-of-type {
+          font-size: 18px;
+          margin-bottom: 8px;
           color: #354048;
           font-weight: 600;
         }
 
       }
 
-      &
-      .userInfo-img {
-        position: relative;
 
-        .headImg {
-          width: 120px;
-          height: 120px;
-          background: pink;
-          border-radius: 50%;
-        }
 
-        &
-        .sex {
-          position: absolute;
-          width: 36px;
-          height: 36px;
-          bottom: 0;
-          right: 0;
-          border-radius: 50%;
-        }
-
-      }
-
-      &
       .userInfo-desc {
         display: flex;
         flex-flow: column nowrap;
         justify-content: center;
-        margin-left: 30px;
+        margin-left: 15px;
 
         .name {
-          width: 540px;
-          .setEllipsis();
+          .setEllipsis(270px);
         }
 
         .persion-info {
-          width: 540px;
-          .setEllipsis();
+          .setEllipsis(270px);
         }
 
       }
@@ -218,16 +249,16 @@
           }
 
           .item-info-left {
-            padding: 40px 0;
+            padding: 20px 0;
             img-align: end;
-            width: 180px;
+            width: 90px;
             color: #929292;
-            margin-right: 30px;
+            margin-right: 15px;
           }
 
           .item-info-right {
             width: 100%;
-            padding: 40px 0;
+            padding: 20px 0;
             color: #354048;
             border-bottom: solid 1px #ededed;
           }
@@ -236,44 +267,47 @@
             color: #d7ab70;
             position: absolute;
             right: 0;
-            top: 40px;
+            top: 20px;
           }
 
         }
       }
     }
     .btn-group {
-      padding-top: 80px;
+      padding-top: 40px;
       display: flex;
       justify-content: space-around;
       background: #fff;
-
+      align-items: center;
       .btn-item {
-        font-size: 32px;
-        width: 310px;
-        height: 88px;
-        border-radius: 45px;
+        font-size: 16px;
+        width: 155px;
+        height: 44px;
+        border-radius: 22px;
         background-color: #ededed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
     }
     .reject-container {
-      padding: 30px;
+      padding: 15px;
       background: #fff;
 
       .user-input-s {
-        margin-top: 40px;
-        height: 280px;
-        border-radius: 12px;
+        margin-top: 20px;
+        height: 140px;
+        border-radius: 6px;
         border: solid 1px #dcdcdc;
-        padding: 20px;
+        padding: 10px;
         position: relative;
 
         .user-input-length {
           position: absolute;
-          right: 30px;
-          bottom: 20px;
-          font-size: 24px;
+          right: 15px;
+          bottom: 10px;
+          font-size: 12px;
           color: #bcbcbc;
         }
 

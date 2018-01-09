@@ -1,14 +1,14 @@
 <template>
   <div class="apply-item" @click="handleOne">
-    <img class="item-left" @click.stop="handleTwo"
-         :src="item.avatarUrl || '../../static/icon/img_head_default.png'">
+    <img class="item-left"
+         :src="item.avatarUrl || defaultImg">
     <div class="item-middle">
-      <div class="item-middle-top fs15" @click.stop="handleTwo">{{item.realName}}</div>
+      <div class="item-middle-top fs15">{{item.realName}}</div>
       <div class="item-middle-middle fs15">{{item.reason}}</div>
     </div>
     <XButton
       :class="item.handleStatus === 0 && type === 1 ? 'item-right  btn-common' : 'item-right not-btn button-reset'"
-      @click.stop="handleFour">{{type === 1 ? otherToMeList[item.handleStatus] : meToOtherList[item.handleStatus]}}
+      @click.native.stop="handleFour">{{type === 1 ? otherToMeList[item.handleStatus] : meToOtherList[item.handleStatus]}}
     </XButton>
   </div>
 </template>
@@ -34,27 +34,29 @@
     }
   })
   export default class ApplyIndex extends Vue {
+    defaultImg = require('../../assets/icon/img_head_default.png') || ''
     report = true
     otherToMeList = ['同意', '已同意', '已拒绝']
     meToOtherList = ['等待通过', '已同意', '已拒绝']
 
-    handleOne (e) { // 点击跳转申请详情
-      this.$emit('tap-one', this.item.id, this.item.userId)
-    }
-
-    handleTwo (e) { // 点击跳转个人详情
-        this.$emit('tap-two', this.item.userId, this.item.LighthouseId)
-    }
-
-    handleThree (e) { // 跳转大咖社区
-      this.$emit('tap-three', this.item.LighthouseId)
-    }
-
     handleFour () { // 点击了同意
+      console.log('处理同意')
+      console.log('this.type', this.item.handleStatus, this.type)
       if (this.item.handleStatus === 0 && this.type === 1) {
         this.$emit('tap-four', this.item.id, this.item.LighthouseId)
       }
     }
+    handleOne (e) { // 点击跳转申请详情
+      console.log('跳去详情')
+      this.$emit('tap-one', this.item.id, this.item.userId)
+    }
+//    handleTwo (e) { // 点击跳转个人详情
+//      this.$emit('tap-two', this.item.userId, this.item.LighthouseId)
+//    }
+//
+//    handleThree (e) { // 跳转大咖社区
+//      this.$emit('tap-three', this.item.LighthouseId)
+//    }
 
     created () {
     }
@@ -106,7 +108,11 @@
       }
 
     }
+    .weui-btn:after{
+      border: transparent;
+    }
     .item-right {
+      z-index: 99;
       text-align: center;
       width: 63px;
       height: 32px;

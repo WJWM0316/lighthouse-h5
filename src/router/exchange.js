@@ -18,7 +18,7 @@ const routes = [
     meta: {navHide: true}
   },
   {
-    path: '/exchange/detail',
+    path: '/exchange/detail/:id/:userId/:type',
     name: 'exchange-detail',
     component: resolve => require(['@/views/exchange/detail'], resolve),
     meta: {navHide: true}
