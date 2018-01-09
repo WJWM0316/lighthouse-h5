@@ -181,7 +181,6 @@ export default class Recorder extends Vue {
     this.stopInterval()
     this.recorderInterval = setInterval(() => {
       this.progress += 100
-      this.$apply()
     }, 100)
   }
 
