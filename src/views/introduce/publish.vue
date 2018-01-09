@@ -128,12 +128,18 @@ export default class PublishContent extends Vue {
         this.uploadCustomImages(localIds)
       } else {
         // todo 全部上传到微信服务器成功，通知服务器
-        alert('全部上传到微信服务器成功，通知服务器')
-        // this.uploadWechatSuccess()
+        this.uploadWechatSuccess()
       }
     } catch (error) {
       this.$vux.toast.text(error.message || '网络异常，请重试')
     }
+  }
+
+  /**
+   * 文件成功上传到微信服务器
+   */
+  uploadWechatSuccess () {
+    alert('全部上传到微信服务器成功，通知服务器')
   }
 
   /**

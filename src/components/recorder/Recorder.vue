@@ -186,9 +186,18 @@ export default class Recorder extends Vue {
   async upload () {
     try {
       const res = await this.wechatUploadVoice(this.localId)
+      this.uploadWechatSuccess(res)
     } catch (error) {
       this.$vux.toast.text(error.message, 'middle')
     }
+  }
+
+  /**
+   * 文件成功上传到微信服务器
+   */
+  uploadWechatSuccess (res) {
+    // todo 上传微信服务器成功，通知服务器，并发布
+    alert('全部上传到微信服务器成功，通知服务器')
   }
 
   /**
