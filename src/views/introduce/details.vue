@@ -10,9 +10,9 @@
                  :hidePraiseBtn="true"
                  :hideBorder="true"
                  :hideCommentArea="true"
-                 :disableComment="true"
                  :disableContentClick="true"
                  :showIdentification="true"
+                 ref="details-info"
         ></dynamic>
       </div>
 
@@ -26,26 +26,10 @@
                       :showDelBtn="true"
                       @operation="operation"></discuss-item>
       </div>
-
-
-      <!--<div class="ask-box {{isShowPumpBtn ? 'show' : ''}}">-->
-      <!--<div class="user-input">-->
-      <!--<input type="text" placeholder="{{placeholderText}}"-->
-      <!--bindblur="sleep"-->
-      <!--@confirm="sendComment"-->
-      <!--focus="{{isPumpFocus}}"-->
-      <!--bindinput="bindInputPump"-->
-      <!--value="{{pumpContent}}"-->
-      <!--maxlength="1000"-->
-      <!--placeholder-style="color: #bcbcbc"-->
-      <!--cursor-spacing="20" />-->
-      <!--</div>-->
-      <!--<text class="ask-btn" @tap="sendComment">发送</text>-->
-      <!--</div>-->
     </scroll>
     <!-- footer -->
     <div class="footer">
-      <div class="page-operation">
+      <div class="page-operation" v-if="!displaySuspensionInput">
         <!-- 点赞按钮 -->
         <button @click="operation({eventType: 'praise'})">
           <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
@@ -54,12 +38,20 @@
         </button>
         <span class="split"></span>
         <!-- 评论按钮 -->
-        <button>
+        <button @click="comment({})">
           <img class="icon-pinglun" src="./../../assets/icon/pinglun2@3x.png" />
-          {{'评论'}}
+          {{pagination.total > 0 ? pagination.total : '评论'}}
         </button>
       </div>
     </div>
+
+    <!-- 悬浮输入框 -->
+    <suspension-input v-model="displaySuspensionInput"
+                      :placeholder="suspensionInputPlaceholder"
+                      :commentIndex="commentIndex"
+                      :sendText="'发送'"
+                      @send="sendComment"
+    ></suspension-input>
   </div>
 </template>
 <script>
@@ -67,9 +59,9 @@
   import Component from 'vue-class-component'
   import dynamic from '@/components/dynamic/dynamic'
   import discussItem from '@/components/discussItem/discussItem'
+  import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { Confirm } from 'vux'
   import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi } from '@/api/pages/pageInfo.js'
 
   @Component({
@@ -78,7 +70,7 @@
       dynamic,
       discussItem,
       Scroll,
-      Confirm
+      suspensionInput
     },
     computed: {
       item () {
@@ -90,90 +82,185 @@
   export default class introduce extends Vue {
     dynamicList = []
     discussItemList = []
-    isShowPumpBtn = false
+
+    commentIndex = -1
+    suspensionInputPlaceholder = '写评论'
+    displaySuspensionInput = false
 
     created () {
       this.pageInit().then(() => {})
     }
 
+    // ------------------- 评论区 ----------------------
     operation (e) {
       const {eventType, itemIndex} = e
       const item = this.discussItemList[itemIndex]
       switch (eventType) {
         case 'comment':
           // :todo 评论请求
+          this.comment({item, itemIndex}).then()
           break
         case 'praise':
-          let params = ''
-          let favor = 0
-          if (item) {
-            const {commentId: favorId, isFavor} = item
-            let favorType = 6
-            favor = isFavor ? 0 : 1
-            params = {
-              favorId,    // 喜爱的id
-              favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-              isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
-            }
-          } else {
-            favor = this.dynamicList[0].isFavor ? 0 : 1
-            let favorType = 0
-            switch (this.$route.params.type) {
-              case '1':
-                favorType = 7
-                break
-              case '2':
-                favorType = 5
-                break
-              case '3':
-                favorType = 4
-                break
-            }
-            params = {
-              favorId: this.$route.params.sourceId,    // 喜爱的id
-              favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-              isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
-            }
-          }
-          setFavorApi(params).then(res => {
-            console.log(item)
-            if (item) {
-              this.discussItemList[itemIndex].isFavor = favor
-              this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
-              if (favor) {
-                this.discussItemList[itemIndex].favors.splice(0, 0, res)
-              } else {
-                let temp = ''
-                this.discussItemList[itemIndex].favors.forEach((item, index) => {
-                  if (item.userId === res.userId) {
-                    temp = index
-                  }
-                })
-                this.discussItemList[itemIndex].favors.splice(temp, 1)
-              }
-            } else {
-              this.dynamicList[0].isFavor = favor
-              this.dynamicList[0].favorTotal += favor ? 1 : -1
-              console.log(this.dynamicList[0])
-            }
-          }).catch(e => {
-//            this.$broadcast('show-message', {content: e.message})
-          })
+          this.praise({item, itemIndex}).then()
           break
         case 'del':
-          // :todo 删除请求
-//          this.discussItemList.splice(itemIndex, 1)
-//          console.log(this.discussItemList, itemIndex)
-          const _this = this
-          this.$vux.confirm.show({
-            // 组件除show外的属性
-            onCancel () {
-              console.log(this) // 非当前 vm
-              console.log(_this) // 当前 vm
-            },
-            onConfirm () {}
-          })
+          this.del({item, itemIndex}).then()
           break
+      }
+    }
+    /**
+     * 评论
+     * @param item
+     * @param itemIndex
+     * @returns {Promise.<void>}
+     */
+    async comment ({item, itemIndex}) {
+      if (itemIndex > -1) {
+        this.suspensionInputPlaceholder = '回复' + item.realName + ':'
+        this.commentIndex = itemIndex
+      } else {
+        this.suspensionInputPlaceholder = '写评论'
+        this.commentIndex = -1
+      }
+      this.displaySuspensionInput = true
+    }
+    /**
+     * 点赞
+     * @param item
+     * @param itemIndex
+     * @returns {Promise.<void>}
+     */
+    async praise ({item, itemIndex}) {
+      let params = ''
+      let favor = 0
+      if (item) {
+        const {commentId: favorId, isFavor} = item
+        let favorType = 6
+        favor = isFavor ? 0 : 1
+        params = {
+          favorId,    // 喜爱的id
+          favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
+          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
+        }
+      } else {
+        favor = this.dynamicList[0].isFavor ? 0 : 1
+        let favorType = 0
+        switch (this.$route.params.type) {
+          case '1':
+            favorType = 7
+            break
+          case '2':
+            favorType = 5
+            break
+          case '3':
+            favorType = 4
+            break
+        }
+        params = {
+          favorId: this.$route.params.sourceId,    // 喜爱的id
+          favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
+          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
+        }
+      }
+      setFavorApi(params).then(res => {
+        console.log(item)
+        if (item) {
+          this.discussItemList[itemIndex].isFavor = favor
+          this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
+          if (favor) {
+            this.discussItemList[itemIndex].favors.splice(0, 0, res)
+          } else {
+            let temp = ''
+            this.discussItemList[itemIndex].favors.forEach((item, index) => {
+              if (item.userId === res.userId) {
+                temp = index
+              }
+            })
+            this.discussItemList[itemIndex].favors.splice(temp, 1)
+          }
+        } else {
+          this.dynamicList[0].isFavor = favor
+          this.dynamicList[0].favorTotal += favor ? 1 : -1
+          console.log(this.dynamicList[0])
+        }
+      }).catch(e => {
+//            this.$broadcast('show-message', {content: e.message})
+      })
+    }
+    /**
+     * 删除
+     * @param item
+     * @param itemIndex
+     * @returns {Promise.<void>}
+     */
+    async del ({item, itemIndex}) {
+      const {commentId} = item
+      const _this = this
+      const params = {
+        id: commentId,    // 删除id
+        modelType: 'comment',  // 类型：circle:朋友圈,post:帖子,comment:评论
+      }
+
+      this.$vux.confirm.show({
+        content: '确定要删除吗？',
+        confirmText: '确定',
+        cancelText: '取消',
+        onCancel () {
+        },
+        onConfirm () {
+          delCommontApi(params).then(res => {
+            _this.discussItemList.splice(itemIndex, 1)
+            _this.pagination.total -= 1
+          }).catch(e => {
+          })
+        }
+      })
+      console.log(this.discussItemList, itemIndex)
+    }
+    // ------------------------------------------------
+
+    /**
+     * 发送评论
+     * @param data
+     */
+    async sendComment ({value, commentIndex}) {
+      const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.dynamicList[0]
+      const {modelType, commentId, problemId, circleId} = item
+
+      let sourceType = 4
+      if (commentIndex < 0) {
+        switch (modelType) {
+          case 'circle':
+            sourceType = 1
+            break
+          case 'post':
+            sourceType = 2
+            break
+          case 'problem':
+            sourceType = 3
+            break
+        }
+      }
+
+      const params = {
+        sourceId: commentId || circleId || problemId,     // 对应评论类型id
+        sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
+        content: value       // 评论内容
+      }
+
+      const res = await setSubmitCommentApi(params)
+
+      if (commentIndex < 0) {
+        this.pagination.end = false // 初始化数据，必定不是最后一页
+        await this.getList({page: 1})
+      } else {
+        if (this.discussItemList[commentIndex] && this.discussItemList[commentIndex].comments) {
+          this.discussItemList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
+          this.discussItemList[commentIndex].commentTotal += 1
+        } else {
+          this.discussItemList[commentIndex]['comments'] = [res] // 不存在加一个对象
+          this.discussItemList[commentIndex].commentTotal = 1
+        }
       }
     }
 

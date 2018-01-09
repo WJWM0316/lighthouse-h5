@@ -1,7 +1,7 @@
 <template>
 
   <!-- 大咖精选页 (社区页) -->
-  <div class="big-shot-community">
+  <div :class="{'big-shot-community': true, author: isAuthor}">
     <scroll @refresh="handleRefresh" @pullup="handlePullup">
       <!-- header -->
       <div class="header">
@@ -61,7 +61,7 @@
     </scroll>
 
     <!-- footer -->
-    <div :class="{footer: true, author: isAuthor}">
+    <div class="footer">
       <div v-if="isAuthor" class="author-operation">
         <button @click="question">
           <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
@@ -83,7 +83,6 @@
   import CommunityCard from '@/components/communityCard'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { Confirm } from 'vux'
   import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi } from '@/api/pages/pageInfo.js'
 
   @Component({
@@ -91,8 +90,7 @@
     components: {
       dynamic,
       CommunityCard,
-      Scroll,
-      Confirm
+      Scroll
     },
     computed: {
       isAuthor () {
@@ -121,75 +119,11 @@
           // :todo 评论请求
           break
         case 'praise':
-          let params = ''
-          let favor = 0
-          if (item) {
-            const {commentId: favorId, isFavor} = item
-            let favorType = 6
-            favor = isFavor ? 0 : 1
-            params = {
-              favorId,    // 喜爱的id
-              favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-              isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
-            }
-          } else {
-            favor = this.dynamicList[0].isFavor ? 0 : 1
-            let favorType = 0
-            switch (this.$route.params.type) {
-              case '1':
-                favorType = 7
-                break
-              case '2':
-                favorType = 5
-                break
-              case '3':
-                favorType = 4
-                break
-            }
-            params = {
-              favorId: this.$route.params.sourceId,    // 喜爱的id
-              favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-              isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
-            }
-          }
-          setFavorApi(params).then(res => {
-            console.log(item)
-            if (item) {
-              this.discussItemList[itemIndex].isFavor = favor
-              this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
-              if (favor) {
-                this.discussItemList[itemIndex].favors.splice(0, 0, res)
-              } else {
-                let temp = ''
-                this.discussItemList[itemIndex].favors.forEach((item, index) => {
-                  if (item.userId === res.userId) {
-                    temp = index
-                  }
-                })
-                this.discussItemList[itemIndex].favors.splice(temp, 1)
-              }
-            } else {
-              this.dynamicList[0].isFavor = favor
-              this.dynamicList[0].favorTotal += favor ? 1 : -1
-              console.log(this.dynamicList[0])
-            }
-          }).catch(e => {
-//            this.$broadcast('show-message', {content: e.message})
-          })
           break
         case 'del':
           // :todo 删除请求
 //          this.discussItemList.splice(itemIndex, 1)
 //          console.log(this.discussItemList, itemIndex)
-          const _this = this
-          this.$vux.confirm.show({
-            // 组件除show外的属性
-            onCancel () {
-              console.log(this) // 非当前 vm
-              console.log(_this) // 当前 vm
-            },
-            onConfirm () {}
-          })
           break
       }
     }
@@ -278,10 +212,23 @@
       }
       const {circles, lists, total} = res
 
+      const temp = new Array(...(this.showType ? circles : lists))
+      temp.forEach((item) => {
+        if (item['modelType'] === 'problem') {
+          item['answers'].forEach((answer) => {
+            answer.musicState = 0
+            answer.progress = 0
+          })
+        } else if (item['circleType'] === 1) {
+          item.musicState = 0
+          item.progress = 0
+        }
+      })
+
       if (page === 1) {
-        this.dynamicList = this.showType ? circles : lists
+        this.dynamicList = temp
       } else {
-        this.dynamicList = this.dynamicList.concat((this.showType ? circles : lists) || [])
+        this.dynamicList = this.dynamicList.concat(temp || [])
       }
 
       this.pagination.page = page
@@ -319,7 +266,9 @@
 <style lang="less" scoped>
   .big-shot-community {
     height: 100%;
-    padding-bottom: 52px;
+    &.author {
+      padding-bottom: 50px;
+    }
 
     & .header {
       position: relative;
