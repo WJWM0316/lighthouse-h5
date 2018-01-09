@@ -35,7 +35,6 @@ export const request = ({type = 'post', url, data = {}, config = {}, globalLoadi
   console.log('url', url)
   // 正常请
   // let datas = type === 'get' ? {params: data} :data
-  let datas = type === 'get' ? {params: {...data, TestUid: 2}} : {...data, TestUid: 2}
   showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data, TestUid: 1}} : {...data, TestUid: 1}
   console.log('require params', datas)
