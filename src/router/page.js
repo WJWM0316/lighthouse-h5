@@ -31,11 +31,18 @@ const routers = [
     component: resolve => require(['@/views/introduce/replys'], resolve),
   },
   {
-    // 评论详情页
+    // 发布内容
     path: '/publish/:communityId',
     name: 'publish-content',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/publish'], resolve),
+  },
+  {
+    // 发布语音
+    path: '/publishVoice/:communityId',
+    name: 'publish-voice',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/publishVoice'], resolve),
   },
   {
     // 同学列表

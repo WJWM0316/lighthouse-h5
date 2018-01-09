@@ -33,3 +33,6 @@ export const UPDATE_NOVICE_LIST = 'UPDATE_NOVICE_LIST'
 
 // 显示首页banner
 export const UPDATE_NOVICE_HOME = 'UPDATE_NOVICE_HOME'
+
+// 微信完成配置
+export const WECHAT_READY = 'WECHAT_READY'

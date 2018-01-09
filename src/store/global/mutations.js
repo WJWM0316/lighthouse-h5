@@ -36,5 +36,8 @@ export default {
   },
   [types.UPDATE_NOVICE_HOME] (state, show) {
     state.showNoviceHomeBanner = show
+  },
+  [types.WECHAT_READY] (state) {
+    state.wechatReady = true
   }
 }
