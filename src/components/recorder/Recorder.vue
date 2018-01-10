@@ -190,9 +190,7 @@ export default class Recorder extends Vue {
    */
   async upload () {
     try {
-      Vue.$vux.loading.show({
-        text: '上传中...'
-      })
+      this.$emit('uploading')
       const res = await this.wechatUploadVoice(this.localId)
       this.uploadWechatSuccess(res)
     } catch (error) {
@@ -206,9 +204,6 @@ export default class Recorder extends Vue {
   async uploadWechatSuccess ({ serverId }) {
     // todo 上传微信服务器成功，通知服务器，并发布
     try {
-      Vue.$vux.loading.show({
-        text: '发布中...'
-      })
       const params = {
         medias: [{
           mediaId: serverId,
@@ -216,12 +211,9 @@ export default class Recorder extends Vue {
         }]
       }
       const { files } = await wechatUploadFileApi(params)
-      this.$vux.toast.text('发布成功', 'middle')
-      this.$router.go(-1)
+      this.$emit('upload-success', files)
     } catch (error) {
       this.$vux.toast.test(error.message, 'middle')
-    } finally {
-      Vue.$vux.loading.hide()
     }
   }
 
