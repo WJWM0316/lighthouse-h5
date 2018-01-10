@@ -71,11 +71,14 @@
         <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>
       </div>
     </div>
+
+    <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" :close-on-clicking-mask="false" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
+  import { Actionsheet } from 'vux'
   import dynamic from '@/components/dynamic/dynamic'
   import CommunityCard from '@/components/communityCard'
   import Scroll from '@/components/scroller'
@@ -87,7 +90,8 @@
     components: {
       dynamic,
       CommunityCard,
-      Scroll
+      Scroll,
+      Actionsheet
     },
     computed: {
       isAuthor () {
@@ -104,6 +108,21 @@
     isCommunityTitleFixed = false
     showIdentification = false
     displaySuspensionInput = false
+
+    // 发布操作选项
+    releaseActionsheet = {
+      show: false,
+      menus: [
+        {
+          label: '动态',
+          value: 'default'
+        },
+        {
+          label: '语音',
+          value: 'voice'
+        }
+      ]
+    }
 
     created () {
       this.pageInit().then(() => {})
@@ -156,6 +175,7 @@
     }
     release () {
       // :todo 发布
+      this.releaseActionsheet.show = true
     }
     toMemberList () {
       this.$router.push({name: 'classmates', communityId: this.$route.params.communityId})
@@ -261,6 +281,24 @@
      */
     handlePullup (loaded) {
       this.loadNext().then(() => { loaded('done') })
+    }
+
+    /**
+     * 点击发布选项item
+     * @param {*} key
+     * @param {*} item
+     */
+    handleReleaseActionsheetItem (key, item) {
+      switch (key) {
+        case 'default':
+          this.$router.push(`/publish/${this.pageInfo.communityId}`)
+          break
+        case 'voice':
+          this.$router.push(`/publishVoice/${this.pageInfo.communityId}`)
+          break
+        default:
+          break
+      }
     }
   }
 </script>
