@@ -45,12 +45,9 @@
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
                      :showIdentification="showIdentification"
+                     @suspensionInputState="suspensionInputState"
             ></dynamic>
           </div>
-          <!--<div class='u-bottom-loading'>-->
-            <!--<img class='icon' src='../../static/icon/icon_loading.gif' wx:if='{{!pagination.end}}'></img>-->
-            <!--<text class='text' wx:else>没有更多内容了～</text>-->
-          <!--</div>-->
           <div class="blank" v-else>
             <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
             <p>暂时没有内容～</p>
@@ -61,7 +58,7 @@
     </scroll>
 
     <!-- footer -->
-    <div class="footer">
+    <div class="footer" v-show="!displaySuspensionInput">
       <div v-if="isAuthor" class="author-operation">
         <button @click="question">
           <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
@@ -74,11 +71,14 @@
         <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>
       </div>
     </div>
+
+    <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" :close-on-clicking-mask="false" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
+  import { Actionsheet } from 'vux'
   import dynamic from '@/components/dynamic/dynamic'
   import CommunityCard from '@/components/communityCard'
   import Scroll from '@/components/scroller'
@@ -90,7 +90,8 @@
     components: {
       dynamic,
       CommunityCard,
-      Scroll
+      Scroll,
+      Actionsheet
     },
     computed: {
       isAuthor () {
@@ -106,6 +107,22 @@
     showType = 1 // 1 朋友圈 0 交流社区
     isCommunityTitleFixed = false
     showIdentification = false
+    displaySuspensionInput = false
+
+    // 发布操作选项
+    releaseActionsheet = {
+      show: false,
+      menus: [
+        {
+          label: '动态',
+          value: 'default'
+        },
+        {
+          label: '语音',
+          value: 'voice'
+        }
+      ]
+    }
 
     created () {
       this.pageInit().then(() => {})
@@ -158,9 +175,13 @@
     }
     release () {
       // :todo 发布
+      this.releaseActionsheet.show = true
     }
     toMemberList () {
       this.$router.push({name: 'classmates', communityId: this.$route.params.communityId})
+    }
+    suspensionInputState (val) {
+      this.displaySuspensionInput = val
     }
 
     // ------------------------------------------------
@@ -260,6 +281,24 @@
      */
     handlePullup (loaded) {
       this.loadNext().then(() => { loaded('done') })
+    }
+
+    /**
+     * 点击发布选项item
+     * @param {*} key
+     * @param {*} item
+     */
+    handleReleaseActionsheetItem (key, item) {
+      switch (key) {
+        case 'default':
+          this.$router.push(`/publish/${this.pageInfo.communityId}`)
+          break
+        case 'voice':
+          this.$router.push(`/publishVoice/${this.pageInfo.communityId}`)
+          break
+        default:
+          break
+      }
     }
   }
 </script>

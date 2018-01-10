@@ -7,13 +7,14 @@
 
     <div class="images" v-if="addonType === 0 || addonType === 3">
       <div class="item" v-for="(item, index) in images" :key="index">
-        <image-item class="image" mode="auto" :src="item.path" />
+        <image-item class="image" mode="auto" :src="item.fileUrl" />
         <button type="button" class="close u-btn" @click="handleDeleteImage(index, item)"><i class="u-icon-delete-image"></i></button>
       </div>
       <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
     </div>
 
     <div class="btn-container">
+      {{serverIds}}
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
     </div>
 
@@ -30,6 +31,7 @@ import WechatMixin from '@/mixins/wechat'
 import { Actionsheet } from 'vux'
 
 import { publishApi } from '@/api/pages/content'
+import { wechatUploadFileApi } from '@/api/common'
 
 @Component({
   name: 'publish-content',
@@ -106,11 +108,13 @@ export default class PublishContent extends Vue {
         count: this.lengths.imageMax - this.images.length
       }
       const res = await this.wechatChooseImage(params)
-      this.images = res.localIds.map(item => {
+      const newImages = res.localIds.map(item => {
         return {
-          path: item
+          mediaId: '',
+          fileUrl: item
         }
       })
+      this.images = [].concat(this.images, newImages)
       this.uploadCustomImages(res.localIds)
     } catch (error) {
       console.log(error)
@@ -126,6 +130,7 @@ export default class PublishContent extends Vue {
       if (localId) {
         this.uploadSuccess = false
         const { serverId } = await this.wechatUploadImage(localId)
+        this.images[localIds.length].mediaId = serverId
         this.serverIds.push(serverId)
       }
 
@@ -141,11 +146,32 @@ export default class PublishContent extends Vue {
   }
 
   /**
-   * 文件成功上传到微信服务器
+   * 文件成功上传到微信服务器，通知服务器
    */
-  uploadWechatSuccess () {
-    alert('全部上传到微信服务器成功，通知服务器')
-    setTimeout()
+  async uploadWechatSuccess () {
+    try {
+      const params = {
+        medias: this.serverIds.reverse().map(item => {
+          return {
+            mediaId: item,
+            fileType: 'image'
+          }
+        })
+      }
+      const { files } = await wechatUploadFileApi(params)
+      // 成功后，将所有还剩下的图片对象替换
+      for (let [, file] of files.entries()) {
+        for (let [index, image] of this.images.entries()) {
+          if (image.mediaId === file.mediaId) {
+            this.images[index] = file
+            continue
+          }
+        }
+      }
+      this.uploadSuccess = true
+    } catch (error) {
+      this.$vux.toast.test(error.message, 'middle')
+    }
   }
 
   /**
@@ -167,11 +193,11 @@ export default class PublishContent extends Vue {
     }
 
     if (this.uploadSuccess) {
-      Vue.$vux.loading.show({
-        text: '上传中...'
-      })
       this.publish(params)
     } else {
+      this.$vux.loading.show({
+        text: '上传中...'
+      })
       this.$watch('uploadSuccess', function (val) {
         if (val) {
           this.publish(params)
@@ -205,6 +231,10 @@ export default class PublishContent extends Vue {
    */
   handleDeleteImage (index, image) {
     this.images.splice(index, 1)
+    if (this.images && this.images.length <= 0) {
+      // 如果图片全部删除了，则上传状态变成完成
+      this.uploadSuccess = true
+    }
   }
 
   /**
@@ -221,14 +251,16 @@ export default class PublishContent extends Vue {
   }
 
   /**
-   * 添加图片
+   * 点击添加选项item
    * @param {*} key
    * @param {*} item
    */
   handleAddActoinItem (key, item) {
     switch (key) {
       case 'image':
-        this.chooseCustomImages()
+        setTimeout(() => {
+          this.chooseCustomImages()
+        }, 0)
         break
       case 'video':
         this.$vux.alert.show({

@@ -15,7 +15,11 @@
       <div class="module-content h5-code" v-html="pageInfo.intro">
       </div>
     </div>
-    <!--<img class="how-to-play" src="./../../static/how2play.png" @tap="how2play"></img>-->
+    <div class="how-to-play">
+      <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/four/index.html">
+        <img src="./../../assets/how2play.png" />
+      </a>
+    </div>
     <div class="module" v-if="dynamicList.length > 0">
       <div class="module-title">
         <p>精选内容</p>
@@ -37,26 +41,26 @@
     </div>
 
     <div class="footer">
-      <!--<div class="to-home" @tap="toHome">-->
-        <!--<img src="./../../static/icon/icon_home.png" class="icon-home" />-->
-        <!--<text>首页</text>-->
-      <!--</div>-->
+      <div class="to-home">
+        <img src="./../../assets/icon/icon_home.png" class="icon-home" />
+        <span>首页</span>
+      </div>
       <div class="time-clock" v-if="isJoinAgency">
         <p>开课倒计时</p>
         <p>{{pageInfo.duration}}</p>
       </div>
       <p v-else-if="isEnd">课堂已关闭，停止报名</p>
       <p v-else-if="pageInfo.remainingJoinNum <= 0">已满员，停止报名</p>
-      <div v-else>
+      <div class="btn-box" v-else>
         <button :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
                 :disabled="!isFreeBtn" v-if="pageInfo.freeJoinNum > 0">
           <span>集Call免费加入</span>
-          <span>（{{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}}）</span>
+          <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
         </button>
         <button :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @tap="subscribe('pay')" v-if="pageInfo.payJoinNum > 0">
-          <span>付费加入：¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
-          <span>（{{paySurplusPeople > 0 ? '剩余：' + paySurplusPeople : '已满员，通道关闭'}}）</span>
+          <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
+          <span>({{paySurplusPeople > 0 ? '剩余：' + paySurplusPeople : '已满员，通道关闭'}})</span>
         </button>
       </div>
     </div>
@@ -225,6 +229,14 @@
       z-index: 999;
       font-size: 15px;
 
+      & .btn-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        height: 100%;
+      }
+
       & .to-home {
         flex: 0 0 auto;
         width: 52px;
@@ -302,10 +314,15 @@
 
     & .how-to-play {
       margin-top: 30px;
-      width: 100%;
-      height: 60px;
-      border-radius: 6px;
-      background-color: #fffdf3;
+      padding: 0 30px;
+
+      & img {
+        border-radius: 6px;
+        width: 100%;
+        height: auto;
+        vertical-align: middle;
+        text-align: center;
+      }
     }
 
     & .icon-home {

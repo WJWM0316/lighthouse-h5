@@ -31,10 +31,15 @@ function hideLoading (open) {
   }
 }
 
-export const request = ({type = 'post', url, data = {}, config = {}, globalLoading = false} = {}) => {
+export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   console.log('url', url)
   // 正常请
   // let datas = type === 'get' ? {params: data} :data
+  let globalLoading = false
+  if (data.globalLoading !== undefined) {
+    globalLoading = data.globalLoading || false
+    delete data.globalLoading
+  }
   showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data, TestUid: 2}} : {...data, TestUid: 2}
   console.log('require params', datas)
