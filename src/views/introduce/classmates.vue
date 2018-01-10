@@ -61,8 +61,7 @@
       }
     }
     goUserDetail (userId) {
-//      this.$router.push({name: 'exchange-detail', query: {id, userId}})
-      console.log('跳转个人详情 userId', userId)
+      this.$router.push({name: 'userInfo-details', params: {userId}})
     }
 
     /**

@@ -19,7 +19,6 @@
             <p v-if="userIdentify === 1 && userInfo.weChat">微信号：{{userInfo.weChat}}</p>
           </div>
         </div>
-
         <button class="exchange-btn" v-if="!isShowExchangeBtn" @click="goExchange">交换微信</button>
       </div>
 
@@ -34,7 +33,7 @@
             <community-card class="community-item" v-for="(item, index) in communityList" :key="index" :community="item" @tap-card="handleTap(item)" ></community-card>
           </div>
         </div>
-        
+
         <!-- 普通用户 -->
         <div v-if="dynamicList.length > 0">
           <div class="container-title" style="border-bottom: solid 1px #ededed;">TA的内容</div>
@@ -139,16 +138,13 @@
 
     // 跳转申请交换微信
     goExchange () {
-      if (this.isComplete) { // 是否已完善信息
-//        wx.navigateTo({
-//          url: `/pages/exchange/apply?userId=${this.userId}&communityId=${this.communityId}`
-//        })
-      } else {
+      if (this.isComplete) { // 已完善个人资料跳转交换微信
+        console.log('this.$route.params.userId', this.$route.params.userId)
+        this.$router.push({name: 'exchange-apply', params: {userId: this.$route.params.userId}})
+      } else { // 未完善跳转完善
         this.$vux.toast.text('完善信息才能交换微信', 'bottom')
         setTimeout(() => {
-//          wx.navigateTo({
-//            url: `/pages/center/editinfo`
-//          })
+          this.$router.push({name: 'center-editinfo', query: {redirect: this.$route.currentRoute.path}})
         }, 2000)
       }
     }

@@ -78,6 +78,12 @@ export const request = ({type = 'post', url, data = {}, config = {}, globalLoadi
           name: 'undefined'
         })
       }
+      if (data && data.statusCode === 271) { // 未入社进入社后请求报的错 跳转到入社介绍页 需要一个社区id
+        // hideLoading(globalLoading)
+        // router.replace({
+        //   name: 'undefined'
+        // })
+      }
 
       hideLoading(globalLoading)
       return Promise.reject(data)
