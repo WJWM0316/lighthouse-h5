@@ -130,6 +130,8 @@
         } else if (item['circleType'] === 1) {
           item.musicState = 0
           item.progress = 0
+        } else if (res['circleType'] === 2) {
+          item.videoPlay = false
         }
       })
       this.dynamicList = temp

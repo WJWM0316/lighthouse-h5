@@ -242,6 +242,11 @@ export default class dynamicItem extends Vue {
     })
   }
   videoPlay () {
+    const itemIndex = this.itemIndex
+    this.$emit('videoEvent', {
+      eventType: 'play',
+      itemIndex
+    })
   }
 
   /**

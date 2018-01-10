@@ -14,7 +14,7 @@
     </div>
 
     <div class="btn-container">
-      {{serverIds}}
+      {{uploadSuccess}}{{serverIds}}
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
     </div>
 
@@ -127,10 +127,18 @@ export default class PublishContent extends Vue {
   async uploadCustomImages (localIds = []) {
     try {
       const localId = localIds.pop()
+      alert(localIds.pop)
       if (localId) {
         this.uploadSuccess = false
+        alert(this.wechatUploadImage)
         const { serverId } = await this.wechatUploadImage(localId)
-        this.images[localIds.length].mediaId = serverId
+
+        for (let [index, image] of this.images.entries()) {
+          if (image.fileUrl === localId) {
+            this.images[index].mediaId = serverId
+            break
+          }
+        }
         this.serverIds.push(serverId)
       }
 
@@ -139,6 +147,7 @@ export default class PublishContent extends Vue {
       } else {
         // todo 全部上传到微信服务器成功，通知服务器
         this.uploadWechatSuccess()
+        this.uploadSuccess = true
       }
     } catch (error) {
       this.$vux.toast.text(error.message || '网络异常，请重试')
@@ -168,9 +177,8 @@ export default class PublishContent extends Vue {
           }
         }
       }
-      this.uploadSuccess = true
     } catch (error) {
-      this.$vux.toast.test(error.message, 'middle')
+      this.$vux.toast.test(error.message, 'bottom')
     }
   }
 
@@ -184,7 +192,7 @@ export default class PublishContent extends Vue {
     } else if (this.addonType === 3) {
       fileId = this.images.map(item => item.fileId)
     }
-
+    alert(fileId)
     const params = {
       communityId: this.form.communityId,
       content: this.form.content,
@@ -211,18 +219,18 @@ export default class PublishContent extends Vue {
    */
   async publish (params) {
     try {
-      Vue.$vux.loading.show({
+      this.$vux.loading.show({
         text: '发布中...'
       })
       await publishApi(params)
-      Vue.$vux.loading.show({
+      this.$vux.loading.show({
         text: '发布成功'
       })
       this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
     } finally {
-      Vue.$vux.loading.hide()
+      this.$vux.loading.hide()
     }
   }
 

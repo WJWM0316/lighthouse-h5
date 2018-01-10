@@ -15,6 +15,7 @@
                   :disableContentClick="disableContentClick"
                   :disableUserClick="disableUserClick"
                   @audioEvent="audioEvent"
+                  @videoEvent="videoEvent"
                   @operation="operation"
     ></dynamic-item>
 
@@ -279,6 +280,17 @@
       }
     }
 
+    videoEvent (e) {
+      const {eventType, itemIndex} = e
+
+      switch (eventType) {
+        case 'play':
+          this.dynamicList[itemIndex].videoPlay = true
+          console.log(this.dynamicList[itemIndex])
+          break
+      }
+    }
+
     /**
      * 操作事件
      * @param e :{eventType, itemIndex} eventType: 事件名称 itemIndex: 触发对象下标
@@ -445,6 +457,10 @@
   }
 </script>
 <style lang="less" scoped>
-  .m-community {
+  .dynamic-list {
+
+    & .video-box {
+      position: absolute;
+    }
   }
 </style>
