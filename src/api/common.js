@@ -60,3 +60,12 @@ export const getWechatSign = data => request({
   url: '/wap/currency/getWxSign',
   data
 })
+
+/**
+ * 微信上传
+ * @param {*} data
+ */
+export const wecharUploadFile = data => request({
+  url: '/wap/currency/wxUploadFile',
+  data
+})
