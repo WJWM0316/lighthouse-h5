@@ -68,7 +68,9 @@ export default class HomeIndex extends Vue {
   ready = false
 
   created () {
+    this.$vux.loading.show()
     this.init()
+    this.$vux.loading.hide()
   }
 
   /**
