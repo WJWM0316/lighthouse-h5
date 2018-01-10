@@ -187,20 +187,21 @@
       video.autoplay = true
       video.controls = true
       video.addEventListener('fullscreenchange', function(e) {
-        if (!document.webkitIsFullScreen) {
-          console.log('退出全屏')
+        const isFullscreen = window.fullScreen || window.document.webkitIsFullScreen || window.document.msFullscreenEnabled
+        if (!isFullscreen) {
+          video.src = ''
         }
       })
       video.addEventListener('mozfullscreenchange', function(e) {
-        if (!document.webkitIsFullScreen) {
-          console.log('退出全屏: moz')
+        const isFullscreen = window.fullScreen || window.document.webkitIsFullScreen || window.document.msFullscreenEnabled
+        if (!isFullscreen) {
+          video.src = ''
         }
       })
       video.addEventListener('webkitfullscreenchange', function(e) {
         const isFullscreen = window.fullScreen || window.document.webkitIsFullScreen || window.document.msFullscreenEnabled
-        console.log(isFullscreen)
-        if (!document.webkitIsFullScreen) {
-          console.log('退出全屏: webkit')
+        if (!isFullscreen) {
+          video.src = ''
         }
       })
 
