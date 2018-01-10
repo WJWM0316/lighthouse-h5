@@ -125,33 +125,51 @@ export default class PublishContent extends Vue {
    * 上传多张图片
    */
   async uploadCustomImages (localIds = []) {
-    try {
-      const localId = localIds.pop()
-      alert(localIds.pop)
-      if (localId) {
-        this.uploadSuccess = false
-        alert(this.wechatUploadImage)
-        const { serverId } = await this.wechatUploadImage(localId)
-
-        for (let [index, image] of this.images.entries()) {
-          if (image.fileUrl === localId) {
-            this.images[index].mediaId = serverId
-            break
-          }
+    const localId = localIds.pop()
+    if (localId) {
+      this.uploadSuccess = false
+      const { serverId } = await this.wechatUploadImage(localId)
+      for (let [index, image] of this.images.entries()) {
+        if (image.fileUrl === localId) {
+          this.images[index].mediaId = serverId
+          break
         }
-        this.serverIds.push(serverId)
       }
-
-      if (localIds && localIds.length > 0) {
-        this.uploadCustomImages(localIds)
-      } else {
-        // todo 全部上传到微信服务器成功，通知服务器
-        this.uploadWechatSuccess()
-        this.uploadSuccess = true
-      }
-    } catch (error) {
-      this.$vux.toast.text(error.message || '网络异常，请重试')
+      this.serverIds.push(serverId)
     }
+
+    if (localIds && localIds.length > 0) {
+      this.uploadCustomImages(localIds)
+    } else {
+      // todo 全部上传到微信服务器成功，通知服务器
+      this.uploadWechatSuccess()
+      this.uploadSuccess = true
+    }
+    // try {
+    //   const localId = localIds.pop()
+    //   if (localId) {
+    //     this.uploadSuccess = false
+    //     const { serverId } = await this.wechatUploadImage(localId)
+    //     for (let [index, image] of this.images.entries()) {
+    //       if (image.fileUrl === localId) {
+    //         this.images[index].mediaId = serverId
+    //         break
+    //       }
+    //     }
+    //     this.serverIds.push(serverId)
+    //   }
+
+    //   if (localIds && localIds.length > 0) {
+    //     this.uploadCustomImages(localIds)
+    //   } else {
+    //     // todo 全部上传到微信服务器成功，通知服务器
+    //     this.uploadWechatSuccess()
+    //     this.uploadSuccess = true
+    //   }
+    // } catch (error) {
+    //   console.log(error)
+    //   this.$vux.toast.text(error.message || '网络异常，请重试')
+    // }
   }
 
   /**
