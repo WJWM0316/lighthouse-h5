@@ -104,15 +104,16 @@ export default class PublishContent extends Vue {
   async chooseCustomImages () {
     try {
       const params = {
-        count: this.lengths.imageMax - this.images.length
+        count: this.lenggths.imageMax - this.images.length
       }
       const res = await this.wechatChooseImage(params)
-      this.images = res.localIds.map(item => {
+      const newImages = res.localIds.map(item => {
         return {
           mediaId: '',
           fileUrl: item
         }
       })
+      this.images = [].contact(this.images, newImages)
       this.uploadCustomImages(res.localIds)
     } catch (error) {
       console.log(error)
@@ -191,7 +192,7 @@ export default class PublishContent extends Vue {
     }
 
     if (this.uploadSuccess) {
-      Vue.$vux.loading.show({
+      this.$vux.loading.show({
         text: '上传中...'
       })
       this.publish(params)
@@ -209,18 +210,18 @@ export default class PublishContent extends Vue {
    */
   async publish (params) {
     try {
-      Vue.$vux.loading.show({
+      this.$vux.loading.show({
         text: '发布中...'
       })
       await publishApi(params)
-      Vue.$vux.loading.show({
+      this.$vux.loading.show({
         text: '发布成功'
       })
       this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'middle')
     } finally {
-      Vue.$vux.loading.hide()
+      this.$vux.loading.hide()
     }
   }
 
