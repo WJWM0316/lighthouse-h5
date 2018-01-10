@@ -93,6 +93,8 @@ export default {
      */
     wechatUploadImage (localId, options = {}) {
       return new Promise((resolve, reject) => {
+        alert(this.$wechat)
+        alert(this.$wechat.uploadImage)
         this.$wechat.uploadImage({
           localId: localId,
           isShowProgressTips: options.isShowProgressTips || 0, // sdk默认为1，显示进度提示
