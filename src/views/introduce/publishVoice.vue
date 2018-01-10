@@ -4,6 +4,7 @@
       <div class="hd">
         <button type="button" class="u-btn-close" @click="handleClose">关闭</button>
       </div>
+      {{serverIds}}
       <recorder @uploading="handleUploading" @upload-success="handleUploadSuccess" />
     </div>
   </div>
@@ -28,6 +29,8 @@ export default class PublishVoice extends Vue {
     communityId: '', // 社区id
     fileId: []
   }
+
+  serverIds = []
 
   created () {
     this.form.communityId = this.$route.params.communityId
@@ -80,6 +83,7 @@ export default class PublishVoice extends Vue {
    */
   handleUploadSuccess (files) {
     this.form.fileId = files.map(item => item.fileId)
+    this.serverIds = files.map(item => item.mediaId)
     this.publish()
   }
 }
