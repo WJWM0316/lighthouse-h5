@@ -106,7 +106,7 @@
         <!-- 只有文件 -->
         <div v-if="item.circleType === 4">
           <p class="content-text">{{item.content}}</p>
-          <div class="content-file">
+          <div class="content-file" @click.stop="fileOpen(item.files[0].fileUrl)">
             <img class="file-logo" src="./../../assets/suffix/pdf.png" v-if="fileType === 'pdf'" />
             <img class="file-logo" src="./../../assets/suffix/ppt.png" v-else-if="fileType === 'ppt'" />
             <img class="file-logo" src="./../../assets/suffix/word.png" v-else-if="fileType === 'word'" />
@@ -145,7 +145,7 @@
             {{item.commentTotal > 0 ? item.commentTotal : '评论'}}
           </button>
           <!-- 灯塔信息 -->
-          <div class="info-light-house" v-if="showLightHouseInfo" @click.stop="toCommunity">
+          <div class="info-light-house" v-if="showLightHouseInfo" @click.stop="toCommunity(item.LighthouseId)">
             <span>{{item.Lighthouse}}</span>
           </div>
         </div>

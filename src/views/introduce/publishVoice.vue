@@ -4,7 +4,7 @@
       <div class="hd">
         <button type="button" class="u-btn-close" @click="handleClose">关闭</button>
       </div>
-      <recorder />
+      <recorder @uploading="handleUploading" @upload-success="handleUploadSuccess" />
     </div>
   </div>
 </template>
@@ -15,6 +15,8 @@ import Component from 'vue-class-component'
 
 import Recorder from '@/components/recorder'
 
+import { publishApi } from '@/api/pages/content'
+
 @Component({
   name: 'publish-voice',
   components: {
@@ -22,6 +24,38 @@ import Recorder from '@/components/recorder'
   }
 })
 export default class PublishVoice extends Vue {
+  form = {
+    communityId: '', // 社区id
+    fileId: []
+  }
+
+  created () {
+    this.form.communityId = this.$route.params.communityId
+  }
+
+  /**
+   * 发布
+   */
+  async publish () {
+    try {
+      const params = {
+        communityId: this.form.communityId,
+        type: 1,
+        fileId: this.form.fileId
+      }
+      this.$vux.loading.show({
+        text: '正在发布...'
+      })
+      await publishApi(params)
+      this.$vux.toast.text('发布成功', 'middle')
+      this.$router.go(-1)
+    } catch (error) {
+      this.$vux.toast.text(error.message, 'middle')
+    } finally {
+      this.$vux.loading.hide()
+    }
+  }
+
   /**
    * 点击关闭
    */
@@ -33,6 +67,20 @@ export default class PublishVoice extends Vue {
         self.$router.go(-1)
       }
     })
+  }
+
+  handleUploading () {
+    this.$vux.loading.show({
+      text: '上传中...'
+    })
+  }
+
+  /**
+   * 文件上传成功
+   */
+  handleUploadSuccess (files) {
+    this.form.fileId = files.map(item => item.fileId)
+    this.publish()
   }
 }
 </script>

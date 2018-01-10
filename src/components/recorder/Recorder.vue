@@ -69,6 +69,8 @@ import { mapGetters } from 'vuex'
 
 import wechatMixin from '@/mixins/wechat'
 
+import { wechatUploadFileApi } from '@/api/common'
+
 @Component({
   name: 'recorder',
   mixins: [wechatMixin],
@@ -183,8 +185,12 @@ export default class Recorder extends Vue {
     }
   }
 
+  /**
+   * 上传文件到微信服务器
+   */
   async upload () {
     try {
+      this.$emit('uploading')
       const res = await this.wechatUploadVoice(this.localId)
       this.uploadWechatSuccess(res)
     } catch (error) {
@@ -195,9 +201,20 @@ export default class Recorder extends Vue {
   /**
    * 文件成功上传到微信服务器
    */
-  uploadWechatSuccess (res) {
+  async uploadWechatSuccess ({ serverId }) {
     // todo 上传微信服务器成功，通知服务器，并发布
-    alert('全部上传到微信服务器成功，通知服务器')
+    try {
+      const params = {
+        medias: [{
+          mediaId: serverId,
+          fileType: 'audio'
+        }]
+      }
+      const { files } = await wechatUploadFileApi(params)
+      this.$emit('upload-success', files)
+    } catch (error) {
+      this.$vux.toast.test(error.message, 'middle')
+    }
   }
 
   /**

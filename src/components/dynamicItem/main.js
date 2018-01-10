@@ -224,15 +224,22 @@ export default class dynamicItem extends Vue {
       urls.push(item.fileUrl)
     })
     console.log('当前图片: ', img, '图片数组: ', urls)
-    // wx.previewImage({
-    //   current: img,
-    //   urls: urls
-    // })
+
+    this.$emit('operation', {
+      eventType: 'previewImage',
+      img,
+      urls
+    })
   }
   /**
    * 打开文件
    */
-  fileOpen () {
+  fileOpen (url) {
+    console.log('当前打开文件: ', url)
+    this.$emit('operation', {
+      eventType: 'fileOpen',
+      url
+    })
   }
   videoPlay () {
   }
@@ -254,6 +261,7 @@ export default class dynamicItem extends Vue {
       return
     }
     console.log('去个人详情: ', userId)
+    this.$router.push(`/userInfo/${userId}/details`)
   }
   toDetails () { // 去朋友圈、帖子、问题详情
     if (this.disableContentClick) {
@@ -288,7 +296,7 @@ export default class dynamicItem extends Vue {
       this.$router.push(`/details/${sourceId}/${type}`)
     }
   }
-  toCommunity () { // 去大咖介绍页
-    console.log('去大咖介绍页')
+  toCommunity (communityId) { // 去大咖介绍页
+    this.$router.push(`/introduce/${communityId}`)
   }
 }

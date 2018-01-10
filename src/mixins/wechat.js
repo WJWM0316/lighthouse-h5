@@ -1,12 +1,29 @@
 // 微信jssdk mixin
-import { getWechatSign } from '@/api/common'
+import { getWechatSignApi } from '@/api/common'
 
 export default {
   data () {
     return {
       wechatConfig: {
         debug: false,
-        jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'downloadVoice', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'chooseWXPay']
+        jsApiList: [
+          'onMenuShareTimeline',
+          'onMenuShareAppMessage',
+          'startRecord',
+          'stopRecord',
+          'onVoiceRecordEnd',
+          'playVoice',
+          'pauseVoice',
+          'stopVoice',
+          'onVoicePlayEnd',
+          'uploadVoice',
+          'downloadVoice',
+          'chooseImage',
+          'previewImage',
+          'uploadImage',
+          'downloadImage',
+          'chooseWXPay'
+        ]
       }
     }
   },
@@ -20,7 +37,7 @@ export default {
         const params = {
           url: location.href.split('#')[0]
         }
-        const res = await getWechatSign(params)
+        const res = await getWechatSignApi(params)
         this.wechatConfig = Object.assign({}, this.wechatConfig, res)
         this.setWechatConfig()
       } catch (error) {
@@ -52,6 +69,19 @@ export default {
           fail: function (e) {
             reject(e)
           }
+        })
+      })
+    },
+
+    /**
+     * 预览图片
+     * @param {*} options
+     */
+    wechatPreviewImage (options = {}) {
+      return new Promise((resolve, reject) => {
+        this.$wechat.previewImage({
+          current: options.img,
+          urls: options.urls
         })
       })
     },
