@@ -6,10 +6,10 @@
       <div class="item-middle-top fs15">{{item.realName}}</div>
       <div class="item-middle-middle fs15">{{item.reason}}</div>
     </div>
-    <XButton
+    <div
       :class="item.handleStatus === 0 && type === 1 ? 'item-right  btn-common' : 'item-right not-btn button-reset'"
-      @click.native.stop="handleFour">{{type === 1 ? otherToMeList[item.handleStatus] : meToOtherList[item.handleStatus]}}
-    </XButton>
+      @click.stop="handleFour">{{type === 1 ? otherToMeList[item.handleStatus] : meToOtherList[item.handleStatus]}}
+    </div>
   </div>
 </template>
 <script>
@@ -40,8 +40,6 @@
     meToOtherList = ['等待通过', '已同意', '已拒绝']
 
     handleFour () { // 点击了同意
-      console.log('处理同意')
-      console.log('this.type', this.item.handleStatus, this.type)
       if (this.item.handleStatus === 0 && this.type === 1) {
         this.$emit('tap-four', this.item.id, this.item.LighthouseId)
       }

@@ -194,7 +194,7 @@ export default class Recorder extends Vue {
       const res = await this.wechatUploadVoice(this.localId)
       this.uploadWechatSuccess(res)
     } catch (error) {
-      this.$vux.toast.text(error.message, 'middle')
+      this.$vux.toast.text(error.message, 'bottom')
     }
   }
 
@@ -213,7 +213,7 @@ export default class Recorder extends Vue {
       const { files } = await wechatUploadFileApi(params)
       this.$emit('upload-success', files)
     } catch (error) {
-      this.$vux.toast.test(error.message, 'middle')
+      this.$vux.toast.test(error.message, 'bottom')
     }
   }
 

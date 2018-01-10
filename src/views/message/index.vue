@@ -127,7 +127,7 @@
         this.pagination.end = this.isLastPage
         this.pagination.busy = false
       } catch (e) {
-        this.$vux.toast.text(e.message, 'middle')
+        this.$vux.toast.text(e.message, 'bottom')
       }
     }
 

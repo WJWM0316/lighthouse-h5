@@ -194,7 +194,7 @@ export default class PublishContent extends Vue {
       })
       this.$router.go(-1)
     } catch (error) {
-      this.$vux.toast.text(error.message, 'middle')
+      this.$vux.toast.text(error.message, 'bottom')
     } finally {
       Vue.$vux.loading.hide()
     }
