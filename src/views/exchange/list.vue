@@ -36,10 +36,9 @@
       ApplyItem,
       Scroller
     },
-    mixins: [ListMixin]
+    mixins: [ListMixin],
   })
   export default class ExchangeListIndex extends Vue {
-    applyType = 1 // 类型：1我收到的申请，2我发出的申请
     typeClassList = ['one', 'two']
     dataList = []
     iconSrc = 'http://cdnstatic.zike.com/Uploads/static/beacon/404.png'
@@ -52,11 +51,17 @@
     goCommunityDetail (LighthouseId) {
       console.log('跳去社区详情，暂时不要的')
     }
+    get applyType () {
+      const iniType = parseInt(this.$route.query.type)
+      console.log('iniType', iniType)
+      return iniType || 1 // 类型：1我收到的申请，2我发出的申请
+    }
     async handleDetails (id, LighthouseId) { // 直接同意申请
       console.log('LighthouseId', LighthouseId)
       try {
         await handleDetailsApi({id, LighthouseId, handleStatus: 1, refuseReason: this.refuseReason})
         this.$vux.toast.text('已同意申请', 'bottom')
+        this.pagination.end = false
         this.getList()
       } catch (e) {
         this.$vux.toast.text(e.message, 'bottom')
@@ -66,14 +71,16 @@
     toggle (type) {
       this.dataList = []
       this.pagination.end = false
-      this.applyType = Number.parseInt(type)
+      this.$router.replace(`/exchange/list?type=${type}`)
       this.getList({ page: 1 })
     }
     async getList ({ page, pageSize } = {}) { // 请求列表
+      console.log('前', this.pagination.end, this.pagination.busy)
       if (this.pagination.end || this.pagination.busy) {
         // 防止多次加载
         return
       }
+      console.log('后', this.pagination.end, this.pagination.busy)
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
       if (this.isLastPage && page !== 1) return
