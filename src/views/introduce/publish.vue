@@ -14,6 +14,7 @@
     </div>
 
     <div class="btn-container">
+      {{serverIds}}
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
     </div>
 
