@@ -97,15 +97,9 @@
       suspensionInput
     },
     watch: {
-//      data (data) {
-//        const temp = new Array(...data)
-//        temp.forEach((item) => {
-//          item.musicState = 1
-//          item.progress = 50
-//        })
-//        console.log(temp)
-//        this.dynamicList = temp
-//      }
+      displaySuspensionInput (val) {
+        this.$emit('suspensionInputState', val)
+      }
     },
     mixins: [WechatMixin]
   })
