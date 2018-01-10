@@ -243,9 +243,13 @@
         } else if (item['circleType'] === 1) {
           item.musicState = 0
           item.progress = 0
+        } else if (item['circleType'] === 2) {
+          console.log('视频')
+          item.videoPlay = false
         }
       })
 
+      console.log(temp)
       if (page === 1) {
         this.dynamicList = temp
       } else {

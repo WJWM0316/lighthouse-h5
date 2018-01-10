@@ -52,11 +52,12 @@
       videoEvent () {},
       handleDetails () {},
       goDetail (item) {
+        console.log('item', item.type)
         switch (item.type) {
           case 1: // 回答我的提问
           case 2: // 回答我的追问
           case 3: // 评论我的问答
-//            wx.navigateTo({
+//            wx.naigateTo({
 //              url: `/pages/introduce/ask?communityId=${item.LighthouseId}`
 //            })
             break
@@ -64,15 +65,13 @@
             this.$router.push({name: 'all-details', params: {sourceId: item.beReturnedId, type: 2}})
             break
           case 5: // 回复我的评论
-            this.$router.push({name: 'all-reply', params: {commentId: item.LighthouseId}})
+            console.log('跳转到评论详情')
+            this.$router.push({name: 'all-reply', params: {commentId: item.beReturnedId}})
             break
           case 6: // 6评论导师内容（朋友圈）
             this.$router.push({name: 'all-details', params: {sourceId: item.beReturnedId, type: 1}})
             break
         }
-      },
-      goUserDetail (userId, LighthouseId) {
-        this.$router.push({name: 'introduce-detail', params: {}})
       },
       goCommunityDetail (LighthouseId) {
         this.$router.push({name: 'community', params: {communityId: LighthouseId}})
@@ -95,6 +94,9 @@
 
     goexChangeList () {
       this.$router.push({name: 'exchange-list'})
+    }
+    goUserDetail (userId) {
+      this.$router.push({name: 'userInfo-details', params: {userId}})
     }
 
     async getList ({page, pageSize} = {}) { // 请求列表

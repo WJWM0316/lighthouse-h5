@@ -16,7 +16,7 @@
 
       <!-- 问答类型 -->
       <!-- 发表内容 -->
-      <div v-if="item.modelType === 'problem'" class="publish-content problem">
+      <div class="publish-content problem" v-if="item.modelType === 'problem'">
 
         <p class="content-text">问：{{item.content}}</p>
 
@@ -54,7 +54,7 @@
 
       <!-- 帖子类型 -->
       <!-- 发表内容 类型:0.无文件 1.音频 2.视频 3.图片 4.文件 -->
-      <div v-else class="publish-content">
+      <div class="publish-content" v-else>
 
         <!-- 只有文字 -->
         <p class="content-text" v-if="item.circleType === 0">{{item.content}}</p>
@@ -81,8 +81,9 @@
         <div v-if="item.circleType === 2">
           <p class="content-text">{{item.content}}</p>
           <div class="content-video" @click.stop="videoPlay">
+            <video :src="item.files[0].fileUrl" autoplay controls v-if="item.videoPlay"></video>
             <!--背景图-->
-            <img />
+            <!--<img />-->
           </div>
         </div>
 
@@ -101,7 +102,6 @@
             </div>
           </div>
         </div>
-
 
         <!-- 只有文件 -->
         <div v-if="item.circleType === 4">
