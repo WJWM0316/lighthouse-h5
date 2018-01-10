@@ -71,9 +71,6 @@
             break
         }
       },
-      goUserDetail (userId, LighthouseId) {
-        this.$router.push({name: 'introduce-detail', params: {}})
-      },
       goCommunityDetail (LighthouseId) {
         this.$router.push({name: 'community', params: {communityId: LighthouseId}})
       },
@@ -95,6 +92,9 @@
 
     goexChangeList () {
       this.$router.push({name: 'exchange-list'})
+    }
+    goUserDetail (userId) {
+      this.$router.push({name: 'userInfo-details', params: {userId}})
     }
 
     async getList ({page, pageSize} = {}) { // 请求列表
