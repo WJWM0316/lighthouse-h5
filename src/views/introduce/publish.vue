@@ -193,11 +193,11 @@ export default class PublishContent extends Vue {
     }
 
     if (this.uploadSuccess) {
-      Vue.$vux.loading.show({
-        text: '上传中...'
-      })
       this.publish(params)
     } else {
+      this.$vux.loading.show({
+        text: '上传中...'
+      })
       this.$watch('uploadSuccess', function (val) {
         if (val) {
           this.publish(params)
