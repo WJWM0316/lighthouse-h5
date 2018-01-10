@@ -110,6 +110,7 @@
       problemIndex: -1
     }
     music = ''
+    currentVideoIndex = -1
 
     commentIndex = -1
     suspensionInputPlaceholder = '写评论'
@@ -282,10 +283,14 @@
 
     videoEvent (e) {
       const {eventType, itemIndex} = e
+      if (this.currentVideoIndex > -1) {
+        this.dynamicList[this.currentVideoIndex].videoPlay = false
+      }
 
       switch (eventType) {
         case 'play':
           this.dynamicList[itemIndex].videoPlay = true
+          this.currentVideoIndex = itemIndex
           console.log(this.dynamicList[itemIndex])
           break
       }
