@@ -19,10 +19,10 @@
             {{pageInfo.reason}}
           </div>
         </div>
-        <div class="item-info" v-if="!(pageInfo.handleStatus === 0 && queryParams.type === 1)">
+        <div class="item-info" v-if="!(pageInfo.handleStatus === 0 && applyType === 1)">
           <div class="item-info-left">申请状态</div>
           <div class="item-info-right">
-            {{queryParams.type === 1 ? otherToMeList[pageInfo.handleStatus] : meToOtherList[pageInfo.handleStatus]}}
+            {{applyType === 1 ? otherToMeList[pageInfo.handleStatus] : meToOtherList[pageInfo.handleStatus]}}
           </div>
         </div>
         <div class="item-info" v-if="pageInfo.handleStatus === 1">
@@ -31,7 +31,7 @@
             {{pageInfo.wechat}}
           </div>
         </div>
-        <div class="item-info" v-if="pageInfo.handleStatus === 2 && queryParams.type === 2">
+        <div class="item-info" v-if="pageInfo.handleStatus === 2 && applyType === 2">
           <div class="item-info-left">拒绝理由</div>
           <div class="item-info-right">
             {{pageInfo.refuseReason}}
@@ -39,7 +39,7 @@
         </div>
       </div>
       <!--我收到的申请 并且是等我同意-->
-      <div class="btn-group" v-if="pageInfo.handleStatus === 0 && queryParams.type === 1">
+      <div class="btn-group" v-if="pageInfo.handleStatus === 0 && applyType === 1">
         <div class="btn-item" @click="showReject(true)">拒绝</div>
         <div class="btn-item yellow-tan-bg" @click="handleDetails(1)">同意</div>
       </div>
@@ -51,9 +51,6 @@
                   class="user-input-text"
                   maxlength="100"
                   v-model="refuseReason"/>
-        <!--<group>-->
-          <!--<x-textarea title="title" placeholder-style="color: #bcbcbc;" v-model="refuseReason" class="user-input-text" placeholder="请填写拒绝理由"></x-textarea>-->
-        <!--</group>-->
         <div class="user-input-length">{{strLength}}/100</div>
       </div>
       <div class="btn-group">
@@ -92,6 +89,9 @@
       }
     },
     computed: {
+      'applyType': function () {
+        return this.$route.params.type || 1
+      },
       'userCareer': function () {
         console.log('this.pageInfo', this.pageInfo)
         const {workTimeName, career, office} = this.pageInfo
