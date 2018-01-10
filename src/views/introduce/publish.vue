@@ -109,6 +109,7 @@ export default class PublishContent extends Vue {
       const res = await this.wechatChooseImage(params)
       this.images = res.localIds.map(item => {
         return {
+          mediaId: '',
           fileUrl: item
         }
       })
@@ -127,6 +128,7 @@ export default class PublishContent extends Vue {
       if (localId) {
         this.uploadSuccess = false
         const { serverId } = await this.wechatUploadImage(localId)
+        this.images[localIds.length].mediaId = serverId
         this.serverIds.push(serverId)
       }
 
@@ -155,8 +157,16 @@ export default class PublishContent extends Vue {
         })
       }
       const { files } = await wechatUploadFileApi(params)
-      this.images = files
-      this.uploadSuccess = false
+      // 成功后，将所有还剩下的图片对象替换
+      for (let [, file] of files.entries()) {
+        for (let [index, image] of this.images.entries()) {
+          if (image.mediaId === file.mediaId) {
+            this.images[index] = file
+            continue
+          }
+        }
+      }
+      this.uploadSuccess = true
     } catch (error) {
       this.$vux.toast.test(error.message, 'middle')
     }
@@ -219,6 +229,10 @@ export default class PublishContent extends Vue {
    */
   handleDeleteImage (index, image) {
     this.images.splice(index, 1)
+    if (this.images && this.images.length <= 0) {
+      // 如果图片全部删除了，则上传状态变成完成
+      this.uploadSuccess = true
+    }
   }
 
   /**

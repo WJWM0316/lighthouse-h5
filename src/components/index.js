@@ -14,3 +14,5 @@ Vue.use(LoadingPlugin)
 
 Vue.use(Image)
 Vue.use(BottomLoading)
+
+window.wx = Vue.wechat
