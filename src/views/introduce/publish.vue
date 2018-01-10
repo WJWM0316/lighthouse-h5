@@ -146,8 +146,6 @@ export default class PublishContent extends Vue {
         // todo 全部上传到微信服务器成功，通知服务器
         this.uploadWechatSuccess()
         this.uploadSuccess = true
-        alert(localIds instanceof Array)
-        alert(localIds.toString())
       }
     } catch (error) {
       this.$vux.toast.text(error.message || '网络异常，请重试')
