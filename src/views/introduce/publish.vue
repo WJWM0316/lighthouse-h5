@@ -258,7 +258,9 @@ export default class PublishContent extends Vue {
   handleAddActoinItem (key, item) {
     switch (key) {
       case 'image':
-        this.chooseCustomImages()
+        setTimeout(() => {
+          this.chooseCustomImages()
+        }, 0)
         break
       case 'video':
         this.$vux.alert.show({
