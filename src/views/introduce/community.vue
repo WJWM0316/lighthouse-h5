@@ -45,12 +45,9 @@
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
                      :showIdentification="showIdentification"
+                     @suspensionInputState="suspensionInputState"
             ></dynamic>
           </div>
-          <!--<div class='u-bottom-loading'>-->
-            <!--<img class='icon' src='../../static/icon/icon_loading.gif' wx:if='{{!pagination.end}}'></img>-->
-            <!--<text class='text' wx:else>没有更多内容了～</text>-->
-          <!--</div>-->
           <div class="blank" v-else>
             <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
             <p>暂时没有内容～</p>
@@ -61,7 +58,7 @@
     </scroll>
 
     <!-- footer -->
-    <div class="footer">
+    <div class="footer" v-show="!displaySuspensionInput">
       <div v-if="isAuthor" class="author-operation">
         <button @click="question">
           <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
@@ -110,6 +107,7 @@
     showType = 1 // 1 朋友圈 0 交流社区
     isCommunityTitleFixed = false
     showIdentification = false
+    displaySuspensionInput = false
 
     // 发布操作选项
     releaseActionsheet = {
@@ -181,6 +179,9 @@
     }
     toMemberList () {
       this.$router.push({name: 'classmates', communityId: this.$route.params.communityId})
+    }
+    suspensionInputState (val) {
+      this.displaySuspensionInput = val
     }
 
     // ------------------------------------------------
