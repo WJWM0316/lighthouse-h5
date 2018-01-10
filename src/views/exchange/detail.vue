@@ -30,7 +30,6 @@
           <div class="item-info-right">
             {{pageInfo.wechat}}
           </div>
-          <div class="copy-btn">复制</div>
         </div>
         <div class="item-info" v-if="pageInfo.handleStatus === 2 && queryParams.type === 2">
           <div class="item-info-left">拒绝理由</div>
@@ -46,27 +45,28 @@
       </div>
     </div>
     <!--拒绝确认的框-->
-    <!--<div class="reject-container" v-else>-->
-      <!--<div class="user-input-s">-->
-        <!--<textarea placeholder="请填写拒绝理由"-->
-                 <!--class="user-input-img"-->
-                 <!--placeholder-style="color: #bcbcbc;"-->
-                 <!--maxlength="100"-->
-                 <!--bindinput="bindKeyInput"-->
-                 <!--value="{{refuseReason}}"/>-->
-        <!--<img class="user-input-length">{{strLength}}/100</img>-->
-      <!--</div>-->
-      <!--<div class="btn-group">-->
-        <!--<div class="btn-item" @click="showReject(false)">取消</div>-->
-        <!--<div class="btn-item yellow-tan-bg" @click="handleDetails(2)">确定拒绝</div>-->
-        <!--</div>-->
-      <!--</div>-->
+    <div class="reject-container" v-else>
+      <div class="user-input-s">
+        <textarea placeholder="请填写拒绝理由"
+                  class="user-input-text"
+                  maxlength="100"
+                  v-model="refuseReason"/>
+        <!--<group>-->
+          <!--<x-textarea title="title" placeholder-style="color: #bcbcbc;" v-model="refuseReason" class="user-input-text" placeholder="请填写拒绝理由"></x-textarea>-->
+        <!--</group>-->
+        <div class="user-input-length">{{strLength}}/100</div>
+      </div>
+      <div class="btn-group">
+        <div class="btn-item" @click="showReject(false)">取消</div>
+        <div class="btn-item yellow-tan-bg" @click="handleDetails(2)">确定拒绝</div>
+      </div>
     </div>
+  </div>
 </template>
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import { XInput, XButton } from 'vux'
+  import { XInput, XButton, Group, XTextarea } from 'vux'
   import { applyDetailsApi, handleDetailsApi } from '../../api/pages/exchange.js'
 
   @Component({
@@ -74,6 +74,8 @@
     components: {
       XInput,
       XButton,
+      Group,
+      XTextarea
     },
     data () {
       return {
@@ -111,7 +113,7 @@
         console.log('careerStr', careerStr)
         return careerStr
       },
-      'strLength': () => {
+      'strLength': function () {
         return this.refuseReason.length
       }
     }
@@ -126,14 +128,17 @@
       career: '',
       office: ''
     }
+
     created () {
       this.getDetail()
     }
 
     mounted () {
     }
+
     showReject (isShow) {
-      if (isShow === 'true') {
+      console.log('isShow', isShow)
+      if (isShow) {
         this.refuseReason = ''
         this.showRejectModal = true
       } else {
@@ -141,18 +146,21 @@
         this.showRejectModal = false // 隐藏拒绝框
       }
     }
-    async handleDetails (id, LighthouseId) { // 直接同意申请
-      console.log('LighthouseId', LighthouseId)
+
+    async handleDetails (isAgree) { // 直接同意申请
+      const isAgreeNum = Number.parseInt(isAgree)
+      const {id, LighthouseId} = this.$route.params
       try {
-        await handleDetailsApi({id, LighthouseId, handleStatus: 1, refuseReason: this.refuseReason})
-        this.$vux.toast.text('已同意申请', 'bottom')
-        this.getList()
+        await handleDetailsApi({id, LighthouseId, handleStatus: isAgreeNum, refuseReason: this.refuseReason})
+        this.$vux.toast.text(isAgreeNum === 1 ? '已同意申请' : '已拒绝申请', 'bottom')
+        this.getDetail()
       } catch (e) {
         this.$vux.toast.text(e.message, 'bottom')
       }
-      console.log('直接同意申请', id, LighthouseId)
     }
+
     async getDetail () {
+      this.showRejectModal = false
       const {id, userId, type} = this.$route.params
       console.log(id, userId, type)
       try {
@@ -211,16 +219,7 @@
           }
         }
 
-        & img:first-of-type {
-          font-size: 18px;
-          margin-bottom: 8px;
-          color: #354048;
-          font-weight: 600;
-        }
-
       }
-
-
 
       .userInfo-desc {
         display: flex;
@@ -311,8 +310,10 @@
           color: #bcbcbc;
         }
 
-        imgarea {
+        textarea {
           width: 100%;
+          height: 100%;
+          border: transparent;
         }
 
       }

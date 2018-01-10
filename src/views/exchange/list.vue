@@ -36,10 +36,9 @@
       ApplyItem,
       Scroller
     },
-    mixins: [ListMixin]
+    mixins: [ListMixin],
   })
   export default class ExchangeListIndex extends Vue {
-    applyType = 1 // 类型：1我收到的申请，2我发出的申请
     typeClassList = ['one', 'two']
     dataList = []
     iconSrc = 'http://cdnstatic.zike.com/Uploads/static/beacon/404.png'
@@ -51,6 +50,11 @@
     }
     goCommunityDetail (LighthouseId) {
       console.log('跳去社区详情，暂时不要的')
+    }
+    get applyType () {
+      const iniType = parseInt(this.$route.query.type)
+      console.log('iniType', iniType)
+      return iniType || 1 // 类型：1我收到的申请，2我发出的申请
     }
     async handleDetails (id, LighthouseId) { // 直接同意申请
       console.log('LighthouseId', LighthouseId)
@@ -64,9 +68,10 @@
       console.log('直接同意申请', id, LighthouseId)
     }
     toggle (type) {
+      console.log('type', type)
       this.dataList = []
       this.pagination.end = false
-      this.applyType = Number.parseInt(type)
+      this.$router.replace(`/exchange/list?type=${type}`)
       this.getList({ page: 1 })
     }
     async getList ({ page, pageSize } = {}) { // 请求列表

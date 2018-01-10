@@ -36,7 +36,7 @@ export const request = ({type = 'post', url, data = {}, config = {}, globalLoadi
   // 正常请
   // let datas = type === 'get' ? {params: data} :data
   showLoading(globalLoading)
-  let datas = type === 'get' ? {params: {...data, TestUid: 1}} : {...data, TestUid: 1}
+  let datas = type === 'get' ? {params: {...data, TestUid: 2}} : {...data, TestUid: 2}
   console.log('require params', datas)
   return Vue.axios[type](url, datas, config)
     .catch(response => {
@@ -63,6 +63,12 @@ export const request = ({type = 'post', url, data = {}, config = {}, globalLoadi
         hideLoading(globalLoading)
         router.replace({
           name: 'login',
+          query: {redirect: router.currentRoute.path}
+        })
+      }
+      if (data && data.statusCode === 430) {
+        router.replace({
+          name: 'center-editinfo',
           query: {redirect: router.currentRoute.path}
         })
       }
