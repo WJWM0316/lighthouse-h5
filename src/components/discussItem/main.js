@@ -156,6 +156,7 @@ export default class discussItem extends Vue {
     }
     // userId
     console.log(userId)
+    this.$router.push(`/userInfo/${userId}/details`)
   }
   toCommentList (commentId) { // 去评论详情
     if (this.disableContentClick) {

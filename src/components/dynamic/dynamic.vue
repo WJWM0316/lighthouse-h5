@@ -33,6 +33,7 @@
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi} from '@/api/pages/pageInfo.js'
+  import WechatMixin from '@/mixins/wechat'
 
   @Component({
     name: 'dynamic-list',
@@ -105,7 +106,8 @@
 //        console.log(temp)
 //        this.dynamicList = temp
 //      }
-    }
+    },
+    mixins: [WechatMixin]
   })
   export default class dynamicList extends Vue {
     currentPlay = {
@@ -311,6 +313,12 @@
           break
         case 'del':
           this.del({item, itemIndex}).then()
+          break
+        case 'previewImage':
+          this.wechatPreviewImage(e).then()
+          break
+        case 'fileOpen':
+          window.location.href = e.url
           break
       }
     }

@@ -6,7 +6,24 @@ export default {
     return {
       wechatConfig: {
         debug: false,
-        jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'downloadVoice', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'chooseWXPay']
+        jsApiList: [
+          'onMenuShareTimeline',
+          'onMenuShareAppMessage',
+          'startRecord',
+          'stopRecord',
+          'onVoiceRecordEnd',
+          'playVoice',
+          'pauseVoice',
+          'stopVoice',
+          'onVoicePlayEnd',
+          'uploadVoice',
+          'downloadVoice',
+          'chooseImage',
+          'previewImage',
+          'uploadImage',
+          'downloadImage',
+          'chooseWXPay'
+        ]
       }
     }
   },
@@ -52,6 +69,19 @@ export default {
           fail: function (e) {
             reject(e)
           }
+        })
+      })
+    },
+
+    /**
+     * 预览图片
+     * @param {*} options
+     */
+    wechatPreviewImage (options = {}) {
+      return new Promise((resolve, reject) => {
+        this.$wechat.previewImage({
+          current: options.img,
+          urls: options.urls
         })
       })
     },
