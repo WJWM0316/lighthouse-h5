@@ -1,5 +1,5 @@
 // 微信jssdk mixin
-import { getWechatSign } from '@/api/common'
+import { getWechatSignApi } from '@/api/common'
 
 export default {
   data () {
@@ -37,7 +37,7 @@ export default {
         const params = {
           url: location.href.split('#')[0]
         }
-        const res = await getWechatSign(params)
+        const res = await getWechatSignApi(params)
         this.wechatConfig = Object.assign({}, this.wechatConfig, res)
         this.setWechatConfig()
       } catch (error) {

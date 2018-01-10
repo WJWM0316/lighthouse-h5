@@ -61,6 +61,7 @@
       try {
         await handleDetailsApi({id, LighthouseId, handleStatus: 1, refuseReason: this.refuseReason})
         this.$vux.toast.text('已同意申请', 'bottom')
+        this.pagination.end = false
         this.getList()
       } catch (e) {
         this.$vux.toast.text(e.message, 'bottom')
@@ -68,17 +69,18 @@
       console.log('直接同意申请', id, LighthouseId)
     }
     toggle (type) {
-      console.log('type', type)
       this.dataList = []
       this.pagination.end = false
       this.$router.replace(`/exchange/list?type=${type}`)
       this.getList({ page: 1 })
     }
     async getList ({ page, pageSize } = {}) { // 请求列表
+      console.log('前', this.pagination.end, this.pagination.busy)
       if (this.pagination.end || this.pagination.busy) {
         // 防止多次加载
         return
       }
+      console.log('后', this.pagination.end, this.pagination.busy)
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
       if (this.isLastPage && page !== 1) return
