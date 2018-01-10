@@ -276,6 +276,17 @@
         res = await this.getProblemDetailApi(sourceId)
       }
 
+      if (res['modelType'] === 'problem') {
+        res['answers'].forEach((answer) => {
+          answer.musicState = 0
+          answer.progress = 0
+        })
+      } else if (res['circleType'] === 1) {
+        res.musicState = 0
+        res.progress = 0
+      } else if (res['circleType'] === 2) {
+        res.videoPlay = false
+      }
       this.dynamicList = [res]
 
       await this.getList({page: 1})

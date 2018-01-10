@@ -26,10 +26,6 @@
                       :sendText="'发送'"
                       @send="sendComment"
     ></suspension-input>
-
-    <div class="video-box" ref="video-box">
-
-    </div>
   </div>
 </template>
 <script>
@@ -114,7 +110,6 @@
       problemIndex: -1
     }
     music = ''
-    video = ''
 
     commentIndex = -1
     suspensionInputPlaceholder = '写评论'
@@ -181,32 +176,6 @@
       music.onerror = (e) => {
       }
       this.music = music
-
-      // 创建视频对象
-      const video = document.createElement('VIDEO')
-      video.autoplay = true
-      video.controls = true
-      video.addEventListener('fullscreenchange', function(e) {
-        const isFullscreen = window.fullScreen || window.document.webkitIsFullScreen || window.document.msFullscreenEnabled
-        if (!isFullscreen) {
-          video.src = ''
-        }
-      })
-      video.addEventListener('mozfullscreenchange', function(e) {
-        const isFullscreen = window.fullScreen || window.document.webkitIsFullScreen || window.document.msFullscreenEnabled
-        if (!isFullscreen) {
-          video.src = ''
-        }
-      })
-      video.addEventListener('webkitfullscreenchange', function(e) {
-        const isFullscreen = window.fullScreen || window.document.webkitIsFullScreen || window.document.msFullscreenEnabled
-        if (!isFullscreen) {
-          video.src = ''
-        }
-      })
-
-      this.$refs['video-box'].appendChild(video)
-      this.video = video
     }
 
     /**
@@ -312,19 +281,12 @@
     }
 
     videoEvent (e) {
-      const {eventType} = e
-      const video = this.video
+      const {eventType, itemIndex} = e
 
       switch (eventType) {
         case 'play':
-          video.src = e.url
-          if (video.requestFullscreen) {
-            video.requestFullscreen()
-          } else if (video.mozRequestFullScreen) {
-            video.mozRequestFullScreen()
-          } else if (video.webkitRequestFullscreen) {
-            video.webkitRequestFullscreen()
-          }
+          this.dynamicList[itemIndex].videoPlay = true
+          console.log(this.dynamicList[itemIndex])
           break
       }
     }
@@ -498,7 +460,7 @@
   .dynamic-list {
 
     & .video-box {
-      /*position: absolute;*/
+      position: absolute;
     }
   }
 </style>
