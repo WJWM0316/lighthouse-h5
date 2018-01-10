@@ -127,14 +127,10 @@ export default class PublishContent extends Vue {
   async uploadCustomImages (localIds = []) {
     try {
       const localId = localIds.pop()
-      this.$vux.alert.show({
-        content: localIds.pop
-      })
+      alert(localIds.pop)
       if (localId) {
         this.uploadSuccess = false
-        this.$vux.alert.show({
-          content: this.wechatUploadImage
-        })
+        alert(this.wechatUploadImage)
         const { serverId } = await this.wechatUploadImage(localId)
 
         for (let [index, image] of this.images.entries()) {
@@ -154,9 +150,6 @@ export default class PublishContent extends Vue {
         this.uploadSuccess = true
       }
     } catch (error) {
-      this.$vux.alert.show({
-        content: error
-      })
       this.$vux.toast.text(error.message || '网络异常，请重试')
     }
   }
