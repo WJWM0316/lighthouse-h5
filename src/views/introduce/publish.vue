@@ -148,6 +148,9 @@ export default class PublishContent extends Vue {
         this.uploadSuccess = true
       }
     } catch (error) {
+      this.$vux.alert.show({
+        content: error
+      })
       this.$vux.toast.text(error.message || '网络异常，请重试')
     }
   }
