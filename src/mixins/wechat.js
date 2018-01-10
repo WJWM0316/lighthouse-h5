@@ -99,9 +99,9 @@ export default {
           success: function (res) {
             resolve(res)
             // const serverId = res.serverId // 返回图片的服务器端ID
-          },
-          fail: function (e) {
-            reject(e)
+          // },
+          // fail: function (e) {
+          //   reject(e)
           }
         })
       })
