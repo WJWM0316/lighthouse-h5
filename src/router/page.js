@@ -50,6 +50,13 @@ const routers = [
     name: 'classmates',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/classmates'], resolve),
+  },
+  {
+    // 用户个人详情页
+    path: '/userInfo/:userId/details',
+    name: 'userInfo-details',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/userInfo'], resolve),
   }
 ]
 

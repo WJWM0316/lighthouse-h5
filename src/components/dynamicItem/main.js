@@ -261,6 +261,7 @@ export default class dynamicItem extends Vue {
       return
     }
     console.log('去个人详情: ', userId)
+    this.$router.push(`/userInfo/${userId}/details`)
   }
   toDetails () { // 去朋友圈、帖子、问题详情
     if (this.disableContentClick) {
@@ -295,7 +296,7 @@ export default class dynamicItem extends Vue {
       this.$router.push(`/details/${sourceId}/${type}`)
     }
   }
-  toCommunity () { // 去大咖介绍页
-    console.log('去大咖介绍页')
+  toCommunity (communityId) { // 去大咖介绍页
+    this.$router.push(`/introduce/${communityId}`)
   }
 }

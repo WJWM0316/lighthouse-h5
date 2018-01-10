@@ -145,7 +145,7 @@
             {{item.commentTotal > 0 ? item.commentTotal : '评论'}}
           </button>
           <!-- 灯塔信息 -->
-          <div class="info-light-house" v-if="showLightHouseInfo" @click.stop="toCommunity">
+          <div class="info-light-house" v-if="showLightHouseInfo" @click.stop="toCommunity(item.LighthouseId)">
             <span>{{item.Lighthouse}}</span>
           </div>
         </div>
