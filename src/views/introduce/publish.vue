@@ -221,7 +221,7 @@ export default class PublishContent extends Vue {
   }
 
   /**
-   * 添加图片
+   * 点击添加选项item
    * @param {*} key
    * @param {*} item
    */
