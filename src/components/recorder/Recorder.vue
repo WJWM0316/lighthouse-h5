@@ -216,7 +216,7 @@ export default class Recorder extends Vue {
         }]
       }
       const { files } = await wechatUploadFileApi(params)
-      this.$vux.toast.test('发布成功', 'middle')
+      this.$vux.toast.text('发布成功', 'middle')
       this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.test(error.message, 'middle')
