@@ -197,6 +197,7 @@ export default {
           self.$wechat.onVoicePlayEnd({
             success: res => {
               // var localId = res.localId // 返回音频的本地ID
+              console.log('播放录音结束')
               this.triggerCallback('onPlayVoiceEnded', res)
             }
           })
