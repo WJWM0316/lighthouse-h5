@@ -1,6 +1,6 @@
 <template>
-  <div class="classmate-item" >
-    <div class="userInfo-img">
+  <div class="common-item" >
+    <div class="userInfo-img" @click="handleOne">
       <img class="headImg" :src="item.avatarUrl || defaultImg">
       <img class="sex"
            :src="item.gender === 1 ? boyImg : girlImg">
@@ -25,8 +25,13 @@
       XInput,
       XButton,
     },
+    props: {
+      item: {
+        type: Object
+      },
+    },
     computed: {
-      'userCareer': () => {
+      'userCareer': function () {
         console.log('this.item', this.item)
         const {workTimeName, career, office} = this.item
         console.log('career', career)
@@ -48,7 +53,7 @@
         console.log('careerStr', careerStr)
         return careerStr
       },
-      'isDaka': () => {
+      'isDaka': function () {
         return this.item.identify === 1
       }
     }
@@ -61,49 +66,50 @@
     }
     mounted () {
     }
+    handleOne (e) { // 点击跳转个人详情
+      this.$emit('tap-one', this.item.userId)
+    }
   }
 </script>
 
 <style lang="less" type="text/less">
   @import "../../styles/mixins";
-  .classmate-item {
-    margin-left: 0 15px;
-    display: flex;
-    align-items: center;
-  }
-  .userInfo-img {
-    position: relative;
-    .headImg{
-      width: 60px;
-      height: 60px;
-      background: pink;
-      border-radius: 50%;
+  .common-item {
+    display: -webkit-box;
+    .userInfo-img {
+      position: relative;
+      .headImg{
+        width: 60px;
+        height: 60px;
+        background: pink;
+        border-radius: 50%;
+      }
+      & .sex {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        bottom: 0;
+        right: 0;
+        border-radius: 50%;
+      }
     }
-    & .sex {
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      bottom: 0;
-      right: 0;
-      border-radius: 50%;
-    }
-  }
 
-  .userInfo-desc {
-    margin-left: 15px;
+    .userInfo-desc {
+      margin-left: 15px;
 
-    .name {
-      font-size: 15px;
-      line-height: 19px;
-      font-weight: 600;
-      .setEllipsis(295px);
-    }
-    .persion-info{
-      padding-top: 5px;
-      font-size: 13px;
-      line-height: 17px;
-      color: #929292;
-      .setEllipsis(295px);
+      .name {
+        font-size: 15px;
+        line-height: 19px;
+        font-weight: 600;
+        .setEllipsis(265px);
+      }
+      .persion-info{
+        padding-top: 5px;
+        font-size: 13px;
+        line-height: 17px;
+        color: #929292;
+        .setEllipsis(265px);
+      }
     }
   }
 </style>

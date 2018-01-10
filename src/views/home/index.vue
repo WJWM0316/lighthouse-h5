@@ -123,7 +123,7 @@ export default class HomeIndex extends Vue {
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
     } catch (error) {
-      this.$vux.toast.text(error.message, 'middle')
+      this.$vux.toast.text(error.message, 'bottom')
     }
   }
 

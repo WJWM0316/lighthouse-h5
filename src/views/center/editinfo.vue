@@ -187,7 +187,7 @@ export default class CenterEditinfo extends Vue {
       this.form.gender = [this.form.gender]
       this.form.workTime = [this.form.workTime]
     } catch (error) {
-      this.$vux.toast.text(error.message, 'middle')
+      this.$vux.toast.text(error.message, 'bottom')
     }
   }
 
@@ -200,39 +200,39 @@ export default class CenterEditinfo extends Vue {
     const form = this.form
     if (!form.avatarUrl) {
       // 头像
-      this.$vux.toast.text('请上传头像', 'middle')
+      this.$vux.toast.text('请上传头像', 'bottom')
       valid = false
     } else if (!form.realName) {
       // 用户姓名
-      this.$vux.toast.text('请填写姓名', 'middle')
+      this.$vux.toast.text('请填写姓名', 'bottom')
       valid = false
     } else if (!form.gender || !form.gender[0]) {
       // 性别
-      this.$vux.toast.text('请选择性别', 'middle')
+      this.$vux.toast.text('请选择性别', 'bottom')
       valid = false
     } else if (!form.workTime || !form.workTime[0]) {
       // 工作年限
-      this.$vux.toast.text('请选择工作年限', 'middle')
+      this.$vux.toast.text('请选择工作年限', 'bottom')
       valid = false
     } else if (!form.career) {
       // 职位
-      this.$vux.toast.text('请填写职位', 'middle')
+      this.$vux.toast.text('请填写职位', 'bottom')
       valid = false
     } else if (!form.office) {
       // 最近任职公司
-      this.$vux.toast.text('请填写任职公司', 'middle')
+      this.$vux.toast.text('请填写任职公司', 'bottom')
       valid = false
     } else if (!form.phone) {
       // 手机号码
-      this.$vux.toast.text('请填写手机号', 'middle')
+      this.$vux.toast.text('请填写手机号', 'bottom')
       valid = false
     } else if (!/^1[34578]\d{9}$/.test(form.phone)) {
       // 手机号码正则验证
-      this.$vux.toast.text('手机号格式不正确', 'middle')
+      this.$vux.toast.text('手机号格式不正确', 'bottom')
       valid = false
     } else if (!form.weChat) {
       // 微信号
-      this.$vux.toast.text('请填写微信号', 'middle')
+      this.$vux.toast.text('请填写微信号', 'bottom')
       valid = false
     }
 
@@ -256,10 +256,10 @@ export default class CenterEditinfo extends Vue {
     try {
       const params = this.transformData(this.form)
       await editInformationApi(params)
-      this.$vux.toast.text('保存成功', 'middle')
+      this.$vux.toast.text('保存成功', 'bottom')
       this.$router.go(-1)
     } catch (error) {
-      this.$vux.toast.text(error.message, 'middle')
+      this.$vux.toast.text(error.message, 'bottom')
     }
   }
 

@@ -77,7 +77,7 @@ export default class HomeIndex extends Vue {
     try {
       this.model = await getInformationApi()
     } catch (error) {
-      this.$vux.toast.text(error.message, 'middle')
+      this.$vux.toast.text(error.message, 'bottom')
     }
   }
 

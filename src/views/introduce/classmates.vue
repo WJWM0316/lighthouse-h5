@@ -57,12 +57,11 @@
         this.pagination.end = this.isLastPage
         this.pagination.busy = false
       } catch (e) {
-        this.$vux.toast.text(e.message, 'middle')
+        this.$vux.toast.text(e.message, 'bottom')
       }
     }
     goUserDetail (userId) {
-//      this.$router.push({name: 'exchange-detail', query: {id, userId}})
-      console.log('跳转个人详情 userId', userId)
+      this.$router.push({name: 'userInfo-details', params: {userId}})
     }
 
     /**

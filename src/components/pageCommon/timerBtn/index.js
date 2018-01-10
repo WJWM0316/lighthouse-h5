@@ -29,9 +29,9 @@ export default class TimeBtn extends Vue {
   async runs () {
     if (this.time > 0) return
     if (!this.loginInfo.mobile) {
-      this.$vux.toast.text('请输入手机号码', 'middle')
+      this.$vux.toast.text('请输入手机号码', 'bottom')
     } else if (this.loginInfo.mobile.length !== 11) {
-      this.$vux.toast.text('手机号码格式不对', 'middle')
+      this.$vux.toast.text('手机号码格式不对', 'bottom')
     } else {
       try {
         const params = {...this.loginInfo, from: this.type}
@@ -46,7 +46,7 @@ export default class TimeBtn extends Vue {
         this.timeFlag = true
         this.timer()
       } catch (e) {
-        this.$vux.toast.text(e.message, 'middle')
+        this.$vux.toast.text(e.message, 'bottom')
         if (e.data && e.data.imgcode_url) this.$emit('send', e)
       }
     }
