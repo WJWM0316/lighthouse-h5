@@ -242,6 +242,12 @@ export default class dynamicItem extends Vue {
     })
   }
   videoPlay () {
+    const url = this.item.files[0].fileUrl
+    console.log('播放视频: ', url)
+    this.$emit('videoEvent', {
+      eventType: 'play',
+      url
+    })
   }
 
   /**

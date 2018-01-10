@@ -15,6 +15,7 @@
                   :disableContentClick="disableContentClick"
                   :disableUserClick="disableUserClick"
                   @audioEvent="audioEvent"
+                  @videoEvent="videoEvent"
                   @operation="operation"
     ></dynamic-item>
 
@@ -25,6 +26,10 @@
                       :sendText="'发送'"
                       @send="sendComment"
     ></suspension-input>
+
+    <div class="video-box" ref="video-box">
+
+    </div>
   </div>
 </template>
 <script>
@@ -109,6 +114,7 @@
       problemIndex: -1
     }
     music = ''
+    video = ''
 
     commentIndex = -1
     suspensionInputPlaceholder = '写评论'
@@ -175,6 +181,32 @@
       music.onerror = (e) => {
       }
       this.music = music
+
+      // 创建视频对象
+      const video = document.createElement('VIDEO')
+      video.autoplay = true
+      video.controls = true
+      video.addEventListener('fullscreenchange', function(e) {
+        const isFullscreen = window.fullScreen || window.document.webkitIsFullScreen || window.document.msFullscreenEnabled
+        if (!isFullscreen) {
+          video.src = ''
+        }
+      })
+      video.addEventListener('mozfullscreenchange', function(e) {
+        const isFullscreen = window.fullScreen || window.document.webkitIsFullScreen || window.document.msFullscreenEnabled
+        if (!isFullscreen) {
+          video.src = ''
+        }
+      })
+      video.addEventListener('webkitfullscreenchange', function(e) {
+        const isFullscreen = window.fullScreen || window.document.webkitIsFullScreen || window.document.msFullscreenEnabled
+        if (!isFullscreen) {
+          video.src = ''
+        }
+      })
+
+      this.$refs['video-box'].appendChild(video)
+      this.video = video
     }
 
     /**
@@ -274,6 +306,24 @@
           this.currentPlay = {
             itemIndex,
             problemIndex
+          }
+          break
+      }
+    }
+
+    videoEvent (e) {
+      const {eventType} = e
+      const video = this.video
+
+      switch (eventType) {
+        case 'play':
+          video.src = e.url
+          if (video.requestFullscreen) {
+            video.requestFullscreen()
+          } else if (video.mozRequestFullScreen) {
+            video.mozRequestFullScreen()
+          } else if (video.webkitRequestFullscreen) {
+            video.webkitRequestFullscreen()
           }
           break
       }
@@ -445,6 +495,10 @@
   }
 </script>
 <style lang="less" scoped>
-  .m-community {
+  .dynamic-list {
+
+    & .video-box {
+      /*position: absolute;*/
+    }
   }
 </style>

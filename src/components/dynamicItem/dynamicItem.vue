@@ -80,7 +80,7 @@
         <!-- 文字与视频 -->
         <div v-if="item.circleType === 2">
           <p class="content-text">{{item.content}}</p>
-          <div class="content-video">
+          <div class="content-video" @click.stop="videoPlay">
             <!--背景图-->
             <img />
           </div>
