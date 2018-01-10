@@ -106,7 +106,7 @@
         <!-- 只有文件 -->
         <div v-if="item.circleType === 4">
           <p class="content-text">{{item.content}}</p>
-          <div class="content-file">
+          <div class="content-file" @click.stop="fileOpen(item.files[0].fileUrl)">
             <img class="file-logo" src="./../../assets/suffix/pdf.png" v-if="fileType === 'pdf'" />
             <img class="file-logo" src="./../../assets/suffix/ppt.png" v-else-if="fileType === 'ppt'" />
             <img class="file-logo" src="./../../assets/suffix/word.png" v-else-if="fileType === 'word'" />

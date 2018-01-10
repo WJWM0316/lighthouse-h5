@@ -224,15 +224,22 @@ export default class dynamicItem extends Vue {
       urls.push(item.fileUrl)
     })
     console.log('当前图片: ', img, '图片数组: ', urls)
-    // wx.previewImage({
-    //   current: img,
-    //   urls: urls
-    // })
+
+    this.$emit('operation', {
+      eventType: 'previewImage',
+      img,
+      urls
+    })
   }
   /**
    * 打开文件
    */
-  fileOpen () {
+  fileOpen (url) {
+    console.log('当前打开文件: ', url)
+    this.$emit('operation', {
+      eventType: 'fileOpen',
+      url
+    })
   }
   videoPlay () {
   }
