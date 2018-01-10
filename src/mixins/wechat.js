@@ -93,15 +93,18 @@ export default {
      */
     wechatUploadImage (localId, options = {}) {
       return new Promise((resolve, reject) => {
+        console.log('进到promise对象创建')
         this.$wechat.uploadImage({
           localId: localId,
           isShowProgressTips: options.isShowProgressTips || 0, // sdk默认为1，显示进度提示
           success: function (res) {
+            console.log('选择图片成功', res)
             resolve(res)
-            // const serverId = res.serverId // 返回图片的服务器端ID
-          // },
-          // fail: function (e) {
-          //   reject(e)
+            const serverId = res.serverId // 返回图片的服务器端ID
+          },
+          fail: function (e) {
+            console.log('reject:-----', e)
+            reject(e)
           }
         })
       })
