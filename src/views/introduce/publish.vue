@@ -113,7 +113,7 @@ export default class PublishContent extends Vue {
           fileUrl: item
         }
       })
-      this.images = [].contact(this.images, newImages)
+      this.images = [].concat(this.images, newImages)
       this.uploadCustomImages(res.localIds)
     } catch (error) {
       console.log(error)

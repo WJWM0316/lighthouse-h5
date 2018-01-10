@@ -68,9 +68,7 @@ export default class HomeIndex extends Vue {
   ready = false
 
   created () {
-    this.$vux.loading.show()
     this.init()
-    this.$vux.loading.hide()
   }
 
   /**
@@ -109,7 +107,8 @@ export default class HomeIndex extends Vue {
       pageSize = pageSize || this.pagination.pageSize
       const params = {
         page: page,
-        pageCount: pageSize
+        pageCount: pageSize,
+        globalLoading: !this.ready
       }
 
       this.pagination.busy = true
