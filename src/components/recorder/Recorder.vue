@@ -1,6 +1,6 @@
 <template>
   <div class="m-recorder" :class="`z-${status}`">
-    <p class="progress">{{progress | duration}}</p>
+    <p class="progress">{{progress | duration}}{{localId}}</p>
     <p class="duration">{{duration | duration}}</p>
     <div class="controls">
       <!-- 默认 -->
