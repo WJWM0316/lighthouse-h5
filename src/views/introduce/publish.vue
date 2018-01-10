@@ -186,7 +186,7 @@ export default class PublishContent extends Vue {
     } else if (this.addonType === 3) {
       fileId = this.images.map(item => item.fileId)
     }
-
+    alert(fileId)
     const params = {
       communityId: this.form.communityId,
       content: this.form.content,
