@@ -333,7 +333,7 @@
         color:#bcbcbc;
       }
       & .container-title {
-        font-size: 13px;
+        font-size: 18px;
         font-weight: 500;
         color: #929292;
         padding: 10px 0;
