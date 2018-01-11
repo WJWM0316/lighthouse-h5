@@ -128,8 +128,10 @@ export default class PublishContent extends Vue {
     const localId = localIds.pop()
     if (localId) {
       this.uploadSuccess = false
-      const { serverId } = await this.wechatUploadImage(localId)
+      const { serverId } = this.wechatUploadImage(localId)
+      console.log(this.images.entries)
       for (let [index, image] of this.images.entries()) {
+        console.log('循环', index, image)
         if (image.fileUrl === localId) {
           this.images[index].mediaId = serverId
           break

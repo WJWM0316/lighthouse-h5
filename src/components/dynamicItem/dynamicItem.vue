@@ -82,8 +82,11 @@
           <p class="content-text">{{item.content}}</p>
           <div class="content-video" @click.stop="videoPlay">
             <video :src="item.files[0].fileUrl" autoplay controls v-if="item.videoPlay"></video>
-            <!--背景图-->
-            <!--<img />-->
+            <div class="placeholder" v-else>
+
+              <!--背景图-->
+              <!--<img />-->
+            </div>
           </div>
         </div>
 
