@@ -50,6 +50,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     })
     .then((response) => {
       let {data} = response
+      console.log('xxxxxxx', data)
       if (typeof data === 'string') { // 转换返回json
         data = JSON.parse(data)
       }
