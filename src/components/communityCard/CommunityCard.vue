@@ -228,10 +228,11 @@ export default class CommunityCard extends Vue {
       box-sizing: border-box;
       position: absolute;
       left: 0;
+      right: 0;
       bottom: 0;
       padding: 12px;
       background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .2));
-      width: 100%;
+      /*width: 100%;*/
       color: #fff;
 
       .name {
@@ -241,6 +242,7 @@ export default class CommunityCard extends Vue {
         line-height: 1;
         font-size: 0;
         font-weight: normal;
+        max-width: 100%;
 
         .text {
           display: inline-block;
