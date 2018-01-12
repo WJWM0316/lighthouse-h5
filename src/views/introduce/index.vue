@@ -6,7 +6,7 @@
     <div class="header">
       <community-card :community="pageInfo" :type="2" />
     </div>
-    
+
     <div class="module">
       <div class="module-title">
         <div class="hr"></div>
@@ -71,7 +71,8 @@
   import Component from 'vue-class-component'
   import CommunityCard from '@/components/communityCard'
   import dynamic from '@/components/dynamic/dynamic'
-  import {getCommunityInfoApi} from '@/api/pages/pageInfo.js'
+  import {getCommunityInfoApi} from '@/api/pages/pageInfo'
+  import { share } from '@/api/wx/share'
 
   @Component({
     name: 'big-shot-introduce',
@@ -113,6 +114,14 @@
     disableOperationArr = ['comment', 'praise']
 
     created () {
+      // 修改页面分享信息
+      share(this.$wechat, this.$http, {
+        'titles': `好友或qq好友的title`,
+        'title': `朋友圈或QQ`,
+        'desc': '描述',
+        'imgUrl': `https://light-wap.house.api.ziwork.com/static/img/login-logo.bdbf03e.png`,
+        'link': location.href.split('?')[0]
+      })
       this.pageInit().then(() => {})
     }
 
