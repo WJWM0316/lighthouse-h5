@@ -4,6 +4,7 @@
       <div class="hd">
         <button type="button" class="u-btn-close" @click="handleClose">关闭</button>
       </div>
+      {{serverIds}}
       <recorder @uploading="handleUploading" @upload-success="handleUploadSuccess" />
     </div>
   </div>
