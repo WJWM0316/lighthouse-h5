@@ -5,7 +5,7 @@ export default {
   data () {
     return {
       wechatConfig: {
-        debug: false,
+        debug: true,
         jsApiList: [
           'onMenuShareTimeline',
           'onMenuShareAppMessage',
