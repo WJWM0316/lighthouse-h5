@@ -20,7 +20,7 @@ import Component from 'vue-class-component'
 import { Tabbar, TabbarItem, ViewBox, XCircle, cookie } from 'vux'
 import { mapState } from 'vuex'
 import settings from '@/config/index'
-import { share } from '@/api/wx/share'
+// import { share } from '@/api/wx/share'
 
 @Component({
   name: 'app',
@@ -39,14 +39,14 @@ import { share } from '@/api/wx/share'
     '$route': {
       handler (route) {
         console.log('触发路由 route.name:', route.name)
-        if (route.name === null) return
+        // if (route.name === null) return
         // 修改页面分享信息
-        share(this.$wechat, this.$http, {
-          'title': `【小灯塔】title`,
-          'desc': `desc`,
-          'imgUrl': `https://light-wap.house.api.ziwork.com/static/img/login-logo.bdbf03e.png`,
-          'link': location.origin
-        })
+        // share(this.$wechat, this.$http, {
+        //   'title': `【小灯塔】title`,
+        //   'desc': `desc`,
+        //   'imgUrl': `https://light-wap.house.api.ziwork.com/static/img/login-logo.bdbf03e.png`,
+        //   'link': location.origin
+        // })
       },
       immediate: true
     }

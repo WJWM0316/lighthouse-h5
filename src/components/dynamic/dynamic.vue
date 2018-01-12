@@ -17,6 +17,7 @@
                   @audioEvent="audioEvent"
                   @videoEvent="videoEvent"
                   @operation="operation"
+                  ref="dynamic-item"
     ></dynamic-item>
 
     <!-- 悬浮输入框 -->
@@ -286,6 +287,7 @@
       const {eventType, itemIndex} = e
       if (this.currentVideoIndex > -1) {
         this.dynamicList[this.currentVideoIndex].videoPlay = false
+        this.$refs['dynamic-item'][this.currentVideoIndex].videoPause()
       }
 
       switch (eventType) {
