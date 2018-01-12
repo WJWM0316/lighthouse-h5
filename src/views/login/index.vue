@@ -48,7 +48,7 @@ import Component from 'vue-class-component'
 import { Group, XInput, XButton } from 'vux'
 import uuid from 'uuid'
 import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
-import {testApi} from '@/api/pages/login'
+import {loginApi} from '@/api/pages/login'
 
 @Component({
   name: 'login-index',
@@ -92,6 +92,7 @@ export default class LoginIndex extends Vue {
     return this.info.mobile && this.info.sms
   }
   async goSubmit () {
+    await loginApi()
   }
 }
 </script>

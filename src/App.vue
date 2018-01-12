@@ -20,6 +20,7 @@ import Component from 'vue-class-component'
 import { Tabbar, TabbarItem, ViewBox, XCircle, cookie } from 'vux'
 import { mapState } from 'vuex'
 import settings from '@/config/index'
+import { share } from '@/api/wx/share'
 
 @Component({
   name: 'app',
@@ -35,6 +36,22 @@ import settings from '@/config/index'
     },
   },
   watch: {
+    '$route': {
+      handler (route) {
+        if (route.name === null ||
+          route.name === 'article-detail' ||
+          route.name === 'book-detail' ||
+          route.name === 'course-detail') return
+        // 修改页面分享信息
+        share(this.$wechat, this.$http, {
+          'title': `【小灯塔】title`,
+          'desc': `desc`,
+          'imgUrl': `https://light-wap.house.api.ziwork.com/static/img/login-logo.bdbf03e.png`,
+          'link': location.origin
+        })
+      },
+      immediate: true
+    }
   }
 })
 export default class App extends Vue {
