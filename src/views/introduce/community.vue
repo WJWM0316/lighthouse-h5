@@ -166,12 +166,14 @@
     askBtnClick () {
       if (this.showType) {
         // :todo 提问
+        this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
       } else {
         // :todo 发帖
       }
     }
     question () {
       // :todo 回答问题
+      this.$router.push(`/introduce/questions/${this.$route.params.communityId}`)
     }
     release () {
       // :todo 发布

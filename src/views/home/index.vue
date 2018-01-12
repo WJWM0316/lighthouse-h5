@@ -55,8 +55,9 @@ import { getBeaconsApi } from '@/api/pages/home'
 export default class HomeIndex extends Vue {
   // banner图片列表
   banners = [
-    { url: '/center/help', img: 'https://zike-uploads-pro.oss-cn-shenzhen.aliyuncs.com/Uploads/static/beacon/head-banner.png' },
-    { url: '/center', img: 'https://zike-uploads-pro.oss-cn-shenzhen.aliyuncs.com/Uploads/static/beacon/sanyue.jpg' }
+    { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner.png' },
+    { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/sanyue.jpg' },
+    { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner-3.jpg' }
   ]
 
   // 我创建的社区
