@@ -50,6 +50,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     })
     .then((response) => {
       let {data} = response
+      console.log('xxxxxxx', data)
       if (typeof data === 'string') { // 转换返回json
         data = JSON.parse(data)
       }
@@ -60,10 +61,11 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       if (data && data.statusCode === 255) { // 登录时openId cookie失效
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
-        location.href = `/zikeserver/wap/weixin/index?zike_from=${location.href}`
+        console.log('wefwfewfwefw', `${config.devUrl}/wap/wecaht/callback?zike_from=${location.href}`)
+        location.href = `${settings.devUrl}/wap/wecaht/callback?zike_from=${location.href}`
         return data.data === undefined ? {} : data.data
       }
-      if (data && data.statusCode === 401) { // 没有登录权限
+      if (data && data.statusCode === 256) { // 没有登录权限
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
         router.replace({

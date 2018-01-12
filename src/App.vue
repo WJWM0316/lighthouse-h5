@@ -20,6 +20,7 @@ import Component from 'vue-class-component'
 import { Tabbar, TabbarItem, ViewBox, XCircle, cookie } from 'vux'
 import { mapState } from 'vuex'
 import settings from '@/config/index'
+import { share } from '@/api/wx/share'
 
 @Component({
   name: 'app',
@@ -35,6 +36,22 @@ import settings from '@/config/index'
     },
   },
   watch: {
+    '$route': {
+      handler (route) {
+        if (route.name === null ||
+          route.name === 'article-detail' ||
+          route.name === 'book-detail' ||
+          route.name === 'course-detail') return
+        // 修改页面分享信息
+        share(this.$wechat, this.$http, {
+          'title': `【小灯塔】title`,
+          'desc': `desc`,
+          'imgUrl': `https://light-wap.house.api.ziwork.com/static/img/login-logo.bdbf03e.png`,
+          'link': location.origin
+        })
+      },
+      immediate: true
+    }
   }
 })
 export default class App extends Vue {
@@ -69,12 +86,12 @@ export default class App extends Vue {
     return this.$route.path === src
   }
   created () {
-    var ua = navigator.userAgent.toLowerCase()
-    var isWeixin = ua.indexOf('micromessenger') !== -1
-    if (!isWeixin) {
-      document.head.innerHTML = '<title>抱歉，出错了</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/connect/zh_CN/htmledition/style/wap_err1a9853.css">'
-      document.body.innerHTML = '<div class="page_msg"><div class="inner"><span class="msg_icon_wrp"><i class="icon80_smile"></i></span><div class="msg_content"><h4>请在微信客户端打开链接</h4></div></div></div>'
-    }
+//    var ua = navigator.userAgent.toLowerCase()
+//    var isWeixin = ua.indexOf('micromessenger') !== -1
+//    if (!isWeixin) {
+//      document.head.innerHTML = '<title>抱歉，出错了</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/connect/zh_CN/htmledition/style/wap_err1a9853.css">'
+//      document.body.innerHTML = '<div class="page_msg"><div class="inner"><span class="msg_icon_wrp"><i class="icon80_smile"></i></span><div class="msg_content"><h4>请在微信客户端打开链接</h4></div></div></div>'
+//    }
   }
 }
 </script>

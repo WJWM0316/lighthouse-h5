@@ -2,7 +2,7 @@
   <div class="not-found">
     <div class="bg-img">
       <img src="./../../assets/page/empty_error_notexistent@3x.png" alt="">
-      <p class="fs30">抱歉，该内容不存在</p>
+      <p class="fs15">抱歉，该内容不存在</p>
     </div>
   </div>
 </template>

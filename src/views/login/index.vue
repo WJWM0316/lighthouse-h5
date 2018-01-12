@@ -33,12 +33,12 @@
           </span>
         </x-input>
       </div>
-      <x-button type="primary" class="login-btn"
+      <div type="primary" class="login-btn"
                 :class="loginBtnValid ? '' : 'btn-disabled'"
                 :disabled="!loginBtnValid"
-                @click.native="goSubmit"
+                @click="goSubmit"
              >登录
-      </x-button>
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +48,7 @@ import Component from 'vue-class-component'
 import { Group, XInput, XButton } from 'vux'
 import uuid from 'uuid'
 import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
-import {testApi} from '@/api/pages/login'
+import {loginApi} from '@/api/pages/login'
 
 @Component({
   name: 'login-index',
@@ -75,14 +75,7 @@ export default class LoginIndex extends Vue {
     login_type: 2,
     from: '' // 1 注册 2 登录
   }
-  // life cycle
-  async created () {
-    try {
-      const resp = await testApi({type: 1})
-      console.log(resp)
-    } catch (e) {
-      console.log(e)
-    }
+  created () {
     this.refreshCode()
   }
 
@@ -92,14 +85,14 @@ export default class LoginIndex extends Vue {
   mounted () {
   }
   refreshCode () {
-//    this.requestId = uuid.v1().replace(/-/g, '')
-//    const devUrl = `/zike_wap/wap/captchas?t=${this.requestId}`
-//    const productUrl = `${window.location.origin}/zikeserver/wap/captchas?t=${this.requestId}`
     const randonNum = new Date().getTime()
     this.codeImgUrl = `https://www.zike.com/zikeserver/wap/captchas?t=${randonNum}`
   }
   get loginBtnValid() {
     return this.info.mobile && this.info.sms
+  }
+  async goSubmit () {
+    await loginApi()
   }
 }
 </script>

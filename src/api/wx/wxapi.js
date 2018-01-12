@@ -1,8 +1,8 @@
-import {request} from '../../api/request.js'
+import {request} from '../../api/require.js'
 
 export const weixinApi = (data) => {
   return request({
-    url: '/weixin/customShare',
+    url: '/wap/currency/getWxSign',
     data
   })
 }

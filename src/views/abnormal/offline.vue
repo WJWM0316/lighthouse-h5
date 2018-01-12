@@ -2,7 +2,7 @@
   <div class="offline">
     <div class="bg-img">
       <img src="./../../assets/page/empty_error_notexistent@3x.png" alt="">
-      <p class="fs30">抱歉，该课程已下架</p>
+      <p class="fs15">抱歉，该课程已下架</p>
     </div>
   </div>
 </template>

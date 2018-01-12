@@ -2,7 +2,7 @@
   <div class="not-found">
     <div class="bg-img">
       <img src="./../../assets/page/404@3x.png" alt="">
-      <p class="fs30">页面走丢了，等一下再试试吧</p>
+      <p class="fs15">页面走丢了，等一下再试试吧</p>
     </div>
   </div>
 </template>

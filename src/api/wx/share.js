@@ -18,6 +18,13 @@ export const share = async (wx, http, enter) => {
       link: enter.link,
       imgUrl: enter.imgUrl
     })
+    // 分享到QQ空间
+    wx.onMenuShareQZone({
+      title: enter.title, // 分享标题
+      desc: enter.desc,
+      link: enter.link,
+      imgUrl: enter.imgUrl
+    })
     // 分享到好友
     wx.onMenuShareAppMessage({
       title: enter.titles ? enter.titles : enter.title, // 分享标题
@@ -28,13 +35,6 @@ export const share = async (wx, http, enter) => {
     // 分享到QQ
     wx.onMenuShareQQ({
       title: enter.titles ? enter.titles : enter.title, // 分享标题
-      desc: enter.desc,
-      link: enter.link,
-      imgUrl: enter.imgUrl
-    })
-    // 分享到QQ空间
-    wx.onMenuShareQZone({
-      title: enter.title, // 分享标题
       desc: enter.desc,
       link: enter.link,
       imgUrl: enter.imgUrl
