@@ -235,6 +235,7 @@
       // 如果播放视频 关闭音频
       if (this.currentVideoIndex > -1) {
         this.dynamicList[this.currentVideoIndex].videoPlay = false
+        this.$refs['dynamic-item'][this.currentVideoIndex].videoStop()
       }
 
       const {eventType, itemIndex, problemIndex} = e
@@ -292,6 +293,7 @@
       const {eventType, itemIndex} = e
       if (this.currentVideoIndex > -1) {
         this.dynamicList[this.currentVideoIndex].videoPlay = false
+        this.$refs['dynamic-item'][this.currentVideoIndex].videoStop()
       }
 
       switch (eventType) {
