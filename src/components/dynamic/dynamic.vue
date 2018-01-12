@@ -232,6 +232,11 @@
     }
 
     audioEvent (e) {
+      // 如果播放视频 关闭音频
+      if (this.currentVideoIndex > -1) {
+        this.dynamicList[this.currentVideoIndex].videoPlay = false
+      }
+
       const {eventType, itemIndex, problemIndex} = e
       const temp = this.dynamicList[itemIndex]
       let item = temp
@@ -287,12 +292,12 @@
       const {eventType, itemIndex} = e
       if (this.currentVideoIndex > -1) {
         this.dynamicList[this.currentVideoIndex].videoPlay = false
-        this.$refs['dynamic-item'][this.currentVideoIndex].videoPause()
       }
 
       switch (eventType) {
         case 'play':
           this.dynamicList[itemIndex].videoPlay = true
+          this.$refs['dynamic-item'][itemIndex].videoPlay()
           this.currentVideoIndex = itemIndex
           console.log(this.dynamicList[itemIndex])
           break
