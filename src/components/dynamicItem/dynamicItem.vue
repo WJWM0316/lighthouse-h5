@@ -80,8 +80,8 @@
         <!-- 文字与视频 -->
         <div v-if="item.circleType === 2">
           <p class="content-text">{{item.content}}</p>
-          <div class="content-video" @click.stop="videoPlay">
-            <video :src="item.files[0].fileUrl" controls v-show="item.videoPlay" ref="video"></video>
+          <div class="content-video" @click.stop="videoClick">
+            <video controls v-show="item.videoPlay" ref="video"></video>
             <div class="placeholder" v-show="!item.videoPlay">
 
               <!--背景图-->
