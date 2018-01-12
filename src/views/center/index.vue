@@ -27,7 +27,7 @@
           <i class="addon-icon u-icon-center-angle-right" />
         </div>
       </a>
-      <router-link :to="`introduce/details?userId=${model.userId}`" class="item">
+      <router-link :to="`/userInfo/${model.userId}/details`" class="item">
         <div class="left">
           <i class="icon u-icon-center-home" />
           <span class="title">我的主页</span>

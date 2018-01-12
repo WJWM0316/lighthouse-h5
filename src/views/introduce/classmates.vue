@@ -50,7 +50,8 @@
       this.pagination.busy = true
       try {
         const {list, total} = await classmatesApi({...params, communityId: this.communityId})
-        this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
+//        this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
+        this.dataList = list
         this.pagination.page = page
         this.pagination.pageSize = pageSize
         this.pagination.total = total
