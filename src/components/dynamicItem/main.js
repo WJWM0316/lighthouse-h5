@@ -254,6 +254,7 @@ export default class dynamicItem extends Vue {
     })
   }
   videoPlay () {
+    this.video.currentTime = 0
     this.video.src = this.item.files[0].fileUrl
     this.video.play()
   }
