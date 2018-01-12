@@ -22,7 +22,7 @@ const routes = [
 
 const router = new Router({
   mode: 'history',
-  base: '/lighthouse/',
+  base: '/beaconweb/',
   routes
 })
 
