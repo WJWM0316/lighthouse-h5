@@ -107,15 +107,15 @@ export default class PublishContent extends Vue {
       const params = {
         count: this.lengths.imageMax - this.images.length
       }
-      const res = await this.wechatChooseImage(params)
-      const newImages = res.localIds.map(item => {
+      const { localIds } = await this.wechatChooseImage(params)
+      const newImages = localIds.map(item => {
         return {
           mediaId: '',
           fileUrl: item
         }
       })
       this.images = [].concat(this.images, newImages)
-      this.uploadCustomImages(res.localIds)
+      this.uploadCustomImages(localIds)
     } catch (error) {
       console.log(error)
     }
@@ -129,7 +129,7 @@ export default class PublishContent extends Vue {
     if (localId) {
       this.uploadSuccess = false
       const { serverId } = this.wechatUploadImage(localId)
-      console.log(this.images.entries)
+      console.log(this.images)
       for (let [index, image] of this.images.entries()) {
         console.log('循环', index, image)
         if (image.fileUrl === localId) {
