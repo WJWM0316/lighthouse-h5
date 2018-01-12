@@ -247,6 +247,9 @@ export default class dynamicItem extends Vue {
       eventType: 'play',
       itemIndex
     })
+    this.$nextTick(() => {
+      this.$refs['video'].play()
+    })
   }
 
   /**
