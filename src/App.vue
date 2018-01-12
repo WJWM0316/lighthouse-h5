@@ -38,10 +38,8 @@ import { share } from '@/api/wx/share'
   watch: {
     '$route': {
       handler (route) {
-        if (route.name === null ||
-          route.name === 'article-detail' ||
-          route.name === 'book-detail' ||
-          route.name === 'course-detail') return
+        console.log('触发路由 route.name:', route.name)
+        if (route.name === null) return
         // 修改页面分享信息
         share(this.$wechat, this.$http, {
           'title': `【小灯塔】title`,
