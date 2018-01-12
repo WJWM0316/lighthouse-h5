@@ -14,7 +14,6 @@
     </div>
 
     <div class="btn-container">
-      {{uploadSuccess}}{{serverIds}}
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
     </div>
 
@@ -157,8 +156,9 @@ export default class PublishContent extends Vue {
    */
   async uploadWechatSuccess () {
     try {
+      this.serverIds.reverse()
       const params = {
-        medias: this.serverIds.reverse().map(item => {
+        medias: this.serverIds.map(item => {
           return {
             mediaId: item,
             fileType: 'image'
