@@ -176,6 +176,10 @@ export default class dynamicItem extends Vue {
   created () {
   }
 
+  mounted () {
+    this.video = this.$refs['video']
+  }
+
   /**
    * 发表评论
    */
@@ -250,11 +254,13 @@ export default class dynamicItem extends Vue {
     })
   }
   videoPlay () {
-    this.$nextTick(() => {
-      const video = this.$refs['video']
-      video.src = this.item.files[0].fileUrl
-      video.play()
-    })
+    this.video.src = this.item.files[0].fileUrl
+    this.video.play()
+  }
+
+  videoStop () {
+    this.video.pause()
+    this.video.src = ''
   }
 
   /**
