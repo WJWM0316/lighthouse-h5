@@ -20,7 +20,7 @@ import Component from 'vue-class-component'
 import { Tabbar, TabbarItem, ViewBox, XCircle, cookie } from 'vux'
 import { mapState } from 'vuex'
 import settings from '@/config/index'
-import { share } from '@/api/wx/share'
+// import { share } from '@/api/wx/share'
 
 @Component({
   name: 'app',
