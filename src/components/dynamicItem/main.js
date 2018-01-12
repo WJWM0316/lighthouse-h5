@@ -171,8 +171,13 @@ import moment from 'moment'
   }
 })
 export default class dynamicItem extends Vue {
+  video = ''
 
   created () {
+  }
+
+  mounted () {
+    this.video = this.$refs['video']
   }
 
   /**
@@ -243,13 +248,15 @@ export default class dynamicItem extends Vue {
   }
   videoPlay () {
     const itemIndex = this.itemIndex
+    this.video.currentTime = 0
     this.$emit('videoEvent', {
       eventType: 'play',
       itemIndex
     })
-    this.$nextTick(() => {
-      this.$refs['video'].play()
-    })
+    this.video.play()
+  }
+  videoPause () {
+    this.video.pause()
   }
 
   /**
