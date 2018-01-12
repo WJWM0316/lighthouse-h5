@@ -14,7 +14,6 @@
     </div>
 
     <div class="btn-container">
-      {{uploadSuccess}}{{serverIds}}
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
     </div>
 
@@ -114,7 +113,7 @@ export default class PublishContent extends Vue {
           fileUrl: item
         }
       })
-      this.images = [].concat(this.images, newImages)
+      this.images = [...this.images, ...newImages]
       this.uploadCustomImages(localIds)
     } catch (error) {
       console.log(error)
@@ -129,8 +128,8 @@ export default class PublishContent extends Vue {
       const localId = localIds.pop()
       if (localId) {
         this.uploadSuccess = false
-        const { serverId } = this.wechatUploadImage(localId)
-        console.log(this.images)
+        const { serverId } = await this.wechatUploadImage(localId)
+        console.log('----', this.images, localId, serverId)
         this.images.forEach((index, image) => {
           if (image.fileUrl === localId) {
             this.images[index].mediaId = serverId
@@ -157,8 +156,9 @@ export default class PublishContent extends Vue {
    */
   async uploadWechatSuccess () {
     try {
+      this.serverIds.reverse()
       const params = {
-        medias: this.serverIds.reverse().map(item => {
+        medias: this.serverIds.map(item => {
           return {
             mediaId: item,
             fileType: 'image'
@@ -174,6 +174,7 @@ export default class PublishContent extends Vue {
           }
         })
       })
+      console.log('转换之后images：', this.images)
     } catch (error) {
       this.$vux.toast.test(error.message, 'bottom')
     }
@@ -184,12 +185,13 @@ export default class PublishContent extends Vue {
    */
   readyPublish () {
     let fileId = []
+    console.log('准备发布images：', this.images)
     if (this.addonType === 2) {
       fileId = this.videos.map(item => item.fileId)
     } else if (this.addonType === 3) {
       fileId = this.images.map(item => item.fileId)
     }
-    alert(fileId)
+    console.log('生成的fileId：', fileId)
     const params = {
       communityId: this.form.communityId,
       content: this.form.content,
