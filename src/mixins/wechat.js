@@ -100,7 +100,7 @@ export default {
           success: function (res) {
             console.log('选择图片成功', res)
             resolve(res)
-            const serverId = res.serverId // 返回图片的服务器端ID
+            // const serverId = res.serverId // 返回图片的服务器端ID
           },
           fail: function (e) {
             console.log('reject:-----', e)

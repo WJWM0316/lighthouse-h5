@@ -114,7 +114,7 @@ export default class PublishContent extends Vue {
           fileUrl: item
         }
       })
-      this.images = [].concat(this.images, newImages)
+      this.images = [...this.images, ...newImages]
       this.uploadCustomImages(localIds)
     } catch (error) {
       console.log(error)
@@ -129,7 +129,7 @@ export default class PublishContent extends Vue {
       const localId = localIds.pop()
       if (localId) {
         this.uploadSuccess = false
-        const { serverId } = this.wechatUploadImage(localId)
+        const { serverId } = await this.wechatUploadImage(localId)
         console.log('----', this.images, localId, serverId)
         this.images.forEach((index, image) => {
           if (image.fileUrl === localId) {
