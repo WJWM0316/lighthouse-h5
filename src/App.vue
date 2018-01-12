@@ -39,14 +39,14 @@ import settings from '@/config/index'
     '$route': {
       handler (route) {
         console.log('触发路由 route.name:', route.name)
-        if (route.name === null) return
+        // if (route.name === null) return
         // 修改页面分享信息
-        share(this.$wechat, this.$http, {
-          'title': `【小灯塔】title`,
-          'desc': `desc`,
-          'imgUrl': `https://light-wap.house.api.ziwork.com/static/img/login-logo.bdbf03e.png`,
-          'link': location.origin
-        })
+        // share(this.$wechat, this.$http, {
+        //   'title': `【小灯塔】title`,
+        //   'desc': `desc`,
+        //   'imgUrl': `https://light-wap.house.api.ziwork.com/static/img/login-logo.bdbf03e.png`,
+        //   'link': location.origin
+        // })
       },
       immediate: true
     }
