@@ -174,6 +174,7 @@ export default class PublishContent extends Vue {
           }
         })
       })
+      console.log('转换之后images：', this.images)
     } catch (error) {
       this.$vux.toast.test(error.message, 'bottom')
     }
@@ -184,12 +185,13 @@ export default class PublishContent extends Vue {
    */
   readyPublish () {
     let fileId = []
+    console.log('准备发布images：', this.images)
     if (this.addonType === 2) {
       fileId = this.videos.map(item => item.fileId)
     } else if (this.addonType === 3) {
       fileId = this.images.map(item => item.fileId)
     }
-
+    console.log('生成的fileId：', fileId)
     const params = {
       communityId: this.form.communityId,
       content: this.form.content,
