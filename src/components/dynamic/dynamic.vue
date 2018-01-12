@@ -121,7 +121,6 @@
 
     mounted () {
       const music = new Audio()
-      music.autoplay = true
 
       /**
        * 音频加载中
@@ -259,10 +258,12 @@
             this.music['src'] = e.url
             this.audioStateSet()
             this.audioProgressSet()
+            this.music.play()
           } else if (temp.modelType === 'problem' && lastProblemIndex !== problemIndex) {
             this.music['src'] = e.url
             this.audioStateSet()
             this.audioProgressSet()
+            this.music.play()
           } else {
             console.log(this.music.paused)
             if (this.music.paused) {

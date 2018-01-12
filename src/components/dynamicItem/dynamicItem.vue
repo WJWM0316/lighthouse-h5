@@ -81,7 +81,7 @@
         <div v-if="item.circleType === 2">
           <p class="content-text">{{item.content}}</p>
           <div class="content-video" @click.stop="videoPlay">
-            <video :src="item.files[0].fileUrl" autoplay controls v-if="item.videoPlay"></video>
+            <video :src="item.files[0].fileUrl" controls v-if="item.videoPlay" ref="video"></video>
             <div class="placeholder" v-else>
 
               <!--背景图-->
