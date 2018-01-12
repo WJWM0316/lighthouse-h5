@@ -32,7 +32,6 @@ function hideLoading (open) {
 }
 
 export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
-  console.log('url', url)
   // 正常请
   // let datas = type === 'get' ? {params: data} :data
   let globalLoading = false
@@ -42,7 +41,6 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   }
   showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data, TestUid: 2}} : {...data, TestUid: 2}
-  console.log('require params', datas)
   return Vue.axios[type](url, datas, config)
     .catch(response => {
       /* eslint-disable prefer-promise-reject-errors */
@@ -50,7 +48,9 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     })
     .then((response) => {
       let {data} = response
-      console.log('xxxxxxx', data)
+      // console.log('请求接口路径', url)
+      // console.log('接口请求参数', datas)
+      // console.log('接口返回数据', data)
       if (typeof data === 'string') { // 转换返回json
         data = JSON.parse(data)
       }
@@ -61,7 +61,6 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       if (data && data.statusCode === 255) { // 登录时openId cookie失效
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
-        console.log('wefwfewfwefw', `${config.devUrl}/wap/wecaht/callback?zike_from=${location.href}`)
         location.href = `${settings.devUrl}/wap/wecaht/callback?zike_from=${location.href}`
         return data.data === undefined ? {} : data.data
       }

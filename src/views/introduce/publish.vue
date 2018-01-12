@@ -14,7 +14,6 @@
     </div>
 
     <div class="btn-container">
-      {{uploadSuccess}}{{serverIds}}
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
     </div>
 
@@ -131,12 +130,13 @@ export default class PublishContent extends Vue {
         this.uploadSuccess = false
         const { serverId } = await this.wechatUploadImage(localId)
         console.log('----', this.images, localId, serverId)
-        this.images.forEach((index, image) => {
+        this.images.forEach((image) => {
           if (image.fileUrl === localId) {
-            this.images[index].mediaId = serverId
+            image.mediaId = serverId
           }
         })
         this.serverIds.push(serverId)
+        console.log('====', this.images, this.serverIds)
       }
 
       if (localIds && localIds.length > 0) {
@@ -157,8 +157,9 @@ export default class PublishContent extends Vue {
    */
   async uploadWechatSuccess () {
     try {
+      this.serverIds.reverse()
       const params = {
-        medias: this.serverIds.reverse().map(item => {
+        medias: this.serverIds.map(item => {
           return {
             mediaId: item,
             fileType: 'image'
@@ -174,6 +175,7 @@ export default class PublishContent extends Vue {
           }
         })
       })
+      console.log('转换之后images：', this.images)
     } catch (error) {
       this.$vux.toast.test(error.message, 'bottom')
     }
@@ -184,12 +186,13 @@ export default class PublishContent extends Vue {
    */
   readyPublish () {
     let fileId = []
+    console.log('准备发布images：', this.images)
     if (this.addonType === 2) {
       fileId = this.videos.map(item => item.fileId)
     } else if (this.addonType === 3) {
       fileId = this.images.map(item => item.fileId)
     }
-    alert(fileId)
+    console.log('生成的fileId：', fileId)
     const params = {
       communityId: this.form.communityId,
       content: this.form.content,
