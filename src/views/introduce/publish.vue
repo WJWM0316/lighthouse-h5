@@ -130,7 +130,7 @@ export default class PublishContent extends Vue {
         this.uploadSuccess = false
         const { serverId } = await this.wechatUploadImage(localId)
         console.log('----', this.images, localId, serverId)
-        this.images.forEach((image) => {
+        this.images.forEach(image => {
           if (image.fileUrl === localId) {
             image.mediaId = serverId
           }
@@ -169,7 +169,7 @@ export default class PublishContent extends Vue {
       const { files } = await wechatUploadFileApi(params)
       // 成功后，将所有还剩下的图片对象替换
       files.forEach(file => {
-        this.images.forEach((index, image) => {
+        this.images.forEach((image, index) => {
           if (image.mediaId === file.mediaId) {
             this.images[index] = file
           }
