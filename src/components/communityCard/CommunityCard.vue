@@ -57,6 +57,25 @@ import Component from 'vue-class-component'
       type: Number,
       default: 1
     }
+  },
+  watch: {
+    'community.startTime': {
+      handler (val) {
+        if (this.community.isAuthor !== 1 && this.community.isJoined !== 1 && !this.isEnd) {
+          // 启用倒计时
+          const countdown = this.getCountdown()
+          countdown.start(this.community.startTime * 1000, (timestamp) => {
+            if (timestamp > 0) {
+              this.duration = timestamp
+            } else {
+              this.duration = 0
+            }
+          })
+        }
+      },
+      deep: true,
+      immediate: true
+    }
   }
 })
 export default class CommunityCard extends Vue {
@@ -73,20 +92,6 @@ export default class CommunityCard extends Vue {
   // 是否已结束
   get isEnd () {
     return this.community.endTime * 1000 < new Date().getTime()
-  }
-
-  created () {
-    if (this.community.isAuthor !== 1 && this.community.isJoined !== 1 && !this.isEnd) {
-      // 启用倒计时
-      const countdown = this.getCountdown()
-      countdown.start(this.community.startTime * 1000, (timestamp) => {
-        if (timestamp > 0) {
-          this.duration = timestamp
-        } else {
-          this.duration = 0
-        }
-      })
-    }
   }
 
   /**

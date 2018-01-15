@@ -107,6 +107,9 @@ export default class ReplyQuestion extends Vue {
    */
   async reply () {
     try {
+      this.$vux.loading.show({
+        text: '加载中...'
+      })
       const params = {
         communityId: this.communityId,
         problemId: this.id,
@@ -119,6 +122,8 @@ export default class ReplyQuestion extends Vue {
       this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
+    } finally {
+      this.$vux.loading.hide()
     }
   }
 
@@ -141,7 +146,8 @@ export default class ReplyQuestion extends Vue {
    */
   getAnswerById (answerId) {
     let result = null
-    for (let [, answer] of this.problem.answer.entries()) {
+    for (let index in this.problem.answer) {
+      const answer = this.problem.answer[index]
       if (answer.answerId === answerId) {
         result = answer
         break

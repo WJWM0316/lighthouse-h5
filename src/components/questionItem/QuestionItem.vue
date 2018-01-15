@@ -43,7 +43,7 @@
                 <image-item class="image" :src="(model.user && model.user.avatar) || require('@/assets/icon/img_head_default.png')" />
               </a>
               <div class="voice">
-                <a class="voice-container z-read" @click.prevent.stop="handleTapVoice(item)">
+                <a href="#" class="voice-container z-read" @click.prevent.stop="handleTapVoice(item)">
                   <div class="progress">
                     <div class="bar" :style="{ width: `${item.voice.progress || 0}%` }"></div>
                   </div>
@@ -274,11 +274,12 @@ export default class QuestionItem extends Vue {
       }
 
       .voice-container {
-        display: block;
         position: relative;
+        display: block;
         box-sizing: border-box;
         max-width: 240px;
         height: 40px;
+        color: @font-color-default;
 
         &::after {
           content: " ";
