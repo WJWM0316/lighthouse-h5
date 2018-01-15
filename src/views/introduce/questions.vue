@@ -36,7 +36,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import Scroller from '@/components/scroller'
-import QuestionItem from '@/components/QuestionItem'
+import QuestionItem from '@/components/questionItem'
 
 import ListMixin from '@/mixins/list'
 

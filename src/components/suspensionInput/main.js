@@ -11,6 +11,10 @@ import Component from 'vue-class-component'
     value: {
       type: Boolean,
       default: false
+    },
+    content: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -28,6 +32,9 @@ import Component from 'vue-class-component'
       if (index !== oldIndex) {
         this.suspensionInputContent = ''
       }
+    },
+    content (val) {
+      this.suspensionInputContent = val
     }
   }
 })
