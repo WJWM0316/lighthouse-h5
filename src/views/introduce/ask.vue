@@ -250,12 +250,11 @@ export default class Ask extends Vue {
    * 获取问题回答
    */
   getAnswerById (problemId, answerId) {
-    console.log(problemId, answerId, this.problemList)
     let result = null
     let find = false
 
-    for (let problemIndex in this.problemList) {
-      const problem = this.problemList[problemIndex]
+    for (let problemIndex in this.pageInfo.problem) {
+      const problem = this.pageInfo.problem[problemIndex]
       if (problemId !== problem.problemId) {
         continue
       }
@@ -385,9 +384,11 @@ export default class Ask extends Vue {
       }
 
       this.audioEventCallbacks.onPlaying = e => {
+        console.log('播放中')
         answer.voice.status = 'playing'
       }
       this.audioEventCallbacks.onTimeUpdate = e => {
+        console.log('播放中 ', this.audio.currentTime, this.audio.duration)
         const progress = (this.audio.currentTime / this.audio.duration) * 100
         answer.voice.progress = parseInt(progress)
       }
