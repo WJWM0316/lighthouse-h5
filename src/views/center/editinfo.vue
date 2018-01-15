@@ -153,12 +153,11 @@ export default class CenterEditinfo extends Vue {
   // 工作年限
   get workTimeText () {
     let result = ''
-    for (let [, item] of this.workYearsSource.entries()) {
+    this.workYearsSource.forEach(item => {
       if (item.id === parseInt(this.form.workTime[0])) {
         result = item.name
-        break
       }
-    }
+    })
     return result
   }
 
