@@ -43,7 +43,7 @@
                 <image-item :src="model.user.avatar || require('@/assets/icon/img_head_default.png')" />
               </a>
               <div class="voice">
-                <div class="voice-container z-read" @click="handleTapVoice">
+                <div class="voice-container z-read" @click="handleTapVoice(item)">
                   <div class="progress">
                     <div class="bar" :style="{ width: `${item.voice.progress || 0}%` }"></div>
                   </div>
@@ -87,7 +87,10 @@ import Component from 'vue-class-component'
     model: {
       type: Object,
       default () {
-        return {}
+        return {
+          user: {},
+          answer: []
+        }
       }
     },
 
@@ -117,26 +120,26 @@ export default class QuestionItem extends Vue {
   /**
    * 点击头像，跳转个人详情
    */
-  handleUserDetail (userId) {
-    this.$router.push(`/introduce/details?userId=${userId}`)
+  handleUserDetail () {
+    this.$router.push(`/introduce/details?userId=${this.model.user.userId}`)
   }
 
   /**
    * 点击卡片
    */
-  handleTap (communityId, model) {
-    this.$emit('card-tap', communityId, model)
+  handleTap () {
+    this.$emit('card-tap', this.communityId, this.model)
   }
 
   /**
    * 播放音频
    */
-  handleTapVoice (url, communityId, problemId, answerItem) {
+  handleTapVoice (answerItem) {
     if (answerItem.voice.status === 'default') {
       // 通知父级组件播放音频
-      this.$emit('play-voice', url, communityId, problemId, answerItem.answerId)
+      this.$emit('play-voice', answerItem.content, this.communityId, this.model.problemId, answerItem)
     } else if (answerItem.voice.status === 'loading' || answerItem.voice.status === 'playing') {
-      this.$emit('pause-voice', communityId, problemId, answerItem.answerId)
+      this.$emit('pause-voice', this.communityId, this.model.problemId, answerItem.answerId)
     }
   }
 }

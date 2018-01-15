@@ -40,7 +40,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     delete data.globalLoading
   }
   showLoading(globalLoading)
-  let datas = type === 'get' ? {params: {...data, TestUid: 2}} : {...data, TestUid: 2}
+  let datas = type === 'get' ? {params: {...data}} : {...data}
   return Vue.axios[type](url, datas, config)
     .catch(response => {
       /* eslint-disable prefer-promise-reject-errors */
@@ -64,7 +64,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         location.href = `${settings.devUrl}/wap/wechat/callback?zike_from=${location.href}`
         return data.data === undefined ? {} : data.data
       }
-      if (data && data.statusCode === 256) { // 没有登录权限
+      if (data && data.statusCode === 256) { // 没有登录权限,跳去手机号登录
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
         router.replace({
