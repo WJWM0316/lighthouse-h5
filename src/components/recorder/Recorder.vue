@@ -284,6 +284,15 @@ export default class Recorder extends Vue {
       }
     })
   }
+
+  /**
+   * 尝试停止播放录音（组件外调用）
+   */
+  stopPlayVoice () {
+    if (this.status === 'playing') {
+      this.handleStop()
+    }
+  }
 }
 </script>
 
