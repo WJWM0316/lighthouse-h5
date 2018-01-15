@@ -170,13 +170,59 @@ export default class Ask extends Vue {
     }
   }
 
+  async payIn () {
+    try {
+      const params = await payApi({
+        productId: this.communityId,
+        productType: 1
+      })
+      if (typeof WeixinJSBridge === 'undefined') {
+        if (document.addEventListener) {
+          document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(params), false)
+        } else if (document.attachEvent) {
+          document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(params))
+          document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(params))
+        }
+      } else {
+        this.onBridgeReady(params)
+      }
+    } catch (e) {
+      this.$vux.toast.text(e.message, 'bottom')
+    }
+    this.pageInit()
+  }
+  onBridgeReady (params) {
+    let self = this
+    /*eslint-disable*/
+    WeixinJSBridge.invoke('getBrandWCPayRequest', {
+        appId: params.appId,
+        timeStamp: params.timeStamp,
+        nonceStr: params.nonceStr,
+        package: params.package,
+        signType: params.signType,
+        paySign: params.paySign
+      },
+      function (res) {
+        // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+        if (res.err_msg === 'get_brand_wcpay_request:ok') {
+          self.$vux.toast.text('已购买成功', 'bottom')
+          location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
+        } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+          self.$vux.toast.text('已取消支付', 'bottom')
+        } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
+          self.$vux.toast.text('支付失败，请重新购买', 'bottom')
+        }
+      }
+    )
+  }
   /**
    * 提问
    */
   async sendAsk (params) {
     try {
-      const res = await submitProblemApi(params)
+      await submitProblemApi(params)
       if (params.payType === 1) {
+        this.payIn()
         // todo 调起微信支付
       } else {
         this.$vux.toast.text('提问成功', 'bottom')
