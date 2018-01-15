@@ -58,7 +58,7 @@
           <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
         </button>
         <button :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
-                :disabled="!isPayBtn" @click="subscribe('pay')" v-if="pageInfo.payJoinNum > 0">
+                :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
           <span>({{paySurplusPeople > 0 ? '剩余：' + paySurplusPeople : '已满员，通道关闭'}})</span>
         </button>
@@ -73,6 +73,7 @@
   import dynamic from '@/components/dynamic/dynamic'
   import {getCommunityInfoApi} from '@/api/pages/pageInfo'
   import { share } from '@/api/wx/share'
+  import {payApi} from '@/api/pages/pay'
 
   @Component({
     name: 'big-shot-introduce',
@@ -115,57 +116,68 @@
     freeIn () { // 跳转到一个图文消息
       console.log('免费集call')
     }
-    payOrFree (type) {
-      console.log('支付')
-      const that = this
-//      if (type === 'pay') {
-//        let {startTime, endTime} = that.pageInfo
-//        startTime = new Date(startTime * 1000)
-//        endTime = new Date(endTime * 1000)
-//
-//        this.$vux.confirm.show({
-//          content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
-//          confirmText: '确定',
-//          cancelText: '取消',
-//          onConfirm: function (res) {
-//            if (res.confirm) {
-//              payApi({
-//                productId: that.pageInfo.communityId,
-//                productType: 1
-//              }).then((res) => {
-//                res.success = function () {
-//                  // 刷新当前页
-//                  if (self.isAudit) {
-//                    this.$vux.confirm.show({
-//                      title: '恭喜',
-//                      content: `您已加入${res.title},请及时关注【自客】公众号进塔。`,
-//                      confirmText: '好的',
-//                      showCancel: false,
-//                      onConfirm: () => {
-//                        this.$router.go(-1)
-//                      }
-//                    })
-//                  } else {
-//                    that.init()
-//                  }
-//                }
-//                wx.requestPayment(res)
-//              }).catch((e) => {
-//                console.log(e.message)
-//              })
-//            }
-//          },
-//          confirmColor: '#d7ab70'
-//        })
-//      } else {
-//        console.log('重要url', '/pages/freeEnroll/index?communityId=' + that.communityId + '&userId=' + that.$parent.globalData.userInfo.userId + '&formId=' + formId)
-//        wx.navigateTo({
-//          url: '/pages/freeEnroll/index?communityId=' + that.communityId + '&userId=' + that.$parent.globalData.userInfo.userId + '&formId=' + formId
-//        })
-//      }
+    payOrFree () {
+      let that = this
+      let {startTime, endTime} = this.pageInfo
+      startTime = new Date(startTime * 1000)
+      endTime = new Date(endTime * 1000)
+      this.$vux.confirm.show({
+        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
+        confirmText: '确定',
+        cancelText: '取消',
+        onConfirm: function (res) {
+          console.log(res)
+          that.payIn()
+        },
+      })
+    }
+    async payIn () {
+      try {
+        const params = await payApi({
+          productId: this.pageInfo.communityId,
+          productType: 1
+        })
+        if (typeof WeixinJSBridge === 'undefined') {
+          if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(params), false)
+          } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(params))
+            document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(params))
+          }
+        } else {
+          this.onBridgeReady(params)
+        }
+      } catch (e) {
+        this.$vux.toast.text(e.message, 'bottom')
+      }
+      this.pageInit()
+    }
+    onBridgeReady (params) {
+//      this.closeEvent()
+      let self = this
+      /*eslint-disable*/
+      WeixinJSBridge.invoke('getBrandWCPayRequest', {
+          appId: params.appId,
+          timeStamp: params.timeStamp,
+          nonceStr: params.nonceStr,
+          package: params.package,
+          signType: params.signType,
+          paySign: params.paySign
+        },
+        function (res) {
+          // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+          if (res.err_msg === 'get_brand_wcpay_request:ok') {
+            self.$vux.toast.text('已购买成功', 'bottom')
+            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
+          } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+            self.$vux.toast.text('已取消支付', 'bottom')
+          } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
+            self.$vux.toast.text('支付失败，请重新购买', 'bottom')
+          }
+        }
+      )
     }
     created () {
-      console.log(location)
       this.pageInit().then(() => {
         const {title, simpleIntro, master, shareImg} = this.pageInfo
         const {realName, career} = master
