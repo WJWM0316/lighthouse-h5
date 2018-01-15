@@ -4,8 +4,8 @@
     <div class="header">
       <div class="userInfo">
         <div class="userInfo-img">
-          <image-item :src="userInfo.avatar" mode="horizontal" :round="true" />
-          <image-item class="sex" :src="require('@/assets/icon/icon_boy.png')" mode="horizontal" />
+          <image-item class="image" :src="userInfo.avatar" mode="horizontal" :round="true" />
+          <i class="sex no-offset" :class="`u-icon-${userInfo.gender === 2 ? 'girl' : 'boy'}`"></i>
         </div>
         <div class="userInfo-desc">
           <h3>{{userInfo.realName}}</h3>
@@ -24,7 +24,7 @@
         <div class="u-checkbox">
           <input id="private" type="checkbox" v-model="isPrivate" :true-value="1" :false-value="2" />
           <label for="private">
-            <i class="icon u-icon"></i> 设为私密提问 {{isPrivate}}
+            <i class="icon u-icon"></i> 设为私密提问
           </label>
         </div>
       </div>
@@ -381,15 +381,6 @@ export default class Ask extends Vue {
 .p-ask {
   background-color: #f9f9f9;
 
-  button:after {
-    border-style: none;
-  }
-
-  & image {
-    width: 100%;
-    height: 100%;
-  }
-
   .header {
     padding: 20px 15px;
     background-color: #fff;
@@ -408,19 +399,17 @@ export default class Ask extends Vue {
     }
 
     & .userInfo-img {
+      position: relative;
       width: 60px;
       height: 60px;
-      border-radius: 50%;
-      position: relative;
 
-      & image {
-        border-radius: 50%;
+      .image {
+        width: 100%;
+        height: 100%;
       }
 
-      & .sex {
+      .sex {
         position: absolute;
-        width: 18px;
-        height: 18px;
         bottom: 0;
         right: 0;
       }
