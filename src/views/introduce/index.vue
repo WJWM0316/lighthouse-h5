@@ -53,12 +53,12 @@
       <p v-else-if="pageInfo.remainingJoinNum <= 0">已满员，停止报名</p>
       <div class="btn-box" v-else>
         <button :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
-                :disabled="!isFreeBtn" v-if="pageInfo.freeJoinNum > 0">
+                :disabled="!isFreeBtn" v-if="pageInfo.freeJoinNum > 0" @click="freeIn">
           <span>集Call免费加入</span>
           <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
         </button>
         <button :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
-                :disabled="!isPayBtn" @tap="subscribe('pay')" v-if="pageInfo.payJoinNum > 0">
+                :disabled="!isPayBtn" @click="subscribe('pay')" v-if="pageInfo.payJoinNum > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
           <span>({{paySurplusPeople > 0 ? '剩余：' + paySurplusPeople : '已满员，通道关闭'}})</span>
         </button>
@@ -112,7 +112,57 @@
     pageInfo = {}
     dynamicList = []
     disableOperationArr = ['comment', 'praise']
+    freeIn () { // 跳转到一个图文消息
+      console.log('免费集call')
+    }
+    payOrFree (type) {
+      const that = this
+      if (type === 'pay') {
+        let {startTime, endTime} = that.pageInfo
+        startTime = new Date(startTime * 1000)
+        endTime = new Date(endTime * 1000)
 
+        this.$vux.confirm.show({
+          content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
+          confirmText: '确定',
+          cancelText: '取消',
+          onConfirm: function (res) {
+            if (res.confirm) {
+              payApi({
+                productId: that.pageInfo.communityId,
+                productType: 1
+              }).then((res) => {
+                res.success = function () {
+                  // 刷新当前页
+                  if (self.isAudit) {
+                    this.$vux.confirm.show({
+                      title: '恭喜',
+                      content: `您已加入${res.title},请及时关注【自客】公众号进塔。`,
+                      confirmText: '好的',
+                      showCancel: false,
+                      onConfirm: () => {
+                        this.$router.go(-1)
+                      }
+                    })
+                  } else {
+                    that.init()
+                  }
+                }
+                wx.requestPayment(res)
+              }).catch((e) => {
+                console.log(e.message)
+              })
+            }
+          },
+          confirmColor: '#d7ab70'
+        })
+      } else {
+        console.log('重要url', '/pages/freeEnroll/index?communityId=' + that.communityId + '&userId=' + that.$parent.globalData.userInfo.userId + '&formId=' + formId)
+        wx.navigateTo({
+          url: '/pages/freeEnroll/index?communityId=' + that.communityId + '&userId=' + that.$parent.globalData.userInfo.userId + '&formId=' + formId
+        })
+      }
+    },
     created () {
       // 修改页面分享信息
       share(this.$wechat, this.$http, {
