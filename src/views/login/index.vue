@@ -12,7 +12,7 @@
                  :show-clear="showClear"
                  class="input-common"></x-input>
       </div>
-      <div class="section" style="position: relative">
+      <div class="section" style="position: relative" v-if="needImgCode">
         <x-input placeholder="图片验证码" v-model="info.verifyCode"
                  class="input-common"
                  :max="4" :show-clear="showClear">
@@ -48,7 +48,7 @@ import Component from 'vue-class-component'
 import { Group, XInput, XButton } from 'vux'
 import uuid from 'uuid'
 import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
-import {loginApi} from '@/api/pages/login'
+import {loginApi, getCodeImg} from '@/api/pages/login'
 
 @Component({
   name: 'login-index',
@@ -68,31 +68,41 @@ export default class LoginIndex extends Vue {
   isCommitInfo = false // 是否已经请求完善资料接口
   requestId = '' // 随机数
   codeImgUrl = '' // 验证码图片
+  needImgCode = false // 是否需要手机验证码
   info = {
     mobile: '',
     sms: '',
     verifyCode: '',
-    login_type: 2,
+    loginType: 2,
     from: '' // 1 注册 2 登录
   }
   created () {
     this.refreshCode()
   }
 
-  onSend () { // 显示图片验证码
-    this.refreshCode()
+  onSend (imgcodeUrl) { // 显示图片验证码
+    this.needImgCode = true
+    this.codeImgUrl = imgcodeUrl
   }
   mounted () {
   }
-  refreshCode () {
-    const randonNum = new Date().getTime()
-    this.codeImgUrl = `https://www.zike.com/zikeserver/wap/captchas?t=${randonNum}`
+  async refreshCode () {
+    const resp = await getCodeImg()
+    if (resp.imgcodeUrl) {
+      this.codeImgUrl = resp.imgcodeUrl
+      this.needImgCode = true
+    }
   }
   get loginBtnValid() {
     return this.info.mobile && this.info.sms
   }
   async goSubmit () {
-    await loginApi()
+    const resp = await loginApi(this.info)
+    this.$store.dispatch('update_userinfo', {
+      userinfo: resp
+    })
+    console.log('this.$route.query.redirect', this.$route.query.redirect)
+    window.location.href = this.$route.query.redirect
   }
 }
 </script>
@@ -154,7 +164,7 @@ export default class LoginIndex extends Vue {
         font-size: 15px;
         margin-top: 40px;
         text-align: center;
-        color: rgba(0, 0, 0, 0.3);
+        color: rgba(0, 0, 0, 0.8);
         &::after {
           content: none;
         }
@@ -165,6 +175,7 @@ export default class LoginIndex extends Vue {
       }
 
       .btn-disabled{
+        color: rgba(0, 0, 0, 0.3);
         background: rgba(255,226,102,.5);
       }
     }
