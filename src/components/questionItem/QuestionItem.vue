@@ -1,9 +1,9 @@
 <template>
-  <div class="m-question-item" :class="`type-${type}`">
+  <div class="m-question-item" :class="`type-${type}`" @click="handleTap">
     <div class="hd">
       <template v-if="type === 2">
         <div class="middle">
-          <text class="time">{{model.releaseTime}}</text>
+          <p class="time">{{model.releaseTime * 1000 | date('YYYY-MM-DD HH:mm')}}</p>
         </div>
       </template>
       <template v-else>
@@ -11,8 +11,8 @@
           <image-item class="image" :src="model.user.avatar || require('@/assets/icon/img_head_default.png')" />
         </a>
         <div class="middle">
-          <text class="username">{{model.user.realName}}</text>
-          <text class="time">{{model.releaseTime}}</text>
+          <p class="username">{{model.user.realName}}</p>
+          <p class="time">{{model.releaseTime * 1000 | date('YYYY-MM-DD HH:mm')}}</p>
         </div>
       </template>
       <div class="addon-text">{{statusOptions[model.status]}}</div>
@@ -43,13 +43,13 @@
                 <image-item :src="model.user.avatar || require('@/assets/icon/img_head_default.png')" />
               </a>
               <div class="voice">
-                <div class="voice-container z-read" @click="handleTapVoice">
+                <div class="voice-container z-read" @click="handleTapVoice(item)">
                   <div class="progress">
                     <div class="bar" :style="{ width: `${item.voice.progress || 0}%` }"></div>
                   </div>
                   <div class="controls">
                     <image-item class="status" :class="{ 'z-loading': item.voice.status === 'loading' }" :src="audioStatusIcons[item.voice.status]" />
-                    <text class="dutraion">{{item.duration || 0}}s</text>
+                    <p class="dutraion">{{item.duration || 0}}s</p>
                   </div>
                 </div>
               </div>
@@ -87,7 +87,10 @@ import Component from 'vue-class-component'
     model: {
       type: Object,
       default () {
-        return {}
+        return {
+          user: {},
+          answer: []
+        }
       }
     },
 
@@ -112,6 +115,32 @@ export default class QuestionItem extends Vue {
     3: '有追问',
     4: '已回答',
     5: '已过期'
+  }
+
+  /**
+   * 点击头像，跳转个人详情
+   */
+  handleUserDetail () {
+    this.$router.push(`/introduce/details?userId=${this.model.user.userId}`)
+  }
+
+  /**
+   * 点击卡片
+   */
+  handleTap () {
+    this.$emit('card-tap', this.communityId, this.model)
+  }
+
+  /**
+   * 播放音频
+   */
+  handleTapVoice (answerItem) {
+    if (answerItem.voice.status === 'default') {
+      // 通知父级组件播放音频
+      this.$emit('play-voice', answerItem.content, this.communityId, this.model.problemId, answerItem)
+    } else if (answerItem.voice.status === 'loading' || answerItem.voice.status === 'playing') {
+      this.$emit('pause-voice', this.communityId, this.model.problemId, answerItem.answerId)
+    }
   }
 }
 </script>
@@ -180,7 +209,7 @@ export default class QuestionItem extends Vue {
       padding-right: 15px;
 
       .username {
-        .setSingleLine();
+        .setEllipsis();
         display: block;
         line-height: 22px;
         font-size: 15px;

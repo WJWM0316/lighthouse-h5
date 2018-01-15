@@ -57,6 +57,27 @@ const routers = [
     name: 'userInfo-details',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/userInfo'], resolve),
+  },
+  {
+    // 用户提问
+    path: '/introduce/ask/:communityId/:problemId',
+    name: 'ask',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/ask'], resolve),
+  },
+  {
+    // 大咖问题列表
+    path: '/introduce/questions/:communityId',
+    name: 'questions',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/questions'], resolve),
+  },
+  {
+    // 大咖问题详情
+    path: '/introduce/replyQuestion/:communityId/:problemId',
+    name: 'question-reply',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/replyQuestion'], resolve),
   }
 ]
 
