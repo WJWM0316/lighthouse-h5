@@ -62,11 +62,22 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { share } from '@/api/wx/share'
 
 @Component({
   name: 'center-help'
 })
-export default class CenterHelp extends Vue {}
+export default class CenterHelp extends Vue {
+  created () {
+    share(this.$wechat, this.$http, {
+      'titles': '小灯塔使用帮助',
+      'title': '小灯塔使用帮助',
+      'desc': '百万职场人的职场导师知识分享社区，等你加入~',
+      'imgUrl': '',
+      'link': location.href.split('?')[0]
+    })
+  }
+}
 </script>
 
 <style lang="less" scoped>
