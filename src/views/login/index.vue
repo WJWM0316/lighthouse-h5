@@ -81,6 +81,7 @@ export default class LoginIndex extends Vue {
   }
 
   onSend (imgcodeUrl) { // 显示图片验证码
+    console.log('send', imgcodeUrl)
     this.needImgCode = true
     this.codeImgUrl = imgcodeUrl
   }
