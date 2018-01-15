@@ -95,6 +95,7 @@
     goexChangeList () {
       this.$router.push({name: 'exchange-list'})
     }
+
     goUserDetail (userId) {
       this.$router.push({name: 'userInfo-details', params: {userId}})
     }
@@ -113,7 +114,7 @@
       }
       this.pagination.busy = true
       try {
-        const {list, total, isRead} = await messageListApi(params)
+        const {list = [], total, isRead} = await messageListApi(params)
         this.isRead = isRead
         const temp = new Array(...list)
         temp.forEach((item) => {

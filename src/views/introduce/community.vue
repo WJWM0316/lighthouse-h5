@@ -84,6 +84,7 @@
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
   import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi } from '@/api/pages/pageInfo.js'
+  import { share } from '@/api/wx/share'
 
   @Component({
     name: 'big-shot-community',
@@ -125,7 +126,19 @@
     }
 
     created () {
-      this.pageInit().then(() => {})
+      this.pageInit().then(() => {
+        const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
+        const {realName, career} = master
+        const str = realName ? realName + (career ? '|' + career : '') : ''
+        // 页面分享信息
+        share(this.$wechat, this.$http, {
+          'titles': str + '|' + title,
+          'title': str + '|' + title,
+          'desc': simpleIntro,
+          'imgUrl': shareImg,
+          'link': location.origin + `/introduce/${communityId}/community`
+        })
+      })
     }
 
     operation (e) {
@@ -310,6 +323,7 @@
 </script>
 <style lang="less" scoped>
   .big-shot-community {
+    box-sizing: border-box;
     height: 100%;
     &.author {
       padding-bottom: 50px;
@@ -539,7 +553,14 @@
           right: 3px;
           top: 3px;
           font-size: 10px;
+          background-color: #ff4949;
           transform: translate(100%, -50%);
+          border-radius: 50%;
+          line-height: 1;
+          display: inline-block;
+          font-style: normal;
+          color: #FFF;
+          padding: 2px 3px;
         }
       }
       & button:last-of-type {

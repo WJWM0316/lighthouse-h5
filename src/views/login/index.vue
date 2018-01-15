@@ -77,12 +77,14 @@ export default class LoginIndex extends Vue {
     from: '' // 1 注册 2 登录
   }
   created () {
-    this.refreshCode()
+//    this.refreshCode()
   }
 
   onSend (imgcodeUrl) { // 显示图片验证码
-    this.needImgCode = true
-    this.codeImgUrl = imgcodeUrl
+    this.refreshCode()
+//    console.log('send', imgcodeUrl)
+//    this.needImgCode = true
+//    this.codeImgUrl = imgcodeUrl
   }
   mounted () {
   }
