@@ -207,12 +207,15 @@ export default class Ask extends Vue {
     console.log(problemId, answerId, this.problemList)
     let result = null
     let find = false
-    for (let [, problem] of this.problemList.entries()) {
+
+    for (let problemIndex in this.problemList) {
+      const problem = this.problemList[problemIndex]
       if (problemId !== problem.problemId) {
         continue
       }
 
-      for (let [, answer] of problem.answer.entries()) {
+      for (let answerIndex in problem.answer) {
+        const answer = problem.answer[answerIndex]
         if (answer.answerId === answerId) {
           result = answer
           find = true
@@ -224,6 +227,7 @@ export default class Ask extends Vue {
         break
       }
     }
+
     return result
   }
 
