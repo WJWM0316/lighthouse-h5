@@ -40,7 +40,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     delete data.globalLoading
   }
   showLoading(globalLoading)
-  let datas = type === 'get' ? {params: {...data, TestUid: 2}} : {...data, TestUid: 2}
+  let datas = type === 'get' ? {params: {...data}} : {...data}
   return Vue.axios[type](url, datas, config)
     .catch(response => {
       /* eslint-disable prefer-promise-reject-errors */

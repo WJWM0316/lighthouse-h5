@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { smsApi } from '@/api/pages/account'
+import { smsApi } from '@/api/pages/login'
 
 @Component({
   name: 'timerBtn',
   props: {
-    type: { // 1是求职者注册和第一步注册 2是企业端申请 3是求职者登录 4猎头端注册 5猎头端登录 6是企业端登录
+    type: { // 6.小程序登录,9微信浏览器小灯塔登录
       type: Number,
-      default: 1
+      default: 9
     },
     loginInfo: {
       type: Object
@@ -47,7 +47,7 @@ export default class TimeBtn extends Vue {
         this.timer()
       } catch (e) {
         this.$vux.toast.text(e.message, 'bottom')
-        if (e.data && e.data.imgcode_url) this.$emit('send', e)
+        if (e.data && e.data.imgcodeUrl) this.$emit('send', e.data.imgcodeUrl)
       }
     }
   }

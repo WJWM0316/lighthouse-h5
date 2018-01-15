@@ -47,12 +47,10 @@ export const smsApi = (data) => {
   })
 }
 
-// 获取短信验
+// 获取验证码图片
 export const getCodeImg = (data) => {
   return request({
     url: '/wap/captchas',
     data
   })
 }
-
-

@@ -28,7 +28,7 @@ export const isLoginApi = (data) => { // 用户未登录不会返回401，而是
 // sms
 export const smsApi = (data) => {
   return request({
-    url: '/sms',
+    url: '/wap/sms',
     data
   })
 }
