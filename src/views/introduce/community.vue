@@ -310,6 +310,7 @@
 </script>
 <style lang="less" scoped>
   .big-shot-community {
+    box-sizing: border-box;
     height: 100%;
     &.author {
       padding-bottom: 50px;
