@@ -41,6 +41,7 @@ import Scroller from '@/components/scroller'
 import ListMixin from '@/mixins/list'
 
 import { getBeaconsApi } from '@/api/pages/home'
+import { share } from '@/api/wx/share'
 
 @Component({
   name: 'home-index',
@@ -69,16 +70,25 @@ export default class HomeIndex extends Vue {
   ready = false
 
   created () {
-    this.init()
+    this.init().then(() => {
+      // 页面分享信息
+      share(this.$wechat, this.$http, {
+        'titles': '小灯塔|职场导师知识分享社区|照亮你职场的路',
+        'title': '小灯塔|职场导师知识分享社区|照亮你职场的路',
+        'desc': '名师高徒，社群化训练和学习！职场人脉，吸收大咖进阶干货！',
+        'imgUrl': '',
+        'link': location.href.split('?')[0]
+      })
+    })
   }
 
   /**
    * 页面初始化
    */
-  init () {
+  async init () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
-    this.getList({ page: 1 })
-    this.getBanners()
+    await this.getList({ page: 1 })
+    await this.getBanners()
     this.ready = true
   }
 

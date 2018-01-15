@@ -165,15 +165,20 @@
 //      }
     }
     created () {
-      // 修改页面分享信息
-      share(this.$wechat, this.$http, {
-        'titles': `好友或qq好友的title`,
-        'title': `朋友圈或QQ`,
-        'desc': '描述',
-        'imgUrl': `https://light-wap.house.api.ziwork.com/static/img/login-logo.bdbf03e.png`,
-        'link': location.href.split('?')[0]
+      console.log(location)
+      this.pageInit().then(() => {
+        const {title, simpleIntro, master, shareImg} = this.pageInfo
+        const {realName, career} = master
+        const str = realName ? realName + (career ? '|' + career : '') : ''
+        // 页面分享信息
+        share(this.$wechat, this.$http, {
+          'titles': str + '|' + title,
+          'title': str + '|' + title,
+          'desc': simpleIntro,
+          'imgUrl': shareImg,
+          'link': location.href.split('?')[0]
+        })
       })
-      this.pageInit().then(() => {})
     }
 
     async pageInit () {
