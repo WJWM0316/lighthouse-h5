@@ -102,7 +102,7 @@ export default class LoginIndex extends Vue {
       userinfo: resp
     })
     console.log('this.$route.query.redirect', this.$route.query.redirect)
-//    window.location.href = this.$route.query.redirect
+    window.location.href = this.$route.query.redirect
   }
 }
 </script>
