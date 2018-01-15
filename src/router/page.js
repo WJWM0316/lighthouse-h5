@@ -60,7 +60,7 @@ const routers = [
   },
   {
     // 用户提问
-    path: '/introduce/ask/:communityId',
+    path: '/introduce/ask/:communityId/:problemId',
     name: 'ask',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/ask'], resolve),

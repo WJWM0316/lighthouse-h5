@@ -61,6 +61,183 @@ export default class ReplyQuestion extends Vue {
   problem = {} // 问题详情
 
   audio = null
+
+  created () {
+    const { params } = this.$route
+    this.communityId = params.communityId
+    this.id = params.problemId
+
+    this.getInfo()
+  }
+
+  /**
+   * 获取问题信息
+   */
+  async getInfo () {
+    try {
+      const params = {
+        communityId: this.communityId,
+        problemId: this.id
+      }
+
+      const { master, problem } = await getProblemInfoApi(params)
+      problem.answer.forEach(item => {
+        item.voice = {
+          progress: 0,
+          status: 'default'
+        }
+      })
+
+      this.master = master
+      this.problem = problem
+    } catch (error) {
+      this.$vux.toast.text(error.message, 'bottom')
+    }
+  }
+
+  /**
+   * 回复问题
+   */
+  async reply () {
+    try {
+      const params = {
+        communityId: this.communityId,
+        problemId: this.id,
+        type: this.replyType,
+        contact: this.content
+      }
+      console.log('提交的信息：', params)
+
+      await replyApi(params)
+      this.$vux.toast.text('回答成功', 'bottom')
+    } catch (error) {
+      this.$vux.toast.text(error.message, 'bottom')
+    }
+  }
+
+  /**
+   * 验证
+   */
+  validate () {
+    let valid = true
+
+    if (!this.content) {
+      this.$vux.toast.text('请填写回答内容', 'bottom')
+      valid = false
+    }
+
+    return valid
+  }
+
+  /**
+   * 获取问题回答
+   */
+  getAnswerById (answerId) {
+    let result = null
+    for (let [, answer] of this.problem.answer.entries()) {
+      if (answer.answerId === answerId) {
+        result = answer
+        break
+      }
+    }
+    return result
+  }
+
+  /**
+   * 点击切换回答类型
+   */
+  handleSwitchReplyType (type) {
+    if (this.replyType !== type) {
+      this.replyType = type
+      this.content = '' // 切换tab，将内容清空
+    }
+  }
+
+  /**
+   * 上传录音成功
+   */
+  handleUploadSuccess (res) {
+    console.log(res.file)
+    this.content = res.file.fileId
+    this.reply()
+  }
+
+  /**
+   * 文字回答
+   */
+  handleTextReply () {
+    if (this.validate()) {
+      this.reply()
+    }
+  }
+
+  /**
+   * 播放录音
+   */
+  handlePlayVoice (url, communityId, problemId, answerId) {
+    const answer = this.getAnswerById(answerId)
+    if (!this.audio || this.audio.src !== url) {
+      if (this.audio) {
+        this.audio.stop()
+        this.audio.destroy()
+      }
+
+      this.audio = wx.createInnerAudioContext()
+      this.audio.src = url
+
+      this.audio.onPlay(() => {
+        answer.voice.status = 'playing'
+        this.$broadcast('stop-listen') // 暂停页面录音试听
+        this.$apply()
+      })
+
+      this.audio.onTimeUpdate(() => {
+        const progress = (this.audio.currentTime / this.audio.duration) * 100
+        answer.voice.progress = parseInt(progress)
+        this.$apply()
+      })
+
+      this.audio.onPause(() => {
+        answer.voice.status = 'default'
+        this.$apply()
+      })
+
+      this.audio.onStop(() => {
+        answer.voice.progress = 0
+        answer.voice.status = 'default'
+        this.$apply()
+      })
+
+      // this.audio.onWaiting(() => {
+      //   answer.voice.status = 'loading'
+      //   this.$apply()
+      // })
+
+      this.audio.onEnded(() => {
+        answer.voice.progress = 0
+        answer.voice.status = 'default'
+        this.$apply()
+      })
+    }
+
+    this.audio.play()
+    answer.voice.status = 'loading'
+    this.$apply()
+  }
+
+  /**
+   * 暂停播放录音
+   */
+  handlePauseVoice (communityId, problemId, answerId) {
+    this.audio && this.audio.pause()
+  }
+
+  /**
+   * 试听录音
+   */
+  handleListenPlay () {
+    this.audio && this.audio.pause()
+  }
 }
 </script>
 
