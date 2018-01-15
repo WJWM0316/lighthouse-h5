@@ -553,7 +553,14 @@
           right: 3px;
           top: 3px;
           font-size: 10px;
+          background-color: #ff4949;
           transform: translate(100%, -50%);
+          border-radius: 50%;
+          line-height: 1;
+          display: inline-block;
+          font-style: normal;
+          color: #FFF;
+          padding: 2px 3px;
         }
       }
       & button:last-of-type {
