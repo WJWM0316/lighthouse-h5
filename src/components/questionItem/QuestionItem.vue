@@ -8,10 +8,10 @@
       </template>
       <template v-else>
         <a href="#" class="head" @click.prevent.stop="handleUserDetail">
-          <image-item class="image" :src="model.user.avatar || require('@/assets/icon/img_head_default.png')" />
+          <image-item class="image" :src="(model.user && model.user.avatar) || require('@/assets/icon/img_head_default.png')" />
         </a>
         <div class="middle">
-          <p class="username">{{model.user.realName}}</p>
+          <p class="username">{{model.user && model.user.realName}}</p>
           <p class="time">{{model.releaseTime * 1000 | date('YYYY-MM-DD HH:mm')}}</p>
         </div>
       </template>
@@ -23,7 +23,7 @@
         <p class="text"><span class="private" v-if="model.private === 1">私密</span> 问：{{model.content}}</p>
       </div>
       <template v-if="showDetails">
-        <template v-for="(item, index) in model.answer">
+        <template v-for="(item, index) in model.answer" v-if="model.answer && model.answer.length > 0">
           <template v-if="item.answerType === 1">
             <div class="item" :key="`answer_${index}`">
               <p class="text">追问：{{item.content}}</p>
@@ -32,7 +32,7 @@
           <template v-else>
             <div class="item master-item" :key="`answer_${index}`" v-if="item.type === 1">
               <a href="#" class="head" @click.prevent.stop="handleUserDetail">
-                <image-item :src="model.user.avatar || require('@/assets/icon/img_head_default.png')" />
+                <image-item class="image" :src="(model.user && model.user.avatar) || require('@/assets/icon/img_head_default.png')" />
               </a>
               <div class="text-container">
                 <p class="text">{{item.content}}</p>
@@ -40,10 +40,10 @@
             </div>
             <div class="item master-item" :key="`answer_${index}`" v-else>
               <a href="#" class="head" @click.prevent.stop="handleUserDetail">
-                <image-item :src="model.user.avatar || require('@/assets/icon/img_head_default.png')" />
+                <image-item class="image" :src="(model.user && model.user.avatar) || require('@/assets/icon/img_head_default.png')" />
               </a>
               <div class="voice">
-                <div class="voice-container z-read" @click="handleTapVoice(item)">
+                <a class="voice-container z-read" @click.prevent.stop="handleTapVoice(item)">
                   <div class="progress">
                     <div class="bar" :style="{ width: `${item.voice.progress || 0}%` }"></div>
                   </div>
@@ -51,7 +51,7 @@
                     <image-item class="status" :class="{ 'z-loading': item.voice.status === 'loading' }" :src="audioStatusIcons[item.voice.status]" />
                     <p class="dutraion">{{item.duration || 0}}s</p>
                   </div>
-                </div>
+                </a>
               </div>
             </div>
           </template>
@@ -103,9 +103,9 @@ import Component from 'vue-class-component'
 export default class QuestionItem extends Vue {
   // 语音状态icon
   audioStatusIcons = {
-    default: '../../static/icon/music_play.png',
-    loading: '../../static/icon/music_loading.png',
-    playing: '../../static/icon/music_listen.gif'
+    default: require('@/assets/icon/music_play.png'),
+    loading: require('@/assets/icon/music_loading.png'),
+    playing: require('@/assets/icon/music_listen.gif')
   }
 
   // 问题状态列表
@@ -137,7 +137,7 @@ export default class QuestionItem extends Vue {
   handleTapVoice (answerItem) {
     if (answerItem.voice.status === 'default') {
       // 通知父级组件播放音频
-      this.$emit('play-voice', answerItem.content, this.communityId, this.model.problemId, answerItem)
+      this.$emit('play-voice', answerItem.content, this.communityId, this.model.problemId, answerItem.answerId)
     } else if (answerItem.voice.status === 'loading' || answerItem.voice.status === 'playing') {
       this.$emit('pause-voice', this.communityId, this.model.problemId, answerItem.answerId)
     }
@@ -233,7 +233,7 @@ export default class QuestionItem extends Vue {
   }
 
   .bd {
-    padding: 18px 0 17px;
+    padding: 18px 15px 17px 0;
 
     .item {
       line-height: 22px;
@@ -266,7 +266,7 @@ export default class QuestionItem extends Vue {
         line-height: 1;
         font-size: 0;
 
-        & > image {
+        & > .image {
           width: 40px;
           height: 40px;
           border-radius: 50%;
@@ -274,6 +274,7 @@ export default class QuestionItem extends Vue {
       }
 
       .voice-container {
+        display: block;
         position: relative;
         box-sizing: border-box;
         max-width: 240px;

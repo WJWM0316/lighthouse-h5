@@ -15,7 +15,7 @@
       </div>
       <div class="contents">
         <div class="record-reply" v-if="replyType === 2">
-          <recorder @upload-success="handleUploadSuccess" @listen-play="handleListenPlay" />
+          <recorder ref="recorder" @uploading="handleUploading" @upload-success="handleUploadSuccess" @listen-play="handleListenPlay" />
         </div>
         <div class="text-reply" v-else>
           <div class="form-group">
@@ -35,8 +35,8 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import QuestionItem from '@/components/QuestionItem'
-import Recorder from '@/components/Recorder'
+import QuestionItem from '@/components/questionItem'
+import Recorder from '@/components/recorder'
 
 import { getProblemInfoApi, replyApi } from '@/api/pages/qa'
 
@@ -59,8 +59,15 @@ export default class ReplyQuestion extends Vue {
   content = '' // 文字内容或者录音文件id
   master = {} // 大咖信息
   problem = {} // 问题详情
+  serverIds = []
 
   audio = null
+  audioEventCallbacks = {
+    onPlay: null,
+    onTimeUpdate: null,
+    onPause: null,
+    onStopOrEnded: null
+  }
 
   created () {
     const { params } = this.$route
@@ -106,10 +113,10 @@ export default class ReplyQuestion extends Vue {
         type: this.replyType,
         contact: this.content
       }
-      console.log('提交的信息：', params)
 
       await replyApi(params)
       this.$vux.toast.text('回答成功', 'bottom')
+      this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
     }
@@ -154,11 +161,21 @@ export default class ReplyQuestion extends Vue {
   }
 
   /**
+   * 上传录音中
+   */
+  handleUploading () {
+    this.$vux.loading.show({
+      text: '上传中...'
+    })
+  }
+
+  /**
    * 上传录音成功
    */
-  handleUploadSuccess (res) {
-    console.log(res.file)
-    this.content = res.file.fileId
+  handleUploadSuccess (files) {
+    const fileIds = files.map(item => item.fileId)
+    this.serverIds = files.map(item => item.mediaId)
+    this.content = fileIds[0]
     this.reply()
   }
 
@@ -178,51 +195,54 @@ export default class ReplyQuestion extends Vue {
     const answer = this.getAnswerById(answerId)
     if (!this.audio || this.audio.src !== url) {
       if (this.audio) {
-        this.audio.stop()
-        this.audio.destroy()
+        this.audio.pause()
+        this.audioEventCallbacks.onStopOrEnded() // 此处无法自动触发上一次的时间监听，手动触发播放结束回调重置播放音频的状态
+      } else {
+        this.audio = new Audio()
       }
 
-      this.audio = wx.createInnerAudioContext()
       this.audio.src = url
 
-      this.audio.onPlay(() => {
-        answer.voice.status = 'playing'
-        this.$broadcast('stop-listen') // 暂停页面录音试听
-        this.$apply()
-      })
+      // 销毁上一次的监听事件
+      if (this.audioEventCallbacks.onPlaying) {
+        this.audio.removeEventListener('playing', this.audioEventCallbacks.onPlaying)
+      }
+      if (this.audioEventCallbacks.onTimeUpdate) {
+        this.audio.removeEventListener('timeupdate', this.audioEventCallbacks.onTimeUpdate)
+      }
+      if (this.audioEventCallbacks.onPause) {
+        this.audio.removeEventListener('pause', this.audioEventCallbacks.onPause)
+      }
+      if (this.audioEventCallbacks.onStopOrEnded) {
+        this.audio.removeEventListener('ended', this.audioEventCallbacks.onStopOrEnded)
+      }
 
-      this.audio.onTimeUpdate(() => {
+      this.audioEventCallbacks.onPlaying = e => {
+        answer.voice.status = 'playing'
+        this.$refs.recorder && this.$refs.recorder.stopPlayVoice() // 通知录音组件尝试停止播放录音试听
+      }
+      this.audioEventCallbacks.onTimeUpdate = e => {
         const progress = (this.audio.currentTime / this.audio.duration) * 100
         answer.voice.progress = parseInt(progress)
-        this.$apply()
-      })
-
-      this.audio.onPause(() => {
+      }
+      this.audioEventCallbacks.onPause = e => {
         answer.voice.status = 'default'
-        this.$apply()
-      })
-
-      this.audio.onStop(() => {
+      }
+      this.audioEventCallbacks.onStopOrEnded = e => {
+        this.audio.currentTime = 0
         answer.voice.progress = 0
         answer.voice.status = 'default'
-        this.$apply()
-      })
+      }
 
-      // this.audio.onWaiting(() => {
-      //   answer.voice.status = 'loading'
-      //   this.$apply()
-      // })
-
-      this.audio.onEnded(() => {
-        answer.voice.progress = 0
-        answer.voice.status = 'default'
-        this.$apply()
-      })
+      this.audio.addEventListener('playing', this.audioEventCallbacks.onPlaying)
+      this.audio.addEventListener('timeupdate', this.audioEventCallbacks.onTimeUpdate)
+      this.audio.addEventListener('pause', this.audioEventCallbacks.onPause)
+      this.audio.addEventListener('stop', this.audioEventCallbacks.onStopOrEnded)
+      this.audio.addEventListener('ended', this.audioEventCallbacks.onStopOrEnded)
     }
 
     this.audio.play()
     answer.voice.status = 'loading'
-    this.$apply()
   }
 
   /**
@@ -289,10 +309,11 @@ export default class ReplyQuestion extends Vue {
           border-radius: 6px;
           line-height: 19px;
           font-size: 15px;
-        }
+          resize: none;
 
-        .control-placeholder {
-          color: #bcbcbc;
+          &::placeholder {
+            color: #bcbcbc;
+          }
         }
 
         .addon {

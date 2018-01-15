@@ -22,14 +22,14 @@
 
       <div class="is-private">
         <div class="u-checkbox">
-          <input id="private" type="checkbox" :checked="isCheck" />
+          <input id="private" type="checkbox" v-model="isPrivate" :true-value="1" :false-value="2" />
           <label for="private">
-            <i class="icon u-icon"></i> 设为私密提问
+            <i class="icon u-icon"></i> 设为私密提问 {{isPrivate}}
           </label>
         </div>
       </div>
 
-      <button type="button" class="ask-btn" :disabled="strLength <= 0" @click="btnClick(1)">{{isHasFree > 0 ? '提问' : '付费提问'}}</button>
+      <button type="button" class="ask-btn" :disabled="strLength <= 0" @click="handleAsk">{{isHasFree > 0 ? '提问' : '付费提问'}}</button>
 
       <div class="user-desc">
         <p v-if="isHasFree > 0">你还有 {{isHasFree}} 次机会向导师免费提问，你的提问将100%得到答复</p>
@@ -51,13 +51,13 @@
             @play-voice="handlePlayVoice"
             @pause-voice="handlePauseVoice">
             <div class="btn-container" slot="footer" v-if="item.status === 2">
-              <a class="u-btn-add-ask" @click.prevent.stop="wakeUpPump(item)">追问</a>
+              <a class="u-btn-add-ask" @click.prevent.stop="handleWakeUpPump(index)">追问</a>
             </div>
         </question-item>
       </div>
     </div>
 
-    <div class="ask-box" :class="{ show: isShowPumpBtn }">
+    <!-- <div class="ask-box" :class="{ show: isShowPumpBtn }">
       <div class="user-input">
         <input type="text" placeholder="每个问题只能追问一次"
               @blur="sleep"
@@ -66,7 +66,15 @@
               maxlength="1000" />
       </div>
       <button type="button" class="ask-btn" @click="btnClick(2)">追问</button>
-    </div>
+    </div> -->
+
+    <!-- 悬浮输入框 -->
+    <suspension-input v-model="displaySuspensionInput"
+      :placeholder="suspensionInputPlaceholder"
+      :content="pumpContent"
+      :commentIndex="commentIndex"
+      :sendText="'追问'"
+      @send="handleAppendAsk" />
   </div>
 </template>
 
@@ -74,7 +82,8 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import QuestionItem from '@/components/QuestionItem'
+import QuestionItem from '@/components/questionItem'
+import suspensionInput from '@/components/suspensionInput/suspensionInput'
 
 import ListMixin from '@/mixins/list'
 
@@ -85,154 +94,70 @@ import { payApi } from '@/api/pages/pay'
   name: 'ask',
   mixins: [ListMixin],
   components: {
-    QuestionItem
+    QuestionItem,
+    suspensionInput
   }
 })
 export default class Ask extends Vue {
-  routeInfo = ''
-  pageInfo = {}
   communityId = ''
+  pageInfo = {}
   askContent = ''
   pumpContent = ''
   isPrivate = 2
-  isCheck = true
-  isShowPumpBtn = false
-  isPumpFocus = false
-  operatingObject = ''
-  audio = null
 
+  audio = null
+  audioEventCallbacks = {
+    onPlay: null,
+    onTimeUpdate: null,
+    onPause: null,
+    onStopOrEnded: null
+  }
+
+  commentIndex = -1
+  suspensionInputPlaceholder = '每个问题只能追问一次'
+  displaySuspensionInput = false
+
+  // 大咖用户信息
   get userInfo () {
     return this.pageInfo.master || {}
   }
 
-  get roblemList () {
+  // 问题列表
+  get problemList () {
     return this.pageInfo.problem || []
   }
 
+  // 提问内容长度
   get strLength () {
     return this.askContent.length
   }
 
+  // 是否还有免费次数
   get isHasFree () {
     return this.pageInfo['problemNum']
   }
 
-  btnClick (type, e) {
-    console.log(type, e)
-    const self = this
-    const contact = type === '1' ? this.askContent.trim() : this.pumpContent.trim()
+  created () {
+    this.communityId = this.$route.params.communityId
+    this.pageInit()
+  }
 
-    console.log('提问内容： ' + contact)
-    if (!contact) {
-      this.$broadcast('show-message', {content: '内容不能为空'})
-      return
-    }
+  /**
+   * 页面初始化
+   */
+  async pageInit () {
+    try {
+      this.isCheck = false
+      this.askContent = ''
+      this.isPrivate = 2
 
-    const isPay = this.isHasFree > 0 ? 2 : 1
-    const communityId = this.routeInfo.communityId
-    const params = {
-      communityId,
-      contact,
-      private: this.isPrivate,
-      payType: isPay,
-      formId: e.detail.formId
-    }
-
-    console.log(params)
-    this.$vux.confirm.show({
-      title: '提示',
-      content: '提问后就不能再次修改问题，请确认',
-      confirmText: '确定提问',
-      cancelText: '修改一下',
-      onConfirm: () => {
-        if (type === '1') {
-          // 拥有免费次数
-          if (isPay === 2) {
-            self.sendAsk(params)
-          } else {
-            // :todo 付费提问
-            self.sendAsk({...params, payType: 1})
-          }
-        } else {
-          console.log('追问', communityId)
-          self.submitAnswer({
-            communityId,
-            problemId: self.operatingObject.problemId,
-            contact,
-            formId: e.detail.formId
-          })
-        }
+      const params = {
+        communityId: this.communityId
       }
-    })
-  }
 
-  // 唤起悬浮输入框
-  wakeUpPump (item) {
-    if (item.problemId !== this.operatingObject.problemId) {
-      this.operatingObject = ''
-      this.pumpContent = ''
-    }
-    this.operatingObject = item
-    this.isShowPumpBtn = true
-    this.isPumpFocus = true
-  }
-
-  sleep () {
-    console.log(this.pumpContent)
-    this.isPumpFocus = false
-    this.isShowPumpBtn = false
-  }
-
-  // Api
-  sendAsk (params) { // 提问
-    const self = this
-    submitProblemApi(params).then(res => {
-      console.log('res', res)
-      if (params.payType === 1) {
-        res.success = function () {
-          // 刷新当前页
-          self.$broadcast('show-message', {content: '提问成功'})
-          self.pageInit()
-        }
-        wx.requestPayment(res)
-      } else {
-        self.$broadcast('show-message', {content: '提问成功'})
-        self.pageInit()
-      }
-    }).catch(e => {
-      self.$broadcast('show-message', {content: e.message})
-    })
-  }
-
-  submitAnswer (params) { // 追问
-    const self = this
-    console.log('afefewf', params)
-    submitAnswerApi(params).then(res => {
-      self.pageInit()
-      self.$broadcast('show-message', {content: '提问成功'})
-    }).catch(e => {
-      self.$broadcast('show-message', {content: e.message})
-    })
-  }
-
-  // 页面初始化
-  pageInit () {
-    const { communityId } = this.$route.params
-    const self = this
-
-    this.isCheck = false
-    this.askContent = ''
-    this.pumpContent = ''
-    this.isPrivate = 2
-
-    getAskInfoApi({
-      communityId
-    }).then(res => {
-      console.log(res)
-      self.pageInfo = res
-      self.communityId = self.pageInfo.communityId
-      self.pageInfo.problem.forEach(item => {
-        item.releaseTime = self.format(item.releaseTime * 1000, 'YYYY-MM-DD HH:mm')
+      const res = await getAskInfoApi(params)
+      this.pageInfo = res
+      this.pageInfo.problem.forEach(item => {
         item.answer.forEach(answer => {
           answer.voice = {
             status: 'default',
@@ -240,18 +165,49 @@ export default class Ask extends Vue {
           }
         })
       })
-      this.$apply()
-    }).catch(e => {
-    })
+    } catch (error) {
+      this.$vux.toast.text(error.message, 'bottom')
+    }
+  }
+
+  /**
+   * 提问
+   */
+  async sendAsk (params) {
+    try {
+      const res = await submitProblemApi(params)
+      if (params.payType === 1) {
+        // todo 调起微信支付
+      } else {
+        this.$vux.toast.text('提问成功', 'bottom')
+        this.pageInit()
+      }
+    } catch (error) {
+      this.$vux.toast.text(error.message, 'bottom')
+    }
+  }
+
+  /**
+   * 追问
+   */
+  async submitAnswer (params) {
+    try {
+      await submitAnswerApi(params)
+      this.$vux.toast.text('追问成功', 'bottom')
+      this.pageInit()
+    } catch (error) {
+      this.$vux.toast.text(error.message, 'bottom')
+    }
   }
 
   /**
    * 获取问题回答
    */
   getAnswerById (problemId, answerId) {
+    console.log(problemId, answerId, this.problemList)
     let result = null
     let find = false
-    for (let [, problem] of this.pageInfo.problem.entries()) {
+    for (let [, problem] of this.problemList.entries()) {
       if (problemId !== problem.problemId) {
         continue
       }
@@ -271,8 +227,145 @@ export default class Ask extends Vue {
     return result
   }
 
-  created () {
-    this.pageInit()
+  /**
+   * 点击提问|付费提问
+   */
+  handleAsk () {
+    const self = this
+    const contact = this.askContent.trim()
+    if (!contact) {
+      this.$vux.toast.text('内容不能为空', 'bottom')
+      return
+    }
+
+    const isPay = this.isHasFree > 0 ? 2 : 1
+    const communityId = this.communityId
+    const params = {
+      communityId,
+      contact,
+      private: this.isPrivate,
+      payType: isPay
+    }
+
+    this.$vux.confirm.show({
+      title: '提示',
+      content: '提问后就不能再次修改问题，请确认',
+      confirmText: '确定提问',
+      cancelText: '修改一下',
+      onConfirm: () => {
+        if (isPay === 2) {
+          // 免费提问
+          self.sendAsk(params)
+        } else {
+          // :todo 付费提问
+          self.sendAsk({...params, payType: 1})
+        }
+      }
+    })
+  }
+
+  /**
+   * 点击问题列表追问按钮，唤起悬浮输入框
+   * @param {Number} index 问题索引
+   */
+  handleWakeUpPump (index) {
+    this.commentIndex = index
+    this.displaySuspensionInput = true
+  }
+
+  /**
+   * 点击悬浮窗追问
+   */
+  handleAppendAsk ({ value, commentIndex }) {
+    const problem = this.problemList[commentIndex]
+
+    this.$vux.confirm.show({
+      title: '提示',
+      content: '提问后就不能再次修改问题，请确认',
+      confirmText: '确定提问',
+      cancelText: '修改一下',
+      onConfirm: () => {
+        this.submitAnswer({
+          communityId: this.communityId,
+          problemId: problem.problemId,
+          contact: value
+        })
+      },
+      onCancel: () => {
+        this.pumpContent = value
+        this.displaySuspensionInput = true
+      }
+    })
+  }
+
+  /**
+   * 跳转提问详情
+   */
+  handleCardTap (communityId, item) {
+    this.$router.push(`/details/circle/${item.problemId}/3`)
+  }
+
+  /**
+   * 播放录音
+   */
+  handlePlayVoice (url, communityId, problemId, answerId) {
+    const answer = this.getAnswerById(problemId, answerId)
+    if (!this.audio || this.audio.src !== url) {
+      if (this.audio) {
+        this.audio.pause()
+        this.audioEventCallbacks.onStopOrEnded() // 此处无法自动触发上一次的时间监听，手动触发播放结束回调重置播放音频的状态
+      } else {
+        this.audio = new Audio()
+      }
+
+      this.audio.src = url
+
+      // 销毁上一次的监听事件
+      if (this.audioEventCallbacks.onPlaying) {
+        this.audio.removeEventListener('playing', this.audioEventCallbacks.onPlaying)
+      }
+      if (this.audioEventCallbacks.onTimeUpdate) {
+        this.audio.removeEventListener('timeupdate', this.audioEventCallbacks.onTimeUpdate)
+      }
+      if (this.audioEventCallbacks.onPause) {
+        this.audio.removeEventListener('pause', this.audioEventCallbacks.onPause)
+      }
+      if (this.audioEventCallbacks.onStopOrEnded) {
+        this.audio.removeEventListener('ended', this.audioEventCallbacks.onStopOrEnded)
+      }
+
+      this.audioEventCallbacks.onPlaying = e => {
+        answer.voice.status = 'playing'
+      }
+      this.audioEventCallbacks.onTimeUpdate = e => {
+        const progress = (this.audio.currentTime / this.audio.duration) * 100
+        answer.voice.progress = parseInt(progress)
+      }
+      this.audioEventCallbacks.onPause = e => {
+        answer.voice.status = 'default'
+      }
+      this.audioEventCallbacks.onStopOrEnded = e => {
+        this.audio.currentTime = 0
+        answer.voice.progress = 0
+        answer.voice.status = 'default'
+      }
+
+      this.audio.addEventListener('playing', this.audioEventCallbacks.onPlaying)
+      this.audio.addEventListener('timeupdate', this.audioEventCallbacks.onTimeUpdate)
+      this.audio.addEventListener('pause', this.audioEventCallbacks.onPause)
+      this.audio.addEventListener('stop', this.audioEventCallbacks.onStopOrEnded)
+      this.audio.addEventListener('ended', this.audioEventCallbacks.onStopOrEnded)
+    }
+
+    this.audio.play()
+    answer.voice.status = 'loading'
+  }
+
+  /**
+   * 暂停播放录音
+   */
+  handlePauseVoice (communityId, problemId, answerId) {
+    this.audio.pause()
   }
 }
 </script>
