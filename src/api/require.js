@@ -64,12 +64,12 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         location.href = `${settings.devUrl}/wap/wechat/callback?zike_from=${location.href}`
         return data.data === undefined ? {} : data.data
       }
-      if (data && data.statusCode === 256) { // 没有登录权限,跳去手机号登录
+      if (data && data.statusCode === 426) { // 没有登录权限,跳去手机号登录
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
         router.replace({
           name: 'login',
-          query: {redirect: router.currentRoute.path}
+          query: {redirect: location.href}
         })
       }
       if (data && data.statusCode === 430) {
