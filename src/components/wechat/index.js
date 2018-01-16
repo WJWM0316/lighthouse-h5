@@ -1,5 +1,4 @@
-const wx = require('./jweixin-1.0.0')
-
+/* eslint-disable no-undef */
 const plugin = {
   install (Vue) {
     Vue.prototype.$wechat = wx
@@ -9,4 +8,4 @@ const plugin = {
 }
 
 export default plugin
-export const install = plugin.install
+// export const install = plugin.install
