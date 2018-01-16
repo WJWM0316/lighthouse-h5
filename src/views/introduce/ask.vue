@@ -45,15 +45,15 @@
       <div class="question-list">
         <question-item class="question"
                        v-for="(item, index) in pageInfo.problem"
-                       :key="item.problemId + index"
+                       :key="index"
                        :model="item"
+                       :answers="item.answer"
                        :type="2"
                        :communityId="communityId"
                        @card-tap="handleCardTap"
                        @play-voice="handlePlayVoice"
                        @pause-voice="handlePauseVoice">
           <div class="btn-container" slot="footer" v-if="item.status === 2">
-            {{item}}
             <a class="u-btn-add-ask" @click.prevent.stop="handleWakeUpPump(index)">追问</a>
           </div>
         </question-item>
@@ -158,8 +158,7 @@
           communityId: this.communityId
         }
 
-        const res = await getAskInfoApi(params)
-        this.pageInfo = res
+        this.pageInfo = await getAskInfoApi(params)
         this.pageInfo.problem.forEach(item => {
           item.answer.forEach(answer => {
             answer.voice = {
@@ -242,29 +241,33 @@
       }
     }
 
-    /**
-     * 获取问题回答
-     */
-    getAnswerById (problemId, answerId) {
+    getProblemById (problemId) {
       let result = null
-      let find = false
 
       for (let problemIndex in this.pageInfo.problem) {
         const problem = this.pageInfo.problem[problemIndex]
-        if (problemId !== problem.problemId) {
-          continue
+        if (problemId === problem.problemId) {
+          result = problem
+          break
         }
+      }
 
-        for (let answerIndex in problem.answer) {
-          const answer = this.pageInfo.problem[problemIndex].answer[answerIndex]
-          if (answer.answerId === answerId) {
-            result = answer
-            find = true
-            break
+      return result
+    }
+
+    /**
+     * 获取问题回答
+     */
+    getAnswerById (problem, answerId) {
+      let result = null
+
+      for (let answerIndex in problem.answer) {
+        const answer = problem.answer[answerIndex]
+        if (answer.answerId === answerId) {
+          result = {
+            index: answerIndex,
+            answer
           }
-        }
-
-        if (find) {
           break
         }
       }
@@ -322,7 +325,7 @@
      * 点击悬浮窗追问
      */
     handleAppendAsk ({value, commentIndex}) {
-      const problem = this.problemList[commentIndex]
+      const problem = this.pageInfo.problem[commentIndex]
 
       this.$vux.confirm.show({
         title: '提示',
@@ -354,8 +357,8 @@
      * 播放录音
      */
     handlePlayVoice (url, communityId, problemId, answerId) {
-      const answer = this.getAnswerById(problemId, answerId)
-      console.log('点击播放，获取到的问题回答项：', answer)
+      const problem = this.getProblemById(problemId, answerId)
+      const { index: answerIndex, answer } = this.getAnswerById(problem, answerId)
       if (!this.audio || this.audio.src !== url) {
         if (this.audio) {
           this.audio.pause()
@@ -383,19 +386,23 @@
         this.audioEventCallbacks.onPlaying = e => {
           console.log('播放中')
           answer.voice.status = 'playing'
+          this.$set(problem.answer, answerIndex, answer) // 强制更新一下problem对象
         }
         this.audioEventCallbacks.onTimeUpdate = e => {
-          console.log('播放中 ', this.audio.currentTime, this.audio.duration)
           const progress = (this.audio.currentTime / this.audio.duration) * 100
+          // this.pageInfo.problem[0].content += parseInt(progress)
           answer.voice.progress = parseInt(progress)
+          this.$set(problem.answer, answerIndex, answer)
         }
         this.audioEventCallbacks.onPause = e => {
           answer.voice.status = 'default'
+          this.$set(problem.answer, answerIndex, answer)
         }
         this.audioEventCallbacks.onStopOrEnded = e => {
           this.audio.currentTime = 0
           answer.voice.progress = 0
           answer.voice.status = 'default'
+          this.$set(problem.answer, answerIndex, answer)
         }
 
         this.audio.addEventListener('playing', this.audioEventCallbacks.onPlaying)
@@ -407,6 +414,7 @@
 
       this.audio.play()
       answer.voice.status = 'loading'
+      this.$set(problem.answer, answerIndex, answer)
     }
 
     /**
