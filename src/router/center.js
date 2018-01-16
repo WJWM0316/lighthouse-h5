@@ -17,7 +17,7 @@ const routers = [
     path: '/center/help',
     name: 'center-help',
     component: resolve => require(['@/views/center/help'], resolve),
-    meta: {navHide: true, customShare: true}
+    meta: {navHide: true}
   },
   {
     path: '/center/protocol',

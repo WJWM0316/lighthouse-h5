@@ -38,17 +38,6 @@ router.beforeEach(async (to, from, next) => {
   } else {
     store.dispatch('show_nav')
   }
-  // 是否使用自定义分享
-  if (!to.matched.some(record => record.meta.customShare)) {
-    // 页面分享信息
-    share(this.$wechat, this.$http, {
-      'titles': '小灯塔|职场导师知识分享社区|照亮你职场的路',
-      'title': '小灯塔|职场导师知识分享社区|照亮你职场的路',
-      'desc': '名师高徒，社群化训练和学习！职场人脉，吸收大咖进阶干货！',
-      'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner.png',
-      'link': location.origin
-    })
-  }
   next() // 确保一定要调用 next()
 })
 //

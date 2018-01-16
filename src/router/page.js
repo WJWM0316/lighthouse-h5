@@ -6,21 +6,21 @@ const routers = [
     // 大咖介绍页
     path: '/introduce/:communityId',
     name: 'introduce',
-    meta: {navHide: true, customShare: true},
+    meta: {navHide: true},
     component: resolve => require(['@/views/introduce/index'], resolve),
   },
   {
     // 大咖详情页 (入社后查看介绍页)
     path: '/introduce/:communityId/detail',
     name: 'introduce-detail',
-    meta: {navHide: true, customShare: true},
+    meta: {navHide: true},
     component: resolve => require(['@/views/introduce/index'], resolve),
   },
   {
     // 大咖精选页
     path: '/introduce/:communityId/community',
     name: 'community',
-    meta: {navHide: true, customShare: true},
+    meta: {navHide: true},
     component: resolve => require(['@/views/introduce/community'], resolve),
   },
   {
