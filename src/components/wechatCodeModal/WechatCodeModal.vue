@@ -42,6 +42,12 @@ import Component from 'vue-class-component'
       type: String,
       default: '抱歉，由于微信的功能限制，请您长按识别小程序码，到小程序中录制或发布视频。'
     }
+  },
+
+  watch: {
+    show (val) {
+      this.$emit('input', val)
+    }
   }
 })
 export default class WechatCodeModal extends Vue {
@@ -49,6 +55,7 @@ export default class WechatCodeModal extends Vue {
    * 点击取消
    */
   handleCancel () {
+    this.show = false
     this.$emit('cancel')
   }
 }
@@ -58,14 +65,29 @@ export default class WechatCodeModal extends Vue {
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
+@keyframes slide-in-bottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .m-wechat-code-modal {
   .setModal();
 
   .dialog {
+    align-self: flex-end;
     background: #fff;
     border-radius: 12px 12px 0 0;
     font-size: 16px;
     color: #666;
+
+    animation: slide-in-bottom 300ms ease;
   }
 
   .bd {
