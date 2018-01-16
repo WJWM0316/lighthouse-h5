@@ -228,7 +228,7 @@
           item.videoPlay = false
         }
       })
-      this.dynamicList = temp
+      this.dynamicList = temp || []
       this.pageInfo = res
     }
 
