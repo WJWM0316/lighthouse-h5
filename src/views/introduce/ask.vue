@@ -53,6 +53,7 @@
                        @play-voice="handlePlayVoice"
                        @pause-voice="handlePauseVoice">
           <div class="btn-container" slot="footer" v-if="item.status === 2">
+            {{item}}
             <a class="u-btn-add-ask" @click.prevent.stop="handleWakeUpPump(index)">追问</a>
           </div>
         </question-item>
@@ -346,7 +347,7 @@
      * 跳转提问详情
      */
     handleCardTap (communityId, item) {
-      this.$router.push(`/details/circle/${item.problemId}/3`)
+      this.$router.push(`/details/${item.problemId}/3`)
     }
 
     /**
