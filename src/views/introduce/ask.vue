@@ -46,7 +46,7 @@
         <question-item class="question"
                        v-for="(item, index) in pageInfo.problem"
                        :key="index"
-                       :model="item"
+                       :model.sync="item"
                        :type="2"
                        :communityId="communityId"
                        @card-tap="handleCardTap"
