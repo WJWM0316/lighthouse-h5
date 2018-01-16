@@ -41,7 +41,7 @@
     </div>
 
     <div class="footer" v-if="completelyShow">
-      <div class="to-home">
+      <div class="to-home" @click="toHome">
         <img src="./../../assets/icon/icon_home.png" class="icon-home" />
         <span>首页</span>
       </div>
@@ -134,6 +134,9 @@
         },
       })
     }
+    toHome () {
+      this.$router.replace(`/index`)
+    }
     async payIn () {
       try {
         const params = await payApi({
@@ -225,7 +228,7 @@
           item.videoPlay = false
         }
       })
-      this.dynamicList = temp
+      this.dynamicList = temp || []
       this.pageInfo = res
     }
 
