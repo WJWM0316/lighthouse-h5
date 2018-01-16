@@ -45,8 +45,8 @@
       <div class="question-list">
         <question-item class="question"
                        v-for="(item, index) in pageInfo.problem"
-                       :key="index"
-                       :model.sync="item"
+                       :key="item.problemId + index"
+                       :model="item"
                        :type="2"
                        :communityId="communityId"
                        @card-tap="handleCardTap"
@@ -256,7 +256,7 @@
         }
 
         for (let answerIndex in problem.answer) {
-          const answer = problem.answer[answerIndex]
+          const answer = this.pageInfo.problem[problemIndex].answer[answerIndex]
           if (answer.answerId === answerId) {
             result = answer
             find = true
