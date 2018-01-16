@@ -5,7 +5,7 @@ export default {
   data () {
     return {
       wechatConfig: {
-        debug: false,
+        debug: true,
         jsApiList: [
           'onMenuShareTimeline',
           'onMenuShareAppMessage',
@@ -241,6 +241,51 @@ export default {
           })
         }
       }
+    },
+
+    /**
+     * 微信分享
+     */
+    async wechatShare(enter) {
+      const wx = this.$wechat
+      // 声明你想调用的接口
+      // 发起 http 请求，获取公众号配置
+      wx.ready(() => {
+        // 分享到朋友圈
+        wx.onMenuShareTimeline({
+          title: enter.title, // 分享标题
+          link: enter.link,
+          imgUrl: enter.imgUrl
+        })
+        // 分享到QQ空间
+        wx.onMenuShareQZone({
+          title: enter.title, // 分享标题
+          desc: enter.desc,
+          link: enter.link,
+          imgUrl: enter.imgUrl
+        })
+        // 分享到好友
+        wx.onMenuShareAppMessage({
+          title: enter.titles ? enter.titles : enter.title, // 分享标题
+          desc: enter.desc,
+          link: enter.link,
+          imgUrl: enter.imgUrl
+        })
+        // 分享到QQ
+        wx.onMenuShareQQ({
+          title: enter.titles ? enter.titles : enter.title, // 分享标题
+          desc: enter.desc,
+          link: enter.link,
+          imgUrl: enter.imgUrl
+        })
+        // 分享到腾讯微博
+        wx.onMenuShareWeibo({
+          title: enter.title, // 分享标题
+          desc: enter.desc,
+          link: enter.link,
+          imgUrl: enter.imgUrl
+        })
+      })
     }
   },
 

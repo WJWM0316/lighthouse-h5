@@ -8,7 +8,6 @@ import login from './login'
 import page from './page'
 import exchange from './exchange'
 import store from './../store'
-import { share } from '@/api/wx/share'
 
 Vue.use(Router)
 

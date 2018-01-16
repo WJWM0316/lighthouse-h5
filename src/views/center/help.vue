@@ -62,14 +62,15 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { share } from '@/api/wx/share'
+import WechatMixin from '@/mixins/wechat'
 
 @Component({
-  name: 'center-help'
+  name: 'center-help',
+  mixins: [WechatMixin]
 })
 export default class CenterHelp extends Vue {
   created () {
-    share(this.$wechat, this.$http, {
+    this.wechatShare({
       'titles': '小灯塔使用帮助',
       'title': '小灯塔使用帮助',
       'desc': '百万职场人的职场导师知识分享社区，等你加入~',
@@ -80,7 +81,7 @@ export default class CenterHelp extends Vue {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" scoped type="text/less">
 @import "../../styles/variables";
 @import "../../styles/mixins";
 

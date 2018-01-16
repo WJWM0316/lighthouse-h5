@@ -83,8 +83,8 @@
   import CommunityCard from '@/components/communityCard'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi } from '@/api/pages/pageInfo.js'
-  import { share } from '@/api/wx/share'
+  import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi } from '@/api/pages/pageInfo'
+  import WechatMixin from '@/mixins/wechat'
 
   @Component({
     name: 'big-shot-community',
@@ -99,7 +99,7 @@
         return this.pageInfo.isAuthor
       }
     },
-    mixins: [ListMixin]
+    mixins: [ListMixin, WechatMixin]
   })
   export default class community extends Vue {
     pageInfo = {}
@@ -131,7 +131,7 @@
         const {realName, career} = master
         const str = realName ? realName + (career ? '|' + career : '') : ''
         // 页面分享信息
-        share(this.$wechat, this.$http, {
+        this.wechatShare({
           'titles': str + '|' + title,
           'title': str + '|' + title,
           'desc': simpleIntro,
