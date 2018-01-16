@@ -34,120 +34,133 @@
         </x-input>
       </div>
       <div type="primary" class="login-btn"
-                :class="loginBtnValid ? '' : 'btn-disabled'"
-                :disabled="!loginBtnValid"
-                @click="goSubmit"
-             >登录
+           :class="loginBtnValid ? '' : 'btn-disabled'"
+           :disabled="!loginBtnValid"
+           @click="goSubmit"
+      >登录
       </div>
     </div>
   </div>
 </template>
 <script>
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import { Group, XInput, XButton } from 'vux'
-import uuid from 'uuid'
-import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
-import {loginApi, getCodeImg} from '@/api/pages/login'
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import { Group, XInput, XButton } from 'vux'
+  import uuid from 'uuid'
+  import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
+  import { loginApi, getCodeImg } from '@/api/pages/login'
 
-@Component({
-  name: 'login-index',
-  components: {
-    Group,
-    XInput,
-    XButton,
-    TimeBtn
-  }
-})
-export default class LoginIndex extends Vue {
-  sendSmsType = 9 // 6.小程序登录,9微信浏览器小灯塔登录
-  isComplete = false // 是否显示完善资料页面
-  showClear = false // 输入框是否显示清空的按钮
-  isLogin = true // 是否为登录
-  isLoginEnabled = false // 登录按钮能不能点击
-  isCommitInfo = false // 是否已经请求完善资料接口
-  requestId = '' // 随机数
-  codeImgUrl = '' // 验证码图片
-  needImgCode = false // 是否需要手机验证码
-  info = {
-    mobile: '',
-    sms: '',
-    verifyCode: '',
-    loginType: 2,
-    from: '' // 1 注册 2 登录
-  }
-  created () {
+  @Component({
+    name: 'login-index',
+    components: {
+      Group,
+      XInput,
+      XButton,
+      TimeBtn
+    }
+  })
+  export default class LoginIndex extends Vue {
+    sendSmsType = 9 // 6.小程序登录,9微信浏览器小灯塔登录
+    isComplete = false // 是否显示完善资料页面
+    showClear = false // 输入框是否显示清空的按钮
+    isLogin = true // 是否为登录
+    isLoginEnabled = false // 登录按钮能不能点击
+    isCommitInfo = false // 是否已经请求完善资料接口
+    requestId = '' // 随机数
+    codeImgUrl = '' // 验证码图片
+    needImgCode = false // 是否需要手机验证码
+    info = {
+      mobile: '',
+      sms: '',
+      verifyCode: '',
+      loginType: 2,
+      from: '' // 1 注册 2 登录
+    }
+
+    created () {
 //    this.refreshCode()
-  }
+    }
 
-  onSend (imgcodeUrl) { // 显示图片验证码
-    this.refreshCode()
+    onSend (imgcodeUrl) { // 显示图片验证码
+      this.refreshCode()
 //    console.log('send', imgcodeUrl)
 //    this.needImgCode = true
 //    this.codeImgUrl = imgcodeUrl
-  }
-  mounted () {
-  }
-  async refreshCode () {
-    const resp = await getCodeImg()
-    if (resp.imgcodeUrl) {
-      this.codeImgUrl = resp.imgcodeUrl
-      this.needImgCode = true
+    }
+
+    mounted () {
+    }
+
+    async refreshCode () {
+      try {
+        const resp = await getCodeImg()
+        if (resp.imgcodeUrl) {
+          this.codeImgUrl = resp.imgcodeUrl
+          this.needImgCode = true
+        }
+      } catch (e) {
+        this.$vux.toast.text(e.message, 'bottom')
+      }
+    }
+
+    get loginBtnValid () {
+      return this.info.mobile && this.info.sms
+    }
+
+    async goSubmit () {
+      try {
+        const resp = await loginApi(this.info)
+        this.$store.dispatch('update_userinfo', {
+          userinfo: resp
+        })
+        console.log('this.$route.query.redirect', this.$route.query.redirect)
+        window.location.href = this.$route.query.redirect
+      } catch (e) {
+        this.$vux.toast.text(e.message, 'bottom')
+      }
     }
   }
-  get loginBtnValid() {
-    return this.info.mobile && this.info.sms
-  }
-  async goSubmit () {
-    const resp = await loginApi(this.info)
-    this.$store.dispatch('update_userinfo', {
-      userinfo: resp
-    })
-    console.log('this.$route.query.redirect', this.$route.query.redirect)
-    window.location.href = this.$route.query.redirect
-  }
-}
 </script>
 
 <style lang="less" type="text/less">
-  .p-phone-login{
-    .weui-cell{
+  .p-phone-login {
+    .weui-cell {
       padding: 15px 0;
     }
-    .img-container{
+    .img-container {
       text-align: center;
       padding-top: 50px;
-      .lh-logo{
+      .lh-logo {
         width: 70px;
         height: 70px;
         background: pink;
         border-radius: 50%;
       }
     }
-    .input-group{
+    .input-group {
       margin: 0 25px;
       padding-top: 25px;
-      .section{
+      .section {
         margin-top: 25px;
         border-bottom: 1px solid #dcdcdc; /* no */
 
-        .input-common{
+        .input-common {
           line-height: 20px;
           font-size: 16px;
         }
-        .short-input{
+        .short-input {
           width: 200px;
         }
-        .code-img{
+        .code-img {
           position: absolute;
-          right:0;
-          top:0;
+          right: 0;
+          top: 0;
           width: 90px;
           height: 30px;
         }
-        .counter{
+        .counter {
           position: absolute;
-          right:0;
+          right: 0;
           top: 2px;
           padding-right: 0;
           font-size: 16px;
@@ -156,7 +169,7 @@ export default class LoginIndex extends Vue {
         }
 
       }
-      .login-btn{
+      .login-btn {
         width: 325px;
         height: 44px;
         background: #ffe266;
@@ -176,9 +189,9 @@ export default class LoginIndex extends Vue {
         background: #e5ca5b;
       }
 
-      .btn-disabled{
+      .btn-disabled {
         color: rgba(0, 0, 0, 0.3);
-        background: rgba(255,226,102,.5);
+        background: rgba(255, 226, 102, .5);
       }
     }
     .weui-vcode-img {
