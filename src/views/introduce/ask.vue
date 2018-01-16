@@ -384,7 +384,6 @@
         }
 
         this.audioEventCallbacks.onPlaying = e => {
-          console.log('播放中')
           answer.voice.status = 'playing'
           this.$set(problem.answer, answerIndex, answer) // 强制更新一下problem对象
         }
