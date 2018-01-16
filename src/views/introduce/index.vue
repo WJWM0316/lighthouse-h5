@@ -228,7 +228,7 @@
           item.videoPlay = false
         }
       })
-      this.dynamicList = temp || []
+      this.dynamicList = temp
       this.pageInfo = res
     }
 
@@ -251,7 +251,7 @@
     }
   }
 </script>
-<style lang="less" scoped>
+<style lang="less" scoped type="text/less">
   .big-shot-introduce {
     padding-bottom: 54px;
 
