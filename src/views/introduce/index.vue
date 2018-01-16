@@ -72,7 +72,7 @@
   import CommunityCard from '@/components/communityCard'
   import dynamic from '@/components/dynamic/dynamic'
   import {getCommunityInfoApi} from '@/api/pages/pageInfo'
-  import { share } from '@/api/wx/share'
+  import WechatMixin from '@/mixins/wechat'
   import {payApi} from '@/api/pages/pay'
 
   @Component({
@@ -107,7 +107,8 @@
       isPayBtn () {
         return this.paySurplusPeople > 0
       }
-    }
+    },
+    mixins: [WechatMixin]
   })
   export default class introduce extends Vue {
     pageInfo = {}
@@ -199,7 +200,7 @@
         const {realName, career} = master
         const str = realName ? realName + (career ? '|' + career : '') : ''
         // 页面分享信息
-        share(this.$wechat, this.$http, {
+        this.wechatShare({
           'titles': str + '|' + title,
           'title': str + '|' + title,
           'desc': simpleIntro,

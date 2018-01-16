@@ -384,13 +384,11 @@
         }
 
         this.audioEventCallbacks.onPlaying = e => {
-          console.log('播放中')
           answer.voice.status = 'playing'
           this.$set(problem.answer, answerIndex, answer) // 强制更新一下problem对象
         }
         this.audioEventCallbacks.onTimeUpdate = e => {
           const progress = (this.audio.currentTime / this.audio.duration) * 100
-          // this.pageInfo.problem[0].content += parseInt(progress)
           answer.voice.progress = parseInt(progress)
           this.$set(problem.answer, answerIndex, answer)
         }
