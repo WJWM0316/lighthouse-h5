@@ -1,4 +1,4 @@
-const wx = require('./jweixin-1.0.0')
+// import wx from 'http://res.wx.qq.com/open/js/jweixin-1.2.0.js'
 
 const plugin = {
   install (Vue) {
@@ -9,4 +9,4 @@ const plugin = {
 }
 
 export default plugin
-export const install = plugin.install
+// export const install = plugin.install
