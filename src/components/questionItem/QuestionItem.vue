@@ -7,7 +7,7 @@
         </div>
       </template>
       <template v-else>
-        <a href="#" class="head" @click.prevent.stop="handleUserDetail">
+        <a href="#" class="head" @click.prevent.stop="handleUserDetail(model.user.userId)">
           <image-item class="image" :src="(model.user && model.user.avatar) || require('@/assets/icon/img_head_default.png')" />
         </a>
         <div class="middle">
@@ -31,16 +31,16 @@
           </template>
           <template v-else>
             <div class="item master-item" :key="`answer_${index}`" v-if="item.type === 1">
-              <a href="#" class="head" @click.prevent.stop="handleUserDetail">
-                <image-item class="image" :src="(model.user && model.user.avatar) || require('@/assets/icon/img_head_default.png')" />
+              <a href="#" class="head" @click.prevent.stop="handleUserDetail(item.user.userId)">
+                <image-item class="image" :src="item.user.avatar || require('@/assets/icon/img_head_default.png')" />
               </a>
               <div class="text-container">
                 <p class="text">{{item.content}}</p>
               </div>
             </div>
             <div class="item master-item" :key="`answer_${index}`" v-else>
-              <a href="#" class="head" @click.prevent.stop="handleUserDetail">
-                <image-item class="image" :src="(model.user && model.user.avatar) || require('@/assets/icon/img_head_default.png')" />
+              <a href="#" class="head" @click.prevent.stop="handleUserDetail(item.user.userId)">
+                <image-item class="image" :src="item.user.avatar || require('@/assets/icon/img_head_default.png')" />
               </a>
               <div class="voice">
                 <a href="#" class="voice-container z-read" @click.prevent.stop="handleTapVoice(item)">

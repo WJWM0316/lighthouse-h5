@@ -359,6 +359,7 @@ export default class Ask extends Vue {
    */
   handlePlayVoice (url, communityId, problemId, answerId) {
     const answer = this.getAnswerById(problemId, answerId)
+    console.log('点击播放，获取到的问题回答项：', answer)
     if (!this.audio || this.audio.src !== url) {
       if (this.audio) {
         this.audio.pause()

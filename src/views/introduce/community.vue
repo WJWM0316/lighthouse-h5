@@ -182,6 +182,7 @@
         this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
       } else {
         // :todo 发帖
+        this.$router.push(`/publish/${this.$route.params.communityId}`)
       }
     }
     question () {
