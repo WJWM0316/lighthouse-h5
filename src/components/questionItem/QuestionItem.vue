@@ -88,16 +88,22 @@ import Component from 'vue-class-component'
     model: {
       type: Object,
       default () {
-        return {
-          user: {},
-          answer: []
-        }
+        return {}
       }
     },
 
     // 问题对应社区id
     communityId: {
       type: [String, Number]
+    }
+  },
+
+  watch: {
+    model: {
+      handler (val) {
+        console.log(val)
+      },
+      deep: true
     }
   }
 })
