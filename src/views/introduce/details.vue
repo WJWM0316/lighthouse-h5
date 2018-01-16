@@ -227,17 +227,18 @@
       const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.dynamicList[0]
       const {modelType, commentId, problemId, circleId} = item
 
+      console.log(commentIndex)
       let sourceType = 4
       if (commentIndex < 0) {
         switch (modelType) {
-          case 'circle':
-            sourceType = 1
-            break
           case 'post':
             sourceType = 2
             break
           case 'problem':
             sourceType = 3
+            break
+          default:
+            sourceType = 1
             break
         }
       }
