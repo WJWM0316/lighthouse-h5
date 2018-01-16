@@ -20,7 +20,7 @@
         <img src="./../../assets/how2play.png" />
       </a>
     </div>
-    <div class="module" v-if="dynamicList.length > 0">
+    <div class="module" v-if="completelyShow && dynamicList.length > 0">
       <div class="module-title">
         <p>精选内容</p>
         <div class="hr"></div>
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div class="footer">
+    <div class="footer" v-if="completelyShow">
       <div class="to-home">
         <img src="./../../assets/icon/icon_home.png" class="icon-home" />
         <span>首页</span>
@@ -113,6 +113,8 @@
     pageInfo = {}
     dynamicList = []
     disableOperationArr = ['comment', 'praise']
+    completelyShow = true
+
     freeIn () { // 跳转到一个图文消息
       console.log('免费集call')
     }
@@ -178,8 +180,19 @@
       )
     }
     created () {
+      if (this.$route.name === 'introduce-detail') {
+        this.completelyShow = false
+      }
+
       this.pageInit().then(() => {
-        const {title, simpleIntro, master, shareImg} = this.pageInfo
+        const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
+
+        // 是否已入社
+        if (this.completelyShow && this.isJoinAgency) {
+          this.$router.replace(`/introduce/${communityId}/community`)
+          return
+        }
+
         const {realName, career} = master
         const str = realName ? realName + (career ? '|' + career : '') : ''
         // 页面分享信息
