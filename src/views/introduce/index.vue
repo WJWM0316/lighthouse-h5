@@ -308,6 +308,11 @@
       z-index: 999;
       font-size: 15px;
 
+      & p {
+        flex-grow: 1;
+        text-align: center;
+      }
+
       & .btn-box {
         display: flex;
         justify-content: center;
