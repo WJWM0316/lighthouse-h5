@@ -1,5 +1,4 @@
-// import wx from 'http://res.wx.qq.com/open/js/jweixin-1.2.0.js'
-
+/* eslint-disable no-undef */
 const plugin = {
   install (Vue) {
     Vue.prototype.$wechat = wx
