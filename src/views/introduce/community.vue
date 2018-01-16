@@ -322,7 +322,7 @@
     }
   }
 </script>
-<style lang="less" scoped>
+<style lang="less" scoped type="text/less">
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
