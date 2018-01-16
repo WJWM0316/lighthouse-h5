@@ -41,7 +41,7 @@
     </div>
 
     <div class="footer" v-if="completelyShow">
-      <div class="to-home">
+      <div class="to-home" @click="toHome">
         <img src="./../../assets/icon/icon_home.png" class="icon-home" />
         <span>首页</span>
       </div>
@@ -132,6 +132,9 @@
           that.payIn()
         },
       })
+    }
+    toHome () {
+      this.$router.replace(`/index`)
     }
     async payIn () {
       try {
