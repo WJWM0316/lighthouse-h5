@@ -43,6 +43,7 @@
                 <image-item class="image" :src="item.user.avatar || require('@/assets/icon/img_head_default.png')" />
               </a>
               <div class="voice">
+                {{item.voice.progress}}
                 <a href="#" class="voice-container z-read" @click.prevent.stop="handleTapVoice(item)">
                   <div class="progress">
                     <div class="bar" :style="{ width: `${item.voice.progress || 0}%` }"></div>
