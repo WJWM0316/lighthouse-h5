@@ -18,6 +18,7 @@
     </div>
 
     <actionsheet v-model="addActionsConfig.show" :menus="addActionsConfig.menus" :close-on-clicking-mask="false" show-cancel @on-click-menu="handleAddActoinItem" />
+    <wechat-code-modal v-model="wechatCodeModal.show" />
   </div>
 </template>
 
@@ -28,6 +29,7 @@ import Component from 'vue-class-component'
 import WechatMixin from '@/mixins/wechat'
 
 import { Actionsheet } from 'vux'
+import WechatCodeModal from '@/components/wechatCodeModal'
 
 import { publishApi } from '@/api/pages/content'
 import { wechatUploadFileApi } from '@/api/common'
@@ -35,7 +37,8 @@ import { wechatUploadFileApi } from '@/api/common'
 @Component({
   name: 'publish-content',
   components: {
-    Actionsheet
+    Actionsheet,
+    WechatCodeModal
   },
   mixins: [WechatMixin]
 })
@@ -71,6 +74,11 @@ export default class PublishContent extends Vue {
 
   serverIds = [] // 上传到微信服务器的serverId数组
   uploadSuccess = true
+
+  // 小程序码弹窗
+  wechatCodeModal = {
+    show: false
+  }
 
   // 图文类型： 0:无文件(文本) 1:音频 2:视频 3:图片
   get addonType () {
@@ -271,11 +279,7 @@ export default class PublishContent extends Vue {
         }, 0)
         break
       case 'video':
-        this.$vux.alert.show({
-          title: '小程序',
-          content: '小灯塔客服：020-28163063或添加客服微信：zike02',
-          buttonText: '好的'
-        })
+        this.wechatCodeModal.show = true
         break
       default:
         break
