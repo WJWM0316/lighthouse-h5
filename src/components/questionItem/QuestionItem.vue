@@ -120,8 +120,8 @@ export default class QuestionItem extends Vue {
   /**
    * 点击头像，跳转个人详情
    */
-  handleUserDetail () {
-    this.$router.push(`/introduce/details?userId=${this.model.user.userId}`)
+  handleUserDetail (userId) {
+    this.$router.push(`/userInfo/${userId}/details`)
   }
 
   /**
