@@ -2,6 +2,13 @@
 
   <!-- 大咖精选页 (社区页) -->
   <div :class="{'big-shot-community': true, author: isAuthor}">
+
+    <!-- tab -->
+    <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed': true}" v-if="isCommunityTitleFixed">
+      <span @click="toggle(1)">导师内容</span>
+      <span @click="toggle(0)">学员交流</span>
+    </div>
+
     <scroll @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll">
       <!-- header -->
       <div class="header">
@@ -35,7 +42,7 @@
 
         <!-- 主体内容块 -->
         <div class="fixed-box" ref="community-title">
-          <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed': isCommunityTitleFixed}">
+          <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
             <span @click="toggle(1)">导师内容</span>
             <span @click="toggle(0)">学员交流</span>
           </div>
@@ -327,7 +334,6 @@
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
-    position: relative;
 
     &.author {
       padding-bottom: 50px;
@@ -398,6 +404,46 @@
       }
     }
 
+    & .big-shot-community-title {
+      padding: 0 15px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      color: #929292;
+
+      & span {
+        height: 40px;
+        line-height: 40px;
+      }
+      &.circles span:first-of-type,
+      &.forum span:last-of-type {
+        color: #354048;
+        font-weight: 500;
+        position: relative;
+      }
+      &.circles span:first-of-type:after,
+      &.forum span:last-of-type:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 4px;
+        border-radius: 2px;
+        background-color: #ffe266;
+      }
+
+      &.fixed {
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        background:#fff;
+        margin-top: 0;
+        z-index: 99;
+      }
+    }
+
     & .container {
       font-size: 15px;
 
@@ -446,45 +492,6 @@
       & .fixed-box {
         height: 40px;
         margin-top: 35px;
-      }
-      & .big-shot-community-title {
-        padding: 0 15px;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        color: #929292;
-
-        & span {
-          height: 40px;
-          line-height: 40px;
-        }
-        &.circles span:first-of-type,
-        &.forum span:last-of-type {
-          color: #354048;
-          font-weight: 500;
-          position: relative;
-        }
-        &.circles span:first-of-type:after,
-        &.forum span:last-of-type:after {
-          content: '';
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          height: 4px;
-          border-radius: 2px;
-          background-color: #ffe266;
-        }
-
-        &.fixed {
-          position:absolute;
-          top:0;
-          left:0;
-          right:0;
-          background:#fff;
-          margin-top: 0;
-          z-index: 99;
-        }
       }
 
       & .big-shot-community-content {
