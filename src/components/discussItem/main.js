@@ -163,8 +163,6 @@ export default class discussItem extends Vue {
       return
     }
     console.log(commentId)
-    // commentId
-    console.log(commentId)
-    this.$router.push({name: 'all-reply', params: {commentId}})
+    this.$router.push(`/reply/${commentId}`)
   }
 }
