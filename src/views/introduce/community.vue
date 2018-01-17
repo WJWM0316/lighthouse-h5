@@ -109,6 +109,7 @@
     components: {
       dynamic,
       CommunityCard,
+      suspensionInput,
       Scroll,
       Actionsheet
     },
