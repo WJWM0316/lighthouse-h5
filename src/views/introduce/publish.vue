@@ -189,6 +189,7 @@ export default class PublishContent extends Vue {
           }
         }
       })
+      this.$forceUpdate()
       console.log('转换之后images：', this.images)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
