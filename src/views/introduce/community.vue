@@ -144,7 +144,7 @@
 
     mounted () {
       this.communityTitleTop = this.$refs['community-title'].offsetTop
-      console.log(this.$refs['community-title'])
+      console.log(this.$refs)
     }
 
     async pageInit () {
