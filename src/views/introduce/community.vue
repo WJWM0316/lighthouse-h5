@@ -53,6 +53,7 @@
                      :showDelBtn="true"
                      :showIdentification="showIdentification"
                      :disableOperationArr="disableOperationArr"
+                     @disableOperationEvents="operation"
             ></dynamic>
           </div>
           <div class="blank" v-else>
