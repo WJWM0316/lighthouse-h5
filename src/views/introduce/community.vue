@@ -52,7 +52,7 @@
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
                      :showIdentification="showIdentification"
-                     @suspensionInputState="suspensionInputState"
+                     :disableOperationArr="disableOperationArr"
             ></dynamic>
           </div>
           <div class="blank" v-else>
@@ -79,6 +79,14 @@
       </div>
     </div>
 
+    <!-- 悬浮输入框 -->
+    <suspension-input v-model="displaySuspensionInput"
+                      :placeholder="suspensionInputPlaceholder"
+                      :commentIndex="commentIndex"
+                      :sendText="'发送'"
+                      @send="sendComment"
+    ></suspension-input>
+
     <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" :close-on-clicking-mask="false" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
   </div>
 </template>
@@ -88,6 +96,7 @@
   import { Actionsheet } from 'vux'
   import dynamic from '@/components/dynamic/dynamic'
   import CommunityCard from '@/components/communityCard'
+  import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
   import wxUtil from '@/util/wx/index'
@@ -116,8 +125,12 @@
     showType = 1 // 1 朋友圈 0 交流社区
     isCommunityTitleFixed = false
     showIdentification = false
-    displaySuspensionInput = false
     communityTitleTop = 0
+    disableOperationArr = ['comment']
+
+    commentIndex = -1
+    suspensionInputPlaceholder = '写评论'
+    displaySuspensionInput = false
 
     // 发布操作选项
     releaseActionsheet = {
@@ -197,6 +210,73 @@
     }
     suspensionInputState (val) {
       this.displaySuspensionInput = val
+    }
+
+    /**
+     * 操作事件
+     * @param e :{eventType, itemIndex} eventType: 事件名称 itemIndex: 触发对象下标
+     */
+    operation (e) {
+      const {eventType, itemIndex} = e
+
+      const item = this.dynamicList[itemIndex]
+
+      switch (eventType) {
+        case 'comment':
+          this.comment({item, itemIndex}).then()
+          break
+      }
+    }
+
+    /**
+     * 评论
+     * @param item
+     * @param itemIndex
+     * @returns {Promise.<void>}
+     */
+    async comment ({item, itemIndex}) {
+      if (item.modelType !== 'circle') {
+        this.suspensionInputPlaceholder = '回复' + item.releaseUser.realName + ':'
+      }
+      this.displaySuspensionInput = true
+      this.commentIndex = itemIndex
+    }
+
+    /**
+     * 发送评论
+     * @param data
+     */
+    async sendComment ({value, commentIndex}) {
+      const item = this.dynamicList[commentIndex]
+      const {problemId, circleId} = item
+      let sourceType = 4
+      switch (item.modelType) {
+        case 'circle':
+          sourceType = 1
+          break
+        case 'post':
+          sourceType = 2
+          break
+        case 'problem':
+          sourceType = 3
+          break
+      }
+
+      const params = {
+        sourceId: circleId || problemId,     // 对应评论类型id
+        sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
+        content: value       // 评论内容
+      }
+
+      const res = await setSubmitCommentApi(params)
+
+      if (this.dynamicList[commentIndex] && this.dynamicList[commentIndex].comments) {
+        this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
+        this.dynamicList[commentIndex].commentTotal += 1
+      } else {
+        this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
+        this.dynamicList[commentIndex].commentTotal = 1
+      }
     }
 
     // ------------------------------------------------

@@ -99,9 +99,9 @@
       suspensionInput
     },
     watch: {
-      displaySuspensionInput (val) {
-        this.$emit('suspensionInputState', val)
-      },
+//      displaySuspensionInput (val) {
+//        this.$emit('suspensionInputState', val)
+//      },
       dynamicList (dynamicList) {
         const {item, itemIndex} = this.currentPlay
         if (item.modelType !== dynamicList[itemIndex].modelType) {
@@ -331,7 +331,8 @@
         const isTrue = this.disableOperationArr.map((typeName) => { return typeName === eventType })
         if (isTrue) {
           this.$emit('disableOperationEvents', {
-            eventType
+            eventType,
+            itemIndex
           })
           return
         }
