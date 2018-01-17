@@ -172,6 +172,9 @@
       }
     }
 
+    /**
+     * 微信支付
+     */
     async payIn (params) {
       if (typeof WeixinJSBridge === 'undefined') {
         if (document.addEventListener) {
@@ -217,8 +220,8 @@
       try {
         const param = await submitProblemApi(params)
         if (params.payType === 1) {
-          this.payIn(param)
           // todo 调起微信支付
+          this.payIn(param)
         } else {
           this.$vux.toast.text('提问成功', 'bottom')
           this.pageInit()
