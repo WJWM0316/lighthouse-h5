@@ -506,29 +506,6 @@
       }
     }
 
-    & .footer .ask-btn {
-      position: fixed;
-      right: 20px;
-      bottom: 30px;
-      width: 65px;
-      height: 65px;
-      background-color: #ffffff;
-      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
-      border-radius: 50%;
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: center;
-      align-items: center;
-      font-size: 11px;
-      color: #d7ab70;
-
-      & img {
-        width: 26px;
-        height: 25px;
-        margin-top: 4px;
-      }
-    }
-
     & .footer .author-operation {
       position: fixed;
       bottom: 0;
