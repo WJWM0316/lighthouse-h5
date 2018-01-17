@@ -159,7 +159,7 @@ export default class PublishContent extends Vue {
         this.uploadCustomImages(localIds)
       } else {
         // todo 全部上传到微信服务器成功，通知服务器
-        this.uploadWechatSuccess()
+        await this.uploadWechatSuccess()
         this.uploadSuccess = true
       }
     } catch (error) {
