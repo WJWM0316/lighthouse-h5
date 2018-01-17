@@ -4,7 +4,7 @@ import Vue from 'vue'
 import { AlertPlugin, ToastPlugin, WechatPlugin, ConfirmPlugin, LoadingPlugin } from 'vux'
 // import { AlertPlugin, ToastPlugin, ConfirmPlugin, LoadingPlugin } from 'vux'
 
-import Wechat from './wechat'
+// import Wechat from './wechat'
 import Image from './imageItem'
 import BottomLoading from './bottomLoading'
 
