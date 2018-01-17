@@ -137,7 +137,7 @@
           'title': str + '|' + title,
           'desc': simpleIntro,
           'imgUrl': shareImg,
-          'link': location.origin + `/beaconweb/introduce/${communityId}/community`
+          'link': location.origin + `/beaconweb/#/introduce/${communityId}/community`
         })
       })
     }
