@@ -311,8 +311,7 @@
       const {eventType, itemIndex} = e
 
       if (this.disableOperationArr && this.disableOperationArr.length > 0) {
-        const isTrue = this.disableOperationArr.map((typeName) => { return typeName === eventType })
-        if (isTrue) {
+        if (this.disableOperationArr.indexOf(eventType) > -1) {
           this.$emit('disableOperationEvents', {
             eventType,
             itemIndex
