@@ -24,7 +24,7 @@ import WechatMixin from '@/mixins/wechat'
 
 @Component({
   name: 'app',
-//  mixins: [WechatMixin],
+  mixins: [WechatMixin],
   components: {
     Tabbar,
     TabbarItem,
@@ -37,23 +37,23 @@ import WechatMixin from '@/mixins/wechat'
     },
   },
   watch: {
-//    '$route': {
-//      handler (route) {
-//        // 自定义分享信息路径
-//        const customSharePageName = ['introduce', 'introduce-detail', 'community', 'center-help']
-//        if (customSharePageName.indexOf(route.name) < 0) {
-//          // 页面分享信息
-//          this.wechatShare({
-//            'titles': '小灯塔|职场导师知识分享社区|照亮你职场的路',
-//            'title': '小灯塔|职场导师知识分享社区|照亮你职场的路',
-//            'desc': '名师高徒，社群化训练和学习！职场人脉，吸收大咖进阶干货！',
-//            'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner.png',
-//            'link': location.origin + '/beaconweb'
-//          })
-//        }
-//      },
-//      immediate: true
-//    }
+    '$route': {
+      handler (route) {
+        // 自定义分享信息路径
+        const customSharePageName = ['introduce', 'introduce-detail', 'community', 'center-help']
+        if (customSharePageName.indexOf(route.name) < 0) {
+          // 页面分享信息
+          this.wechatShare({
+            'titles': '小灯塔|职场导师知识分享社区|照亮你职场的路',
+            'title': '小灯塔|职场导师知识分享社区|照亮你职场的路',
+            'desc': '名师高徒，社群化训练和学习！职场人脉，吸收大咖进阶干货！',
+            'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner.png',
+            'link': location.origin + '/beaconweb'
+          })
+        }
+      },
+      immediate: true
+    }
   }
 })
 export default class App extends Vue {
