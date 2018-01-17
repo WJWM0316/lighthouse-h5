@@ -426,9 +426,7 @@
           outline: none;
           line-height: 1;
           background-color: transparent;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          text-align: center;
         }
 
         & .split {
