@@ -40,7 +40,7 @@ import WechatMixin from '@/mixins/wechat'
   watch: {
     '$route': {
       handler (route) {
-        // wxUtil.fixedUrl()
+         wxUtil.fixedUrl()
         // 自定义分享信息路径
         const customSharePageName = ['introduce', 'introduce-detail', 'community', 'center-help']
         if (customSharePageName.indexOf(route.name) < 0) {
