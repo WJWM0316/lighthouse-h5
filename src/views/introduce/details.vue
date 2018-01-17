@@ -418,6 +418,7 @@
         background: #FFF;
 
         & > button　{
+          flex: 1 1 auto;
           height: 50px;
           font-size: 15px;
           color: #666666;
@@ -427,11 +428,7 @@
           background-color: transparent;
           display: flex;
           align-items: center;
-          flex-grow: 1;
           justify-content: center;
-        }
-        & > button:after {
-          border-style: none;
         }
 
         & .split {
