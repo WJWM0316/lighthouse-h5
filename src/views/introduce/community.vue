@@ -34,7 +34,7 @@
         </div>
 
         <!-- 主体内容块 -->
-        <div class="fixed-box">
+        <div class="fixed-box" ref="community-title">
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed': isCommunityTitleFixed}">
             <span @click="toggle(1)">导师内容</span>
             <span @click="toggle(0)">学员交流</span>
@@ -109,6 +109,7 @@
     isCommunityTitleFixed = false
     showIdentification = false
     displaySuspensionInput = false
+    communityTitleTop = 0
 
     // 发布操作选项
     releaseActionsheet = {
@@ -147,6 +148,12 @@
       let res = await this.getCommunity(communityId)
       this.pageInfo = res
       await this.getList({page: 1})
+
+      this.$nextTick(() => {
+        this.communityTitleTop = this.$refs['community-title'].offsetTop
+        console.log(this.$refs)
+        console.log(this.$refs['community-title'].offsetTop)
+      })
     }
 
     toggle (type) {
@@ -305,7 +312,12 @@
     }
 
     scroll (e) {
-      console.log(e)
+      const communityTitleTop = this.communityTitleTop
+      console.log(e, communityTitleTop)
+      if (communityTitleTop) {
+        const {scrollTop} = e.target
+        this.isCommunityTitleFixed = scrollTop >= communityTitleTop
+      }
     }
   }
 </script>
