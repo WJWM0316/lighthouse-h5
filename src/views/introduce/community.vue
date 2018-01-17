@@ -325,6 +325,7 @@
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
+    transform: translate3d(0, 0, 0);
     &.author {
       padding-bottom: 50px;
     }
