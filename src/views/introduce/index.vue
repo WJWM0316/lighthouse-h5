@@ -199,13 +199,14 @@
 
         const {realName, career} = master
         const str = realName ? realName + (career ? '|' + career : '') : ''
+        console.log('location.href', location.href)
         // 页面分享信息
         this.wechatShare({
           'titles': str + '|' + title,
           'title': str + '|' + title,
           'desc': simpleIntro,
           'imgUrl': shareImg,
-          'link': location.href.split('?')[0]
+          'link': location.href
         })
       })
     }
