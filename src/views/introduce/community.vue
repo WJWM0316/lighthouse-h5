@@ -327,6 +327,8 @@
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
+    position: relative;
+
     &.author {
       padding-bottom: 50px;
     }
@@ -475,8 +477,7 @@
         }
 
         &.fixed {
-          transform: translate3d(0, 0, 0);
-          position:fixed;
+          position:absolute;
           top:0;
           left:0;
           right:0;
