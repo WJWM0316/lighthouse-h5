@@ -13,8 +13,9 @@
       <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
     </div>
 
-    {{serverIds}}
-    {{uploadSuccess}}
+    {{serverIds}}<br>
+    {{uploadSuccess}}<br>
+    {{images}}
 
     <div class="btn-container">
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
@@ -180,12 +181,15 @@ export default class PublishContent extends Vue {
       const { files } = await wechatUploadFileApi(params)
       // 成功后，将所有还剩下的图片对象替换
       files.forEach(file => {
-        this.images.forEach((image, index) => {
+        for (let index in this.images) {
+          const image = this.images[index]
+          console.log(image.mediaId, file.mediaId)
           if (image.mediaId === file.mediaId) {
             this.images[index] = file
           }
-        })
+        }
       })
+      this.$forceUpdate()
       console.log('转换之后images：', this.images)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
