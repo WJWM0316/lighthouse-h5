@@ -180,7 +180,8 @@ export default class PublishContent extends Vue {
       }
       const { files } = await wechatUploadFileApi(params)
       // 成功后，将所有还剩下的图片对象替换
-      files.forEach(file => {
+      for (let fileIndex in files) {
+        const file = files[fileIndex]
         for (let index in this.images) {
           const image = this.images[index]
           console.log(image.mediaId, file.mediaId)
@@ -189,7 +190,7 @@ export default class PublishContent extends Vue {
             this.$set(this.images, index, file)
           }
         }
-      })
+      }
       console.log('转换之后images：', this.images)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
