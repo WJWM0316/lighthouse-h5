@@ -19,21 +19,12 @@
                   @operation="operation"
                   ref="dynamic-item"
     ></dynamic-item>
-
-    <!-- 悬浮输入框 -->
-    <suspension-input v-model="displaySuspensionInput"
-                      :placeholder="suspensionInputPlaceholder"
-                      :commentIndex="commentIndex"
-                      :sendText="'发送'"
-                      @send="sendComment"
-    ></suspension-input>
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
-  import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi} from '@/api/pages/pageInfo.js'
   import WechatMixin from '@/mixins/wechat'
 
@@ -95,13 +86,9 @@
       }
     },
     components: {
-      dynamicItem,
-      suspensionInput
+      dynamicItem
     },
     watch: {
-//      displaySuspensionInput (val) {
-//        this.$emit('suspensionInputState', val)
-//      },
       dynamicList (dynamicList) {
         const {item, itemIndex} = this.currentPlay
         if (item.modelType !== dynamicList[itemIndex].modelType) {
@@ -119,10 +106,6 @@
     }
     music = ''
     currentVideoIndex = -1
-
-    commentIndex = -1
-    suspensionInputPlaceholder = '写评论'
-    displaySuspensionInput = false
 
     created () {
     }
@@ -342,7 +325,6 @@
 
       switch (eventType) {
         case 'comment':
-          this.comment({item, itemIndex}).then()
           break
         case 'praise':
           this.praise({item, itemIndex}).then()
@@ -357,20 +339,6 @@
           window.location.href = e.url
           break
       }
-    }
-
-    /**
-     * 评论
-     * @param item
-     * @param itemIndex
-     * @returns {Promise.<void>}
-     */
-    async comment ({item, itemIndex}) {
-      if (item.modelType !== 'circle') {
-        this.suspensionInputPlaceholder = '回复' + item.releaseUser.realName + ':'
-      }
-      this.displaySuspensionInput = true
-      this.commentIndex = itemIndex
     }
     /**
      * 点赞
@@ -446,43 +414,6 @@
         }
       })
       console.log(this.dynamicList, itemIndex)
-    }
-
-    /**
-     * 发送评论
-     * @param data
-     */
-    async sendComment ({value, commentIndex}) {
-      const item = this.dynamicList[commentIndex]
-      const {problemId, circleId} = item
-      let sourceType = 4
-      switch (item.modelType) {
-        case 'circle':
-          sourceType = 1
-          break
-        case 'post':
-          sourceType = 2
-          break
-        case 'problem':
-          sourceType = 3
-          break
-      }
-
-      const params = {
-        sourceId: circleId || problemId,     // 对应评论类型id
-        sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
-        content: value       // 评论内容
-      }
-
-      const res = await setSubmitCommentApi(params)
-
-      if (this.dynamicList[commentIndex] && this.dynamicList[commentIndex].comments) {
-        this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
-        this.dynamicList[commentIndex].commentTotal += 1
-      } else {
-        this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
-        this.dynamicList[commentIndex].commentTotal = 1
-      }
     }
   }
 </script>

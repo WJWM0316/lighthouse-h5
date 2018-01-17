@@ -1,6 +1,6 @@
 <template>
   <!-- 悬浮输入框 -->
-  <div class="suspension-input" :class="{show: isShow}">
+  <div class="suspension-input" v-if="isShow">
     <div class="ask-box">
       <div class="user-input">
         <input type="text"
@@ -21,12 +21,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    display: none;
     z-index: 99;
-
-    &.show {
-      display: block;
-    }
 
     .ask-box {
       height: 54px;
