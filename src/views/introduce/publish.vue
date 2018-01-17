@@ -124,6 +124,7 @@ export default class PublishContent extends Vue {
           mediaId: '',
           fileUrl: localId
         }
+        console.log('localDatas:', localDatas)
         if (localDatas && localDatas.length > 0) {
           item.base64Url = localDatas[index]
         }
@@ -233,7 +234,7 @@ export default class PublishContent extends Vue {
         if (val) {
           setTimeout(() => {
             this.publish(params)
-          }, 500)
+          }, 1000)
         }
       })
     }
