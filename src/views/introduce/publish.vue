@@ -7,7 +7,7 @@
 
     <div class="images" v-if="addonType === 0 || addonType === 3">
       <div class="item" v-for="(item, index) in images" :key="index">
-        <image-item class="image" mode="auto" :src="item.fileUrl" />
+        <image-item class="image" mode="auto" :src="item.base64Url || item.fileUrl" />
         <button type="button" class="close u-btn" @click="handleDeleteImage(index, item)"><i class="u-icon-delete-image"></i></button>
       </div>
       <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
@@ -118,12 +118,16 @@ export default class PublishContent extends Vue {
       const params = {
         count: this.lengths.imageMax - this.images.length
       }
-      const { localIds } = await this.wechatChooseImage(params)
-      const newImages = localIds.map(item => {
-        return {
+      const { localIds, localDatas } = await this.wechatChooseImage(params)
+      const newImages = localIds.map((localId, index) => {
+        const item = {
           mediaId: '',
-          fileUrl: item
+          fileUrl: localId
         }
+        if (localDatas && localDatas.length > 0) {
+          item.base64Url = localDatas[index]
+        }
+        return item
       })
       this.images = [...this.images, ...newImages]
       this.uploadCustomImages(localIds)
