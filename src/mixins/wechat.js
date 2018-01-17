@@ -182,7 +182,7 @@ export default {
          * 微信播放录音
          * @param {*} localId
          */
-        playVoice ({ localId } = {}) {
+        playVoice ({localId} = {}) {
           localId = localId || _localId
           if (!localId) {
             console.log('没有找到localId')
@@ -206,7 +206,7 @@ export default {
          * 微信暂停录音
          * @param {*} localId
          */
-        pauseVoice ({ localId } = {}) {
+        pauseVoice ({localId} = {}) {
           localId = localId || _localId
           if (!localId) {
             console.log('没有找到localId')
@@ -225,7 +225,7 @@ export default {
          * @param {*} localId
          * @param {*} callStopVoice 是否调用回调函数
          */
-        stopVoice ({ localId, callStopVoice = true } = {}) {
+        stopVoice ({localId, callStopVoice = true} = {}) {
           localId = localId || _localId
           if (!localId) {
             console.log('没有找到localId')
@@ -246,7 +246,7 @@ export default {
     /**
      * 微信分享
      */
-    async wechatShare(enter) {
+    async wechatShare (enter) {
       const wx = this.$wechat
       // 声明你想调用的接口
       // 发起 http 请求，获取公众号配置
@@ -293,6 +293,13 @@ export default {
     this.getWechatSign()
     this.$wechat.ready(() => {
       this.$store.dispatch('wechat_ready')
+    })
+    this.$wechat.checkJsApi({
+      jsApiList: this.wechatConfig.jsApiList, // 需要检测的JS接口列表，所有JS接口列表见附录2,
+      success: function (res) {
+        // 以键值对的形式返回，可用的api值true，不可用为false
+        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+      }
     })
   }
 }
