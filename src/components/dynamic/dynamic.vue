@@ -101,6 +101,13 @@
     watch: {
       displaySuspensionInput (val) {
         this.$emit('suspensionInputState', val)
+      },
+      dynamicList (dynamicList) {
+        const {item, itemIndex} = this.currentPlay
+        if (item.modelType !== dynamicList[itemIndex].modelType) {
+          console.log('暂停')
+          this.music.pause()
+        }
       }
     },
     mixins: [WechatMixin]
@@ -177,6 +184,12 @@
       music.onerror = (e) => {
       }
       this.music = music
+    }
+
+    destroyed () {
+      this.music.pause()
+      this.music.src = ''
+      this.music = ''
     }
 
     /**
@@ -282,6 +295,7 @@
             }
           }
           this.currentPlay = {
+            item,
             itemIndex,
             problemIndex
           }
