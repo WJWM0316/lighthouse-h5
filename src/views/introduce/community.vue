@@ -142,17 +142,18 @@
       })
     }
 
-    mounted () {
-      this.communityTitleTop = this.$refs['community-title'].offsetTop
-      console.log(this.$refs['community-title'])
-    }
-
     async pageInit () {
       const { communityId } = this.$route.params
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = await this.getCommunity(communityId)
       this.pageInfo = res
       await this.getList({page: 1})
+
+      this.$nextTick(() => {
+        this.communityTitleTop = this.$refs['community-title'].offsetTop
+        console.log(this.$refs)
+        console.log(this.$refs['community-title'].offsetTop)
+      })
     }
 
     toggle (type) {

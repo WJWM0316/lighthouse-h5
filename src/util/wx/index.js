@@ -11,6 +11,22 @@ class WxUtil {
       router.go(0) // 刷新当前页
     }
   }
+
+  /**
+   * 检测当前url（location.href）是否在#号前带有?号，没有的话跳转至‘正确路径’
+   * => ios上支付调用页面为第一次进入单页面的链接，而安卓则是当前链接
+   */
+  fixedUrl () {
+    const paths = location.href.split('#')
+    if (paths[0].charAt(paths[0].length - 1) !== '?') {
+      paths[0] = `${paths[0]}?`
+    }
+
+    const url = `${paths[0]}#${paths[1]}`
+    if (location.href !== url) {
+      location.href = url
+    }
+  }
 }
 
 export default new WxUtil()

@@ -19,6 +19,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Tabbar, TabbarItem, ViewBox, XCircle, cookie } from 'vux'
 import { mapState } from 'vuex'
+import wxUtil from '@/util/wx'
 import settings from '@/config/index'
 import WechatMixin from '@/mixins/wechat'
 
@@ -39,6 +40,7 @@ import WechatMixin from '@/mixins/wechat'
   watch: {
     '$route': {
       handler (route) {
+        // wxUtil.fixedUrl()
         // 自定义分享信息路径
         const customSharePageName = ['introduce', 'introduce-detail', 'community', 'center-help']
         if (customSharePageName.indexOf(route.name) < 0) {

@@ -62,14 +62,14 @@
 //            })
             break
           case 4: // 评论我帖子
-            this.$router.push({name: 'all-details', params: {sourceId: item.beReturnedId, type: 2}})
+            this.$router.push(`/details/${item.beReturnedId}/2`)
             break
           case 5: // 回复我的评论
             console.log('跳转到评论详情')
-            this.$router.push({name: 'all-reply', params: {commentId: item.beReturnedId}})
+            this.$router.push(`/reply/${item.beReturnedId}`)
             break
           case 6: // 6评论导师内容（朋友圈）
-            this.$router.push({name: 'all-details', params: {sourceId: item.beReturnedId, type: 1}})
+            this.$router.push(`/details/${item.beReturnedId}/1`)
             break
         }
       },
