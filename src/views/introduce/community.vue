@@ -83,6 +83,7 @@
   import CommunityCard from '@/components/communityCard'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
+  import wxUtil from '@/util/wx/index'
   import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi } from '@/api/pages/pageInfo'
   import WechatMixin from '@/mixins/wechat'
 
@@ -127,6 +128,7 @@
     }
 
     created () {
+      wxUtil.reloadPage()
       this.pageInit().then(() => {
         const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
         const {realName, career} = master

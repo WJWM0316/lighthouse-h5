@@ -74,6 +74,7 @@
   import {getCommunityInfoApi} from '@/api/pages/pageInfo'
   import WechatMixin from '@/mixins/wechat'
   import {payApi} from '@/api/pages/pay'
+  import wxUtil from '@/util/wx/index'
 
   @Component({
     name: 'big-shot-introduce',
@@ -184,6 +185,7 @@
       )
     }
     created () {
+      wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
       }
@@ -206,7 +208,7 @@
           'title': str + '|' + title,
           'desc': simpleIntro,
           'imgUrl': shareImg,
-          'link': location.href
+          'link': location.href.split('?')[0]
         })
       })
     }
