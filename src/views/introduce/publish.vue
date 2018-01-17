@@ -13,8 +13,9 @@
       <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
     </div>
 
-    {{serverIds}}
-    {{uploadSuccess}}
+    {{serverIds}}<br>
+    {{uploadSuccess}}<br>
+    {{images}}
 
     <div class="btn-container">
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
@@ -181,6 +182,7 @@ export default class PublishContent extends Vue {
       // 成功后，将所有还剩下的图片对象替换
       files.forEach(file => {
         this.images.forEach((image, index) => {
+          console.log(image.mediaId, file.mediaId)
           if (image.mediaId === file.mediaId) {
             this.images[index] = file
           }
