@@ -313,6 +313,7 @@
 
     scroll (e) {
       const communityTitleTop = this.communityTitleTop
+      console.log(this.$refs['community-title'].offsetTop)
       console.log(e, communityTitleTop)
       if (communityTitleTop) {
         const {scrollTop} = e.target
