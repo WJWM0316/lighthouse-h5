@@ -231,7 +231,9 @@ export default class PublishContent extends Vue {
       })
       this.$watch('uploadSuccess', function (val) {
         if (val) {
-          this.publish(params)
+          this.$nextTick(() => {
+            this.publish(params)
+          })
         }
       })
     }
