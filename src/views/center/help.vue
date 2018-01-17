@@ -75,7 +75,7 @@ export default class CenterHelp extends Vue {
       'title': '小灯塔使用帮助',
       'desc': '百万职场人的职场导师知识分享社区，等你加入~',
       'imgUrl': '',
-      'link': location.href.split('?')[0]
+      'link': location.href
     })
   }
 }
