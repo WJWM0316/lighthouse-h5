@@ -160,7 +160,9 @@ export default class PublishContent extends Vue {
       } else {
         // todo 全部上传到微信服务器成功，通知服务器
         await this.uploadWechatSuccess()
-        this.uploadSuccess = true
+        this.$nextTick(() => {
+          this.uploadSuccess = true
+        })
       }
     } catch (error) {
       console.log(error)
@@ -195,6 +197,7 @@ export default class PublishContent extends Vue {
           }
         }
       }
+      this.serverIds = []
       console.log('转换之后images：', this.images)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
