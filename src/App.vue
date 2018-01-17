@@ -24,7 +24,7 @@ import WechatMixin from '@/mixins/wechat'
 
 @Component({
   name: 'app',
-  mixins: [WechatMixin],
+//  mixins: [WechatMixin],
   components: {
     Tabbar,
     TabbarItem,

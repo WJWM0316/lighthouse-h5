@@ -297,6 +297,7 @@ export default {
     this.$wechat.checkJsApi({
       jsApiList: this.wechatConfig.jsApiList, // 需要检测的JS接口列表，所有JS接口列表见附录2,
       success: function (res) {
+        console.log('客户端允许', res)
         // 以键值对的形式返回，可用的api值true，不可用为false
         // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
       }
