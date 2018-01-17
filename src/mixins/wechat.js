@@ -66,6 +66,7 @@ export default {
           sourceType: options.sourceType || ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
           success: function (res) {
             res.localDatas = []
+            console.log('是否要WKWebView：', window.wxjs_is_wkwebview)
             if (window.wxjs_is_wkwebview) {
               res.localIds.forEach(localId => {
                 self.$wechat.getLocalImgData({
