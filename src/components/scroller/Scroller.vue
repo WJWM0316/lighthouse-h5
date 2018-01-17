@@ -6,7 +6,8 @@
     :top-block-height="scroller.topBlockHeight"
     :bottom-block-height="scroller.bottomBlockHeight"
     :top-config="scroller.topConfig"
-    :bottom-config="scroller.bottomConfig">
+    :bottom-config="scroller.bottomConfig"
+    @scroll="handleScroll">
     <template slot="top-block" slot-scope="props">
       <div class="top-block">
         <p v-text="props.stateText"></p>
@@ -95,6 +96,13 @@ export default class Scroller extends Vue {
     this.$nextTick(() => {
       this.$emit('pullup', loaded)
     })
+  }
+
+  /**
+   * 滚动监听
+   */
+  handleScroll (e) {
+    this.$emit('scroll', e)
   }
 }
 </script>
