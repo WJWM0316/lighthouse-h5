@@ -2,7 +2,7 @@
 
   <!-- 大咖精选页 (社区页) -->
   <div :class="{'big-shot-community': true, author: isAuthor}">
-    <scroll @refresh="handleRefresh" @pullup="handlePullup">
+    <scroll @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll">
       <!-- header -->
       <div class="header">
         <community-card class="community-item" :community="pageInfo" :type="2">
@@ -139,23 +139,6 @@
           'link': location.origin + `/beaconweb/introduce/${communityId}/community`
         })
       })
-    }
-
-    operation (e) {
-      const {eventType, itemIndex} = e
-      const item = this.discussItemList[itemIndex]
-      switch (eventType) {
-        case 'comment':
-          // :todo 评论请求
-          break
-        case 'praise':
-          break
-        case 'del':
-          // :todo 删除请求
-//          this.discussItemList.splice(itemIndex, 1)
-//          console.log(this.discussItemList, itemIndex)
-          break
-      }
     }
 
     async pageInit () {
@@ -319,6 +302,10 @@
         default:
           break
       }
+    }
+
+    scroll (e) {
+      console.log(e)
     }
   }
 </script>
