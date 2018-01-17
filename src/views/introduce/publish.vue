@@ -185,11 +185,11 @@ export default class PublishContent extends Vue {
           const image = this.images[index]
           console.log(image.mediaId, file.mediaId)
           if (image.mediaId === file.mediaId) {
-            this.images[index] = file
+//            this.images[index] = file
+            this.$set(this.images, index, file)
           }
         }
       })
-      this.$forceUpdate()
       console.log('转换之后images：', this.images)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
