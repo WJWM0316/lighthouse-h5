@@ -56,16 +56,16 @@
       <p v-else-if="isEnd">课堂已关闭，停止报名</p>
       <p v-else-if="pageInfo.remainingJoinNum <= 0">已满员，停止报名</p>
       <div class="btn-box" v-else>
-        <button :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
+        <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
                 :disabled="!isFreeBtn" v-if="pageInfo.freeJoinNum > 0" @click="freeIn">
           <span>集Call免费加入</span>
           <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
-        </button>
-        <button :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
+        </div>
+        <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
           <span>({{paySurplusPeople > 0 ? '剩余：' + paySurplusPeople : '已满员，通道关闭'}})</span>
-        </button>
+        </div>
       </div>
     </div>
     <!--分享弹窗-->
@@ -256,7 +256,7 @@
       })
       this.dynamicList = temp
       this.pageInfo = res
-      this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
+//      this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
     }
 
     disableOperationEvents (e) {
