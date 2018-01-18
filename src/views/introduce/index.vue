@@ -56,16 +56,16 @@
       <p v-else-if="isEnd">课堂已关闭，停止报名</p>
       <p v-else-if="pageInfo.remainingJoinNum <= 0">已满员，停止报名</p>
       <div class="btn-box" v-else>
-        <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
+        <button :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
                 :disabled="!isFreeBtn" v-if="pageInfo.freeJoinNum > 0" @click="freeIn">
           <span>集Call免费加入</span>
           <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
-        </div>
-        <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
+        </button>
+        <button :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
           <span>({{paySurplusPeople > 0 ? '剩余：' + paySurplusPeople : '已满员，通道关闭'}})</span>
-        </div>
+        </button>
       </div>
     </div>
     <!--分享弹窗-->
@@ -319,7 +319,6 @@
       &.h5-code {
         display: block;
         max-width: 100%;
-        height: 100%;
         line-height: 1.5;
         font-size: 16px;
         overflow: hidden;
@@ -424,11 +423,11 @@
         }
       }
 
-      & div {
+      & button {
         flex-grow: 1;
         height: 100%;
         font-size: 13px;
-        line-height: 1;
+        line-height: 54px;
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
