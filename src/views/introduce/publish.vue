@@ -6,10 +6,10 @@
     </div>
 
     <div class="images" v-if="addonType === 0 || addonType === 3">
-      <div class="item" v-for="(item, index) in images" :key="index">
+      <a href="#" class="item" v-for="(item, index) in images" :key="index" @click.prevent.stop="handlePreviewImage(item)">
         <image-item class="image" mode="auto" :src="item.base64Url || item.fileUrl" />
         <button type="button" class="close u-btn" @click="handleDeleteImage(index, item)"><i class="u-icon-delete-image"></i></button>
-      </div>
+      </a>
       <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
     </div>
 
@@ -123,13 +123,16 @@ export default class PublishContent extends Vue {
       for (let index in localIds) {
         const localId = localIds[index]
         const { localData } = await this.wechatGetLocalImgData(localId)
-        newImages.push({
+        const item = {
           mediaId: '',
-          fileUrl: localId,
-          base64Url: localData
-        })
+          fileUrl: localId
+        }
+        if (localData) {
+          item.base64Url = localData
+        }
+        newImages.push(item)
       }
-      console.log('newImages:', ...newImages)
+      console.log('newImages:', newImages.map(item => item.base64Url))
       this.images = [...this.images, ...newImages]
       this.uploadCustomImages(localIds)
     } catch (error) {
@@ -255,6 +258,16 @@ export default class PublishContent extends Vue {
   }
 
   /**
+   * 预览图片
+   */
+  handlePreviewImage (image) {
+    this.wechatPreviewImage({
+      current: image.fileUrl,
+      urls: this.images.map(item => item.fileUrl)
+    })
+  }
+
+  /**
    * 删除图片
    */
   handleDeleteImage (index, image) {
@@ -363,6 +376,7 @@ export default class PublishContent extends Vue {
         background: #f1f1f1;
         width: 111px;
         height: 111px;
+        line-height: 109px;
       }
 
       .close {
@@ -379,12 +393,6 @@ export default class PublishContent extends Vue {
         line-height: 109px;
         text-align: center;
         border: solid 1px #ededed; /* no */
-
-        & > image {
-          width: 40px;
-          height: 40px;
-          vertical-align: middle;
-        }
       }
     }
   }
