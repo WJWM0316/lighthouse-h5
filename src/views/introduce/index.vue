@@ -424,7 +424,7 @@
         }
       }
 
-      & button {
+      & div {
         flex-grow: 1;
         height: 100%;
         font-size: 13px;
