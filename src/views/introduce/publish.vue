@@ -13,9 +13,9 @@
       <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
     </div>
 
-    {{serverIds}}<br>
+    <!-- {{serverIds}}<br>
     {{uploadSuccess}}<br>
-    {{images}}
+    {{images}} -->
 
     <div class="btn-container">
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
