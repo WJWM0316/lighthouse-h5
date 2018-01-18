@@ -1,5 +1,6 @@
 // 微信jssdk mixin
 import { getWechatSignApi } from '@/api/common'
+import browser from '@/util/browser'
 
 export default {
   data () {
@@ -82,7 +83,7 @@ export default {
     wechatGetLocalImgData(localId) {
       return new Promise((resolve, reject) => {
         console.log('是否支持getLocalImgData：', !!this.$wechat.getLocalImgData)
-        if (this.$wechat.getLocalImgData) {
+        if (browser.isIos && this.$wechat.getLocalImgData) {
           this.$wechat.getLocalImgData({
             localId: localId, // 图片的localID
             success: function (res) {
