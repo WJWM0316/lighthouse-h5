@@ -137,8 +137,11 @@
       return newStr
     }
     freeIn () { // 跳转到一个图文消息
-      // 取后端链接并跳转，若没有链接，弹框提示
-      this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
+      if (this.pageInfo.wechatIntroUrl) {
+        location.href = this.pageInfo.wechatIntroUrl
+      } else {
+        this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
+      }
     }
     payOrFree () {
       let that = this
@@ -253,9 +256,7 @@
       })
       this.dynamicList = temp
       this.pageInfo = res
-      console.log('转换前', this.pageInfo.intro)
       this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
-      console.log('转换后', this.pageInfo.intro)
     }
 
     disableOperationEvents (e) {
