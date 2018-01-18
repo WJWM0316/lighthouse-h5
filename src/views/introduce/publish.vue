@@ -376,6 +376,7 @@ export default class PublishContent extends Vue {
         background: #f1f1f1;
         width: 111px;
         height: 111px;
+        line-height: 109px;
       }
 
       .close {
@@ -392,12 +393,6 @@ export default class PublishContent extends Vue {
         line-height: 109px;
         text-align: center;
         border: solid 1px #ededed; /* no */
-
-        & > image {
-          width: 40px;
-          height: 40px;
-          vertical-align: middle;
-        }
       }
     }
   }

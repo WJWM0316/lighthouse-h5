@@ -17,6 +17,7 @@ class Flexible {
   dpr = 1 // 设备dpr
   rem = 16 // 单位rem
   scale = 1 // 当前缩放值
+  minSize = this.docWidth // 宽高最小值
 
   constructor () {
     if (__instance()) {
@@ -36,8 +37,14 @@ class Flexible {
       this.docEl.firstElementChild.appendChild(this.metaEl)
     }
 
-    this.dpr = parseInt(window.devicePixelRatio) || 1
+    window.dpr = this.dpr = Math.floor(window.devicePixelRatio) || 1
     this.scale = 1 / this.dpr
+    this.minSize = Math.min(this.docEl.clientWidth, this.docEl.clientHeight)
+
+    if (!navigator.userAgent.match(/AppleWebKit.*Mobile.*/)) {
+      this.minSize = 375 * this.dpr
+    }
+
     this.setBodyFontSize()
     this.setRem()
 
@@ -78,19 +85,20 @@ class Flexible {
    */
   setRem () {
     const dpr = this.dpr
-    const clientWidth = this.docWidth
-    // const scale = this.scale
-    // this.rem = (clientWidth * dpr) / 10
-    this.rem = clientWidth / 10
+    const minSize = this.minSize
+    const scale = this.scale
+    this.rem = (minSize * dpr) / 10
 
     // 设置viewport，进行缩放，达到高清效果
-    // this.metaEl.setAttribute('content', 'width=' + (dpr * clientWidth) + ',initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no')
+    this.metaEl.setAttribute('content', 'width=' + (dpr * minSize) + ',initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no')
 
     // 设置data-dpr属性，留作的css hack之用
     this.docEl.setAttribute('data-dpr', dpr.toString())
 
     // 动态写入样式
     this.docEl.style.fontSize = this.rem + 'px'
+
+    window.rem = this.rem
   }
 
   /**
