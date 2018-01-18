@@ -35,7 +35,7 @@
           <span class="text">性别</span>
         </label>
         <div class="control-container">
-          <popup-picker :show.sync="showGenderPopupPicker" :show-cell="false" :data="genders" v-model="form.gender" />
+          <popup-picker ref="gender" :show.sync="showGenderPopupPicker" :show-cell="false" :data="genders" v-model="form.gender" @on-hide="handleGenderPopupPickerHide" />
           <input id="gender" class="control" type="text" placeholder="请选择性别" :value="genderText" readonly @click="handleShowGenderPopupPicker" />
         </div>
       </div>
@@ -46,7 +46,7 @@
           <span class="text">工作年限</span>
         </label>
         <div class="control-container">
-          <popup-picker :show.sync="showWorkTimePopupPicker" :show-cell="false" :data="workYears" v-model="form.workTime" />
+          <popup-picker :show.sync="showWorkTimePopupPicker" :show-cell="false" :data="workYears" v-model="form.workTime" @on-hide="handleWorkTimePopupPickerHide" />
           <input id="workTime" class="control" type="text" placeholder="请选择工作年限" :value="workTimeText" readonly @click="handleShowWorkTimePopupPicker" />
         </div>
       </div>
@@ -112,6 +112,28 @@ import { getGeneralListApi } from '@/api/common'
   name: 'center-editinfo',
   components: {
     PopupPicker
+  },
+  watch: {
+    'form.gender': {
+      handler (val) {
+        console.log(val, genderOptions[val[0]])
+        this.genderText = genderOptions[val[0]] || ''
+      },
+      deep: true,
+      immediate: true
+    },
+
+    'form.workTime': {
+      handler (val) {
+        this.workYearsSource.forEach(item => {
+          if (item.id === parseInt(val[0])) {
+            this.workTimeText = item.name
+          }
+        })
+      },
+      deep: true,
+      immediate: true
+    }
   }
 })
 export default class CenterEditinfo extends Vue {
@@ -138,28 +160,14 @@ export default class CenterEditinfo extends Vue {
       value: 2
     }
   ]]
+  genderText = ''
+  workTimeText = ''
 
   // 工作年限列表
   workYearsSource = []
 
   showGenderPopupPicker = false
   showWorkTimePopupPicker = false
-
-  // 性别
-  get genderText () {
-    return genderOptions[this.form.gender[0]] || ''
-  }
-
-  // 工作年限
-  get workTimeText () {
-    let result = ''
-    this.workYearsSource.forEach(item => {
-      if (item.id === parseInt(this.form.workTime[0])) {
-        result = item.name
-      }
-    })
-    return result
-  }
 
   // 工作年限选项
   get workYears () {
@@ -182,9 +190,15 @@ export default class CenterEditinfo extends Vue {
   async getPageData () {
     try {
       this.workYearsSource = await getGeneralListApi({ type: 3 })
-      this.form = await getInformationApi()
-      this.form.gender = [this.form.gender]
-      this.form.workTime = [this.form.workTime]
+      const res = await getInformationApi()
+      this.form.avatarUrl = res.avatarUrl
+      this.form.realName = res.realName
+      this.form.gender = [res.gender || 0]
+      this.form.workTime = [res.workTime || 0]
+      this.form.career = res.career
+      this.form.office = res.office
+      this.form.phone = res.phone
+      this.form.weChat = res.weChat
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
     }
@@ -270,10 +284,28 @@ export default class CenterEditinfo extends Vue {
   }
 
   /**
-   * 选择性别
+   * 选择工作年限
    */
   handleShowWorkTimePopupPicker () {
     this.showWorkTimePopupPicker = true
+  }
+
+  /**
+   * 性别弹窗关闭，若是没有相应的值，则默认设置为第一个
+   */
+  handleGenderPopupPickerHide (closeType) {
+    if (closeType && parseInt(this.form.gender[0]) === 0) {
+      this.form.gender = [1]
+    }
+  }
+
+  /**
+   * 工作年限弹窗关闭，若是没有相应的值，则默认设置为第一个
+   */
+  handleWorkTimePopupPickerHide (closeType) {
+    if (closeType && parseInt(this.form.workTime[0]) === 0) {
+      this.form.workTime = [this.workYearsSource[0].id]
+    }
   }
 
   /**
