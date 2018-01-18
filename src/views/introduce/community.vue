@@ -17,7 +17,7 @@
             <!--介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
           <!--</a>-->
         </community-card>
-        <div class="share-btn">
+        <div class="share-btn" @click="showShare = true">
           <img class="share-icon" src="./../../assets/icon/icon_share.png" />
           <span>分享</span>
         </div>
@@ -79,7 +79,9 @@
         <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>
       </div>
     </div>
-
+    <!--分享弹窗-->
+    <share-dialog :isShow="showShare" @close-share="showShare = false"
+                  :shareType="1"></share-dialog>
     <!-- 悬浮输入框 -->
     <suspension-input v-model="displaySuspensionInput"
                       :placeholder="suspensionInputPlaceholder"
@@ -103,6 +105,7 @@
   import wxUtil from '@/util/wx/index'
   import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi } from '@/api/pages/pageInfo'
   import WechatMixin from '@/mixins/wechat'
+  import ShareDialog from '@/components/shareDialog/ShareDialog'
 
   @Component({
     name: 'big-shot-community',
@@ -111,7 +114,8 @@
       CommunityCard,
       suspensionInput,
       Scroll,
-      Actionsheet
+      Actionsheet,
+      ShareDialog
     },
     computed: {
       isAuthor () {
@@ -121,6 +125,7 @@
     mixins: [ListMixin, WechatMixin]
   })
   export default class community extends Vue {
+    showShare = false // 显示分享弹框
     pageInfo = {}
     dynamicList = []
     discussItemList = []
