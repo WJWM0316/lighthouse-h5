@@ -13,9 +13,9 @@
       <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
     </div>
 
-    {{serverIds}}<br>
+    <!-- {{serverIds}}<br>
     {{uploadSuccess}}<br>
-    {{images}}
+    {{images}} -->
 
     <div class="btn-container">
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
@@ -118,17 +118,17 @@ export default class PublishContent extends Vue {
       const params = {
         count: this.lengths.imageMax - this.images.length
       }
-      const { localIds, localDatas } = await this.wechatChooseImage(params)
-      const newImages = localIds.map((localId, index) => {
-        const item = {
+      const { localIds } = await this.wechatChooseImage(params)
+      const newImages = []
+      for (let index in localIds) {
+        const localId = localIds[index]
+        const { localData } = await this.wechatGetLocalImgData(localId)
+        newImages.push({
           mediaId: '',
-          fileUrl: localId
-        }
-        if (localDatas && localDatas.length > 0) {
-          item.base64Url = localDatas[index]
-        }
-        return item
-      })
+          fileUrl: localId,
+          base64Url: localData
+        })
+      }
       console.log('newImages:', ...newImages)
       this.images = [...this.images, ...newImages]
       this.uploadCustomImages(localIds)
@@ -161,9 +161,7 @@ export default class PublishContent extends Vue {
       } else {
         // todo 全部上传到微信服务器成功，通知服务器
         await this.uploadWechatSuccess()
-        this.$nextTick(() => {
-          this.uploadSuccess = true
-        })
+        this.uploadSuccess = true
       }
     } catch (error) {
       console.log(error)
@@ -191,7 +189,6 @@ export default class PublishContent extends Vue {
         const file = files[fileIndex]
         for (let index in this.images) {
           const image = this.images[index]
-          console.log(image.mediaId, file.mediaId)
           if (image.mediaId === file.mediaId) {
             this.images[index] = file
             // this.$set(this.images, index, file)
