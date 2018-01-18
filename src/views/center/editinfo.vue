@@ -147,7 +147,7 @@ export default class CenterEditinfo extends Vue {
 
   // 性别
   get genderText () {
-    return genderOptions[this.form.gender[0]]
+    return genderOptions[this.form.gender[0]] || ''
   }
 
   // 工作年限
