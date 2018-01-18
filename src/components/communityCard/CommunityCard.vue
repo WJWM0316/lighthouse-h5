@@ -17,7 +17,7 @@
       <div class="bottom">
         <div class="left">
           <!-- 已结束 -->
-          <p v-if="community.isEnd">课堂已关闭</p>
+          <p v-if="isEnd">课堂已关闭</p>
           <!-- 已加入 -->
           <p class="time-range" v-else-if="community.isAuthor === 1 || community.isJoined === 1">开课时间：{{community.startTime * 1000 | date('YYYY年MM月DD日')}}-{{community.endTime * 1000 | date('YYYY年MM月DD日')}}</p>
           <!-- 未加入且未开社 -->
@@ -26,7 +26,7 @@
           <p v-else>课堂已开启</p>
         </div>
         <div class="right">
-          <template v-if="community.isAuthor !== 1 && community.isJoined !== 1 && !community.isEnd">
+          <template v-if="community.isAuthor !== 1 && community.isJoined !== 1 && !isEnd">
             <p class="residue" v-if="community.remainingJoinNum <= 0">已满员</p>
             <p class="residue" v-else>剩余 <span class="number">{{community.remainingJoinNum || 0}}</span> 个学位</p>
           </template>
