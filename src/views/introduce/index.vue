@@ -256,7 +256,7 @@
       })
       this.dynamicList = temp
       this.pageInfo = res
-//      this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
+      this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
     }
 
     disableOperationEvents (e) {
@@ -319,6 +319,7 @@
       &.h5-code {
         display: block;
         max-width: 100%;
+        height: 100%;
         line-height: 1.5;
         font-size: 16px;
         overflow: hidden;
