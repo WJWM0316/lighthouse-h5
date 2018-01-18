@@ -151,8 +151,8 @@ export default class HomeIndex extends Vue {
   /**
    * 点击banner
    */
-  handleTapBanner (item) {
-    this.$router.push(item.url)
+  handleTapBanner () {
+    location.href = 'https://stg.ziwork.com/zikeappstatic/lighthousestatic/howplay/index.html'
   }
 
   /**
