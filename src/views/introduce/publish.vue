@@ -124,12 +124,12 @@ export default class PublishContent extends Vue {
           mediaId: '',
           fileUrl: localId
         }
-        console.log('localDatas:', localDatas)
         if (localDatas && localDatas.length > 0) {
           item.base64Url = localDatas[index]
         }
         return item
       })
+      console.log('newImages:', ...newImages)
       this.images = [...this.images, ...newImages]
       this.uploadCustomImages(localIds)
     } catch (error) {
@@ -193,8 +193,9 @@ export default class PublishContent extends Vue {
           const image = this.images[index]
           console.log(image.mediaId, file.mediaId)
           if (image.mediaId === file.mediaId) {
-//            this.images[index] = file
-            this.$set(this.images, index, file)
+            this.images[index] = file
+            // this.$set(this.images, index, file)
+            break
           }
         }
       }
