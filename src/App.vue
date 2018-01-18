@@ -97,6 +97,12 @@ export default class App extends Vue {
 //      document.body.innerHTML = '<div class="page_msg"><div class="inner"><span class="msg_icon_wrp"><i class="icon80_smile"></i></span><div class="msg_content"><h4>请在微信客户端打开链接</h4></div></div></div>'
 //    }
   }
+  mounted () {
+    document.querySelector('body').addEventListener('touchmove', function (e) {
+      e.preventDefault()
+      e.stopPropagation()
+    })
+  }
 }
 </script>
 
