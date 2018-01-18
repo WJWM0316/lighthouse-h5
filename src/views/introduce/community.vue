@@ -191,6 +191,7 @@
 
     toggle (type) {
       if (this.showType !== type) {
+        this.displaySuspensionInput = false
         this.dynamicList = []
         this.showType = type
         this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
