@@ -191,7 +191,6 @@ export default class PublishContent extends Vue {
           const image = this.images[index]
           if (image.mediaId === file.mediaId) {
             this.images[index] = file
-            // this.$set(this.images, index, file)
             break
           }
         }
@@ -207,23 +206,8 @@ export default class PublishContent extends Vue {
    * 准备发布
    */
   readyPublish () {
-    let fileId = []
-    console.log('准备发布images：', this.images)
-    if (this.addonType === 2) {
-      fileId = this.videos.map(item => item.fileId)
-    } else if (this.addonType === 3) {
-      fileId = this.images.map(item => item.fileId)
-    }
-    console.log('生成的fileId：', fileId)
-    const params = {
-      communityId: this.form.communityId,
-      content: this.form.content,
-      type: this.addonType,
-      fileId: fileId
-    }
-
     if (this.uploadSuccess) {
-      this.publish(params)
+      this.publish()
     } else {
       this.$vux.loading.show({
         text: '上传中...'
@@ -232,7 +216,7 @@ export default class PublishContent extends Vue {
         if (val) {
           this.$nextTick(() => {
             setTimeout(() => {
-              this.publish(params)
+              this.publish()
             }, 1000)
           })
         }
@@ -243,11 +227,27 @@ export default class PublishContent extends Vue {
   /**
    * 最终发布
    */
-  async publish (params) {
+  async publish () {
     try {
       this.$vux.loading.show({
         text: '发布中...'
       })
+
+      let fileId = []
+      console.log('准备发布images：', this.images)
+      if (this.addonType === 2) {
+        fileId = this.videos.map(item => item.fileId)
+      } else if (this.addonType === 3) {
+        fileId = this.images.map(item => item.fileId)
+      }
+      console.log('生成的fileId：', fileId)
+      const params = {
+        communityId: this.form.communityId,
+        content: this.form.content,
+        type: this.addonType,
+        fileId: fileId
+      }
+
       await publishApi(params)
       this.$vux.toast.text('发布成功', 'bottom')
       this.$router.go(-1)
