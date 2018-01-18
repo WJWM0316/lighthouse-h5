@@ -243,7 +243,7 @@ export default class dynamicItem extends Vue {
     console.log('当前打开文件: ', url)
     this.$emit('operation', {
       eventType: 'fileOpen',
-      url: 'https://zike-uploads-pro.oss-cn-shenzhen.aliyuncs.com/product/file/2017-12-26/1f3f03169d32e60264514ccf80a1b4de.pdf'
+      url: 'https://cdnstatic.zike.com/product/file/2017-12-26/1f3f03169d32e60264514ccf80a1b4de.pdf'
     })
   }
   videoClick () {
