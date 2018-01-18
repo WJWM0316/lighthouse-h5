@@ -138,6 +138,10 @@ export default class Recorder extends Vue {
       this.duration = this.progress
       this.progress = 0
       this.stopInterval()
+      this.$vux.alert.show({
+        title: '已停止录音',
+        content: '已达到此音频的最大长度限制。',
+      })
       this.$emit('finish', res)
     }
 
