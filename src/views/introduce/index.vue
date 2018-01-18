@@ -83,6 +83,7 @@
   import {payApi} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
+  import flexible from '@/util/flexible'
 
   @Component({
     name: 'big-shot-introduce',
@@ -126,7 +127,15 @@
     dynamicList = []
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
-
+    pxToRem (_s) {
+      // 匹配:20px或: 20px不区分大小写
+      const reg = /(\:|: )+(\d)+(px)/gi
+      let newStr = _s.replace(reg, function (_x) {
+        _x = _x.replace(/(\:|: )/, '').replace(/px/i, '')
+        return ':' + parseFloat(_x) / 32 + 'rem'
+      })
+      return newStr
+    }
     freeIn () { // 跳转到一个图文消息
       // 取后端链接并跳转，若没有链接，弹框提示
       this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
@@ -204,7 +213,6 @@
 
       this.pageInit().then(() => {
         const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
-
         // 是否已入社
         if (this.completelyShow && this.isJoinAgency) {
           this.$router.replace(`/introduce/${communityId}/community`)
@@ -245,6 +253,9 @@
       })
       this.dynamicList = temp
       this.pageInfo = res
+      console.log('转换前', this.pageInfo.intro)
+      this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
+      console.log('转换后', this.pageInfo.intro)
     }
 
     disableOperationEvents (e) {
