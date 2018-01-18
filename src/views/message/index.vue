@@ -57,15 +57,12 @@
           case 1: // 回答我的提问
           case 2: // 回答我的追问
           case 3: // 评论我的问答
-//            wx.naigateTo({
-//              url: `/pages/introduce/ask?communityId=${item.LighthouseId}`
-//            })
+            this.$router.push(`/details/${item.beReturnedId}/3`)
             break
           case 4: // 评论我帖子
             this.$router.push(`/details/${item.beReturnedId}/2`)
             break
           case 5: // 回复我的评论
-            console.log('跳转到评论详情')
             this.$router.push(`/reply/${item.beReturnedId}`)
             break
           case 6: // 6评论导师内容（朋友圈）

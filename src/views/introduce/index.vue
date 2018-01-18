@@ -5,6 +5,10 @@
 
     <div class="header">
       <community-card :community="pageInfo" :type="2" />
+      <div class="share-btn" @click="showShare = true">
+        <img class="share-icon" src="./../../assets/icon/icon_share.png" />
+        <span>分享</span>
+      </div>
     </div>
 
     <div class="module">
@@ -64,6 +68,9 @@
         </button>
       </div>
     </div>
+    <!--分享弹窗-->
+    <share-dialog :isShow="showShare" @close-share="showShare = false"
+                  :shareType="1"></share-dialog>
   </div>
 </template>
 <script>
@@ -75,12 +82,14 @@
   import WechatMixin from '@/mixins/wechat'
   import {payApi} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
+  import ShareDialog from '@/components/shareDialog/ShareDialog'
 
   @Component({
     name: 'big-shot-introduce',
     components: {
       dynamic,
-      CommunityCard
+      CommunityCard,
+      ShareDialog
     },
     computed: {
       // 剩余免费名额
@@ -112,13 +121,15 @@
     mixins: [WechatMixin]
   })
   export default class introduce extends Vue {
+    showShare = false // 显示分享弹框
     pageInfo = {}
     dynamicList = []
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
 
     freeIn () { // 跳转到一个图文消息
-      console.log('免费集call')
+      // 取后端链接并跳转，若没有链接，弹框提示
+      this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
     }
     payOrFree () {
       let that = this
@@ -260,6 +271,31 @@
     padding-bottom: 54px;
 
     & .header {
+      & .share-btn {
+        position: absolute;
+        top: 15px;
+        right: 0;
+        width: 70px;
+        height: 32px;
+        border-radius: 50px 0 0 50px;
+        background-color: rgba(255, 255, 255, .8);
+        font-size: 15px;
+        line-height: 32px;
+        color: #d7ab70;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        & .share-icon {
+          width: 15px;
+          height: 15px;
+          margin-right: 5px;
+        }
+
+        &::after {
+          content: none;
+        }
+      }
     }
 
     & .container {

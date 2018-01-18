@@ -4,7 +4,7 @@
       <div @click="toggle(1)">我收到的申请</div>
       <div @click="toggle(2)">我发出的申请</div>
     </div>
-    <div class="apply-list">
+    <div class="apply-list" v-if="dataList.length > 0">
       <scroller @refresh="handleRefresh" @pullup="handlePullup">
       <div v-for='item in dataList'>
         <apply-item class='community-item'
@@ -16,6 +16,12 @@
                     :item="item"></apply-item>
       </div>
       </scroller>
+    </div>
+    <div class="p-message" v-else>
+      <div class="icon-container">
+        <img class="icon" :src="iconSrc">
+      </div>
+      <div class="text">还没有申请哦～</div>
     </div>
   </div>
 </template>

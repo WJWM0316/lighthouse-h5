@@ -45,7 +45,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   return Vue.axios[type](url, datas, config)
     .catch(response => {
       /* eslint-disable prefer-promise-reject-errors */
-      return Promise.reject({code: 500, message: '服务器繁忙!'})
+      return Promise.reject({code: 500, message: '网络异常'})
     })
     .then((response) => {
       let {data} = response
