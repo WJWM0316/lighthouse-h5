@@ -155,6 +155,10 @@
     }
 
     created () {
+      if (this.$route.query.type !== undefined) {
+        this.showType = parseInt(this.$route.query.type)
+      }
+      console.log('this.showType', this.showType)
       wxUtil.reloadPage()
       this.pageInit().then(() => {
         const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
@@ -187,8 +191,9 @@
 
     toggle (type) {
       if (this.showType !== type) {
+        this.dynamicList = []
         this.showType = type
-
+        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
         this.showIdentification = !type
 
         this.pagination.end = false // 初始化数据，必定不是最后一页
@@ -201,7 +206,7 @@
         this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
       } else {
         // :todo 发帖
-        this.$router.push(`/publish/${this.$route.params.communityId}`)
+        this.$router.push(`/publish/${this.$route.params.communityId}?type=0`)
       }
     }
     question () {
@@ -658,6 +663,13 @@
           right: 3px;
           top: 3px;
           font-size: 10px;
+          /*background-color: #ff4949;*/
+          /*border-radius: 50%;*/
+          /*line-height: 1;*/
+          /*display: inline-block;*/
+          /*font-style: normal;*/
+          /*color: #FFF;*/
+          /*padding: 2px 3px;*/
         }
       }
       & button:last-of-type {

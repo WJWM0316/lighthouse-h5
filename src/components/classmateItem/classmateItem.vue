@@ -8,7 +8,7 @@
     <div class="userInfo-desc">
       <div class="name">{{item.realName}}</div>
       <div class="persion-info">
-        {{item.workTimeName}}{{item.workTimeName ? ' | ': ''}}{{item.career}}{{item.career ? ' | ': ''}}{{item.office}}
+        {{item['workTimeName']}}{{item['workTimeName'] ?  ' | ' + item['career'] : item['career']}}{{(item['workTimeName'] || item['career']) && item['office'] ? ' | ' + item['office'] : item['office']}}
       </div>
     </div>
   </div>
