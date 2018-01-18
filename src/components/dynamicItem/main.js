@@ -292,7 +292,7 @@ export default class dynamicItem extends Vue {
     const {modelType, circleId, problemId, isCanSee} = item
     console.log('isCanSee', isCanSee)
     if (isCanSee === 0) {
-      alert('您未加入该灯塔，不能查看。')
+      this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return
     }
     let type = 0
