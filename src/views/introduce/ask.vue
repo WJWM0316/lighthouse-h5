@@ -15,9 +15,9 @@
 
       <div class="user-input">
         <textarea placeholder="点此输入您想要向大咖提问的问题"
-                  maxlength="1000"
-                  v-model="askContent"/>
-        <p class="user-input-length">{{strLength}}/1000</p>
+                  :maxlength="lengths.textMa"
+                  v-model="askContent" />
+        <p class="user-input-length">{{strLength}}/{{lengths.textMax}}</p>
       </div>
 
       <div class="is-private">
@@ -99,9 +99,25 @@
     components: {
       QuestionItem,
       suspensionInput
+    },
+    watch: {
+      askContent: {
+        handler (val) {
+          if (val.length > this.lengths.textMax) {
+            this.askContent = val.substr(0, this.lengths.textMax)
+          }
+        },
+        immediate: true
+      }
     }
   })
   export default class Ask extends Vue {
+
+    // 长度
+    lengths = {
+      textMax: 1000, // 文本最大字数
+    }
+
     communityId = ''
     pageInfo = {}
     askContent = ''

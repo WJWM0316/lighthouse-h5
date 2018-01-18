@@ -19,7 +19,7 @@
         </div>
         <div class="text-reply" v-else>
           <div class="form-group">
-            <textarea class="control" maxlength="1000" placeholder="写下您的回答~" v-model="content" />
+            <textarea class="control" :maxlength="lengths.textMax" placeholder="写下您的回答~" v-model="content" />
             <p class="addon" :class="{ 'z-active': content.length > 0 }"><span class="current">{{content.length}}</span>/{{lengths.textMax}}</p>
           </div>
           <div class="btn-container">
@@ -45,10 +45,20 @@ import { getProblemInfoApi, replyApi } from '@/api/pages/qa'
   components: {
     QuestionItem,
     Recorder
+  },
+  watch: {
+    content: {
+      handler (val) {
+        if (val.length > this.lengths.textMax) {
+          this.content = val.substr(0, this.lengths.textMax)
+        }
+      },
+      immediate: true
+    }
   }
 })
 export default class ReplyQuestion extends Vue {
-  // 文本长度
+  // 长度
   lengths = {
     textMax: 1000, // 文本最大字数
   }
