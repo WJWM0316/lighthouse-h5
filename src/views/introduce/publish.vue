@@ -123,11 +123,14 @@ export default class PublishContent extends Vue {
       for (let index in localIds) {
         const localId = localIds[index]
         const { localData } = await this.wechatGetLocalImgData(localId)
-        newImages.push({
+        const item = {
           mediaId: '',
-          fileUrl: localId,
-          base64Url: localData
-        })
+          fileUrl: localId
+        }
+        if (localData) {
+          item.base64Url = localData
+        }
+        newImages.push(item)
       }
       console.log('newImages:', ...newImages)
       this.images = [...this.images, ...newImages]
