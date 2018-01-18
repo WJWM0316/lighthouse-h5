@@ -6,10 +6,10 @@
     </div>
 
     <div class="images" v-if="addonType === 0 || addonType === 3">
-      <div class="item" v-for="(item, index) in images" :key="index">
+      <a href="#" class="item" v-for="(item, index) in images" :key="index" @click.prevent.stop="handlePreviewImage(item)">
         <image-item class="image" mode="auto" :src="item.base64Url || item.fileUrl" />
         <button type="button" class="close u-btn" @click="handleDeleteImage(index, item)"><i class="u-icon-delete-image"></i></button>
-      </div>
+      </a>
       <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
     </div>
 
@@ -132,7 +132,7 @@ export default class PublishContent extends Vue {
         }
         newImages.push(item)
       }
-      console.log('newImages:', ...newImages)
+      console.log('newImages:', newImages.map(item => item.base64Url))
       this.images = [...this.images, ...newImages]
       this.uploadCustomImages(localIds)
     } catch (error) {
