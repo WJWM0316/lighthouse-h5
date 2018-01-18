@@ -384,6 +384,7 @@
 
       & .btn-box {
         display: flex;
+        flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
         flex-grow: 1;
