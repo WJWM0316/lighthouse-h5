@@ -137,9 +137,11 @@
       return newStr
     }
     freeIn () { // 跳转到一个图文消息
-      // 取后端链接并跳转，若没有链接，弹框提示
-//      location.href = 'http://mp.weixin.qq.com/s?__biz=MzI5MjUxNTQ2OA==&mid=100000172&idx=1&sn=ba31e47c93fd4619c0dc06b75a5e7faa&chksm=6c017a4f5b76f3590cccae0f228931f0d2455e9b4cdff334a0d3852d6d170229bc8f7d538443#rd'
-      this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
+      if (this.pageInfo.wechatIntroUrl) {
+        location.href = this.pageInfo.wechatIntroUrl
+      } else {
+        this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
+      }
     }
     payOrFree () {
       let that = this
