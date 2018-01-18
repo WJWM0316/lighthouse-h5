@@ -66,14 +66,12 @@ export default {
           sourceType: options.sourceType || ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
           success: function (res) {
             res.localDatas = []
-            res.localIds.forEach(localId => {
-              self.$wechat.getLocalImgData({
-                localId: localId, // 图片的localID
-                success: function (resp) {
-                  res.localDatas.push(resp.localData) // localData是图片的base64数据，可以用img标签显示
-                }
+            if (self.$wechat.getLocalImgData) {
+              res.localIds.forEach(async localId => {
+                const { localData } = await self.wechatGetLocalImgData(localId)
+                res.localDatas.push(localData)
               })
-            })
+            }
             resolve(res)
             // const localIds = res.localIds // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
           },
@@ -83,6 +81,25 @@ export default {
         })
       })
     },
+
+    /**
+     * 获取本地base64数据
+     * @param {*} localId
+     */
+    wechatGetLocalImgData(localId) {
+      return new Promise((resolve, reject) => {
+        this.$wechat.getLocalImgData({
+          localId: localId, // 图片的localID
+          success: function (res) {
+            resolve(res)
+            // const localData = res.localData // localData是图片的base64数据，可以用img标签显示
+          },
+          fail: function (e) {
+            reject(e)
+          }
+        })
+      })
+    }
 
     /**
      * 预览图片
