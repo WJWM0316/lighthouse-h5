@@ -64,10 +64,10 @@ export default {
           count: options.count || 9, // 默认9
           sizeType: options.sizeType || ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
           sourceType: options.sourceType || ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-          success: function (res) {
+          success: async function (res) {
             res.localDatas = []
             if (self.$wechat.getLocalImgData) {
-              res.localIds.forEach(async localId => {
+              await res.localIds.forEach(async localId => {
                 const { localData } = await self.wechatGetLocalImgData(localId)
                 res.localDatas.push(localData)
               })
