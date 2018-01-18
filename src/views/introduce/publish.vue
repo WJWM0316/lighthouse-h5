@@ -258,6 +258,16 @@ export default class PublishContent extends Vue {
   }
 
   /**
+   * 预览图片
+   */
+  handlePreviewImage (image) {
+    this.wechatPreviewImage({
+      current: image.fileUrl,
+      urls: this.images.map(item => item.fileUrl)
+    })
+  }
+
+  /**
    * 删除图片
    */
   handleDeleteImage (index, image) {
