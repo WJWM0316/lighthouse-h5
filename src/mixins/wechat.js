@@ -37,7 +37,7 @@ export default {
     async getWechatSign () {
       try {
         const params = {
-          url: location.href.split('#')[0]
+          url: location.href.split('#')[0].split('?')[0]
         }
         const res = await getWechatSignApi(params)
         this.wechatConfig = Object.assign({}, this.wechatConfig, res)
