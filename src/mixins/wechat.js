@@ -83,6 +83,7 @@ export default {
     wechatGetLocalImgData(localId) {
       return new Promise((resolve, reject) => {
         console.log('是否支持getLocalImgData：', !!this.$wechat.getLocalImgData)
+        console.log('是否是ios', browser.isIos)
         if (browser.isIos && this.$wechat.getLocalImgData) {
           this.$wechat.getLocalImgData({
             localId: localId, // 图片的localID
