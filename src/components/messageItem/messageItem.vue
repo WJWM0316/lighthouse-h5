@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="desc-bottom">
-        <div class="send-time">{{moment(item.replyTime * 1000).format('MM月DD日 HH:mm:ss')}}</div>
+        <div class="send-time">{{moment(item.replyTime * 1000).format('YY-MM-DD HH:mm')}}</div>
         <div class="linght-house" @click.stop="handleThree">{{item.manito + '的' +item.Lighthouse}}</div>
       </div>
     </div>
