@@ -8,7 +8,8 @@
                v-model="suspensionInputContent"
                @blur="hide()"
                ref="suspension-input"
-               maxlength="1000" />
+               maxlength="1000"
+               autofocus />
       </div>
       <span class="ask-btn" @click="send">{{sendText}}</span>
     </div>
