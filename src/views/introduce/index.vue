@@ -128,7 +128,8 @@
     completelyShow = true
 
     freeIn () { // 跳转到一个图文消息
-      console.log('免费集call')
+      // 取后端链接并跳转，若没有链接，弹框提示
+      this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
     }
     payOrFree () {
       let that = this
