@@ -223,6 +223,7 @@ export default class Recorder extends Vue {
   clear () {
     this.localId = ''
     this.status = 'default'
+    this.manager && this.manager.stopRecord()
     this.manager && this.manager.stopVoice({ callStopVoice: false })
     this.duration = 0
     this.progress = 0

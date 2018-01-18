@@ -163,6 +163,9 @@ export default class ReplyQuestion extends Vue {
     if (this.replyType !== type) {
       this.replyType = type
       this.content = '' // 切换tab，将内容清空
+      if (type !== 2) {
+        this.$refs.recorder.clear()
+      }
     }
   }
 
