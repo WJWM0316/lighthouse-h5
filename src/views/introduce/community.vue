@@ -418,6 +418,7 @@
   }
 </script>
 <style lang="less" scoped type="text/less">
+  @import "../../styles/mixins";
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
@@ -647,18 +648,16 @@
           position: relative;
         }
         & .answer-count {
+          .setTag();
+          min-width: 13px;
+          height: 13px;
+          line-height: 13px;
+          padding: 0 3px;
+          transform: translate(100%, -50%);
           position: absolute;
           right: 3px;
           top: 3px;
           font-size: 10px;
-          background-color: #ff4949;
-          transform: translate(100%, -50%);
-          border-radius: 50%;
-          line-height: 1;
-          display: inline-block;
-          font-style: normal;
-          color: #FFF;
-          padding: 2px 3px;
         }
       }
       & button:last-of-type {
