@@ -58,41 +58,42 @@
     margin-left: 15px;
     display: flex;
     align-items: center;
-  }
-  .userInfo-img {
-    position: relative;
-    font-size: 0;
-    line-height: 1;
-    .headImg{
-      width: 50px;
-      height: 50px;
-      background: pink;
-      border-radius: 50%;
-    }
-    & .sex {
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      bottom: 0;
-      right: 0;
-      border-radius: 50%;
-    }
-  }
 
-  .userInfo-desc {
-    margin-left: 15px;
-
-    .name {
-      font-size: 15px;
-      line-height: 19px;
-      .setEllipsis(285px);
+    .userInfo-img {
+      position: relative;
+      font-size: 0;
+      line-height: 1;
+      .headImg{
+        width: 50px;
+        height: 50px;
+        background: pink;
+        border-radius: 50%;
+      }
+      & .sex {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        bottom: 0;
+        right: 0;
+        border-radius: 50%;
+      }
     }
-    .persion-info{
-      padding-top: 5px;
-      font-size: 13px;
-      line-height: 17px;
-      color: #929292;
-      .setEllipsis(285px);
+
+    .userInfo-desc {
+      margin-left: 15px;
+
+      .name {
+        font-size: 15px;
+        line-height: 19px;
+        .setEllipsis(285px);
+      }
+      .persion-info{
+        padding-top: 5px;
+        font-size: 13px;
+        line-height: 17px;
+        color: #929292;
+        .setEllipsis(285px);
+      }
     }
   }
 </style>

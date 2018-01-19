@@ -70,7 +70,7 @@
   .apply-item {
     margin: 0 15px;
     padding: 20px 0;
-    border-bottom: solid 1px #ededed;
+    border-bottom: solid 1px #ededed; /* no */
     display: flex;
     align-items: center;
     .item-left {
@@ -87,6 +87,7 @@
         .setEllipsis();
       }
       .item-middle-middle {
+        margin-top: 5px;
         .setEllipsis();
       }
       .item-middle-bottom {
