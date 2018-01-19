@@ -103,6 +103,7 @@ export default class Scroller extends Vue {
    * 滚动监听
    */
   handleScroll (e) {
+    e.preventDefault()
     this.$emit('scroll', e)
   }
 }
