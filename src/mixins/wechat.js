@@ -197,11 +197,13 @@ export default {
          * 停止录音
          * @return {Promise}
          */
-        stopRecord () {
+        stopRecord (callStopRecord = true) {
           self.$wechat.stopRecord({
             success: res => {
-              _localId = res.localId
-              this.triggerCallback('onStopRecord', res)
+              if (callStopRecord) {
+                _localId = res.localId
+                this.triggerCallback('onStopRecord', res)
+              }
             }
           })
         },

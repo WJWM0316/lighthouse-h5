@@ -45,6 +45,7 @@
       <div class="question-list">
         currentTime: {{this.audio && this.audio.currentTime}}<br>
         duration: {{this.audio && this.audio.duration}}<br>
+        duration2: {{this.duration}}<br>
         progress: {{this.audio && parseInt(this.audio.currentTime / this.audio.duration)}}
         <question-item class="question"
                        v-for="(item, index) in pageInfo.problem"
@@ -133,6 +134,7 @@
       onPause: null,
       onStopOrEnded: null
     }
+    duration = 0
 
     commentIndex = -1
     suspensionInputPlaceholder = '每个问题只能追问一次'
@@ -425,6 +427,9 @@
           this.$set(problem.answer, answerIndex, answer)
         }
 
+        this.audio.addEventListener('durationchange', e => {
+          this.duration = this.audio.duration
+        })
         this.audio.addEventListener('playing', this.audioEventCallbacks.onPlaying)
         this.audio.addEventListener('timeupdate', this.audioEventCallbacks.onTimeUpdate)
         this.audio.addEventListener('pause', this.audioEventCallbacks.onPause)
