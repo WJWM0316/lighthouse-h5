@@ -175,7 +175,6 @@
         return
       }
       if (this.pagination.end) {
-        this.$vux.toast.text('没有更多数据了', 'bottom')
         return
       }
       page = page || this.pagination.page || 1
