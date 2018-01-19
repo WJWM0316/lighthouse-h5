@@ -25,16 +25,17 @@
     right: 0;
     z-index: 99;
 
-    &.z-focused {
-      transform: translateY(-100%);
-    }
+    /*&.z-focused {*/
+      /*transform: translateY(-54%);*/
+    /*}*/
 
     .ask-box {
-      height: 54px;
+      height: 108px;
       background-color: #f8f8f8;
       padding: 0 10px;
       display: flex;
-      align-items: center;
+      padding-top: 10px;
+      /*align-items: center;*/
       justify-content: space-between;
 
       & .user-input {
