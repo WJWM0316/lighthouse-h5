@@ -257,7 +257,7 @@
       console.log(temp)
       this.dynamicList = temp
       this.pageInfo = res
-//      this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
+      this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
     }
 
     disableOperationEvents (e) {
