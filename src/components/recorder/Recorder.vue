@@ -135,7 +135,7 @@ export default class Recorder extends Vue {
     this.manager.onRecordEnded = res => {
       this.localId = res.localId
       this.status = 'finish'
-      this.duration = 60
+      this.duration = 60000
       this.progress = 0
       this.stopInterval()
       this.$vux.alert.show({
