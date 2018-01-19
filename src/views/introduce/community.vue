@@ -430,7 +430,7 @@
     height: 100%;
 
     &.author {
-      /*padding-bottom: 50px;*/
+      padding-bottom: 100px;
     }
 
     & .header {

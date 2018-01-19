@@ -59,6 +59,7 @@
         flex: 0 0 auto;
         margin-right: -10px;
         padding: 0 10px;
+        padding-top: 10px;
         border-radius: 0;
         font-size: 15px;
         font-weight: 500;
