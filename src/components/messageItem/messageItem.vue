@@ -120,7 +120,8 @@
   @import "../../styles/mixins";
   .message-item {
     padding: 0px 15px;
-    display: -webkit-box;
+    display: flex;
+
     .content-audio {
       margin-top: 8px;
       width: 240px;
@@ -251,10 +252,12 @@
         margin-top: 7px;
         display: flex;
         justify-content: space-between;
+        width: 100%;
         .send-time{
-
+          flex: 1 1 auto;
         }
         .linght-house{
+          width: 130px;
           text-align: right;
           .setEllipsis(130px);
         }
