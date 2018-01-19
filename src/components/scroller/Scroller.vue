@@ -18,7 +18,6 @@
     </template>
 
     <slot></slot>
-
     <bottom-loading :status="loadingStatus" v-if="infiniteScroll" />
 
     <template slot="bottom-block" slot-scope="props">

@@ -9,7 +9,7 @@
       <span @click="toggle(0)">学员交流</span>
     </div>
 
-    <scroll @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll">
+    <scroll :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- header -->
       <div class="header">
         <community-card class="community-item" :community="pageInfo" :type="2">
@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="big-shot-community-content">
-          <div class="module-content" v-if="dynamicList.length > 0">
+          <div class="module-content" v-if="dynamicList && dynamicList.length > 0">
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
                      :showIdentification="showIdentification"
@@ -382,16 +382,20 @@
      * 下拉刷新
      */
     handleRefresh (loaded) {
-      this.pageInit().then(res => {
-        loaded('done')
-      })
+      this.pageInit()
+      loaded('done')
     }
 
     /**
      * 上拉加载
      */
-    handlePullup (loaded) {
-      this.loadNext().then(() => { loaded('done') })
+    async handlePullup (loaded) {
+      await this.loadNext()
+      if (this.pagination.end) {
+        loaded('ended')
+      } else {
+        loaded('done')
+      }
     }
 
     /**
@@ -417,7 +421,6 @@
         this.displaySuspensionInput = false
       }
       const communityTitleTop = this.communityTitleTop
-      console.log(e, communityTitleTop)
       if (communityTitleTop) {
         const {scrollTop} = e.target
         this.isCommunityTitleFixed = scrollTop >= communityTitleTop
