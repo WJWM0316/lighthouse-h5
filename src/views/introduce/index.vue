@@ -139,6 +139,7 @@
       return newStr
     }
     freeIn () { // 跳转到一个图文消息
+      if (!this.isFreeBtn) return
       if (this.pageInfo.wechatIntroUrl) {
         location.href = this.pageInfo.wechatIntroUrl
       } else {
