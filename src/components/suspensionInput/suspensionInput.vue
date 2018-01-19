@@ -24,10 +24,10 @@
     left: 0;
     right: 0;
     z-index: 99;
-    -webkit-overflow-scrolling : touch;
-    /*&.z-focused {*/
-      /*transform: translateY(-54%);*/
-    /*}*/
+    transform: translateZ(99px);
+    &.z-focused {
+      transform: translateY(-54%);
+    }
 
     .ask-box {
       height: 54px;
