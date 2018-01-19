@@ -195,7 +195,7 @@
         this.communityList = communityList || []
       } else {
         this.dynamicList = this.dynamicList.concat(behaviorList || [])
-        this.communityList = this.dynamicList.concat(communityList || [])
+        this.communityList = this.communityList.concat(communityList || [])
       }
 
       this.pagination.page = page
