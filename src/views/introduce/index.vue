@@ -38,6 +38,7 @@
                    :showLightHouseInfo="false"
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="disableOperationEvents"
+                   :disableUserClick="true"
           ></dynamic>
         </div>
         <div class="desc">
