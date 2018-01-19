@@ -304,7 +304,7 @@ export default class CommunityCard extends Vue {
 
     .desc {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       line-height: 21px;
       font-size: 13px;
       color: #929292;
