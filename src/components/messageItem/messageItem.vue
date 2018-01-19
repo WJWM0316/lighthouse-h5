@@ -201,7 +201,7 @@
     .userInfo-desc {
       margin-left: 15px;
       padding: 20px 0;
-      border-bottom: 1px solid #ededed;
+      border-bottom: 1px solid #ededed; /* no */
       .desc-top{
         margin-bottom: 7px;
         .setEllipsis(285px);

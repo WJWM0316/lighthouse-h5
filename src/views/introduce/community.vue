@@ -413,6 +413,9 @@
     }
 
     scroll (e) {
+      if (this.displaySuspensionInput) {
+        this.displaySuspensionInput = false
+      }
       const communityTitleTop = this.communityTitleTop
       console.log(e, communityTitleTop)
       if (communityTitleTop) {
@@ -459,7 +462,7 @@
           width: 15px;
           height: 15px;
           margin-right: 5px;
-          margin-left: 5px;
+          margin-left: 10px;
         }
 
         &::after {
