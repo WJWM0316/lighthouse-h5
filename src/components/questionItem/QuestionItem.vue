@@ -95,15 +95,6 @@ import Component from 'vue-class-component'
     communityId: {
       type: [String, Number]
     }
-  },
-
-  watch: {
-    model: {
-      handler (val) {
-        console.log(val)
-      },
-      deep: true
-    }
   }
 })
 export default class QuestionItem extends Vue {

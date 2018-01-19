@@ -1,69 +1,71 @@
 <template>
   <div class="p-body p-ask">
-    <!-- header -->
-    <div class="header">
-      <div class="userInfo">
-        <div class="userInfo-img">
-          <image-item class="image" :src="userInfo.avatar" mode="horizontal" :round="true"/>
-          <i class="sex no-offset" :class="`u-icon-${userInfo.gender === 2 ? 'girl' : 'boy'}`"></i>
+    <scroller :pullupable="false" :refreshable="false" class="wrapper" @scroll="handleScroll">
+      <!-- header -->
+      <div class="header">
+        <div class="userInfo">
+          <div class="userInfo-img">
+            <image-item class="image" :src="userInfo.avatar" mode="horizontal" :round="true"/>
+            <i class="sex no-offset" :class="`u-icon-${userInfo.gender === 2 ? 'girl' : 'boy'}`"></i>
+          </div>
+          <div class="userInfo-desc">
+            <h3>{{userInfo.realName}}</h3>
+            <p v-if="userInfo.career">{{userInfo.career}}</p>
+          </div>
         </div>
-        <div class="userInfo-desc">
-          <h3>{{userInfo.realName}}</h3>
-          <p v-if="userInfo.career">{{userInfo.career}}</p>
-        </div>
-      </div>
 
-      <div class="user-input">
+        <div class="user-input">
         <textarea placeholder="点此输入您想要向大咖提问的问题"
                   :maxlength="lengths.textMa"
                   v-model="askContent" />
-        <p class="user-input-length">{{strLength}}/{{lengths.textMax}}</p>
-      </div>
+          <p class="user-input-length">{{strLength}}/{{lengths.textMax}}</p>
+        </div>
 
-      <div class="is-private">
-        <div class="u-checkbox">
-          <input id="private" type="checkbox" v-model="isPrivate" :true-value="1" :false-value="2"/>
-          <label for="private">
-            <i class="icon u-icon"></i> 设为私密提问
-          </label>
+        <div class="is-private">
+          <div class="u-checkbox">
+            <input id="private" type="checkbox" v-model="isPrivate" :true-value="1" :false-value="2"/>
+            <label for="private">
+              <i class="icon u-icon"></i> 设为私密提问
+            </label>
+          </div>
+        </div>
+
+        <button type="button" class="ask-btn" :disabled="strLength <= 0" @click="handleAsk">{{isHasFree > 0 ? '提问' :
+          '付费提问'}}
+        </button>
+
+        <div class="user-desc">
+          <p v-if="isHasFree > 0">你还有 {{isHasFree}} 次机会向导师免费提问，你的提问将100%得到答复</p>
+          <p v-else>你可以以每条 ￥{{pageInfo.problemPrice}} 的价格向导师进行付费提问。</p>
         </div>
       </div>
 
-      <button type="button" class="ask-btn" :disabled="strLength <= 0" @click="handleAsk">{{isHasFree > 0 ? '提问' :
-        '付费提问'}}
-      </button>
-
-      <div class="user-desc">
-        <p v-if="isHasFree > 0">你还有 {{isHasFree}} 次机会向导师免费提问，你的提问将100%得到答复</p>
-        <p v-else>你可以以每条 ￥{{pageInfo.problemPrice}} 的价格向导师进行付费提问。</p>
+      <!-- container -->
+      <div class="container">
+        <div class="container-title" v-if="pageInfo.problem && pageInfo.problem.length > 0">历史提问</div>
+        <div class="question-list">
+          <!-- currentTime: {{this.audio && this.audio.currentTime}}<br>
+          duration: {{this.audio && this.audio.duration}}<br>
+          duration2: {{this.duration}}<br>
+          progress: {{this.audio && parseInt(this.audio.currentTime / this.audio.duration)}} -->
+          <question-item class="question"
+                         v-for="(item, index) in pageInfo.problem"
+                         :key="index"
+                         :model="item"
+                         :answers="item.answer"
+                         :type="2"
+                         :communityId="communityId"
+                         @card-tap="handleCardTap"
+                         @play-voice="handlePlayVoice"
+                         @pause-voice="handlePauseVoice">
+            <div class="btn-container" slot="footer" v-if="item.status === 2">
+              <a class="u-btn-add-ask" @click.prevent.stop="handleWakeUpPump(index)">追问</a>
+            </div>
+          </question-item>
+        </div>
       </div>
-    </div>
 
-    <!-- container -->
-    <div class="container">
-      <div class="container-title" v-if="pageInfo.problem && pageInfo.problem.length > 0">历史提问</div>
-      <div class="question-list">
-        <!-- currentTime: {{this.audio && this.audio.currentTime}}<br>
-        duration: {{this.audio && this.audio.duration}}<br>
-        duration2: {{this.duration}}<br>
-        progress: {{this.audio && parseInt(this.audio.currentTime / this.audio.duration)}} -->
-        <question-item class="question"
-                       v-for="(item, index) in pageInfo.problem"
-                       :key="index"
-                       :model="item"
-                       :answers="item.answer"
-                       :type="2"
-                       :communityId="communityId"
-                       @card-tap="handleCardTap"
-                       @play-voice="handlePlayVoice"
-                       @pause-voice="handlePauseVoice">
-          <div class="btn-container" slot="footer" v-if="item.status === 2">
-            <a class="u-btn-add-ask" @click.prevent.stop="handleWakeUpPump(index)">追问</a>
-          </div>
-        </question-item>
-      </div>
-    </div>
-
+    </scroller>
     <!-- <div class="ask-box" :class="{ show: isShowPumpBtn }">
       <div class="user-input">
         <input type="text" placeholder="每个问题只能追问一次"
@@ -91,6 +93,7 @@
 
   import QuestionItem from '@/components/questionItem'
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
+  import Scroller from '@/components/scroller'
 
   import ListMixin from '@/mixins/list'
 
@@ -102,7 +105,8 @@
     mixins: [ListMixin],
     components: {
       QuestionItem,
-      suspensionInput
+      suspensionInput,
+      Scroller
     },
     watch: {
       askContent: {
@@ -300,6 +304,13 @@
     }
 
     /**
+     * 监听滚动
+     */
+    handleScroll (e) {
+      this.displaySuspensionInput = false
+    }
+
+    /**
      * 点击提问|付费提问
      */
     handleAsk () {
@@ -456,7 +467,15 @@
   @import "../../styles/variables";
 
   .p-ask {
+    position: relative;
     background-color: #f9f9f9;
+
+    .wrapper {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
 
     .header {
       padding: 20px 15px;
