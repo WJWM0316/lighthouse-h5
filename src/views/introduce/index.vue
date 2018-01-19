@@ -233,7 +233,7 @@
           'title': str + '|' + title,
           'desc': simpleIntro,
           'imgUrl': shareImg,
-          'link': location.href.split('?')[0]
+          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
       })
     }
