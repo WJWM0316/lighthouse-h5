@@ -285,6 +285,7 @@ export default class PublishContent extends Vue {
    */
   handleDeleteImage (index, image) {
     this.images.splice(index, 1)
+    this.serverIds.splice(index, 1)
     if (this.images && this.images.length <= 0) {
       // 如果图片全部删除了，则上传状态变成完成
       this.uploadSuccess = true
