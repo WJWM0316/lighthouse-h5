@@ -4,7 +4,7 @@
       <div class="hd">
         <button type="button" class="u-btn-close" @click="handleClose">关闭</button>
       </div>
-      <recorder @uploading="handleUploading" @upload-success="handleUploadSuccess" />
+      <recorder ref="recorder" @uploading="handleUploading" @upload-success="handleUploadSuccess" />
     </div>
   </div>
 </template>
@@ -33,6 +33,10 @@ export default class PublishVoice extends Vue {
 
   created () {
     this.form.communityId = this.$route.params.communityId
+  }
+
+  destroyed () {
+    this.$refs.recorder.clear()
   }
 
   /**
