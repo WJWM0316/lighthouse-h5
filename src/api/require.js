@@ -34,9 +34,9 @@ function hideLoading (open) {
 export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   // 正常r请
   // let datas = type === 'get' ? {params: data} :data
-  let globalLoading = false
+  let globalLoading = true
   if (data.globalLoading !== undefined) {
-    globalLoading = data.globalLoading || false
+    globalLoading = data.globalLoading || true
     delete data.globalLoading
   }
   // data.TestUid = 2
