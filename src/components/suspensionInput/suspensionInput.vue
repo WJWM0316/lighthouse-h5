@@ -1,12 +1,13 @@
 <template>
   <!-- 悬浮输入框 -->
-  <div class="suspension-input" v-if="isShow">
+  <div class="suspension-input" :class="{ 'z-focused': isFocused }" v-if="isShow">
     <div class="ask-box">
       <div class="user-input">
         <input type="text"
                :placeholder="placeholder"
                v-model="suspensionInputContent"
                @blur="hide()"
+               @focus="handleFocus"
                ref="suspension-input"
                maxlength="1000"
                autofocus />
@@ -23,6 +24,10 @@
     left: 0;
     right: 0;
     z-index: 99;
+
+    &.z-focused {
+      transform: translateY(-100%);
+    }
 
     .ask-box {
       height: 54px;

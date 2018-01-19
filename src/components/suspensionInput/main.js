@@ -43,6 +43,7 @@ export default class suspensionInput extends Vue {
   suspensionInputContent = ''
   suspensionInput = ''
   isShow = false
+  isFocused = false
 
   mounted () {
     this.suspensionInput = this.$refs['suspension-input']
@@ -67,5 +68,11 @@ export default class suspensionInput extends Vue {
 
   hide () {
     this.$emit('input', false)
+    this.isFocused = false
+  }
+
+  handleFocus () {
+    this.$emit('focus')
+    this.isFocused = true
   }
 }
