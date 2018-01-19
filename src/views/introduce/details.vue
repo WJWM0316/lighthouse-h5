@@ -332,6 +332,7 @@
         return
       }
       if (this.pagination.end) {
+        this.$vux.toast.text('没有更多数据了', 'bottom')
         return
       }
       page = page || this.pagination.page || 1
@@ -400,7 +401,7 @@
         color: #354048;
         padding: 10px 0;
         margin: 0 15px;
-        border-bottom: solid 1px #dcdcdc;
+        border-bottom: solid 1px #dcdcdc;  /* no */
       }
     }
 
@@ -413,7 +414,7 @@
       & .page-operation {
         display: flex;
         align-items: center;
-        border-top: solid 1px #ededed;
+        border-top: solid 1px #ededed;  /* no */
         background: #FFF;
 
         & > button　{

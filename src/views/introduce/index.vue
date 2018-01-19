@@ -250,10 +250,11 @@
         } else if (item['circleType'] === 1) {
           item.musicState = 0
           item.progress = 0
-        } else if (res['circleType'] === 2) {
+        } else if (item['circleType'] === 2) {
           item.videoPlay = false
         }
       })
+      console.log(temp)
       this.dynamicList = temp
       this.pageInfo = res
       this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
