@@ -28,8 +28,8 @@
       </div>
     </scroll>
     <!-- footer -->
-    <div class="footer">
-      <div class="page-operation" v-if="!displaySuspensionInput">
+    <div class="footer" v-if="!displaySuspensionInput">
+      <div class="page-operation">
         <!-- 点赞按钮 -->
         <button @click="operation({eventType: 'praise'})">
           <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />

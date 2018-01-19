@@ -32,14 +32,14 @@ function hideLoading (open) {
 }
 
 export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
-  // 正常请
+  // 正常r请
   // let datas = type === 'get' ? {params: data} :data
   let globalLoading = false
   if (data.globalLoading !== undefined) {
     globalLoading = data.globalLoading || false
     delete data.globalLoading
   }
-  // data.TestUid = 2
+  data.TestUid = 2
   showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data}} : {...data}
   return Vue.axios[type](url, datas, config)
