@@ -36,12 +36,7 @@ export default class TimeBtn extends Vue {
       try {
         const params = {...this.loginInfo, from: this.type}
         await smsApi(params)
-        this.$vux.toast.show({
-          text: '验证码发送成功，<br>请留意短信',
-          position: 'middle',
-          time: 800,
-          type: 'text'
-        })
+        this.$vux.toast.text('验证码发送成功，<br>请留意短信', 'bottom')
         this.time = this.second
         this.timeFlag = true
         this.timer()
