@@ -668,7 +668,7 @@
           /*border-radius: 50%;*/
           /*line-height: 1;*/
           /*display: inline-block;*/
-          /*font-style: normal;*/
+          font-style: normal;
           /*color: #FFF;*/
           /*padding: 2px 3px;*/
         }
