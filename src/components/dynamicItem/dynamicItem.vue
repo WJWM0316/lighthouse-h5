@@ -154,28 +154,27 @@
         </div>
       </div>
 
-
       <!-- 评论区 -->
-        <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || item.commentTotal > 0)">
-          <!-- 点赞信息 -->
-            <div class="praise-block" v-if="item.favorTotal > 0">
-              <img class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
-              <div class="praise-name">
-                  <span class="favor-name" v-for="(favor, favorIndex) in item.favors" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
-              </div>
-              <span class="praise-total" v-if="item.favorTotal > 3">等{{item.favorTotal}}人觉得很赞</span>
+      <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || item.commentTotal > 0)">
+        <!-- 点赞信息 -->
+          <div class="praise-block" v-if="item.favorTotal > 0">
+            <img class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+            <div class="praise-name">
+                <span class="favor-name" v-for="(favor, favorIndex) in item.favors" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
             </div>
+            <span class="praise-total" v-if="item.favorTotal > 3">等{{item.favorTotal}}人觉得很赞</span>
+          </div>
 
-          <!-- 评论信息 -->
-          <div class="reply-block" v-if="item.commentTotal > 0">
-            <div class="reply" v-for="reply in item.comments">
-              <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.realName}}</span>: {{reply.content}}
-            </div>
-            <div class="reply" v-if="item.commentTotal > 3">
-              <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
-            </div>
+        <!-- 评论信息 -->
+        <div class="reply-block" v-if="item.commentTotal > 0">
+          <div class="reply" v-for="reply in item.comments">
+            <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.realName}}</span>: {{reply.content}}
+          </div>
+          <div class="reply" v-if="item.commentTotal > 3">
+            <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </template>

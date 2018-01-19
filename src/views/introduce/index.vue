@@ -283,6 +283,7 @@
     padding-bottom: 54px;
 
     & .header {
+      margin-bottom: 20px;
       & .share-btn {
         position: absolute;
         top: 15px;
@@ -481,7 +482,7 @@
     & .icon-home {
       width: 18px;
       height: 16px;
-      margin-bottom: 7px;
+      margin-bottom: 2px;
     }
   }
 </style>
