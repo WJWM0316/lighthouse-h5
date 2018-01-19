@@ -4,11 +4,13 @@
     ref="pullTo"
     :top-load-method="refreshable ? handleRefresh : undefined"
     :bottom-load-method="pullupable ? handlePullup : undefined"
+    :is-bottom-bounce="pullupable ? true : false"
     :top-block-height="scroller.topBlockHeight"
     :bottom-block-height="scroller.bottomBlockHeight"
     :top-config="scroller.topConfig"
     :bottom-config="scroller.bottomConfig"
-    @scroll="handleScroll">
+    @scroll="handleScroll"
+    @infinite-scroll="handleInfiniteScroll">
     <template slot="top-block" slot-scope="props">
       <div class="top-block">
         <p v-text="props.stateText"></p>
@@ -16,6 +18,8 @@
     </template>
 
     <slot></slot>
+
+    <bottom-loading :status="loadingStatus" v-if="infiniteScroll" />
 
     <template slot="bottom-block" slot-scope="props">
       <div class="bottom-block">
@@ -49,6 +53,12 @@ import PullTo from 'vue-pull-to'
       default: true
     },
 
+    // 是否开启无限加载
+    infiniteScroll: {
+      type: Boolean,
+      default: false
+    },
+
     // 是否没有更多数据加载了
     isNoneData: {
       type: Boolean,
@@ -61,8 +71,10 @@ import PullTo from 'vue-pull-to'
       handler (val) {
         if (this.isNoneData) {
           this.scroller.bottomConfig = Object.assign({}, this.scroller.bottomConfig, { doneText: '没有更多内容了~' })
+          this.switchLoadingStatus('ended')
         } else {
           this.scroller.bottomConfig = Object.assign({}, this.scroller.bottomConfig, { doneText: '加载完成' })
+          this.switchLoadingStatus('done')
         }
       },
       immediate: true
@@ -83,6 +95,30 @@ export default class Scroller extends Vue {
     }
   }
 
+  // 底部loading状态
+  loadingStatus = 'default'
+
+  /**
+   * 切换loading状态
+   */
+  switchLoadingStatus (status) {
+    this.$nextTick(() => {
+      switch (status) {
+        case 'done':
+          this.loadingStatus = 'default'
+          break
+        // case 'loading':
+        //   this.loadingStatus = 'loading'
+        //   break
+        // case 'ended':
+        //   this.loadingStatus = 'ended'
+        //   break
+        default:
+          this.loadingStatus = status
+      }
+    })
+  }
+
   /**
    * 下拉刷新
    */
@@ -97,6 +133,16 @@ export default class Scroller extends Vue {
     this.$nextTick(() => {
       this.$emit('pullup', loaded)
     })
+  }
+
+  /**
+   * 滚动到底部
+   */
+  handleInfiniteScroll () {
+    if (this.infiniteScroll && this.loadingStatus === 'default') {
+      this.switchLoadingStatus('loading')
+      this.$emit('infinite-scroll', this.switchLoadingStatus)
+    }
   }
 
   /**
