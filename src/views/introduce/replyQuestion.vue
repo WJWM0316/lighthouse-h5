@@ -68,7 +68,9 @@ export default class ReplyQuestion extends Vue {
   replyType = 2 // 问题回答类型 1 => 文字；2 => 语音
   content = '' // 文字内容或者录音文件id
   master = {} // 大咖信息
-  problem = {} // 问题详情
+  problem = {
+
+  } // 问题详情
   serverIds = []
 
   audio = null
@@ -103,7 +105,7 @@ export default class ReplyQuestion extends Vue {
         problemId: this.id
       }
 
-      const { master, problem } = await getProblemInfoApi(params)
+      const { master, problem = {answer: []} } = await getProblemInfoApi(params)
       problem.answer.forEach(item => {
         item.voice = {
           progress: 0,
