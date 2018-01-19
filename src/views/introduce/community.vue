@@ -522,7 +522,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        height: 4px;
+        height: 3px;
         border-radius: 2px;
         background-color: #ffe266;
       }
@@ -543,8 +543,8 @@
 
       & .classmate-list {
         margin: 20px 15px 0 15px;
-        border-top: solid 1px #dcdcdc;
-        border-bottom: solid 1px #dcdcdc;
+        border-top: solid 1px #dcdcdc; /* no */
+        border-bottom: solid 1px #dcdcdc; /* no */
         padding: 20px 0;
         display: flex;
         justify-content: space-between;
@@ -561,6 +561,7 @@
 
           & span {
             padding: 0 14px;
+            font-size: 15px;
           }
           & .icon {
             width: 16px;
@@ -576,7 +577,7 @@
           height: 30px;
           border-radius: 50%;
           margin-left: -5px;
-          border: solid 1px #ededed;
+          border: solid 1px #ededed; /* no */
         }
         & img:first-of-type, & img:nth-of-type(14n + 1) {
           margin-left: 0;
@@ -585,7 +586,7 @@
 
       & .fixed-box {
         height: 40px;
-        /*margin-top: 35px;*/
+        margin-top: 35px;
       }
 
       & .big-shot-community-content {
