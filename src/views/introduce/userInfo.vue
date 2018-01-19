@@ -2,7 +2,7 @@
 
   <!-- 用户个人详情 (社区页) -->
   <div class="userInfo-details">
-    <scroll @refresh="handleRefresh" @pullup="handlePullup">
+    <scroll :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end">
 
       <!-- header -->
       <div class="header">
@@ -65,7 +65,6 @@
             <!--<p>暂时没有内容～</p>-->
           <!--</div>-->
         <!--</div>-->
-
       </div>
     </scroll>
   </div>
@@ -226,8 +225,13 @@
     /**
      * 上拉加载
      */
-    handlePullup (loaded) {
-      this.loadNext().then(() => { loaded('done') })
+    async handlePullup (loaded) {
+      await this.loadNext().then(() => { loaded('done') })
+      if (this.pagination.end) {
+        loaded('ended')
+      } else {
+        loaded('done')
+      }
     }
   }
 </script>
