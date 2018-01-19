@@ -211,6 +211,16 @@ export default class PublishContent extends Vue {
     const localIds = this.images.map(item => item.fileUrl) || []
     if (localIds.length > 0) {
       this.uploadCustomImages(localIds)
+      this.$vux.loading.show({
+        text: '上传中...'
+      })
+      this.$watch('uploadSuccess', function (val) {
+        if (val) {
+          this.publish()
+        }
+      })
+    } else {
+      this.publish()
     }
     // if (this.uploadSuccess) {
     //   this.publish()
