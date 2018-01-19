@@ -318,7 +318,7 @@
       font-weight: 600;
       margin: 0 15px;
       padding: 15px 0;
-      border-bottom: 2px solid #ededed;
+      border-bottom: 1px solid #ededed; /* no */
     }
     .exchange-wx {
       font-weight: 500;
