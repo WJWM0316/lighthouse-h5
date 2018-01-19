@@ -430,7 +430,7 @@
     height: 100%;
 
     &.author {
-      padding-bottom: 50px;
+      /*padding-bottom: 50px;*/
     }
 
     & .header {
@@ -585,7 +585,7 @@
 
       & .fixed-box {
         height: 40px;
-        margin-top: 35px;
+        /*margin-top: 35px;*/
       }
 
       & .big-shot-community-content {
