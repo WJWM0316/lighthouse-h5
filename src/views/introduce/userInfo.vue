@@ -2,15 +2,16 @@
 
   <!-- 用户个人详情 (社区页) -->
   <div class="userInfo-details">
-    <scroll :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end">
+    <scroll :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup"
+            :is-none-data="pagination.end">
 
       <!-- header -->
       <div class="header">
         <div class="userInfo">
           <div class="userInfo-img">
-            <img :src="userInfo.avatarUrl" />
-            <img class="sex" v-if="userInfo.gender === 1" src="./../../assets/icon/icon_boy.png" />
-            <img class="sex" v-if="userInfo.gender === 2"  src="./../../assets/icon/icon_girl.png" />
+            <img :src="userInfo.avatarUrl"/>
+            <img class="sex" v-if="userInfo.gender === 1" src="./../../assets/icon/icon_boy.png"/>
+            <img class="sex" v-if="userInfo.gender === 2" src="./../../assets/icon/icon_girl.png"/>
           </div>
           <div class="userInfo-desc">
             <p>{{userInfo.realName}}</p>
@@ -30,7 +31,8 @@
         <div v-if="communityList.length > 0">
           <div class="container-title">导师灯塔</div>
           <div class="container-content">
-            <community-card class="community-item" v-for="(item, index) in communityList" :key="index" :community="item" @tap-card="handleTap(item)" ></community-card>
+            <community-card class="community-item" v-for="(item, index) in communityList" :key="index" :community="item"
+                            @tap-card="handleTap(item)"></community-card>
           </div>
         </div>
 
@@ -50,20 +52,20 @@
         </div>
         <!-- 主体内容块 -->
         <!--<div class="big-shot-community-content">-->
-          <!--<div class="module-content" v-if="dynamicList.length > 0">-->
-            <!--<dynamic :dynamicList="dynamicList"-->
-                     <!--:showDelBtn="true"-->
-                     <!--:showIdentification="showIdentification"-->
-            <!--&gt;</dynamic>-->
-          <!--</div>-->
-          <!--&lt;!&ndash;<div class='u-bottom-loading'>&ndash;&gt;-->
-          <!--&lt;!&ndash;<img class='icon' src='../../static/icon/icon_loading.gif' wx:if='{{!pagination.end}}'></img>&ndash;&gt;-->
-          <!--&lt;!&ndash;<text class='text' wx:else>没有更多内容了～</text>&ndash;&gt;-->
-          <!--&lt;!&ndash;</div>&ndash;&gt;-->
-          <!--<div class="blank" v-else>-->
-            <!--<img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />-->
-            <!--<p>暂时没有内容～</p>-->
-          <!--</div>-->
+        <!--<div class="module-content" v-if="dynamicList.length > 0">-->
+        <!--<dynamic :dynamicList="dynamicList"-->
+        <!--:showDelBtn="true"-->
+        <!--:showIdentification="showIdentification"-->
+        <!--&gt;</dynamic>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;<div class='u-bottom-loading'>&ndash;&gt;-->
+        <!--&lt;!&ndash;<img class='icon' src='../../static/icon/icon_loading.gif' wx:if='{{!pagination.end}}'></img>&ndash;&gt;-->
+        <!--&lt;!&ndash;<text class='text' wx:else>没有更多内容了～</text>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--<div class="blank" v-else>-->
+        <!--<img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />-->
+        <!--<p>暂时没有内容～</p>-->
+        <!--</div>-->
         <!--</div>-->
       </div>
     </scroll>
@@ -142,10 +144,10 @@
         this.$router.push({name: 'exchange-apply', params: {userId: this.$route.params.userId}})
       } else { // 未完善跳转完善
         this.$vux.toast.text('完善信息才能交换微信', 'bottom')
-        let that = this
-        setTimeout(() => {
-          that.$router.push({name: 'center-editinfo', query: {redirect: this.$route.currentRoute.path}})
-        }, 2000)
+//        let that = this
+//        setTimeout(() => {
+        this.$router.push({name: 'center-editinfo', query: {redirect: this.$route.currentRoute.path}})
+//        }, 2000)
       }
     }
 
@@ -167,6 +169,7 @@
     getPersonalDetails (params) {
       return getPersonalDetailsApi(params)
     }
+
     // ------------------------------------------------
 
     async getList ({page, pageSize} = {}) {
@@ -209,9 +212,9 @@
     /**
      * 加载下一页
      */
-    async loadNext() {
+    async loadNext () {
       const nextPage = this.pagination.page + 1
-      await this.getList({ page: nextPage })
+      await this.getList({page: nextPage})
     }
 
     /**
@@ -239,110 +242,134 @@
 <style lang="less" scoped>
   .userInfo-details {
     height: 100%;
-    .community-item {
-      margin: 0 15px 35px 15px;
-    }
+
+  .community-item {
+    margin: 0 15px 35px 15px;
+  }
+
+  background-color: #fff
+
+  ;
+
+  button:after {
+    border-style: none;
+  }
+
+  &
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .header {
+    padding: 20px 15px;
+    text-align: center;
+
+  &
+  .userInfo {
+    font-size: 13px;
+    color: #929292;
+    text-align: center;
+
+  }
+
+  &
+  .userInfo-img {
+    width: 80px;
+    height: 80px;
+    font-size: 0;
+    line-height: 1;
+    position: relative;
+    display: inline-block;
+    border: solid 1px #ededed;
+    border-radius: 50%;
+
+  &
+  img {
+    border-radius: 50%;
+  }
+
+  &
+  .sex {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    bottom: 0;
+    right: 0;
+  }
+
+  }
+
+  &
+  .userInfo-desc {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    margin-top: 10px;
+
+  &
+  p:first-of-type {
+    font-size: 18px;
+    color: #354048;
+    font-weight: 500;
+  }
+
+  &
+  p:not(:first-of-type) {
+    margin-top: 2px;
+  }
+
+  }
+
+  &
+  .exchange-btn {
+    margin-top: 15px;
+    width: 100px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 16px;
     background-color: #fff;
+    font-size: 15px;
+    color: #d7ab70;
+    border: solid 1px #d7ab70;
 
-    button:after {
-      border-style: none;
-    }
+  &
+  ::after {
+    content: none;
+  }
 
-    & img {
-      width: 100%;
-      height: 100%;
-    }
+  }
 
-    .header {
-      padding: 20px 15px;
-      text-align: center;
+  &
+  .user-desc {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #bcbcbc;
+    text-align: center;
+  }
 
-      & .userInfo {
-        font-size: 13px;
-        color: #929292;
-        text-align: center;
+  }
 
-      }
+  .container {
+    margin-top: 16px;
 
-      & .userInfo-img {
-        width: 80px;
-        height: 80px;
-        font-size: 0;
-        line-height: 1;
-        position: relative;
-        display: inline-block;
-        border: solid 1px #ededed;
-        border-radius: 50%;
+  .empty-tip {
+    margin-top: 100px;
+    display: inline-block;
+    line-height: 18px;
+    font-size: 13px;
+    color: #bcbcbc;
+  }
 
-        & img {
-          border-radius: 50%;
-        }
+  &
+  .container-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #929292;
+    padding: 10px 0;
+    margin: 0 15px;
+  }
 
-        & .sex {
-          position: absolute;
-          width: 22px;
-          height: 22px;
-          bottom: 0;
-          right: 0;
-        }
-      }
-
-      & .userInfo-desc {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        margin-top: 10px;
-
-        & p:first-of-type {
-          font-size: 18px;
-          color: #354048;
-          font-weight: 500;
-        }
-        & p:not(:first-of-type) {
-          margin-top: 2px;
-        }
-      }
-
-      & .exchange-btn {
-        margin-top: 15px;
-        width: 100px;
-        height: 32px;
-        line-height: 32px;
-        border-radius: 16px;
-        background-color: #fff;
-        font-size: 15px;
-        color: #d7ab70;
-        border: solid 1px #d7ab70;
-
-        &::after {
-          content: none;
-        }
-      }
-
-      & .user-desc {
-        margin-top: 12px;
-        font-size: 12px;
-        color: #bcbcbc;
-        text-align: center;
-      }
-    }
-
-    .container {
-      margin-top: 16px;
-      .empty-tip{
-        margin-top: 100px;
-        display:inline-block;
-        line-height:18px;
-        font-size:13px;
-        color:#bcbcbc;
-      }
-      & .container-title {
-        font-size: 18px;
-        font-weight: 500;
-        color: #929292;
-        padding: 10px 0;
-        margin: 0 15px;
-      }
-    }
+  }
   }
 </style>
