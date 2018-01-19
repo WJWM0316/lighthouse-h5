@@ -91,7 +91,7 @@
     watch: {
       dynamicList (dynamicList) {
         const {item, itemIndex} = this.currentPlay
-        if (item.modelType !== dynamicList[itemIndex].modelType) {
+        if (item.modelType && item.modelType !== dynamicList[itemIndex].modelType) {
           console.log('暂停')
           this.music.pause()
         }
