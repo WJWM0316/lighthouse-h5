@@ -101,6 +101,7 @@
   })
   export default class dynamicList extends Vue {
     currentPlay = {
+      item: {},
       itemIndex: -1,
       problemIndex: -1
     }

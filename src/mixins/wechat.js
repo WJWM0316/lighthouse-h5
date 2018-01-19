@@ -197,7 +197,7 @@ export default {
          * 停止录音
          * @return {Promise}
          */
-        stopRecord ({ callStopRecord = true }) {
+        stopRecord ({ callStopRecord = true } = {}) {
           self.$wechat.stopRecord({
             success: res => {
               if (callStopRecord) {
