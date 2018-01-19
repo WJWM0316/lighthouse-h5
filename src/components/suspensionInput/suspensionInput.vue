@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less" scoped type="text/less">
   .suspension-input {
     position: fixed;
     bottom: 0;
@@ -30,12 +30,11 @@
     /*}*/
 
     .ask-box {
-      height: 108px;
+      height: 54px;
       background-color: #f8f8f8;
       padding: 0 10px;
       display: flex;
-      padding-top: 10px;
-      /*align-items: center;*/
+      align-items: center;
       justify-content: space-between;
 
       & .user-input {
@@ -59,7 +58,6 @@
         flex: 0 0 auto;
         margin-right: -10px;
         padding: 0 10px;
-        padding-top: 10px;
         border-radius: 0;
         font-size: 15px;
         font-weight: 500;

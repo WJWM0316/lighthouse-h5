@@ -90,7 +90,7 @@
                       @send="sendComment"
     ></suspension-input>
 
-    <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
+    <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" :close-on-clicking-mask="false" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
   </div>
 </template>
 <script>
@@ -430,7 +430,7 @@
     height: 100%;
 
     &.author {
-      padding-bottom: 100px;
+      padding-bottom: 50px;
     }
 
     & .header {
@@ -522,7 +522,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        height: 3px;
+        height: 4px;
         border-radius: 2px;
         background-color: #ffe266;
       }
@@ -543,8 +543,8 @@
 
       & .classmate-list {
         margin: 20px 15px 0 15px;
-        border-top: solid 1px #dcdcdc;  /* no */
-        border-bottom: solid 1px #dcdcdc;  /* no */
+        border-top: solid 1px #dcdcdc;
+        border-bottom: solid 1px #dcdcdc;
         padding: 20px 0;
         display: flex;
         justify-content: space-between;
@@ -561,7 +561,6 @@
 
           & span {
             padding: 0 14px;
-            font-size: 15px;
           }
           & .icon {
             width: 16px;
@@ -577,7 +576,7 @@
           height: 30px;
           border-radius: 50%;
           margin-left: -5px;
-          border: solid 1px #ededed;  /* no */
+          border: solid 1px #ededed;
         }
         & img:first-of-type, & img:nth-of-type(14n + 1) {
           margin-left: 0;
