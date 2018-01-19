@@ -90,7 +90,7 @@
     },
     computed: {
       'applyType': function () {
-        return this.$route.params.type || 1
+        return parseInt(this.$route.params.type) || 1
       },
       'userCareer': function () {
         console.log('this.pageInfo', this.pageInfo)
