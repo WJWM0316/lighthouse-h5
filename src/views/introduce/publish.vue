@@ -134,7 +134,6 @@ export default class PublishContent extends Vue {
       }
       console.log('newImages:', newImages.map(item => item.base64Url))
       this.images = [...this.images, ...newImages]
-      this.uploadCustomImages(localIds)
     } catch (error) {
       console.log(error)
     }
@@ -209,18 +208,22 @@ export default class PublishContent extends Vue {
    * 准备发布
    */
   readyPublish () {
-    if (this.uploadSuccess) {
-      this.publish()
-    } else {
-      this.$vux.loading.show({
-        text: '上传中...'
-      })
-      this.$watch('uploadSuccess', function (val) {
-        if (val) {
-          this.publish()
-        }
-      })
+    const localIds = this.images.map(item => item.fileUrl) || []
+    if (localIds.length > 0) {
+      this.uploadCustomImages(localIds)
     }
+    // if (this.uploadSuccess) {
+    //   this.publish()
+    // } else {
+    //   this.$vux.loading.show({
+    //     text: '上传中...'
+    //   })
+    //   this.$watch('uploadSuccess', function (val) {
+    //     if (val) {
+    //       this.publish()
+    //     }
+    //   })
+    // }
   }
 
   /**
