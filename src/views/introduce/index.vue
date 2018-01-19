@@ -290,7 +290,9 @@
     overflow: hidden;
 
     & .header {
+      position: relative;
       margin-bottom: 20px;
+
       & .share-btn {
         position: absolute;
         top: 15px;
@@ -310,6 +312,7 @@
           width: 15px;
           height: 15px;
           margin-right: 5px;
+          margin-left: 10px;
         }
 
         &::after {
