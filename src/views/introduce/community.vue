@@ -460,6 +460,7 @@
           width: 15px;
           height: 15px;
           margin-right: 5px;
+          margin-left: 5px;
         }
 
         &::after {
