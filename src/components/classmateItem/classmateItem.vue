@@ -53,8 +53,8 @@
 <style lang="less" type="text/less">
   @import "../../styles/mixins";
   .classmate-item {
-    border-bottom: 1px solid #dcdcdc;
-    padding:15px 0;
+    border-bottom: 1px solid #dcdcdc; /* no */
+    padding: 15px 0;
     margin-left: 15px;
     display: flex;
     align-items: center;

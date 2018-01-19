@@ -176,7 +176,7 @@ export default class HomeIndex extends Vue {
   padding-bottom: 50px;
 
   .banners {
-    margin: 15px 15px 0;
+    margin: 15px 15px 30px;
     border-radius: 3px;
     font-size: 0;
     line-height: 1;

@@ -109,6 +109,6 @@ export default class App extends Vue {
   max-width: 375px;
 }
 .weui-tabbar {
-  background-color: #FFF;
+  background-color: #FFF !important;
 }
 </style>

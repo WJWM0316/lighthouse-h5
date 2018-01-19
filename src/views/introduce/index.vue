@@ -398,13 +398,15 @@
         height: 100%;
         border-top: solid 1px #dcdcdc;  /* no */
         border-right: solid 1px #ededed;  /* no */
-        font-size: 11px;
         display: flex;
         flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
         color: #929292;
         background-color: #ffffff;
+        & > span {
+          font-size: 11px !important;
+        }
       }
 
       & .time-clock {
