@@ -21,7 +21,7 @@
       <button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
     </div>
 
-    <actionsheet v-model="addActionsConfig.show" :menus="addActionsConfig.menus" :close-on-clicking-mask="false" show-cancel @on-click-menu="handleAddActoinItem" />
+    <actionsheet v-model="addActionsConfig.show" :menus="addActionsConfig.menus" show-cancel @on-click-menu="handleAddActoinItem" />
     <wechat-code-modal v-model="wechatCodeModal.show" />
   </div>
 </template>
