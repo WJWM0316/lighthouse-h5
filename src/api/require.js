@@ -36,7 +36,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   // let datas = type === 'get' ? {params: data} :data
   let globalLoading = true
   if (data.globalLoading !== undefined) {
-    globalLoading = data.globalLoading || true
+    globalLoading = data.globalLoading
     delete data.globalLoading
   }
   // data.TestUid = 2
@@ -92,6 +92,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         } else {
           router.replace(`/index`)
         }
+        return {}
       }
 
       hideLoading(globalLoading)
