@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <scroller @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
+    <scroller :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end">
       <div class="questions">
         <question-item v-for="(item, index) in questions" :key="index" class="question" :model="item" :showDetails="false" :communityId="communityId" @card-tap="handleItemTap" />
       </div>
@@ -297,7 +297,7 @@ export default class Questions extends Vue {
   }
 
   .questions {
-    .question {
+    .question:not(:last-of-type) {
       margin-bottom: 10px;
     }
   }

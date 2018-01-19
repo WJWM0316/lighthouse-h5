@@ -4,7 +4,7 @@ export default {
     return {
       pagination: {
         page: 1,
-        pageSize: 20,
+        pageSize: 5,
         total: 0,
         end: false,
         busy: false
