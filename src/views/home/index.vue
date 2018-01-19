@@ -173,15 +173,17 @@ export default class HomeIndex extends Vue {
 @import "../../styles/mixins";
 
 .p-home-index {
-
   padding-bottom: 50px;
-.banners {
-    margin: 15px 15px 0 25px;
+
+  .banners {
+    margin: 15px 15px 0;
     border-radius: 3px;
+    font-size: 0;
+    line-height: 1;
     overflow: hidden;
 
     .m-banner-swiper {
-      height: 290px;
+      height: 100%;
       border-radius: 3px;
       overflow: hidden;
 
