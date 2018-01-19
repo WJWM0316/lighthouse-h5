@@ -90,7 +90,7 @@
                       @send="sendComment"
     ></suspension-input>
 
-    <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" :close-on-clicking-mask="false" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
+    <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
   </div>
 </template>
 <script>
