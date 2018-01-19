@@ -1,6 +1,7 @@
 <template>
   <div class='u-bottom-loading'>
-    <image-item class='icon' :src="loadingSrc" v-if="!end" />
+    <p class="text" v-if="status === 'default'">上拉至底部加载更多</p>
+    <image-item class='icon' :src="loadingSrc" v-else-if="status === 'loading'" />
     <p class='text' v-else>没有更多内容了～</p>
   </div>
 </template>
@@ -12,10 +13,9 @@ import Component from 'vue-class-component'
 @Component({
   name: 'bottom-loading',
   props: {
-    // 是否加载完了
-    end: {
-      type: Boolean,
-      default: false
+    status: {
+      type: String,
+      default: 'default'
     }
   }
 })
