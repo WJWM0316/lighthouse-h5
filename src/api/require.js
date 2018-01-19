@@ -87,7 +87,11 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       }
       if (data && data.statusCode === 271) { // 未入社进入社后请求报的错 跳转到入社介绍页 需要一个社区id
         hideLoading(globalLoading)
-        router.replace(`/introduce/${data.data.communityId}`)
+        if (data.data) {
+          router.replace(`/introduce/${data.data.communityId}`)
+        } else {
+          router.replace(`/index`)
+        }
       }
 
       hideLoading(globalLoading)
