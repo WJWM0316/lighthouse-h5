@@ -1,6 +1,7 @@
 <template>
   <pull-to
     class="m-scroller"
+    ref="pullTo"
     :top-load-method="refreshable ? handleRefresh : undefined"
     :bottom-load-method="pullupable ? handlePullup : undefined"
     :top-block-height="scroller.topBlockHeight"
@@ -82,6 +83,11 @@ export default class Scroller extends Vue {
     }
   }
 
+  mounted () {
+    // this.$refs.pullTo.scrollEl.style.webkitTransform = 'translate3d(0, 0, 0)'
+    // this.$refs.pullTo.scrollEl.style.transform = 'translate3d(0, 0, 0)'
+  }
+
   /**
    * 下拉刷新
    */
@@ -107,12 +113,15 @@ export default class Scroller extends Vue {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
 .m-scroller {
-  -webkit-overflow-scrolling: touch;
+
+  .scroll-container {
+    -webkit-overflow-scrolling: auto;
+  }
 
   .top-block,
   .bottom-block {
