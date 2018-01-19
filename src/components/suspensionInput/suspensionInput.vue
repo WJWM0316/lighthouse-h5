@@ -25,9 +25,9 @@
     right: 0;
     z-index: 99;
     transform: translateZ(99px);
-    /*&.z-focused {*/
-      /*transform: translateY(-54%);*/
-    /*}*/
+    &.z-focused {
+      transform: translateY(-54%);
+    }
 
     .ask-box {
       height: 54px;
