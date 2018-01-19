@@ -1,6 +1,6 @@
 <template>
   <div class="p-body p-classmates">
-    <scroller @refresh="handleRefresh" @pullup="handlePullup">
+    <!--<scroller @refresh="handleRefresh" @pullup="handlePullup">-->
       <div v-for='(item, index) in dataList'>
         <classmate-item class='classmate-item'
                     :item.sync='item'
@@ -8,7 +8,7 @@
         >
         </classmate-item>
       </div>
-    </scroller>
+    <!--</scroller>-->
   </div>
 </template>
 <script>
