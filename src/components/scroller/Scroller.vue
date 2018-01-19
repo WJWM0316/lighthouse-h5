@@ -120,7 +120,7 @@ export default class Scroller extends Vue {
 .m-scroller {
 
   .scroll-container {
-    transform: translate3d(0, 0, 0);
+    -webkit-overflow-scrolling: auto;
   }
 
   .top-block,
