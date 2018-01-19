@@ -19,20 +19,20 @@
 
 <style lang="less" scoped type="text/less">
   .suspension-input {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 99;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    background-color: #f8f8f8;
     &.z-focused {
-      transform: translateY(-54%);
+      padding-bottom: 30px;
     }
 
     .ask-box {
       height: 54px;
-      background-color: #f8f8f8;
       padding: 0 10px;
       display: flex;
       align-items: center;
