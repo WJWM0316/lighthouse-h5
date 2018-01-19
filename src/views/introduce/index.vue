@@ -274,6 +274,7 @@
         },
         onConfirm () {
           console.log(_this) // 当前 vm
+          _this.payOrFree()
         }
       })
     }
