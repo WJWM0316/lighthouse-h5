@@ -89,6 +89,7 @@ export default class ReplyQuestion extends Vue {
 
   beforeDestroy () {
     this.audio && this.audio.pause()
+    this.audio.src = ''
     this.audio = null
   }
 
