@@ -6,10 +6,10 @@
     </div>
 
     <div class="images" v-if="addonType === 0 || addonType === 3">
-      <a href="#" class="item" v-for="(item, index) in images" :key="index">
+      <div class="item" v-for="(item, index) in images" :key="index">
         <image-item class="image" mode="auto" :src="item.base64Url || item.fileUrl" />
         <button type="button" class="close u-btn" @click="handleDeleteImage(index, item)"><i class="u-icon-delete-image"></i></button>
-      </a>
+      </div>
       <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
     </div>
 
@@ -183,7 +183,8 @@ export default class PublishContent extends Vue {
             mediaId: item,
             fileType: 'image'
           }
-        })
+        }),
+        globalLoading: false
       }
       const { files } = await wechatUploadFileApi(params)
       // 成功后，将所有还剩下的图片对象替换
@@ -257,7 +258,8 @@ export default class PublishContent extends Vue {
         communityId: this.form.communityId,
         content: this.form.content,
         type: this.addonType,
-        fileId: fileId
+        fileId: fileId,
+        globalLoading: false
       }
 
       await publishApi(params)
