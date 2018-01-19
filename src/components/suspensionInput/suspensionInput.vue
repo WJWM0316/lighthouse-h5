@@ -24,6 +24,9 @@
     left: 0;
     right: 0;
     z-index: 99;
+    overflow-y: scroll;
+    /* 增加该属性，可以增加弹性，是滑动更加顺畅 */
+    -webkit-overflow-scrolling: touch;
     &.z-focused {
       transform: translateY(-54%);
     }
