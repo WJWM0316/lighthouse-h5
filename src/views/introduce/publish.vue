@@ -6,7 +6,7 @@
     </div>
 
     <div class="images" v-if="addonType === 0 || addonType === 3">
-      <a href="#" class="item" v-for="(item, index) in images" :key="index" @click.prevent.stop="handlePreviewImage(item)">
+      <a href="#" class="item" v-for="(item, index) in images" :key="index">
         <image-item class="image" mode="auto" :src="item.base64Url || item.fileUrl" />
         <button type="button" class="close u-btn" @click="handleDeleteImage(index, item)"><i class="u-icon-delete-image"></i></button>
       </a>
