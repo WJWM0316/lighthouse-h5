@@ -395,8 +395,8 @@
         flex: 0 0 auto;
         width: 52px;
         height: 100%;
-        border-top: solid 1px #dcdcdc;
-        border-right: solid 1px #ededed;
+        border-top: solid 1px #dcdcdc;  /* no */
+        border-right: solid 1px #ededed;  /* no */
         font-size: 11px;
         display: flex;
         flex-flow: column nowrap;
@@ -434,7 +434,7 @@
         justify-content: center;
         border-style: none;
         border-radius: 0;
-        border-top: solid 1px #dcdcdc;
+        border-top: solid 1px #dcdcdc;  /* no */
         &:after {
           border-style: none;
         }
@@ -467,7 +467,7 @@
 
     & .how-to-play {
       margin-top: 30px;
-      padding: 0 30px;
+      padding: 0 15px;
 
       & img {
         border-radius: 6px;
