@@ -43,6 +43,9 @@
     <div class="container">
       <div class="container-title" v-if="pageInfo.problem && pageInfo.problem.length > 0">历史提问</div>
       <div class="question-list">
+        currentTime: {{this.audio && this.audio.currentTime}}<br>
+        duration: {{this.audio && this.audio.duration}}<br>
+        progress: {{this.audio && parseInt(this.audio.currentTime / this.audio.duration)}}
         <question-item class="question"
                        v-for="(item, index) in pageInfo.problem"
                        :key="index"
@@ -112,7 +115,6 @@
     }
   })
   export default class Ask extends Vue {
-
     // 长度
     lengths = {
       textMax: 1000, // 文本最大字数
