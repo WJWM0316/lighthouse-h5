@@ -112,6 +112,8 @@ export default class Scroller extends Vue {
 @import "../../styles/mixins";
 
 .m-scroller {
+  -webkit-overflow-scrolling: touch;
+
   .top-block,
   .bottom-block {
     .setFlex();
