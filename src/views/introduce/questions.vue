@@ -78,7 +78,7 @@ export default class Questions extends Vue {
    */
   loadNext() {
     const nextPage = this.pagination.page + 1
-    this.getList({ page: nextPage })
+    return this.getList({ page: nextPage })
   }
 
   /**
@@ -111,8 +111,11 @@ export default class Questions extends Vue {
       this.pagination.total = total
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
+
+      return Promise.resolve()
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
+      return Promise.reject(error)
     }
   }
 
@@ -161,10 +164,15 @@ export default class Questions extends Vue {
    * 上拉加载
    */
   handlePullup (loaded) {
-    setTimeout(() => {
-      this.loadNext()
+    this.loadNext().then(() => {
+      if (this.pagination.end) {
+        loaded('ended')
+      } else {
+        loaded('done')
+      }
+    }).catch(() => {
       loaded('done')
-    }, 500)
+    })
   }
 
   /**

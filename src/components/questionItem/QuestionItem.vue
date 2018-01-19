@@ -249,6 +249,10 @@ export default class QuestionItem extends Vue {
         margin-top: 15px;
       }
 
+      .text {
+        white-space: pre-line;
+      }
+
       &.master-item {
         display: flex;
 

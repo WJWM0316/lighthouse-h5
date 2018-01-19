@@ -1,46 +1,48 @@
 <template>
 
   <!-- 大咖介绍页 -->
-  <div class="big-shot-introduce">
+  <div class="p-body big-shot-introduce">
 
-    <div class="header">
-      <community-card :community="pageInfo" :type="2" />
-      <div class="share-btn" @click="showShare = true">
-        <img class="share-icon" src="./../../assets/icon/icon_share.png" />
-        <span>分享</span>
+    <div class="container">
+      <div class="header">
+        <community-card :community="pageInfo" :type="2" />
+        <div class="share-btn" @click="showShare = true">
+          <img class="share-icon" src="./../../assets/icon/icon_share.png" />
+          <span>分享</span>
+        </div>
       </div>
-    </div>
 
-    <div class="module">
-      <div class="module-title">
-        <div class="hr"></div>
-        <p>关于灯塔</p>
+      <div class="module">
+        <div class="module-title">
+          <div class="hr"></div>
+          <p>关于灯塔</p>
+        </div>
+        <div class="module-content h5-code" v-html="pageInfo.intro">
+        </div>
       </div>
-      <div class="module-content h5-code" v-html="pageInfo.intro">
+      <div class="how-to-play">
+        <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/four/index.html">
+          <img src="./../../assets/how2play.png" />
+        </a>
       </div>
-    </div>
-    <div class="how-to-play">
-      <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/four/index.html">
-        <img src="./../../assets/how2play.png" />
-      </a>
-    </div>
-    <div class="module" v-if="completelyShow && dynamicList.length > 0">
-      <div class="module-title">
-        <p>精选内容</p>
-        <div class="hr"></div>
-      </div>
-      <div class="module-content">
-        <dynamic :dynamicList="dynamicList"
-                 :hideCommentArea="false"
-                 :showDelBtn="true"
-                 :showIdentification="false"
-                 :showLightHouseInfo="false"
-                 :disableOperationArr="disableOperationArr"
-                 @disableOperationEvents="disableOperationEvents"
-        ></dynamic>
-      </div>
-      <div class="desc">
-        加入灯塔社区，即可解锁更多内容~
+      <div class="module" v-if="completelyShow && dynamicList.length > 0">
+        <div class="module-title">
+          <p>精选内容</p>
+          <div class="hr"></div>
+        </div>
+        <div class="module-content">
+          <dynamic :dynamicList="dynamicList"
+                   :hideCommentArea="false"
+                   :showDelBtn="true"
+                   :showIdentification="false"
+                   :showLightHouseInfo="false"
+                   :disableOperationArr="disableOperationArr"
+                   @disableOperationEvents="disableOperationEvents"
+          ></dynamic>
+        </div>
+        <div class="desc">
+          加入灯塔社区，即可解锁更多内容~
+        </div>
       </div>
     </div>
 
@@ -282,7 +284,10 @@
 </script>
 <style lang="less" scoped type="text/less">
   .big-shot-introduce {
-    padding-bottom: 54px;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    overflow: hidden;
 
     & .header {
       margin-bottom: 20px;
@@ -314,7 +319,8 @@
     }
 
     & .container {
-      margin-top: 20px;
+      flex: 1 1 auto;
+      overflow: scroll;
     }
 
     & .module {
@@ -367,11 +373,9 @@
     }
 
     & .footer {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      flex: 0 0 auto;
       height: 54px;
+      position: relative;
       background: #f4f4f4;
       display: flex;
       justify-content: center;

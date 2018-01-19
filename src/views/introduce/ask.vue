@@ -476,6 +476,7 @@
       }
 
       & .userInfo-img {
+        flex: 0 0 auto;
         position: relative;
         width: 60px;
         height: 60px;
@@ -493,6 +494,7 @@
       }
 
       & .userInfo-desc {
+        flex: 1 1 auto;
         display: flex;
         flex-flow: column nowrap;
         justify-content: center;
