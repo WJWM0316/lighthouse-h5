@@ -108,4 +108,7 @@ export default class App extends Vue {
   transform: translateX(-50%);
   max-width: 375px;
 }
+.weui-tabbar {
+  background-color: #FFF;
+}
 </style>

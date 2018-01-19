@@ -176,8 +176,7 @@ export default class HomeIndex extends Vue {
 
   padding-bottom: 50px;
 .banners {
-    padding: 10px 15px 0;
-    margin-bottom: 43px;
+    margin: 15px 15px 0 25px;
     border-radius: 3px;
     overflow: hidden;
 
@@ -189,6 +188,8 @@ export default class HomeIndex extends Vue {
       .image-item {
         width: 100%;
         height: 100%;
+        border-radius: 3px;
+        overflow: hidden;
       }
     }
   }
