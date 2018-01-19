@@ -144,10 +144,9 @@
         this.$router.push({name: 'exchange-apply', params: {userId: this.$route.params.userId}})
       } else { // 未完善跳转完善
         this.$vux.toast.text('完善信息才能交换微信', 'bottom')
-//        let that = this
-//        setTimeout(() => {
-        this.$router.push({name: 'center-editinfo', query: {redirect: this.$route.currentRoute.path}})
-//        }, 2000)
+        setTimeout(() => {
+          this.$router.push({name: 'center-editinfo'})
+        }, 2000)
       }
     }
 
