@@ -486,7 +486,7 @@
     & .icon-home {
       width: 18px;
       height: 16px;
-      margin-bottom: 2px;
+      margin-bottom: 5px;
     }
   }
 </style>

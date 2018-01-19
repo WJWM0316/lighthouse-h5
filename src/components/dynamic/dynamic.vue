@@ -283,6 +283,10 @@
             problemIndex
           }
           break
+        case 'pause':
+          this.music.pause()
+          this.audioStateSet()
+          break
       }
     }
 
@@ -291,6 +295,14 @@
       if (this.currentVideoIndex > -1) {
         this.dynamicList[this.currentVideoIndex].videoPlay = false
         this.$refs['dynamic-item'][this.currentVideoIndex].videoStop()
+      }
+
+      const {itemIndex: audioIndex} = this.currentPlay
+      if (audioIndex > -1) {
+        this.audioEvent({
+          eventType: 'pause',
+          itemIndex: audioIndex
+        })
       }
 
       switch (eventType) {
