@@ -25,6 +25,7 @@
     right: 0;
     z-index: 99;
     -webkit-overflow-scrolling : touch;
+    transform:translateZ(100);
     /*&.z-focused {*/
       /*transform: translateY(-54%);*/
     /*}*/
