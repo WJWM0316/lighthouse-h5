@@ -62,7 +62,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       if (data && data.statusCode === 255) { // 登录时openId cookie失效
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
-        location.href = `${process.env.NODE_ENV !== 'production' ? settings.devUrl : settings.productUrl}/wap/wechat/callback?zike_from=${location.href}`
+        location.href = `${settings.devUrl}/wap/wechat/callback?zike_from=${location.href}`
         return data.data === undefined ? {} : data.data
       }
       if (data && data.statusCode === 426) { // 没有登录权限,跳去手机号登录
