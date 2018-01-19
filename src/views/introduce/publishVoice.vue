@@ -35,7 +35,7 @@ export default class PublishVoice extends Vue {
     this.form.communityId = this.$route.params.communityId
   }
 
-  destroyed () {
+  beforeDestroy () {
     this.$refs.recorder.clear()
   }
 
