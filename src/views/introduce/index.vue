@@ -38,6 +38,7 @@
                    :showLightHouseInfo="false"
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="disableOperationEvents"
+                   :disableUserClick="true"
           ></dynamic>
         </div>
         <div class="desc">
@@ -139,6 +140,7 @@
       return newStr
     }
     freeIn () { // 跳转到一个图文消息
+      if (!this.isFreeBtn) return
       if (this.pageInfo.wechatIntroUrl) {
         location.href = this.pageInfo.wechatIntroUrl
       } else {
@@ -233,7 +235,7 @@
           'title': str + '|' + title,
           'desc': simpleIntro,
           'imgUrl': shareImg,
-          'link': location.href.split('?')[0]
+          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
       })
     }

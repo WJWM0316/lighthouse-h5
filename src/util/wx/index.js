@@ -25,7 +25,7 @@ class WxUtil {
 
     const url = `${paths[0]}#${paths[1]}`
     if (location.href !== url) {
-      location.href = url
+      location.replace(url)
     }
   }
 }
