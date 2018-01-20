@@ -1,14 +1,14 @@
 <template>
   <div class="p-body p-classmates">
-    <!--<scroller @refresh="handleRefresh" @pullup="handlePullup">-->
-      <div v-for='(item, index) in dataList'>
+    <scroller :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end">
+      <div v-for='(item, index) in dataList' :key="index">
         <classmate-item class='classmate-item'
                     :item.sync='item'
                     @tap-one='goUserDetail'
         >
         </classmate-item>
       </div>
-    <!--</scroller>-->
+    </scroller>
   </div>
 </template>
 <script>
@@ -35,6 +35,7 @@
   export default class ClassmatesIndex extends Vue {
     communityId = ''
     dataList = []
+
     async getList ({page, pageSize} = {}) { // 请求列表
       if (this.pagination.end || this.pagination.busy) {
         // 防止多次加载
@@ -50,8 +51,7 @@
       this.pagination.busy = true
       try {
         const {list, total} = await classmatesApi({...params, communityId: this.communityId})
-//        this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
-        this.dataList = list
+        this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
         this.pagination.page = page
         this.pagination.pageSize = pageSize
         this.pagination.total = total
@@ -69,6 +69,7 @@
      * 下拉刷新
      */
     async handleRefresh (loaded) {
+      this.pagination.end = false
       await this.getList({page: 1})
       loaded('done')
     }
@@ -79,7 +80,11 @@
     async handlePullup (loaded) {
       const nextPage = this.pagination.page + 1
       await this.getList({page: nextPage})
-      loaded('done')
+      if (this.pagination.end) {
+        loaded('ended')
+      } else {
+        loaded('done')
+      }
     }
 
     created () {
