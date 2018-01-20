@@ -187,7 +187,9 @@
         const params = {
           communityId: this.communityId
         }
-        const {problem = []} = await getAskInfoApi(params)
+        // const {problem = []} = await getAskInfoApi(params)
+        this.pageInfo = await getAskInfoApi(params)
+        const problem = this.pageInfo.problem || []
         problem.forEach(item => {
           const {answers = []} = item
           answers.forEach(answer => {
