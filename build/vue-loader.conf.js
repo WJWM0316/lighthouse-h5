@@ -13,11 +13,20 @@ module.exports = {
     extract: isProduction
   }),
   cssSourceMap: sourceMapEnabled,
-  cacheBusting: config.dev.cacheBusting, 
+  cacheBusting: config.dev.cacheBusting,
   transformToRequire: {
     video: 'src',
     source: 'src',
     img: 'src',
     image: 'xlink:href'
-  }
+  },
+  postcss: [
+    require('autoprefixer')({
+      browsers: ['iOS >= 7', 'Android >= 4.1']
+    }),
+    require('postcss-px2rem')({
+      baseDpr: 1,
+      remUnit: 37.5
+    })
+  ]
 }

@@ -1,0 +1,144 @@
+// ======== 公共样式 ========
+@import "./variables";
+@import "./mixins";
+
+body {
+  .setTextWrap();
+  -webkit-overflow-scrolling: touch;
+  color: @font-color-default;
+}
+
+// ::-webkit-scrollbar 滚动条整体部分
+// ::-webkit-scrollbar-thumb  滚动条里面的小方块，能向上向下移动（或往左往右移动，取决于是垂直滚动条还是水平滚动条）
+// ::-webkit-scrollbar-track  滚动条的轨道（里面装有Thumb）
+// ::-webkit-scrollbar-button 滚动条的轨道的两端按钮，允许通过点击微调小方块的位置。
+// ::-webkit-scrollbar-track-piece 内层轨道，滚动条中间部分（除去）
+// ::-webkit-scrollbar-corner 边角，即两个滚动条的交汇处
+// ::-webkit-resizer 两个滚动条的交汇处上用于通过拖动调整元素大小的小控件
+::-webkit-scrollbar {
+  width: 0;
+}
+
+::placeholder {
+  color: #929292;
+}
+
+// ==== 页面 ====
+.p-body {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 375px;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;  /* 针对 overflow: scroll; 在ios中卡顿问题 */
+}
+
+// ==== 轮播图指示点 ====
+.m-banner-swiper.vux-slider .banner-dots {
+  bottom: 12px;
+  line-height: 1;
+  font-size: 0;
+
+  & > a {
+    margin: 0 3px;
+  }
+
+  .vux-icon-dot {
+    background-color: rgba(255, 255, 255, .3);
+    width: 9px;
+    height: 3px;
+    border-radius: 2px;
+
+    &.active {
+      background-color: rgba(255, 255, 255, 1);
+    }
+  }
+}
+
+// ==== picker样式重写 ====
+.vux-picker {
+
+  .scroller-component {
+    height: 238px; /* px */
+
+    .scroller-mask {
+        background-size: 100% 102px; /* px */
+    }
+
+    .scroller-indicator {
+      height: 34px; /* px */
+      top: 102px; /* px */
+      background-size: 100% 1px; /* no */
+    }
+
+    .scroller-content {
+
+      .scroller-item {
+        font-size: 16px; /* px */
+        height: 34px; /* px */
+        line-height: 34px; /* px */
+      }
+    }
+  }
+}
+
+// ==== confirm弹窗样式重写 ====
+.vux-confirm {
+  width: 100%;
+
+  .vux-x-dialog {
+    width: 100%
+  }
+}
+
+// ==== toast 样式重写 ====
+.vux-toast-bottom{
+  padding: 10px;
+  bottom: 80px!important;
+}
+// ==== dialog 样式重写 ====
+.weui-dialog{
+  width: 80%;
+}
+
+// ==== pull-to插件样式重写 ====
+.vue-pull-to-wrapper {
+  .scroll-container {
+    // position: relative;
+    -webkit-transform: translate3D(0, 0, 0);
+  }
+}
+
+.yellow-tan {
+  color: #ffe266;
+}
+
+.yellow-tan-bg {
+  background: #ffe266!important;
+}
+
+.yellow-tan-deep {
+  color: #d69a54;
+}
+
+.button-reset{
+  background: transparent!important;
+  &:after {
+    border-style: none!important;
+  }
+}
+
+.g-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+}
+img{
+  object-fit: cover;
+}
+
+
