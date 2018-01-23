@@ -87,11 +87,12 @@ export default class HomeIndex extends Vue {
    * 创建灯塔
    */
   handleCreate () {
-    this.$vux.alert.show({
-      title: '创建灯塔请联系',
-      content: '小灯塔客服：020-28163063或添加客服微信：zike02',
-      buttonText: '好的'
-    })
+    this.$router.push({name: 'center-create'})
+//    this.$vux.alert.show({
+//      title: '创建灯塔请联系',
+//      content: '小灯塔客服：020-28163063或添加客服微信：zike02',
+//      buttonText: '好的'
+//    })
   }
 }
 </script>

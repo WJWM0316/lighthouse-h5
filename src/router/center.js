@@ -25,12 +25,18 @@ const routers = [
     component: resolve => require(['@/views/center/protocol'], resolve),
     meta: {navHide: true}
   },
-  {
+  { // 学员列表
     path: '/center/classmates',
     name: 'center-classmates',
     component: resolve => require(['@/views/center/classmatesList'], resolve),
     meta: {navHide: true}
-  }
+  },
+  { // 创建灯塔
+    path: '/center/create',
+    name: 'center-create',
+    component: resolve => require(['@/views/center/create'], resolve),
+    meta: {navHide: true}
+  },
 ]
 
 export default routers
