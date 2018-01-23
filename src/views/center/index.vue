@@ -21,7 +21,7 @@
       <a href="#" class="item" @click.prevent.stop="handleCreate">
         <div class="left">
           <i class="icon u-icon-center-create" />
-          <span class="title">创建我的灯塔</span>
+          <span class="title">{{isCreated ? '塔主中心' : '创建我的灯塔'}}</span>
         </div>
         <div class="addon">
           <i class="addon-icon u-icon-center-angle-right" />
@@ -67,7 +67,9 @@ import { getInformationApi } from '@/api/pages/center'
   name: 'center-index'
 })
 export default class HomeIndex extends Vue {
-  model = {}
+  model = {
+  }
+  isCreated = true // 是否已经成为塔主
 
   created () {
     this.getModel()
