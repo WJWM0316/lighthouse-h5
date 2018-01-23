@@ -18,7 +18,7 @@
     </template>
 
     <slot></slot>
-    <bottom-loading :status="loadingStatus" v-if="infiniteScroll" />
+    <bottom-loading :status="loadingStatus" v-if="showBottomLoading && infiniteScroll" />
 
     <template slot="bottom-block" slot-scope="props">
       <div class="bottom-block">
@@ -56,6 +56,12 @@ import PullTo from 'vue-pull-to'
     infiniteScroll: {
       type: Boolean,
       default: false
+    },
+
+    // 开启无限加载的时候是否显示底部loading
+    showBottomLoading: {
+      type: Boolean,
+      default: true
     },
 
     // 是否没有更多数据加载了
