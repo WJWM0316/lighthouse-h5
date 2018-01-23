@@ -11,19 +11,19 @@
       <div class="communities" v-if="creations && creations.length > 0">
         <h3 class='title'>我开设的灯塔</h3>
         <div class="list">
-          <community-card class="community-item" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          <community-info-card class="community-item" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
         </div>
       </div>
       <div class="communities" v-if="joins && joins.length > 0">
         <h3 class='title'>我加入的灯塔</h3>
         <div class="list">
-          <community-card class="community-item" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          <community-info-card class="community-item" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
         </div>
       </div>
       <div class="communities" v-if="communities && communities.length > 0">
         <h3 class='title'>精选灯塔</h3>
         <div class="list">
-          <community-card class="community-item" v-for="item in communities" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
         </div>
       </div>
     </scroller>
@@ -36,6 +36,7 @@ import Component from 'vue-class-component'
 
 import { Swiper, SwiperItem } from 'vux'
 import CommunityCard from '@/components/communityCard'
+import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
 import Scroller from '@/components/scroller'
 
 import ListMixin from '@/mixins/list'
@@ -48,6 +49,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     Swiper,
     SwiperItem,
     CommunityCard,
+    communityInfoCard,
     Scroller
   },
   mixins: [ListMixin]
