@@ -1,5 +1,12 @@
 <template>
   <div class="p-body p-home-index">
+    <!-- tab -->
+    <div class="nav-bar fs30 fixed" :class="navTabName">
+      <span @click="toggle('joined')">已加入</span>
+      <span @click="toggle('find')">发现</span>
+      <span @click="toggle('picked')">精选</span>
+    </div>
+
     <scroller @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
       <div class="banners">
         <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
@@ -70,6 +77,8 @@ export default class HomeIndex extends Vue {
   communities = []
   ready = false
 
+  navTabName = 'find'
+
   created () {
     this.init().then(() => {})
   }
@@ -82,6 +91,13 @@ export default class HomeIndex extends Vue {
     await this.getList({ page: 1 })
     await this.getBanners()
     this.ready = true
+  }
+
+  /**
+   * 切换nav
+   **/
+  toggle (targetName) {
+    this.navTabName = targetName
   }
 
   /**
@@ -175,7 +191,55 @@ export default class HomeIndex extends Vue {
 @import "../../styles/mixins";
 
 .p-home-index {
-  padding-bottom: 50px;
+  padding: 50px 0;
+  box-sizing: border-box;
+
+  & .nav-bar {
+    box-sizing: border-box;
+    height: 49px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #929292;
+    padding: 0 75px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1); /* no */
+
+    & span {
+      height: 100%;
+      line-height: 49px;
+    }
+    &.joined span:nth-of-type(1),
+    &.find span:nth-of-type(2),
+    &.picked span:nth-of-type(3) {
+      color: #354048;
+      font-weight: 500;
+      position: relative;
+    }
+
+    &.joined span:nth-of-type(1):after,
+    &.find span:nth-of-type(2):after,
+    &.picked span:nth-of-type(3):after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      border-radius: 2px;
+      background-color: #ffe266;
+    }
+
+    &.fixed {
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      background:#fff;
+      margin-top: 0;
+      z-index: 99;
+    }
+  }
 
   .banners {
     margin: 15px 15px 30px;
