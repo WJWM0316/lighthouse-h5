@@ -1,0 +1,94 @@
+@import "../../styles/mixins";
+
+.community-info-card {
+  padding: 0 0 25px;
+
+  .master-info {
+    display: flex;
+    color: #666666;
+    font-weight: 300;
+    font-size: 13px;
+    justify-content: space-between;
+
+    .left {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-between;
+      line-height: 1;
+      width: 205px;
+
+      & .community-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: #354048;
+        .setEllipsisLn(2)
+      }
+
+      & .community-desc {
+        .setEllipsis();
+      }
+
+      & .community-status {
+        font-size: 0;
+        display: flex;
+        align-items: center;
+
+        & span {
+          padding: 3px 6px;
+          font-size: 13px;
+        }
+        & span:nth-of-type(1) {
+          display: inline-block;
+          color: #FFF;
+          background-color: rgba(53, 64, 72, 0.8);
+          max-width: 140px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          word-wrap: normal;
+        }
+        & span:nth-of-type(2) {
+          paddin: 3px 8px;
+          color: #d7ab70;
+          background-color: rgba(255, 226, 102, 0.15);
+        }
+      }
+
+      & > div p:last-of-type {
+        margin-top: 8px;
+        .setEllipsis();
+      }
+    }
+    .right {
+      width: 120px;
+      height: 120px;
+      flex: 0 0 auto;
+      position: relative;
+
+      & img {
+        width: 100%;
+        height: 100%;
+      }
+
+      &.newMessage:after {
+        content: '';
+        position: absolute;
+        right: 7px;
+        top: 7px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background-color: #ff3434;
+        border: solid 1px #ffffff;
+        box-sizing: border-box;
+      }
+    }
+  }
+
+  .additional {
+    margin-top: 15px;
+    font-weight: 300;
+    font-size: 13px;
+    color: #929292;
+  }
+}
