@@ -5,12 +5,13 @@
       <div @click="toggle(2)">免费入社</div>
     </div>
     <div class="apply-list" v-if="dataList.length > 0">
-      <scroller :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end">
+      <scroller :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end" :show-bottom-loading="!pagination.end">
         <div v-for='item in dataList'>
           <classmate-item class='community-item'
                           :item.sync='item'
                           @tap-one='goUserDetail'></classmate-item>
         </div>
+        <div class="bottom-content">没有更多学员了，<span class="bottom-share" @click="goDetail">去分享吧</span></div>
       </scroller>
     </div>
     <div class="p-message" v-else>
@@ -69,6 +70,9 @@
         this.$vux.toast.text(e.message, 'bottom')
       }
       console.log('直接同意申请', id, LighthouseId)
+    }
+    goDetail () {
+      this.$router.push({name: 'community', params: {communityId: '6e0804d662ce053f2070fee37fcf1907'}, query: {...this.$route.query, showShare: true}})
     }
     toggle (type) {
       this.dataList = []
@@ -189,6 +193,16 @@
     }
     .apply-list {
       height: 100%;
+      .bottom-content{
+        height: 70px;
+        color: #bcbcbc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .bottom-share{
+          color: #d7ab70;
+        }
+      }
     }
   }
 </style>

@@ -80,7 +80,7 @@
       </div>
     </div>
     <!--分享弹窗-->
-    <share-dialog :isShow="showShare" @close-share="showShare = false"
+    <share-dialog :isShow="showShare" @close-share="closeShare"
                   :shareType="1"></share-dialog>
     <!-- 悬浮输入框 -->
     <suspension-input v-model="displaySuspensionInput"
@@ -160,6 +160,9 @@
       }
       console.log('this.showType', this.showType)
       wxUtil.reloadPage()
+      if (this.$route.query.showShare === 'true') {
+        this.showShare = true
+      }
       this.pageInit().then(() => {
         const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
         const {realName, career} = master
@@ -174,7 +177,10 @@
         })
       })
     }
-
+    closeShare () {
+      this.showShare = false
+      this.$router.replace({path: `/introduce/${this.pageInfo.communityId}/community`, query: {...this.$route.query, showShare: false}})
+    }
     async pageInit () {
       const { communityId } = this.$route.params
       this.pagination.end = false // 初始化数据，必定不是最后一页

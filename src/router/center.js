@@ -24,6 +24,12 @@ const routers = [
     name: 'center-protocol',
     component: resolve => require(['@/views/center/protocol'], resolve),
     meta: {navHide: true}
+  },
+  {
+    path: '/center/classmates',
+    name: 'center-classmates',
+    component: resolve => require(['@/views/center/classmatesList'], resolve),
+    meta: {navHide: true}
   }
 ]
 
