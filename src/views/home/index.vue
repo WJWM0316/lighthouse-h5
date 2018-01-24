@@ -346,7 +346,7 @@ export default class HomeIndex extends Vue {
     }
 
     .community-item:not(:last-child) {
-      margin-bottom: 35px;
+      /*margin-bottom: 35px;*/
     }
   }
 
