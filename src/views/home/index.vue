@@ -1,37 +1,70 @@
 <template>
-  <div class="p-body p-home-index">
-    <!-- tab -->
-    <div class="nav-bar fs30 fixed" :class="navTabName">
-      <span @click="toggle('joined')">已加入</span>
-      <span @click="toggle('find')">发现</span>
-      <span @click="toggle('picked')">精选</span>
+  <div class="p-body p-home-index" :class="navTabName">
+    <div class="fixed">
+      <!-- tab -->
+      <div class="nav-bar fs30" :class="navTabName">
+        <span @click="toggle('joined')">已加入</span>
+        <span @click="toggle('find')">发现</span>
+        <span @click="toggle('picked')">精选</span>
+      </div>
+
+      <!-- 分类 -->
+      <div class="classification fs28" v-if="navTabName === 'picked'">
+        <span class="selected">全部</span>
+        <span>产品</span>
+        <span>产品设计</span>
+        <span>技术</span>
+        <span>创投</span>
+        <span>市场</span>
+        <span>运营</span>
+      </div>
     </div>
 
     <scroller @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
-      <div class="banners">
-        <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
-          <swiper-item v-for="(item, index) in banners" :key="`banner_${index}`">
-            <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item class="image-item" :src="item.img" mode="horizontal" /></a>
-          </swiper-item>
-        </swiper>
-      </div>
-      <div class="communities" v-if="creations && creations.length > 0">
-        <h3 class='title'>我开设的灯塔</h3>
-        <div class="list">
-          <community-info-card class="community-item" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+
+      <!-- 已加入 -->
+      <div v-if="navTabName === 'joined'">
+
+        <div class="communities" v-if="joins && joins.length > 0">
+          <div class="list">
+            <community-info-card class="community-item" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          </div>
         </div>
-      </div>
-      <div class="communities" v-if="joins && joins.length > 0">
-        <h3 class='title'>我加入的灯塔</h3>
-        <div class="list">
-          <community-info-card class="community-item" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+        <div v-else>
+          <div class="community-empty"></div>
+          <p class="community-empty-desc fs26">你还没加入任何灯塔，赶紧来加入吧～</p>
         </div>
-      </div>
-      <div class="communities" v-if="communities && communities.length > 0">
-        <h3 class='title'>精选灯塔</h3>
-        <div class="list">
-          <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+
+        <div class="find-more-box">
+          <span class="find-more">发现更多灯塔</span>
+          <p class="community-created">
+            <span class="fs26">我也要创建灯塔</span>
+          </p>
         </div>
+
+      </div>
+
+      <!-- 发现 -->
+      <div v-if="navTabName === 'find'">
+
+      </div>
+
+      <!-- 精选 -->
+      <div v-if="navTabName === 'picked'">
+
+        <div class="banners">
+          <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
+            <swiper-item v-for="(item, index) in banners" :key="`banner_${index}`">
+              <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item class="image-item" :src="item.img" mode="horizontal" /></a>
+            </swiper-item>
+          </swiper>
+        </div>
+        <div class="communities" v-if="communities && communities.length > 0">
+          <div class="list">
+            <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          </div>
+        </div>
+
       </div>
     </scroller>
     <!-- <bottom-loading :end="pagination.isLastPage" /> -->
@@ -62,24 +95,33 @@ import { getBeaconsApi } from '@/api/pages/home'
   mixins: [ListMixin]
 })
 export default class HomeIndex extends Vue {
+  // 顶部标签控制
+  navTabName = 'find'
+  // ******************* 已加入 **********************
+  // 我加入的社区
+  joins = []
+  // ******************** 发现 ***********************
+  // ******************** 精选 ***********************
   // banner图片列表
   banners = [
     { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner.png' },
     { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/sanyue.jpg' },
     { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner-3.jpg' }
   ]
-
   // 我创建的社区
   creations = []
-  // 我加入的社区
-  joins = []
   // 社区列表
   communities = []
   ready = false
 
-  navTabName = 'find'
-
   created () {
+    const routeName = this.$route.name
+    if (routeName === 'home') {
+      this.navTabName = 'find'
+    } else {
+      this.navTabName = routeName
+    }
+
     this.init().then(() => {})
   }
 
@@ -98,6 +140,8 @@ export default class HomeIndex extends Vue {
    **/
   toggle (targetName) {
     this.navTabName = targetName
+    const name = targetName === 'find' ? 'home' : targetName
+    this.$router.replace({name})
   }
 
   /**
@@ -194,6 +238,20 @@ export default class HomeIndex extends Vue {
   padding: 50px 0;
   box-sizing: border-box;
 
+  &.picked {
+    padding: 90px 0 50px;
+  }
+
+  & .fixed {
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    background:#fff;
+    margin-top: 0;
+    z-index: 99;
+  }
+
   & .nav-bar {
     box-sizing: border-box;
     height: 49px;
@@ -229,15 +287,29 @@ export default class HomeIndex extends Vue {
       border-radius: 2px;
       background-color: #ffe266;
     }
+  }
 
-    &.fixed {
-      position:fixed;
-      top:0;
-      left:0;
-      right:0;
-      background:#fff;
-      margin-top: 0;
-      z-index: 99;
+  & .classification {
+    height: 40px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    font-weight: 300;
+    white-space: nowrap; /*不换行*/
+    line-height: 40px;
+    padding: 0 15px;
+
+    & > span {
+      margin-left: 25px;
+      color: #929292;
+
+      &:first-of-type {
+        margin-left: 0;
+      }
+
+      &.selected {
+        font-weight: 500;
+        color: #d7ab70;
+      }
     }
   }
 
@@ -263,7 +335,7 @@ export default class HomeIndex extends Vue {
   }
 
   .communities {
-    padding: 10px 15px 20px;
+    padding: 10px 0 20px;
 
     & > .title {
       display: block;
@@ -275,6 +347,42 @@ export default class HomeIndex extends Vue {
 
     .community-item:not(:last-child) {
       margin-bottom: 35px;
+    }
+  }
+
+  & .community-empty {
+    width: 120px;
+    height: 120px;
+    margin: 50px auto 0;
+  }
+  & .community-empty-desc {
+    margin-top: 15px;
+    color: #bcbcbc;
+  }
+
+  & .find-more-box {
+    margin: 15px 0 25px;
+
+    & .find-more {
+      margin: 0 auto;
+      display: block;
+      width: 170px;
+      height: 40px;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 22px;
+      border: solid 1px #d7ab70; /* no */
+      color: #d7ab70;
+    }
+  }
+
+  & .community-created {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: 300;
+    & > span {
+      color: #929292;
+      text-decoration: underline;
     }
   }
 }
