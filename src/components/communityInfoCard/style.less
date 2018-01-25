@@ -1,7 +1,8 @@
 @import "../../styles/mixins";
 
 .community-info-card {
-  padding: 0 0 25px;
+  padding: 0 15px 25px;
+  border-bottom: solid 1px #ededed; /* no */
 
   .master-info {
     display: flex;
@@ -48,7 +49,7 @@
           word-wrap: normal;
         }
         & span:nth-of-type(2) {
-          paddin: 3px 8px;
+          padding: 3px 8px;
           color: #d7ab70;
           background-color: rgba(255, 226, 102, 0.15);
         }
@@ -68,6 +69,7 @@
       & img {
         width: 100%;
         height: 100%;
+        border-radius: 3px;
       }
 
       &.newMessage:after {
@@ -79,7 +81,7 @@
         height: 9px;
         border-radius: 50%;
         background-color: #ff3434;
-        border: solid 1px #ffffff;
+        border: solid 1px #ffffff; /* no */
         box-sizing: border-box;
       }
     }

@@ -14,6 +14,16 @@ const homeRoutes = [
     component: resolve => require(['@/views/home/index'], resolve),
   },
   {
+    path: '/joined',
+    name: 'joined',
+    component: resolve => require(['@/views/home/index'], resolve),
+  },
+  {
+    path: '/picked',
+    name: 'picked',
+    component: resolve => require(['@/views/home/index'], resolve),
+  },
+  {
     path: '/undefined',
     name: 'undefined',
     component: resolve => require(['@/views/abnormal/notFound'], resolve),
