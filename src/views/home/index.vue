@@ -35,7 +35,7 @@
           <p class="community-empty-desc fs26">你还没加入任何灯塔，赶紧来加入吧～</p>
         </div>
 
-        <div class="find-more-box">
+        <div class="find-more-box" v-if="pagination.end">
           <span class="find-more">发现更多灯塔</span>
           <p class="community-created">
             <span class="fs26">我也要创建灯塔</span>
@@ -67,7 +67,7 @@
 
       </div>
     </scroller>
-    <!-- <bottom-loading :end="pagination.isLastPage" /> -->
+
   </div>
 </template>
 <script>
@@ -97,22 +97,19 @@ import { getBeaconsApi } from '@/api/pages/home'
 export default class HomeIndex extends Vue {
   // 顶部标签控制
   navTabName = 'find'
+  // 社区列表
+  ready = false
   // ******************* 已加入 **********************
-  // 我加入的社区
   joins = []
   // ******************** 发现 ***********************
+  finds = []
   // ******************** 精选 ***********************
-  // banner图片列表
   banners = [
     { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner.png' },
     { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/sanyue.jpg' },
     { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner-3.jpg' }
   ]
-  // 我创建的社区
-  creations = []
-  // 社区列表
   communities = []
-  ready = false
 
   created () {
     const routeName = this.$route.name
@@ -130,8 +127,14 @@ export default class HomeIndex extends Vue {
    */
   async init () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
-    await this.getList({ page: 1 })
-    await this.getBanners()
+
+    const navTabName = this.navTabName
+    if (navTabName !== 'picked') {
+      await this.getList({ page: 1 })
+    } else {
+      await this.getList({ page: 1 })
+      await this.getBanners()
+    }
     this.ready = true
   }
 
@@ -139,22 +142,49 @@ export default class HomeIndex extends Vue {
    * 切换nav
    **/
   toggle (targetName) {
-    this.navTabName = targetName
-    const name = targetName === 'find' ? 'home' : targetName
-    this.$router.replace({name})
+    if (this.navTabName !== targetName) {
+      this.ready = false
+      this.joins = []
+      this.finds = []
+      this.communities = []
+      this.navTabName = targetName
+      const name = targetName === 'find' ? 'home' : targetName
+      this.$router.replace({name})
+      this.init().then(() => {})
+    }
   }
 
+  // ------------------------------------------------
+  /**
+   * 已加入
+   **/
+  getJoinedApi (params) {
+    return getBeaconsApi(params)
+  }
+  /**
+   * 发现
+   **/
+  getFindApi (params) {
+    return getBeaconsApi(params)
+  }
+  /**
+   * 精选
+   **/
+  getPickedApi (params) {
+    return getBeaconsApi(params)
+  }
   /**
    * 获取banner列表
    */
   getBanners () {}
+  // ------------------------------------------------
 
   /**
    * 加载下一页
    */
   loadNext() {
     const nextPage = this.pagination.page + 1
-    this.getList({ page: nextPage })
+    this.getList({ page: nextPage }).then(() => {})
   }
 
   /**
@@ -175,14 +205,29 @@ export default class HomeIndex extends Vue {
       }
 
       this.pagination.busy = true
-      const { creations, joins, list, total } = await getBeaconsApi(params)
-      this.creations = page === 1 ? creations : this.creations.concat(creations || [])
-      this.joins = page === 1 ? joins : this.joins.concat(joins || [])
-      this.communities = page === 1 ? list : this.communities.concat(list || [])
+
+      const navTabName = this.navTabName
+      let res = ''
+      let allTotal = 0
+      if (navTabName === 'find') {
+//        res = await this.getJoinedApi(params)
+//        const { joins, total } = res
+//        allTotal = total
+      } else if (navTabName === 'joined') {
+        res = await this.getJoinedApi(params)
+        const { joins, total } = res
+        this.joins = page === 1 ? joins : this.joins.concat(joins || [])
+        allTotal = total
+      } else {
+        res = await this.getJoinedApi(params)
+        const { list, total } = res
+        this.communities = page === 1 ? list : this.communities.concat(list || [])
+        allTotal = total
+      }
 
       this.pagination.page = page
       this.pagination.pageSize = pageSize
-      this.pagination.total = total
+      this.pagination.total = allTotal
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
     } catch (error) {
