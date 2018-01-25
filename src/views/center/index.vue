@@ -69,7 +69,7 @@ import { getInformationApi } from '@/api/pages/center'
 export default class HomeIndex extends Vue {
   model = {
   }
-  isCreated = true // 是否已经成为塔主
+  isCreated = false // 是否已经成为塔主
 
   created () {
     this.getModel()
@@ -87,12 +87,12 @@ export default class HomeIndex extends Vue {
    * 创建灯塔
    */
   handleCreate () {
-    this.$router.push({name: 'center-create'})
-//    this.$vux.alert.show({
-//      title: '创建灯塔请联系',
-//      content: '小灯塔客服：020-28163063或添加客服微信：zike02',
-//      buttonText: '好的'
-//    })
+//    this.$router.push({name: 'center-create'})
+    this.$vux.alert.show({
+      title: '创建灯塔请联系',
+      content: '小灯塔客服：020-28163063或添加客服微信：zike02',
+      buttonText: '好的'
+    })
   }
 }
 </script>
