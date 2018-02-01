@@ -10,13 +10,11 @@
 
       <!-- 分类 -->
       <div class="classification fs28" v-if="navTabName === 'picked'">
-        <span class="selected">全部</span>
-        <span>产品</span>
-        <span>产品设计</span>
-        <span>技术</span>
-        <span>创投</span>
-        <span>市场</span>
-        <span>运营</span>
+        <span v-for="itemTag, indexTag in communityTagList"
+              :key="indexTag"
+              :class="{selected: itemTag.selected}"
+              v-text="itemTag.tagName"
+              @click="tagSelected(indexTag)"></span>
       </div>
     </div>
 
@@ -46,7 +44,15 @@
 
       <!-- 发现 -->
       <div v-if="navTabName === 'find'">
-
+        <explore :exploreList="finds"
+                 :hideCommentArea="false"
+                 :showDelBtn="true"
+                 :showIdentification="false"
+                 :showLightHouseInfo="false"
+                 :disableOperationArr="disableOperationArr"
+                 @disableOperationEvents="disableOperationEvents"
+                 :disableUserClick="true"
+        ></explore>
       </div>
 
       <!-- 精选 -->
@@ -54,8 +60,8 @@
 
         <div class="banners">
           <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
-            <swiper-item v-for="(item, index) in banners" :key="`banner_${index}`">
-              <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item class="image-item" :src="item.img" mode="horizontal" /></a>
+            <swiper-item v-for="(item, index) in bannerList" :key="`banner_${index}`">
+              <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item class="image-item" :src="item.imgUrl" mode="horizontal" /></a>
             </swiper-item>
           </swiper>
         </div>
@@ -75,21 +81,21 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import { Swiper, SwiperItem } from 'vux'
-import CommunityCard from '@/components/communityCard'
 import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
+import explore from '@/components/explore/explore'
 import Scroller from '@/components/scroller'
 
 import ListMixin from '@/mixins/list'
 
-import { getBeaconsApi } from '@/api/pages/home'
+import { getBeaconsApi, getBannersApi, getTagsListApi, getSelectionApi } from '@/api/pages/home'
 
 @Component({
   name: 'home-index',
   components: {
     Swiper,
     SwiperItem,
-    CommunityCard,
     communityInfoCard,
+    explore,
     Scroller
   },
   mixins: [ListMixin]
@@ -99,17 +105,19 @@ export default class HomeIndex extends Vue {
   navTabName = 'find'
   // 社区列表
   ready = false
+  disableOperationArr = ['comment', 'praise']
+
   // ******************* 已加入 **********************
   joins = []
   // ******************** 发现 ***********************
   finds = []
   // ******************** 精选 ***********************
-  banners = [
-    { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner.png' },
-    { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/sanyue.jpg' },
-    { url: '/center/help', img: 'https://cdnstatic.zike.com/Uploads/static/beacon/head-banner-3.jpg' }
-  ]
+  bannerList = []
   communities = []
+  communityTagList = []
+  pickedParams = { // 页面所需参数
+    tagId: 0
+  }
 
   created () {
     const routeName = this.$route.name
@@ -120,22 +128,6 @@ export default class HomeIndex extends Vue {
     }
 
     this.init().then(() => {})
-  }
-
-  /**
-   * 页面初始化
-   */
-  async init () {
-    this.pagination.end = false // 初始化数据，必定不是最后一页
-
-    const navTabName = this.navTabName
-    if (navTabName !== 'picked') {
-      await this.getList({ page: 1 })
-    } else {
-      await this.getList({ page: 1 })
-      await this.getBanners()
-    }
-    this.ready = true
   }
 
   /**
@@ -154,6 +146,79 @@ export default class HomeIndex extends Vue {
     }
   }
 
+  /**
+   * 切换 Tag 标签
+   **/
+  tagSelected (tagIndex) {
+    const communityTagList = this.communityTagList
+    if (communityTagList[tagIndex].id === this.pickedParams.tagId) {
+      return
+    }
+
+    this.pickedParams.tagId = communityTagList[tagIndex].id
+    this.communities = []
+    this.bannerList = []
+
+    this.pickedInit().then(() => {})
+  }
+
+  disableOperationEvents (e) {
+    const {eventType} = e
+    console.log(eventType, '拦截')
+  }
+
+  // ------------------------------------------------
+  /**
+   * 页面入口初始
+   */
+  async init () {
+    const navTabName = this.navTabName
+    switch (navTabName) {
+      case 'picked':
+        await this.pickedInit()
+        break
+      case 'joined':
+        await this.joinedInit()
+        break
+      default:
+        await this.findInit()
+        break
+    }
+    this.ready = true
+  }
+
+  /**
+   * 加入 Tab 初始
+   */
+  async joinedInit () {
+    this.pagination.end = false // 初始化数据，必定不是最后一页
+    console.log('加入 Tab 初始')
+
+    await this.getList({ page: 1 })
+  }
+
+  /**
+   * 精选 Tab 初始
+   */
+  async pickedInit () {
+    this.pagination.end = false // 初始化数据，必定不是最后一页
+    console.log('精选 Tab 初始')
+
+    await this.getTagsList()
+    this.bannerList = await this.getBanners()
+    await this.getList({ page: 1 })
+  }
+
+  /**
+   * 发现 Tab 初始
+   */
+  async findInit () {
+    this.pagination.end = false // 初始化数据，必定不是最后一页
+    console.log('发现 Tab 初始')
+
+    await this.getList({ page: 1 })
+  }
+
   // ------------------------------------------------
   /**
    * 已加入
@@ -165,7 +230,7 @@ export default class HomeIndex extends Vue {
    * 发现
    **/
   getFindApi (params) {
-    return getBeaconsApi(params)
+    return getSelectionApi(params)
   }
   /**
    * 精选
@@ -176,7 +241,28 @@ export default class HomeIndex extends Vue {
   /**
    * 获取banner列表
    */
-  getBanners () {}
+  getBanners () {
+    return getBannersApi(this.pickedParams)
+  }
+  /**
+   * 获取banner列表
+   */
+  getTagsList () {
+    return getTagsListApi().then((res) => {
+      const tagId = this.pickedParams.tagId
+      let tagIndex = 0
+      res.forEach((tag, index) => {
+        console.log(tagId, tag.id)
+        if (tagId === tag.id) {
+          tagIndex = index
+        }
+      })
+      res[tagIndex].selected = true
+      console.log(res)
+
+      this.communityTagList = res
+    })
+  }
   // ------------------------------------------------
 
   /**
@@ -209,20 +295,25 @@ export default class HomeIndex extends Vue {
       const navTabName = this.navTabName
       let res = ''
       let allTotal = 0
-      if (navTabName === 'find') {
-//        res = await this.getJoinedApi(params)
-//        const { joins, total } = res
-//        allTotal = total
-      } else if (navTabName === 'joined') {
-        res = await this.getJoinedApi(params)
-        const { joins, total } = res
-        this.joins = page === 1 ? joins : this.joins.concat(joins || [])
-        allTotal = total
-      } else {
-        res = await this.getJoinedApi(params)
-        const { list, total } = res
-        this.communities = page === 1 ? list : this.communities.concat(list || [])
-        allTotal = total
+
+      switch (navTabName) {
+        case 'picked':
+          res = await this.getPickedApi({
+            ...params,
+            ...this.pickedParams
+          })
+          console.log('精选: ', res)
+          const communities = res.list
+          this.communities = page === 1 ? communities : this.communities.concat(communities || [])
+          allTotal = res.total
+          break
+        case 'joined':
+          break
+        default:
+          res = await this.getFindApi(params)
+          console.log('发现: ', res)
+          this.finds = res
+          break
       }
 
       this.pagination.page = page
@@ -258,8 +349,8 @@ export default class HomeIndex extends Vue {
   /**
    * 点击banner
    */
-  handleTapBanner () {
-    location.href = 'https://stg.ziwork.com/zikeappstatic/lighthousestatic/howplay/index.html'
+  handleTapBanner (item) {
+    location.href = item.url
   }
 
   /**
@@ -274,7 +365,6 @@ export default class HomeIndex extends Vue {
   }
 }
 </script>
-
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
