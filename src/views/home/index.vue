@@ -45,13 +45,8 @@
       <!-- 发现 -->
       <div v-if="navTabName === 'find'">
         <explore :exploreList="finds"
-                 :hideCommentArea="false"
-                 :showDelBtn="true"
-                 :showIdentification="false"
-                 :showLightHouseInfo="false"
                  :disableOperationArr="disableOperationArr"
                  @disableOperationEvents="disableOperationEvents"
-                 :disableUserClick="true"
         ></explore>
       </div>
 
@@ -311,6 +306,19 @@ export default class HomeIndex extends Vue {
           break
         default:
           res = await this.getFindApi(params)
+          res.forEach((item) => {
+            if (item['modelType'] === 'problem') {
+              item['answers'].forEach((answer) => {
+                answer.musicState = 0
+                answer.progress = 0
+              })
+            } else if (item['circleType'] === 1) {
+              item.musicState = 0
+              item.progress = 0
+            } else if (item['circleType'] === 2) {
+              item.videoPlay = false
+            }
+          })
           console.log('发现: ', res)
           this.finds = res
           break

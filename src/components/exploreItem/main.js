@@ -276,47 +276,25 @@ export default class exploreItem extends Vue {
   }
 
   // -------------------- 页面跳转 ------------------------
-  toUserInfo (userId) { // 去个人详情
+  toUserInfo () { // 去社区详情
     if (this.disableUserClick) {
       return
     }
-    console.log('去个人详情: ', userId)
-    this.$router.push(`/userInfo/${userId}/details`)
+    this.toCommunity()
   }
-  toDetails () { // 去朋友圈、帖子、问题详情
+  toDetails ({to}) { // 发现内容详情
     if (this.disableContentClick) {
       return
     }
-    const item = this.item
-    console.log('item item', item)
-    const {modelType, circleId, problemId, isCanSee} = item
-    console.log('isCanSee', isCanSee)
-    if (isCanSee === 0) {
-      this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
-      return
+    if (to && to === 'praise') {
+      console.log('内容详情-点赞列表')
+    } else {
+      console.log('内容详情')
     }
-    let type = 0
-    switch (modelType) {
-      case 'circle':
-        console.log('circleId')
-        type = 1
-        break
-      case 'post':
-        type = 2
-        break
-      case 'problem':
-        type = 3
-        break
-    }
-    if (type) {
-      // 跳转详情页 sourceId type
-      const sourceId = circleId || problemId
-      console.log('跳转详情页: ', sourceId, type)
-      // this.$router.push({name: 'all-details', params: {sourceId, type}})
-      this.$router.push(`/details/${sourceId}/${type}`)
-    }
+    // this.$router.push(`/details/`)
   }
-  toCommunity (communityId) { // 去大咖介绍页
-    this.$router.push(`/introduce/${communityId}`)
+  toCommunity () { // 去大咖介绍页
+    const {community} = this.item
+    this.$router.push(`/introduce/${community.communityId}`)
   }
 }

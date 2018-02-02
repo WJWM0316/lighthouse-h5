@@ -1,7 +1,7 @@
 <template>
   <!-- 朋友圈 首页发现专用 -->
   <div class="explore-list">
-    <dynamic-item v-for="item,index in exploreList"
+    <explore-item v-for="item,index in exploreList"
                   :item="item"
                   :key="index"
                   :itemIndex="index"
@@ -18,13 +18,13 @@
                   @videoEvent="videoEvent"
                   @operation="operation"
                   ref="dynamic-item"
-    ></dynamic-item>
+    ></explore-item>
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import dynamicItem from '@/components/dynamicItem/dynamicItem'
+  import exploreItem from '@/components/exploreItem/exploreItem'
   import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi} from '@/api/pages/pageInfo.js'
   import WechatMixin from '@/mixins/wechat'
 
@@ -86,7 +86,7 @@
       }
     },
     components: {
-      dynamicItem
+      exploreItem
     },
     watch: {
       exploreList (exploreList) {

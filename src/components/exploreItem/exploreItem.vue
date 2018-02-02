@@ -4,12 +4,15 @@
 
     <!-- 头像 -->
     <div class="left">
-      <img :src="item.releaseUser.avatar" class="user-image" @click.stop="toUserInfo(item.releaseUser.userId)" />
+      <img :src="item.releaseUser.avatar" class="user-image" @click.stop="toCommunity" />
     </div>
 
     <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
-      <span class="user-name" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}</span>
+      <span class="user-name" @click.stop="toCommunity">{{item.releaseUser.realName}}</span>
+
+      <!-- 用户头衔 -->
+      <p class="user-career" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
 
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
@@ -126,6 +129,9 @@
 
       <!-- -------------------------------------------------------------- -->
 
+      <!-- 来自社区 -->
+      <span class="community-form" @click.stop="toCommunity">来自于: {{item.community.title}}</span>
+
       <!-- 尾部 -->
       <div class="info-area">
         <div>
@@ -147,20 +153,16 @@
             <img class="icon-pinglun" src="./../../assets/icon/pinglun2@3x.png" />
             {{item.commentTotal > 0 ? item.commentTotal : '评论'}}
           </button>
-          <!-- 灯塔信息 -->
-          <div class="info-light-house" v-if="showLightHouseInfo" @click.stop="toCommunity(item.LighthouseId)">
-            <span>{{item.Lighthouse}}</span>
-          </div>
         </div>
       </div>
 
       <!-- 评论区 -->
       <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || item.commentTotal > 0)">
         <!-- 点赞信息 -->
-          <div class="praise-block" v-if="item.favorTotal > 0">
+        <div class="praise-block" v-if="item.favorTotal > 0" @click.stop="toDetails({to: 'praise'})">
             <img class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
             <div class="praise-name">
-                <span class="favor-name" v-for="(favor, favorIndex) in item.favors" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
+                <span class="favor-name" v-for="(favor, favorIndex) in item.favors" @click.stop="toDetails">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
             </div>
             <span class="praise-total" v-if="item.favorTotal > 3">等{{item.favorTotal}}人觉得很赞</span>
           </div>
@@ -168,9 +170,9 @@
         <!-- 评论信息 -->
         <div class="reply-block" v-if="item.commentTotal > 0">
           <div class="reply" v-for="reply in item.comments">
-            <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.realName}}</span>: {{reply.content}}
+            <span class="favor-name">{{reply.realName}}</span>: {{reply.content}}
           </div>
-          <div class="reply" v-if="item.commentTotal > 3">
+          <div class="reply" v-if="item.commentTotal > 10">
             <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
           </div>
         </div>
