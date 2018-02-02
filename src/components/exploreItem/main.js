@@ -287,11 +287,10 @@ export default class exploreItem extends Vue {
       return
     }
     if (to && to === 'praise') {
-      console.log('内容详情-点赞列表')
+      this.$router.push(`/index/details/${this.item.circleId}`)
     } else {
-      console.log('内容详情')
+      this.$router.push(`/index/details/${this.item.circleId}`)
     }
-    // this.$router.push(`/details/`)
   }
   toCommunity () { // 去大咖介绍页
     const {community} = this.item

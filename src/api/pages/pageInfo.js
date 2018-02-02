@@ -178,3 +178,21 @@ export const getCommentDetailApi = (data) => {
     isLoading: true
   })
 }
+
+// 发现内容详情
+export const getExploreDetailApi = (data) => {
+  return request({
+    url: '/wap/beacon/selectionDetails',
+    data,
+    isLoading: true
+  })
+}
+
+// 发现内容评论列表
+export const getExploreCommentsApi = (data) => {
+  return request({
+    url: '/wap/comment/geComments',
+    data,
+    isLoading: true
+  })
+}

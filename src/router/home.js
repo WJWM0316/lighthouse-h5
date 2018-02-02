@@ -14,6 +14,11 @@ const homeRoutes = [
     component: resolve => require(['@/views/home/index'], resolve),
   },
   {
+    path: '/index/details/:sourceId',
+    name: 'find-detail',
+    component: resolve => require(['@/views/introduce/exploreDetails'], resolve),
+  },
+  {
     path: '/joined',
     name: 'joined',
     component: resolve => require(['@/views/home/index'], resolve),
