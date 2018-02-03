@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/lighthouse_wap': {
-        target: 'https://light.house.api.ziwork.com',
+        target: 'http://demo2016.thetiger.com.cn/beaconserver',
         changeOrigin: true,
         pathRewrite: {
           '^/lighthouse_wap': '/'
