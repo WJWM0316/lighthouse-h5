@@ -9,10 +9,10 @@
 
     <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
-      <span class="user-name" @click.stop="toCommunity">{{item.releaseUser.realName}}</span>
+      <span class="user-name singleLine" @click.stop="toCommunity">{{item.releaseUser.realName}}</span>
 
       <!-- 用户头衔 -->
-      <p class="user-career" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
+      <p class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
 
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
@@ -130,7 +130,7 @@
       <!-- -------------------------------------------------------------- -->
 
       <!-- 来自社区 -->
-      <span class="community-form" @click.stop="toCommunity">来自于: {{item.community.title}}</span>
+      <span class="community-form singleLine" @click.stop="toCommunity">来自于: {{item.community.title}}</span>
 
       <!-- 尾部 -->
       <div class="info-area">

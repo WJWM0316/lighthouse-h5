@@ -162,6 +162,7 @@ export default class HomeIndex extends Vue {
   disableOperationEvents (e) {
     const {eventType} = e
     console.log(eventType, '拦截')
+    this.$router.push(`/index/details/${this.finds[e.itemIndex].circleId}`)
   }
 
   // ------------------------------------------------

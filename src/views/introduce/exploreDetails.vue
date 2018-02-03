@@ -47,9 +47,6 @@
 
 
           <div v-if="discussItemList.length === 0">
-            <div class="community-empty">
-              <img src="./../../assets/page/empty.png" alt="">
-            </div>
             <p class="community-empty-desc fs26">成为第一个评论的人吧</p>
           </div>
         </div>
@@ -60,9 +57,6 @@
           </classmate-item>
 
           <div v-if="classmateList.length === 0">
-            <div class="community-empty">
-              <img src="./../../assets/page/empty.png" alt="">
-            </div>
             <p class="community-empty-desc fs26">成为第一个点赞的人吧</p>
           </div>
         </div>
@@ -385,7 +379,7 @@
       margin: 50px auto 0;
     }
     & .community-empty-desc {
-      margin-top: 15px;
+      margin-top: 50px;
       color: #bcbcbc;
       text-align: center;
       margin-bottom: 30px;
