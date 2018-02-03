@@ -132,12 +132,12 @@
 
       this.pagination.busy = true
       const res = await this.getExploreComments(params)
-      const {topComments, total} = res
+      const {data, total} = res
 
       if (page === 1) {
-        this.discussItemList = topComments
+        this.discussItemList = data
       } else {
-        this.discussItemList = this.discussItemList.concat(topComments || [])
+        this.discussItemList = this.discussItemList.concat(data || [])
       }
 
       this.pagination.page = page
