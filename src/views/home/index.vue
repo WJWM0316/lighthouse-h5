@@ -306,7 +306,7 @@ export default class HomeIndex extends Vue {
           break
         default:
           res = await this.getFindApi(params)
-          res.forEach((item) => {
+          res.list.forEach((item) => {
             if (item['modelType'] === 'problem') {
               item['answers'].forEach((answer) => {
                 answer.musicState = 0
@@ -320,7 +320,8 @@ export default class HomeIndex extends Vue {
             }
           })
           console.log('发现: ', res)
-          this.finds = res
+          this.finds = res.list
+          allTotal = res.total
           break
       }
 
