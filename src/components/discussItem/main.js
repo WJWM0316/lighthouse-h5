@@ -49,6 +49,11 @@ import moment from 'moment'
       type: Boolean,
       default: false
     },
+    // 禁止评论区域点击事件
+    disableCommentAreaClick: {
+      type: Boolean,
+      default: false
+    },
     // 禁止内容点击事件
     disableContentClick: {
       type: Boolean,
@@ -145,6 +150,16 @@ export default class discussItem extends Vue {
     const itemIndex = this.itemIndex
     this.$emit('operation', {
       eventType: 'del',
+      itemIndex
+    })
+  }
+  /**
+   * 评论区点击
+   */
+  commentAreaClick () {
+    const itemIndex = this.itemIndex
+    this.$emit('operation', {
+      eventType: 'comment-area',
       itemIndex
     })
   }

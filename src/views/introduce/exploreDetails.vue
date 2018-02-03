@@ -2,30 +2,83 @@
 
   <!-- 发现内容详情 -->
   <div class="explore-detail">
-    <scroll @refresh="handleRefresh" @pullup="handlePullup">
+
+    <div class="fixed-box" v-show="isCeilingBoxFixed">
+      <div class="ceiling-box fixed" :class="navTabName">
+        <span @click="toggle('comment')">评论({{item.commentsTotal}})</span>
+        <span @click="toggle('praise')">点赞({{item.favorTotal}})</span>
+      </div>
+    </div>
+
+    <scroll @refresh="handleRefresh"
+            @pullup="handlePullup"
+            @scroll="scroll">
       <!-- header -->
       <div class="header">
         <explore :exploreList="exploreList"
                  :hideBorder="true"
                  :hideCommentArea="true"
                  :disableContentClick="true"
+                 :disableOperationArr="disableOperationArr"
+                 @disableOperationEvents="disableOperationEvents"
         ></explore>
       </div>
 
       <!-- container -->
       <div class="container">
-        <div class="container-title">评论({{pagination.total}})</div>
-        <discuss-item v-for="item,index in discussItemList"
-                      :item="item"
-                      :key="index"
-                      :itemIndex="index"
-                      @operation="operation"></discuss-item>
-      </div>
-    </scroll>
-    <!-- footer -->
-    <div class="footer">
-    </div>
 
+        <div class="fixed-box" ref="ceiling-box">
+          <div class="ceiling-box" :class="navTabName">
+            <span @click="toggle('comment')">评论({{item.commentsTotal}})</span>
+            <span @click="toggle('praise')">点赞({{item.favorTotal}})</span>
+          </div>
+        </div>
+
+        <div class="content-comment" v-if="navTabName === 'comment'">
+          <discuss-item v-for="item,index in discussItemList"
+                        :item="item"
+                        :key="index"
+                        :itemIndex="index"
+                        :disableContentClick="true"
+                        :disableUserClick="true"
+                        :disableCommentAreaClick="true"
+                        @operation="operation">
+          </discuss-item>
+
+
+          <div v-if="discussItemList.length === 0">
+            <div class="community-empty">
+              <img src="./../../assets/page/empty.png" alt="">
+            </div>
+            <p class="community-empty-desc fs26">成为第一个评论的人吧</p>
+          </div>
+        </div>
+        <div class="content-praise" v-else>
+          <classmate-item v-for="item, index in classmateList"
+                          :item='item'
+                          :key="index">
+          </classmate-item>
+
+          <div v-if="classmateList.length === 0">
+            <div class="community-empty">
+              <img src="./../../assets/page/empty.png" alt="">
+            </div>
+            <p class="community-empty-desc fs26">成为第一个点赞的人吧</p>
+          </div>
+        </div>
+      </div>
+
+    </scroll>
+
+    <div class="footer">
+      <div class="page-operation">
+        <div class="to-home" @click="toHome">
+          <img src="./../../assets/icon/icon_home.png" class="icon-home" />
+          <span>首页</span>
+        </div>
+        <button @click="toCommunity">立即加入</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -33,15 +86,17 @@
   import Component from 'vue-class-component'
   import explore from '@/components/explore/explore'
   import discussItem from '@/components/discussItem/discussItem'
+  import classmateItem from '@/components/classmateItem/classmateItem'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getExploreDetailApi, getExploreCommentsApi, setFavorApi, setSubmitCommentApi, delCommontApi } from '@/api/pages/pageInfo.js'
+  import { getExploreDetailApi, getExploreCommentsApi, getFavorListApi } from '@/api/pages/pageInfo.js'
 
   @Component({
-    name: 'explore-details',
+    name: 'explore-detail',
     components: {
       explore,
       discussItem,
+      classmateItem,
       Scroll
     },
     computed: {
@@ -54,29 +109,72 @@
   export default class exploreDetails extends Vue {
     exploreList = []
     discussItemList = []
+    classmateList = []
+    navTabName = 'comment'
+    isCeilingBoxFixed = false
+    ceilingBoxTop = 0
+    disableOperationArr = ['comment', 'praise']
 
     created () {
+      console.log(this.$route)
+      const {target} = this.$route.query
+      if (target === 'praise') {
+        this.navTabName = 'praise'
+      }
       this.pageInit().then(() => {})
     }
 
-    // ------------------- 评论区 ----------------------
-    operation (e) {
-      const {eventType, itemIndex} = e
-      const item = this.discussItemList[itemIndex]
-      switch (eventType) {
-        case 'comment':
-          break
-        case 'praise':
-          break
-        case 'del':
-          break
+    /**
+     * 切换nav
+     **/
+    toggle (targetName) {
+      if (this.navTabName !== targetName) {
+        this.navTabName = targetName
+        if (targetName === 'praise') {
+          this.$router.replace({path: this.$route.path, query: {target: 'praise'}})
+        } else {
+          this.$router.replace({path: this.$route.path})
+        }
+
+        this.pagination.end = false // 初始化数据，必定不是最后一页
+        this.getList({page: 1}).then(() => {})
       }
     }
+
+    // ------------------- 评论区 ----------------------
+    operation () {
+      this.showTips()
+    }
+    disableOperationEvents () {
+      this.showTips()
+    }
     // ------------------------------------------------
+
+    showTips () {
+      const _this = this
+      this.$vux.confirm.show({
+        title: '加入灯塔',
+        content: '解锁更多内容',
+        confirmText: '去看看',
+        cancelText: '取消',
+        onCancel () {
+        },
+        onConfirm () {
+          _this.$router.push(`/introduce/${_this.item.community.communityId}`)
+        }
+      })
+    }
+    toHome () {
+      this.$router.push('/index')
+    }
+    toCommunity () {
+      this.$router.push(`/introduce/${this.item.community.communityId}`)
+    }
 
     async pageInit () {
       const { sourceId } = this.$route.params
       this.pagination.end = false // 初始化数据，必定不是最后一页
+
       let res = await this.getExploreDetail(sourceId)
 
       if (res['modelType'] === 'problem') {
@@ -93,6 +191,10 @@
       this.exploreList = [res]
 
       await this.getList({page: 1})
+
+      this.$nextTick(() => {
+        this.ceilingBoxTop = this.$refs['ceiling-box'].offsetTop
+      })
     }
 
     // ------------------------------------------------
@@ -109,6 +211,12 @@
      */
     getExploreComments (params) {
       return getExploreCommentsApi(params)
+    }
+    /**
+     * 获取点赞列表
+     */
+    getFavorList (params) {
+      return getFavorListApi(params)
     }
     // ------------------------------------------------
 
@@ -131,18 +239,35 @@
       }
 
       this.pagination.busy = true
-      const res = await this.getExploreComments(params)
-      const {data, total} = res
 
-      if (page === 1) {
-        this.discussItemList = data
+      const navTabName = this.navTabName
+      console.log(navTabName)
+      let allTotal = 0
+      if (navTabName === 'comment') {
+        const res = await this.getExploreComments(params)
+        const {comments, total} = res
+        allTotal = total
+
+        if (page === 1) {
+          this.discussItemList = comments
+        } else {
+          this.discussItemList = this.discussItemList.concat(comments || [])
+        }
       } else {
-        this.discussItemList = this.discussItemList.concat(data || [])
+        const res = await this.getFavorList(params)
+        const {list, total} = res
+        allTotal = total
+
+        if (page === 1) {
+          this.classmateList = list
+        } else {
+          this.classmateList = this.classmateList.concat(list || [])
+        }
       }
 
       this.pagination.page = page
       this.pagination.pageSize = pageSize
-      this.pagination.total = total
+      this.pagination.total = allTotal
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
     }
@@ -170,14 +295,70 @@
     handlePullup (loaded) {
       this.loadNext().then(() => { loaded('done') })
     }
+
+    scroll (e) {
+      const ceilingBoxTop = this.ceilingBoxTop
+      if (ceilingBoxTop) {
+        const {scrollTop} = e.target
+        this.isCeilingBoxFixed = scrollTop >= ceilingBoxTop
+      }
+    }
   }
 </script>
 <style lang="less" scoped>
-  .explore-details {
+  .explore-detail {
     box-sizing: border-box;
-    padding-bottom: 50px;
+    padding-bottom: 49px;
     height: 100%;
     & .header {
+    }
+
+    & .ceiling-box {
+      margin: 0 15px;
+      display: flex;
+      align-items: center;
+      color: #929292;
+      font-size: 15px;
+      border-bottom: solid 1px #dcdcdc;
+
+      & span {
+        height: 40px;
+        line-height: 40px;
+        margin-left: 40px;
+        padding: 0 5px;
+        transform: translate(0, 1px);
+
+        &:first-of-type {
+          margin-left: 0;
+        }
+      }
+      &.comment span:nth-of-type(1),
+      &.praise span:nth-of-type(2) {
+        color: #354048;
+        font-weight: 500;
+        position: relative;
+      }
+      &.comment span:nth-of-type(1):after,
+      &.praise span:nth-of-type(2):after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        border-radius: 2px;
+        background-color: #ffe266;
+      }
+
+      &.fixed {
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        background:#fff;
+        margin-top: 0;
+        z-index: 99;
+      }
     }
 
     & .container {
@@ -189,6 +370,25 @@
         margin: 0 15px;
         border-bottom: solid 1px #dcdcdc;  /* no */
       }
+
+      & .content-comment {
+
+      }
+      & .content-praise {
+        padding-right: 15px;
+      }
+    }
+
+    & .community-empty {
+      width: 120px;
+      height: 120px;
+      margin: 50px auto 0;
+    }
+    & .community-empty-desc {
+      margin-top: 15px;
+      color: #bcbcbc;
+      text-align: center;
+      margin-bottom: 30px;
     }
 
     .footer {
@@ -202,32 +402,40 @@
         align-items: center;
         border-top: solid 1px #ededed;  /* no */
         background: #FFF;
+        height: 49px;
+
+        & .to-home {
+          flex: 0 0 auto;
+          width: 46px;
+          height: 100%;
+          color: #929292;
+          display: flex;
+          flex-flow: column nowrap;
+          justify-content: center;
+          align-items: center;
+          & > span {
+            font-size: 11px !important;
+          }
+        }
 
         & > button　{
           flex: 1 1 auto;
-          height: 50px;
-          font-size: 15px;
-          color: #666666;
+          height: 49px;
+          font-size: 16px;
+          color: #354048;
           border-style: none;
           outline: none;
           line-height: 1;
-          background-color: transparent;
+          background-color: #ffe266;
           text-align: center;
         }
-
-        & .split {
-          width: 1px;
-          height: 20px;
-          background-color: #dcdcdc;
-        }
       }
+    }
 
-      & .icon-zan, & .icon-pinglun {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        margin-right: 2px;
-      }
+    & .icon-home {
+      width: 18px;
+      height: 17px;
+      margin-bottom: 5px;
     }
   }
 </style>

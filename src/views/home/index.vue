@@ -29,7 +29,9 @@
           </div>
         </div>
         <div v-else>
-          <div class="community-empty"></div>
+          <div class="community-empty">
+            <img src="./../../assets/page/empty.png" alt="">
+          </div>
           <p class="community-empty-desc fs26">你还没加入任何灯塔，赶紧来加入吧～</p>
         </div>
 

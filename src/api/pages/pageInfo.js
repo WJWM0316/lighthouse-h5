@@ -89,6 +89,15 @@ export const setFavorApi = (data) => {
   })
 }
 
+// 点赞列表
+export const getFavorListApi = (data) => {
+  return request({
+    url: '/wap/currency/favorList',
+    data,
+    isLoading: true
+  })
+}
+
 // 评论
 export const setSubmitCommentApi = (data) => {
   return request({

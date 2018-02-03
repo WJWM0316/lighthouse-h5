@@ -287,7 +287,7 @@ export default class exploreItem extends Vue {
       return
     }
     if (to && to === 'praise') {
-      this.$router.push(`/index/details/${this.item.circleId}`)
+      this.$router.push(`/index/details/${this.item.circleId}?target=praise`)
     } else {
       this.$router.push(`/index/details/${this.item.circleId}`)
     }

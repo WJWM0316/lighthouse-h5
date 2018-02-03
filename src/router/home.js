@@ -16,6 +16,7 @@ const homeRoutes = [
   {
     path: '/index/details/:sourceId',
     name: 'find-detail',
+    meta: {navHide: true},
     component: resolve => require(['@/views/introduce/exploreDetails'], resolve),
   },
   {

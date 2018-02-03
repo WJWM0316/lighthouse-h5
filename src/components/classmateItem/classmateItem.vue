@@ -1,7 +1,7 @@
 <template>
   <div class="classmate-item" @click="handleOne">
     <div class="userInfo-img">
-      <img class="headImg" :src="item.avatarUrl || '../../assets/icon/img_head_default.png'">
+      <img class="headImg" :src="item.avatar || '../../assets/icon/img_head_default.png'">
       <img class="sex" v-if="item.gender"
              :src="item.gender === 1 ? boyImg : girlImg">
     </div>
