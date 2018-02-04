@@ -53,3 +53,13 @@ export const getSelectionDetailsApi = data => request({
 })
 
 // ******************* 已加入 Tab **********************
+
+/**
+ * 首页已加入列表
+ * @param {*} data
+ */
+export const getJoineListdApi = data => request({
+  url: '/wap/beacon/joined',
+  needUserInfo: false,
+  data
+})

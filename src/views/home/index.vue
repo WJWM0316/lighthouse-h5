@@ -23,12 +23,23 @@
       <!-- 已加入 -->
       <div v-if="navTabName === 'joined'">
 
-        <div class="communities" v-if="joins && joins.length > 0">
+        <!-- 创建的灯塔列表 -->
+        <div class="module-home communities" v-if="creations && creations.length > 0">
+          <!--<p class="module-home-title">已创建</p>-->
+          <div class="list">
+            <community-info-card class="community-item" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          </div>
+        </div>
+
+        <!-- 已加入列表 -->
+        <div class="module-home communities" v-if="joins && joins.length > 0">
+          <!--<p class="module-home-title">已加入</p>-->
           <div class="list">
             <community-info-card class="community-item" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
           </div>
         </div>
-        <div v-else>
+
+        <div v-if="joins.length === 0 && creations.length === 0">
           <div class="community-empty">
             <img src="./../../assets/page/empty.png" alt="">
           </div>
@@ -37,9 +48,17 @@
 
         <div class="find-more-box" v-if="pagination.end">
           <span class="find-more">发现更多灯塔</span>
-          <p class="community-created">
-            <span class="fs26">我也要创建灯塔</span>
-          </p>
+          <!--<p class="community-created">-->
+            <!--<span class="fs26">我也要创建灯塔</span>-->
+          <!--</p>-->
+        </div>
+
+        <!-- 猜你喜欢 -->
+        <div class="module-home likes communities" v-if="joins.length === 0 && creations.length === 0">
+          <p class="module-home-title">猜你喜欢</p>
+          <div class="list">
+            <community-info-card class="community-item" v-for="item in likes" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          </div>
         </div>
 
       </div>
@@ -84,7 +103,7 @@ import Scroller from '@/components/scroller'
 
 import ListMixin from '@/mixins/list'
 
-import { getBeaconsApi, getBannersApi, getTagsListApi, getSelectionApi } from '@/api/pages/home'
+import { getBeaconsApi, getBannersApi, getTagsListApi, getSelectionApi, getJoineListdApi } from '@/api/pages/home'
 
 @Component({
   name: 'home-index',
@@ -105,7 +124,9 @@ export default class HomeIndex extends Vue {
   disableOperationArr = ['comment', 'praise']
 
   // ******************* 已加入 **********************
+  creations = []
   joins = []
+  likes = []
   // ******************** 发现 ***********************
   finds = []
   // ******************** 精选 ***********************
@@ -222,7 +243,7 @@ export default class HomeIndex extends Vue {
    * 已加入
    **/
   getJoinedApi (params) {
-    return getBeaconsApi(params)
+    return getJoineListdApi(params)
   }
   /**
    * 发现
@@ -306,6 +327,20 @@ export default class HomeIndex extends Vue {
           allTotal = res.total
           break
         case 'joined':
+          res = await this.getJoinedApi(params)
+          console.log('已加入: ', res)
+          const {creations, joins, recommends} = res
+          this.joins = page === 1 ? joins : this.joins.concat(joins || [])
+
+          if (creations && page === 1) {
+            this.creations = creations
+          }
+
+          if (recommends && page === 1) {
+            this.likes = recommends
+          }
+
+          allTotal = res.total
           break
         default:
           res = await this.getFindApi(params)
@@ -497,6 +532,20 @@ export default class HomeIndex extends Vue {
     }
   }
 
+  & .likes {
+    margin-top: 70px;
+  }
+
+  & .module-home {
+    & .module-home-title {
+      font-size: 21px;
+      font-weight: 500;
+      color: #bcbcbc;
+      padding: 0 15px 15px;
+      border-bottom: solid 1px #ededed; /* no */
+    }
+  }
+
   & .community-empty {
     width: 120px;
     height: 120px;
@@ -505,6 +554,7 @@ export default class HomeIndex extends Vue {
   & .community-empty-desc {
     margin-top: 15px;
     color: #bcbcbc;
+    text-align: center;
   }
 
   & .find-more-box {
