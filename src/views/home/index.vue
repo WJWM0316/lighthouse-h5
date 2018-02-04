@@ -47,7 +47,7 @@
         </div>
 
         <div class="find-more-box" v-if="pagination.end">
-          <span class="find-more">发现更多灯塔</span>
+          <span class="find-more" @click="findMore">发现更多灯塔</span>
           <!--<p class="community-created">-->
             <!--<span class="fs26">我也要创建灯塔</span>-->
           <!--</p>-->
@@ -74,7 +74,7 @@
       <!-- 精选 -->
       <div v-if="navTabName === 'picked'">
 
-        <div class="banners">
+        <div class="banners" v-if="bannerList && bannerList.length > 0">
           <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
             <swiper-item v-for="(item, index) in bannerList" :key="`banner_${index}`">
               <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item class="image-item" :src="item.imgUrl" mode="horizontal" /></a>
@@ -184,6 +184,10 @@ export default class HomeIndex extends Vue {
     const {eventType} = e
     console.log(eventType, '拦截')
     this.$router.push(`/index/details/${this.finds[e.itemIndex].circleId}`)
+  }
+
+  findMore () {
+    this.toggle('picked')
   }
 
   // ------------------------------------------------
