@@ -47,7 +47,7 @@
 
 
           <div v-if="discussItemList.length === 0">
-            <p class="community-empty-desc fs26">成为第一个评论的人吧</p>
+            <p class="community-empty-desc fs26">成为第一个评论的人吧~</p>
           </div>
         </div>
         <div class="content-praise" v-else>
@@ -57,7 +57,7 @@
           </classmate-item>
 
           <div v-if="classmateList.length === 0">
-            <p class="community-empty-desc fs26">成为第一个点赞的人吧</p>
+            <p class="community-empty-desc fs26">成为第一个点赞的人吧~</p>
           </div>
         </div>
       </div>
@@ -356,6 +356,7 @@
     }
 
     & .container {
+      padding-top: 4px;
       & .container-title {
         font-size: 15px;
         font-weight: 500;

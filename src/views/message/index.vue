@@ -7,7 +7,7 @@
         <img class="icon" style="margin-left: 10px;" src="./../../assets/icon/mypage_arrow.png">
       </div>
       <div class="space-line"></div>
-      <div class="message-pannel fs15" v-if="dataList.length > 0">通知列表</div>
+      <div class="message-pannel fs30" v-if="dataList.length > 0">通知列表</div>
       <div class="message-container">
         <div v-for='(item,index) in dataList'>
           <message-item class='community-item'
@@ -323,7 +323,7 @@
     .exchange-wx {
       font-weight: 500;
       margin: 0px 15px;
-      padding: 15px 0;
+      padding: 11px 0;
       position: relative;
       .red-dot {
         width: 15px;

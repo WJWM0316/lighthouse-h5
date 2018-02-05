@@ -502,7 +502,7 @@ export default class HomeIndex extends Vue {
   }
 
   .banners {
-    margin: 15px 15px 30px;
+    margin: 0 15px 15px;
     border-radius: 3px;
     font-size: 0;
     line-height: 1;
