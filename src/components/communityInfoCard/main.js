@@ -24,7 +24,8 @@ import Component from 'vue-class-component'
   watch: {
     'community.startTime': {
       handler (val) {
-        if (this.community.isAuthor !== 1 && this.community.isJoined !== 1 && !this.isEnd) {
+        // if (this.community.isAuthor !== 1 && this.community.isJoined !== 1 && !this.isEnd) {
+        if (!this.isEnd) {
           // 启用倒计时
           const countdown = this.getCountdown()
           countdown.start(this.community.startTime * 1000, (timestamp) => {
