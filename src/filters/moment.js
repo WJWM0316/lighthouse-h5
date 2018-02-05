@@ -28,18 +28,26 @@ Vue.filter('duration', timestamp => {
     return (prefix + val).substr(val.toString().length)
   }
 
-  let result = 'hh:mm:ss'
+  // let result = 'hh:mm:ss'
+  // let option = {
+  //   'D+': days,
+  //   'h+': hours,
+  //   'm+': minutes,
+  //   's+': seconds
+  // }
+  //
+  // // 如果超过一天则显示天
+  // if (asDays > 0) {
+  //   result = 'D天 hh:mm:ss'
+  //   option['D+'] = asDays
+  // }
+
+  let result = 'D天 hh:mm:ss'
   let option = {
-    'D+': days,
+    'D+': asDays,
     'h+': hours,
     'm+': minutes,
     's+': seconds
-  }
-
-  // 如果超过一天则显示天
-  if (asDays > 0) {
-    result = 'D天 hh:mm:ss'
-    option['D+'] = asDays
   }
 
   for (let key of Object.keys(option)) {

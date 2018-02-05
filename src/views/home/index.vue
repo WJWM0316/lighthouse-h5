@@ -350,10 +350,12 @@ export default class HomeIndex extends Vue {
           res = await this.getFindApi(params)
           res.list.forEach((item) => {
             if (item['modelType'] === 'problem') {
-              item['answers'].forEach((answer) => {
-                answer.musicState = 0
-                answer.progress = 0
-              })
+              if (item['answers']) {
+                item['answers'].forEach((answer) => {
+                  answer.musicState = 0
+                  answer.progress = 0
+                })
+              }
             } else if (item['circleType'] === 1) {
               item.musicState = 0
               item.progress = 0
