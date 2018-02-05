@@ -21,7 +21,7 @@
       </div>
 
       <div class="right" :class="{newMessage}">
-        <img :src="community.detailImg" alt="">
+        <img :src="community.icon" alt="">
       </div>
 
     </div>
