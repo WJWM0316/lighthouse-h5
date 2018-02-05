@@ -534,12 +534,12 @@ export default class HomeIndex extends Vue {
     }
 
     .community-item:not(:last-child) {
-      /*margin-bottom: 35px;*/
+      margin-bottom: 25px;
     }
   }
 
   & .likes {
-    margin-top: 70px;
+    margin-top: 15px;
   }
 
   & .module-home {

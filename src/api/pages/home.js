@@ -60,6 +60,5 @@ export const getSelectionDetailsApi = data => request({
  */
 export const getJoineListdApi = data => request({
   url: '/wap/beacon/joined',
-  needUserInfo: false,
   data
 })
