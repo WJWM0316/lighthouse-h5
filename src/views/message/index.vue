@@ -212,6 +212,12 @@
       this.music = music
     }
 
+    destroyed () {
+      this.music.pause()
+      this.music.src = ''
+      this.music = ''
+    }
+
     /**
      * 设置当前播放状态
      * @param state play | playing | loading
