@@ -21,7 +21,9 @@
       <!-- 发表内容 -->
       <div class="publish-content problem" v-if="item.modelType === 'problem'">
 
-        <p class="content-text">问：{{item.content}}</p>
+        <div ref="problem-content">
+          <p class="content-text">问：{{item.content}}</p>{{isFullText('problem-content')}}
+        </div>
 
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
 
