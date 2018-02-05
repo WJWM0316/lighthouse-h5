@@ -2,14 +2,14 @@
   <div class="p-body p-home-index" :class="navTabName">
     <div class="fixed">
       <!-- tab -->
-      <div class="nav-bar fs30" :class="navTabName">
+      <div class="nav-bar fs15" :class="navTabName">
         <span @click="toggle('joined')">已加入</span>
         <span @click="toggle('find')">发现</span>
         <span @click="toggle('picked')">精选</span>
       </div>
 
       <!-- 分类 -->
-      <div class="classification fs28" v-if="navTabName === 'picked'">
+      <div class="classification fs14" v-if="navTabName === 'picked'">
         <span v-for="itemTag, indexTag in communityTagList"
               :key="indexTag"
               :class="{selected: itemTag.selected}"
@@ -43,7 +43,7 @@
           <div class="community-empty">
             <img src="./../../assets/page/empty.png" alt="">
           </div>
-          <p class="community-empty-desc fs26">你还没加入任何灯塔，赶紧来加入吧～</p>
+          <p class="community-empty-desc fs13">你还没加入任何灯塔，赶紧来加入吧～</p>
         </div>
 
         <div class="find-more-box" v-if="pagination.end">
@@ -576,6 +576,7 @@ export default class HomeIndex extends Vue {
       border-radius: 22px;
       border: solid 1px #d7ab70; /* no */
       color: #d7ab70;
+      font-weight: 300;
     }
   }
 
