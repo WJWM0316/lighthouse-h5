@@ -60,7 +60,10 @@
       <div class="publish-content" v-else>
 
         <!-- 只有文字 -->
-        <p class="content-text" v-if="item.circleType === 0">{{item.content}}</p>
+        <div ref="circle-content">
+          <p class="content-text ellipsis">{{item.content}}</p>{{isFullText('circle-content')}}
+        </div>
+
 
         <!-- 音频 -->
         <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
@@ -82,7 +85,6 @@
 
         <!-- 文字与视频 -->
         <div v-if="item.circleType === 2">
-          <p class="content-text">{{item.content}}</p>
           <div class="content-video" @click.stop="videoClick">
             <video controls v-show="item.videoPlay" ref="video"></video>
             <div class="placeholder" v-show="!item.videoPlay">
@@ -95,7 +97,6 @@
 
         <!-- 文字与图片 -->
         <div v-if="item.circleType === 3">
-          <p class="content-text">{{item.content}}</p>
           <div class="content-images">
             <!-- 图片为 1 张时 -->
             <div class="item-image one" v-if="item.files.length === 1">
@@ -111,7 +112,6 @@
 
         <!-- 只有文件 -->
         <div v-if="item.circleType === 4">
-          <p class="content-text">{{item.content}}</p>
           <div class="content-file" @click.stop="fileOpen(item.files[0].fileUrl)">
             <img class="file-logo" src="./../../assets/suffix/pdf.png" v-if="fileType === 'pdf'" />
             <img class="file-logo" src="./../../assets/suffix/ppt.png" v-else-if="fileType === 'ppt'" />

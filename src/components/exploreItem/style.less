@@ -153,8 +153,22 @@
       word-wrap: break-word;
       line-height: 1.5;
       color: #354048;
-      display: block;
       white-space: pre-line;
+      display: block;
+
+      &.ellipsis{
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 6;
+        overflow: hidden;
+      }
+    }
+
+    & .full-text {
+      margin-top: 10px;
+      font-size: 15px;
+      color: #576b95;
+      line-height: 1;
     }
 
     & .content-images {

@@ -180,6 +180,32 @@ export default class exploreItem extends Vue {
     this.video = this.$refs['video']
   }
 
+  isFullText (ref) {
+    this.$nextTick(() => {
+      const el = this.$refs[ref]
+      const contentText = el.firstChild
+      console.log(contentText.offsetHeight, contentText.scrollHeight)
+      if (contentText.scrollHeight > contentText.offsetHeight) {
+        const fullText = document.createElement('span')
+        fullText.className = 'full-text'
+        fullText.innerText = '全文'
+        fullText.onclick = (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+
+          if (fullText.innerText === '全文') {
+            contentText.classList.remove('ellipsis')
+            fullText.innerText = '收起'
+          } else {
+            contentText.classList.add('ellipsis')
+            fullText.innerText = '全文'
+          }
+        }
+        el.appendChild(fullText)
+      }
+    })
+  }
+
   /**
    * 发表评论
    */
