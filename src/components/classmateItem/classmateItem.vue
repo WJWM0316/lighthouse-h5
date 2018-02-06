@@ -65,7 +65,7 @@
       line-height: 1;
       .headImg{
         width: 50px;
-        height: 50px;
+        /*height: 50px;*/
         background: pink;
         border-radius: 50%;
       }
