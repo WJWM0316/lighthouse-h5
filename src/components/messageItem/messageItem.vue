@@ -183,6 +183,7 @@
     .userInfo-img {
       padding: 20px 0;
       position: relative;
+      flex: 0 0 auto;
       .headImg{
         width: 50px;
         height: 50px;

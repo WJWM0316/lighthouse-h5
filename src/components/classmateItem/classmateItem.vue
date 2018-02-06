@@ -63,6 +63,7 @@
       position: relative;
       font-size: 0;
       line-height: 1;
+      flex: 0 0 auto;
       .headImg{
         width: 50px;
         height: 50px;

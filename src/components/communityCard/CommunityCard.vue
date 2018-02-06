@@ -28,7 +28,7 @@
         <div class="right">
           <template v-if="community.isAuthor !== 1 && community.isJoined !== 1 && !isEnd">
             <p class="residue" v-if="community.remainingJoinNum <= 0">已满员</p>
-            <p class="residue" v-else><span class="number">{{community.freeJoinedNum + community.payJoinedNum}}</span> 人已加入</p>
+            <p class="residue" v-else-if="community.freeJoinedNum && community.payJoinedNum"><span class="number">{{community.freeJoinedNum + community.payJoinedNum}}</span> 人已加入</p>
           </template>
         </div>
       </div>
