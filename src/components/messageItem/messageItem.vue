@@ -225,7 +225,7 @@
           }
         }
       .desc-middle{
-        .setEllipsis(285px);
+        .setEllipsisLn(4);
       }
       .desc-middle-return{
         display: flex;
