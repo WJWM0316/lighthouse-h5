@@ -495,6 +495,7 @@ export default class HomeIndex extends Vue {
     & > span {
       margin-left: 25px;
       color: #929292;
+      display: inline-block;
 
       &:first-of-type {
         margin-left: 0;
