@@ -2,7 +2,7 @@
   <div class="p-body p-message-outer">
     <scroller @refresh="handleRefresh" @pullup="handlePullup">
       <div class="exchange-wx" @click="goexChangeList">
-        <div>交换微信申请</div>
+        <div class="fs15">交换微信申请</div>
         <div class="red-dot" v-if="isRead"></div>
         <img class="icon" style="margin-left: 10px;" src="./../../assets/icon/mypage_arrow.png">
       </div>

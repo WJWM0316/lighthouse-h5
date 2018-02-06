@@ -23,19 +23,21 @@
       <!-- 已加入 -->
       <div v-if="navTabName === 'joined'">
 
-        <!-- 创建的灯塔列表 -->
-        <div class="module-home communities" v-if="creations && creations.length > 0">
-          <!--<p class="module-home-title">已创建</p>-->
-          <div class="list">
-            <community-info-card class="community-item" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+        <div class="joined-list">
+          <!-- 创建的灯塔列表 -->
+          <div class="module-home communities" v-if="creations && creations.length > 0">
+            <!--<p class="module-home-title">已创建</p>-->
+            <div class="list">
+              <community-info-card class="community-item" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+            </div>
           </div>
-        </div>
 
-        <!-- 已加入列表 -->
-        <div class="module-home communities" v-if="joins && joins.length > 0">
-          <!--<p class="module-home-title">已加入</p>-->
-          <div class="list">
-            <community-info-card class="community-item" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          <!-- 已加入列表 -->
+          <div class="module-home communities" v-if="joins && joins.length > 0">
+            <!--<p class="module-home-title">已加入</p>-->
+            <div class="list">
+              <community-info-card class="community-item" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+            </div>
           </div>
         </div>
 
@@ -451,7 +453,7 @@ export default class HomeIndex extends Vue {
     justify-content: space-around;
     align-items: center;
     color: #929292;
-    padding: 0 75px;
+    padding: 0 75px 0 60px;
     background-color: #ffffff;
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1); /* no */
 
@@ -524,6 +526,10 @@ export default class HomeIndex extends Vue {
         overflow: hidden;
       }
     }
+  }
+
+  .joined-list {
+    margin-top: 15px;
   }
 
   .communities {
