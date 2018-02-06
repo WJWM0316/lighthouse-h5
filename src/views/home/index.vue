@@ -56,7 +56,7 @@
         </div>
 
         <!-- 猜你喜欢 -->
-        <div class="module-home likes communities" v-if="joins.length === 0 && creations.length === 0">
+        <div class="module-home likes communities" v-if="joins.length === 0 && creations.length === 0 && likes.length > 0">
           <p class="module-home-title">猜你喜欢</p>
           <div class="list">
             <community-info-card class="community-item" v-for="item in likes" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
