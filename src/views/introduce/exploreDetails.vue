@@ -313,7 +313,7 @@
       align-items: center;
       color: #929292;
       font-size: 15px;
-      border-bottom: solid 1px #dcdcdc;
+      border-bottom: solid 1px #dcdcdc; /* no */
 
       & span {
         height: 40px;

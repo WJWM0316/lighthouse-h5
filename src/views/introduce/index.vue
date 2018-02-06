@@ -454,7 +454,7 @@
 
         & span {
           display: block;
-          margin-top: 6px;
+          margin-top: 2px;
         }
         & span:first-of-type {
           margin-top: 0;
