@@ -272,18 +272,20 @@ export default class HomeIndex extends Vue {
    */
   getTagsList () {
     return getTagsListApi().then((res) => {
-      const tagId = this.pickedParams.tagId
-      let tagIndex = 0
-      res.forEach((tag, index) => {
-        console.log(tagId, tag.id)
-        if (tagId === tag.id) {
-          tagIndex = index
-        }
-      })
-      res[tagIndex].selected = true
-      console.log(res)
+      if (res && res.length) {
+        const tagId = this.pickedParams.tagId
+        let tagIndex = 0
+        res.forEach((tag, index) => {
+          console.log(tagId, tag.id)
+          if (tagId === tag.id) {
+            tagIndex = index
+          }
+        })
+        res[tagIndex].selected = true
+        console.log(res)
 
-      this.communityTagList = res
+        this.communityTagList = res
+      }
     })
   }
   // ------------------------------------------------
@@ -348,24 +350,26 @@ export default class HomeIndex extends Vue {
           break
         default:
           res = await this.getFindApi(params)
-          res.list.forEach((item) => {
-            if (item['modelType'] === 'problem') {
-              if (item['answers']) {
-                item['answers'].forEach((answer) => {
-                  answer.musicState = 0
-                  answer.progress = 0
-                })
+          if (res && res.list && res.list.length > 0) {
+            res.list.forEach((item) => {
+              if (item['modelType'] === 'problem') {
+                if (item['answers']) {
+                  item['answers'].forEach((answer) => {
+                    answer.musicState = 0
+                    answer.progress = 0
+                  })
+                }
+              } else if (item['circleType'] === 1) {
+                item.musicState = 0
+                item.progress = 0
+              } else if (item['circleType'] === 2) {
+                item.videoPlay = false
               }
-            } else if (item['circleType'] === 1) {
-              item.musicState = 0
-              item.progress = 0
-            } else if (item['circleType'] === 2) {
-              item.videoPlay = false
-            }
-          })
-          console.log('发现: ', res)
-          this.finds = res.list
-          allTotal = res.total
+            })
+            console.log('发现: ', res)
+            this.finds = res.list
+            allTotal = res.total
+          }
           break
       }
 
