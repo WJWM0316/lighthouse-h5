@@ -67,7 +67,6 @@
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
-          <span>({{paySurplusPeople > 0 ? '剩余：' + paySurplusPeople : '已满员，通道关闭'}})</span>
         </div>
       </div>
     </div>
