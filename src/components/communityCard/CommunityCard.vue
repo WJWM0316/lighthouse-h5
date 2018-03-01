@@ -17,13 +17,13 @@
       <div class="bottom">
         <div class="left">
           <!-- 已结束 -->
-          <p v-if="isEnd">课堂已关闭</p>
+          <p v-if="isEnd">灯塔已关闭</p>
           <!-- 已加入 -->
           <p class="time-range" v-else-if="community.isAuthor === 1 || community.isJoined === 1">开课时间：{{community.startTime * 1000 | date('YYYY年MM月DD日')}}-{{community.endTime * 1000 | date('YYYY年MM月DD日')}}</p>
           <!-- 未加入且未开社 -->
           <p class="countdown" v-else-if="duration">{{duration | duration}}后开启</p>
           <!-- 未加入且已开社 -->
-          <p v-else>课堂已开启</p>
+          <p v-else>灯塔已开启</p>
         </div>
         <div class="right">
           <template v-if="community.isAuthor !== 1 && community.isJoined !== 1 && !isEnd">
