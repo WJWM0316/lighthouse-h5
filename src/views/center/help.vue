@@ -73,7 +73,7 @@ export default class CenterHelp extends Vue {
     this.wechatShare({
       'titles': '小灯塔使用帮助',
       'title': '小灯塔使用帮助',
-      'desc': '百万职场人的职场导师知识分享社区，等你加入~',
+      'desc': '百万职场人的知识分享社区，等你加入~',
       'imgUrl': '',
       'link': location.href
     })
