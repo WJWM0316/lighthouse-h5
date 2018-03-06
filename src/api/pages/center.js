@@ -19,3 +19,21 @@ export const editInformationApi = data => request({
   url: '/wap/my/editInformation',
   data
 })
+
+/**
+ * 获取申请创建社区详情
+ * @param {} data
+ */
+export const getApplyCommunityApi = data => request({
+  url: '/wap/my/getApplyCommunity',
+  data
+})
+
+/**
+ * 提交申请创建社区
+ * @param {} data
+ */
+export const saveApplyCommunityApi = data => request({
+  url: '/wap/my/setApplyCommunity',
+  data
+})
