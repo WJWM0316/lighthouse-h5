@@ -137,6 +137,7 @@ export default class CenterCreateLite extends Vue {
       if (this.validate()) {
         const params = this.transformData(this.form)
         await saveApplyCommunityApi(params)
+        this.init()
       }
     } catch (error) {
       console.error(error)
