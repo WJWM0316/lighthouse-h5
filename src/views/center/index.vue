@@ -67,7 +67,9 @@ import { getInformationApi } from '@/api/pages/center'
   name: 'center-index'
 })
 export default class HomeIndex extends Vue {
-  model = {}
+  model = {
+  }
+  isCreated = false // 是否已经成为塔主
 
   created () {
     this.getModel()
