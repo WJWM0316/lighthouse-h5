@@ -74,7 +74,7 @@ export default class CenterHelp extends Vue {
       'titles': '小灯塔使用帮助',
       'title': '小灯塔使用帮助',
       'desc': '百万职场人的知识分享社区，等你加入~',
-      'imgUrl': '',
+      'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
       'link': location.href
     })
   }
