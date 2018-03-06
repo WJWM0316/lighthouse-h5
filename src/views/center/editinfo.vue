@@ -116,7 +116,6 @@ import { getGeneralListApi } from '@/api/common'
   watch: {
     'form.gender': {
       handler (val) {
-        console.log(val, genderOptions[val[0]])
         this.genderText = genderOptions[val[0]] || ''
       },
       deep: true,

@@ -32,9 +32,9 @@ const routers = [
     meta: {navHide: true}
   },
   { // 创建灯塔
-    path: '/center/create',
-    name: 'center-create',
-    component: resolve => require(['@/views/center/create'], resolve),
+    path: '/center/createLite',
+    name: 'center-create-lite',
+    component: resolve => require(['@/views/center/createLite'], resolve),
     meta: {navHide: true}
   },
 ]

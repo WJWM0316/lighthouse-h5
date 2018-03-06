@@ -130,13 +130,24 @@ body {
   }
 }
 
-.g-header {
+// ======== 固定头部、底部 ========
+.g-header,
+.g-footer {
+  box-sizing: border-box;
   position: fixed;
   left: 0;
-  top: 0;
   width: 100%;
   z-index: 10;
 }
+
+.g-header {
+  top: 0;
+}
+
+.g-footer {
+  bottom: 0;
+}
+
 img{
   object-fit: cover;
 }

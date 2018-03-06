@@ -4,8 +4,8 @@
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
         <span @click="toggle('joined')">已加入</span>
-        <span @click="toggle('find')">发现</span>
         <span @click="toggle('picked')">精选</span>
+        <span @click="toggle('find')">发现</span>
       </div>
 
       <!-- 分类 -->
@@ -458,20 +458,21 @@ export default class HomeIndex extends Vue {
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1); /* no */
 
     & span {
+      display: inline-block;
       height: 100%;
       line-height: 49px;
     }
     &.joined span:nth-of-type(1),
-    &.find span:nth-of-type(2),
-    &.picked span:nth-of-type(3) {
+    &.find span:nth-of-type(3),
+    &.picked span:nth-of-type(2) {
       color: #354048;
       font-weight: 500;
       position: relative;
     }
 
     &.joined span:nth-of-type(1):after,
-    &.find span:nth-of-type(2):after,
-    &.picked span:nth-of-type(3):after {
+    &.find span:nth-of-type(3):after,
+    &.picked span:nth-of-type(2):after {
       content: '';
       position: absolute;
       left: 0;

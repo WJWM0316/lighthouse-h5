@@ -18,15 +18,15 @@
     </div>
 
     <div class="navs">
-      <a href="#" class="item" @click.prevent.stop="handleCreate">
+      <router-link to="/center/createLite" class="item">
         <div class="left">
           <i class="icon u-icon-center-create" />
-          <span class="title">{{model.isCommunity ? '塔主中心' : '创建我的灯塔'}}</span>
+          <span class="title">{{model.isCommunity === 1 ? '塔主中心' : '创建我的灯塔'}}</span>
         </div>
         <div class="addon">
           <i class="addon-icon u-icon-center-angle-right" />
         </div>
-      </a>
+      </router-link>
       <router-link :to="`/userInfo/${model.userId}/details`" class="item">
         <div class="left">
           <i class="icon u-icon-center-home" />
@@ -69,6 +69,7 @@ import { getInformationApi } from '@/api/pages/center'
 export default class HomeIndex extends Vue {
   model = {
   }
+  isCreated = false // 是否已经成为塔主
 
   created () {
     this.getModel()
