@@ -81,11 +81,8 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       }
       if (data && data.statusCode === 431) { // 需要授权
         console.log('这里要跳转去手动授权')
-        alert(location.href)
-        const url = {key: JSON.stringify(location.href)}
-        const urlJson = JSON.stringify(url)
-        console.log(urlJson)
-        location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${urlJson}`
+        const params = location.hash.substring(1)
+        location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${location.href}&key=${params}`
         return data.data === undefined ? {} : data.data
       }
       if (data && data.statusCode === 264) { // 内容找不到
