@@ -37,6 +37,12 @@ const routers = [
     component: resolve => require(['@/views/center/createLite'], resolve),
     meta: {navHide: true}
   },
+  { // 塔主中心
+    path: '/center/liteCenter',
+    name: 'center-lite-center',
+    component: resolve => require(['@/views/center/liteCenter'], resolve),
+    meta: {navHide: true}
+  }
 ]
 
 export default routers
