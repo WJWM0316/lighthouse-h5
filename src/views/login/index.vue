@@ -80,7 +80,7 @@
 
     created () {
 //    this.refreshCode()
-      if (brower.isWechat() && !this.$route.query.granted) location.href = `/zikeserver/wap/weixin/snsapiUserinfo?zike_from=${location.href}`
+      if (brower.isWechat() && !this.$route.query.granted) location.href = `/zikeserver/wap/wechat/snsapiUserinfo?zike_from=${location.href}`
     }
 
     onSend (imgcodeUrl) { // 显示图片验证码
