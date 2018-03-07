@@ -49,6 +49,7 @@
   import uuid from 'uuid'
   import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
   import { loginApi, getCodeImg } from '@/api/pages/login'
+  import brower from '@/util/browser/index'
 
   @Component({
     name: 'login-index',
@@ -79,6 +80,7 @@
 
     created () {
 //    this.refreshCode()
+      if (brower.isWechat()) location.href = `/zikeserver/wap/weixin/snsapiUserinfo?zike_from=${location.href}`
     }
 
     onSend (imgcodeUrl) { // 显示图片验证码
