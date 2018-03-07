@@ -80,7 +80,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         })
       }
       if (data && data.status_code === 431) { // 需要授权
-        location.href = `/zikeserver/wap/weixin/snsapiUserinfo?zike_from=${location.href}`
+        location.href = `/zikeserver/wap/wechat/snsapiUserinfo?zike_from=${location.href}`
         return data.data === undefined ? {} : data.data
       }
       if (data && data.statusCode === 264) { // 内容找不到
