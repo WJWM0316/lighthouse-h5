@@ -82,8 +82,9 @@
     created () {
 //    this.refreshCode()
       if (brower.isWechat() && !this.$route.query.granted) {
-        const urlFrom = encodeURI(location.href)
-        location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${urlFrom}`
+        const hashParams = location.hash.substring(1)
+        const hostname = location.href.split('?')[0]
+        location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`
       }
     }
 
