@@ -81,6 +81,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       }
       if (data && data.statusCode === 431) { // 需要授权
         console.log('这里要跳转去手动授权')
+        alert(location.href)
         location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${location.href}`
         return data.data === undefined ? {} : data.data
       }
