@@ -81,7 +81,11 @@
 
     created () {
 //    this.refreshCode()
-      if (brower.isWechat() && !this.$route.query.granted) location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${location.href}`
+      if (brower.isWechat() && !this.$route.query.granted) {
+        const hashParams = location.hash.substring(1)
+        const hostname = location.href.split('?')[0]
+        location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`
+      }
     }
 
     onSend (imgcodeUrl) { // 显示图片验证码
