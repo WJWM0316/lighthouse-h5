@@ -22,7 +22,7 @@ export const editInformationApi = data => request({
 
 /**
  * 获取申请创建社区详情
- * @param {} data
+ * @param {*} data
  */
 export const getApplyCommunityApi = data => request({
   url: '/wap/my/getApplyCommunity',
@@ -31,9 +31,18 @@ export const getApplyCommunityApi = data => request({
 
 /**
  * 提交申请创建社区
- * @param {} data
+ * @param {*} data
  */
 export const saveApplyCommunityApi = data => request({
   url: '/wap/my/setApplyCommunity',
+  data
+})
+
+/**
+ * 获取灯塔中心我的社区列表
+ * @param {*} data
+ */
+export const getMyCommunityListApi = data => request({
+  url: '/wap/my/myCommunity',
   data
 })
