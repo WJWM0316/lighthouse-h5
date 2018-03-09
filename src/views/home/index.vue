@@ -4,8 +4,8 @@
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
         <span @click="toggle('joined')">已加入</span>
-        <span @click="toggle('find')">发现</span>
         <span @click="toggle('picked')">精选</span>
+        <span @click="toggle('find')">发现</span>
       </div>
 
       <!-- 分类 -->
@@ -120,7 +120,7 @@ import { getBeaconsApi, getBannersApi, getTagsListApi, getSelectionApi, getJoine
 })
 export default class HomeIndex extends Vue {
   // 顶部标签控制
-  navTabName = 'find'
+  navTabName = 'picked'
   // 社区列表
   ready = false
   disableOperationArr = ['comment', 'praise']
@@ -142,7 +142,7 @@ export default class HomeIndex extends Vue {
   created () {
     const routeName = this.$route.name
     if (routeName === 'home') {
-      this.navTabName = 'find'
+      this.navTabName = 'picked'
     } else {
       this.navTabName = routeName
     }
@@ -160,7 +160,7 @@ export default class HomeIndex extends Vue {
       this.finds = []
       this.communities = []
       this.navTabName = targetName
-      const name = targetName === 'find' ? 'home' : targetName
+      const name = targetName === 'picked' ? 'home' : targetName
       this.$router.replace({name})
       this.init().then(() => {})
     }
