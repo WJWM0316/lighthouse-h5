@@ -19,3 +19,12 @@ export const editInformationApi = data => request({
   url: '/wap/my/editInformation',
   data
 })
+
+/**
+ * 现金奖励记录
+ * @param {*} data
+ */
+export const sellOrdersApi = data => request({
+  url: '/wap/beacon/sellOrders',
+  data
+})
