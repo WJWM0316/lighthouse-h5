@@ -54,3 +54,11 @@ export const getCodeImg = (data) => {
     data
   })
 }
+
+// 是否需要跳转手动授权
+export const isNeedGrantApi = (data) => {
+  return request({
+    url: '/wap/user/issetUnionid',
+    data
+  })
+}

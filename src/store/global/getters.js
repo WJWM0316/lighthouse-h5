@@ -5,6 +5,9 @@ export default {
   navIsShow: function (state) {
     return state.nav_show
   },
+  isShowQrcode: function (state) {
+    return state.nav_qr
+  },
   viewScrollTop: function (state) {
     return state.viewScrollTop
   },

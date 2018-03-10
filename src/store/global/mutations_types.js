@@ -13,6 +13,12 @@ export const SHOW_NAV = 'SHOW_NAV'
 // 关闭导航条
 export const HIDE_NAV = 'HIDE_NAV'
 
+// 显示二维码
+export const SHOW_QR = 'SHOW_QR'
+
+// 隐藏二维码
+export const HIDE_QR = 'HIDE_QR'
+
 // 滚动更新
 export const UPDATE_VIEWSCROLLTOP = 'UPDATE_VIEWSCROLLTOP'
 

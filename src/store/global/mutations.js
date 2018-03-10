@@ -16,6 +16,12 @@ export default {
   [types.HIDE_NAV] (state) {
     state.nav_show = false
   },
+  [types.SHOW_QR] (state) {
+    state.qr_show = true
+  },
+  [types.HIDE_QR] (state) {
+    state.qr_show = false
+  },
   [types.UPDATE_VIEWSCROLLTOP] (state, scrollTop) {
     state.viewScrollTop = scrollTop
   },
