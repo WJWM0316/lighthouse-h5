@@ -35,6 +35,20 @@ export default {
     })
   },
 
+  show_qr: ({commit}) => {
+    return new Promise((resolve, reject) => {
+      commit(types.SHOW_QR)
+      resolve()
+    })
+  },
+
+  hide_qr: ({commit}) => {
+    return new Promise((resolve, reject) => {
+      commit(types.HIDE_QR)
+      resolve()
+    })
+  },
+
   show_music_stript: ({
     commit
   }) => {
