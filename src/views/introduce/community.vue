@@ -17,7 +17,10 @@
             <!--介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
           <!--</a>-->
         </community-card>
-        <div class="share-btn" @click="showShare = true">
+        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
+          <span>分享赚¥{{pageInfo.sellPrice}}</span>
+        </div>
+        <div class="share-btn" v-else @click="showShare = true">
           <img class="share-icon" src="./../../assets/icon/icon_share.png" />
           <span>分享</span>
         </div>
@@ -126,6 +129,7 @@
   })
   export default class community extends Vue {
     showShare = false // 显示分享弹框
+    showSell = false // 显示分销弹框
     pageInfo = {}
     dynamicList = []
     discussItemList = []
@@ -164,13 +168,21 @@
         this.showShare = true
       }
       this.pageInit().then(() => {
-        const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
+        const {
+          title,
+          simpleIntro,
+          master,
+          shareImg, // 分享图片
+          sharePoint, // 分享摘要
+          shareIntroduction,  // 分享标题
+          communityId
+        } = this.pageInfo
         const {realName, career} = master
         const str = realName ? realName + (career ? '|' + career : '') : ''
         // 页面分享信息
         this.wechatShare({
-          'titles': `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-          'title': `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'title': sharePoint || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
           'desc': simpleIntro,
           'imgUrl': shareImg,
           'link': location.origin + `/beaconweb/#/introduce/${communityId}/community`
@@ -452,7 +464,7 @@
 
       }
 
-      & .share-btn {
+      & .share-btn, & .share-btn-2 {
         position: absolute;
         top: 15px;
         right: 0;
@@ -477,6 +489,16 @@
         &::after {
           content: none;
         }
+      }
+
+      & .share-btn-2 {
+        position: fixed;
+        padding-left: 10px;
+        min-width: 85px;
+        background-color: #ffe266;
+        font-size: 13px;
+        color: #354048;
+        z-index: 99;
       }
 
       .community-item {

@@ -149,29 +149,28 @@ export default class App extends Vue {
     background: #fff;
     border-radius: 6px;
     text-align: center;
-    .icon-close{
-      position: absolute;
-      right: 16px;
-      top: 16px;
-    }
-    .title{
-      color: #354048;
-      font-size: 22px;
-      padding-top: 41px;
-    }
-    .content{
-      position: relative;
-      color: #666666;
-      font-size: 15px;
-      margin-top: 8px;
-    }
-    .qrcode{
-      margin-top: 12px;
-      width: 160px;
-      height: 160px;
-    }
   }
-
+  .icon-close{
+    position: absolute;
+    right: 16px;
+    top: 16px;
+  }
+  .title{
+    color: #354048;
+    font-size: 22px;
+    padding-top: 41px;
+  }
+  .content{
+    position: relative;
+    color: #666666;
+    font-size: 15px;
+    margin-top: 8px;
+  }
+  .qrcode{
+    margin-top: 12px;
+    width: 160px;
+    height: 160px;
+  }
 }
 .weui-tabbar {
   background-color: #FFF !important;
