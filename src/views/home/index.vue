@@ -146,6 +146,7 @@ export default class HomeIndex extends Vue {
     } else {
       this.navTabName = routeName
     }
+    console.log(this.navTabName)
 
     this.init().then(() => {})
   }
@@ -199,14 +200,14 @@ export default class HomeIndex extends Vue {
   async init () {
     const navTabName = this.navTabName
     switch (navTabName) {
-      case 'picked':
-        await this.pickedInit()
+      case 'find':
+        await this.findInit()
         break
       case 'joined':
         await this.joinedInit()
         break
       default:
-        await this.findInit()
+        await this.pickedInit()
         break
     }
     this.ready = true
@@ -462,16 +463,16 @@ export default class HomeIndex extends Vue {
       line-height: 49px;
     }
     &.joined span:nth-of-type(1),
-    &.find span:nth-of-type(2),
-    &.picked span:nth-of-type(3) {
+    &.picked span:nth-of-type(2),
+    &.find span:nth-of-type(3) {
       color: #354048;
       font-weight: 500;
       position: relative;
     }
 
     &.joined span:nth-of-type(1):after,
-    &.find span:nth-of-type(2):after,
-    &.picked span:nth-of-type(3):after {
+    &.picked span:nth-of-type(2):after,
+    &.find span:nth-of-type(3):after {
       content: '';
       position: absolute;
       left: 0;
