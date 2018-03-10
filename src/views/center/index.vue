@@ -27,6 +27,15 @@
           <i class="addon-icon u-icon-center-angle-right" />
         </div>
       </a>
+      <router-link to="/center/rewards" class="item">
+        <div class="left">
+          <i class="icon u-icon-center-reward" />
+          <span class="title">现金奖励</span>
+        </div>
+        <div class="addon">
+          <i class="addon-icon u-icon-center-angle-right" />
+        </div>
+      </router-link>
       <router-link :to="`/userInfo/${model.userId}/details`" class="item">
         <div class="left">
           <i class="icon u-icon-center-home" />
