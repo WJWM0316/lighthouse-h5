@@ -13,7 +13,7 @@
     </tabbar>
     <div class="home-mask" v-if="isShowQrcode">
       <div class="qr-container">
-        <i class="u-icon-close icon-close"></i>
+        <i class="u-icon-close icon-close" @click="closeQrCode"></i>
         <div class="title">支付成功</div>
         <div class="content">关注公众号，不错过导师更新</div>
         <img class="qrcode" src="./assets/page/wx-qrcode.png">
@@ -105,6 +105,10 @@ export default class App extends Vue {
   isSelected (src) {
     return this.$route.path === src
   }
+  closeQrCode () {
+    this.$store.dispatch('hide_qr')
+    location.reload()
+  }
   created () {
 //    var ua = navigator.userAgent.toLowerCase()
 //    var isWeixin = ua.indexOf('micromessenger') !== -1
@@ -125,7 +129,7 @@ export default class App extends Vue {
   max-width: 375px;
 }
 .home-mask {
-  z-index: 501;
+  z-index: 1000;
   position: absolute;
   width: 100%;
   height: 100%;

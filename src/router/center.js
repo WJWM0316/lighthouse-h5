@@ -37,6 +37,12 @@ const routers = [
     component: resolve => require(['@/views/center/create'], resolve),
     meta: {navHide: true}
   },
+  { // 现金奖励
+    path: '/center/rewards',
+    name: 'center-reward-records',
+    component: resolve => require(['@/views/center/rewardRecords'], resolve),
+    meta: {navHide: true}
+  },
 ]
 
 export default routers
