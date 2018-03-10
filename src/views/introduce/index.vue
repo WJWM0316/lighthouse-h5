@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="how-to-play">
-        <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/four/index.html">
+        <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/howplay/index.html">
           <img src="./../../assets/how2play.png" />
         </a>
       </div>
@@ -73,6 +73,10 @@
     <!--分享弹窗-->
     <share-dialog :isShow="showShare" @close-share="showShare = false"
                   :shareType="1"></share-dialog>
+    <div class="qrcode-container">
+      <div class="qrcode-mask"></div>
+      <div class="content"></div>
+    </div>
   </div>
 </template>
 <script>
@@ -495,6 +499,27 @@
       width: 18px;
       height: 16px;
       margin-bottom: 5px;
+    }
+    .qrcode-container{
+      /*width: 100%;*/
+      /*height: 100%;*/
+      .qrcode-mask{
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        position: fixed;
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+      .content{
+        position: fixed;
+        background: #fff;
+        height: 656px;
+        border-radius: 20px 20px 0 0 ;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
     }
   }
 </style>
