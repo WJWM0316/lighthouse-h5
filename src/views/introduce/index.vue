@@ -6,7 +6,10 @@
     <div class="container">
       <div class="header">
         <community-card :community="pageInfo" :type="2" />
-        <div class="share-btn" @click="showShare = true">
+        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
+          <span>分享赚¥{{pageInfo.sellPrice}}</span>
+        </div>
+        <div class="share-btn" v-else @click="showShare = true">
           <img class="share-icon" src="./../../assets/icon/icon_share.png" />
           <span>分享</span>
         </div>
@@ -45,6 +48,17 @@
           加入灯塔社区，即可解锁更多内容~
         </div>
       </div>
+
+      <!-- 相关推荐 -->
+      <div class="module relevant" v-if="relevantList.length > 0">
+        <div class="module-title">
+          <p>相关灯塔</p>
+          <div class="hr"></div>
+        </div>
+        <div class="module-content">
+          <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+        </div>
+      </div>
     </div>
 
     <div class="footer" v-if="completelyShow">
@@ -73,6 +87,17 @@
     <!--分享弹窗-->
     <share-dialog :isShow="showShare" @close-share="showShare = false"
                   :shareType="1"></share-dialog>
+
+    <div class="home-mask" v-if="showSell">
+      <div class="sell-container">
+        <i class="u-icon-close icon-close" @click="showSell = false"></i>
+        <div class="Qr">
+          <img src="./../../assets/page/wx-qrcode.png">
+        </div>
+        <p>关注公众号可获取专属海报</p>
+        <p>及查询奖励</p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -80,6 +105,7 @@
   import Component from 'vue-class-component'
   import CommunityCard from '@/components/communityCard'
   import dynamic from '@/components/dynamic/dynamic'
+  import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
   import {getCommunityInfoApi} from '@/api/pages/pageInfo'
   import WechatMixin from '@/mixins/wechat'
   import {payApi} from '@/api/pages/pay'
@@ -91,6 +117,7 @@
     name: 'big-shot-introduce',
     components: {
       dynamic,
+      communityInfoCard,
       CommunityCard,
       ShareDialog
     },
@@ -125,8 +152,10 @@
   })
   export default class introduce extends Vue {
     showShare = false // 显示分享弹框
+    showSell = false // 显示分销弹框
     pageInfo = {}
     dynamicList = []
+    relevantList = []
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
     pxToRem (_s) {
@@ -164,6 +193,19 @@
     toHome () {
       this.$router.replace(`/index`)
     }
+
+    /**
+     * 点击卡片
+     */
+    handleTapCard (item) {
+      if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
+        this.$router.push(`/introduce/${item.communityId}/community`)
+      } else { // 未入社跳到未入社页面
+        this.$router.replace(`/introduce/${item.communityId}`)
+        wxUtil.reloadPage()
+      }
+    }
+
     async payIn () {
       try {
         const params = await payApi({
@@ -242,7 +284,8 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-      const res = await getCommunityInfoApi(communityId)
+      const { saleId: applyId } = this.$route.query
+      const res = await getCommunityInfoApi({communityId, data: {applyId}})
 
       const temp = new Array(...res.circles)
       temp.forEach((item) => {
@@ -260,6 +303,7 @@
       })
       console.log(temp)
       this.dynamicList = temp
+      this.relevantList = res.relevantRecommendations || []
       this.pageInfo = res
       this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
     }
@@ -295,7 +339,7 @@
       position: relative;
       margin-bottom: 20px;
 
-      & .share-btn {
+      & .share-btn, & .share-btn-2 {
         position: absolute;
         top: 15px;
         right: 0;
@@ -320,6 +364,16 @@
         &::after {
           content: none;
         }
+      }
+
+      & .share-btn-2 {
+        position: fixed;
+        padding-left: 10px;
+        min-width: 85px;
+        background-color: #ffe266;
+        font-size: 13px;
+        color: #354048;
+        z-index: 99;
       }
     }
 
@@ -350,6 +404,9 @@
         }
       }
       .module-content {
+        .community-item {
+          margin-top: 25px;
+        }
 
         &.h5-code {
           padding: 0 15px;
@@ -496,6 +553,38 @@
       width: 18px;
       height: 16px;
       margin-bottom: 5px;
+    }
+
+    & .home-mask {
+      & .sell-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 285px;
+        background: #fff;
+        border-radius: 6px;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        padding: 45px 0;
+        font-size: 15px;
+        color: #666666;
+
+        & .Qr {
+          width: 160px;
+          height: 160px;
+          font-size: 0;
+          margin-bottom: 12px;
+        }
+        & img {
+          width: 100%;
+          height: 100%;
+          vertical-align: middle;
+          text-align: center;
+        }
+      }
     }
   }
 </style>

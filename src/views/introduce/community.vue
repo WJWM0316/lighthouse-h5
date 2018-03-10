@@ -17,7 +17,10 @@
             <!--介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
           <!--</a>-->
         </community-card>
-        <div class="share-btn" @click="showShare = true">
+        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
+          <span>分享赚¥{{pageInfo.sellPrice}}</span>
+        </div>
+        <div class="share-btn" v-else @click="showShare = true">
           <img class="share-icon" src="./../../assets/icon/icon_share.png" />
           <span>分享</span>
         </div>
@@ -126,6 +129,7 @@
   })
   export default class community extends Vue {
     showShare = false // 显示分享弹框
+    showSell = false // 显示分销弹框
     pageInfo = {}
     dynamicList = []
     discussItemList = []
@@ -452,7 +456,7 @@
 
       }
 
-      & .share-btn {
+      & .share-btn, & .share-btn-2 {
         position: absolute;
         top: 15px;
         right: 0;
@@ -477,6 +481,16 @@
         &::after {
           content: none;
         }
+      }
+
+      & .share-btn-2 {
+        position: fixed;
+        padding-left: 10px;
+        min-width: 85px;
+        background-color: #ffe266;
+        font-size: 13px;
+        color: #354048;
+        z-index: 99;
       }
 
       .community-item {
