@@ -22,7 +22,8 @@
       <div class="publish-content problem" v-if="item.modelType === 'problem'">
 
         <div ref="problem-content">
-          <p class="content-text">问：{{item.content}}</p>{{isFullText('problem-content')}}
+          <p class="content-text">问：{{item.content}}</p>
+          <p class="full-text-btn">{{isFullText('problem-content')}}</p>
         </div>
 
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
@@ -63,7 +64,8 @@
 
         <!-- 只有文字 -->
         <div ref="circle-content">
-          <p class="content-text ellipsis">{{item.content}}</p>{{isFullText('circle-content')}}
+          <p class="content-text ellipsis">{{item.content}}</p>
+          <p class="full-text-btn">{{isFullText('circle-content')}}</p>
         </div>
 
 

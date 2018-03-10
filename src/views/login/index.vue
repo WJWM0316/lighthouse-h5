@@ -80,7 +80,7 @@
     }
 
     async created () {
-//    this.refreshCode()
+      this.refreshCode()
       const resp = await isNeedGrantApi() // 请求后端看需要手动获取授权
       if (brower.isWechat() && resp.isJump) {
         const hashParams = location.hash.substring(1)

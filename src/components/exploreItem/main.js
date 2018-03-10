@@ -201,7 +201,8 @@ export default class exploreItem extends Vue {
             fullText.innerText = '全文'
           }
         }
-        el.appendChild(fullText)
+        el.lastChild.innerHTML = ''
+        el.lastChild.appendChild(fullText)
       }
     })
   }
