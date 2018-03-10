@@ -87,6 +87,17 @@
     <!--分享弹窗-->
     <share-dialog :isShow="showShare" @close-share="showShare = false"
                   :shareType="1"></share-dialog>
+
+    <div class="home-mask" v-if="showSell">
+      <div class="sell-container">
+        <i class="u-icon-close icon-close" @click="showSell = false"></i>
+        <div class="Qr">
+          <img src="./../../assets/page/wx-qrcode.png">
+        </div>
+        <p>关注公众号可获取专属海报</p>
+        <p>及查询奖励</p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -273,7 +284,8 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-      const res = await getCommunityInfoApi(communityId)
+      const { saleId: applyId } = this.$route.query
+      const res = await getCommunityInfoApi({communityId, data: {applyId}})
 
       const temp = new Array(...res.circles)
       temp.forEach((item) => {
@@ -541,6 +553,38 @@
       width: 18px;
       height: 16px;
       margin-bottom: 5px;
+    }
+
+    & .home-mask {
+      & .sell-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 285px;
+        background: #fff;
+        border-radius: 6px;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        padding: 45px 0;
+        font-size: 15px;
+        color: #666666;
+
+        & .Qr {
+          width: 160px;
+          height: 160px;
+          font-size: 0;
+          margin-bottom: 12px;
+        }
+        & img {
+          width: 100%;
+          height: 100%;
+          vertical-align: middle;
+          text-align: center;
+        }
+      }
     }
   }
 </style>
