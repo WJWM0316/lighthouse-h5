@@ -168,13 +168,21 @@
         this.showShare = true
       }
       this.pageInit().then(() => {
-        const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
+        const {
+          title,
+          simpleIntro,
+          master,
+          shareImg, // 分享图片
+          sharePoint, // 分享摘要
+          shareIntroduction,  // 分享标题
+          communityId
+        } = this.pageInfo
         const {realName, career} = master
         const str = realName ? realName + (career ? '|' + career : '') : ''
         // 页面分享信息
         this.wechatShare({
-          'titles': `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-          'title': `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'title': sharePoint || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
           'desc': simpleIntro,
           'imgUrl': shareImg,
           'link': location.origin + `/beaconweb/#/introduce/${communityId}/community`
