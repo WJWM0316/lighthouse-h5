@@ -20,7 +20,7 @@ export const loginApi = (data) => {
 // 是否登录
 export const isLoginApi = (data) => { // 用户未登录不会返回401，而是isLogin:false
   return request({
-    url: '/isLogin',
+    url: '/wap/isLogin',
     data
   })
 }

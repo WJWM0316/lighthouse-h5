@@ -49,6 +49,7 @@
   import uuid from 'uuid'
   import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
   import { loginApi, getCodeImg, isNeedGrantApi } from '@/api/pages/login'
+  import { isLoginApi } from '@/api/pages/account'
   import brower from '@/util/browser/index'
   import settings from '@/config'
 
@@ -80,6 +81,11 @@
     }
 
     async created () {
+      const { isLogin } = await isLoginApi()
+      console.log('isLogin 是否登录', isLogin)
+      if (isLogin) {
+        this.$router.push({name: 'home'})
+      }
       this.refreshCode()
       const resp = await isNeedGrantApi() // 请求后端看需要手动获取授权
       if (brower.isWechat() && resp.isJump) {
