@@ -29,9 +29,10 @@ export const getCommunityApi = (data) => {
 }
 
 // 大咖介绍页
-export const getCommunityInfoApi = (communityId) => {
+export const getCommunityInfoApi = ({communityId, data}) => {
   return request({
     url: '/wap/beacon/' + communityId,
+    data,
     type: 'get',
     isLoading: true
   })
