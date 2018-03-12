@@ -281,6 +281,7 @@
             self.$vux.toast.text('已购买成功', 'bottom')
             const { communityId } = self.$route.params
             console.log('communityId', communityId)
+            //
             if (communityId === 'ec29bec769b517cec9d6ab19886361c3' || communityId === 'e3389ae9d34ffb67f7fdc8139a7d41f4') {
               self.$store.dispatch('show_qr')
             } else {
