@@ -158,7 +158,7 @@ export default class App extends Vue {
   .title{
     color: #354048;
     font-size: 22px;
-    padding-top: 41px;
+    padding-top: 31px;
   }
   .content{
     position: relative;
