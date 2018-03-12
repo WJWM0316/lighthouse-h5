@@ -13,7 +13,7 @@
           <ul class="list">
             <li v-for="(item, index) in records" :key="index">
               <div class="auto">
-                <p class="content">成功推荐 {{item.realName}} 购买：{{item.title}}</p>
+                <p class="content">成功推荐 {{item.realName}} 购买 {{item.title}}</p>
                 <p class="time">{{item.createTime * 1000 | date('YYYY-MM-DD HH:mm')}}</p>
               </div>
               <p class="addon">+ {{item.price.toFixed(2)}}</p>
