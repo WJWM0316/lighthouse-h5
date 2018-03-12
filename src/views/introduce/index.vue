@@ -243,7 +243,6 @@
           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text('已购买成功', 'bottom')
-              this.$store.dispatch('show_qr')
             location.reload()
 //            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
