@@ -244,7 +244,7 @@
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text('已购买成功', 'bottom')
               this.$store.dispatch('show_qr')
-//            location.reload()
+            location.reload()
 //            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
