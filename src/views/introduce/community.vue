@@ -13,9 +13,9 @@
       <!-- header -->
       <div class="header">
         <community-card class="community-item" :community="pageInfo" :type="2">
-          <!--<a class="addon-text" slot="cover-addon">-->
-            <!--介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
-          <!--</a>-->
+          <router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon">
+            介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />
+          </router-link>
         </community-card>
         <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
           <span>分享赚¥{{pageInfo.sellPrice}}</span>
@@ -94,6 +94,17 @@
     ></suspension-input>
 
     <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
+
+    <div class="home-mask" v-if="showSell">
+      <div class="sell-container">
+        <i class="u-icon-close icon-close" @click="showSell = false"></i>
+        <div class="Qr">
+          <img src="./../../assets/page/wx-qrcode.png">
+        </div>
+        <p>关注公众号可获取专属海报</p>
+        <p>及查询奖励</p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -711,6 +722,38 @@
       & button:last-of-type {
         background-color: #ffe266;
         color: #354048;
+      }
+    }
+
+    & .home-mask {
+      & .sell-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 285px;
+        background: #fff;
+        border-radius: 6px;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        padding: 45px 0;
+        font-size: 15px;
+        color: #666666;
+
+        & .Qr {
+          width: 160px;
+          height: 160px;
+          font-size: 0;
+          margin-bottom: 12px;
+        }
+        & img {
+          width: 100%;
+          height: 100%;
+          vertical-align: middle;
+          text-align: center;
+        }
       }
     }
   }
