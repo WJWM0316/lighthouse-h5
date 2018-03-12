@@ -3,7 +3,7 @@
   <!-- 大咖介绍页 -->
   <div class="p-body big-shot-introduce">
 
-    <div class="container">
+    <div class="container" ref="big-shot-introduce-container">
       <div class="header">
         <community-card :community="pageInfo" :type="2" />
         <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
@@ -148,6 +148,42 @@
         return this.paySurplusPeople > 0
       }
     },
+    watch: {
+      '$route' (route) {
+        if (this.$refs['big-shot-introduce-container']) {
+          console.log(this.$refs['big-shot-introduce-container'])
+          this.$refs['big-shot-introduce-container'].scrollTop = 0
+        }
+        this.pageInit().then(() => {
+          const {
+            title,
+            simpleIntro,
+            master,
+            shareImg, // 分享图片
+            sharePoint, // 分享摘要
+            shareIntroduction,  // 分享标题
+            communityId
+          } = this.pageInfo
+          // 是否已入社
+          if (this.completelyShow && this.isJoinAgency) {
+            this.$router.replace(`/introduce/${communityId}/community`)
+            return
+          }
+
+          const {realName, career} = master
+          const str = realName ? realName + (career ? '|' + career : '') : ''
+          console.log('location.href', location.href)
+          // 页面分享信息
+          this.wechatShare({
+            'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+            'title': `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+            'desc': sharePoint || simpleIntro,
+            'imgUrl': shareImg,
+            'link': location.origin + `/beaconweb/#/introduce/${communityId}`
+          })
+        })
+      }
+    },
     mixins: [WechatMixin]
   })
   export default class introduce extends Vue {
@@ -158,6 +194,7 @@
     relevantList = []
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
+    el = ''
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
       const reg = /(\:|: )+(\d)+(px)/gi
@@ -201,8 +238,7 @@
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
-        this.$router.replace(`/introduce/${item.communityId}`)
-        wxUtil.reloadPage()
+        this.$router.push(`/introduce/${item.communityId}`)
       }
     }
 
