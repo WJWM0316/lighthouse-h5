@@ -582,7 +582,7 @@
 
     & .how-to-play {
       margin-top: 30px;
-      padding: 0 15px;
+      padding: 0 15px 25px;
 
       & img {
         border-radius: 6px;
