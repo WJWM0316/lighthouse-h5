@@ -466,7 +466,7 @@
       }
 
       & .hr {
-        height: 1px;
+        height: 1px; /* no */
         background: #dcdcdc;
       }
 
