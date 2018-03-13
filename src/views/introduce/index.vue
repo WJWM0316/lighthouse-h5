@@ -247,6 +247,7 @@
         productId: this.pageInfo.communityId,
         productType: 1
       })
+      console.log(params, '获取返回配置参数')
       if (params) {
         if (typeof WeixinJSBridge === 'undefined') {
           if (document.addEventListener) {
