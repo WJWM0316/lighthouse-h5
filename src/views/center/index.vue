@@ -18,7 +18,7 @@
     </div>
 
     <div class="navs">
-      <router-link to="/center/createLite" class="item">
+      <router-link :to="model.isCommunity === 1 ? '/center/liteCenter' : '/center/createLite'" class="item">
         <div class="left">
           <i class="icon u-icon-center-create" />
           <span class="title">{{model.isCommunity === 1 ? '塔主中心' : '创建我的灯塔'}}</span>

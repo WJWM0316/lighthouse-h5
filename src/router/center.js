@@ -42,6 +42,12 @@ const routers = [
     name: 'center-lite-center',
     component: resolve => require(['@/views/center/liteCenter'], resolve),
     meta: {navHide: true}
+  },
+  { // 塔主分享图片
+    path: '/center/shareLite/:communityId',
+    name: 'center-share-lite',
+    component: resolve => require(['@/views/center/shareLite'], resolve),
+    meta: {navHide: true}
   }
 ]
 
