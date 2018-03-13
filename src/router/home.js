@@ -25,8 +25,8 @@ const homeRoutes = [
     component: resolve => require(['@/views/home/index'], resolve),
   },
   {
-    path: '/picked',
-    name: 'picked',
+    path: '/find',
+    name: 'find',
     component: resolve => require(['@/views/home/index'], resolve),
   },
   {

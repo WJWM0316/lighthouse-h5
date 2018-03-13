@@ -3,10 +3,13 @@
   <!-- 大咖介绍页 -->
   <div class="p-body big-shot-introduce">
 
-    <div class="container">
+    <div class="container" ref="big-shot-introduce-container">
       <div class="header">
         <community-card :community="pageInfo" :type="2" />
-        <div class="share-btn" @click="showShare = true">
+        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
+          <span>分享赚¥{{pageInfo.sellPrice}}</span>
+        </div>
+        <div class="share-btn" v-else @click="showShare = true">
           <img class="share-icon" src="./../../assets/icon/icon_share.png" />
           <span>分享</span>
         </div>
@@ -21,7 +24,7 @@
         </div>
       </div>
       <div class="how-to-play">
-        <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/four/index.html">
+        <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/howplay/index.html">
           <img src="./../../assets/how2play.png" />
         </a>
       </div>
@@ -43,6 +46,17 @@
         </div>
         <div class="desc">
           加入灯塔社区，即可解锁更多内容~
+        </div>
+      </div>
+
+      <!-- 相关推荐 -->
+      <div class="module relevant" v-if="relevantList.length > 0">
+        <div class="module-title">
+          <p>相关灯塔</p>
+          <div class="hr"></div>
+        </div>
+        <div class="module-content">
+          <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
         </div>
       </div>
     </div>
@@ -73,6 +87,17 @@
     <!--分享弹窗-->
     <share-dialog :isShow="showShare" @close-share="showShare = false"
                   :shareType="1"></share-dialog>
+
+    <div class="home-mask" v-if="showSell">
+      <div class="sell-container">
+        <i class="u-icon-close icon-close" @click="showSell = false"></i>
+        <div class="Qr">
+          <img src="./../../assets/page/wx-qrcode.png">
+        </div>
+        <p>长按识别二维码，关注公众号即可获取</p>
+        <p>专属海报及查询实时奖励</p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -80,6 +105,7 @@
   import Component from 'vue-class-component'
   import CommunityCard from '@/components/communityCard'
   import dynamic from '@/components/dynamic/dynamic'
+  import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
   import {getCommunityInfoApi} from '@/api/pages/pageInfo'
   import WechatMixin from '@/mixins/wechat'
   import {payApi} from '@/api/pages/pay'
@@ -91,6 +117,7 @@
     name: 'big-shot-introduce',
     components: {
       dynamic,
+      communityInfoCard,
       CommunityCard,
       ShareDialog
     },
@@ -121,14 +148,53 @@
         return this.paySurplusPeople > 0
       }
     },
+    watch: {
+      '$route' (route) {
+        if (this.$refs['big-shot-introduce-container']) {
+          console.log(this.$refs['big-shot-introduce-container'])
+          this.$refs['big-shot-introduce-container'].scrollTop = 0
+        }
+        this.pageInit().then(() => {
+          const {
+            title,
+            simpleIntro,
+            master,
+            shareImg, // 分享图片
+            sharePoint, // 分享摘要
+            shareIntroduction,  // 分享标题
+            communityId
+          } = this.pageInfo
+          // 是否已入社
+          if (this.completelyShow && this.isJoinAgency) {
+            this.$router.replace(`/introduce/${communityId}/community`)
+            return
+          }
+
+          const {realName, career} = master
+          const str = realName ? realName + (career ? '|' + career : '') : ''
+          console.log('location.href', location.href)
+          // 页面分享信息
+          this.wechatShare({
+            'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+            'title': `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+            'desc': sharePoint || simpleIntro,
+            'imgUrl': shareImg,
+            'link': location.origin + `/beaconweb/#/introduce/${communityId}`
+          })
+        })
+      }
+    },
     mixins: [WechatMixin]
   })
   export default class introduce extends Vue {
     showShare = false // 显示分享弹框
+    showSell = false // 显示分销弹框
     pageInfo = {}
     dynamicList = []
+    relevantList = []
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
+    el = ''
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
       const reg = /(\:|: )+(\d)+(px)/gi
@@ -164,12 +230,26 @@
     toHome () {
       this.$router.replace(`/index`)
     }
+
+    /**
+     * 点击卡片
+     */
+    handleTapCard (item) {
+      if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
+        this.$router.push(`/introduce/${item.communityId}/community`)
+      } else { // 未入社跳到未入社页面
+        this.$router.push(`/introduce/${item.communityId}`)
+      }
+    }
+
     async payIn () {
-      try {
-        const params = await payApi({
-          productId: this.pageInfo.communityId,
-          productType: 1
-        })
+      const params = await payApi({
+        productId: this.pageInfo.communityId,
+        productType: 1
+      })
+      console.log('params', params)
+      const arr = Object.keys(params)
+      if (arr.length !== 0) {
         if (typeof WeixinJSBridge === 'undefined') {
           if (document.addEventListener) {
             document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(params), false)
@@ -180,10 +260,8 @@
         } else {
           this.onBridgeReady(params)
         }
-      } catch (e) {
-        this.$vux.toast.text(e.message, 'bottom')
+        this.pageInit()
       }
-      this.pageInit()
     }
     onBridgeReady (params) {
 //      this.closeEvent()
@@ -201,7 +279,15 @@
           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text('已购买成功', 'bottom')
-            location.reload()
+            const { communityId } = self.$route.params
+            console.log('communityId', communityId)
+            //
+            if (communityId === 'ec29bec769b517cec9d6ab19886361c3' || communityId === 'e3389ae9d34ffb67f7fdc8139a7d41f4') {
+              self.$store.dispatch('show_qr')
+            } else {
+              location.reload()
+            }
+//            self.$store.dispatch('show_qr')
 //            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
@@ -218,7 +304,15 @@
       }
 
       this.pageInit().then(() => {
-        const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
+        const {
+          title,
+          simpleIntro,
+          master,
+          shareImg, // 分享图片
+          sharePoint, // 分享摘要
+          shareIntroduction,  // 分享标题
+          communityId
+        } = this.pageInfo
         // 是否已入社
         if (this.completelyShow && this.isJoinAgency) {
           this.$router.replace(`/introduce/${communityId}/community`)
@@ -230,9 +324,9 @@
         console.log('location.href', location.href)
         // 页面分享信息
         this.wechatShare({
-          'titles': str + '|' + title,
-          'title': str + '|' + title,
-          'desc': simpleIntro,
+          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'desc': sharePoint || simpleIntro,
           'imgUrl': shareImg,
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
@@ -241,7 +335,8 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-      const res = await getCommunityInfoApi(communityId)
+      const { saleId: applyId } = this.$route.query
+      const res = await getCommunityInfoApi({communityId, data: {applyId}})
 
       const temp = new Array(...res.circles)
       temp.forEach((item) => {
@@ -259,6 +354,7 @@
       })
       console.log(temp)
       this.dynamicList = temp
+      this.relevantList = res.relevantRecommendations || []
       this.pageInfo = res
       this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
     }
@@ -294,7 +390,7 @@
       position: relative;
       margin-bottom: 20px;
 
-      & .share-btn {
+      & .share-btn, & .share-btn-2 {
         position: absolute;
         top: 15px;
         right: 0;
@@ -319,6 +415,16 @@
         &::after {
           content: none;
         }
+      }
+
+      & .share-btn-2 {
+        position: fixed;
+        padding-left: 10px;
+        min-width: 85px;
+        background-color: #ffe266;
+        font-size: 13px;
+        color: #354048;
+        z-index: 99;
       }
     }
 
@@ -349,6 +455,9 @@
         }
       }
       .module-content {
+        .community-item {
+          margin-top: 25px;
+        }
 
         &.h5-code {
           padding: 0 15px;
@@ -364,7 +473,7 @@
       }
 
       & .hr {
-        height: 1px;
+        height: 1px; /* no */
         background: #dcdcdc;
       }
 
@@ -480,7 +589,7 @@
 
     & .how-to-play {
       margin-top: 30px;
-      padding: 0 15px;
+      padding: 0 15px 25px;
 
       & img {
         border-radius: 6px;
@@ -495,6 +604,38 @@
       width: 18px;
       height: 16px;
       margin-bottom: 5px;
+    }
+
+    & .home-mask {
+      & .sell-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 285px;
+        background: #fff;
+        border-radius: 6px;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        padding: 45px 0;
+        font-size: 15px;
+        color: #666666;
+
+        & .Qr {
+          width: 160px;
+          height: 160px;
+          font-size: 0;
+          margin-bottom: 12px;
+        }
+        & img {
+          width: 100%;
+          height: 100%;
+          vertical-align: middle;
+          text-align: center;
+        }
+      }
     }
   }
 </style>

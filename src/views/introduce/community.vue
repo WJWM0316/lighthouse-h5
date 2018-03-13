@@ -13,11 +13,14 @@
       <!-- header -->
       <div class="header">
         <community-card class="community-item" :community="pageInfo" :type="2">
-          <!--<a class="addon-text" slot="cover-addon">-->
-            <!--介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
-          <!--</a>-->
+          <router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon">
+            介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />
+          </router-link>
         </community-card>
-        <div class="share-btn" @click="showShare = true">
+        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
+          <span>分享赚¥{{pageInfo.sellPrice}}</span>
+        </div>
+        <div class="share-btn" v-else @click="showShare = true">
           <img class="share-icon" src="./../../assets/icon/icon_share.png" />
           <span>分享</span>
         </div>
@@ -91,6 +94,17 @@
     ></suspension-input>
 
     <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
+
+    <div class="home-mask" v-if="showSell">
+      <div class="sell-container">
+        <i class="u-icon-close icon-close" @click="showSell = false"></i>
+        <div class="Qr">
+          <img src="./../../assets/page/wx-qrcode.png">
+        </div>
+        <p>关注公众号可获取专属海报</p>
+        <p>及查询奖励</p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -126,6 +140,7 @@
   })
   export default class community extends Vue {
     showShare = false // 显示分享弹框
+    showSell = false // 显示分销弹框
     pageInfo = {}
     dynamicList = []
     discussItemList = []
@@ -164,14 +179,22 @@
         this.showShare = true
       }
       this.pageInit().then(() => {
-        const {title, simpleIntro, master, shareImg, communityId} = this.pageInfo
+        const {
+          title,
+          simpleIntro,
+          master,
+          shareImg, // 分享图片
+          sharePoint, // 分享摘要
+          shareIntroduction,  // 分享标题
+          communityId
+        } = this.pageInfo
         const {realName, career} = master
         const str = realName ? realName + (career ? '|' + career : '') : ''
         // 页面分享信息
         this.wechatShare({
-          'titles': str + '|' + title,
-          'title': str + '|' + title,
-          'desc': simpleIntro,
+          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'desc': sharePoint || simpleIntro,
           'imgUrl': shareImg,
           'link': location.origin + `/beaconweb/#/introduce/${communityId}/community`
         })
@@ -452,7 +475,7 @@
 
       }
 
-      & .share-btn {
+      & .share-btn, & .share-btn-2 {
         position: absolute;
         top: 15px;
         right: 0;
@@ -477,6 +500,16 @@
         &::after {
           content: none;
         }
+      }
+
+      & .share-btn-2 {
+        position: fixed;
+        padding-left: 10px;
+        min-width: 85px;
+        background-color: #ffe266;
+        font-size: 13px;
+        color: #354048;
+        z-index: 99;
       }
 
       .community-item {
@@ -689,6 +722,38 @@
       & button:last-of-type {
         background-color: #ffe266;
         color: #354048;
+      }
+    }
+
+    & .home-mask {
+      & .sell-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 285px;
+        background: #fff;
+        border-radius: 6px;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        padding: 45px 0;
+        font-size: 15px;
+        color: #666666;
+
+        & .Qr {
+          width: 160px;
+          height: 160px;
+          font-size: 0;
+          margin-bottom: 12px;
+        }
+        & img {
+          width: 100%;
+          height: 100%;
+          vertical-align: middle;
+          text-align: center;
+        }
       }
     }
   }

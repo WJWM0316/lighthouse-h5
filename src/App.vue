@@ -11,6 +11,14 @@
         <span slot="label">{{tab.label}}</span>
       </tabbar-item>
     </tabbar>
+    <div class="home-mask" v-if="isShowQrcode">
+      <div class="qr-container">
+        <i class="u-icon-close icon-close" @click="closeQrCode"></i>
+        <div class="title">支付成功</div>
+        <div class="content">长按识别二维码，立即加入课程交流群</div>
+        <img class="qrcode" src="./assets/page/group-qrcode.png">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,6 +43,10 @@ import WechatMixin from '@/mixins/wechat'
   computed: {
     isNavShow: function () { // 导航条是否展示
       return this.$store.getters.navIsShow
+    },
+    isShowQrcode: function () { // 公众号二维码是否展示
+      console.log('this.$store.getters.isShowQrcode', this.$store.getters.isShowQrcode)
+      return this.$store.getters.isShowQrcode
     },
   },
   watch: {
@@ -79,6 +91,10 @@ export default class App extends Vue {
       label: '我的'
     }
   ]
+  data () {
+    return {
+    }
+  }
   goSomeWhere (index) {
 //    if (index === 1) {
 //      window.location.href = this.tabList[1].src
@@ -88,6 +104,10 @@ export default class App extends Vue {
   }
   isSelected (src) {
     return this.$route.path === src
+  }
+  closeQrCode () {
+    this.$store.dispatch('hide_qr')
+    location.reload()
   }
   created () {
 //    var ua = navigator.userAgent.toLowerCase()
@@ -107,6 +127,50 @@ export default class App extends Vue {
   left: 50%;
   transform: translateX(-50%);
   max-width: 375px;
+}
+.home-mask {
+  z-index: 1000;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(38, 38, 38, .5);
+  .qr-container{
+    position: relative;
+    left: 50%;
+    top: 50%;
+    margin-left: -142px;
+    margin-top: -151px;
+    width: 285px;
+    height: 302px;
+    background: #fff;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .icon-close{
+    position: absolute;
+    right: 16px;
+    top: 16px;
+  }
+  .title{
+    color: #354048;
+    font-size: 22px;
+    padding-top: 31px;
+  }
+  .content{
+    position: relative;
+    color: #666666;
+    font-size: 15px;
+    margin-top: 8px;
+  }
+  .qrcode{
+    margin-top: 12px;
+    width: 160px;
+    height: 160px;
+  }
 }
 .weui-tabbar {
   background-color: #FFF !important;
