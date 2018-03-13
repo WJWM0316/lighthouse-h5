@@ -247,17 +247,19 @@
         productId: this.pageInfo.communityId,
         productType: 1
       })
-      if (typeof WeixinJSBridge === 'undefined') {
-        if (document.addEventListener) {
-          document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(params), false)
-        } else if (document.attachEvent) {
-          document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(params))
-          document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(params))
+      if (params) {
+        if (typeof WeixinJSBridge === 'undefined') {
+          if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(params), false)
+          } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(params))
+            document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(params))
+          }
+        } else {
+          this.onBridgeReady(params)
         }
-      } else {
-        this.onBridgeReady(params)
+        this.pageInit()
       }
-      this.pageInit()
     }
     onBridgeReady (params) {
 //      this.closeEvent()
