@@ -306,7 +306,7 @@
       const { code=''} = this.$route.query
       if (code) {
         try {
-          await countCodeApi(code)
+          await countCodeApi({code: code})
         } catch (e) {
           this.$vux.toast.text(e.message, 'bottom')
         }
