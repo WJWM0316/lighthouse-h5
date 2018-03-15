@@ -298,13 +298,13 @@
         }
       )
     }
-    created () {
+    async created () {
       wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
       }
 
-      this.pageInit().then(() => {
+      await this.pageInit().then(() => {
         const {
           title,
           simpleIntro,
