@@ -214,18 +214,19 @@
     }
     payOrFree () {
       let that = this
-      let {startTime, endTime} = this.pageInfo
-      startTime = new Date(startTime * 1000)
-      endTime = new Date(endTime * 1000)
-      this.$vux.confirm.show({
-        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
-        confirmText: '确定',
-        cancelText: '取消',
-        onConfirm: function (res) {
-          console.log(res)
-          that.payIn()
-        },
-      })
+      that.payIn()
+//      let {startTime, endTime} = this.pageInfo
+//      startTime = new Date(startTime * 1000)
+//      endTime = new Date(endTime * 1000)
+//      this.$vux.confirm.show({
+//        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
+//        confirmText: '确定',
+//        cancelText: '取消',
+//        onConfirm: function (res) {
+//          console.log(res)
+//          that.payIn()
+//        },
+//      })
     }
     toHome () {
       this.$router.replace(`/index`)
@@ -331,6 +332,8 @@
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
       })
+      let that = this
+      that.payIn()
     }
 
     async pageInit () {
