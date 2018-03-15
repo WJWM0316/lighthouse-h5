@@ -332,8 +332,11 @@
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
       })
-      let that = this
-      that.payIn()
+      const { autoPay=''} = this.$route.query
+      if (autoPay) {
+        let that = this
+        that.payIn()
+      }
     }
 
     async pageInit () {
