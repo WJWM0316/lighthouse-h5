@@ -106,7 +106,8 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       }
       if (data && data.statusCode === 432) { // 需要授权
         hideLoading(globalLoading)
-        let hashParams = location.hash.substring(1)
+        var hashParams = location.hash.substring(1)
+        console.log('xxxx', hashParams, hashParams.endsWith('reload=true'))
         if (hashParams.endsWith('reload=true')) {
           hashParams = hashParams + encodeURI('&autoPay=true')
         } else {
