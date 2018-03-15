@@ -73,7 +73,15 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         hideLoading(globalLoading)
         router.replace({
           name: 'login',
-          query: {redirect: location.href}
+          query: {redirect: location.href + '?'}
+        })
+      }
+      if (data && data.statusCode === 433) { // 没有登录权限,跳去手机号登录
+        store.dispatch('remove_userinfo')
+        hideLoading(globalLoading)
+        router.replace({
+          name: 'login',
+          query: {redirect: location.href + '?autoPay=true'}
         })
       }
       if (data && data.statusCode === 430) {
