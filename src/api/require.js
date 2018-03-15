@@ -76,10 +76,10 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
           query: {redirect: location.href}
         })
       }
-      if (data && data.statusCode === 433) { // 没有登录权限,跳去手机号登录
+      if (data && data.statusCode === 433) { // 支付接口没有登录权限,跳去手机号登录
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
-        if (location.href.endsWith('?reload=true')) {
+        if (location.href.endsWith('reload=true')) {
           router.replace({
             name: 'login',
             query: {redirect: location.href + encodeURI('&autoPay=true')}
@@ -107,7 +107,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       if (data && data.statusCode === 432) { // 需要授权
         hideLoading(globalLoading)
         let hashParams = location.hash.substring(1)
-        if (hashParams.endsWith('?reload=true')) {
+        if (hashParams.endsWith('reload=true')) {
           hashParams = hashParams + encodeURI('&autoPay=true')
         } else {
           hashParams = hashParams + encodeURI('?autoPay=true')
