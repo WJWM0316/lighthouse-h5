@@ -64,6 +64,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         hideLoading(globalLoading)
         const hashParams = location.hash.substring(1)
         const hostname = location.href.split('?')[0]
+        console.log('hashParams', hashParams)
         location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
         return data.data === undefined ? {} : data.data
       }
@@ -82,6 +83,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         })
       }
       if (data && data.statusCode === 431) { // 需要授权
+        hideLoading(globalLoading)
         const hashParams = location.hash.substring(1)
         const hostname = location.href.split('?')[0]
         location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`
