@@ -89,6 +89,13 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`
         return data.data === undefined ? {} : data.data
       }
+      if (data && data.statusCode === 432) { // 需要授权
+        hideLoading(globalLoading)
+        const hashParams = location.hash.substring(1) + '?autoPay=true'
+        const hostname = location.href.split('?')[0]
+        location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`
+        return data.data === undefined ? {} : data.data
+      }
       if (data && data.statusCode === 264) { // 内容找不到
         hideLoading(globalLoading)
         router.replace({
