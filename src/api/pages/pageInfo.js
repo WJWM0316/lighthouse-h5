@@ -206,3 +206,10 @@ export const getExploreCommentsApi = (data) => {
     isLoading: true
   })
 }
+// 统计接口
+export const countCodeApi = (data) => {
+  return request({
+    url: '/wap/beacon/accessRecord',
+    data,
+  })
+}

@@ -106,7 +106,7 @@
   import CommunityCard from '@/components/communityCard'
   import dynamic from '@/components/dynamic/dynamic'
   import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
-  import {getCommunityInfoApi} from '@/api/pages/pageInfo'
+  import {getCommunityInfoApi, countCodeApi} from '@/api/pages/pageInfo'
   import WechatMixin from '@/mixins/wechat'
   import {payApi} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
@@ -303,7 +303,14 @@
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
       }
-
+      const { code=''} = this.$route.query
+      if (code) {
+        try {
+          await countCodeApi(code)
+        } catch (e) {
+          this.$vux.toast.text(e.message, 'bottom')
+        }
+      }
       await this.pageInit().then(() => {
         const {
           title,
