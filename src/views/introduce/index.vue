@@ -249,7 +249,7 @@
         productType: 1
       })
       console.log('params', params)
-      const arr = Object.keys(params)
+      const arr = Object.keys(params || {})
       if (arr.length !== 0) {
         if (typeof WeixinJSBridge === 'undefined') {
           if (document.addEventListener) {
