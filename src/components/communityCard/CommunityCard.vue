@@ -111,8 +111,9 @@ export default class CommunityCard extends Vue {
     let t = null
 
     // 停止倒计时
-    const stop = (t) => {
+    const stop = () => {
       if (t) {
+        console.log('清除')
         clearInterval(t)
       }
     }
@@ -150,6 +151,7 @@ export default class CommunityCard extends Vue {
    */
   stopCountdown () {
     if (this.countdown) {
+      console.log('清除倒计时')
       this.countdown.stop()
     }
   }
