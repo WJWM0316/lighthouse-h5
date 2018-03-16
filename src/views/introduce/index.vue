@@ -5,7 +5,7 @@
 
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
-        <community-card :community="pageInfo" :type="2" />
+        <community-card ref="headCard" :community="pageInfo" :type="2" />
         <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
           <span>分享赚¥{{pageInfo.sellPrice}}</span>
         </div>
@@ -153,6 +153,9 @@
         if (this.$refs['big-shot-introduce-container']) {
           console.log(this.$refs['big-shot-introduce-container'])
           this.$refs['big-shot-introduce-container'].scrollTop = 0
+        }
+        if (this.$refs['headCard']) {
+          this.$refs['headCard'].stopCountdown()
         }
         this.pageInit().then(() => {
           const {

@@ -63,8 +63,8 @@ import Component from 'vue-class-component'
       handler (val) {
         if (this.community.isAuthor !== 1 && this.community.isJoined !== 1 && !this.isEnd) {
           // 启用倒计时
-          const countdown = this.getCountdown()
-          countdown.start(this.community.startTime * 1000, (timestamp) => {
+          this.countdown = this.getCountdown()
+          this.countdown.start(this.community.startTime * 1000, (timestamp) => {
             if (timestamp > 0) {
               this.duration = timestamp
             } else {
@@ -88,6 +88,7 @@ export default class CommunityCard extends Vue {
   }
 
   duration = 0
+  countdown = null
 
   // 是否已结束
   get isEnd () {
@@ -142,10 +143,20 @@ export default class CommunityCard extends Vue {
       stop
     }
   }
+
+  /* ---- 父组件调用函数 ---- */
+  /**
+   * 停止计数器
+   */
+  stopCountdown () {
+    if (this.countdown) {
+      this.countdown.stop()
+    }
+  }
 }
 </script>
 
-<style lang="less">
+<style lang="less" type="text/less">
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
