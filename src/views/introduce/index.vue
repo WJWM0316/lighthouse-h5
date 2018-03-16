@@ -351,7 +351,7 @@
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
 
-      const temp = new Array(...res.circles)
+      const temp = new Array(...res.circles || [])
       temp.forEach((item) => {
         if (item['modelType'] === 'problem') {
           item['answers'].forEach((answer) => {

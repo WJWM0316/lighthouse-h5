@@ -101,7 +101,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         hideLoading(globalLoading)
         const hashParams = location.hash.substring(1)
         const hostname = location.href.split('?')[0]
-        // location.href = encodeURI(`${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`)
+        location.href = encodeURI(`${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`)
         return data.data === undefined ? {} : data.data
       }
       if (data && data.statusCode === 432) { // 需要授权
