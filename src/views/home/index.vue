@@ -120,7 +120,7 @@ import { getBeaconsApi, getBannersApi, getTagsListApi, getSelectionApi, getJoine
 })
 export default class HomeIndex extends Vue {
   // 顶部标签控制
-  navTabName = 'find'
+  navTabName = 'picked'
   // 社区列表
   ready = false
   disableOperationArr = ['comment', 'praise']
@@ -142,7 +142,7 @@ export default class HomeIndex extends Vue {
   created () {
     const routeName = this.$route.name
     if (routeName === 'home') {
-      this.navTabName = 'find'
+      this.navTabName = 'picked'
     } else {
       this.navTabName = routeName
     }
@@ -160,7 +160,7 @@ export default class HomeIndex extends Vue {
       this.finds = []
       this.communities = []
       this.navTabName = targetName
-      const name = targetName === 'find' ? 'home' : targetName
+      const name = targetName === 'picked' ? 'home' : targetName
       this.$router.replace({name})
       this.init().then(() => {})
     }
@@ -199,14 +199,14 @@ export default class HomeIndex extends Vue {
   async init () {
     const navTabName = this.navTabName
     switch (navTabName) {
-      case 'picked':
-        await this.pickedInit()
+      case 'find':
+        await this.findInit()
         break
       case 'joined':
         await this.joinedInit()
         break
       default:
-        await this.findInit()
+        await this.pickedInit()
         break
     }
     this.ready = true

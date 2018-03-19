@@ -46,3 +46,12 @@ export const getMyCommunityListApi = data => request({
   url: '/wap/my/myCommunity',
   data
 })
+
+/**
+ * 现金奖励记录
+ * @param {*} data
+ */
+export const sellOrdersApi = data => request({
+  url: '/wap/beacon/sellOrders',
+  data
+})

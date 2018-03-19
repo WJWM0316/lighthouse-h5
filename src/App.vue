@@ -11,7 +11,7 @@
         <span slot="label">{{tab.label}}</span>
       </tabbar-item>
     </tabbar>
-    <div class="home-mask" v-if="isShowQrcode">
+    <div class="home-mask" v-if="isShowQrcodes">
       <div class="qr-container">
         <i class="u-icon-close icon-close" @click="closeQrCode"></i>
         <div class="title">支付成功</div>
@@ -44,8 +44,7 @@ import WechatMixin from '@/mixins/wechat'
     isNavShow: function () { // 导航条是否展示
       return this.$store.getters.navIsShow
     },
-    isShowQrcode: function () { // 公众号二维码是否展示
-      console.log('this.$store.getters.isShowQrcode', this.$store.getters.isShowQrcode)
+    isShowQrcodes: function () { // 公众号二维码是否展示
       return this.$store.getters.isShowQrcode
     },
   },

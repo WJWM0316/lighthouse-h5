@@ -48,7 +48,13 @@ const routers = [
     name: 'center-share-lite',
     component: resolve => require(['@/views/center/shareLite'], resolve),
     meta: {navHide: true}
-  }
+  },
+  { // 现金奖励
+    path: '/center/rewards',
+    name: 'center-reward-records',
+    component: resolve => require(['@/views/center/rewardRecords'], resolve),
+    meta: {navHide: true}
+  },
 ]
 
 export default routers
