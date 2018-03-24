@@ -199,6 +199,8 @@ export default class HomeIndex extends Vue {
    */
   async init () {
     const navTabName = this.navTabName
+    this.pagination.end = false
+    this.pagination.busy = false
     switch (navTabName) {
       case 'find':
         await this.findInit()
