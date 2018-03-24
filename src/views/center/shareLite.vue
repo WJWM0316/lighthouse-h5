@@ -1,7 +1,7 @@
 <template>
   <div class="p-share-lite p-body">
     <div class="main">
-      <image-item class="image-item" :src="''" mode="auto" />
+      <image-item class="image-item" :src="communityImage" mode="auto" @loaded="handleImageLoaded" @error="handleImageError" />
     </div>
 
     <div class="btn-container">
@@ -18,6 +18,8 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import ShareDialog from '@/components/shareDialog/ShareDialog'
 
+import { getMyCommunityImageApi } from '@/api/pages/center'
+
 @Component({
   name: 'share-lite',
   components: {
@@ -25,8 +27,35 @@ import ShareDialog from '@/components/shareDialog/ShareDialog'
   }
 })
 export default class CenterShareLite extends Vue {
+  communityId = '' // 社区id
+  communityImage = '' // 分享图片
   shareDialog = {
     show: false
+  }
+
+  created () {
+    this.communityId = this.$route.params.communityId
+    this.init()
+  }
+
+  /**
+   * 初始化页面数据
+   */
+  async init () {
+    try {
+      this.$vux.loading.show({
+        text: '加载中...'
+      })
+      const params = {
+        communityId: this.communityId,
+        globalLoading: false
+      }
+      const { communityImage } = await getMyCommunityImageApi(params)
+      this.communityImage = communityImage
+    } catch (error) {
+      this.$vux.toast.text(error.message, 'bottom')
+      this.$vux.loading.hide()
+    }
   }
 
   /**
@@ -34,6 +63,20 @@ export default class CenterShareLite extends Vue {
    */
   handleShare () {
     this.shareDialog.show = true
+  }
+
+  /**
+   * 图片加载完成
+   */
+  handleImageLoaded () {
+    this.$vux.loading.hide()
+  }
+
+  /**
+   * 图片加载失败
+   */
+  handleImageError () {
+    this.$vux.loading.hide()
   }
 }
 </script>

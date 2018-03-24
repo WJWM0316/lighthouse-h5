@@ -55,3 +55,12 @@ export const sellOrdersApi = data => request({
   url: '/wap/beacon/sellOrders',
   data
 })
+
+/**
+ * 获取我的灯塔分享图片
+ * @param {*} data
+ */
+export const getMyCommunityImageApi = data => request({
+  url: '/wap/my/myCommunityImages',
+  data
+})

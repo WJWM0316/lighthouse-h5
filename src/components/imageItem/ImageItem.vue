@@ -31,9 +31,26 @@ import Component from 'vue-class-component'
       type: Boolean,
       default: false
     }
+  },
+  watch: {
+    src: {
+      handler (val, oldVal) {
+        if (val && (val !== oldVal)) {
+          const image = new Image()
+          image.onload = e => {
+            this.$emit('loaded', e)
+          }
+          image.onerror = e => {
+            this.$emit('error', e)
+          }
+          image.src = val
+        }
+      },
+      immediate: true
+    }
   }
 })
-export default class Image extends Vue {}
+export default class ImageItem extends Vue {}
 </script>
 
 <style lang="less" scoped type="text/less">
