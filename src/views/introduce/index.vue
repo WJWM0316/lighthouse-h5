@@ -6,7 +6,10 @@
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
         <community-card ref="headCard" :community="pageInfo" :type="2" />
-        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
+        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">
+          <span>邀请函</span>
+        </div>
+        <div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">
           <span>分享赚¥{{pageInfo.sellPrice}}</span>
         </div>
         <div class="share-btn" v-else @click="showShare = true">
