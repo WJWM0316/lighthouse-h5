@@ -5,7 +5,7 @@
 
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
-        <community-card :community="pageInfo" :type="2" />
+        <community-card ref="headCard" :community="pageInfo" :type="2" />
         <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
           <span>分享赚¥{{pageInfo.sellPrice}}</span>
         </div>
@@ -106,7 +106,7 @@
   import CommunityCard from '@/components/communityCard'
   import dynamic from '@/components/dynamic/dynamic'
   import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
-  import {getCommunityInfoApi} from '@/api/pages/pageInfo'
+  import {getCommunityInfoApi, countCodeApi} from '@/api/pages/pageInfo'
   import WechatMixin from '@/mixins/wechat'
   import {payApi} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
@@ -153,6 +153,9 @@
         if (this.$refs['big-shot-introduce-container']) {
           console.log(this.$refs['big-shot-introduce-container'])
           this.$refs['big-shot-introduce-container'].scrollTop = 0
+        }
+        if (this.$refs['headCard']) {
+          this.$refs['headCard'].stopCountdown()
         }
         this.pageInit().then(() => {
           const {
@@ -214,18 +217,19 @@
     }
     payOrFree () {
       let that = this
-      let {startTime, endTime} = this.pageInfo
-      startTime = new Date(startTime * 1000)
-      endTime = new Date(endTime * 1000)
-      this.$vux.confirm.show({
-        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
-        confirmText: '确定',
-        cancelText: '取消',
-        onConfirm: function (res) {
-          console.log(res)
-          that.payIn()
-        },
-      })
+      that.payIn()
+//      let {startTime, endTime} = this.pageInfo
+//      startTime = new Date(startTime * 1000)
+//      endTime = new Date(endTime * 1000)
+//      this.$vux.confirm.show({
+//        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
+//        confirmText: '确定',
+//        cancelText: '取消',
+//        onConfirm: function (res) {
+//          console.log(res)
+//          that.payIn()
+//        },
+//      })
     }
     toHome () {
       this.$router.replace(`/index`)
@@ -247,8 +251,9 @@
         productId: this.pageInfo.communityId,
         productType: 1
       })
-      console.log(params, '获取返回配置参数')
-      if (params) {
+      console.log('params', params)
+      const arr = Object.keys(params || {})
+      if (arr.length !== 0) {
         if (typeof WeixinJSBridge === 'undefined') {
           if (document.addEventListener) {
             document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(params), false)
@@ -296,13 +301,20 @@
         }
       )
     }
-    created () {
+    async created () {
       wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
       }
-
-      this.pageInit().then(() => {
+      const { code=''} = this.$route.query
+      if (code) {
+        try {
+          await countCodeApi({code: code})
+        } catch (e) {
+          this.$vux.toast.text(e.message, 'bottom')
+        }
+      }
+      await this.pageInit().then(() => {
         const {
           title,
           simpleIntro,
@@ -330,6 +342,11 @@
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
       })
+      const { autoPay=''} = this.$route.query
+      if (autoPay) {
+        let that = this
+        that.payIn()
+      }
     }
 
     async pageInit () {
@@ -337,7 +354,7 @@
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
 
-      const temp = new Array(...res.circles)
+      const temp = new Array(...res.circles || [])
       temp.forEach((item) => {
         if (item['modelType'] === 'problem') {
           item['answers'].forEach((answer) => {

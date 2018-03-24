@@ -64,6 +64,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         hideLoading(globalLoading)
         const hashParams = location.hash.substring(1)
         const hostname = location.href.split('?')[0]
+        console.log('hashParams', hashParams)
         location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
         return data.data === undefined ? {} : data.data
       }
@@ -75,6 +76,21 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
           query: {redirect: location.href}
         })
       }
+      if (data && data.statusCode === 433) { // 支付接口没有登录权限,跳去手机号登录
+        store.dispatch('remove_userinfo')
+        hideLoading(globalLoading)
+        if (location.href.endsWith('reload=true')) {
+          router.replace({
+            name: 'login',
+            query: {redirect: encodeURI(location.href + '&autoPay=true')}
+          })
+        } else {
+          router.replace({
+            name: 'login',
+            query: {redirect: encodeURI(location.href + '?autoPay=true')}
+          })
+        }
+      }
       if (data && data.statusCode === 430) {
         router.replace({
           name: 'center-editinfo',
@@ -82,9 +98,23 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         })
       }
       if (data && data.statusCode === 431) { // 需要授权
+        hideLoading(globalLoading)
         const hashParams = location.hash.substring(1)
         const hostname = location.href.split('?')[0]
-        location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`
+        location.href = encodeURI(`${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`)
+        return data.data === undefined ? {} : data.data
+      }
+      if (data && data.statusCode === 432) { // 需要授权
+        hideLoading(globalLoading)
+        var hashParams = location.hash.substring(1)
+        console.log('xxxx', hashParams, hashParams.endsWith('reload=true'))
+        if (hashParams.endsWith('reload=true')) {
+          hashParams = hashParams + '&autoPay=true'
+        } else {
+          hashParams = hashParams + '?autoPay=true'
+        }
+        const hostname = location.href.split('?')[0]
+        location.href = encodeURI(`${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`)
         return data.data === undefined ? {} : data.data
       }
       if (data && data.statusCode === 264) { // 内容找不到
