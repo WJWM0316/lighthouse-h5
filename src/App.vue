@@ -15,8 +15,8 @@
       <div class="qr-container">
         <i class="u-icon-close icon-close" @click="closeQrCode"></i>
         <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，立即加入课程交流群</div>
-        <img class="qrcode" src="./assets/page/group-qrcode.png">
+        <div class="content">长按识别二维码，添加课程小助手拉您加入课程交流群</div>
+        <img class="qrcode" src="./assets/page/group-qrcode.jpg">
       </div>
     </div>
   </div>
