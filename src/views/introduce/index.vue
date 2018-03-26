@@ -487,6 +487,7 @@
 
           & img {
             max-width: 100% !important;
+            margin: 0 auto;
           }
         }
       }
