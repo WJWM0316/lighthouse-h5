@@ -102,7 +102,7 @@
       <div class="sell-container">
         <i class="u-icon-close icon-close" @click="showSell = false"></i>
         <div class="Qr">
-          <img src="./../../assets/page/wx-qrcode.jpg">
+          <img src="./../../assets/page/wx-qrcode.png">
         </div>
         <p>关注公众号可获取专属海报</p>
         <p>及查询奖励</p>

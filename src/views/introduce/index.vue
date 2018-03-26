@@ -95,7 +95,7 @@
       <div class="sell-container">
         <i class="u-icon-close icon-close" @click="showSell = false"></i>
         <div class="Qr">
-          <img src="./../../assets/page/wx-qrcode.jpg">
+          <img src="./../../assets/page/wx-qrcode.png">
         </div>
         <p>长按识别二维码，关注公众号即可获取</p>
         <p>专属海报及查询实时奖励</p>
