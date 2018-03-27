@@ -6,7 +6,10 @@
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
         <community-card ref="headCard" :community="pageInfo" :type="2" />
-        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell" @click="showSell = true">
+        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">
+          <span>邀请函</span>
+        </div>
+        <div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">
           <span>分享赚¥{{pageInfo.sellPrice}}</span>
         </div>
         <div class="share-btn" v-else @click="showShare = true">
@@ -286,7 +289,7 @@
             const { communityId } = self.$route.params
             console.log('communityId', communityId)
             //
-            if (communityId === 'ec29bec769b517cec9d6ab19886361c3' || communityId === 'e3389ae9d34ffb67f7fdc8139a7d41f4') {
+            if (communityId === 'ca7cfa129f1d7ce4a04aebeb51e2a1aa') {
               self.$store.dispatch('show_qr')
             } else {
               location.reload()
@@ -484,6 +487,7 @@
 
           & img {
             max-width: 100% !important;
+            margin: 0 auto;
           }
         }
       }
