@@ -6,7 +6,7 @@
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
         <community-card ref="headCard" :community="pageInfo" :type="2" />
-        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">
+        <div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">
           <span>邀请函</span>
         </div>
         <div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">
@@ -98,7 +98,7 @@
           <img src="./../../assets/page/wx-qrcode.png">
         </div>
         <p>长按识别二维码，关注公众号即可获取</p>
-        <p>专属海报及查询实时奖励</p>
+        <p>{{pageInfo.isSell && pageInfo.isSell === 2 ? '专属海报，邀请好友一起学习' : '专属海报及查询实时奖励'}}</p>
       </div>
     </div>
   </div>
@@ -409,7 +409,7 @@
       position: relative;
       margin-bottom: 20px;
 
-      & .share-btn, & .share-btn-2 {
+      & .share-btn, & .share-btn-2, & .share-btn-3 {
         position: absolute;
         top: 15px;
         right: 0;
@@ -440,6 +440,16 @@
         position: fixed;
         padding-left: 10px;
         min-width: 85px;
+        background-color: #ffe266;
+        font-size: 13px;
+        color: #354048;
+        z-index: 99;
+      }
+
+      & .share-btn-3 {
+        position: fixed;
+        padding-left: 26px;
+        padding-right: 14px;
         background-color: #ffe266;
         font-size: 13px;
         color: #354048;
