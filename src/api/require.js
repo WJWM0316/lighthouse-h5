@@ -79,8 +79,9 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       if (data && data.statusCode === 433) { // 支付接口没有登录权限,跳去手机号登录
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
-        console.log(location.href.endsWith('reload=true') || location.href.indexOf('saleId='))
-        if (location.href.endsWith('reload=true') || location.href.indexOf('saleId=')) {
+        alert(location.href)
+        alert(location.href.indexOf('saleId=') > -1)
+        if (location.href.endsWith('reload=true') || location.href.indexOf('saleId=') > -1) {
           console.log('====================================111')
           router.replace({
             name: 'login',
