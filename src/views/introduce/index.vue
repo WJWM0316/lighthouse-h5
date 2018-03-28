@@ -1,7 +1,7 @@
 <template>
 
   <!-- 大咖介绍页 -->
-  <div ref="body" class="p-body big-shot-introduce" :class="{ 'no-pdb': !completelyShow }">
+  <div ref="body" class="p-body big-shot-introduce">
 
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
@@ -406,13 +406,12 @@
 </script>
 <style lang="less" scoped type="text/less">
   .big-shot-introduce {
-    padding-bottom: 55px;
+    /*padding-bottom: 55px;*/
     /*display: flex;*/
     /*flex-flow: column nowrap;*/
-
-    &.no-pdb {
-      padding-bottom: 0;
-    }
+    display: flex;
+    flex-flow: column nowrap;
+    overflow: hidden;
 
     & .header {
       position: relative;
@@ -468,9 +467,9 @@
     }
 
     & .container {
-      /*flex: 1 1 auto;*/
-      /*overflow: auto;*/
-      /*-webkit-overflow-scrolling: touch;  !* 针对 overflow: scroll; 在ios中卡顿问题 *!*/
+      flex: 1 1 auto;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;  /* 针对 overflow: scroll; 在ios中卡顿问题 */
     }
 
     & .module {
@@ -527,13 +526,13 @@
     }
 
     & .footer {
-      /*flex: 0 0 auto;*/
-      position: fixed;
-      left: 0;
-      bottom: 0;
+      flex: 0 0 auto;
+      /*position: fixed;*/
+      /*left: 0;*/
+      /*bottom: 0;*/
       width: 100%;
       height: 54px;
-      /*position: relative;*/
+      position: relative;
       background: #f4f4f4;
       display: flex;
       justify-content: center;
