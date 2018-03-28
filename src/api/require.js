@@ -79,6 +79,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       if (data && data.statusCode === 433) { // 支付接口没有登录权限,跳去手机号登录
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
+        console.log(location.href, location.href.split('?'))
         if (location.href.split('?').length === 3) {
           router.replace({
             name: 'login',
