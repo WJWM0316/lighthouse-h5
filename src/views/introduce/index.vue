@@ -1,7 +1,7 @@
 <template>
 
   <!-- 大咖介绍页 -->
-  <div class="p-body big-shot-introduce">
+  <div ref="body" class="p-body big-shot-introduce">
 
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
@@ -201,6 +201,14 @@
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
     el = ''
+
+    mounted () {
+      this.$refs['body'].addEventListener('scroll', e => {
+        e.preventDefault()
+        e.stopPropagation()
+      })
+    }
+
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
       const reg = /(\:|: )+(\d)+(px)/gi
