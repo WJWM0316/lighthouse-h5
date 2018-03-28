@@ -578,10 +578,10 @@
         display: inline-block;
         height: 40px;
         line-height: 40px;
-      }
-      &.circles span:first-of-type,
-      &.forum span:last-of-type {
         color: #354048;
+      }
+      &.circles .item:first-of-type span,
+      &.forum .item:last-of-type span {
         font-weight: 500;
         position: relative;
       }
