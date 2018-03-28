@@ -79,16 +79,12 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
       if (data && data.statusCode === 433) { // 支付接口没有登录权限,跳去手机号登录
         store.dispatch('remove_userinfo')
         hideLoading(globalLoading)
-        alert(location.href)
-        alert(location.href.indexOf('saleId=') > -1)
         if (location.href.endsWith('reload=true') || location.href.indexOf('saleId=') > -1) {
-          console.log('====================================111')
           router.replace({
             name: 'login',
             query: {redirect: encodeURI(location.href + '&autoPay=true')}
           })
         } else {
-          console.log('====================================222')
           router.replace({
             name: 'login',
             query: {redirect: encodeURI(location.href + '?autoPay=true')}
