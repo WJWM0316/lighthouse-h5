@@ -65,6 +65,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
         const hashParams = location.hash.substring(1)
         const hostname = location.href.split('?')[0]
         console.log('hashParams', hashParams)
+        alert(`${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`)
         location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
         return data.data === undefined ? {} : data.data
       }
