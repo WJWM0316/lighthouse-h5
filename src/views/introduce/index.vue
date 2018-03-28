@@ -114,7 +114,6 @@
   import {payApi} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
-  import flexible from '@/util/flexible'
 
   @Component({
     name: 'big-shot-introduce',
@@ -201,6 +200,7 @@
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
     el = ''
+
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
       const reg = /(\:|: )+(\d)+(px)/gi
@@ -402,10 +402,11 @@
 </script>
 <style lang="less" scoped type="text/less">
   .big-shot-introduce {
-    height: 100%;
-    display: flex;
-    flex-flow: column nowrap;
-    overflow: hidden;
+    padding-bottom: 55px;
+    /*height: 100%;*/
+    /*display: flex;*/
+    /*flex-flow: column nowrap;*/
+    /*overflow: hidden;*/
 
     & .header {
       position: relative;
@@ -453,6 +454,7 @@
         padding-left: 13px;
         padding-right: 7px;
         background-color: #ffe266;
+        width: inherit;
         font-size: 13px;
         color: #354048;
         z-index: 99;
@@ -460,8 +462,8 @@
     }
 
     & .container {
-      flex: 1 1 auto;
-      overflow: scroll;
+      /*flex: 1 1 auto;*/
+      /*overflow: scroll;*/
     }
 
     & .module {
@@ -518,9 +520,13 @@
     }
 
     & .footer {
-      flex: 0 0 auto;
+      /*flex: 0 0 auto;*/
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
       height: 54px;
-      position: relative;
+      /*position: relative;*/
       background: #f4f4f4;
       display: flex;
       justify-content: center;
