@@ -114,7 +114,6 @@
   import {payApi} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
-  import flexible from '@/util/flexible'
 
   @Component({
     name: 'big-shot-introduce',
@@ -201,12 +200,6 @@
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
     el = ''
-
-    mounted () {
-      document.body.addEventListener('touchmove', e => {
-        e.preventDefault()
-      })
-    }
 
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
