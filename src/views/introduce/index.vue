@@ -1,7 +1,7 @@
 <template>
 
   <!-- 大咖介绍页 -->
-  <div class="p-body big-shot-introduce">
+  <div class="p-body big-shot-introduce" :class="{ 'no-pdb': !completelyShow }">
 
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
@@ -400,12 +400,17 @@
 </script>
 <style lang="less" scoped type="text/less">
   .big-shot-introduce {
-    /*padding-bottom: 55px;*/
-    /*height: auto;*/
+    box-sizing: inherit;
+    /*width: 100%;*/
     /*min-height: 100%;*/
+    /*padding-bottom: 55px;*/
     display: flex;
     flex-flow: column nowrap;
     overflow: hidden;
+
+    &.no-pdb {
+      padding-bottom: 0;
+    }
 
     & .header {
       position: relative;
