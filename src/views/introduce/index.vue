@@ -448,8 +448,8 @@
 
       & .share-btn-3 {
         position: fixed;
-        padding-left: 26px;
-        padding-right: 14px;
+        padding-left: 13px;
+        padding-right: 7px;
         background-color: #ffe266;
         font-size: 13px;
         color: #354048;
