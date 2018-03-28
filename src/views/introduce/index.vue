@@ -451,6 +451,7 @@
         padding-left: 13px;
         padding-right: 7px;
         background-color: #ffe266;
+        width: inherit;
         font-size: 13px;
         color: #354048;
         z-index: 99;

@@ -5,8 +5,8 @@
 
     <!-- tab -->
     <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed': true}" v-if="isCommunityTitleFixed">
-      <span @click="toggle(1)">导师内容</span>
-      <span @click="toggle(0)">学员交流</span>
+      <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
+      <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
     </div>
 
     <scroll :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
@@ -49,8 +49,8 @@
         <!-- 主体内容块 -->
         <div class="fixed-box" ref="community-title">
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
-            <span @click="toggle(1)">导师内容</span>
-            <span @click="toggle(0)">学员交流</span>
+            <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
+            <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
           </div>
         </div>
         <div class="big-shot-community-content">
@@ -520,6 +520,7 @@
         padding-left: 13px;
         padding-right: 7px;
         background-color: #ffe266;
+        width: inherit;
         font-size: 13px;
         color: #354048;
         z-index: 99;
@@ -563,7 +564,18 @@
       align-items: center;
       color: #929292;
 
+      .item {
+        display: block;
+        flex: 1 1 auto;
+        text-align: center;
+
+        &:active {
+          background: #f1f1f1;
+        }
+      }
+
       & span {
+        display: inline-block;
         height: 40px;
         line-height: 40px;
       }
@@ -573,8 +585,8 @@
         font-weight: 500;
         position: relative;
       }
-      &.circles span:first-of-type:after,
-      &.forum span:last-of-type:after {
+      &.circles .item:first-of-type span:after,
+      &.forum .item:last-of-type span:after {
         content: '';
         position: absolute;
         left: 0;
