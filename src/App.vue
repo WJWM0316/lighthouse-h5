@@ -164,6 +164,7 @@ export default class App extends Vue {
     color: #666666;
     font-size: 15px;
     margin-top: 8px;
+    padding: 0 10px;
   }
   .qrcode{
     margin-top: 12px;
