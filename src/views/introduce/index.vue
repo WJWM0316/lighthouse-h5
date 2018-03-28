@@ -402,11 +402,11 @@
 <style lang="less" scoped type="text/less">
   .big-shot-introduce {
     padding-bottom: 55px;
-    height: auto;
-    min-height: 100%;
+    /*height: auto;*/
+    /*min-height: 100%;*/
     /*display: flex;*/
     /*flex-flow: column nowrap;*/
-    overflow: hidden;
+    /*overflow: hidden;*/
 
     &.no-pdb {
       padding-bottom: 0;
