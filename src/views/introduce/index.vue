@@ -1,7 +1,7 @@
 <template>
 
   <!-- 大咖介绍页 -->
-  <div class="big-shot-introduce" :class="{ 'no-pdb': !completelyShow }">
+  <div ref="body" class="p-body big-shot-introduce" :class="{ 'no-pdb': !completelyShow }">
 
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
@@ -396,16 +396,19 @@
         }
       })
     }
+
+    mounted () {
+      this.$refs['body'].addEventListener('touchmove', e => {
+        e.stopPropagation()
+      })
+    }
   }
 </script>
 <style lang="less" scoped type="text/less">
   .big-shot-introduce {
-    width: 100%;
-    min-height: 100%;
     padding-bottom: 55px;
     /*display: flex;*/
     /*flex-flow: column nowrap;*/
-    /*overflow: hidden;*/
 
     &.no-pdb {
       padding-bottom: 0;
