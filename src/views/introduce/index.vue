@@ -305,6 +305,8 @@
       )
     }
     async created () {
+      console.log(location.href)
+      this.router.replace(decodeURIComponent(location.href))
       wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
