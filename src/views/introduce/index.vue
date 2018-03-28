@@ -1,7 +1,7 @@
 <template>
 
   <!-- 大咖介绍页 -->
-  <div class="p-body big-shot-introduce" @touchmove.stop="() => {}">
+  <div class="p-body big-shot-introduce">
 
     <div class="container" ref="big-shot-introduce-container">
       <div class="header">
@@ -201,6 +201,12 @@
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
     el = ''
+
+    mounted () {
+      document.body.addEventListener('touchmove', e => {
+        e.preventDefault()
+      })
+    }
 
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
