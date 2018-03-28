@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <div class="footer" v-if="completelyShow">
+    <div class="footer" v-show="completelyShow">
       <div class="to-home" @click="toHome">
         <img src="./../../assets/icon/icon_home.png" class="icon-home" />
         <span>首页</span>
