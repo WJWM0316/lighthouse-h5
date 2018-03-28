@@ -289,7 +289,7 @@
             const { communityId } = self.$route.params
             console.log('communityId', communityId)
             //
-            if (communityId === 'ca7cfa129f1d7ce4a04aebeb51e2a1aa') {
+            if (communityId === 'ca7cfa129f1d7ce4a04aebeb51e2a1aa' || communityId === '0cf00b660cd74b1204164239af0f765a') {
               self.$store.dispatch('show_qr')
             } else {
               location.reload()
