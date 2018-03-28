@@ -400,10 +400,11 @@
 </script>
 <style lang="less" scoped type="text/less">
   .big-shot-introduce {
-    height: 100%;
-    display: flex;
-    flex-flow: column nowrap;
-    overflow: hidden;
+    padding-bottom: 55px;
+    /*height: 100%;*/
+    /*display: flex;*/
+    /*flex-flow: column nowrap;*/
+    /*overflow: hidden;*/
 
     & .header {
       position: relative;
@@ -459,8 +460,8 @@
     }
 
     & .container {
-      flex: 1 1 auto;
-      overflow: scroll;
+      /*flex: 1 1 auto;*/
+      /*overflow: scroll;*/
     }
 
     & .module {
@@ -517,9 +518,13 @@
     }
 
     & .footer {
-      flex: 0 0 auto;
+      /*flex: 0 0 auto;*/
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
       height: 54px;
-      position: relative;
+      /*position: relative;*/
       background: #f4f4f4;
       display: flex;
       justify-content: center;
