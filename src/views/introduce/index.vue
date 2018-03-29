@@ -309,10 +309,11 @@
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
       }
-      const { code=''} = this.$route.query
+      const { code='' } = this.$route.query
+      const { communityId } = this.$route.params
       if (code) {
         try {
-          await countCodeApi({code: code})
+          await countCodeApi({ code, communityId })
         } catch (e) {
           this.$vux.toast.text(e.message, 'bottom')
         }
