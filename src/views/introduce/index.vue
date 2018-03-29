@@ -95,7 +95,7 @@
       <div class="sell-container">
         <i class="u-icon-close icon-close" @click="showSell = false"></i>
         <div class="Qr">
-          <img src="./../../assets/page/wx-qrcode.png">
+          <img :src="qrSrc">
         </div>
         <p>长按识别二维码，关注公众号即可获取</p>
         <p>{{pageInfo.isSell && pageInfo.isSell === 2 ? '专属海报，邀请好友一起学习' : '专属海报及查询实时奖励'}}</p>
@@ -200,6 +200,7 @@
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
     el = ''
+    qrSrc = ''
 
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
@@ -289,10 +290,19 @@
             const { communityId } = self.$route.params
             console.log('communityId', communityId)
             //
-            if (communityId === 'ca7cfa129f1d7ce4a04aebeb51e2a1aa' || communityId === '0cf00b660cd74b1204164239af0f765a') {
-              self.$store.dispatch('show_qr')
-            } else {
-              location.reload()
+            switch (communityId) {
+              case 'ca7cfa129f1d7ce4a04aebeb51e2a1aa':
+                this.$store.dispatch('show_qr', {type: 1})
+                break
+              case '0cf00b660cd74b1204164239af0f765a':
+                this.$store.dispatch('show_qr', {type: 1})
+                break
+              case '64074da38681f864082708b9be959e08':
+                this.$store.dispatch('show_qr', {type: 2})
+                break
+              default:
+                location.reload()
+                break
             }
 //            self.$store.dispatch('show_qr')
 //            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
@@ -355,6 +365,16 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
+
+      switch (communityId) {
+        case '64074da38681f864082708b9be959e08':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        default:
+          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
+          break
+      }
+
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
 

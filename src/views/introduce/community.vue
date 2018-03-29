@@ -102,7 +102,7 @@
       <div class="sell-container">
         <i class="u-icon-close icon-close" @click="showSell = false"></i>
         <div class="Qr">
-          <img src="./../../assets/page/wx-qrcode.png">
+          <img :src="qrSrc">
         </div>
         <p>长按识别二维码，关注公众号即可获取</p>
         <p>{{pageInfo.isSell && pageInfo.isSell === 2 ? '专属海报，邀请好友一起学习' : '专属海报及查询实时奖励'}}</p>
@@ -171,6 +171,7 @@
         }
       ]
     }
+    qrSrc = ''
 
     created () {
       if (this.$route.query.type !== undefined) {
@@ -209,6 +210,16 @@
     }
     async pageInit () {
       const { communityId } = this.$route.params
+
+      switch (communityId) {
+        case '64074da38681f864082708b9be959e08':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        default:
+          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
+          break
+      }
+
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = await this.getCommunity(communityId)
       this.pageInfo = res
