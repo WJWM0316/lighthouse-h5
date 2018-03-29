@@ -300,13 +300,16 @@
             //
             switch (communityId) {
               case 'ca7cfa129f1d7ce4a04aebeb51e2a1aa':
-                this.$store.dispatch('show_qr', {type: 1})
+                self.$store.dispatch('show_qr', {type: 1})
                 break
-              case '0cf00b660cd74b1204164239af0f765a':
-                this.$store.dispatch('show_qr', {type: 1})
+              case '0cf00b660cd74b1204164239af0f765a': // 测试
+                self.$store.dispatch('show_qr', {type: 1})
                 break
               case '64074da38681f864082708b9be959e08':
-                this.$store.dispatch('show_qr', {type: 2})
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '67917ba04abd74c3247245576b1168b0': // 测试
+                self.$store.dispatch('show_qr', {type: 2})
                 break
               default:
                 location.reload()
@@ -506,6 +509,7 @@
         border-radius: 16px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
         overflow: hidden;
+        z-index: 99;
 
         &.fixed {
           position: fixed;
