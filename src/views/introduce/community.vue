@@ -17,16 +17,24 @@
             介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />
           </router-link>
         </community-card>
-        <div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">
-          <span>邀请函</span>
+
+        <div class="share-group">
+          <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
+          <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button>
+          <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">分享赚¥{{pageInfo.sellPrice}}</button>
+          <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
         </div>
-        <div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">
-          <span>分享赚¥{{pageInfo.sellPrice}}</span>
-        </div>
-        <div class="share-btn" v-else @click="showShare = true">
-          <img class="share-icon" src="./../../assets/icon/icon_share.png" />
-          <span>分享</span>
-        </div>
+
+        <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
+          <!--<span>邀请函</span>-->
+        <!--</div>-->
+        <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
+          <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
+        <!--</div>-->
+        <!--<div class="share-btn" v-else @click="showShare = true">-->
+          <!--<img class="share-icon" src="./../../assets/icon/icon_share.png" />-->
+          <!--<span>分享</span>-->
+        <!--</div>-->
       </div>
 
       <!-- container -->
@@ -257,6 +265,10 @@
       this.displaySuspensionInput = val
     }
 
+    toHome () {
+      this.$router.replace(`/index`)
+    }
+
     /**
      * 操作事件
      * @param e :{eventType, itemIndex} eventType: 事件名称 itemIndex: 触发对象下标
@@ -461,7 +473,9 @@
   }
 </script>
 <style lang="less" scoped type="text/less">
+  @import "../../styles/variables";
   @import "../../styles/mixins";
+
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
@@ -524,6 +538,62 @@
         font-size: 13px;
         color: #354048;
         z-index: 99;
+      }
+
+      .share-group {
+        position: absolute;
+        right: 10px;
+        top: 15px;
+        background: #fff;
+        line-height: 1;
+        font-size: 0;
+        border-radius: 16px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+        overflow: hidden;
+
+        &.fixed {
+          position: fixed;
+        }
+
+        .u-btn {
+          position: relative;
+          line-height: 18px;
+          font-size: 13px;
+          color: @font-color-default;
+
+          &:first-child {
+            padding: 8px 12px 6px 15px;
+          }
+
+          &:last-child {
+            padding: 8px 15px 6px 12px;
+          }
+
+          &.home,
+          &.share {
+            background: #fff;
+
+            &:active {
+              background: #f1f1f1;
+            }
+          }
+
+          &.share:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            right: 100%;
+            top: 8px;
+            background: #d8d8d8;
+            width: 1px; /* no */
+            height: 18px;
+          }
+
+          &.invite,
+          &.money {
+            background: #ffe266;
+          }
+        }
       }
 
       .community-item {
