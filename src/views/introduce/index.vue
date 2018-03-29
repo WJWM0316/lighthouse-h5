@@ -494,6 +494,7 @@
         .u-btn {
           position: relative;
           line-height: 18px;
+          min-height: 32px;
           font-size: 13px;
           color: @font-color-default;
 
@@ -508,6 +509,8 @@
           &.home,
           &.share {
             background: #fff;
+            line-height: 1;
+            font-size: 0;
 
             &:active {
               background: #f1f1f1;
