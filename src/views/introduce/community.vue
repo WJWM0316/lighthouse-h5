@@ -561,6 +561,7 @@
         border-radius: 16px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
         overflow: hidden;
+        z-index: 99;
 
         &.fixed {
           position: fixed;
