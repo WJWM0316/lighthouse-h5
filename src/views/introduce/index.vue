@@ -589,7 +589,7 @@
           font-size: 15px;
           word-wrap: break-word;
           width: 100%;
-          box-sizing: border-box;
+          /*box-sizing: border-box;*/
 
           & img {
             max-width: 100% !important;
