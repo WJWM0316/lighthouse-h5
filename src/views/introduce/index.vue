@@ -568,14 +568,6 @@
 
     & .module {
 
-      &.h5-code {
-        display: block;
-        max-width: 100%;
-        line-height: 1.5;
-        font-size: 16px;
-        overflow: hidden;
-      }
-
       .module-title {
         margin: 0 15px;
         font-size: 18px;
