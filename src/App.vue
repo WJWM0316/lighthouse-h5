@@ -16,7 +16,7 @@
         <i class="u-icon-close icon-close" @click="closeQrCode(1)"></i>
         <div class="title">支付成功</div>
         <div class="content">长按识别二维码，添加课程小助手拉您加入课程交流群</div>
-        <img class="qrcode" src="assets/page/qr_kf_1.jpg">
+        <img class="qrcode" src="./assets/page/qr_kf_1.jpg">
       </div>
     </div>
     <div class="home-mask" v-if="isShowQrcodes2">
@@ -24,7 +24,7 @@
         <i class="u-icon-close icon-close" @click="closeQrCode(2)"></i>
         <div class="title">支付成功</div>
         <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="assets/page/qr_kf_2.png">
+        <img class="qrcode" src="./assets/page/qr_kf_2.png">
       </div>
     </div>
   </div>
