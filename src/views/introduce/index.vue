@@ -562,7 +562,8 @@
 
     & .container {
       flex: 1 1 auto;
-      overflow: auto;
+      overflow: hidden;
+      overflow-y: scroll;
       -webkit-overflow-scrolling: touch;  /* 针对 overflow: scroll; 在ios中卡顿问题 */
     }
 
@@ -588,8 +589,8 @@
           padding: 0 15px;
           font-size: 15px;
           word-wrap: break-word;
-          /*width: 100%;*/
-          overflow-x: hidden;
+          width: 100%;
+          box-sizing: border-box;
 
           & img {
             max-width: 100% !important;
