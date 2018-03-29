@@ -588,8 +588,8 @@
           padding: 0 15px;
           font-size: 15px;
           word-wrap: break-word;
-          width: 100%;
-          /*box-sizing: border-box;*/
+          /*width: 100%;*/
+          overflow-x: hidden;
 
           & img {
             max-width: 100% !important;
