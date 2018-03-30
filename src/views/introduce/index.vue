@@ -382,6 +382,9 @@
         case '64074da38681f864082708b9be959e08':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
+        case '25c2ff088da3f757b685a318ab050b5a':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
         default:
           this.qrSrc = require('@/assets/page/qr_gzh_1.png')
           break
