@@ -339,6 +339,7 @@
           this.$vux.toast.text(e.message, 'bottom')
         }
       }
+      const self = this
       await this.pageInit().then(() => {
         const {
           title,
@@ -348,10 +349,10 @@
           sharePoint, // 分享摘要
           shareIntroduction,  // 分享标题
           communityId
-        } = this.pageInfo
+        } = self.pageInfo
         // 是否已入社
         if (this.completelyShow && this.isJoinAgency) {
-          this.$router.replace(`/introduce/${communityId}/community`)
+          self.$router.replace(`/introduce/${communityId}/community`)
           return
         }
 
@@ -359,7 +360,7 @@
         const str = realName ? realName + (career ? '|' + career : '') : ''
         console.log('location.href', location.href)
         // 页面分享信息
-        this.wechatShare({
+        self.wechatShare({
           'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
           'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
           'desc': sharePoint || simpleIntro,
