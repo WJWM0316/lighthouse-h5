@@ -1,9 +1,9 @@
 <template>
 
   <!-- 大咖介绍页 -->
-  <div ref="body" class="p-body big-shot-introduce">
+  <div ref="body" class="big-shot-introduce">
 
-    <div class="container" ref="big-shot-introduce-container">
+    <div class="container" ref="big-shot-introduce-container" :class="{ 'no-pdb': !completelyShow }">
       <div class="header">
         <community-card ref="headCard" :community="pageInfo" :type="2" />
 
@@ -431,9 +431,9 @@
     }
 
     mounted () {
-      this.$refs['body'].addEventListener('touchmove', e => {
-        e.stopPropagation()
-      })
+      // this.$refs['body'].addEventListener('touchmove', e => {
+      //   e.stopPropagation()
+      // })
     }
   }
 </script>
@@ -442,12 +442,17 @@
   @import "../../styles/mixins";
 
   .big-shot-introduce {
-    /*padding-bottom: 55px;*/
+    min-height: 100%;
+    padding-bottom: 55px;
     /*display: flex;*/
     /*flex-flow: column nowrap;*/
-    display: flex;
-    flex-flow: column nowrap;
-    overflow: hidden;
+    /*display: flex;*/
+    /*flex-flow: column nowrap;*/
+    /*overflow: hidden;*/
+
+    &.no-pdb {
+      padding-bottom: 0;
+    }
 
     & .header {
       position: relative;
@@ -505,10 +510,11 @@
         position: absolute;
         right: 10px;
         top: 15px;
+        background: #fff;
         line-height: 1;
-        font-size: 0;
         border-radius: 16px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+        font-size: 0;
         overflow: hidden;
         z-index: 99;
 
@@ -533,12 +539,12 @@
 
           &.home,
           &.share {
-            background: #fff;
+            background-color: #fff;
             line-height: 1;
             font-size: 0;
 
             &:active {
-              background: #f1f1f1;
+              background-color: #f1f1f1;
             }
           }
 
@@ -555,17 +561,17 @@
 
           &.invite,
           &.money {
-            background: #ffe266;
+            background-color: #ffe266;
           }
         }
       }
     }
 
     & .container {
-      flex: 1 1 auto;
-      overflow: hidden;
-      overflow-y: scroll;
-      -webkit-overflow-scrolling: touch;  /* 针对 overflow: scroll; 在ios中卡顿问题 */
+      /*flex: 1 1 auto;*/
+      /*overflow: hidden;*/
+      /*overflow-y: scroll;*/
+      /*-webkit-overflow-scrolling: touch;  !* 针对 overflow: scroll; 在ios中卡顿问题 *!*/
     }
 
     & .module {
@@ -614,13 +620,13 @@
     }
 
     & .footer {
-      flex: 0 0 auto;
-      /*position: fixed;*/
-      /*left: 0;*/
-      /*bottom: 0;*/
+      /*flex: 0 0 auto;*/
+      position: fixed;
+      left: 0;
+      bottom: 0;
       width: 100%;
       height: 54px;
-      position: relative;
+      /*position: relative;*/
       background: #f4f4f4;
       display: flex;
       justify-content: center;
