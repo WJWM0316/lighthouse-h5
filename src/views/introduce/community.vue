@@ -18,7 +18,7 @@
           </router-link>
         </community-card>
 
-        <div class="share-group fixed">
+        <div class="share-group">
           <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
           <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button>
           <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">分享赚¥{{pageInfo.sellPrice}}</button>
