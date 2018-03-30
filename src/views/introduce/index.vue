@@ -302,7 +302,7 @@
               case 'ca7cfa129f1d7ce4a04aebeb51e2a1aa':
                 self.$store.dispatch('show_qr', {type: 1})
                 break
-              case '0cf00b660cd74b1204164239af0f765a': // 测试
+              case '25c2ff088da3f757b685a318ab050b5a': // 测试
                 self.$store.dispatch('show_qr', {type: 1})
                 break
               case '64074da38681f864082708b9be959e08':
