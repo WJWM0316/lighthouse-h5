@@ -1,8 +1,8 @@
 <template>
   <div class="p-body p-classmates-list">
     <div class="toggle-tab fs15">
-      <button type="button" class="item u-btn" :class="{ 'z-active': type === 1 }" @click="handleSwitchTab(1)"><span>付费入社</span></button>
-      <button type="button" class="item u-btn" :class="{ 'z-active': type === 0 }" @click="handleSwitchTab(0)"><span>免费入社</span></button>
+      <button type="button" class="item u-btn" :class="{ 'z-active': type === 0 }" @click="handleSwitchTab(0)"><span>付费入社</span></button>
+      <button type="button" class="item u-btn" :class="{ 'z-active': type === 1 }" @click="handleSwitchTab(1)"><span>免费入社</span></button>
     </div>
     <div class="classmates" v-if="list.length > 0">
       <scroller :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end" :show-bottom-loading="!pagination.end">
@@ -59,17 +59,12 @@
   export default class ExchangeListIndex extends Vue {
     iconSrc = 'http://cdnstatic.zike.com/Uploads/static/beacon/404.png'
     communityId = '' // 社区id
-    type = 1 // 学员类型：0=>免费入社 1=>付费入社
+    type = 0 // 学员类型：0=>付费入社 1=>免费入社
     list = [] // 当前列表
 
     created () {
       const { type, communityId } = this.$route.params
-      const typeTemp = parseInt(type)
-      if (isNaN(typeTemp)) {
-        this.type = 1
-      } else {
-        this.type = typeTemp
-      }
+      this.type = parseInt(type) || 0
       this.communityId = communityId
       this.init()
     }
