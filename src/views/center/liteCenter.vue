@@ -16,7 +16,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import Scroller from '@/components/scroller'
-import MyCommunityItem from '@/components/MyCommunityItem'
+import MyCommunityItem from '@/components/myCommunityItem'
 import ListMixin from '@/mixins/list'
 import { getMyCommunityListApi } from '@/api/pages/center'
 
