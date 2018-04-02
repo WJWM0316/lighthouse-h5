@@ -1,21 +1,29 @@
 <template>
 
   <!-- 大咖介绍页 -->
-  <div class="p-body big-shot-introduce">
+  <div ref="body" class="big-shot-introduce">
 
-    <div class="container" ref="big-shot-introduce-container">
+    <div class="container" ref="big-shot-introduce-container" :class="{ 'no-pdb': !completelyShow }">
       <div class="header">
         <community-card ref="headCard" :community="pageInfo" :type="2" />
-        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">
-          <span>邀请函</span>
+
+        <div class="share-group fixed">
+          <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
+          <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button>
+          <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">分享赚¥{{pageInfo.sellPrice}}</button>
+          <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
         </div>
-        <div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">
-          <span>分享赚¥{{pageInfo.sellPrice}}</span>
-        </div>
-        <div class="share-btn" v-else @click="showShare = true">
-          <img class="share-icon" src="./../../assets/icon/icon_share.png" />
-          <span>分享</span>
-        </div>
+
+        <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
+          <!--<span>邀请函</span>-->
+        <!--</div>-->
+        <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
+          <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
+        <!--</div>-->
+        <!--<div class="share-btn" v-else @click="showShare = true">-->
+          <!--<img class="share-icon" src="./../../assets/icon/icon_share.png" />-->
+          <!--<span>分享</span>-->
+        <!--</div>-->
       </div>
 
       <div class="module">
@@ -64,11 +72,11 @@
       </div>
     </div>
 
-    <div class="footer" v-if="completelyShow">
-      <div class="to-home" @click="toHome">
-        <img src="./../../assets/icon/icon_home.png" class="icon-home" />
-        <span>首页</span>
-      </div>
+    <div class="footer" v-show="completelyShow">
+      <!--<div class="to-home" @click="toHome">-->
+        <!--<img src="./../../assets/icon/icon_home.png" class="icon-home" />-->
+        <!--<span>首页</span>-->
+      <!--</div>-->
       <div class="time-clock" v-if="isJoinAgency">
         <p>开课倒计时</p>
         <p>{{pageInfo.duration}}</p>
@@ -95,10 +103,10 @@
       <div class="sell-container">
         <i class="u-icon-close icon-close" @click="showSell = false"></i>
         <div class="Qr">
-          <img src="./../../assets/page/wx-qrcode.png">
+          <img :src="qrSrc">
         </div>
         <p>长按识别二维码，关注公众号即可获取</p>
-        <p>专属海报及查询实时奖励</p>
+        <p>{{pageInfo.isSell && pageInfo.isSell === 2 ? '专属海报，邀请好友一起学习' : '专属海报及查询实时奖励'}}</p>
       </div>
     </div>
   </div>
@@ -114,7 +122,6 @@
   import {payApi} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
-  import flexible from '@/util/flexible'
 
   @Component({
     name: 'big-shot-introduce',
@@ -201,6 +208,8 @@
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
     el = ''
+    qrSrc = ''
+
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
       const reg = /(\:|: )+(\d)+(px)/gi
@@ -289,10 +298,22 @@
             const { communityId } = self.$route.params
             console.log('communityId', communityId)
             //
-            if (communityId === 'ca7cfa129f1d7ce4a04aebeb51e2a1aa') {
-              self.$store.dispatch('show_qr')
-            } else {
-              location.reload()
+            switch (communityId) {
+              case 'ca7cfa129f1d7ce4a04aebeb51e2a1aa':
+                self.$store.dispatch('show_qr', {type: 1})
+                break
+              case '25c2ff088da3f757b685a318ab050b5a': // 测试
+                self.$store.dispatch('show_qr', {type: 1})
+                break
+              case '64074da38681f864082708b9be959e08':
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '67917ba04abd74c3247245576b1168b0': // 测试
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              default:
+                location.reload()
+                break
             }
 //            self.$store.dispatch('show_qr')
 //            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
@@ -309,14 +330,16 @@
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
       }
-      const { code=''} = this.$route.query
+      const { code='' } = this.$route.query
+      const { communityId } = this.$route.params
       if (code) {
         try {
-          await countCodeApi({code: code})
+          await countCodeApi({ code, communityId })
         } catch (e) {
           this.$vux.toast.text(e.message, 'bottom')
         }
       }
+      const self = this
       await this.pageInit().then(() => {
         const {
           title,
@@ -326,10 +349,10 @@
           sharePoint, // 分享摘要
           shareIntroduction,  // 分享标题
           communityId
-        } = this.pageInfo
+        } = self.pageInfo
         // 是否已入社
         if (this.completelyShow && this.isJoinAgency) {
-          this.$router.replace(`/introduce/${communityId}/community`)
+          self.$router.replace(`/introduce/${communityId}/community`)
           return
         }
 
@@ -337,7 +360,7 @@
         const str = realName ? realName + (career ? '|' + career : '') : ''
         console.log('location.href', location.href)
         // 页面分享信息
-        this.wechatShare({
+        self.wechatShare({
           'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
           'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
           'desc': sharePoint || simpleIntro,
@@ -354,6 +377,19 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
+
+      switch (communityId) {
+        case '64074da38681f864082708b9be959e08':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case '25c2ff088da3f757b685a318ab050b5a':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        default:
+          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
+          break
+      }
+
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
 
@@ -396,20 +432,36 @@
         }
       })
     }
+
+    mounted () {
+      // this.$refs['body'].addEventListener('touchmove', e => {
+      //   e.stopPropagation()
+      // })
+    }
   }
 </script>
 <style lang="less" scoped type="text/less">
+  @import "../../styles/variables";
+  @import "../../styles/mixins";
+
   .big-shot-introduce {
-    height: 100%;
-    display: flex;
-    flex-flow: column nowrap;
-    overflow: hidden;
+    min-height: 100%;
+    padding-bottom: 55px;
+    /*display: flex;*/
+    /*flex-flow: column nowrap;*/
+    /*display: flex;*/
+    /*flex-flow: column nowrap;*/
+    /*overflow: hidden;*/
+
+    &.no-pdb {
+      padding-bottom: 0;
+    }
 
     & .header {
       position: relative;
       margin-bottom: 20px;
 
-      & .share-btn, & .share-btn-2 {
+      & .share-btn, & .share-btn-2, & .share-btn-3 {
         position: absolute;
         top: 15px;
         right: 0;
@@ -445,22 +497,87 @@
         color: #354048;
         z-index: 99;
       }
+
+      & .share-btn-3 {
+        position: fixed;
+        padding-left: 13px;
+        padding-right: 7px;
+        background-color: #ffe266;
+        width: inherit;
+        font-size: 13px;
+        color: #354048;
+        z-index: 99;
+      }
+
+      .share-group {
+        position: absolute;
+        right: 10px;
+        top: 15px;
+        background: #fff;
+        line-height: 1;
+        border-radius: 16px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+        font-size: 0;
+        overflow: hidden;
+        z-index: 99;
+
+        &.fixed {
+          position: fixed;
+        }
+
+        .u-btn {
+          position: relative;
+          line-height: 18px;
+          min-height: 32px;
+          font-size: 13px;
+          color: @font-color-default;
+
+          &:first-child {
+            padding: 8px 12px 6px 15px;
+          }
+
+          &:last-child {
+            padding: 8px 15px 6px 12px;
+          }
+
+          &.home,
+          &.share {
+            background-color: #fff;
+            line-height: 1;
+            font-size: 0;
+
+            &:active {
+              background-color: #f1f1f1;
+            }
+          }
+
+          &.share:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            right: 100%;
+            top: 8px;
+            background: #d8d8d8;
+            width: 1px; /* no */
+            height: 18px;
+          }
+
+          &.invite,
+          &.money {
+            background-color: #ffe266;
+          }
+        }
+      }
     }
 
     & .container {
-      flex: 1 1 auto;
-      overflow: scroll;
+      /*flex: 1 1 auto;*/
+      /*overflow: hidden;*/
+      /*overflow-y: scroll;*/
+      /*-webkit-overflow-scrolling: touch;  !* 针对 overflow: scroll; 在ios中卡顿问题 *!*/
     }
 
     & .module {
-
-      &.h5-code {
-        display: block;
-        max-width: 100%;
-        line-height: 1.5;
-        font-size: 16px;
-        overflow: hidden;
-      }
 
       .module-title {
         margin: 0 15px;
@@ -506,9 +623,13 @@
     }
 
     & .footer {
-      flex: 0 0 auto;
+      /*flex: 0 0 auto;*/
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
       height: 54px;
-      position: relative;
+      /*position: relative;*/
       background: #f4f4f4;
       display: flex;
       justify-content: center;

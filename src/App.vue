@@ -13,10 +13,18 @@
     </tabbar>
     <div class="home-mask" v-if="isShowQrcodes">
       <div class="qr-container">
-        <i class="u-icon-close icon-close" @click="closeQrCode"></i>
+        <i class="u-icon-close icon-close" @click="closeQrCode(1)"></i>
         <div class="title">支付成功</div>
         <div class="content">长按识别二维码，添加课程小助手拉您加入课程交流群</div>
-        <img class="qrcode" src="./assets/page/group-qrcode.jpg">
+        <img class="qrcode" src="./assets/page/qr_kf_1.jpg">
+      </div>
+    </div>
+    <div class="home-mask" v-if="isShowQrcodes2">
+      <div class="qr-container">
+        <i class="u-icon-close icon-close" @click="closeQrCode(2)"></i>
+        <div class="title">支付成功</div>
+        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
+        <img class="qrcode" src="./assets/page/qr_kf_2.png">
       </div>
     </div>
   </div>
@@ -47,6 +55,9 @@ import WechatMixin from '@/mixins/wechat'
     isShowQrcodes: function () { // 公众号二维码是否展示
       return this.$store.getters.isShowQrcode
     },
+    isShowQrcodes2: function () { // 公众号二维码是否展示
+      return this.$store.getters.isShowQrcode2
+    }
   },
   watch: {
     '$route': {
@@ -104,8 +115,8 @@ export default class App extends Vue {
   isSelected (src) {
     return this.$route.path === src
   }
-  closeQrCode () {
-    this.$store.dispatch('hide_qr')
+  closeQrCode (type) {
+    this.$store.dispatch('hide_qr', {type})
     location.reload()
   }
   created () {
@@ -164,6 +175,7 @@ export default class App extends Vue {
     color: #666666;
     font-size: 15px;
     margin-top: 8px;
+    padding: 0 10px;
   }
   .qrcode{
     margin-top: 12px;

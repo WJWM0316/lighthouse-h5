@@ -5,8 +5,8 @@
 
     <!-- tab -->
     <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed': true}" v-if="isCommunityTitleFixed">
-      <span @click="toggle(1)">导师内容</span>
-      <span @click="toggle(0)">学员交流</span>
+      <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
+      <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
     </div>
 
     <scroll :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
@@ -17,16 +17,24 @@
             介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />
           </router-link>
         </community-card>
-        <div class="share-btn-2" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">
-          <span>邀请函</span>
+
+        <div class="share-group">
+          <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
+          <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button>
+          <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">分享赚¥{{pageInfo.sellPrice}}</button>
+          <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
         </div>
-        <div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">
-          <span>分享赚¥{{pageInfo.sellPrice}}</span>
-        </div>
-        <div class="share-btn" v-else @click="showShare = true">
-          <img class="share-icon" src="./../../assets/icon/icon_share.png" />
-          <span>分享</span>
-        </div>
+
+        <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
+          <!--<span>邀请函</span>-->
+        <!--</div>-->
+        <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
+          <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
+        <!--</div>-->
+        <!--<div class="share-btn" v-else @click="showShare = true">-->
+          <!--<img class="share-icon" src="./../../assets/icon/icon_share.png" />-->
+          <!--<span>分享</span>-->
+        <!--</div>-->
       </div>
 
       <!-- container -->
@@ -49,8 +57,8 @@
         <!-- 主体内容块 -->
         <div class="fixed-box" ref="community-title">
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
-            <span @click="toggle(1)">导师内容</span>
-            <span @click="toggle(0)">学员交流</span>
+            <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
+            <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
           </div>
         </div>
         <div class="big-shot-community-content">
@@ -102,10 +110,10 @@
       <div class="sell-container">
         <i class="u-icon-close icon-close" @click="showSell = false"></i>
         <div class="Qr">
-          <img src="./../../assets/page/wx-qrcode.png">
+          <img :src="qrSrc">
         </div>
-        <p>关注公众号可获取专属海报</p>
-        <p>及查询奖励</p>
+        <p>长按识别二维码，关注公众号即可获取</p>
+        <p>{{pageInfo.isSell && pageInfo.isSell === 2 ? '专属海报，邀请好友一起学习' : '专属海报及查询实时奖励'}}</p>
       </div>
     </div>
   </div>
@@ -171,6 +179,7 @@
         }
       ]
     }
+    qrSrc = ''
 
     created () {
       if (this.$route.query.type !== undefined) {
@@ -199,7 +208,7 @@
           'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
           'desc': sharePoint || simpleIntro,
           'imgUrl': shareImg,
-          'link': location.origin + `/beaconweb/#/introduce/${communityId}/community`
+          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
       })
     }
@@ -209,6 +218,16 @@
     }
     async pageInit () {
       const { communityId } = this.$route.params
+
+      switch (communityId) {
+        case '64074da38681f864082708b9be959e08':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        default:
+          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
+          break
+      }
+
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = await this.getCommunity(communityId)
       this.pageInfo = res
@@ -255,6 +274,10 @@
     }
     suspensionInputState (val) {
       this.displaySuspensionInput = val
+    }
+
+    toHome () {
+      this.$router.replace(`/index`)
     }
 
     /**
@@ -461,7 +484,9 @@
   }
 </script>
 <style lang="less" scoped type="text/less">
+  @import "../../styles/variables";
   @import "../../styles/mixins";
+
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
@@ -478,7 +503,7 @@
 
       }
 
-      & .share-btn, & .share-btn-2 {
+      & .share-btn, & .share-btn-2, & .share-btn-3 {
         position: absolute;
         top: 15px;
         right: 0;
@@ -513,6 +538,74 @@
         font-size: 13px;
         color: #354048;
         z-index: 99;
+      }
+
+      & .share-btn-3 {
+        position: fixed;
+        padding-left: 13px;
+        padding-right: 7px;
+        background-color: #ffe266;
+        width: inherit;
+        font-size: 13px;
+        color: #354048;
+        z-index: 99;
+      }
+
+      .share-group {
+        position: absolute;
+        right: 10px;
+        top: 15px;
+        background: #fff;
+        line-height: 1;
+        font-size: 0;
+        border-radius: 16px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+        overflow: hidden;
+        z-index: 99;
+
+        &.fixed {
+          position: fixed;
+        }
+
+        .u-btn {
+          position: relative;
+          line-height: 18px;
+          font-size: 13px;
+          color: @font-color-default;
+
+          &:first-child {
+            padding: 8px 12px 6px 15px;
+          }
+
+          &:last-child {
+            padding: 8px 15px 6px 12px;
+          }
+
+          &.home,
+          &.share {
+            background: #fff;
+
+            &:active {
+              background: #f1f1f1;
+            }
+          }
+
+          &.share:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            right: 100%;
+            top: 8px;
+            background: #d8d8d8;
+            width: 1px; /* no */
+            height: 18px;
+          }
+
+          &.invite,
+          &.money {
+            background: #ffe266;
+          }
+        }
       }
 
       .community-item {
@@ -553,18 +646,29 @@
       align-items: center;
       color: #929292;
 
+      .item {
+        display: block;
+        flex: 1 1 auto;
+        text-align: center;
+
+        &:active {
+          background: #f1f1f1;
+        }
+      }
+
       & span {
+        display: inline-block;
         height: 40px;
         line-height: 40px;
-      }
-      &.circles span:first-of-type,
-      &.forum span:last-of-type {
         color: #354048;
+      }
+      &.circles .item:first-of-type span,
+      &.forum .item:last-of-type span {
         font-weight: 500;
         position: relative;
       }
-      &.circles span:first-of-type:after,
-      &.forum span:last-of-type:after {
+      &.circles .item:first-of-type span:after,
+      &.forum .item:last-of-type span:after {
         content: '';
         position: absolute;
         left: 0;

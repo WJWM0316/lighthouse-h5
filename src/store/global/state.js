@@ -3,6 +3,7 @@ export default {
   loaded: false,                    // 是否已经加载完成
   nav_show: true,                   // TabBar是否展示
   qr_show: false,                   // TabBar是否展示
+  qr_show2: false,                  // TabBar是否展示
   viewScrollTop: 0,                 // 记录页面滚动高度
   musicStripBottomHeight: 88,       // 音乐悬浮条距离底部高度
   musicStripIsShow: true,           // 音乐悬浮条是否展示

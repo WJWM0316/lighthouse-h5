@@ -130,7 +130,15 @@
         console.log('this.$route.query.redirect', this.$route.query.redirect)
         window.location.href = this.$route.query.redirect
       } catch (e) {
-        this.$vux.toast.text(e.message, 'bottom')
+        if (e.statusCode === 434) {
+          this.$vux.alert.show({
+            title: '手机号已存在',
+            content: '请更换其他绑定手机，或联系客服处理\n（客服微信：zike02）',
+            'button-text': '好的'
+          })
+        } else {
+          this.$vux.toast.text(e.message, 'bottom')
+        }
       }
     }
   }

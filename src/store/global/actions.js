@@ -35,9 +35,9 @@ export default {
     })
   },
 
-  show_qr: ({commit}) => {
+  show_qr: ({commit}, {type}) => {
     return new Promise((resolve, reject) => {
-      commit(types.SHOW_QR)
+      commit(types.SHOW_QR, {type})
       resolve()
     })
   },
