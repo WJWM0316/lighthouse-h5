@@ -22,7 +22,7 @@
                 </p>
               </div>
             </div>
-            <p class="addon" v-if="item.num">{{item.type === 1 ? `￥${item.num}` : `${item.num}个Call`}}</p>
+            <p class="addon" v-if="item.num">{{item.type === 0 ? `￥${item.num}` : `${item.num}个Call`}}</p>
           </li>
         </ul>
         <div class="bottom" v-show="pagination.end">没有更多学员了，<a class="share" @click="handleToDetail">去分享吧</a></div>
