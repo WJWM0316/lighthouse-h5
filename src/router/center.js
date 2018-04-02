@@ -26,7 +26,7 @@ const routers = [
     meta: {navHide: true}
   },
   { // 学员列表
-    path: '/center/classmates',
+    path: '/center/classmates/:communityId/:type?',
     name: 'center-classmates',
     component: resolve => require(['@/views/center/classmatesList'], resolve),
     meta: {navHide: true}

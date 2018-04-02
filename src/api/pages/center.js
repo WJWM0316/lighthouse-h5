@@ -64,3 +64,13 @@ export const getMyCommunityImageApi = data => request({
   url: '/wap/my/myCommunityImages',
   data
 })
+
+/**
+ * 获取我的灯塔的同学列表
+ * @param data
+ * @return {*}
+ */
+export const getMyCommunityClassmatesApi = data => request({
+  url: '/wap/my/myCommunityClassmate',
+  data
+})

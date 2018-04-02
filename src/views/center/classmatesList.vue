@@ -1,85 +1,94 @@
 <template>
   <div class="p-body p-classmates-list">
-    <div class="toggle-tab fs15" :class="typeClassList[applyType -1]">
-      <div @click="toggle(1)">付费入社</div>
-      <div @click="toggle(2)">免费入社</div>
+    <div class="toggle-tab fs15">
+      <button type="button" class="item u-btn" :class="{ 'z-active': type === 1 }" @click="handleSwitchTab(1)"><span>付费入社</span></button>
+      <button type="button" class="item u-btn" :class="{ 'z-active': type === 0 }" @click="handleSwitchTab(0)"><span>免费入社</span></button>
     </div>
-    <div class="apply-list" v-if="dataList.length > 0">
+    <div class="classmates" v-if="list.length > 0">
       <scroller :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end" :show-bottom-loading="!pagination.end">
-        <div v-for='item in dataList'>
-          <classmate-item class='community-item'
-                          :item.sync='item'
-                          @tap-one='goUserDetail'></classmate-item>
-        </div>
-        <div class="bottom-content">没有更多学员了，<span class="bottom-share" @click="goDetail">去分享吧</span></div>
+        <ul class="list">
+          <li v-for='item in list' @click.prevent.stop="handleUserDetail({ item })">
+            <div class="head">
+              <image-item class="image-item" :src="item.avatar" mode="horizontal" :round="true" />
+              <i class="addon-icon" :class="[`u-icon-${item.gender === 1 ? 'boy' : 'girl'}`]" v-if="item.gender"></i>
+            </div>
+            <div class="info">
+              <div class="wrapper">
+                <h3 class="name" v-text="item.realName"></h3>
+                <p class="desc" v-if="item.workTimeName || item.career || item.office">
+                  <span v-if="item.workTimeName" v-text="item.workTimeName"></span>
+                  <span v-if="item.career" v-text="item.career"></span>
+                  <span v-if="item.office" v-text="item.office"></span>
+                </p>
+              </div>
+            </div>
+            <p class="addon" v-if="item.num">{{item.type === 1 ? `￥${item.num}` : `${item.num}个Call`}}</p>
+          </li>
+        </ul>
+        <div class="bottom" v-show="pagination.end">没有更多学员了，<a class="share" @click="handleToDetail">去分享吧</a></div>
       </scroller>
     </div>
     <div class="p-message" v-else>
       <div class="icon-container">
         <img class="icon" :src="iconSrc">
       </div>
-      <div class="text">还没有申请哦～</div>
+      <div class="text">暂时没有相关学员哦～</div>
+      <div class="btn-container">
+        <button type="button" class="share u-btn" @click="handleToDetail">去分享</button>
+      </div>
     </div>
   </div>
 </template>
+
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import classmateItem from '@/components/classmateItem/classmateItem'
+  import ClassmateItem from '@/components/classmateItem/classmateItem'
   import Scroller from '@/components/scroller'
-  import { XInput, XButton } from 'vux'
   import ListMixin from '@/mixins/list'
-  import { applyListApi, handleDetailsApi } from '../../api/pages/exchange.js'
+  import { getMyCommunityClassmatesApi } from '@/api/pages/center'
 
   @Component({
     name: 'login-index',
     components: {
-      XInput,
-      XButton,
-      classmateItem,
+      ClassmateItem,
       Scroller
     },
     mixins: [ListMixin],
   })
   export default class ExchangeListIndex extends Vue {
-    typeClassList = ['one', 'two']
-    dataList = []
     iconSrc = 'http://cdnstatic.zike.com/Uploads/static/beacon/404.png'
-    goApplyDetail (id, userId) {
-      this.$router.push({name: 'exchange-detail', params: {id, userId, type: this.applyType}})
-    }
-    goUserDetail (userId, LighthouseId) {
-      console.log('跳去用户详情，暂时不要的')
-    }
-    goCommunityDetail (LighthouseId) {
-      console.log('跳去社区详情，暂时不要的')
-    }
-    get applyType () {
-      const iniType = parseInt(this.$route.query.type)
-      console.log('iniType', iniType)
-      return iniType || 1 // 类型：1我收到的申请，2我发出的申请
-    }
-    async handleDetails (id, LighthouseId) { // 直接同意申请
-      console.log('LighthouseId', LighthouseId)
-      try {
-        await handleDetailsApi({id, LighthouseId, handleStatus: 1, refuseReason: this.refuseReason})
-        this.$vux.toast.text('已同意申请', 'bottom')
-        this.pagination.end = false
-        this.getList()
-      } catch (e) {
-        this.$vux.toast.text(e.message, 'bottom')
+    communityId = '' // 社区id
+    type = 1 // 学员类型：0=>免费入社 1=>付费入社
+    list = [] // 当前列表
+
+    created () {
+      const { type, communityId } = this.$route.params
+      const typeTemp = parseInt(type)
+      if (isNaN(typeTemp)) {
+        this.type = 1
+      } else {
+        this.type = typeTemp
       }
-      console.log('直接同意申请', id, LighthouseId)
+      this.communityId = communityId
+      this.init()
     }
-    goDetail () {
-      this.$router.push({name: 'community', params: {communityId: '6e0804d662ce053f2070fee37fcf1907'}, query: {...this.$route.query, showShare: true}})
-    }
-    toggle (type) {
-      this.dataList = []
+
+    /**
+     * 初始化
+     */
+    init () {
+      this.pagination.page = 1
       this.pagination.end = false
-      this.$router.replace(`/exchange/list?type=${type}`)
-      this.getList({ page: 1 })
+      this.getList()
     }
+
+    /**
+     * 获取数据列表
+     * @param page
+     * @param pageSize
+     * @return {Promise<void>}
+     */
     async getList ({ page, pageSize } = {}) { // 请求列表
       if (this.pagination.end || this.pagination.busy) {
         // 防止多次加载
@@ -87,15 +96,18 @@
       }
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
-      if (this.isLastPage && page !== 1) return
+
       const params = {
         page: page,
-        pageCount: pageSize
+        pageCount: pageSize,
+        communityId: this.communityId,
+        type: this.type
       }
       this.pagination.busy = true
+
       try {
-        const {list, total} = await applyListApi({...params, type: this.applyType})
-        this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
+        const { peoples, total } = await getMyCommunityClassmatesApi(params)
+        this.list = page === 1 ? (peoples || []) : this.dataList.concat(peoples || [])
         this.pagination.page = page
         this.pagination.pageSize = pageSize
         this.pagination.total = total
@@ -105,6 +117,7 @@
         this.$vux.toast.text(e.message, 'bottom')
       }
     }
+
     /**
      * 下拉刷新
      */
@@ -119,7 +132,7 @@
      */
     async handlePullup (loaded) {
       const nextPage = this.pagination.page + 1
-      await this.getList({page: nextPage})
+      await this.getList({ page: nextPage })
       if (this.pagination.end) {
         loaded('ended')
       } else {
@@ -127,56 +140,102 @@
       }
     }
 
-    created () {
-      this.getList()
+    /**
+     * 跳转到社区详情
+     */
+    handleToDetail () {
+      this.$router.push({
+        name: 'community',
+        params: {
+          communityId: this.communityId
+        },
+        query: {
+          ...this.$route.query,
+          showShare: true
+        }
+      })
     }
 
-    mounted () {
+    /**
+     * 切换tab
+     * @param type
+     */
+    handleSwitchTab (type) {
+      this.type = type
+      this.list = []
+      this.$router.replace(`/center/classmates/${this.communityId}/${this.type}`)
+      this.init()
+    }
+
+    /**
+     * 跳转到用户详情
+     * @param item
+     * @param event
+     */
+    handleUserDetail ({ item, event } = {}) {
+      this.$router.push(`/userInfo/${item.userId}/details`)
     }
   }
 </script>
 
 <style lang="less" type="text/less">
+  @import "../../styles/variables";
+  @import "../../styles/mixins";
+
   .p-classmates-list {
     padding-top: 44px;
     height: 100%;
+
     .toggle-tab {
-      position: fixed;
-      left: 15px;
-      top: 0;
-      right: 15px;
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
       align-items: center;
-      color: #929292;
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      padding: 0 15px;
       background: #fff;
+      border-bottom: solid 1px #dcdcdc; /* no */
+      color: #929292;
       z-index: 99;
 
-      & div {
+      .item {
+        flex:  1 1 auto;
         height: 40px;
         line-height: 40px;
-      }
-      &.one div:first-of-type,
-      &.two div:last-of-type {
-        color: #354048;
-        font-weight: 500;
-        position: relative;
-      }
-      &.one div:first-of-type:after,
-      &.two div:last-of-type:after {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 3px;
-        border-radius: 1.5px;
-        background-color: #ffe266;
+
+        &:active {
+          background: #f1f1f1;
+        }
+
+        &.z-active {
+          font-weight: 500;
+          color: #354048;
+
+          & > span:after {
+            content: " ";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ffe266;
+            height: 3px;
+            border-radius: 1.5px;
+          }
+        }
+
+        & > span {
+          display: inline-block;
+          position: relative;
+        }
       }
     }
+
     .p-message {
-      padding: 120px 15px 50px;
+      padding: 80px 15px 50px;
       text-align: center;
+
       .icon-container {
         margin-bottom: 18px;
 
@@ -185,21 +244,117 @@
           height: 130px;
         }
       }
+
       .text {
         line-height: 21px;
         font-size: 15px;
         color: #bcbcbc;
       }
+
+      .btn-container {
+        margin-top: 50px;
+
+        .share {
+          padding: 10px 25px;
+          background: #ffe266;
+          min-width: 130px;
+          line-height: 24px;
+          border-radius: 22px;
+          font-size: 16px;
+          color: @font-color-default;
+        }
+      }
     }
-    .apply-list {
-      height: 100%;
-      .bottom-content{
-        height: 70px;
+
+    .classmates {
+      padding-left: 15px;
+
+      .list {
+
+        &,
+        & * {
+          box-sizing: border-box;
+        }
+
+        & > li {
+          .setFlex();
+          /*align-items: center;*/
+          padding: 15px 15px 15px 0;
+          border-bottom: solid 1px #ededed; /* no */
+        }
+
+        .head,
+        .addon {
+          flex: 0 0 auto;
+        }
+
+        .head {
+          position: relative;
+
+          .image-item {
+            width: 50px;
+            height: 50px;
+          }
+
+          .addon-icon {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            top: auto;
+          }
+        }
+
+        .info {
+          position: relative;
+          flex: 1 1 auto;
+
+          .wrapper {
+            .setFlex(@direction: column);
+            justify-content: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: 0 15px;
+            width: 100%;
+            height: 100%;
+          }
+
+          .name {
+            line-height: 26px;
+            font-weight: normal;
+            font-size: 15px;
+          }
+
+          .desc {
+            .setEllipsis();
+            line-height: 24px;
+            font-size: 13px;
+            color: #929292;
+
+            & > span {
+
+              &:not(:first-child):before {
+                content: " | ";
+              }
+            }
+          }
+        }
+
+        .addon {
+          line-height: 26px;
+          align-self: center;
+          font-size: 15px;
+        }
+      }
+
+      .bottom {
+        margin: 25px 15px;
+        line-height: 24px;
+        font-size: 13px;
+        text-align: center;
         color: #bcbcbc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .bottom-share{
+
+        .share {
           color: #d7ab70;
         }
       }

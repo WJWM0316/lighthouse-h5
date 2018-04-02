@@ -17,8 +17,8 @@
     </div>
     <footer class="ft">
       <router-link :to="`/center/shareLite/${model.communityId}`" class="share u-btn"><i class="u-icon-share-gray" /> 分享</router-link>
-      <router-link to="/" class="free u-btn">免费学员({{model.freeJoinedNum}})</router-link>
-      <router-link to="/" class="pay u-btn">付费学员({{model.payJoinedNum}})</router-link>
+      <router-link :to="`/center/classmates/${model.communityId}/0`" class="free u-btn">免费学员({{model.freeJoinedNum}})</router-link>
+      <router-link :to="`/center/classmates/${model.communityId}/1`" class="pay u-btn">付费学员({{model.payJoinedNum}})</router-link>
     </footer>
   </div>
 </template>
