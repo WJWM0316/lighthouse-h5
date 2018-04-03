@@ -40,7 +40,7 @@
     </div>
 
     <div class="g-footer">
-      <button type="button" class="submit u-btn" :disabled="form.status === 1" @click="handleSubmit" v-text="form.status === 1 ? '审核中，请稍候' : '确定创建灯塔'"></button>
+      <button type="button" class="submit u-btn" :disabled="form.status === 1" @click="handleSubmit" v-text="form.status === 1 ? '申请提交成功，正在审核' : '确定创建灯塔'"></button>
     </div>
   </div>
 </template>

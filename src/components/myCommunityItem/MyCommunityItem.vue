@@ -6,11 +6,9 @@
         <p class="desc" v-text="model.simpleIntro">我曾经实现，相信你也可以做得到</p>
         <div class="other">
           <p class="status" :class="{ 'z-overed': isOffline || isOverred }" v-text="statusText"></p>
-          <template v-if="!isOffline">
-            <p class="time" v-if="isOverred">停止报名</p>
-            <p class="time" v-else-if="isStart">{{model.startTime * 1000 | date('YYYY-MM-DD')}} 至 {{model.endTime * 1000 | date('YYYY-MM-DD')}}</p>
-            <p class="time" v-else><span class="countdown">{{duration * 1000 | duration}}</span> 后开启</p>
-          </template>
+          <p class="time" v-if="isOverred">停止报名</p>
+          <p class="time" v-else-if="isStart">{{model.startTime * 1000 | date('YYYY-MM-DD')}} 至 {{model.endTime * 1000 | date('YYYY-MM-DD')}}</p>
+          <p class="time" v-else><span class="countdown">{{duration * 1000 | duration}}</span> 后开启</p>
         </div>
       </div>
       <div class="cover">
@@ -47,7 +45,7 @@ export default class MyComponentItem extends Vue {
 
   // 是否已经下线
   get isOffline () {
-    return this.communityStatus === 2
+    return this.model.communityStatus === 2
   }
 
   // 是否已经结束
