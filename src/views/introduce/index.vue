@@ -73,11 +73,8 @@
     </div>
 
     <div class="footer" v-show="completelyShow">
-      <!--<div class="to-home" @click="toHome">-->
-        <!--<img src="./../../assets/icon/icon_home.png" class="icon-home" />-->
-        <!--<span>首页</span>-->
-      <!--</div>-->
-      <div class="time-clock" v-if="isJoinAgency">
+      <p v-if="pageInfo.communityStatus === 2">课堂已下线，停止报名</p>
+      <div class="time-clock" v-else-if="isJoinAgency">
         <p>开课倒计时</p>
         <p>{{pageInfo.duration}}</p>
       </div>
