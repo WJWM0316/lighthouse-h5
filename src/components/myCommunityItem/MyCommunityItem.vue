@@ -5,10 +5,12 @@
         <h3 class="title" v-text="model.title"></h3>
         <p class="desc" v-text="model.simpleIntro">我曾经实现，相信你也可以做得到</p>
         <div class="other">
-          <p class="status" :class="{ 'z-overed': isOverred }" v-text="statusText"></p>
-          <p class="time" v-if="isOverred">停止报名</p>
-          <p class="time" v-else-if="isStart">{{model.startTime * 1000 | date('YYYY-MM-DD')}} 至 {{model.endTime * 1000 | date('YYYY-MM-DD')}}</p>
-          <p class="time" v-else><span class="countdown">{{duration * 1000 | duration}}</span> 后开启</p>
+          <p class="status" :class="{ 'z-overed': isOffline || isOverred }" v-text="statusText"></p>
+          <template v-if="!isOffline">
+            <p class="time" v-if="isOverred">停止报名</p>
+            <p class="time" v-else-if="isStart">{{model.startTime * 1000 | date('YYYY-MM-DD')}} 至 {{model.endTime * 1000 | date('YYYY-MM-DD')}}</p>
+            <p class="time" v-else><span class="countdown">{{duration * 1000 | duration}}</span> 后开启</p>
+          </template>
         </div>
       </div>
       <div class="cover">
@@ -43,6 +45,11 @@ export default class MyComponentItem extends Vue {
 
   countdown = null
 
+  // 是否已经下线
+  get isOffline () {
+    return this.communityStatus === 2
+  }
+
   // 是否已经结束
   get isOverred () {
     return this.now > this.model.endTime
@@ -61,7 +68,9 @@ export default class MyComponentItem extends Vue {
   // 状态文本
   get statusText () {
     let text = ''
-    if (this.isOverred) {
+    if (this.isOffline) {
+      text = '已下线'
+    } else if (this.isOverred) {
       text = '已结束'
     } else if (this.isFull) {
       text = '已满员'

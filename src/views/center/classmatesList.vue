@@ -9,7 +9,7 @@
         <ul class="list">
           <li v-for='item in list' @click.prevent.stop="handleUserDetail({ item })">
             <div class="head">
-              <image-item class="image-item" :src="item.avatar" mode="horizontal" :round="true" />
+              <image-item class="image-item" :src="item.avatar" mode="horizontal" :round="true"></image-item>
               <i class="addon-icon" :class="[`u-icon-${item.gender === 1 ? 'boy' : 'girl'}`]" v-if="item.gender"></i>
             </div>
             <div class="info">
@@ -22,7 +22,7 @@
                 </p>
               </div>
             </div>
-            <p class="addon" v-if="item.num">{{item.type === 0 ? `￥${item.num}` : `${item.num}个Call`}}</p>
+            <p class="addon" v-if="item.num">{{type === 0 ? `￥${item.num}` : `${item.num}个Call`}}</p>
           </li>
         </ul>
         <div class="bottom" v-show="pagination.end">没有更多学员了，<a class="share" @click="handleToDetail">去分享吧</a></div>
