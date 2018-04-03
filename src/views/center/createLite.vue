@@ -5,7 +5,7 @@
       <div class="form-group flex">
         <label for="type"><span class="asterisk">*</span> 灯塔类别</label>
         <div class="control-container">
-          <popup-picker ref="type" :show.sync="showTypePopupPicker" :show-cell="false" :data="types" v-model="form.type" @on-hide="handleTypePopupPickerHide" />
+          <popup-picker ref="type" :show.sync="showTypePopupPicker" :show-cell="false" :data="types" v-model="form.type" @on-hide="handleTypePopupPickerHide"></popup-picker>
           <input type="text" id="type" class="control" placeholder="请选择灯塔类型" :value="typeText" readonly @click="handleShowTypePopupPicker" :disabled="form.status === 1">
         </div>
       </div>
@@ -18,13 +18,13 @@
       <div class="form-group">
         <label for="advantage"><span class="asterisk">*</span> 您的优势</label>
         <div class="control-container">
-          <textarea id="advantage" class="control" rows="5" :maxlength="1000" placeholder="请尽量说明您的优势，例如您有怎样的行业或项目经历？获得过什么样的殊荣？" v-model="form.advantage" :disabled="form.status === 1" />
+          <textarea id="advantage" class="control" rows="5" :maxlength="1000" placeholder="请尽量说明您的优势，例如您有怎样的行业或项目经历？获得过什么样的殊荣？" v-model="form.advantage" :disabled="form.status === 1"></textarea>
         </div>
       </div>
       <div class="form-group">
-        <label for="advantage"><span class="asterisk">*</span> 灯塔价值</label>
+        <label for="worth"><span class="asterisk">*</span> 灯塔价值</label>
         <div class="control-container">
-          <textarea id="advantage" class="control" rows="5" :maxlength="1000" placeholder="您想向学员传输什么样的话题或内容？学员都可以获得什么？" v-model="form.worth" :disabled="form.status === 1" />
+          <textarea id="worth" class="control" rows="5" :maxlength="1000" placeholder="您想向学员传输什么样的话题或内容？学员都可以获得什么？" v-model="form.worth" :disabled="form.status === 1"></textarea>
         </div>
       </div>
 
@@ -40,7 +40,7 @@
     </div>
 
     <div class="g-footer">
-      <button type="button" class="submit u-btn" :disabled="form.status === 1" @click="handleSubmit" v-text="form.status === 1 ? '审核中，请稍候' : '确定创建灯塔'" />
+      <button type="button" class="submit u-btn" :disabled="form.status === 1" @click="handleSubmit" v-text="form.status === 1 ? '审核中，请稍候' : '确定创建灯塔'"></button>
     </div>
   </div>
 </template>
