@@ -25,6 +25,12 @@ const routers = [
     component: resolve => require(['@/views/center/protocol'], resolve),
     meta: {navHide: true}
   },
+  {
+    path: '/center/protocolCreate',
+    name: 'center-protocol-create',
+    component: resolve => require(['@/views/center/protocol-create'], resolve),
+    meta: {navHide: true}
+  },
   { // 学员列表
     path: '/center/classmates/:communityId/:type?',
     name: 'center-classmates',

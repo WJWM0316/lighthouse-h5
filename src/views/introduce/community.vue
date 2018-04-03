@@ -187,9 +187,12 @@
       }
       console.log('this.showType', this.showType)
       wxUtil.reloadPage()
-      if (this.$route.query.showShare === 'true') {
+      console.log(typeof this.$route.query.showShare)
+      const showShare = this.$route.query.showShare
+      if (showShare && (showShare.toString() === 'true')) {
         this.showShare = true
       }
+
       this.pageInit().then(() => {
         const {
           title,

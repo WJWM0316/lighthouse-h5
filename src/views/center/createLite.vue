@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="advantage"><span class="asterisk">*</span> 你的优势</label>
+        <label for="advantage"><span class="asterisk">*</span> 您的优势</label>
         <div class="control-container">
           <textarea id="advantage" class="control" rows="5" :maxlength="1000" placeholder="请尽量说明您的优势，例如您有怎样的行业或项目经历？获得过什么样的殊荣？" v-model="form.advantage" :disabled="form.status === 1" />
         </div>
@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <p class="protocol">确定创建则代表您已确认并同意<a href="#">《创建灯塔协议》</a></p>
+      <p class="protocol">确定创建则代表您已确认并同意<router-link to="/center/protocolCreate">《创建灯塔协议》</router-link></p>
 
       <div class="contact">
         <label class="label"><span class="asterisk">*</span> 如有疑问，请联系顾问</label>
@@ -137,6 +137,7 @@ export default class CenterCreateLite extends Vue {
       if (this.validate()) {
         const params = this.transformData(this.form)
         await saveApplyCommunityApi(params)
+        this.$vux.toast.text('提交成功', 'bottom')
         this.init()
       }
     } catch (error) {
@@ -174,7 +175,7 @@ export default class CenterCreateLite extends Vue {
       this.$vux.toast.text('灯塔标题最多30个字', 'bottom')
       valid = false
     } else if (!this.form.advantage) {
-      this.$vux.toast.text('请填写你的优势', 'bottom')
+      this.$vux.toast.text('请填写您的优势', 'bottom')
       valid = false
     } else if (this.form.advantage.length > 1000) {
       this.$vux.toast.text('你的优势最多1000个字', 'bottom')
@@ -243,7 +244,7 @@ export default class CenterCreateLite extends Vue {
 
     .form-group {
       padding-top: 16px;
-      
+
       &.flex {
         .setFlex();
         margin: 0 5px;
@@ -269,7 +270,7 @@ export default class CenterCreateLite extends Vue {
         line-height: 32px;
         font-weight: lighter;
         color: #666;
-        
+
         .asterisk {
           color: @color-primary;
         }

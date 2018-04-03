@@ -263,6 +263,7 @@
 
     .classmates {
       padding-left: 15px;
+      height: 100%;
 
       .list {
 
