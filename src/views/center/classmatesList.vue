@@ -102,7 +102,7 @@
 
       try {
         const { peoples, total } = await getMyCommunityClassmatesApi(params)
-        this.list = page === 1 ? (peoples || []) : this.dataList.concat(peoples || [])
+        this.list = page === 1 ? (peoples || []) : this.list.concat(peoples || [])
         this.pagination.page = page
         this.pagination.pageSize = pageSize
         this.pagination.total = total
