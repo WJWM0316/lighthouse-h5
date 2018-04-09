@@ -13,7 +13,7 @@
         <div class="left-desc">
           <div class="community-status">
             <span v-text="community.master && community.master.realName"></span>
-            <span :class="communityStatus === '招募中' ? '' : 'end'" v-text="communityStatus"></span>
+            <span v-if="communityStatus" :class="communityStatus === '招募中' ? '' : 'end'" v-text="communityStatus"></span>
           </div>
           <p v-text="community.master && community.master.career"></p>
         </div>

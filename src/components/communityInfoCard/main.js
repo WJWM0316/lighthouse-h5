@@ -51,6 +51,8 @@ import Component from 'vue-class-component'
         return '已结束'
       } else if (this.community['remainingJoinNum'] <= 0) {
         return '已满员'
+      } else if (this.community['communityStatus'] === 2) {
+        return ''
       } else {
         return '招募中'
       }
