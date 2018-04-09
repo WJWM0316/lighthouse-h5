@@ -73,13 +73,13 @@
     </div>
 
     <div class="footer" v-show="completelyShow">
-      <p v-if="pageInfo.communityStatus === 2">课堂已下线，停止报名</p>
-      <div class="time-clock" v-else-if="isJoinAgency">
+      <div class="time-clock" v-if="isJoinAgency">
         <p>开课倒计时</p>
         <p>{{pageInfo.duration}}</p>
       </div>
       <p v-else-if="isEnd">课堂已关闭，停止报名</p>
       <p v-else-if="pageInfo.remainingJoinNum <= 0">已满员，停止报名</p>
+      <p v-else-if="pageInfo.communityStatus === 2">课堂已下线，停止报名</p>
       <div class="btn-box" v-else>
         <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
                 :disabled="!isFreeBtn" v-if="pageInfo.freeJoinNum > 0" @click="freeIn">
