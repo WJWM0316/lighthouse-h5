@@ -49,12 +49,12 @@ import Component from 'vue-class-component'
     communityStatus () {
       if (this.isEnd) {
         return '已结束'
-      } else if (this.community['remainingJoinNum'] <= 0) {
-        return '已满员'
       } else if (this.community['communityStatus'] === 2) {
         return ''
+      } else if (this.community['remainingJoinNum'] <= 0) {
+        return '已满员'
       } else {
-        return '招募中'
+        return ''
       }
     },
     newMessage () {
