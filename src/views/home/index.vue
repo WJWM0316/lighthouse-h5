@@ -3,7 +3,7 @@
     <div class="fixed">
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
-        <span @click="toggle('joined')">已加入</span>
+        <span class="join" :class="{'message': isMessage}" @click="toggle('joined')">已加入</span>
         <span @click="toggle('picked')">精选</span>
         <span @click="toggle('find')">发现</span>
       </div>
@@ -28,7 +28,7 @@
           <div class="module-home communities" v-if="creations && creations.length > 0">
             <!--<p class="module-home-title">已创建</p>-->
             <div class="list">
-              <community-info-card class="community-item" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+              <community-info-card class="community-item" :type="3" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
             </div>
           </div>
 
@@ -36,7 +36,7 @@
           <div class="module-home communities" v-if="joins && joins.length > 0">
             <!--<p class="module-home-title">已加入</p>-->
             <div class="list">
-              <community-info-card class="community-item" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+              <community-info-card class="community-item" :type="3" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ import Scroller from '@/components/scroller'
 
 import ListMixin from '@/mixins/list'
 
-import { getBeaconsApi, getBannersApi, getTagsListApi, getSelectionApi, getJoineListdApi } from '@/api/pages/home'
+import { getBeaconsApi, getBannersApi, getTagsListApi, getSelectionApi, getJoineListdApi, getTabBardApi } from '@/api/pages/home'
 
 @Component({
   name: 'home-index',
@@ -124,6 +124,7 @@ export default class HomeIndex extends Vue {
   // 社区列表
   ready = false
   disableOperationArr = ['comment', 'praise']
+  isMessage = true
 
   // ******************* 已加入 **********************
   creations = []
@@ -382,6 +383,10 @@ export default class HomeIndex extends Vue {
       this.pagination.total = allTotal
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
+
+      // 红点更新
+      let {status} = await getTabBardApi()
+      this.isMessage = Boolean(status)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
     }
@@ -459,10 +464,22 @@ export default class HomeIndex extends Vue {
     background-color: #ffffff;
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1); /* no */
 
+    & span.join.message:before {
+      content: '';
+      position: absolute;
+      right: -6px;
+      top: 12px;
+      width: 6px;
+      height: 6px;
+      background: #ff3434;
+      border-radius: 50%;
+    }
+
     & span {
       display: inline-block;
       height: 100%;
       line-height: 49px;
+      position: relative;
     }
     &.joined span:nth-of-type(1),
     &.find span:nth-of-type(3),

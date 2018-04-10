@@ -62,3 +62,12 @@ export const getJoineListdApi = data => request({
   url: '/wap/beacon/joined',
   data
 })
+
+/**
+ * 首页红点消息
+ * @param {*} data
+ */
+export const getTabBardApi = data => request({
+  url: '/wap/beacon/tabBar',
+  data
+})

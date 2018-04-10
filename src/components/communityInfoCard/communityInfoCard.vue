@@ -11,9 +11,12 @@
         </div>
 
         <div class="left-desc">
-          <div class="community-status">
-            <span v-text="community.master && community.master.realName"></span>
-            <span v-if="communityStatus" :class="communityStatus === '招募中' ? '' : 'end'" v-text="communityStatus"></span>
+          <div class="community-status-box">
+            <div class="community-status">
+              <span v-text="community.master && community.master.realName"></span>
+              <span v-if="communityStatus" :class="communityStatus === '招募中' ? '' : 'end'" v-text="communityStatus"></span>
+            </div>
+            <span v-if="community.joinPrice === 0 && showFreeIdentification" class="free fs13">免费</span>
           </div>
           <p v-text="community.master && community.master.career"></p>
         </div>
@@ -27,14 +30,14 @@
     </div>
 
     <!-- 额外内容区 -->
-    <div class="additional">
-      <!-- 已结束 -->
-      <p v-if="isEnd">社区已结束</p>
-      <!-- 未开社 -->
-      <p v-else-if="duration"><span style="color: #d7ab70;">{{duration | duration}}</span>后开启</p>
-      <!-- 已开社 -->
-      <p v-else>社区已开启</p>
-    </div>
+    <!--<div class="additional">-->
+      <!--&lt;!&ndash; 已结束 &ndash;&gt;-->
+      <!--<p v-if="isEnd">社区已结束</p>-->
+      <!--&lt;!&ndash; 未开社 &ndash;&gt;-->
+      <!--<p v-else-if="duration"><span style="color: #d7ab70;">{{duration | duration}}</span>后开启</p>-->
+      <!--&lt;!&ndash; 已开社 &ndash;&gt;-->
+      <!--<p v-else>社区已开启</p>-->
+    <!--</div>-->
 
   </div>
 </template>

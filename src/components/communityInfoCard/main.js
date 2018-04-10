@@ -15,7 +15,14 @@ import Component from 'vue-class-component'
       }
     },
 
-    // 类型：1为列表页卡片，2为详情页卡片
+    showFreeIdentification: {
+      type: Boolean,
+      default () {
+        return true
+      }
+    },
+
+    // 类型：1为列表页卡片, 2为详情页卡片, 3为已加入列表
     type: {
       type: Number,
       default: 1
@@ -46,15 +53,29 @@ import Component from 'vue-class-component'
     isEnd () {
       return this.community.endTime * 1000 < new Date().getTime()
     },
+    // 是否已开启
+    isStart () {
+      return this.community.startTime * 1000 < new Date().getTime()
+    },
     communityStatus () {
-      if (this.isEnd) {
-        return '已结束'
-      } else if (this.community['communityStatus'] === 2) {
-        return ''
-      } else if (this.community['remainingJoinNum'] <= 0) {
-        return '已满员'
+      if (this.type === 3) {
+        if (this.isEnd) {
+          return '已结束'
+        } else if (this.isStart) {
+          return '已开启'
+        } else {
+          return '未开启'
+        }
       } else {
-        return ''
+        if (this.isEnd) {
+          return '已结束'
+        } else if (this.community['communityStatus'] === 2) {
+          return ''
+        } else if (this.community['remainingJoinNum'] <= 0) {
+          return '已满员'
+        } else {
+          return ''
+        }
       }
     },
     newMessage () {
