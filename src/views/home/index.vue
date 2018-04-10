@@ -25,7 +25,7 @@
 
         <div class="joined-list">
           <!-- 创建的灯塔列表 -->
-          <div class="module-home communities" v-if="creations && creations.length > 0">
+          <div class="module-home communities" :showFreeIdentification="false" v-if="creations && creations.length > 0">
             <!--<p class="module-home-title">已创建</p>-->
             <div class="list">
               <community-info-card class="community-item" :type="3" v-for="item in creations" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
@@ -33,7 +33,7 @@
           </div>
 
           <!-- 已加入列表 -->
-          <div class="module-home communities" v-if="joins && joins.length > 0">
+          <div class="module-home communities" :showFreeIdentification="false" v-if="joins && joins.length > 0">
             <!--<p class="module-home-title">已加入</p>-->
             <div class="list">
               <community-info-card class="community-item" :type="3" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
