@@ -87,8 +87,12 @@
           <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
-                :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0">
+                :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
+        </div>
+        <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
+                :disabled="!isPayBtn" @click="freeJoin" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice === 0">
+          <span>免费加入</span>
         </div>
       </div>
     </div>
@@ -116,7 +120,7 @@
   import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
   import {getCommunityInfoApi, countCodeApi} from '@/api/pages/pageInfo'
   import WechatMixin from '@/mixins/wechat'
-  import {payApi} from '@/api/pages/pay'
+  import {payApi, freePay} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
 
@@ -240,6 +244,14 @@
 //        },
 //      })
     }
+    async freeJoin () {
+      await freePay({
+        productId: this.pageInfo.communityId,
+        productType: 1
+      }).then((res) => {
+        this.pageInit().then(() => {})
+      })
+    }
     toHome () {
       this.$router.replace(`/index`)
     }
@@ -347,14 +359,9 @@
           shareIntroduction,  // 分享标题
           communityId
         } = self.pageInfo
-        // 是否已入社
-        if (this.completelyShow && this.isJoinAgency) {
-          self.$router.replace(`/introduce/${communityId}/community`)
-          return
-        }
 
         const {realName, career} = master
-        const str = realName ? realName + (career ? '|' + career : '') : ''
+//        const str = realName ? realName + (career ? '|' + career : '') : ''
         console.log('location.href', location.href)
         // 页面分享信息
         self.wechatShare({
@@ -390,6 +397,14 @@
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
 
+      this.pageInfo = res
+
+      // 是否已入社
+      if (this.completelyShow && this.isJoinAgency) {
+        this.$router.replace(`/introduce/${communityId}/community`)
+        return
+      }
+
       const temp = new Array(...res.circles || [])
       temp.forEach((item) => {
         if (item['modelType'] === 'problem') {
@@ -407,7 +422,6 @@
       console.log(temp)
       this.dynamicList = temp
       this.relevantList = res.relevantRecommendations || []
-      this.pageInfo = res
       this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
     }
 
@@ -419,7 +433,7 @@
       this.$vux.confirm.show({
         title: '评论点赞',
         content: '您还没有加入，暂时不能操作',
-        confirmText: '付费加入',
+        confirmText: _this.pageInfo.joinPrice > 0 ? '付费加入' : '免费加入',
         cancelText: '我知道了',
         onCancel () {
         },
