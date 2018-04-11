@@ -17,7 +17,7 @@
     </div>
     <footer class="ft">
       <router-link :to="`/center/shareLite/${model.communityId}`" class="share u-btn"><i class="u-icon-share-gray" /> 分享</router-link>
-      <router-link :to="`/center/classmates/${model.communityId}/0`" class="pay u-btn">付费学员({{model.payJoinedNum}})</router-link>
+      <router-link :to="`/center/classmates/${model.communityId}/0`" class="pay u-btn" v-if="model.joinPrice > 0">付费学员({{model.payJoinedNum}})</router-link>
       <router-link :to="`/center/classmates/${model.communityId}/1`" class="free u-btn">免费学员({{model.freeJoinedNum}})</router-link>
     </footer>
   </div>
@@ -220,7 +220,8 @@ export default class MyComponentItem extends Vue {
       flex: 1 1 auto;
       padding: 14px 15px 12px;
       line-height: 24px;
-      font-size: 15px;
+      font-size: 13px;
+      font-weight: 300;
       color: @font-color-default;
 
       &:active {

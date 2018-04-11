@@ -124,7 +124,7 @@ export default class HomeIndex extends Vue {
   // 社区列表
   ready = false
   disableOperationArr = ['comment', 'praise']
-  isMessage = true
+  isMessage = false
 
   // ******************* 已加入 **********************
   creations = []

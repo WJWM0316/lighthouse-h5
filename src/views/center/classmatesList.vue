@@ -1,9 +1,9 @@
 <template>
   <div class="p-body p-classmates-list">
-    <div class="toggle-tab fs15">
-      <button type="button" class="item u-btn" :class="{ 'z-active': type === 0 }" @click="handleSwitchTab(0)"><span>付费入社</span></button>
-      <button type="button" class="item u-btn" :class="{ 'z-active': type === 1 }" @click="handleSwitchTab(1)"><span>免费入社</span></button>
-    </div>
+    <!--<div class="toggle-tab fs15">-->
+      <!--<button type="button" class="item u-btn" :class="{ 'z-active': type === 0 }" @click="handleSwitchTab(0)"><span>付费入社</span></button>-->
+      <!--<button type="button" class="item u-btn" :class="{ 'z-active': type === 1 }" @click="handleSwitchTab(1)"><span>免费入社</span></button>-->
+    <!--</div>-->
     <div class="classmates" v-if="list.length > 0">
       <scroller :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end" :show-bottom-loading="!pagination.end">
         <ul class="list">
@@ -22,7 +22,7 @@
                 </p>
               </div>
             </div>
-            <p class="addon" v-if="item.num">{{type === 0 ? `￥${item.num}` : `${item.num}个Call`}}</p>
+            <!--<p class="addon" v-if="item.num">{{type === 0 ? `￥${item.num}` : `${item.num}个Call`}}</p>-->
           </li>
         </ul>
         <div class="bottom" v-show="pagination.end">没有更多学员了，<a class="share" @click="handleToDetail">去分享吧</a></div>
@@ -178,7 +178,7 @@
   @import "../../styles/mixins";
 
   .p-classmates-list {
-    padding-top: 44px;
+    /*padding-top: 44px;*/
     height: 100%;
 
     .toggle-tab {

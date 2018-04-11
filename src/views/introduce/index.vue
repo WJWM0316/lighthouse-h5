@@ -249,7 +249,15 @@
         productId: this.pageInfo.communityId,
         productType: 1
       }).then((res) => {
-        this.pageInit().then(() => {})
+        const _this = this
+        this.$vux.alert.show({
+          title: '加入成功',
+          content: '快去灯塔里和大家一起进步吧',
+          buttonText: '好的',
+          onHide () {
+            _this.pageInit().then(() => {})
+          }
+        })
       })
     }
     toHome () {
