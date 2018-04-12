@@ -308,6 +308,9 @@
               case '67917ba04abd74c3247245576b1168b0': // 测试
                 self.$store.dispatch('show_qr', {type: 2})
                 break
+              case '16a2f4a61d870978f1598b466a48f12e': // add 詹润杰的灯塔 测试用
+                self.$store.dispatch('show_qr', {type: 3})
+                break
               case 'a7f79b000c990dd2658b6af10a37fe3c': // add 詹润杰的灯塔 2018/4/12
                 self.$store.dispatch('show_qr', {type: 3})
                 break
