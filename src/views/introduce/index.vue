@@ -258,6 +258,8 @@
             _this.pageInit().then(() => {})
           }
         })
+      }).catch((e) => {
+        this.$vux.toast.text(e.message, 'bottom')
       })
     }
     toHome () {
@@ -438,16 +440,22 @@
       console.log(eventType, '拦截')
 
       const _this = this
+      const isBuy = _this.pageInfo.joinPrice > 0
       this.$vux.confirm.show({
         title: '评论点赞',
         content: '您还没有加入，暂时不能操作',
-        confirmText: _this.pageInfo.joinPrice > 0 ? '付费加入' : '免费加入',
+        confirmText: isBuy ? '付费加入' : '免费加入',
         cancelText: '我知道了',
         onCancel () {
         },
         onConfirm () {
           console.log(_this) // 当前 vm
-          _this.payOrFree()
+          if (isBuy) {
+            _this.payOrFree()
+          }
+          else {
+            _this.freeJoin().then(() => {})
+          }
         }
       })
     }

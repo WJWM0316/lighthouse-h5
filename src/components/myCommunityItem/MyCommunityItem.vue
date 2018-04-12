@@ -17,8 +17,8 @@
     </div>
     <footer class="ft">
       <router-link :to="`/center/shareLite/${model.communityId}`" class="share u-btn"><i class="u-icon-share-gray" /> 分享</router-link>
-      <router-link :to="`/center/classmates/${model.communityId}/0`" class="pay u-btn" v-if="model.joinPrice > 0">付费学员({{model.payJoinedNum}})</router-link>
-      <router-link :to="`/center/classmates/${model.communityId}/1`" class="free u-btn">免费学员({{model.freeJoinedNum}})</router-link>
+      <router-link :to="`/center/classmates/${model.communityId}/0`" class="pay u-btn" v-if="model.payJoinNum > 0">{{model.joinPrice > 0 ? '付费学员' : '免费学员'}}({{model.payJoinedNum}})</router-link>
+      <router-link :to="`/center/classmates/${model.communityId}/1`" class="free u-btn" v-if="model.freeJoinNum > 0">集Call学员({{model.freeJoinedNum}})</router-link>
     </footer>
   </div>
 </template>
