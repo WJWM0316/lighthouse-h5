@@ -65,6 +65,9 @@ import WechatMixin from '@/mixins/wechat'
     },
     isShowQrcodes2: function () { // 公众号二维码是否展示
       return this.$store.getters.isShowQrcode2
+    },
+    isShowQrcodes3: function () { // 公众号二维码是否展示
+      return this.$store.getters.isShowQrcode3
     }
   },
   watch: {
