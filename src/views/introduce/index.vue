@@ -330,6 +330,9 @@
               case '67917ba04abd74c3247245576b1168b0': // 测试
                 self.$store.dispatch('show_qr', {type: 2})
                 break
+              case '16a2f4a61d870978f1598b466a48f12e': // 测试 詹润杰的灯塔
+                self.$store.dispatch('show_qr', {type: 3})
+                break
               default:
                 location.reload()
                 break
@@ -398,6 +401,9 @@
           break
         case '25c2ff088da3f757b685a318ab050b5a':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case '16a2f4a61d870978f1598b466a48f12e': // 詹润杰的灯塔
+          this.qrSrc = require('@/assets/page/qr_gzh_3.png')
           break
         default:
           this.qrSrc = require('@/assets/page/qr_gzh_1.png')
@@ -572,6 +578,7 @@
             background-color: #fff;
             line-height: 1;
             font-size: 0;
+            margin-top: 1px;
 
             &:active {
               background-color: #f1f1f1;

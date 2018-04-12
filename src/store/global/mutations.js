@@ -21,6 +21,9 @@ export default {
       case 2:
         state.qr_show2 = true
         break
+      case 3:
+        state.qr_show3 = true
+        break
       default:
         state.qr_show = true
         break
@@ -30,6 +33,9 @@ export default {
     switch (type) {
       case 2:
         state.qr_show2 = false
+        break
+      case 3:
+        state.qr_show3 = false
         break
       default:
         state.qr_show = false
