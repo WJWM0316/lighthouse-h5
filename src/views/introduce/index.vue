@@ -402,9 +402,6 @@
         case '25c2ff088da3f757b685a318ab050b5a':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
-        case '16a2f4a61d870978f1598b466a48f12e': // 詹润杰的灯塔
-          this.qrSrc = require('@/assets/page/qr_gzh_3.png')
-          break
         default:
           this.qrSrc = require('@/assets/page/qr_gzh_1.png')
           break
