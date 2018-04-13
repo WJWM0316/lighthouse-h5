@@ -84,8 +84,8 @@ export default class ImageItem extends Vue {}
   }
 
   &.auto > img {
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     max-width: 100%;
     max-height: 100%;
   }

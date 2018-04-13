@@ -177,7 +177,7 @@ export default class MyComponentItem extends Vue {
         .status {
           padding: 0 8px;
           background: rgba(255, 226, 102, .15);
-          min-width: 56px;
+          min-width: 48px;
           text-align: center;
           color: @color-primary;
 
