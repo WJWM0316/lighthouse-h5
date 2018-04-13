@@ -11,6 +11,9 @@ export default {
   isShowQrcode2: function (state) {
     return state.qr_show2
   },
+  isShowQrcode3: function (state) {
+    return state.qr_show3
+  },
   viewScrollTop: function (state) {
     return state.viewScrollTop
   },

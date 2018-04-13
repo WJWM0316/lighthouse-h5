@@ -327,6 +327,12 @@
               case '64074da38681f864082708b9be959e08':
                 self.$store.dispatch('show_qr', {type: 2})
                 break
+              case '67917ba04abd74c3247245576b1168b0': // 测试
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '16a2f4a61d870978f1598b466a48f12e': // 测试 詹润杰的灯塔
+                self.$store.dispatch('show_qr', {type: 3})
+                break
               default:
                 location.reload()
                 break
