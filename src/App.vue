@@ -27,14 +27,6 @@
         <img class="qrcode" src="./assets/page/qr_kf_2.png">
       </div>
     </div>
-    <div class="home-mask" v-if="isShowQrcodes3">
-      <div class="qr-container">
-        <i class="u-icon-close icon-close" @click="closeQrCode(3)"></i>
-        <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_3.png">
-      </div>
-    </div>
   </div>
 </template>
 
@@ -65,9 +57,6 @@ import WechatMixin from '@/mixins/wechat'
     },
     isShowQrcodes2: function () { // 公众号二维码是否展示
       return this.$store.getters.isShowQrcode2
-    },
-    isShowQrcodes3: function () { // 公众号二维码是否展示
-      return this.$store.getters.isShowQrcode3
     }
   },
   watch: {
