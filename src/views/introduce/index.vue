@@ -359,6 +359,9 @@
       const { communityId } = this.$route.params
       if (code) {
         try {
+          if (communityId === 'a7f79b000c990dd2658b6af10a37fe3c') { // 如果为此社区 跳转首页
+            this.$router.replace(`/index`)
+          }
           await countCodeApi({ code, communityId })
         } catch (e) {
           this.$vux.toast.text(e.message, 'bottom')
