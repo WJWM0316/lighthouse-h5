@@ -333,6 +333,9 @@
               case '16a2f4a61d870978f1598b466a48f12e': // 测试 詹润杰的灯塔
                 self.$store.dispatch('show_qr', {type: 3})
                 break
+              case 'a7f79b000c990dd2658b6af10a37fe3c': // 正式 詹润杰的灯塔
+                self.$store.dispatch('show_qr', {type: 3})
+                break
               default:
                 location.reload()
                 break
