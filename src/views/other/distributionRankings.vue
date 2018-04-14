@@ -140,7 +140,6 @@
           flex: 0 0 auto;
           width: 55px;
           height: 55px;
-          background: pink;
           border-radius: 50%;
           overflow: hidden;
         }
