@@ -122,7 +122,11 @@ async function process(response) {
   if (data && data.statusCode === 264) { // 内容找不到
     hideLoading(globalLoading)
     const {url} = data.data
-    if (url) location.href = url
+    console.log(data.data)
+    if (url) {
+      location.href = url
+      return
+    }
     router.replace({
       name: 'undefined'
     })
