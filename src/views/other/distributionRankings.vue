@@ -172,7 +172,6 @@
 
       .rank-list {
         padding: 80px 0 0;
-        height: 100px;
 
         .rank-item {
           display: flex;
@@ -210,7 +209,6 @@
           .rank-img {
             width: 30px;
             height: 30px;
-            background: pink;
             margin-right: 10px;
           }
           .rank-name {
