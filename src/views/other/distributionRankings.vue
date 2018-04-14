@@ -152,11 +152,14 @@
             font-size: 16px;
             font-weight: 500;
             color: #354048;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+            margin-right: 15px;
           }
         }
         .user-count {
           flex: 0 0 auto;
-          text-align: center;
+          text-align: right;
           font-size: 11px;
           & p:nth-of-type(1) {
             margin-bottom: 5px;
@@ -216,9 +219,12 @@
             text-overflow:ellipsis;
             white-space: nowrap;
             margin-right: 15px;
+            color: #666;
+            font-weight: 300;
           }
           .rank-count {
             font-size: 13px;
+            color: #929292;
             & span {
               color: #d7ab70;
             }
