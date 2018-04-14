@@ -76,7 +76,7 @@ import WechatMixin from '@/mixins/wechat'
         wxUtil.fixedUrl()
         // 自定义分享信息路径
         const customSharePageName = ['introduce', 'introduce-detail', 'community', 'center-help', 'distribution-rankings']
-        if (route.name && customSharePageName.indexOf(route.name) < 0) {
+        if (customSharePageName.indexOf(route.name) < 0) {
           // 页面分享信息
           this.wechatShare({
             'titles': '小灯塔|职场知识分享社区|照亮你职场的路',
