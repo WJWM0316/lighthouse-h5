@@ -213,3 +213,11 @@ export const countCodeApi = (data) => {
     data,
   })
 }
+
+// 分销排行榜
+export const rankingApi = (data) => {
+  return request({
+    url: '/wap/beacon/ranking',
+    data,
+  })
+}

@@ -85,6 +85,13 @@ const routers = [
     name: 'question-reply',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/replyQuestion'], resolve),
+  },
+  {
+    // 社区分销排行榜
+    path: '/introduce/ranking/:communityId',
+    name: 'distribution-rankings',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/other/distributionRankings'], resolve),
   }
 ]
 
