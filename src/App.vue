@@ -75,7 +75,7 @@ import WechatMixin from '@/mixins/wechat'
       handler (route) {
         wxUtil.fixedUrl()
         // 自定义分享信息路径
-        const customSharePageName = ['introduce', 'introduce-detail', 'community', 'center-help']
+        const customSharePageName = ['introduce', 'introduce-detail', 'community', 'center-help', 'distribution-rankings']
         if (customSharePageName.indexOf(route.name) < 0) {
           // 页面分享信息
           this.wechatShare({
