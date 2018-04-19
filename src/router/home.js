@@ -24,11 +24,11 @@ const homeRoutes = [
     name: 'joined',
     component: resolve => require(['@/views/home/index'], resolve),
   },
-  {
-    path: '/find',
-    name: 'find',
-    component: resolve => require(['@/views/home/index'], resolve),
-  },
+  // {
+  //   path: '/find',
+  //   name: 'find',
+  //   component: resolve => require(['@/views/home/index'], resolve),
+  // },
   {
     path: '/undefined',
     name: 'undefined',

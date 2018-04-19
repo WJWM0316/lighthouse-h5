@@ -3,16 +3,20 @@
   <div class="explore-item" @click="toDetails">
 
     <!-- 头像 -->
-    <div class="left">
+    <div class="content-head">
       <img :src="item.releaseUser.avatar" class="user-image" @click.stop="toCommunity" />
+      <div class="user-box">
+        <div>
+          <!-- 用户名 -->
+          <p class="user-name singleLine" @click.stop="toCommunity">{{item.releaseUser.realName}}</p>
+          <!-- 用户头衔 -->
+          <p class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
+        </div>
+      </div>
     </div>
 
     <div :class="{right: true, border: !hideBorder}">
-      <!-- 用户名 -->
-      <span class="user-name singleLine" @click.stop="toCommunity">{{item.releaseUser.realName}}</span>
-
-      <!-- 用户头衔 -->
-      <p class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
+      
 
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
@@ -86,7 +90,7 @@
             </div>
           </div>
         </div>
-
+  
         <!-- 文字与视频 -->
         <div v-if="item.circleType === 2">
           <div class="content-video" @click.stop="videoClick">
@@ -146,6 +150,10 @@
         </div>
 
         <div class="operation">
+          <!-- 分享按钮 -->
+          <button @click.stop="praise">
+            <img class="icon-share" src="./../../assets/icon/icon_share_gray.png" />
+          </button>
           <!-- 点赞按钮 -->
           <button v-if="!hidePraiseBtn" @click.stop="praise">
             <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
@@ -174,11 +182,11 @@
         <!-- 评论信息 -->
         <div class="reply-block" v-if="item.commentTotal > 0">
           <div class="reply" v-for="reply in item.comments">
-            <span class="favor-name">{{reply.realName}}</span>: {{reply.content}}
+            <p class="favor-content"><span class="favor-name">{{reply.realName}}：</span>{{reply.content}}</p>
           </div>
-          <div class="reply" v-if="item.commentTotal > 10">
+          <!-- <div class="reply" v-if="item.commentTotal > 10">
             <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

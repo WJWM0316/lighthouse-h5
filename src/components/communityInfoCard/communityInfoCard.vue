@@ -2,7 +2,9 @@
   <!-- 社区卡片项 （用于首页等卡片项） -->
   <div class="community-info-card" @click.prevent.stop="handleTap">
     <div class="master-info">
-
+      <div class="right" :class="{newMessage}">
+        <img :src="community.icon" alt="">
+      </div>
       <div class="left">
 
         <div class="left-info">
@@ -13,19 +15,24 @@
         <div class="left-desc">
           <div class="community-status-box">
             <div class="community-status">
-              <span v-text="community.master && community.master.realName"></span>
-              <span v-if="communityStatus" :class="communityStatus === '招募中' ? '' : 'end'" v-text="communityStatus"></span>
+              <!-- <span v-text="community.master && community.master.realName"></span> -->
+              <span v-if="communityStatus && cardType === 'joined'" class="status" :class="communityStatus === '已结束' ? 'end' : ''">社区{{communityStatus}}</span>
+              <template v-if="cardType === 'picked'">
+                  <span v-if="community.joinPrice > 0 && showFreeIdentification" class="price">¥ {{community.joinPrice}}</span>
+                  <span v-else="community.joinPrice === 0 && showFreeIdentification" class="price">免费</span>
+                  <span v-text="community.master && community.master.career" class="job"></span>
+              </template>
+              
+              
             </div>
-            <span v-if="community.joinPrice === 0 && showFreeIdentification" class="free fs13">免费</span>
+            
           </div>
-          <p v-text="community.master && community.master.career"></p>
+          
         </div>
 
       </div>
 
-      <div class="right" :class="{newMessage}">
-        <img :src="community.icon" alt="">
-      </div>
+      
 
     </div>
 

@@ -1,14 +1,32 @@
 <template>
-  <div class="p-body p-home-index" :class="navTabName">
+  <div class="p-body p-home-index" :class="[{'hasBanner' : bannerList && bannerList.length > 0 && navTabName === 'picked'},navTabName]">
     <div class="fixed">
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
-        <span class="join" :class="{'message': isMessage}" @click="toggle('joined')">已加入</span>
         <span @click="toggle('picked')">精选</span>
-        <span @click="toggle('find')">发现</span>
+        <span class="join" :class="{'message': isMessage}" @click="toggle('joined')">已加入</span>
+        <span class="create" @click="toggle('center-create-lite')">创建灯塔</span>
+       <!--  <span @click="toggle('find')">发现</span> -->
       </div>
 
-      <!-- 分类 -->
+      <!-- 选项卡 -->
+      <div class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
+        <ul>
+          <li v-for="(item, index) in bannerList" :key="`banner_${index}`" @click.prevent.stop="handleTapBanner(item)">
+              <image-item class="chose-tab-img" :src="item.imgUrl" />
+              <p class="chose-tab-con">{{item.title}}</p>
+          </li>
+        </ul>
+      </div>
+      <!-- 轮播图 -->
+      <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
+          <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
+            <swiper-item v-for="(item, index) in bannerList" :key="`banner_${index}`">
+              <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item class="image-item" :src="item.imgUrl" mode="horizontal" /></a>
+            </swiper-item>
+          </swiper>
+      </div> -->
+       <!-- 分类 -->
       <div class="classification fs14" v-if="navTabName === 'picked'">
         <span v-for="itemTag, indexTag in communityTagList"
               :key="indexTag"
@@ -36,7 +54,7 @@
           <div class="module-home communities" :showFreeIdentification="false" v-if="joins && joins.length > 0">
             <!--<p class="module-home-title">已加入</p>-->
             <div class="list">
-              <community-info-card class="community-item" :type="3" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+              <community-info-card class="community-item" :type="3" :cardType="'joined'" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
             </div>
           </div>
         </div>
@@ -65,27 +83,15 @@
 
       </div>
 
-      <!-- 发现 -->
-      <div v-if="navTabName === 'find'">
-        <explore :exploreList="finds"
-                 :disableOperationArr="disableOperationArr"
-                 @disableOperationEvents="disableOperationEvents"
-        ></explore>
-      </div>
+      
 
       <!-- 精选 -->
       <div v-if="navTabName === 'picked'">
-
-        <div class="banners" v-if="bannerList && bannerList.length > 0">
-          <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
-            <swiper-item v-for="(item, index) in bannerList" :key="`banner_${index}`">
-              <a href="#" @click.prevent.stop="handleTapBanner(item)"><image-item class="image-item" :src="item.imgUrl" mode="horizontal" /></a>
-            </swiper-item>
-          </swiper>
-        </div>
+        
+        
         <div class="communities" v-if="communities && communities.length > 0">
           <div class="list">
-            <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+            <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" />
           </div>
         </div>
 
@@ -105,7 +111,7 @@ import Scroller from '@/components/scroller'
 
 import ListMixin from '@/mixins/list'
 
-import { getBeaconsApi, getBannersApi, getTagsListApi, getSelectionApi, getJoineListdApi, getTabBardApi } from '@/api/pages/home'
+import { getBeaconsApi, getBannersApi, getTagsListApi, getJoineListdApi, getTabBardApi } from '@/api/pages/home'
 
 @Component({
   name: 'home-index',
@@ -123,15 +129,13 @@ export default class HomeIndex extends Vue {
   navTabName = 'picked'
   // 社区列表
   ready = false
-  disableOperationArr = ['comment', 'praise']
   isMessage = false
 
   // ******************* 已加入 **********************
   creations = []
   joins = []
   likes = []
-  // ******************** 发现 ***********************
-  finds = []
+  
   // ******************** 精选 ***********************
   bannerList = []
   communities = []
@@ -158,7 +162,6 @@ export default class HomeIndex extends Vue {
     if (this.navTabName !== targetName) {
       this.ready = false
       this.joins = []
-      this.finds = []
       this.communities = []
       this.navTabName = targetName
       const name = targetName === 'picked' ? 'home' : targetName
@@ -183,11 +186,7 @@ export default class HomeIndex extends Vue {
     this.pickedInit().then(() => {})
   }
 
-  disableOperationEvents (e) {
-    const {eventType} = e
-    console.log(eventType, '拦截')
-    this.$router.push(`/index/details/${this.finds[e.itemIndex].circleId}`)
-  }
+  
 
   findMore () {
     this.toggle('picked')
@@ -202,9 +201,6 @@ export default class HomeIndex extends Vue {
     this.pagination.end = false
     this.pagination.busy = false
     switch (navTabName) {
-      case 'find':
-        await this.findInit()
-        break
       case 'joined':
         await this.joinedInit()
         break
@@ -237,16 +233,6 @@ export default class HomeIndex extends Vue {
     await this.getList({ page: 1 })
   }
 
-  /**
-   * 发现 Tab 初始
-   */
-  async findInit () {
-    this.pagination.end = false // 初始化数据，必定不是最后一页
-    console.log('发现 Tab 初始')
-
-    await this.getList({ page: 1 })
-  }
-
   // ------------------------------------------------
   /**
    * 已加入
@@ -254,12 +240,7 @@ export default class HomeIndex extends Vue {
   getJoinedApi (params) {
     return getJoineListdApi(params)
   }
-  /**
-   * 发现
-   **/
-  getFindApi (params) {
-    return getSelectionApi(params)
-  }
+  
   /**
    * 精选
    **/
@@ -350,31 +331,7 @@ export default class HomeIndex extends Vue {
           if (recommends && page === 1) {
             this.likes = recommends
           }
-
           allTotal = res.total
-          break
-        default:
-          res = await this.getFindApi(params)
-          if (res && res.list && res.list.length > 0) {
-            res.list.forEach((item) => {
-              if (item['modelType'] === 'problem') {
-                if (item['answers']) {
-                  item['answers'].forEach((answer) => {
-                    answer.musicState = 0
-                    answer.progress = 0
-                  })
-                }
-              } else if (item['circleType'] === 1) {
-                item.musicState = 0
-                item.progress = 0
-              } else if (item['circleType'] === 2) {
-                item.videoPlay = false
-              }
-            })
-            console.log('发现: ', res)
-            this.finds = res.list
-            allTotal = res.total
-          }
           break
       }
 
@@ -432,6 +389,10 @@ export default class HomeIndex extends Vue {
 }
 </script>
 <style lang="less" scoped>
+/* 隐藏滚动条 以免下方选中色块被遮住 */
+::-webkit-scrollbar {
+  height: 0px;
+}
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
@@ -440,7 +401,10 @@ export default class HomeIndex extends Vue {
   box-sizing: border-box;
 
   &.picked {
-    padding: 90px 0 50px;
+    padding: 113px 0 50px;
+  }
+  &.hasBanner {
+    padding: 283px 0 50px;
   }
 
   & .fixed {
@@ -455,14 +419,13 @@ export default class HomeIndex extends Vue {
 
   & .nav-bar {
     box-sizing: border-box;
-    height: 49px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
     color: #929292;
-    padding: 0 75px 0 60px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    line-height: 1.22;
+    padding: 12px 15px 13px;
     background-color: #ffffff;
-    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1); /* no */
+    /* box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);  */
 
     & span.join.message:before {
       content: '';
@@ -478,28 +441,24 @@ export default class HomeIndex extends Vue {
     & span {
       display: inline-block;
       height: 100%;
-      line-height: 49px;
+      line-height: 48px;
       position: relative;
+      margin-right: 22px;
+      vertical-align: top;
+      &:nth-of-type(3) {
+        margin-right: 0;
+        float: right;
+        font-size: 15px;
+        color: #354048;
+        font-weight: 300;
+      }
     }
-    &.joined span:nth-of-type(1),
-    &.find span:nth-of-type(3),
-    &.picked span:nth-of-type(2) {
+    &.joined span:nth-of-type(2),
+    &.picked span:nth-of-type(1) {
       color: #354048;
       font-weight: 500;
+      font-size: 24px;
       position: relative;
-    }
-
-    &.joined span:nth-of-type(1):after,
-    &.find span:nth-of-type(3):after,
-    &.picked span:nth-of-type(2):after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 2px;
-      border-radius: 2px;
-      background-color: #ffe266;
     }
   }
 
@@ -509,27 +468,85 @@ export default class HomeIndex extends Vue {
     overflow-x: scroll;
     font-weight: 300;
     white-space: nowrap; /*不换行*/
-    line-height: 40px;
     padding: 0 15px;
-
+    background: #f8f8f8;
     & > span {
       margin-left: 25px;
       color: #929292;
       display: inline-block;
-
+      height: 40px;
+      line-height: 40px;
+      position: relative;
       &:first-of-type {
         margin-left: 0;
       }
 
       &.selected {
         font-weight: 500;
-        color: #d7ab70;
+        color: #354048;
+        
+        &::before {
+          content: '';
+          width: 15px;
+          height: 3px;
+          border-radius: 22px;
+          background: #ffe266;
+          position: absolute;
+          left: 50%;
+          margin-left: -7.5px;
+          bottom: 0;
+        }
       }
     }
   }
-
-  .banners {
-    margin: 0 15px 15px;
+  .chose-tab {
+    ul {
+      white-space: nowrap;
+      font-size: 0;
+      overflow-x: scroll;
+      line-height: 0;
+      li {
+        width: 151px;
+        display: inline-block;
+        margin-left: 15px;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+        &:last-child {
+          margin-right: 15px;
+        }
+        .chose-tab-img {
+          width: 100%;
+          height: 93px;
+          border-radius: 6px 6px 0 0;
+        }
+        .chose-tab-con {
+          white-space: normal;
+          width: 132px;
+          height: 36px;
+          font-family: PingFangSC;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 1.29;
+          margin: 10px 10px 11px 0; 
+          padding-left: 9px;
+          .setEllipsisLn();
+          position: relative;
+          &::before {
+            content: '';
+            width: 3px;
+            height: 12px;
+            background-color: #ffe266;
+            display: block;
+            position: absolute;
+            top: 5px;
+            left: 0px;
+          }
+        }
+      }
+    }
+  }
+  /* .banners {
+    margin: 13px 15px 0px;
     border-radius: 3px;
     font-size: 0;
     line-height: 1;
@@ -547,14 +564,14 @@ export default class HomeIndex extends Vue {
         overflow: hidden;
       }
     }
-  }
+  } */
 
   .joined-list {
     margin-top: 15px;
   }
 
   .communities {
-    padding: 10px 0 20px;
+    padding: 15px 0 0;
 
     & > .title {
       display: block;
@@ -565,7 +582,7 @@ export default class HomeIndex extends Vue {
     }
 
     .community-item:not(:last-child) {
-      margin-bottom: 25px;
+      margin-bottom: 15px;
     }
   }
 

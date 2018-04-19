@@ -187,18 +187,21 @@ export default class exploreItem extends Vue {
       console.log(contentText.offsetHeight, contentText.scrollHeight)
       if (contentText.scrollHeight > contentText.offsetHeight) {
         const fullText = document.createElement('span')
-        fullText.className = 'full-text'
-        fullText.innerText = '全文'
+        fullText.className = 'full-text open'
+        fullText.innerText = '展开全文'
+        console.log(contentText.classList)
         fullText.onclick = (e) => {
           e.preventDefault()
           e.stopPropagation()
 
-          if (fullText.innerText === '全文') {
+          if (fullText.innerText === '展开全文') {
             contentText.classList.remove('ellipsis')
-            fullText.innerText = '收起'
+            fullText.innerText = '收起全文'
+            fullText.className = 'full-text close'
           } else {
+            fullText.innerText = '展开全文'
             contentText.classList.add('ellipsis')
-            fullText.innerText = '全文'
+            fullText.className = 'full-text open'
           }
         }
         el.lastChild.innerHTML = ''

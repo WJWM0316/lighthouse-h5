@@ -1,7 +1,7 @@
 @import "../../styles/mixins";
 
 .community-info-card {
-  padding: 0 15px 22px;
+  padding: 0 15px 15px;
   border-bottom: solid 1px #ededed; /* no */
 
   .master-info {
@@ -16,7 +16,8 @@
       flex-flow: column nowrap;
       justify-content: space-between;
       line-height: 1;
-      width: 205px;
+      margin-left: 15px;
+      flex: 1;
 
       & .community-title {
         font-size: 18px;
@@ -28,7 +29,7 @@
 
       & .community-desc {
         margin-top: 6px;
-        .setEllipsis();
+        .setEllipsisLn(1);
       }
 
       & .left-desc {
@@ -46,38 +47,38 @@
         font-size: 0;
         display: flex;
         align-items: center;
-
+        justify-content: center;
+        width: 100%;
         & span {
-          padding: 3px 6px;
-          font-size: 13px;
+          flex: 1;
         }
-        & span:nth-of-type(1) {
-          display: inline-block;
-          color: #FFF;
-          background-color: rgba(53, 64, 72, 0.8);
-          max-width: 95px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          word-wrap: normal;
-        }
-        & span:nth-of-type(2) {
-          padding: 3px 8px;
+        .price {
           color: #d7ab70;
-          background-color: rgba(255, 226, 102, 0.15);
-
-          &.end {
-            color: #bcbcbc;
-            background-color: rgba(53, 64, 72, 0.06);
-          }
+          font-size: 14px;
+          line-height: 18px;
+        }
+        .job {
+          flex-basis: 150px;
+          color: #929292;
+          font-size: 12px;
+          line-height: 16px;
+          padding-left: 30px;
+          text-align: right;
+          box-sizing: border-box;
+          .setEllipsisLn(1);
+        }
+        .status {
+          color: #d7ab70;
+          font-size: 14px;
+          line-height: 18px;
+        }
+        .end {
+          color: #bcbcbc;
+          font-size: 14px;
+          line-height: 18px;
         }
       }
 
-      & span.free {
-        padding: 3px 6px;
-        background: #ffe266;
-        color: #354048;
-      }
 
       & .left-desc p:last-of-type {
         margin-top: 8px;
@@ -85,8 +86,8 @@
       }
     }
     .right {
-      width: 120px;
-      height: 120px;
+      width: 74px;
+      height: 74px;
       flex: 0 0 auto;
       position: relative;
 

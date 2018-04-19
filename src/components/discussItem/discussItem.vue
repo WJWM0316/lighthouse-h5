@@ -3,14 +3,21 @@
   <div class="discuss-item" @click="toCommentList(item['commentId'])">
 
     <!-- 头像 -->
-    <div class="left">
+    <div class="content-head">
       <img :src="item.avatar" class="user-image" @click.stop="toUserInfo(item.userId)" />
+      <div class="user-box">
+        <div>
+          <!-- 用户名 -->
+          <span class="user-name" @click.stop="toUserInfo(item.userId)">{{item.realName}}</span>
+          <!-- 用户头衔 -->
+          <p class="user-career" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
+        </div>
+      </div>
     </div>
 
     <div :class="{right: true, border: !hideBorder}">
-      <!-- 用户名 -->
-      <span class="user-name" @click.stop="toUserInfo(item.userId)">{{item.realName}}</span>
-
+      
+      
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
 

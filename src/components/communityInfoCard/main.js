@@ -14,7 +14,10 @@ import Component from 'vue-class-component'
         }
       }
     },
-
+    cardType: {
+      type: String,
+      default: 'joined'
+    },
     showFreeIdentification: {
       type: Boolean,
       default () {
