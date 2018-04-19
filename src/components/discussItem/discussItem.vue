@@ -3,21 +3,22 @@
   <div class="discuss-item" @click="toCommentList(item['commentId'])">
 
     <!-- 头像 -->
-    <div class="content-head">
-      <img :src="item.avatar" class="user-image" @click.stop="toUserInfo(item.userId)" />
-      <div class="user-box">
-        <div>
-          <!-- 用户名 -->
-          <span class="user-name" @click.stop="toUserInfo(item.userId)">{{item.realName}}</span>
-          <!-- 用户头衔 -->
-          <p class="user-career" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
-        </div>
-      </div>
+    <div class="left">
+    <img :src="item.avatar" class="user-image" @click.stop="toUserInfo(item.userId)" />
     </div>
 
     <div :class="{right: true, border: !hideBorder}">
       
-      
+      <div class="content-head">
+        <div class="user-box">
+          <div>
+            <!-- 用户名 -->
+            <span class="user-name" @click.stop="toUserInfo(item.userId)">{{item.realName}}</span>
+            <!-- 用户头衔 -->
+            <p class="user-career" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
+          </div>
+        </div>
+      </div>
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
 
@@ -46,13 +47,13 @@
         <div class="operation">
           <!-- 点赞按钮 -->
           <button v-if="!hidePraiseBtn" @click.stop="praise">
-            <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
-            <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+            <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
+            <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
             {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
-            <img class="icon-pinglun" src="./../../assets/icon/pinglun2@3x.png" />
+            <img class="icon-pinglun" src="./../../assets/icon/bnt_comment@3x.png" />
             {{item.commentTotal > 0 ? item.commentTotal : '评论'}}
           </button>
           <!-- 灯塔信息 -->

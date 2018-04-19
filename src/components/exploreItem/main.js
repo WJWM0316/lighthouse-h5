@@ -10,6 +10,10 @@ import moment from 'moment'
       type: Object,
       required: true
     },
+    isFold: {
+      type: Boolean,
+      default: true
+    },
     // 对象下标
     itemIndex: {
       type: Number

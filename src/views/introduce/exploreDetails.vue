@@ -19,6 +19,7 @@
                  :hideBorder="true"
                  :hideCommentArea="true"
                  :disableContentClick="true"
+                 :isFold="false"
                  :disableOperationArr="disableOperationArr"
                  @disableOperationEvents="disableOperationEvents"
         ></explore>

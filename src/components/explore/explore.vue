@@ -4,6 +4,7 @@
     <explore-item v-for="item,index in exploreList"
                   :item="item"
                   :key="index"
+                  :isFold="isFold"
                   :itemIndex="index"
                   :hideCommentBtn="hideCommentBtn"
                   :hidePraiseBtn="hidePraiseBtn"
@@ -34,6 +35,11 @@
       exploreList: {
         type: Array,
         required: true
+      },
+      // 是否显示折叠功能
+      isFold: {
+        type: Boolean,
+        'default': true
       },
       // 是否隐藏评论按钮
       hideCommentBtn: {

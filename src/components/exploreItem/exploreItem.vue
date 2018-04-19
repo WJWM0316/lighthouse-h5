@@ -68,10 +68,9 @@
 
         <!-- 只有文字 -->
         <div ref="circle-content">
-          <p class="content-text ellipsis">{{item.content}}</p>
-          <p class="full-text-btn">{{isFullText('circle-content')}}</p>
+          <p class="content-text" :class="{'ellipsis': isFold}">{{item.content}}</p>
+          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
         </div>
-
 
         <!-- 音频 -->
         <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
@@ -151,18 +150,18 @@
 
         <div class="operation">
           <!-- 分享按钮 -->
-          <button @click.stop="praise">
-            <img class="icon-share" src="./../../assets/icon/icon_share_gray.png" />
-          </button>
+          <!-- <button @click.stop="praise">
+            <img class="icon-share" src="./../../assets/icon/bnt_share@3x.png" />
+          </button> -->
           <!-- 点赞按钮 -->
           <button v-if="!hidePraiseBtn" @click.stop="praise">
-            <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
-            <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+            <img v-if="item.favorTotal === 0" class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
+            <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
             {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
-            <img class="icon-pinglun" src="./../../assets/icon/pinglun2@3x.png" />
+            <img class="icon-pinglun" src="./../../assets/icon/bnt_comment@3x.png" />
             {{item.commentTotal > 0 ? item.commentTotal : '评论'}}
           </button>
         </div>
@@ -172,7 +171,7 @@
       <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || item.commentTotal > 0)">
         <!-- 点赞信息 -->
         <div class="praise-block" v-if="item.favorTotal > 0" @click.stop="toDetails({to: 'praise'})">
-            <img class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+            <img class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
             <div class="praise-name">
                 <span class="favor-name" v-for="(favor, favorIndex) in item.favors" @click.stop="toDetails">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
             </div>
@@ -181,9 +180,15 @@
 
         <!-- 评论信息 -->
         <div class="reply-block" v-if="item.commentTotal > 0">
-          <div class="reply" v-for="reply in item.comments">
-            <p class="favor-content"><span class="favor-name">{{reply.realName}}：</span>{{reply.content}}</p>
+          <div class="hot-reply">
+            <div class="hot-reply-icon">热门评论</div>
+            <div class="reply" v-for="(reply,index) in item.comments" v-if="index === 0">
+              <p class="favor-content"><span class="favor-name">{{reply.realName}}：</span>{{reply.content}}</p>
+            </div>
           </div>
+          <!-- <div class="reply" v-for="reply in item.comments">
+            <p class="favor-content"><span class="favor-name">{{reply.realName}}：</span>{{reply.content}}</p>
+          </div> -->
           <!-- <div class="reply" v-if="item.commentTotal > 10">
             <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
           </div> -->
