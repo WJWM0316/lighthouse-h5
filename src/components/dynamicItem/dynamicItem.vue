@@ -9,7 +9,14 @@
 
     <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
-      <span class="user-name" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}</span>
+      <div class="user-masage">
+      	<span class="user-name" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}</span>
+      	<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career">123456</span>
+      </div>
+      <!--头衔-->
+      <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
+			<!--<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career">1231324654</span>-->
+
 
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
@@ -57,7 +64,12 @@
       <div class="publish-content" v-else>
 
         <!-- 只有文字 -->
-        <p class="content-text" v-if="item.circleType === 0">{{item.content}}</p>
+        <!--<p class="content-text" v-if="item.circleType === 0">{{item.content}}</p>-->
+        <!--限制六行-->
+        <div ref="circle-content" v-if="item.circleType === 0">
+          <p class="content-text ellipsis">{{item.content}}</p>
+          <p class="full-text-btn">{{isFullText('circle-content')}}</p>
+        </div>
 
         <!-- 音频 -->
         <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
@@ -79,7 +91,13 @@
 
         <!-- 文字与视频 -->
         <div v-if="item.circleType === 2">
-          <p class="content-text">{{item.content}}</p>
+          <!--<p class="content-text">{{item.content}}</p>-->
+          <!--限制文本行数-->
+          <div ref="circle-content">
+	          <p class="content-text ellipsis">{{item.content}}</p>
+	          <p class="full-text-btn">{{isFullText('circle-content')}}</p>
+	        </div>
+	        
           <div class="content-video" @click.stop="videoClick">
             <video controls v-show="item.videoPlay" ref="video"></video>
             <div class="placeholder" v-show="!item.videoPlay">
@@ -92,7 +110,13 @@
 
         <!-- 文字与图片 -->
         <div v-if="item.circleType === 3">
-          <p class="content-text">{{item.content}}</p>
+          <!--<p class="content-text">{{item.content}}</p>-->
+          <!--限制文本行数-->
+          <div ref="circle-content">
+	          <p class="content-text ellipsis">{{item.content}}</p>
+	          <p class="full-text-btn">{{isFullText('circle-content')}}</p>
+	        </div>
+	        
           <div class="content-images">
             <!-- 图片为 1 张时 -->
             <div class="item-image one" v-if="item.files.length === 1">

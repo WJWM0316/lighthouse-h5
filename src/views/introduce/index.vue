@@ -28,8 +28,12 @@
 
       <div class="module">
         <div class="module-title">
-          <div class="hr"></div>
-          <p>关于灯塔</p>
+        	<!--<div class="hr"></div>-->
+          <p>关于社区</p>
+          
+          <!--关于塔主标签-->
+          <!--<span class="module-title-tip-line"></span>
+          <div class="module-title-tip">关于塔主</div>-->
         </div>
         <div class="module-content h5-code" v-html="pageInfo.intro">
         </div>
@@ -620,11 +624,51 @@
         margin: 0 15px;
         font-size: 18px;
         color: #929292;
-        font-weight: 500;
+        font-weight: 600;
+        
+        /*关于塔主标签*/
+        /*margin-bottom: 30px;
+        position: relative;
+        
+        .module-title-tip{
+        	padding: 0 6px;
+        	font-size: 16px;
+        	height: 22.5px;
+        	line-height: 22.5px;
+        	position: absolute;
+        	bottom: -22.5px;
+        	left: 50%;
+        	transform: translateX(-50%);
+        	color: #D7AB70;
+        	font-weight: normal;
+        	background: #fff;
+        	
+        }
+        .module-title-tip-line{
+        	position: absolute;
+        	bottom: -11.5px;
+        	width: 100%;
+        	height: 0.5px;
+        	background: #D7AB70;
+        }*/
 
         & p {
           display: block;
-          padding: 30px 0 10px;
+					font-size:18px;
+          padding: 30px 0 15px 20px;
+					line-height:22px;
+					position:relative;
+					
+					&::before{
+						content:'';
+						display:block;
+						position:absolute;
+						top:33px;
+						left:0;
+						width:5px;
+						height:17px;
+						background-color:#ffe266;
+					}
         }
       }
       .module-content {
@@ -633,7 +677,7 @@
         }
 
         &.h5-code {
-          padding: 0 15px;
+          padding: 0 20px;
           font-size: 15px;
           word-wrap: break-word;
           width: 100%;
@@ -665,7 +709,7 @@
       left: 0;
       bottom: 0;
       width: 100%;
-      height: 54px;
+      height: 49px;
       /*position: relative;*/
       background: #f4f4f4;
       display: flex;
@@ -740,24 +784,36 @@
         }
 
         & span {
+        	/*color: #354048;*/
           display: block;
-          margin-top: 2px;
+          margin-top: 1px;
         }
         & span:first-of-type {
           margin-top: 0;
-          font-size: 15px;
+          font-size: 16px;
+					line-height:20px;
         }
 
         &.free-btn {
           color: #d7ab70;
           background-color: #ffffff;
+					/*bing-增加*/
+					flex-grow:1;
+					width:150px;
+					& span:nth-of-type(2){
+						font-size:12px;
+						line-height:16px;
+					}
+					/*bing-增加*/
         }
         &.pay-btn {
+					width:225px;
           color: #354048;
           background-color: #ffe266;
           & span:not(:first-of-type) {
             color: rgba(53, 64, 72, 0.8);
           }
+					flex-grow:1;
         }
         &.free-btn-disable, &.pay-btn-disable {
           color: #bcbcbc;

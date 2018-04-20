@@ -1,15 +1,20 @@
+<!--灯塔头部组件-->
 <template>
   <a href="#" class="m-community" :class="cardClasses" @click.prevent.stop="handleTap">
+  	<!--灯塔头部-->
     <div class="cover-container">
       <image-item class="cover" :src="community.detailImg" mode="full" />
+      <span class="header-photo">
+      	<img :src="community.detailImg"/>
+      </span>
       <div class="master">
-        <h3 class="name" :class="{ round: type === 1 }">
+        <p class="name" :class="{ round: type === 1 }">
           <span class="text" v-text="community.master && community.master.realName"></span>
-        </h3>
-        <p class="career" v-text="community.master && community.master.career"></p>
+        </p><span v-if="community.master && community.master.career">/</span><p class="career" v-text="community.master && community.master.career">asdfasdf</p>
       </div>
       <slot name="cover-addon"></slot>
     </div>
+    <!--灯塔头部-->
 
     <div class="info" :class="{ 'type-2': type === 2 }">
       <h3 class="title" v-text="community.title"></h3>
@@ -168,7 +173,7 @@ export default class CommunityCard extends Vue {
   &.type-1 {
 
     .cover-container {
-
+			
       .cover {
         border-radius: 3px;
       }
@@ -203,7 +208,29 @@ export default class CommunityCard extends Vue {
   &.type-2 {
 
     .cover-container {
-      height: 245px;
+      height: 171px;
+      /*头部改变新增属性*/
+      position: relative;
+    	
+			.header-photo{
+					display:block;
+					width:80px;
+					height: 80px;
+					border-radius: 50%;
+					overflow:hidden;
+					position: absolute;	
+					top:42px;
+					left:50%;
+					transform:translateX(-50%);
+					margin-bottom:7.5px;
+					
+					>img{
+						border-radius: 50%;
+						width: 100%;
+						height: 100%;
+					}
+			}
+			/*新增*/
 
       .master {
         padding-bottom: 17px;
@@ -211,7 +238,7 @@ export default class CommunityCard extends Vue {
     }
 
     .info {
-      padding: 0 15px;
+      padding: 0 20px;
     }
   }
 
@@ -233,25 +260,32 @@ export default class CommunityCard extends Vue {
 
   .cover-container {
     position: relative;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
     height: 226px;
 
     .cover {
       background: #ccc;
       width: 100%;
-      height: 100%;
+      /*height: 100%;*/
+     	height: 100px;
     }
 
     .master {
+	    width: 100%;
+	    text-align: center;
+	    
       box-sizing: border-box;
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      /*position: absolute;
+      top: 130px;
+      left: 50%;*/
+      /*right: 0;*/
+      /*bottom: 0;*/
+     	/*transform: translateX(-50%);*/
       padding: 12px;
-      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .2));
+      padding-top: 32px;
+      /*background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .2));*/
       /*width: 100%;*/
-      color: #fff;
+      color: #666666;
 
       .name {
         display: inline-block;
@@ -261,11 +295,14 @@ export default class CommunityCard extends Vue {
         font-size: 0;
         font-weight: normal;
         max-width: 100%;
+        
+        padding-right:2px;
 
         .text {
           display: inline-block;
-          line-height: 40px;
-          font-size: 27px;
+          line-height: 16px;
+          /*font-size: 27px;*/
+         font-size: 12px;
         }
 
         &.round {
@@ -297,10 +334,10 @@ export default class CommunityCard extends Vue {
       }
 
       .career {
+      	display: inline-block;
         margin-bottom: -7px;
-        display: block;
-        line-height: 24px;
-        font-size: 13px;
+        line-height: 16px;
+        font-size: 12px;
       }
     }
   }
@@ -309,24 +346,25 @@ export default class CommunityCard extends Vue {
 
     .title {
       display: block;
-      line-height: 24px;
-      font-weight: normal;
+      line-height: 22px;
+      font-weight: 600;
       font-size: 18px;
       color: @font-color-default;
     }
 
     .desc {
       display: block;
-      margin-bottom: 6px;
-      line-height: 21px;
-      font-size: 13px;
-      color: #929292;
+      margin-top: 6px;
+      margin-bottom: 23px;
+      line-height: 18px;
+      font-size: 14px;
+      color: #666666;
     }
 
     .bottom {
       display: flex;
-      font-size: 13px;
-      line-height: 19px;
+      font-size: 14px;
+      line-height: 18px;
       color: #929292;
 
       .left {

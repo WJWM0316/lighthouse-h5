@@ -621,10 +621,12 @@
           right: 5px;;
           bottom: 10px;
           padding: 0 10px;
-          background: none;
+          /*background: none;*/
           line-height: 28px;
           font-size: 13px;
-          color: rgba(255, 255, 255, .8);
+          /*color: rgba(255, 255, 255, .8);*/
+         	color:#000;
+         	background: #ccc;
 
           &:active {
             background: none;
