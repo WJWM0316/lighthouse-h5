@@ -100,8 +100,8 @@ export default class App extends Vue {
       label: '灯塔'
     },
     {
-      icon: require('./assets/icon/tab-lighthouse-2@3x.png'),
-      selectIcon: require('./assets/icon/invalid-name@3x.png'),
+      icon: require('./assets/icon/tab_discover@3x.png'),
+      selectIcon: require('./assets/icon/tab_discover_pre@3x.png'),
       src: '/find',
       label: '发现'
     },

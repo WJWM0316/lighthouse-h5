@@ -1,9 +1,19 @@
 @import "./../../styles/mixins";
 
 .discuss-item {
-  padding: 0 15px;
+  padding: 0 20px;
+  display: flex;
+  .photo {
+    flex-basis: 40px;
+  }
+  .user-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #000;
+  }
   & .content-head {
-    padding: 20px 0 0 50px;
     position: relative;
     .user-image {
       width: 40px;
@@ -14,49 +24,47 @@
       top:20px;
       left:0;
     }
-    .user-box {
+    .user-box , .other-box{
       display: flex;
       align-items: center;
       height: 40px;
+      &.other-box {
+        height: auto;
+        line-height: 18px;
+      }
       .user-career, .user-name {
         width: 100%;
+        &.master {
+          color: #d7ab70;
+        }
+        &.guest {
+          color: #4080AD;
+        }
       }
       .user-career {
-        color: #999;
+        color: #929292;
       }
-      
     }
 
   }
   & .left {
     flex: 0 0 auto;
-    padding: 20px 0;
+    padding: 15px 0;
     margin-right: 15px;
-    & > .user-image {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      overflow: hidden;
-      background: #000;
-    }
   }
 
   & .right {
     flex-grow: 1;
-    padding: 20px 0;
+    padding: 15px 0;
     font-size: 15px;
 
     &.border {
       border-bottom: solid 1px #ededed; /* no */
     }
 
-    & .user-name {
-      color: #d7ab70;
-    }
-
     & .info-area {
       display: flex;
-      margin-top: 13px;
+      margin-top: 12px;
       justify-content: space-between;
       align-items: center;
       font-size: 13px;
@@ -78,9 +86,10 @@
           display: flex;
           align-items: center;
           padding: 0 4px;
+          margin-right: 13px;
         }
         & > button:last-of-type {
-          margin-left: 22px;
+          margin: 0;
         }
         & > button:after {
           border-style: none;
@@ -95,7 +104,7 @@
       }
 
       & .del-btn {
-        color: #576b95;
+        color: #4080AD;
         margin-left: 10px;
       }
     }
@@ -138,7 +147,7 @@
       }
       & .favor-name {
         font-weight: 500;
-        color: #576b95;
+        color: #4080AD;
       }
     }
 
@@ -151,12 +160,13 @@
     // margin-top: 16px;
 
     & .content-text {
-      margin-top: 5px;
+      margin-top: 6px;
       word-break: break-all;
       word-wrap: break-word;
-      line-height: 1.5;
+      line-height: 20px;
       color: #354048;
       display: block;
+      font-size: 16px;
       white-space: pre-line;
     }
 

@@ -19,6 +19,7 @@
                  :hideBorder="true"
                  :hideCommentArea="true"
                  :disableContentClick="true"
+                 :isFold="false"
                  :disableOperationArr="disableOperationArr"
                  @disableOperationEvents="disableOperationEvents"
         ></explore>
@@ -33,8 +34,13 @@
             <span @click="toggle('praise')">点赞({{item.favorTotal}})</span>
           </div>
         </div>
-
-        <div class="content-comment" v-if="navTabName === 'comment'">
+        <!-- 评论 -->
+        <template v-if="navTabName === 'comment'">
+          <!-- 热门评论 -->
+        <div class="hot-area">
+          <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
+        </div>
+        <div class="content-comment" >
           <discuss-item v-for="item,index in discussItemList"
                         :item="item"
                         :key="index"
@@ -50,7 +56,30 @@
             <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
           </div>
         </div>
-        <div class="content-praise" v-else>
+        <!-- 全部评论 -->
+        <div class="hot-area">
+          <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
+        </div>
+        <div class="content-comment" >
+          <discuss-item v-for="item,index in discussItemList"
+                        :item="item"
+                        :key="index"
+                        :itemIndex="index"
+                        :disableContentClick="true"
+                        :disableUserClick="true"
+                        :disableCommentAreaClick="true"
+                        @operation="operation">
+          </discuss-item>
+
+
+          <div v-if="discussItemList.length === 0">
+            <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
+          </div>
+        </div>
+        </template>
+        <!-- 点赞 -->
+        <template v-else>
+        <div class="content-praise">
           <classmate-item v-for="item, index in classmateList"
                           :item='item'
                           :key="index">
@@ -60,6 +89,7 @@
             <p class="community-empty-desc fs13">成为第一个点赞的人吧~</p>
           </div>
         </div>
+        </template>
       </div>
 
     </scroll>
@@ -314,7 +344,7 @@
       color: #929292;
       font-size: 15px;
       border-bottom: solid 1px #dcdcdc; /* no */
-
+      
       & span {
         height: 40px;
         line-height: 40px;
@@ -354,7 +384,19 @@
         z-index: 99;
       }
     }
-
+    & .hot-area {
+      padding-left: 32px;
+      font-size: 16px;
+      line-height: 40px;
+      color: #354048;
+      background: #F8F8F8;
+      .hot-icon {
+        width: 15px;
+        height: 20px;
+        display: inline-block;
+        margin-right: 10px;
+      }
+    }
     & .container {
       padding-top: 4px;
       & .container-title {

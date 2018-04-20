@@ -181,8 +181,6 @@ export default class HomeIndex extends Vue {
 
     this.pickedParams.tagId = communityTagList[tagIndex].id
     this.communities = []
-    this.bannerList = []
-
     this.pickedInit().then(() => {})
   }
 
@@ -200,6 +198,7 @@ export default class HomeIndex extends Vue {
     const navTabName = this.navTabName
     this.pagination.end = false
     this.pagination.busy = false
+    this.bannerList = await this.getBanners()
     switch (navTabName) {
       case 'joined':
         await this.joinedInit()
@@ -229,7 +228,6 @@ export default class HomeIndex extends Vue {
     console.log('精选 Tab 初始')
 
     await this.getTagsList()
-    this.bannerList = await this.getBanners()
     await this.getList({ page: 1 })
   }
 
@@ -251,7 +249,7 @@ export default class HomeIndex extends Vue {
    * 获取banner列表
    */
   getBanners () {
-    return getBannersApi(this.pickedParams)
+    return getBannersApi()
   }
   /**
    * 获取banner列表
@@ -389,10 +387,6 @@ export default class HomeIndex extends Vue {
 }
 </script>
 <style lang="less" scoped>
-/* 隐藏滚动条 以免下方选中色块被遮住 */
-::-webkit-scrollbar {
-  height: 0px;
-}
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
@@ -404,7 +398,7 @@ export default class HomeIndex extends Vue {
     padding: 113px 0 50px;
   }
   &.hasBanner {
-    padding: 283px 0 50px;
+    padding: 259px 0 50px;
   }
 
   & .fixed {
@@ -441,7 +435,7 @@ export default class HomeIndex extends Vue {
     & span {
       display: inline-block;
       height: 100%;
-      line-height: 48px;
+      line-height: 24px;
       position: relative;
       margin-right: 22px;
       vertical-align: top;

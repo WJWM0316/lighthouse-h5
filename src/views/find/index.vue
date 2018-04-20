@@ -1,13 +1,15 @@
 <template>
 	<!-- 发现 -->
-  <scroller @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
-    <div>
-      <explore :exploreList="finds"
-               :disableOperationArr="disableOperationArr"
-               @disableOperationEvents="disableOperationEvents"
-      ></explore>
-    </div>
-  </scroller>
+  <div class="find-wrap">
+    <scroller @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
+      <div>
+        <explore :exploreList="finds"
+                 :disableOperationArr="disableOperationArr"
+                 @disableOperationEvents="disableOperationEvents"
+        ></explore>
+      </div>
+    </scroller>
+  </div>
 </template>
 <script>
 import Vue from 'vue'
@@ -148,3 +150,10 @@ export default class HomeIndex extends Vue {
   }
 }
 </script>
+<style scoped>
+  .find-wrap {
+    height: 100%;
+    box-sizing: border-box;
+    padding-bottom: 50px;
+  }
+</style>

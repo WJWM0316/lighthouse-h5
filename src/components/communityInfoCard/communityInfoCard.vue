@@ -16,10 +16,10 @@
           <div class="community-status-box">
             <div class="community-status">
               <!-- <span v-text="community.master && community.master.realName"></span> -->
-              <span v-if="communityStatus && cardType === 'joined'" class="status" :class="communityStatus === '已结束' ? 'end' : ''">社区{{communityStatus}}</span>
+              <span v-if="communityStatus && cardType === 'joined'" class="status" :class="communityStatus === '已结束' ? 'end' : ''">{{communityStatus}}</span>
               <template v-if="cardType === 'picked'">
                   <span v-if="community.joinPrice > 0 && showFreeIdentification" class="price">¥ {{community.joinPrice}}</span>
-                  <span v-else="community.joinPrice === 0 && showFreeIdentification" class="price">免费</span>
+                  <span v-if="community.joinPrice === 0 && showFreeIdentification" class="price">免费</span>
                   <span v-text="community.master && community.master.career" class="job"></span>
               </template>
               
