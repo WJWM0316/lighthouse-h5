@@ -1,9 +1,30 @@
 <template>
   <div class="p-body p-ask">
     <scroller :pullupable="false" :refreshable="false" class="wrapper" @scroll="handleScroll">
+
+      
+
+      <!-- 选择提问导师 -->
+      <div class="teachers_sel">
+        <div class="tea_txt">选择提问导师<span class="txt">（7人）</span></div>
+
+        <div class="tea_cont" scroll-x="true">
+            <div v-for="(item, index) in data2" :key="index" class="teacher " @click="selTeach">
+              <img class="tea_icon" src="" />
+              <div class="tea_tit">{{item.val}}</div>
+              <div class="tea_name">{{index}}</div>
+            </div>
+        </div>
+
+        <!-- 选中的信息 -->
+        <div class="sel_teach">
+          adia<span class="sel_tit">xxx合伙人</span>
+        </div>
+      </div>
+
       <!-- header -->
       <div class="header">
-        <div class="userInfo">
+        <!-- <div class="userInfo">
           <div class="userInfo-img">
             <image-item class="image" :src="userInfo.avatar" mode="horizontal" :round="true"/>
             <i class="sex no-offset" :class="`u-icon-${userInfo.gender === 2 ? 'girl' : 'boy'}`"></i>
@@ -12,7 +33,7 @@
             <h3>{{userInfo.realName}}</h3>
             <p v-if="userInfo.career">{{userInfo.career}}</p>
           </div>
-        </div>
+        </div> -->
 
         <div class="user-input">
         <textarea placeholder="点此输入您想要向大咖提问的问题"
@@ -130,6 +151,30 @@
     askContent = ''
     pumpContent = ''
     isPrivate = 2
+
+    data2 = [{
+        value: 1,
+        isSel: false,
+      },{
+        value: 2,
+        isSel: false,
+      },{
+        value: 3,
+        isSel: false,
+      },{
+        value: 4,
+        isSel: false,
+      },{
+        value: 5,
+        isSel: false,
+      },{
+        value: 6,
+        isSel: false,
+      },{
+        value: 7,
+        isSel: false,
+      }];
+    selTeaIndex = 0;
 
     audio = null
     audioEventCallbacks = {
@@ -355,6 +400,13 @@
       })
     }
 
+    //设置选中老师信息
+    selTeach(index){
+      console.log(index)
+
+      this.selTeaIndex = index;
+    }
+
     /**
      * 点击问题列表追问按钮，唤起悬浮输入框
      * @param {Number} index 问题索引
@@ -484,9 +536,93 @@
       overflow-x: hidden;
       overflow-y: auto;
     }
+    .teachers_sel {
+      background: #ffffff;
+      width: 345px;
+      margin: 0 auto;
+      overflow:hidden;
+      white-space:nowrap;
+      .tea_txt {
+        font-family: 'PingFangSC-Medium';
+        font-size: 16px;
+        color: #354048;
+        height: 20px;
+        line-height: 20px;
+        margin-bottom: 10px;
+        .txt {
+          font-family: 'PingFangSC-Regular';
+          color: #666666;
+          padding-left: 10px;
+        }
+      }
+      .sel_teach {
+        font-family: 'PingFangSC-Medium';
+        font-size: 16px;
+        color: #354048;
+        letter-spacing: 0;
+        line-height: 20px;
+        height: 20px;
+        margin-top: 25px;
+        .sel_tit {
+          font-family: 'PingFangSC-Regular';
+          font-size: 14px;
+          color: #929292;
+
+          padding-left: 15px;
+
+        }
+      }
+      .tea_cont {
+        width: 345px;
+        height:108px;
+        overflow-x: scroll;
+        .teacher {
+          width: 80px;
+          padding-top: 10px;
+          height: 98px;
+          margin-right: 5px;
+          position: relative;
+          display: inline-block;
+          &.sel {
+            background: rgba(255,226,102,0.20);
+            border-radius: 4px;
+          }
+          .tea_icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: block;
+            margin: 0px 10px 10px 10px;
+          }
+          .tea_tit {
+            position: absolute;
+            left: 50%;
+            top: 62.5px;
+            margin-left: -16px;
+            width: 32px;
+            height: 15px;
+            line-height: 15px;
+            border-radius: 40px;
+            background: #FFE266;
+
+            font-family: 'PingFangSC-Light';
+            font-size: 10px;
+            color: #354048;
+            text-align: center;
+          }
+          .tea_name {
+            font-family: 'PingFangSC-Regular';
+            font-size: 14px;
+            color: #354048;
+            text-align: center;
+            line-height: 18px;
+          }
+        }
+      }
+    }
 
     .header {
-      padding: 20px 15px;
+      padding: 12.5px 15px 20px 15px;
       background-color: #fff;
 
       & .userInfo {
@@ -535,7 +671,7 @@
       }
 
       & .user-input {
-        margin-top: 20px;
+        //margin-top: 20px;
         height: 140px;
         border-radius: 6px;
         background-color: #f9f9f9;
