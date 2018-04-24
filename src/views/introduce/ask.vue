@@ -5,8 +5,8 @@
       
 
       <!-- 选择提问导师 -->
-      <div class="teachers_sel">
-        <div class="tea_txt">选择提问导师<span class="txt">（7人）</span></div>
+      <div class="teachers_sel" v-if="teachers.length>0">
+        <div class="tea_txt">选择提问导师<span class="txt">（{{teachers.length}}人）</span></div>
 
         <div class="tea_cont" scroll-x="true">
             <div v-for="(item, index) in teachers" :key="index" class="teacher "
