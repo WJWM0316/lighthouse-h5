@@ -182,3 +182,6 @@ export default class discussItem extends Vue {
     this.$router.push(`/reply/${commentId}`)
   }
 }
+// http://localhost:8080/?#/index/details/174
+// 
+// http://localhost:8080/?#/details/577/1

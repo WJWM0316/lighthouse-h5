@@ -211,13 +211,12 @@ export default class HomeIndex extends Vue {
     const navTabName = this.navTabName
     this.pagination.end = false
     this.pagination.busy = false
-    await this.getBanners()
-
     switch (navTabName) {
       case 'joined':
         await this.joinedInit()
         break
       default:
+        await this.getBanners()
         await this.pickedInit()
         break
     }
@@ -389,7 +388,8 @@ export default class HomeIndex extends Vue {
   /**
    * 滚动监听
    */
-  scroll (scrollTop) {
+  scroll (e) {
+    const {scrollTop} = e.target
     if (scrollTop >= this.scrollHeight) {
       this.isFlex = true
     } else {
