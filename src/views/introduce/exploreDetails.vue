@@ -45,7 +45,7 @@
                         :item="item"
                         :key="index"
                         :itemIndex="index"
-                        :disableUserClick="true"
+                        :disableUserClick="false"
                         :disableCommentAreaClick="true"
                         @operation="operation">
           </discuss-item>
@@ -59,7 +59,7 @@
                         :item="item"
                         :key="index"
                         :itemIndex="index"
-                        :disableUserClick="true"
+                        :disableUserClick="false"
                         :disableCommentAreaClick="true"
                         @operation="operation">
           </discuss-item>
