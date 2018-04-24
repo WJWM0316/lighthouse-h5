@@ -51,11 +51,7 @@
           </discuss-item>
         </div>
         <!-- 全部评论 -->
-<<<<<<< HEAD
         <div class="hot-area"  v-if="discussItemList.length > 0">
-=======
-        <div class="hot-area" v-if="discussItemList.length > 0">
->>>>>>> 304c173878b4d2d9f96ac5a45b475390d6e64753
           <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
         </div>
         <div class="content-comment" >

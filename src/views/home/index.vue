@@ -1,5 +1,5 @@
 <template>
-  <div class="p-body p-home-index" :class="[{'hasBanner' : bannerList && bannerList.length > 0 && navTabName === 'picked'},navTabName]">
+  <div class="p-body p-home-index" :class="[{'hasBanner' : isFlex || !bannerList && bannerList.length === 0 && navTabName === 'picked'}, navTabName]">
     <div class="fixed">
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
@@ -8,9 +8,18 @@
         <span class="create" @click="toggle('center-create-lite')">创建灯塔</span>
        <!--  <span @click="toggle('find')">发现</span> -->
       </div>
-
+       <!-- 分类  用于悬浮顶格-->
+      <div ref="tab" class="classification fs14 tabFixed" v-if="navTabName === 'picked'"  v-show="isFlex || !bannerList && bannerList.length">
+        <span v-for="itemTag, indexTag in communityTagList"
+              :key="indexTag"
+              :class="{selected: itemTag.selected}"
+              v-text="itemTag.tagName"
+              @click="tagSelected(indexTag)"></span>
+      </div>
+    </div>
+<scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- 选项卡 -->
-      <div class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
+      <div  ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
         <ul>
           <li v-for="(item, index) in bannerList" :key="`banner_${index}`" @click.prevent.stop="handleTapBanner(item)">
               <image-item class="chose-tab-img" :src="item.imgUrl" />
@@ -27,16 +36,16 @@
           </swiper>
       </div> -->
        <!-- 分类 -->
-      <div class="classification fs14" v-if="navTabName === 'picked'">
+      <div ref="tab" class="classification fs14" v-if="navTabName === 'picked'" v-show="!isFlex">
         <span v-for="itemTag, indexTag in communityTagList"
               :key="indexTag"
               :class="{selected: itemTag.selected}"
               v-text="itemTag.tagName"
               @click="tagSelected(indexTag)"></span>
       </div>
-    </div>
+   
 
-    <scroller @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
+    
 
       <!-- 已加入 -->
       <div v-if="navTabName === 'joined'">
@@ -130,7 +139,10 @@ export default class HomeIndex extends Vue {
   // 社区列表
   ready = false
   isMessage = false
+  // 悬浮控制
+  isFlex = false
 
+  scrollHeight = 0 // 计算banner 跟 tab 的高度
   // ******************* 已加入 **********************
   creations = []
   joins = []
@@ -181,6 +193,7 @@ export default class HomeIndex extends Vue {
 
     this.pickedParams.tagId = communityTagList[tagIndex].id
     this.communities = []
+    this.getBanners()
     this.pickedInit().then(() => {})
   }
 
@@ -198,7 +211,8 @@ export default class HomeIndex extends Vue {
     const navTabName = this.navTabName
     this.pagination.end = false
     this.pagination.busy = false
-    this.bannerList = await this.getBanners()
+    await this.getBanners()
+
     switch (navTabName) {
       case 'joined':
         await this.joinedInit()
@@ -249,10 +263,17 @@ export default class HomeIndex extends Vue {
    * 获取banner列表
    */
   getBanners () {
-    return getBannersApi()
+    return getBannersApi(this.pickedParams).then(res => {
+      this.bannerList = res
+      if (res.length > 0) {
+        this.$nextTick(() => {
+          this.scrollHeight = this.$refs.tabBanner.clientHeight
+        })
+      }
+    })
   }
   /**
-   * 获取banner列表
+   * 获取tab列表
    */
   getTagsList () {
     return getTagsListApi().then((res) => {
@@ -260,7 +281,6 @@ export default class HomeIndex extends Vue {
         const tagId = this.pickedParams.tagId
         let tagIndex = 0
         res.forEach((tag, index) => {
-          console.log(tagId, tag.id)
           if (tagId === tag.id) {
             tagIndex = index
           }
@@ -366,6 +386,17 @@ export default class HomeIndex extends Vue {
       loaded('done')
     }, 500)
   }
+  /**
+   * 滚动监听
+   */
+  scroll (scrollTop) {
+    if (scrollTop >= this.scrollHeight) {
+      this.isFlex = true
+    } else {
+      this.isFlex = false
+    }
+  }
+
 
   /**
    * 点击banner
@@ -395,15 +426,27 @@ export default class HomeIndex extends Vue {
   box-sizing: border-box;
 
   &.picked {
-    padding: 113px 0 50px;
+    // padding: 113px 0 50px;
+    padding: 49px 0 50px;
   }
   &.hasBanner {
-    padding: 259px 0 50px;
+     padding: 89px 0 50px;
+    // padding: 259px 0 50px;
   }
 
   & .fixed {
     position:fixed;
     top:0;
+    left:0;
+    right:0;
+    background:#fff;
+    margin-top: 0;
+    z-index: 99;
+  }
+
+  & .tabFixed {
+    position:fixed;
+    top:49px;
     left:0;
     right:0;
     background:#fff;

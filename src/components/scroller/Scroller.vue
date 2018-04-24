@@ -156,7 +156,8 @@ export default class Scroller extends Vue {
    */
   handleScroll (e) {
     e.preventDefault()
-    this.$emit('scroll', e)
+    console.log(e.target.scrollTop)
+    this.$emit('scroll', e.target.scrollTop)
   }
 }
 </script>

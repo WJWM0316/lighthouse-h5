@@ -167,6 +167,7 @@
         if (this.$refs['big-shot-introduce-container']) {
           console.log(this.$refs['big-shot-introduce-container'])
           document.body.scrollTop = 0
+          document.documentElement.scrollTop = 0
           this.$refs['big-shot-introduce-container'].scrollTop = 0
         }
         if (this.$refs['headCard']) {
