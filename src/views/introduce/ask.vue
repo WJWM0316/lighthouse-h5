@@ -5,20 +5,24 @@
       
 
       <!-- 选择提问导师 -->
-      <div class="teachers_sel">
-        <div class="tea_txt">选择提问导师<span class="txt">（7人）</span></div>
+      <div class="teachers_sel" v-if="teachers.length>0">
+        <div class="tea_txt">选择提问导师<span class="txt">（{{teachers.length}}人）</span></div>
 
         <div class="tea_cont" scroll-x="true">
-            <div v-for="(item, index) in data2" :key="index" class="teacher " @click="selTeach">
-              <img class="tea_icon" src="" />
-              <div class="tea_tit">{{item.val}}</div>
-              <div class="tea_name">{{index}}</div>
+            <div v-for="(item, index) in teachers" :key="index" class="teacher "
+              :class="{ sel :index === selTeaIndex}" @click="selTeach(index)">
+              <img class="tea_icon" :src="item.avatar" />
+              <div class="tea_tit" v-if="index==0">塔主</div>
+              <div class="tea_tit" v-else>{{item.roleName}}</div>
+              <div class="tea_name txt_ellipsis">{{item.realName}}</div>
+
+              <div class="triangle" v-if="index == selTeaIndex" ></div>
             </div>
         </div>
 
         <!-- 选中的信息 -->
-        <div class="sel_teach">
-          adia<span class="sel_tit">xxx合伙人</span>
+        <div class="sel_teach" v-if="teachers.length>0">
+          {{teachers[selTeaIndex].realName}}<span class="sel_tit">{{teachers[selTeaIndex].career}}</span>
         </div>
       </div>
 
@@ -150,31 +154,11 @@
     pageInfo = {}
     askContent = ''
     pumpContent = ''
-    isPrivate = 2
+    isPrivate = 2;
 
-    data2 = [{
-        value: 1,
-        isSel: false,
-      },{
-        value: 2,
-        isSel: false,
-      },{
-        value: 3,
-        isSel: false,
-      },{
-        value: 4,
-        isSel: false,
-      },{
-        value: 5,
-        isSel: false,
-      },{
-        value: 6,
-        isSel: false,
-      },{
-        value: 7,
-        isSel: false,
-      }];
-    selTeaIndex = 0;
+
+    teachers=[];  //所有导师
+    selTeaIndex = 0; //选中
 
     audio = null
     audioEventCallbacks = {
@@ -210,6 +194,7 @@
     }
 
     created () {
+
       this.communityId = this.$route.params.communityId
       this.pageInit()
     }
@@ -225,15 +210,28 @@
      */
     async pageInit () {
       try {
-        this.isCheck = false
-        this.askContent = ''
-        this.isPrivate = 2
+
+        this.isCheck = false;
+        this.askContent = '';
+        this.isPrivate = 2;
+
+        this.teachers = [];
+        this.selTeaIndex = 0;
 
         const params = {
           communityId: this.communityId
         }
         // const {problem = []} = await getAskInfoApi(params)
         this.pageInfo = await getAskInfoApi(params)
+
+
+
+
+        this.teachers.push(this.pageInfo.master);
+        this.teachers.push(...this.pageInfo.role);
+        console.log(this.teachers);
+
+
         const problem = this.pageInfo.problem || []
         problem.forEach(item => {
           const {answers = []} = item
@@ -281,7 +279,7 @@
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text('支付成功', 'bottom')
             location.reload()
-//            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
+    //location.href = location.href.split('?')[0] + '?' + new     Date().getTime() // todo 假如原来有参数需要换种写法
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
           } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
@@ -295,6 +293,7 @@
      * 提问
      */
     async sendAsk (params) {
+
       try {
         const param = await submitProblemApi(params)
         if (params.payType === 1) {
@@ -374,11 +373,14 @@
         return
       }
 
-      const isPay = this.isHasFree > 0 ? 2 : 1
-      const communityId = this.communityId
+      const isPay = this.isHasFree > 0 ? 2 : 1;
+      const communityId = this.communityId;
+      let userId = this.teachers[this.selTeaIndex].userId;
+
       const params = {
         communityId,
         contact,
+        userId,
         private: this.isPrivate,
         payType: isPay
       }
@@ -525,7 +527,11 @@
 <style lang="less" scoped type="text/less">
   @import "../../styles/mixins";
   @import "../../styles/variables";
-
+  .txt_ellipsis {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+  }
   .p-ask {
     position: relative;
     background-color: #f9f9f9;
@@ -539,9 +545,10 @@
     .teachers_sel {
       background: #ffffff;
       width: 345px;
-      margin: 0 auto;
+      padding: 0 15px;
       overflow:hidden;
       white-space:nowrap;
+      padding-top: 20px;
       .tea_txt {
         font-family: 'PingFangSC-Medium';
         font-size: 16px;
@@ -574,7 +581,7 @@
       }
       .tea_cont {
         width: 345px;
-        height:108px;
+        height:115px;
         overflow-x: scroll;
         .teacher {
           width: 80px;
@@ -586,6 +593,28 @@
           &.sel {
             background: rgba(255,226,102,0.20);
             border-radius: 4px;
+            &::after {
+              position: absolute;
+              left: 0;
+              bottom: 0;
+              width: 80px;
+              height: 3px;
+              content:'';
+              background: #FFE266;
+              border-bottom-right-radius: 50px;
+              border-bottom-left-radius: 50px;
+            }
+          }
+          .triangle{
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            margin-left: -3.5px;
+            width: 0; 
+            height: 0; 
+            border-left: 5px solid transparent; 
+            border-right: 5px solid transparent; 
+            border-top: 7px solid #FFE266; 
           }
           .tea_icon {
             width: 60px;
