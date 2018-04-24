@@ -15,7 +15,6 @@
         </div>
 
         <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
-          <!--<span>邀请函</span>-->
         <!--</div>-->
         <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
           <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
@@ -167,6 +166,7 @@
       '$route' (route) {
         if (this.$refs['big-shot-introduce-container']) {
           console.log(this.$refs['big-shot-introduce-container'])
+          document.body.scrollTop = 0
           this.$refs['big-shot-introduce-container'].scrollTop = 0
         }
         if (this.$refs['headCard']) {

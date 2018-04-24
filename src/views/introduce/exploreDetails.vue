@@ -37,7 +37,7 @@
         <!-- 评论 -->
         <template v-if="navTabName === 'comment'">
           <!-- 热门评论 -->
-        <div class="hot-area">
+        <div class="hot-area" v-if="discussItemList.length > 0">
           <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
         </div>
         <div class="content-comment" >
@@ -50,14 +50,9 @@
                         :disableCommentAreaClick="true"
                         @operation="operation">
           </discuss-item>
-
-
-          <div v-if="discussItemList.length === 0">
-            <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
-          </div>
         </div>
         <!-- 全部评论 -->
-        <div class="hot-area">
+        <div class="hot-area"  v-if="discussItemList.length > 0">
           <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
         </div>
         <div class="content-comment" >
