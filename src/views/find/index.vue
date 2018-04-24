@@ -1,14 +1,14 @@
-<template>
-	<!-- 发现 -->
+<template>	
+  <!-- 发现 -->
   <div class="find-wrap">
-    <scroller @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
+    <scroller  @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
       <div>
         <explore :exploreList="finds"
                  :disableOperationArr="disableOperationArr"
                  @disableOperationEvents="disableOperationEvents"
         ></explore>
       </div>
-    </scroller>
+    </scroller >
   </div>
 </template>
 <script>
