@@ -15,7 +15,6 @@
         </div>
 
         <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
-          <!--<span>邀请函</span>-->
         <!--</div>-->
         <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
           <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
@@ -117,9 +116,6 @@
   </div>
 </template>
 <script>
-	window.addEventListener("scroll",function(e){
-		console.log(e)
-	});
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import CommunityCard from '@/components/communityCard'
@@ -168,26 +164,13 @@
       }
     },
     watch: {
-      '$route' (to,from) {
-//      if (this.$refs['big-shot-introduce-container']) {
-//        console.log(this.$refs['big-shot-introduce-container'],this.$refs['big-shot-introduce-container'].scrollTop)
-//        this.$refs['big-shot-introduce-container'].scrollTop = 0;
-//        let Box=document.getElementsByClassName("big-shot-introduce")[0];
-//        console.log(Box.scrollTop);
-					let self = this
-//					this.$nextTick(function () {
-//							self.$refs['big-shot-introduce-container'].scrollTop = 0;
-//						
-//							document.body.scrollTop = 0;
-//	          	document.documentElement.scrollTop=0;
-	          	setTimeout(function(){
-	          		
-	          	},1000)
-	          	
-//					})
-//        this.$store.dispatch('update_viewScrollTop', {scrollTop:0})
-//        
-//      }
+      '$route' (route) {
+        if (this.$refs['big-shot-introduce-container']) {
+          console.log(this.$refs['big-shot-introduce-container'])
+          document.body.scrollTop = 0
+          document.documentElement.scrollTop = 0
+          this.$refs['big-shot-introduce-container'].scrollTop = 0
+        }
         if (this.$refs['headCard']) {
           this.$refs['headCard'].stopCountdown()
         }

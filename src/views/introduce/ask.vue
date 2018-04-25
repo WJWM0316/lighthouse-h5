@@ -1,9 +1,34 @@
 <template>
   <div class="p-body p-ask">
     <scroller :pullupable="false" :refreshable="false" class="wrapper" @scroll="handleScroll">
+
+      
+
+      <!-- 选择提问导师 -->
+      <div class="teachers_sel" v-if="teachers.length>0">
+        <div class="tea_txt">选择提问导师<span class="txt">（{{teachers.length}}人）</span></div>
+
+        <div class="tea_cont" scroll-x="true">
+            <div v-for="(item, index) in teachers" :key="index" class="teacher "
+              :class="{ sel :index === selTeaIndex}" @click="selTeach(index)">
+              <img class="tea_icon" :src="item.avatar" />
+              <div class="tea_tit" v-if="index==0">塔主</div>
+              <div class="tea_tit" v-else>{{item.roleName}}</div>
+              <div class="tea_name txt_ellipsis">{{item.realName}}</div>
+
+              <div class="triangle" v-if="index == selTeaIndex" ></div>
+            </div>
+        </div>
+
+        <!-- 选中的信息 -->
+        <div class="sel_teach" v-if="teachers.length>0">
+          {{teachers[selTeaIndex].realName}}<span class="sel_tit">{{teachers[selTeaIndex].career}}</span>
+        </div>
+      </div>
+
       <!-- header -->
       <div class="header">
-        <div class="userInfo">
+        <!-- <div class="userInfo">
           <div class="userInfo-img">
             <image-item class="image" :src="userInfo.avatar" mode="horizontal" :round="true"/>
             <i class="sex no-offset" :class="`u-icon-${userInfo.gender === 2 ? 'girl' : 'boy'}`"></i>
@@ -12,7 +37,7 @@
             <h3>{{userInfo.realName}}</h3>
             <p v-if="userInfo.career">{{userInfo.career}}</p>
           </div>
-        </div>
+        </div> -->
 
         <div class="user-input">
         <textarea placeholder="点此输入您想要向大咖提问的问题"
@@ -129,7 +154,11 @@
     pageInfo = {}
     askContent = ''
     pumpContent = ''
-    isPrivate = 2
+    isPrivate = 2;
+
+
+    teachers=[];  //所有导师
+    selTeaIndex = 0; //选中
 
     audio = null
     audioEventCallbacks = {
@@ -165,6 +194,7 @@
     }
 
     created () {
+
       this.communityId = this.$route.params.communityId
       this.pageInit()
     }
@@ -180,15 +210,28 @@
      */
     async pageInit () {
       try {
-        this.isCheck = false
-        this.askContent = ''
-        this.isPrivate = 2
+
+        this.isCheck = false;
+        this.askContent = '';
+        this.isPrivate = 2;
+
+        this.teachers = [];
+        this.selTeaIndex = 0;
 
         const params = {
           communityId: this.communityId
         }
         // const {problem = []} = await getAskInfoApi(params)
         this.pageInfo = await getAskInfoApi(params)
+
+
+
+
+        this.teachers.push(this.pageInfo.master);
+        this.teachers.push(...this.pageInfo.role);
+        console.log(this.teachers);
+
+
         const problem = this.pageInfo.problem || []
         problem.forEach(item => {
           const {answers = []} = item
@@ -236,7 +279,7 @@
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text('支付成功', 'bottom')
             location.reload()
-//            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
+    //location.href = location.href.split('?')[0] + '?' + new     Date().getTime() // todo 假如原来有参数需要换种写法
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
           } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
@@ -250,6 +293,7 @@
      * 提问
      */
     async sendAsk (params) {
+
       try {
         const param = await submitProblemApi(params)
         if (params.payType === 1) {
@@ -329,11 +373,14 @@
         return
       }
 
-      const isPay = this.isHasFree > 0 ? 2 : 1
-      const communityId = this.communityId
+      const isPay = this.isHasFree > 0 ? 2 : 1;
+      const communityId = this.communityId;
+      let userId = this.teachers[this.selTeaIndex].userId;
+
       const params = {
         communityId,
         contact,
+        userId,
         private: this.isPrivate,
         payType: isPay
       }
@@ -353,6 +400,13 @@
           }
         }
       })
+    }
+
+    //设置选中老师信息
+    selTeach(index){
+      console.log(index)
+
+      this.selTeaIndex = index;
     }
 
     /**
@@ -473,7 +527,11 @@
 <style lang="less" scoped type="text/less">
   @import "../../styles/mixins";
   @import "../../styles/variables";
-
+  .txt_ellipsis {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+  }
   .p-ask {
     position: relative;
     background-color: #f9f9f9;
@@ -484,9 +542,116 @@
       overflow-x: hidden;
       overflow-y: auto;
     }
+    .teachers_sel {
+      background: #ffffff;
+      width: 345px;
+      padding: 0 15px;
+      overflow:hidden;
+      white-space:nowrap;
+      padding-top: 20px;
+      .tea_txt {
+        font-family: 'PingFangSC-Medium';
+        font-size: 16px;
+        color: #354048;
+        height: 20px;
+        line-height: 20px;
+        margin-bottom: 10px;
+        .txt {
+          font-family: 'PingFangSC-Regular';
+          color: #666666;
+          padding-left: 10px;
+        }
+      }
+      .sel_teach {
+        font-family: 'PingFangSC-Medium';
+        font-size: 16px;
+        color: #354048;
+        letter-spacing: 0;
+        line-height: 20px;
+        height: 20px;
+        margin-top: 25px;
+        .sel_tit {
+          font-family: 'PingFangSC-Regular';
+          font-size: 14px;
+          color: #929292;
+
+          padding-left: 15px;
+
+        }
+      }
+      .tea_cont {
+        width: 345px;
+        height:115px;
+        overflow-x: scroll;
+        .teacher {
+          width: 80px;
+          padding-top: 10px;
+          height: 98px;
+          margin-right: 5px;
+          position: relative;
+          display: inline-block;
+          &.sel {
+            background: rgba(255,226,102,0.20);
+            border-radius: 4px;
+            &::after {
+              position: absolute;
+              left: 0;
+              bottom: 0;
+              width: 80px;
+              height: 3px;
+              content:'';
+              background: #FFE266;
+              border-bottom-right-radius: 50px;
+              border-bottom-left-radius: 50px;
+            }
+          }
+          .triangle{
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            margin-left: -3.5px;
+            width: 0; 
+            height: 0; 
+            border-left: 5px solid transparent; 
+            border-right: 5px solid transparent; 
+            border-top: 7px solid #FFE266; 
+          }
+          .tea_icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: block;
+            margin: 0px 10px 10px 10px;
+          }
+          .tea_tit {
+            position: absolute;
+            left: 50%;
+            top: 62.5px;
+            margin-left: -16px;
+            width: 32px;
+            height: 15px;
+            line-height: 15px;
+            border-radius: 40px;
+            background: #FFE266;
+
+            font-family: 'PingFangSC-Light';
+            font-size: 10px;
+            color: #354048;
+            text-align: center;
+          }
+          .tea_name {
+            font-family: 'PingFangSC-Regular';
+            font-size: 14px;
+            color: #354048;
+            text-align: center;
+            line-height: 18px;
+          }
+        }
+      }
+    }
 
     .header {
-      padding: 20px 15px;
+      padding: 12.5px 15px 20px 15px;
       background-color: #fff;
 
       & .userInfo {
@@ -535,7 +700,7 @@
       }
 
       & .user-input {
-        margin-top: 20px;
+        //margin-top: 20px;
         height: 140px;
         border-radius: 6px;
         background-color: #f9f9f9;

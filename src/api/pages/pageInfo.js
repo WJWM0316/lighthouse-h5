@@ -221,3 +221,11 @@ export const rankingApi = (data) => {
     data,
   })
 }
+
+// 获取当前登录用户的权限和角色身份
+export const userJurisdictionApi = (data) => {
+  return request({
+    url: '/docs/show/983',
+    data,
+  })
+}

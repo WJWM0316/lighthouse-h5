@@ -174,6 +174,7 @@ export default class discussItem extends Vue {
     this.$router.push(`/userInfo/${userId}/details`)
   }
   toCommentList (commentId) { // 去评论详情
+    console.log('commentId', this.disableContentClick)
     if (this.disableContentClick) {
       return
     }
@@ -181,3 +182,7 @@ export default class discussItem extends Vue {
     this.$router.push(`/reply/${commentId}`)
   }
 }
+// http://localhost:8080/?#/index/details/174
+// 
+// http://localhost:8080/?#/details/577/1
+// //http://localhost:8080/?#/reply/1353

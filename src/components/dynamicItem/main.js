@@ -347,7 +347,5 @@ export default class dynamicItem extends Vue {
       this.$router.push(`/details/${sourceId}/${type}`)
     }
   }
-  toCommunity (communityId) { // 去大咖介绍页
-    this.$router.push(`/introduce/${communityId}`)
-  }
+
 }
