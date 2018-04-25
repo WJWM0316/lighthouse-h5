@@ -262,7 +262,7 @@ export default class HomeIndex extends Vue {
    * 获取banner列表
    */
   getBanners () {
-    return getBannersApi(this.pickedParams).then(res => {
+    return getBannersApi().then(res => {
       this.bannerList = res
       if (res.length > 0) {
         this.$nextTick(() => {
