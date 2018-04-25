@@ -28,6 +28,15 @@ export const getCommunityApi = (data) => {
   })
 }
 
+// 用户社区角色信息
+export const getRoleInfoApi = (data) => {
+  return request({
+    url: '/wap/beacon/roleInfo',
+    data,
+    isLoading: true
+  })
+}
+
 // 大咖介绍页
 export const getCommunityInfoApi = ({communityId, data}) => {
   return request({
@@ -206,7 +215,10 @@ export const getExploreCommentsApi = (data) => {
     isLoading: true
   })
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 882b935a53571be4de6462e0459d2791379f593f
 // 新发现内容评论列表
 export const getNewExploreCommentsApi = (data) => {
   return request({
