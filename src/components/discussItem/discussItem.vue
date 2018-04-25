@@ -4,7 +4,7 @@
 
     <!-- 头像 -->
     <div class="left">
-    <img :src="item.avatar" class="user-image" @click.stop="toUserInfo(item.userId)" />
+    <img :src="item.reviewer.avatar" class="user-image" @click.stop="toUserInfo(item.reviewer.userId)" />
     </div>
 
     <div :class="{right: true, border: !hideBorder}">
@@ -13,7 +13,7 @@
         <div class="user-box" v-if="false">
           <div>
             <!-- 用户名 -->
-            <span class="user-name master" @click.stop="toUserInfo(item.userId)">{{item.realName}}</span>
+            <span class="user-name master" @click.stop="toUserInfo(item.reviewer.userId)">{{item.reviewer.realName}}</span>
             <!-- 用户头衔 -->
             <p class="user-career" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
           </div>
@@ -21,7 +21,7 @@
         <div class="other-box">
           <div>
             <!-- 用户名 -->
-            <span class="user-name guest" @click.stop="toUserInfo(item.userId)">{{item.realName}}</span>
+            <span class="user-name guest" @click.stop="toUserInfo(item.userId)">{{item.reviewer.realName}}</span>
             <!-- 用户头衔 -->
           </div>
         </div>
@@ -84,12 +84,12 @@
 
         <!-- 评论信息 -->
         <div class="reply-block" v-if="item.commentTotal > 0">
-          <div class="reply" v-for="(reply,index) in item.comments" v-if="index<3">
+          <div class="reply" v-for="(reply,index) in item.childComments" v-if="index<3">
             <p v-if="reply.isReceiver">
-              <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.realName}}</span> 回复 <span class="favor-name" @click.stop="toUserInfo(reply.receiver.userId)">{{reply.receiver.realName}}</span>：{{reply.content}}
+              <span class="favor-name" @click.stop="toUserInfo(reply.reviewer.userId)">{{reply.reviewer.realName}}</span> 回复 <span class="favor-name" @click.stop="toUserInfo(reply.receiver.userId)">{{reply.receiver.realName}}</span>：{{reply.content}}
             </p>
             <p v-else>
-              <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.realName}}</span>: {{reply.content}}
+              <span class="favor-name" @click.stop="toUserInfo(reply.reviewer.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
             </p>
           </div>
           <div class="reply" v-if="item.commentTotal > 3">

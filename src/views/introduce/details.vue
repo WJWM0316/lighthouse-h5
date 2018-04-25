@@ -338,20 +338,20 @@
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
       const params = {
-        sourceId: this.$route.params.sourceId,
-        type: this.$route.params.type * 1,
+        id: this.$route.params.sourceId,
+        modelType: 'circle',
         page: page,
         pageCount: pageSize
       }
 
       this.pagination.busy = true
       const res = await this.getCommentList(params)
-      const {topComments, total} = res
+      const {comments, total} = res
 
       if (page === 1) {
-        this.discussItemList = topComments
+        this.discussItemList = comments
       } else {
-        this.discussItemList = this.discussItemList.concat(topComments || [])
+        this.discussItemList = this.discussItemList.concat(comments || [])
       }
 
       this.pagination.page = page

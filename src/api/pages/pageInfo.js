@@ -206,6 +206,14 @@ export const getExploreCommentsApi = (data) => {
     isLoading: true
   })
 }
+// 获取评论列表
+export const getNewExploreCommentsApi = (data) => {
+  return request({
+    url: '/wap/comment/geComments',
+    data,
+    isLoading: true
+  })
+}
 // 统计接口
 export const countCodeApi = (data) => {
   return request({
