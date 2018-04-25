@@ -165,12 +165,12 @@
     },
     watch: {
       '$route' (route) {
-        if (this.$refs['big-shot-introduce-container']) {
-          console.log(this.$refs['big-shot-introduce-container'])
-          document.body.scrollTop = 0
-          document.documentElement.scrollTop = 0
-          this.$refs['big-shot-introduce-container'].scrollTop = 0
-        }
+        console.log(1111)
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+      window.pageYOffset = 0
+      this.$store.dispatch('update_viewScrollTop', 0)
+      console.log(this.$store.dispatch('update_viewScrollTop'))
         if (this.$refs['headCard']) {
           this.$refs['headCard'].stopCountdown()
         }
@@ -278,8 +278,12 @@
      * 点击卡片
      */
     handleTapCard (item) {
+<<<<<<< HEAD
+      window.scrollTo(0,0)
+=======
 //  	console.log("9999999",this.$refs['big-shot-introduce-container'].scrollTop,$event);
     	console.log("调试item",item)
+>>>>>>> 35f9e651853a38df0c0b91fdb484f43cca8d28a8
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
@@ -485,6 +489,7 @@
     }
 
     mounted () {
+      
       // this.$refs['body'].addEventListener('touchmove', e => {
       //   e.stopPropagation()
       // })
