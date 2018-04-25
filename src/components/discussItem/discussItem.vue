@@ -10,18 +10,18 @@
     <div :class="{right: true, border: !hideBorder}">
       
       <div class="content-head">
-        <div class="user-box" v-if="false">
+        <div class="user-box" v-if="item.reviewer.role.isShow !== 0">
           <div>
             <!-- 用户名 -->
             <span class="user-name master" @click.stop="toUserInfo(item.reviewer.userId)">{{item.reviewer.realName}}</span>
             <!-- 用户头衔 -->
-            <p class="user-career" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
+            <p class="user-career"  v-text="item.reviewer.career"></p>
           </div>
         </div>
-        <div class="other-box">
+        <div class="other-box" v-else>
           <div>
             <!-- 用户名 -->
-            <span class="user-name guest" @click.stop="toUserInfo(item.userId)">{{item.reviewer.realName}}</span>
+            <span class="user-name guest" @click.stop="toUserInfo(item.reviewer.userId)">{{item.reviewer.realName}}</span>
             <!-- 用户头衔 -->
           </div>
         </div>
@@ -89,7 +89,9 @@
               <span class="favor-name" @click.stop="toUserInfo(reply.reviewer.userId)">{{reply.reviewer.realName}}</span> 回复 <span class="favor-name" @click.stop="toUserInfo(reply.receiver.userId)">{{reply.receiver.realName}}</span>：{{reply.content}}
             </p>
             <p v-else>
-              <span class="favor-name" @click.stop="toUserInfo(reply.reviewer.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
+              <p v-if="reply.realName"><span class="favor-name" @click.stop="toUserInfo(reply.reviewer.userId)">{{reply.realName}}</span>: {{reply.content}}</p>
+              <p v-else><span class="favor-name" @click.stop="toUserInfo(reply.reviewer.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}</p>
+              
             </p>
           </div>
           <div class="reply" v-if="item.commentTotal > 3">

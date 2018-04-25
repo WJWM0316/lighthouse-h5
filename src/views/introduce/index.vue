@@ -165,12 +165,10 @@
     },
     watch: {
       '$route' (route) {
-        console.log(1111)
+        console.log(1111111111)
       document.documentElement.scrollTop = 0
       document.body.scrollTop = 0
       window.pageYOffset = 0
-      this.$store.dispatch('update_viewScrollTop', 0)
-      console.log(this.$store.dispatch('update_viewScrollTop'))
         if (this.$refs['headCard']) {
           this.$refs['headCard'].stopCountdown()
         }
@@ -278,12 +276,6 @@
      * 点击卡片
      */
     handleTapCard (item) {
-<<<<<<< HEAD
-      window.scrollTo(0,0)
-=======
-//  	console.log("9999999",this.$refs['big-shot-introduce-container'].scrollTop,$event);
-    	console.log("调试item",item)
->>>>>>> 35f9e651853a38df0c0b91fdb484f43cca8d28a8
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
@@ -495,9 +487,6 @@
       // })
     }
     
-    updated() {  
-        window.scroll(0, 0);  
-    } 
   }
 </script>
 <style lang="less" scoped type="text/less">
