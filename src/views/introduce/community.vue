@@ -195,10 +195,10 @@
           label: '动态',
           value: 'default'
         },
-        {
-          label: '语音',
-          value: 'voice'
-        }
+//      {
+//        label: '语音',
+//        value: 'voice'
+//      }
       ]
     }
     qrSrc = ''

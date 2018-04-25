@@ -118,7 +118,7 @@
      */
     async comment ({item, itemIndex}) {
       if (itemIndex > -1) {
-        this.suspensionInputPlaceholder = '回复' + item.realName + ':'
+        this.suspensionInputPlaceholder = '回复' + item.reviewer.realName + ':'
         this.commentIndex = itemIndex
       } else {
         this.suspensionInputPlaceholder = '写评论'
@@ -246,7 +246,7 @@
       }
 
       const params = {
-        sourceId: commentId || circleId || problemId,     // 对应评论类型id
+        sourceId: commentId.toString() || circleId.toString() || problemId.toString(),     // 对应评论类型id
         sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
         content: value       // 评论内容
       }
