@@ -82,6 +82,8 @@
   export default class introduce extends Vue {
     dynamicList = []
     discussItemList = []
+    
+    
 
     commentIndex = -1
     suspensionInputPlaceholder = '写评论'

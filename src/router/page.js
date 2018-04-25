@@ -17,6 +17,14 @@ const routers = [
     component: resolve => require(['@/views/introduce/index'], resolve),
   },
   {
+    // 更多页
+    path: '/introduce/:communityId/more',
+//	path: '/more/:sourceId/:type',
+    name: 'introduce-more',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/more'], resolve),
+  },
+  {
     // 大咖精选页
     path: '/introduce/:communityId/community',
     name: 'community',
