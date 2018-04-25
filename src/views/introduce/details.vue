@@ -82,8 +82,7 @@
   export default class introduce extends Vue {
     dynamicList = []
     discussItemList = []
-    
-    
+ 
 
     commentIndex = -1
     suspensionInputPlaceholder = '写评论'
@@ -118,7 +117,7 @@
      */
     async comment ({item, itemIndex}) {
       if (itemIndex > -1) {
-        this.suspensionInputPlaceholder = '回复' + item.realName + ':'
+        this.suspensionInputPlaceholder = '回复' + item.reviewer.realName + ':'
         this.commentIndex = itemIndex
       } else {
         this.suspensionInputPlaceholder = '写评论'
@@ -246,7 +245,7 @@
       }
 
       const params = {
-        sourceId: commentId || circleId || problemId,     // 对应评论类型id
+        sourceId: commentId.toString() || circleId.toString() || problemId.toString(),     // 对应评论类型id
         sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
         content: value       // 评论内容
       }
@@ -257,12 +256,12 @@
         this.pagination.end = false // 初始化数据，必定不是最后一页
         await this.getList({page: 1})
       } else {
-        if (this.discussItemList[commentIndex] && this.discussItemList[commentIndex].comments) {
-          this.discussItemList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
-          this.discussItemList[commentIndex].commentTotal += 1
+        if (this.discussItemList[commentIndex] && this.discussItemList[commentIndex].childComments) {
+          this.discussItemList[commentIndex].childComments.splice(0, 0, res) // 评价列表已经存在加在尾部
+          this.discussItemList[commentIndex].total += 1
         } else {
           this.discussItemList[commentIndex]['comments'] = [res] // 不存在加一个对象
-          this.discussItemList[commentIndex].commentTotal = 1
+          this.discussItemList[commentIndex].total = 1
         }
       }
     }
@@ -339,9 +338,21 @@
       }
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
+      let modelType = ''
+      switch (this.$route.params.type * 1) {
+          case 1:
+            modelType = 'circle'
+            break
+          case 2:
+            modelType = 'post'
+            break
+          default:
+            modelType = 'problem'
+            break
+      }
       const params = {
         id: this.$route.params.sourceId,
-        modelType: 'circle',
+        modelType: modelType,
         page: page,
         pageCount: pageSize
       }
