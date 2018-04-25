@@ -108,7 +108,7 @@
   import classmateItem from '@/components/classmateItem/classmateItem'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getExploreDetailApi, getExploreCommentsApi, getFavorListApi } from '@/api/pages/pageInfo.js'
+  import { getExploreDetailApi, getNewExploreCommentsApi, getFavorListApi } from '@/api/pages/pageInfo.js'
 
   @Component({
     name: 'explore-detail',
@@ -229,7 +229,7 @@
      * 获取评论列表
      */
     getExploreComments (params) {
-      return getExploreCommentsApi(params)
+      return getNewExploreCommentsApi(params)
     }
     /**
      * 获取点赞列表
