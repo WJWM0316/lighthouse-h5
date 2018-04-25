@@ -117,6 +117,9 @@
   </div>
 </template>
 <script>
+	window.addEventListener("scroll",function(e){
+		console.log(e)
+	});
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import CommunityCard from '@/components/communityCard'
@@ -149,6 +152,7 @@
       },
       // 是否已入社
       isJoinAgency () {
+      	console.log("333333333333",this.pageInfo.isJoined,this.pageInfo.isAuthor)
         return this.pageInfo.isAuthor || this.pageInfo.isJoined
       },
       // 是否已结束
@@ -164,11 +168,26 @@
       }
     },
     watch: {
-      '$route' (route) {
-        if (this.$refs['big-shot-introduce-container']) {
-          console.log(this.$refs['big-shot-introduce-container'])
-          this.$refs['big-shot-introduce-container'].scrollTop = 0
-        }
+      '$route' (to,from) {
+//      if (this.$refs['big-shot-introduce-container']) {
+//        console.log(this.$refs['big-shot-introduce-container'],this.$refs['big-shot-introduce-container'].scrollTop)
+//        this.$refs['big-shot-introduce-container'].scrollTop = 0;
+//        let Box=document.getElementsByClassName("big-shot-introduce")[0];
+//        console.log(Box.scrollTop);
+					let self = this
+//					this.$nextTick(function () {
+//							self.$refs['big-shot-introduce-container'].scrollTop = 0;
+//						
+//							document.body.scrollTop = 0;
+//	          	document.documentElement.scrollTop=0;
+	          	setTimeout(function(){
+	          		
+	          	},1000)
+	          	
+//					})
+//        this.$store.dispatch('update_viewScrollTop', {scrollTop:0})
+//        
+//      }
         if (this.$refs['headCard']) {
           this.$refs['headCard'].stopCountdown()
         }
@@ -182,6 +201,7 @@
             shareIntroduction,  // 分享标题
             communityId
           } = this.pageInfo
+          console.log("222222222",this.pageInfo)
           // 是否已入社
           if (this.completelyShow && this.isJoinAgency) {
             this.$router.replace(`/introduce/${communityId}/community`)
@@ -201,6 +221,7 @@
           })
         })
       }
+      
     },
     mixins: [WechatMixin]
   })
@@ -274,10 +295,15 @@
      * 点击卡片
      */
     handleTapCard (item) {
+//  	console.log("9999999",this.$refs['big-shot-introduce-container'].scrollTop,$event);
+    	console.log("调试item",item)
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
-        this.$router.push(`/introduce/${item.communityId}`)
+      	this.completelyShow=true;
+        this.$router.push(`/introduce/${item.communityId}?reload=true`)
+        //03b9200ec0d02059adc1882956104bc2
+        //03b9200ec0d02059adc1882956104bc2
       }
     }
 
@@ -355,6 +381,8 @@
       )
     }
     async created () {
+    	console.log(this.$refs['big-shot-introduce-container']);
+    	console.log(" 我是测试的route",this.$route)
       wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
@@ -406,7 +434,7 @@
       const { communityId } = this.$route.params
 
       switch (communityId) {
-        case '64074da38681f864082708b9be959e08':
+        case 'aa3b415b564bd95b27da2f0e9c986e6a':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
         case '25c2ff088da3f757b685a318ab050b5a':
@@ -478,6 +506,10 @@
       //   e.stopPropagation()
       // })
     }
+    
+    updated() {  
+        window.scroll(0, 0);  
+    } 
   }
 </script>
 <style lang="less" scoped type="text/less">
@@ -485,8 +517,11 @@
   @import "../../styles/mixins";
 
   .big-shot-introduce {
-    min-height: 100%;
+    /*min-height: 100%;*/
+   	height: 100%;
     padding-bottom: 55px;
+    box-sizing: border-box;
+    overflow-y: auto;
     /*display: flex;*/
     /*flex-flow: column nowrap;*/
     /*display: flex;*/
@@ -494,6 +529,7 @@
     /*overflow: hidden;*/
 
     &.no-pdb {
+    	
       padding-bottom: 0;
     }
 
