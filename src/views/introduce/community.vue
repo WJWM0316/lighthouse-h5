@@ -12,11 +12,20 @@
     <scroll :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- header -->
       <div class="header">
-        <community-card class="community-item" :community="pageInfo" :type="2">
-          <router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon">
+      	
+      	<!--详情页头部组件-->
+        <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false">
+        	<!--介绍-->
+          <!--<router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon">
             介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />
-          </router-link>
+          </router-link>-->
+          
+          <!--<router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon-more">:to="{name: 'introduce-more'}"-->
+      		<div :starTime="starTime" @click.prevent.stop="toMore" class="addon-text" slot="cover-addon-more">
+             <img class="icon" src="../../assets/icon/bnt_more@3x.png" />
+          </div>
         </community-card>
+        <!--详情页头部组件-->
 
         <div class="share-group">
           <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
@@ -41,7 +50,7 @@
       <div class="container">
 
         <!-- 同学的列表 -->
-        <div class="classmate-list" v-if="pageInfo.peoples && pageInfo.peoples.length > 0" @click="toMemberList">
+        <!--<div class="classmate-list" v-if="pageInfo.peoples && pageInfo.peoples.length > 0" @click="toMemberList">
           <div class="flex-1">
             <img :src="item['avatar']" v-for="(item, index) in pageInfo['peoples']" v-if="index < 6" />
             <img src="./../../assets/icon/firends-call-more.png" v-else-if="pageInfo.remainingJoinNum > 7" />
@@ -52,10 +61,10 @@
             <span>{{pageInfo['joinedNum']}}</span>
             <img class="icon" src="./../../assets/icon/mypage_arrow.png" />
           </div>
-        </div>
+        </div>-->
 
         <!-- 主体内容块 -->
-        <div class="fixed-box" ref="community-title">
+        <div class="fixed-box" ref="community-title" v-if="pageInfo.isCourse===1">
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
             <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
             <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
@@ -81,16 +90,24 @@
 
     <!-- footer -->
     <div class="footer" v-show="!displaySuspensionInput">
+    	<!--在这里增加嘉宾判断-->
       <div v-if="isAuthor" class="author-operation">
         <button @click="question">
           <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
         <button @click="release">发布动态</button>
       </div>
-      <div class="ask-btn" @click="askBtnClick" v-else>
-        <img src="./../../assets/icon/icon_question.png" v-if="showType" />
+      <div class="ask-warp" v-else>
+      <!--<div class="ask-btn" @click="askBtnClick" v-else>-->
+        <!--<img src="./../../assets/icon/icon_question.png" v-if="showType" />
         <img src="./../../assets/icon/icon_writing.png" v-else />
-        <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>
+        <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>-->
+        <!--4.25改版-->
+        <button @click="postQuestions">
+          <span class="desc"><img src="../../assets/icon/tab-massage-2@3x.png"/>提问</span>
+        </button>
+        <button @click="posted" class="post-tip"><img src="../../assets/icon/writing@3x.png"/>发帖</button>
+        
       </div>
     </div>
     <!--分享弹窗-->
@@ -160,6 +177,11 @@
     showIdentification = false
     communityTitleTop = 0
     disableOperationArr = ['comment']
+    starTime=''
+    communityId=''
+    
+    //显示标题模式
+    titleBoxShow=false;
 
     commentIndex = -1
     suspensionInputPlaceholder = '写评论'
@@ -182,8 +204,12 @@
     qrSrc = ''
 
     created () {
+    	let titleBoxShow=true;
+    	console.log("5555555555555555",this.$route);
       if (this.$route.query.type !== undefined) {
         this.showType = parseInt(this.$route.query.type)
+      }else{
+      	this.showType=0;
       }
       console.log('this.showType', this.showType)
       wxUtil.reloadPage()
@@ -201,9 +227,12 @@
           shareImg, // 分享图片
           sharePoint, // 分享摘要
           shareIntroduction,  // 分享标题
-          communityId
+          communityId,
+          startTime
         } = this.pageInfo
         const {realName, career} = master
+        this.communityId=communityId
+        this.starTime=startTime
         const str = realName ? realName + (career ? '|' + career : '') : ''
         // 页面分享信息
         this.wechatShare({
@@ -215,6 +244,14 @@
         })
       })
     }
+    
+    //路由跳转more
+    toMore(){
+    	console.log(this.communityId);
+    	let that=this;
+    	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId}})
+    }
+    
     closeShare () {
       this.showShare = false
       this.$router.replace({path: `/introduce/${this.pageInfo.communityId}/community`, query: {...this.$route.query, showShare: false}})
@@ -239,7 +276,7 @@
       this.$nextTick(() => {
         this.communityTitleTop = this.$refs['community-title'].offsetTop
         console.log(this.$refs)
-        console.log(this.$refs['community-title'].offsetTop)
+//      console.log(this.$refs['community-title'].offsetTop)
       })
     }
 
@@ -255,15 +292,15 @@
         this.getList({page: 1}).then(() => {})
       }
     }
-    askBtnClick () {
-      if (this.showType) {
-        // :todo 提问
-        this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
-      } else {
-        // :todo 发帖
-        this.$router.push(`/publish/${this.$route.params.communityId}?type=0`)
-      }
-    }
+//  askBtnClick () {
+//    if (this.showType) {
+//      // :todo 提问
+//      this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
+//    } else {
+//      // :todo 发帖
+//      this.$router.push(`/publish/${this.$route.params.communityId}?type=0`)
+//    }
+//  }
     question () {
       // :todo 回答问题
       this.$router.push(`/introduce/questions/${this.$route.params.communityId}`)
@@ -271,6 +308,14 @@
     release () {
       // :todo 发布
       this.releaseActionsheet.show = true
+    }
+    postQuestions(){
+    	// :todo 提问
+        this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
+    }
+    posted(){
+    	// :todo 发帖
+        this.$router.push(`/publish/${this.$route.params.communityId}?type=0`)
     }
     toMemberList () {
       this.$router.push({name: 'classmates', communityId: this.$route.params.communityId})
@@ -363,7 +408,10 @@
      * 获取朋友圈列表
      **/
     getCirclesList (params) {
-      return getCirclesApi(params)
+//    return getCirclesApi(params)
+			if(this.pageInfo.isCourse===1){
+					return getCirclesApi(params)
+			}
     }
     /**
      * 获取交流社区列表
@@ -618,15 +666,20 @@
 
         .addon-text {
           position: absolute;
-          right: 5px;;
-          bottom: 10px;
-          padding: 0 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 19px;
+          /*bottom: 10px;*/
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          /*padding: 0 10px;*/
           /*background: none;*/
           line-height: 28px;
           font-size: 13px;
           /*color: rgba(255, 255, 255, .8);*/
          	color:#000;
-         	background: #ccc;
+         	background: #FFE266;
 
           &:active {
             background: none;
@@ -634,10 +687,14 @@
           }
 
           .icon {
-            position: relative;
-            top: -1px;
-            width: 16px;
-            height: 16px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            /*background: #354048;*/
             vertical-align: middle;
           }
         }
@@ -650,6 +707,7 @@
       justify-content: space-around;
       align-items: center;
       color: #929292;
+      background-image: linear-gradient(-180deg, #FCFCFC 0%, #F8F8F8 100%);
 
       .item {
         display: block;
@@ -676,7 +734,9 @@
       &.forum .item:last-of-type span:after {
         content: '';
         position: absolute;
-        left: 0;
+        width: 15px;
+        left: 50%;
+        transform: translateX(-50%);
         right: 0;
         bottom: 0;
         height: 3px;
@@ -835,6 +895,72 @@
         background-color: #ffe266;
         color: #354048;
       }
+    }
+    
+    & .ask-warp{
+    	border-top: 1px solid #DCDCDC;
+    	position: fixed;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      display: flex;
+
+      & button {
+        flex-grow: 1;
+        background-color: #ffffff;
+        border-radius: 0;
+        height: 50px;
+        line-height: 50px;
+        color: #666666;
+        font-size: 16px;
+        border-style: none;
+        & .desc {
+          position: relative;
+          &::after{
+          	content: '';
+          	height: 24px;
+          	border: 0.5px solid #DCDCDC;
+          	position: absolute;
+          	right: -60px;
+          	top: 3px;
+          }
+          
+        }
+        & .answer-count {
+          .setTag();
+          min-width: 13px;
+          height: 13px;
+          line-height: 13px;
+          padding: 0 3px;
+          transform: translate(100%, -50%);
+          position: absolute;
+          right: 3px;
+          top: 3px;
+          font-size: 10px;
+          /*background-color: #ff4949;*/
+          /*border-radius: 50%;*/
+          /*line-height: 1;*/
+          /*display: inline-block;*/
+          font-style: normal;
+          /*color: #FFF;*/
+          /*padding: 2px 3px;*/
+        }
+      }
+      & button:last-of-type {
+      	border-right: 1px solid #DCDCDC;
+        /*background-color: #ffe266;*/
+        color: #354048;
+      }
+    	
+    	>.post-tip{
+    		background-color: #FFFFFF;
+    	}
+    	
+    	& img{
+    		padding-right: 12px;
+    		width: 20px;
+    		height: 18px;
+    	}
     }
 
     & .home-mask {

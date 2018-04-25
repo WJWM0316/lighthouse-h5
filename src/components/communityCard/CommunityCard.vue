@@ -16,7 +16,7 @@
     </div>
     <!--灯塔头部-->
 
-    <div class="info" :class="{ 'type-2': type === 2 }">
+    <div v-if="isEntentr" class="info" :class="{ 'type-2': type === 2 }">
       <h3 class="title" v-text="community.title"></h3>
       <p class="desc" v-text="community.simpleIntro"></p>
       <div class="bottom">
@@ -38,6 +38,13 @@
         </div>
       </div>
     </div>
+    
+    <!--已加入灯塔标题-->
+    <div v-else class="communit-enter-title">
+    		<h3 class="title"><span v-text="community.title"></span><slot name="cover-addon-more"></slot></h3>
+    		
+    </div>
+    
   </a>
 </template>
 <script>
@@ -61,6 +68,12 @@ import Component from 'vue-class-component'
     type: {
       type: Number,
       default: 1
+    },
+    
+    // 类型：true是未加入页，false是加入页
+    isEntentr: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {
@@ -84,6 +97,9 @@ import Component from 'vue-class-component'
   }
 })
 export default class CommunityCard extends Vue {
+	created(){
+//		console.log("我是触发的community",this.isEntentr);
+	}
   // 卡片类名集合
   cardClasses = {
     [`type-${this.type}`]: true,
@@ -208,7 +224,7 @@ export default class CommunityCard extends Vue {
   &.type-2 {
 
     .cover-container {
-      height: 171px;
+      /*height: 171px;*/
       /*头部改变新增属性*/
       position: relative;
     	
@@ -233,7 +249,7 @@ export default class CommunityCard extends Vue {
 			/*新增*/
 
       .master {
-        padding-bottom: 17px;
+        padding-bottom: 10px;
       }
     }
 
@@ -261,7 +277,7 @@ export default class CommunityCard extends Vue {
   .cover-container {
     position: relative;
     /*margin-bottom: 10px;*/
-    height: 226px;
+    /*height: 226px;*/
 
     .cover {
       background: #ccc;
@@ -273,19 +289,19 @@ export default class CommunityCard extends Vue {
     .master {
 	    width: 100%;
 	    text-align: center;
-	    
       box-sizing: border-box;
+      padding: 12px;
+      padding-top: 32px;
+      color: #666666;
       /*position: absolute;
       top: 130px;
       left: 50%;*/
       /*right: 0;*/
       /*bottom: 0;*/
      	/*transform: translateX(-50%);*/
-      padding: 12px;
-      padding-top: 32px;
       /*background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .2));*/
       /*width: 100%;*/
-      color: #666666;
+      
 
       .name {
         display: inline-block;
@@ -300,8 +316,9 @@ export default class CommunityCard extends Vue {
 
         .text {
           display: inline-block;
-          line-height: 16px;
+          
           /*font-size: 27px;*/
+         line-height: 16px;
          font-size: 12px;
         }
 
@@ -340,6 +357,21 @@ export default class CommunityCard extends Vue {
         font-size: 12px;
       }
     }
+  }
+  
+  .communit-enter-title{
+  	text-align: center;
+  	
+  	.title{
+  		position: relative;
+  		display: inline-block;
+  		color: #354048;
+  		font-size: 18px;
+  		line-height: 22px;
+  		text-align: center;
+  		padding: 0 12%;
+  		font-family: PingFangSC-Medium;
+  	}
   }
 
   .info {

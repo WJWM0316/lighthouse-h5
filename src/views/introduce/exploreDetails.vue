@@ -37,11 +37,11 @@
         <!-- 评论 -->
         <template v-if="navTabName === 'comment'">
           <!-- 热门评论 -->
-        <div class="hot-area" v-if="discussItemList.length > 0">
+        <div class="hot-area" v-if="hotList && hotList.length > 0">
           <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
         </div>
         <div class="content-comment" >
-          <discuss-item v-for="item,index in discussItemList"
+          <discuss-item v-for="item,index in hotList"
                         :item="item"
                         :key="index"
                         :itemIndex="index"
@@ -52,11 +52,11 @@
           </discuss-item>
         </div>
         <!-- 全部评论 -->
-        <div class="hot-area"  v-if="discussItemList.length > 0">
+        <div class="hot-area" v-if="allList && allList.length > 0">
           <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
         </div>
         <div class="content-comment" >
-          <discuss-item v-for="item,index in discussItemList"
+          <discuss-item v-for="item,index in allList"
                         :item="item"
                         :key="index"
                         :itemIndex="index"
@@ -67,7 +67,7 @@
           </discuss-item>
 
 
-          <div v-if="discussItemList.length === 0">
+          <div v-if="allList && allList.length === 0">
             <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
           </div>
         </div>
@@ -127,7 +127,8 @@
   })
   export default class exploreDetails extends Vue {
     exploreList = []
-    discussItemList = []
+    hotList = []
+    allList = []
     classmateList = []
     navTabName = 'comment'
     isCeilingBoxFixed = false
@@ -264,13 +265,15 @@
       let allTotal = 0
       if (navTabName === 'comment') {
         const res = await this.getExploreComments(params)
-        const {comments, total} = res
+        const {comments, total, hotComments} = res
         allTotal = total
 
         if (page === 1) {
-          this.discussItemList = comments
+          this.hotList = hotComments
+          this.allList = comments
         } else {
-          this.discussItemList = this.discussItemList.concat(comments || [])
+          this.hotList = this.hotList.concat(hotComments || [])
+          this.allList = this.hotList.concat(comments || [])
         }
       } else {
         const res = await this.getFavorList(params)
