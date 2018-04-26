@@ -156,13 +156,9 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     globalLoading = data.globalLoading
     delete data.globalLoading
   }
-<<<<<<< HEAD
- data.TestUid = 2
-=======
+ // data.TestUid = 2
 
-  data.TestUid = 2
 
->>>>>>> 882b935a53571be4de6462e0459d2791379f593f
   showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data}} : {...data}
   return Vue.axios[type](url, datas, config)
