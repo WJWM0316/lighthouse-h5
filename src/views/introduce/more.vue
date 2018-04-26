@@ -114,7 +114,7 @@
 			});
 			//获取同学列表
 			classmatesApi({communityId:id.communityId,page:1,pageCount:5}).then(res=>{
-				that.classmate=res.list;
+				that.classmate=res.peoples;
 				console.log("同学列表",that.classmate)
 			})
 			

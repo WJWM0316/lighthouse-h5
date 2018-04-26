@@ -38,6 +38,15 @@ export const getCommunityInfoApi = ({communityId, data}) => {
   })
 }
 
+// 获取角色区分
+export const getRoleInfoApi = (data) => {
+  return request({
+    url: '/wap/beacon/roleInfo',
+    data,
+    isLoading: true
+  })
+}
+
 // 朋友圈
 export const getCirclesApi = (data) => {
   return request({
