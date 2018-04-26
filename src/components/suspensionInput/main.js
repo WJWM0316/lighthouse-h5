@@ -8,6 +8,10 @@ import Component from 'vue-class-component'
     placeholder: String,
     sendText: String,
     commentIndex: Number,
+    isShow: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: Boolean,
       default: false
@@ -20,15 +24,10 @@ import Component from 'vue-class-component'
   computed: {
   },
   watch: {
-    // isShow (val) {
-    //   if (val === true) {
-    //     this.$refs.myInput.focus()
-    //   } else {
-    //     this.$refs.myInput.blur()
-    //   }
-    // },
+    isShow (val) {
+    },
     value (val) {
-      this.isShow = val
+      // this.isShow = val
       if (val && this.suspensionInput) {
         this.$nextTick(() => {
           this.suspensionInput.focus()
@@ -48,7 +47,7 @@ import Component from 'vue-class-component'
 export default class suspensionInput extends Vue {
   suspensionInputContent = ''
   suspensionInput = ''
-  isShow = false
+  
   isFocused = false
 
   mounted () {

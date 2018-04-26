@@ -118,6 +118,7 @@
                       :placeholder="suspensionInputPlaceholder"
                       :commentIndex="commentIndex"
                       :sendText="'发送'"
+                      :isShow = "isShow"
                       @send="sendComment"
     ></suspension-input>
 
@@ -164,12 +165,18 @@
         return this.pageInfo.isAuthor
       }
     },
+    watch: {
+      displaySuspensionInput (val) {
+        this.isShow = val
+      }
+    },
     mixins: [ListMixin, WechatMixin]
   })
   export default class community extends Vue {
     showShare = false // 显示分享弹框
     showSell = false // 显示分销弹框
     pageInfo = {}
+    isShow = false // 控制评论框
     dynamicList = []
     discussItemList = []
     showType = 1 // 1 朋友圈 0 交流社区

@@ -2,20 +2,19 @@
 
   <!-- 朋友圈、帖子、问题 详情 -->
   <div class="all-details">
-    <scroll @refresh="handleRefresh" @pullup="handlePullup">
+  <scroll @refresh="handleRefresh" @pullup="handlePullup">  
       <!-- header -->
       <div class="header">
         <dynamic :dynamicList="dynamicList"
                  :hideCommentBtn="true"
-                 :hidePraiseBtn="true"
+                 :hidePraiseBtn="false"
                  :hideBorder="true"
                  :hideCommentArea="true"
                  :disableContentClick="true"
                  :showIdentification="false"
-                 ref="details-info"
         ></dynamic>
       </div>
-
+  
       <!-- container -->
       <div class="container">
         <div class="container-title">评论({{pagination.total}})</div>
@@ -26,9 +25,9 @@
                       :showDelBtn="true"
                       @operation="operation"></discuss-item>
       </div>
-    </scroll>
+  </scroll>
     <!-- footer -->
-    <div class="footer" v-if="!displaySuspensionInput">
+    <div class="footer" v-if="false">
       <div class="page-operation">
         <!-- 点赞按钮 -->
         <button @click="operation({eventType: 'praise'})">
@@ -50,6 +49,7 @@
                       :placeholder="suspensionInputPlaceholder"
                       :commentIndex="commentIndex"
                       :sendText="'发送'"
+                      :isShow = 'isShow'
                       @send="sendComment"
     ></suspension-input>
   </div>
@@ -88,10 +88,11 @@
     dynamicList = []
     discussItemList = []
  
-
+    isShow = true
     commentIndex = -1
     suspensionInputPlaceholder = '写评论'
-    displaySuspensionInput = false
+    displaySuspensionInput = true
+    curData = {} // 评论回来的数据
 
     created () {
       this.pageInit().then(() => {})
@@ -137,8 +138,10 @@
      * @returns {Promise.<void>}
      */
     async praise ({item, itemIndex}) {
+      
       let params = ''
       let favor = 0
+
       if (item) {
         const {commentId: favorId, isFavor} = item
         let favorType = 6
@@ -148,8 +151,11 @@
           favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
           isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
         }
+        console.log(1111111111, favorType)
       } else {
+
         favor = this.dynamicList[0].isFavor ? 0 : 1
+        console.log(item, '参数', this.$route.params.type)
         let favorType = 0
         switch (this.$route.params.type) {
           case '1':
@@ -161,7 +167,9 @@
           case '3':
             favorType = 4
             break
+
         }
+        console.log(222222222, favorType)
         params = {
           favorId: this.$route.params.sourceId,    // 喜爱的id
           favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
@@ -169,7 +177,6 @@
         }
       }
       setFavorApi(params).then(res => {
-        console.log(item)
         if (item) {
           this.discussItemList[itemIndex].isFavor = favor
           this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
@@ -187,7 +194,6 @@
         } else {
           this.dynamicList[0].isFavor = favor
           this.dynamicList[0].favorTotal += favor ? 1 : -1
-          console.log(this.dynamicList[0])
         }
       }).catch(e => {
 //            this.$broadcast('show-message', {content: e.message})
@@ -254,31 +260,35 @@
         sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
         content: value       // 评论内容
       }
-
-      const res = await setSubmitCommentApi(params)
-      if (res) {
-        this.$vux.toast.text('评论成功', 'bottom')
-      } else {
-        this.$vux.toast.text('评论失败', 'bottom')
-      }
+      
+      await setSubmitCommentApi(params).then(data => {
+        if (data) {
+          this.curData = data
+          this.$vux.toast.text('评论成功', 'bottom')
+          this.suspensionInputPlaceholder = '写评论'
+          this.commentIndex = -1
+        } else {
+          this.$vux.toast.text('评论失败', 'bottom')
+          this.curData = {}
+        }
+      })
+      
       if (commentIndex < 0) {
         this.pagination.end = false // 初始化数据，必定不是最后一页
-        await this.getList({page: 1})
+        this.discussItemList.splice(0, 0, this.curData)
+        this.pagination.total += 1
       } else {
 
         if (this.discussItemList[commentIndex] && this.discussItemList[commentIndex].childComments) {
-          this.discussItemList[commentIndex].childComments.push(res)// 评价列表已经存在加在尾部
+          this.discussItemList[commentIndex].childComments.push(this.curData)// 评价列表已经存在加在尾部
           // this.discussItemList[commentIndex].childComments.splice(0, 0, res)
           this.discussItemList[commentIndex].commentTotal += 1
           // this.$set(this.discussItemList[commentIndex].childComments, 'realName', this.discussItemList[commentIndex].childComments.reviewer.realName)
           // console.log(this.discussItemList)
         } else {
-          this.discussItemList[commentIndex].childComments = [res] // 不存在加一个对象
+          this.discussItemList[commentIndex].childComments = [this.curData] // 不存在加一个对象
           this.discussItemList[commentIndex].total = 1
         }
-      }
-      if (res) {
-
       }
     }
 
