@@ -93,9 +93,9 @@
     	<!--在这里增加嘉宾判断-->
       <div v-if="isAuthor || isKayo=='guests'" class="author-operation">
         <button @click="question">
-          <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
+          <span class="desc"><img src="../../assets/icon/tab-massage-2@3x.png"/>回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
-        <button @click="release">发布动态</button>
+        <button @click="release"><img src="../../assets/icon/writing@3x.png"/>发布动态</button>
       </div>
       <div class="ask-warp" v-else>
       <!--<div class="ask-btn" @click="askBtnClick" v-else>-->
@@ -954,12 +954,12 @@
         }
       }
       & button:last-of-type {
-        background-color: #ffe266;
+        /*background-color: #ffe266;*/
         color: #354048;
       }
     }
     
-    & .ask-warp{
+    & .ask-warp, & .author-operation{
     	border-top: 1px solid #DCDCDC;
     	position: fixed;
       bottom: 0;
@@ -983,7 +983,7 @@
           	height: 24px;
           	border: 0.5px solid #DCDCDC;
           	position: absolute;
-          	right: -60px;
+          	right: -50px;
           	top: 3px;
           }
           
