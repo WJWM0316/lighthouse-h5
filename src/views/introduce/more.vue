@@ -21,7 +21,7 @@
 		<!--塔主和小伙伴-->
 		<div class="more-parner">
 			<img src="../../assets/icon/icon_center_home.png" />
-			<p>塔主和Ta的小伙伴们 <span>({{role.length+1}}人)</span></p>
+			<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
 			<!--塔主和嘉宾列表-->
 			<div class="guestList">
 				<ul class="guestListBox">
