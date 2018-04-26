@@ -35,7 +35,7 @@ import WechatMixin from '@/mixins/wechat'
 import { Actionsheet } from 'vux'
 import WechatCodeModal from '@/components/wechatCodeModal'
 
-import { publishApi } from '@/api/pages/content'
+import { publishApi,publishPostApi } from '@/api/pages/content'
 import { wechatUploadFileApi } from '@/api/common'
 
 @Component({

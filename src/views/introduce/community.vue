@@ -9,7 +9,7 @@
       <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
     </div>
 
-    <scroll :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+    <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- header -->
       <div class="header">
       	
@@ -93,9 +93,9 @@
     	<!--在这里增加嘉宾判断-->
       <div v-if="isAuthor || isKayo=='guests'" class="author-operation">
         <button @click="question">
-          <span class="desc"><img src="../../assets/icon/tab-massage-2@3x.png"/>回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
+          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
-        <button @click="release"><img src="../../assets/icon/writing@3x.png"/>发布动态</button>
+        <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
       </div>
       <div class="ask-warp" v-else>
       <!--<div class="ask-btn" @click="askBtnClick" v-else>-->
@@ -104,9 +104,9 @@
         <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>-->
         <!--4.25改版-->
         <button @click="postQuestions">
-          <span class="desc"><img src="../../assets/icon/tab-massage-2@3x.png"/>提问</span>
+          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>提问</span>
         </button>
-        <button @click="posted" class="post-tip"><img src="../../assets/icon/writing@3x.png"/>发帖</button>
+        <button @click="posted" class="post-tip"><img src="../../assets/icon/bnt_post@3x.png"/>发帖</button>
         
       </div>
     </div>

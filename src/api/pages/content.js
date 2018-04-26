@@ -9,3 +9,11 @@ export const publishApi = data => request({
   isLoading: false,
   data
 })
+
+//普通用户发布内容
+export const publishPostApi = data => request({
+  url: '/wap/beacon/publishPost',
+  isLoading: false,
+  data
+})
+

@@ -112,7 +112,7 @@
 //				console.log("嘉宾列表",that.role);
 //			});
 			//获取同学列表
-			classmatesApi({communityId:id.communityId,page:1,pageCount:20}).then(res=>{
+			classmatesApi({communityId:id.communityId,page:1,pageCount:5}).then(res=>{
 				that.classmate=res.peoples;
 				that.role=res.role;
 				console.log("同学列表",res)
@@ -318,6 +318,9 @@
 								line-height: 20px;
 							}
 							.classmate-career{
+								white-space: nowrap;
+								overflow: hidden;
+								text-overflow: ellipsis;
 								font-size: 14px;
 								color: #929292;
 								letter-spacing: 2;
