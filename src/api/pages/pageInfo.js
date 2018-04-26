@@ -215,10 +215,6 @@ export const getExploreCommentsApi = (data) => {
     isLoading: true
   })
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 882b935a53571be4de6462e0459d2791379f593f
 // 新发现内容评论列表
 export const getNewExploreCommentsApi = (data) => {
   return request({

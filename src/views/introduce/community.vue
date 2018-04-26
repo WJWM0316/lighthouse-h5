@@ -398,9 +398,16 @@
       }
 
       const res = await setSubmitCommentApi(params)
-
+      if (res) {
+        this.$vux.toast.text('评论成功', 'bottom')
+      } else {
+        this.$vux.toast.text('评论失败', 'bottom')
+      }
       if (this.dynamicList[commentIndex] && this.dynamicList[commentIndex].comments) {
-        this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
+        if (this.dynamicList[commentIndex].commentTotal < 3) {  // 小于3条才显示出来
+          this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
+        }
+        
         this.dynamicList[commentIndex].commentTotal += 1
       } else {
         this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象

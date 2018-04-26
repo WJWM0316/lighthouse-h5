@@ -183,7 +183,7 @@
           <div class="hot-reply">
             <div class="hot-reply-icon">热门评论</div>
             <div class="reply" v-for="(reply,index) in item.comments" v-if="index === 0">
-              <p class="favor-content"><span class="favor-name">{{reply.realName}}：</span>{{reply.content}}</p>
+              <p class="favor-content"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
             </div>
           </div>
           <!-- <div class="reply" v-for="reply in item.comments">

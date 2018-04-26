@@ -276,11 +276,6 @@
      * 点击卡片
      */
     handleTapCard (item) {
-<<<<<<< HEAD
-=======
-      window.scrollTo(0,0)
-    	console.log("调试item",item)
->>>>>>> 882b935a53571be4de6462e0459d2791379f593f
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面

@@ -131,7 +131,7 @@
      */
     async comment ({item, itemIndex}) {
       if (itemIndex > -1) {
-        this.suspensionInputPlaceholder = '回复' + item.realName + ':'
+        this.suspensionInputPlaceholder = '回复' + item.reviewer.realName + ':'
         this.commentIndex = itemIndex
       } else {
         this.suspensionInputPlaceholder = '写评论'

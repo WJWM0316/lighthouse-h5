@@ -11,7 +11,7 @@
                  :hideBorder="true"
                  :hideCommentArea="true"
                  :disableContentClick="true"
-                 :showIdentification="true"
+                 :showIdentification="false"
                  ref="details-info"
         ></dynamic>
       </div>
@@ -256,7 +256,11 @@
       }
 
       const res = await setSubmitCommentApi(params)
-      
+      if (res) {
+        this.$vux.toast.text('评论成功', 'bottom')
+      } else {
+        this.$vux.toast.text('评论失败', 'bottom')
+      }
       if (commentIndex < 0) {
         this.pagination.end = false // 初始化数据，必定不是最后一页
         await this.getList({page: 1})
