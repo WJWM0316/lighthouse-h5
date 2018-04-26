@@ -10,7 +10,7 @@
                @focus="handleFocus"
                ref="suspension-input"
                maxlength="1000"
-               autofocus />
+                />
       </div>
       <span class="ask-btn" @click="send">{{sendText}}</span>
     </div>
@@ -28,7 +28,7 @@
     -webkit-overflow-scrolling: touch;
     background-color: #f8f8f8;
     &.z-focused {
-     /* padding-bottom: 54px; */
+     padding-bottom: 54px;
     }
 
     .ask-box {

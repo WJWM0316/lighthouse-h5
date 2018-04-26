@@ -34,7 +34,7 @@
       <div class="publish-content">
 
         <!-- 指定回复人 -->
-        <p class="content-text" v-if="item.isReceiver">回复<span style="color: #576b95; display: inline-block; z-index: 9;" @click.stop="toUserInfo(item.receiver.userId)">{{item.receiver.realName}}</span>：{{item.content}}</p>
+        <p class="content-text" v-if="item.isReceiver">回复<span style="color: #4080AD; display: inline-block; z-index: 9;" @click.stop="toUserInfo(item.receiver.userId)">{{item.receiver.realName}}</span>：{{item.content}}</p>
         <!-- 无指定回复人 -->
         <p class="content-text" v-else>{{item.content}}</p>
 

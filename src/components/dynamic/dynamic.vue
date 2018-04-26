@@ -362,6 +362,7 @@
       const {modelType, problemId, circleId, isFavor} = item
       let favorId = circleId || problemId || ''
       let favorType = 0
+
       switch (modelType) {
         case 'circle':
           favorType = 7
@@ -372,6 +373,9 @@
         case 'problem':
           favorType = 4
           break
+      }
+      if (circleId && !modelType) {
+        favorType = 7
       }
       const favor = isFavor ? 0 : 1
       const params = {

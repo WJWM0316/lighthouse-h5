@@ -66,6 +66,7 @@
                       :placeholder="suspensionInputPlaceholder"
                       :commentIndex="commentIndex"
                       :sendText="'发送'"
+                      :isShow="isShow"
                       @send="sendComment"
     ></suspension-input>
   </div>
@@ -91,6 +92,11 @@
         return this.discussInfo || {}
       }
     },
+    watch: {
+      displaySuspensionInput (val) {
+        this.isShow = val
+      }
+    },
     mixins: [ListMixin]
   })
   export default class introduce extends Vue {
@@ -100,6 +106,7 @@
 
     commentIndex = -1
     suspensionInputPlaceholder = '写评论'
+    isShow = false
     displaySuspensionInput = false
 
     created () {
@@ -265,10 +272,10 @@
 
       this.pagination.busy = true
       const res = await this.getCommentList(params)
-      const {topComment, comments, total} = res
+      const {comment, comments, total} = res
 
       if (page === 1) {
-        this.discussInfo = topComment
+        this.discussInfo = comment
         this.discussItemList = comments
       } else {
         this.discussItemList = this.discussItemList.concat(comments || [])

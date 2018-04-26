@@ -192,7 +192,7 @@
         <!-- 评论信息 -->
         <div class="reply-block" v-if="item.commentTotal > 0">
           <div class="reply" v-for="reply in item.comments">
-            <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.realName}}</span>: {{reply.content}}
+            <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
           </div>
           <div class="reply" v-if="item.commentTotal > 3">
             <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>

@@ -394,7 +394,7 @@ export default class HomeIndex extends Vue {
    */
   scroll (e) {
     const {scrollTop} = e.target
-    if (scrollTop >= this.scrollHeight) {
+    if (scrollTop >= this.scrollHeight && this.navTabName === 'picked') {
       this.isFlex = true
       this.$refs.tab1.scrollLeft = this.scrollTabLeft
     } else {
@@ -508,7 +508,7 @@ export default class HomeIndex extends Vue {
   & .classification {
     height: 40px;
     overflow-y: hidden;
-    overflow-x: scroll;
+    overflow-x: auto;
     font-weight: 300;
     white-space: nowrap; /*不换行*/
     padding: 0 15px;
