@@ -79,7 +79,6 @@
     },
     watch: {
       discussItemList () {
-        console.log(12121212)
       }
     },
     mixins: [ListMixin]
@@ -151,7 +150,6 @@
           favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
           isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
         }
-        console.log(1111111111, favorType)
       } else {
 
         favor = this.dynamicList[0].isFavor ? 0 : 1
@@ -169,7 +167,6 @@
             break
 
         }
-        console.log(222222222, favorType)
         params = {
           favorId: this.$route.params.sourceId,    // 喜爱的id
           favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
@@ -273,22 +270,24 @@
         }
       })
       
-      if (commentIndex < 0) {
-        this.pagination.end = false // 初始化数据，必定不是最后一页
+      if (commentIndex < 0) {      
         this.discussItemList.splice(0, 0, this.curData)
         this.pagination.total += 1
       } else {
-
-        if (this.discussItemList[commentIndex] && this.discussItemList[commentIndex].childComments) {
-          this.discussItemList[commentIndex].childComments.push(this.curData)// 评价列表已经存在加在尾部
-          // this.discussItemList[commentIndex].childComments.splice(0, 0, res)
-          this.discussItemList[commentIndex].commentTotal += 1
-          // this.$set(this.discussItemList[commentIndex].childComments, 'realName', this.discussItemList[commentIndex].childComments.reviewer.realName)
-          // console.log(this.discussItemList)
-        } else {
-          this.discussItemList[commentIndex].childComments = [this.curData] // 不存在加一个对象
-          this.discussItemList[commentIndex].total = 1
-        }
+        this.pagination.end = false // 初始化数据，必定不是最后一页
+        await this.getList({ page: 1 })
+        // if (this.discussItemList[commentIndex] && this.discussItemList[commentIndex].childComments) {
+        //   this.discussItemList[commentIndex].childComments.push(this.curData)// 评价列表已经存在加在尾部
+        //   // this.discussItemList[commentIndex].childComments.splice(0, 0, res)
+        //   this.discussItemList[commentIndex].commentTotal += 1
+        //   this.$set(this.discussItemList[commentIndex].childComments, 'realName', this.discussItemList[commentIndex].childComments.reviewer.realName)
+        //   console.log(this.discussItemList)
+        // } else {
+        //   console.log(222222222222222222222)
+        //   this.$set(this.discussItemList[commentIndex], 'childComments', [])
+        //   this.discussItemList[commentIndex].childComments.push(this.curData)
+        //   this.discussItemList[commentIndex].total = 1
+        // }
       }
     }
 

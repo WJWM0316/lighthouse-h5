@@ -360,20 +360,22 @@
      */
     async praise ({item, itemIndex}) {
       const {modelType, problemId, circleId, isFavor} = item
-
       let favorId = circleId || problemId || ''
-      let favorParameType = this.$route.params.type || this.$route.query.type
       let favorType = 0
-      switch (favorParameType) {
-        case '1':
+
+      switch (modelType) {
+        case 'circle':
           favorType = 7
           break
-        case '2':
+        case 'post':
           favorType = 5
           break
-        case '3':
+        case 'problem':
           favorType = 4
           break
+      }
+      if (circleId && !modelType) {
+        favorType = 7
       }
       const favor = isFavor ? 0 : 1
       const params = {
