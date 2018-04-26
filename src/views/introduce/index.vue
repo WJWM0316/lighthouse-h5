@@ -165,12 +165,10 @@
     },
     watch: {
       '$route' (route) {
-        console.log(1111)
+        console.log(1111111111)
       document.documentElement.scrollTop = 0
       document.body.scrollTop = 0
       window.pageYOffset = 0
-      this.$store.dispatch('update_viewScrollTop', 0)
-      console.log(this.$store.dispatch('update_viewScrollTop'))
         if (this.$refs['headCard']) {
           this.$refs['headCard'].stopCountdown()
         }
@@ -489,9 +487,6 @@
       // })
     }
     
-    updated() {  
-        window.scroll(0, 0);  
-    } 
   }
 </script>
 <style lang="less" scoped type="text/less">

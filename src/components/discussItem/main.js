@@ -65,6 +65,11 @@ import moment from 'moment'
       default: false
     }
   },
+  watch: {
+    item () {
+      console.log(111111111)
+    }
+  },
   computed: {
     // 朋友圈发表时间展示规则
     timeStr () {
@@ -121,7 +126,6 @@ import moment from 'moment'
 })
 export default class discussItem extends Vue {
   created () {
-    console.log(this.item)
   }
 
   /**
@@ -182,6 +186,7 @@ export default class discussItem extends Vue {
     console.log(commentId)
     this.$router.push(`/reply/${commentId}`)
   }
+
 }
 // http://localhost:8080/?#/index/details/174
 // 

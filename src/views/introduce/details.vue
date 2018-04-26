@@ -11,7 +11,7 @@
                  :hideBorder="true"
                  :hideCommentArea="true"
                  :disableContentClick="true"
-                 :showIdentification="true"
+                 :showIdentification="false"
                  ref="details-info"
         ></dynamic>
       </div>
@@ -75,6 +75,11 @@
     computed: {
       item () {
         return this.dynamicList[0] || {}
+      }
+    },
+    watch: {
+      discussItemList () {
+        console.log(12121212)
       }
     },
     mixins: [ListMixin]
@@ -245,24 +250,35 @@
       }
 
       const params = {
-        sourceId: commentId.toString() || circleId.toString() || problemId.toString(),     // 对应评论类型id
+        sourceId: commentId || circleId || problemId,     // 对应评论类型id
         sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
         content: value       // 评论内容
       }
 
       const res = await setSubmitCommentApi(params)
-
+      if (res) {
+        this.$vux.toast.text('评论成功', 'bottom')
+      } else {
+        this.$vux.toast.text('评论失败', 'bottom')
+      }
       if (commentIndex < 0) {
         this.pagination.end = false // 初始化数据，必定不是最后一页
         await this.getList({page: 1})
       } else {
+
         if (this.discussItemList[commentIndex] && this.discussItemList[commentIndex].childComments) {
-          this.discussItemList[commentIndex].childComments.splice(0, 0, res) // 评价列表已经存在加在尾部
-          this.discussItemList[commentIndex].total += 1
+          this.discussItemList[commentIndex].childComments.push(res)// 评价列表已经存在加在尾部
+          // this.discussItemList[commentIndex].childComments.splice(0, 0, res)
+          this.discussItemList[commentIndex].commentTotal += 1
+          // this.$set(this.discussItemList[commentIndex].childComments, 'realName', this.discussItemList[commentIndex].childComments.reviewer.realName)
+          // console.log(this.discussItemList)
         } else {
-          this.discussItemList[commentIndex]['comments'] = [res] // 不存在加一个对象
+          this.discussItemList[commentIndex].childComments = [res] // 不存在加一个对象
           this.discussItemList[commentIndex].total = 1
         }
+      }
+      if (res) {
+
       }
     }
 

@@ -20,6 +20,13 @@ import Component from 'vue-class-component'
   computed: {
   },
   watch: {
+    // isShow (val) {
+    //   if (val === true) {
+    //     this.$refs.myInput.focus()
+    //   } else {
+    //     this.$refs.myInput.blur()
+    //   }
+    // },
     value (val) {
       this.isShow = val
       if (val && this.suspensionInput) {

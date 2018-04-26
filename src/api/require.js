@@ -40,6 +40,9 @@ async function process(response) {
   if (typeof data === 'string') { // 转换返回json
     data = JSON.parse(data)
   }
+  if(data&&data.statusCode){
+    data.statusCode = parseInt(data.statusCode)
+  }
   if (data && data.statusCode === 200) {
     hideLoading(globalLoading)
     return data.data === undefined ? {} : data.data
@@ -153,7 +156,9 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     globalLoading = data.globalLoading
     delete data.globalLoading
   }
+
  	data.TestUid = 3
+
   showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data}} : {...data}
   return Vue.axios[type](url, datas, config)

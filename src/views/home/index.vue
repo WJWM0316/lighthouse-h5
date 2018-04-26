@@ -9,7 +9,7 @@
        <!--  <span @click="toggle('find')">发现</span> -->
       </div>
        <!-- 分类  用于悬浮顶格-->
-      <div ref="tab" class="classification fs14 tabFixed" v-if="navTabName === 'picked'"  v-show="isFlex || !bannerList && bannerList.length">
+      <div ref="tab1" class="classification fs14 tabFixed" v-if="navTabName === 'picked'"  v-show="isFlex || !bannerList && bannerList.length" @scroll.stop="scrollTab">
         <span v-for="itemTag, indexTag in communityTagList"
               :key="indexTag"
               :class="{selected: itemTag.selected}"
@@ -36,7 +36,7 @@
           </swiper>
       </div> -->
        <!-- 分类 -->
-      <div ref="tab" class="classification fs14" v-if="navTabName === 'picked'" v-show="!isFlex">
+      <div ref="tab2" class="classification fs14" v-if="navTabName === 'picked'" v-show="!isFlex" @scroll.stop="scrollTab">
         <span v-for="itemTag, indexTag in communityTagList"
               :key="indexTag"
               :class="{selected: itemTag.selected}"
@@ -141,7 +141,7 @@ export default class HomeIndex extends Vue {
   isMessage = false
   // 悬浮控制
   isFlex = false
-
+  scrollTabLeft = 0 // tab
   scrollHeight = 0 // 计算banner 跟 tab 的高度
   // ******************* 已加入 **********************
   creations = []
@@ -197,7 +197,11 @@ export default class HomeIndex extends Vue {
     this.pickedInit().then(() => {})
   }
 
-  
+  scrollTab (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    this.scrollTabLeft = e.target.scrollLeft
+  }
 
   findMore () {
     this.toggle('picked')
@@ -392,8 +396,10 @@ export default class HomeIndex extends Vue {
     const {scrollTop} = e.target
     if (scrollTop >= this.scrollHeight) {
       this.isFlex = true
+      this.$refs.tab1.scrollLeft = this.scrollTabLeft
     } else {
       this.isFlex = false
+      this.$refs.tab2.scrollLeft = this.scrollTabLeft
     }
   }
 
@@ -467,8 +473,8 @@ export default class HomeIndex extends Vue {
     & span.join.message:before {
       content: '';
       position: absolute;
-      right: -6px;
-      top: 12px;
+      right: 0px;
+      top: 0px;
       width: 6px;
       height: 6px;
       background: #ff3434;

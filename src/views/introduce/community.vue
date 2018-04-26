@@ -146,6 +146,7 @@
   import ListMixin from '@/mixins/list'
   import wxUtil from '@/util/wx/index'
   import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi } from '@/api/pages/pageInfo'
+
   import WechatMixin from '@/mixins/wechat'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
 
@@ -292,7 +293,18 @@
       }
 
       this.pagination.end = false // 初始化数据，必定不是最后一页
+
       let res = await this.getCommunity(communityId)
+
+      console.log('=========',res)
+      //嘉宾身份
+      if(res.isAuthor == 0){
+          let res2 = await this.getRoleInfo(communityId)
+          if(res2.role && (res2.role.code =='guests'||res2.role.code =='special_guests')){
+            res.isAuthor = 1;
+          }
+          console.log('+++++++++++++++++++++',res2)
+      }
       this.pageInfo = res
       
 //    let role= await this.getRoleInfo(communityId)
@@ -308,8 +320,11 @@
       this.$nextTick(() => {
         this.communityTitleTop = this.$refs['community-title'].offsetTop
         console.log(this.$refs)
-//      console.log(this.$refs['community-title'].offsetTop)
+        //console.log(this.$refs['community-title'].offsetTop)
       })
+
+
+      
     }
 
     toggle (type) {
@@ -417,9 +432,16 @@
       }
 
       const res = await setSubmitCommentApi(params)
-
+      if (res) {
+        this.$vux.toast.text('评论成功', 'bottom')
+      } else {
+        this.$vux.toast.text('评论失败', 'bottom')
+      }
       if (this.dynamicList[commentIndex] && this.dynamicList[commentIndex].comments) {
-        this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
+        if (this.dynamicList[commentIndex].commentTotal < 3) {  // 小于3条才显示出来
+          this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
+        }
+        
         this.dynamicList[commentIndex].commentTotal += 1
       } else {
         this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
@@ -436,20 +458,21 @@
         communityId
       })
     }
-     /**
-     * 获取角色
+
+
+    /**
+     * 用户社区角色信息
      **/
     getRoleInfo (communityId) {
       return getRoleInfoApi({
         communityId
       })
     }
-    
     /**
      * 获取朋友圈列表
      **/
     getCirclesList (params) {
-//    return getCirclesApi(params)
+
 					return getCirclesApi(params)
     }
     /**
