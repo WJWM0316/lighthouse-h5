@@ -91,11 +91,11 @@
     <!-- footer -->
     <div class="footer" v-show="!displaySuspensionInput">
     	<!--在这里增加嘉宾判断-->
-      <div v-if="isAuthor" class="author-operation">
+      <div v-if="isAuthor || isKayo=='guests'" class="author-operation">
         <button @click="question">
-          <span class="desc">回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
+          <span class="desc"><img src="../../assets/icon/tab-massage-2@3x.png"/>回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
-        <button @click="release">发布动态</button>
+        <button @click="release"><img src="../../assets/icon/writing@3x.png"/>发布动态</button>
       </div>
       <div class="ask-warp" v-else>
       <!--<div class="ask-btn" @click="askBtnClick" v-else>-->
@@ -146,7 +146,8 @@
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
   import wxUtil from '@/util/wx/index'
-  import { getCirclesApi, getCommunityApi,getRoleInfoApi, getCommunicationsApi, setSubmitCommentApi } from '@/api/pages/pageInfo'
+  import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi } from '@/api/pages/pageInfo'
+
   import WechatMixin from '@/mixins/wechat'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
 
@@ -163,6 +164,10 @@
     computed: {
       isAuthor () {
         return this.pageInfo.isAuthor
+      },
+      //判断身份是否嘉宾
+      isKayo(){
+      	return this.roleInfo.code
       }
     },
     watch: {
@@ -186,6 +191,7 @@
     disableOperationArr = ['comment']
     starTime=''
     communityId=''
+    roleInfo=''
     
     //显示标题模式
     titleBoxShow=false;
@@ -202,21 +208,19 @@
           label: '动态',
           value: 'default'
         },
-        {
-          label: '语音',
-          value: 'voice'
-        }
+//      {
+//        label: '语音',
+//        value: 'voice'
+//      }
       ]
     }
     qrSrc = ''
 
     created () {
     	let titleBoxShow=true;
-    	console.log("5555555555555555",this.$route);
+//  	console.log("5555555555555555",this.$route.query);
       if (this.$route.query.type !== undefined) {
         this.showType = parseInt(this.$route.query.type)
-      }else{
-      	this.showType=0;
       }
       console.log('this.showType', this.showType)
       wxUtil.reloadPage()
@@ -249,7 +253,27 @@
           'imgUrl': shareImg,
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
-      })
+        
+        //判断嘉宾身份
+        this.getRoleInfo(communityId).then(res=>{
+        }).catch(res => {
+        		this.roleInfo=res.data.role;
+//				    console.log("88888888888888",res.data.role);
+				})
+        
+        //判断是否有课程，无课程则跳转
+        if(this.pageInfo.isCourse===2){
+        	let type=0;
+        	this.displaySuspensionInput = false
+	        this.dynamicList = []
+	        this.showType = type
+	        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+	        this.showIdentification = !type
+	
+	        this.pagination.end = false // 初始化数据，必定不是最后一页
+	        this.getList({page: 1}).then(() => {})
+        }
+     })
     }
     
     //路由跳转more
@@ -276,6 +300,7 @@
       }
 
       this.pagination.end = false // 初始化数据，必定不是最后一页
+
       let res = await this.getCommunity(communityId)
 
       console.log('=========',res)
@@ -288,6 +313,15 @@
           console.log('+++++++++++++++++++++',res2)
       }
       this.pageInfo = res
+      
+//    let role= await this.getRoleInfo(communityId)
+//    this.roleInfo=role
+//    console.log(role)
+
+//			this.getRoleInfo(communityId).then(res=>{
+////				console.log("77777777777777",res)
+//			})
+      
       await this.getList({page: 1})
 
       this.$nextTick(() => {
@@ -432,6 +466,7 @@
       })
     }
 
+
     /**
      * 用户社区角色信息
      **/
@@ -444,10 +479,8 @@
      * 获取朋友圈列表
      **/
     getCirclesList (params) {
-      //return getCirclesApi(params)
-			if(this.pageInfo.isCourse===1){
+
 					return getCirclesApi(params)
-			}
     }
     /**
      * 获取交流社区列表
@@ -928,12 +961,12 @@
         }
       }
       & button:last-of-type {
-        background-color: #ffe266;
+        /*background-color: #ffe266;*/
         color: #354048;
       }
     }
     
-    & .ask-warp{
+    & .ask-warp, & .author-operation{
     	border-top: 1px solid #DCDCDC;
     	position: fixed;
       bottom: 0;
@@ -957,7 +990,7 @@
           	height: 24px;
           	border: 0.5px solid #DCDCDC;
           	position: absolute;
-          	right: -60px;
+          	right: -50px;
           	top: 3px;
           }
           

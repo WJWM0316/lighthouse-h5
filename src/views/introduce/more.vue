@@ -25,20 +25,19 @@
 			<!--塔主和嘉宾列表-->
 			<div class="guestList">
 				<ul class="guestListBox">
-					<li class="guestListPerson">
+					<!--<li class="guestListPerson" @click.prevent.stop="goUserDetail(item.userId)">
 						<div class="imgBox">
-							<!--<img src="../../assets/icon/img_wechat_code.png"/>-->
 							<img :src="master.avatar"/>
 							<span class="personTitle">塔主</span>
 						</div>
 						<span class="name" v-text="master.realName">塔主</span>
-					</li>
+					</li>-->
 					<!--嘉宾-->
-					<li class="guestListPerson" v-for="item in role">
+					<li class="guestListPerson" v-for="item in role"  @click.prevent.stop="goUserDetail(item.userId)">
 						<div class="imgBox">
 							<!--<img src="../../assets/icon/img_wechat_code.png"/>-->
 							<img :src="item.avatar"/>
-							<span class="personTitle" v-text="item.roleName "></span>
+							<span class="personTitle" v-text="item.identityAuthority.title "></span>
 						</div>
 						<span class="name" v-text="item.realName"></span>
 					</li>
@@ -106,16 +105,17 @@
 			})
 			
 			//申请塔主和嘉宾列表
-			getAskInfoApi(id).then(res=>{
-				console.log("请求成功总数据",res)
-				that.master=res.master;
-				that.role=res.role;
-				console.log("嘉宾列表",that.role);
-			});
+//			getAskInfoApi(id).then(res=>{
+//				console.log("请求成功总数据",res)
+//				that.master=res.master;
+//				that.role=res.role;
+//				console.log("嘉宾列表",that.role);
+//			});
 			//获取同学列表
-			classmatesApi(id).then(res=>{
-				that.classmate=res.list;
-				console.log("同学列表",that.classmate)
+			classmatesApi({communityId:id.communityId,page:1,pageCount:20}).then(res=>{
+				that.classmate=res.peoples;
+				that.role=res.role;
+				console.log("同学列表",res)
 			})
 			
 		},

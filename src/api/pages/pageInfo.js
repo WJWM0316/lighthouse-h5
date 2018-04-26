@@ -29,13 +29,13 @@ export const getCommunityApi = (data) => {
 }
 
 // 用户社区角色信息
-export const getRoleInfoApi = (data) => {
-  return request({
-    url: '/wap/beacon/roleInfo',
-    data,
-    isLoading: true
-  })
-}
+//export const getRoleInfoApi = (data) => {
+//return request({
+//  url: '/wap/beacon/roleInfo',
+//  data,
+//  isLoading: true
+//})
+//}
 
 // 大咖介绍页
 export const getCommunityInfoApi = ({communityId, data}) => {
@@ -43,6 +43,15 @@ export const getCommunityInfoApi = ({communityId, data}) => {
     url: '/wap/beacon/' + communityId,
     data,
     type: 'get',
+    isLoading: true
+  })
+}
+
+// 获取角色区分
+export const getRoleInfoApi = (data) => {
+  return request({
+    url: '/wap/beacon/roleInfo',
+    data,
     isLoading: true
   })
 }
