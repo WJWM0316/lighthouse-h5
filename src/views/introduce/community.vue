@@ -208,8 +208,6 @@
     	console.log("5555555555555555",this.$route);
       if (this.$route.query.type !== undefined) {
         this.showType = parseInt(this.$route.query.type)
-      }else{
-      	this.showType=0;
       }
       console.log('this.showType', this.showType)
       wxUtil.reloadPage()
@@ -242,6 +240,19 @@
           'imgUrl': shareImg,
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
+        
+        //判断是否有课程，无课程则跳转
+        if(this.pageInfo.isCourse===2){
+        	let type=0;
+        	this.displaySuspensionInput = false
+	        this.dynamicList = []
+	        this.showType = type
+	        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+	        this.showIdentification = !type
+	
+	        this.pagination.end = false // 初始化数据，必定不是最后一页
+	        this.getList({page: 1}).then(() => {})
+        }
       })
     }
     
@@ -409,9 +420,7 @@
      **/
     getCirclesList (params) {
 //    return getCirclesApi(params)
-			if(this.pageInfo.isCourse===1){
 					return getCirclesApi(params)
-			}
     }
     /**
      * 获取交流社区列表

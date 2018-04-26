@@ -206,17 +206,10 @@ export const getExploreCommentsApi = (data) => {
     isLoading: true
   })
 }
-<<<<<<< HEAD
 // 新发现内容评论列表
 export const getNewExploreCommentsApi = (data) => {
   return request({
     url: '/wap/comment/list',
-=======
-// 获取评论列表
-export const getNewExploreCommentsApi = (data) => {
-  return request({
-    url: '/wap/comment/geComments',
->>>>>>> 35f9e651853a38df0c0b91fdb484f43cca8d28a8
     data,
     isLoading: true
   })
