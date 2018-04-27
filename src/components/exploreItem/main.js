@@ -321,9 +321,9 @@ export default class exploreItem extends Vue {
       return
     }
     if (to && to === 'praise') {
-      this.$router.push(`/index/details/${this.item.circleId}?target=praise`)
+      this.$router.push(`/index/details/${this.item.circleId}/?target=praise&modeType=${this.item.modelType}`)
     } else {
-      this.$router.push(`/index/details/${this.item.circleId}`)
+      this.$router.push(`/index/details/${this.item.circleId}?modeType=${this.item.modelType}`)
     }
   }
   toCommunity () { // 去大咖介绍页

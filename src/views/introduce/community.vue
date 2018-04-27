@@ -74,6 +74,7 @@
           <div class="module-content" v-if="dynamicList && dynamicList.length > 0">
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
+                     :isNeedHot="true"
                      :showIdentification="showIdentification"
                      :disableOperationArr="disableOperationArr"
                      @disableOperationEvents="operation"
@@ -465,16 +466,17 @@
       } else {
         this.$vux.toast.text('评论失败', 'bottom')
       }
-      if (this.dynamicList[commentIndex] && this.dynamicList[commentIndex].comments) {
-        if (this.dynamicList[commentIndex].commentTotal < 3) {  // 小于3条才显示出来
-          this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
-        }
+      // 普通评论不显示
+      // if (this.dynamicList[commentIndex] && this.dynamicList[commentIndex].comments) {
+      //   if (this.dynamicList[commentIndex].commentTotal < 3) {  // 小于3条才显示出来
+      //     this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
+      //   }
         
-        this.dynamicList[commentIndex].commentTotal += 1
-      } else {
-        this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
-        this.dynamicList[commentIndex].commentTotal = 1
-      }
+      //   this.dynamicList[commentIndex].commentTotal += 1
+      // } else {
+      //   this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
+      //   this.dynamicList[commentIndex].commentTotal = 1
+      // }
     }
 
     // ------------------------------------------------

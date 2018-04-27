@@ -34,6 +34,13 @@
       }
       .user-career, .user-name {
         width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+        &.user-career {
+          width: 90%;
+        }
         &.master {
           color: #d7ab70;
         }

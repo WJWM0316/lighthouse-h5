@@ -18,6 +18,10 @@ import moment from 'moment'
     itemIndex: {
       type: Number
     },
+    isNeedHot: {
+      type: Boolean,
+      default: false
+    },
     // 是否隐藏评论按钮
     hideCommentBtn: {
       type: Boolean,
