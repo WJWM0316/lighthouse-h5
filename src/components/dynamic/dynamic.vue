@@ -114,6 +114,7 @@
     currentVideoIndex = -1
 
     created () {
+    	console.log("111111113333333333333333333",this.dynamicList)
     }
 
     mounted () {

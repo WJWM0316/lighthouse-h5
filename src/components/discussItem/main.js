@@ -129,7 +129,6 @@ import moment from 'moment'
 })
 export default class discussItem extends Vue {
   created () {
-    console.log(this.commentType)
   }
 
   /**

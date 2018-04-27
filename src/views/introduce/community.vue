@@ -210,10 +210,10 @@
           label: '动态',
           value: 'default'
         },
-//      {
-//        label: '语音',
-//        value: 'voice'
-//      }
+        {
+          label: '语音',
+          value: 'voice'
+        }
       ]
     }
     qrSrc = ''
@@ -270,9 +270,11 @@
         	this.type=0;
         	let type=0;
         	this.displaySuspensionInput = false
-//	        this.dynamicList = []
+	        this.dynamicList = []
 	        this.showType = type
+//	        debugger
 	        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+//	        debugger
 	        this.showIdentification = !type
 	
 	        this.pagination.end = false // 初始化数据，必定不是最后一页
@@ -284,6 +286,7 @@
     
     //路由跳转more
     toMore(){
+    	
     	console.log(this.communityId);
     	let that=this;
     	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId}})

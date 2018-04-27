@@ -17,12 +17,13 @@
       <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
 			<!--<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career">1231324654</span>-->
 
-
+		<!--</div>-->
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
-
+		<!--<div :class="{right: true, border: !hideBorder}">-->
       <!-- 问答类型 -->
       <!-- 发表内容 -->
+      <!--<div class="publish-content problem" v-if="item.modelType == 'post'">-->
       <div class="publish-content problem" v-if="item.modelType === 'problem'">
 
         <p class="content-text" :class="{'ellipsis' : isFold}">问：{{item.content}}</p>

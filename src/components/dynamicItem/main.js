@@ -178,6 +178,7 @@ export default class dynamicItem extends Vue {
   video = ''
 
   created () {
+  	console.log(this.item,"******************************")
   }
 
   mounted () {
