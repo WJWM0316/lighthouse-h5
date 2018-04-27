@@ -36,41 +36,33 @@
         </div>
         <!-- 评论 -->
         <template v-if="navTabName === 'comment'">
-          <!-- 热门评论 -->
-        <div class="hot-area" v-if="hotList && hotList.length > 0">
-          <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
-        </div>
-        <div class="content-comment" >
-          <discuss-item v-for="item,index in hotList"
-                        :item="item"
-                        :key="index"
-                        :itemIndex="index"
-                        :disableUserClick="false"
-                        :disableContentClick="true"
-                        :disableCommentAreaClick="true"
-                        @operation="operation">
-          </discuss-item>
-        </div>
-        <!-- 全部评论 -->
-        <div class="hot-area" v-if="allList && allList.length > 0">
-          <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
-        </div>
-        <div class="content-comment" >
-          <discuss-item v-for="item,index in allList"
-                        :item="item"
-                        :key="index"
-                        :itemIndex="index"
-                        :disableUserClick="false"
-                        :disableContentClick="true"
-                        :disableCommentAreaClick="true"
-                        @operation="operation">
-          </discuss-item>
-
-
-          <div v-if="allList && allList.length === 0">
-            <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
+        <div  v-for="item,index in allList">
+            <!-- 热门评论 -->
+          <div class="hot-area" v-if="hotCommentTotal > 0 && index ===0">
+            <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
+          </div>
+          <div class="content-comment" >
+            <discuss-item
+                          :item="item"
+                          :key="index"
+                          :itemIndex="index"
+                          :disableUserClick="false"
+                          :disableContentClick="true"
+                          :disableCommentAreaClick="true"
+                          @operation="operation">
+            </discuss-item>
+          </div>
+          <!-- 全部评论 -->
+          <div class="hot-area" v-if="allTotal > 0 && index === hotCommentTotal">
+            <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
           </div>
         </div>
+
+
+        <div v-if="allTotal === 0">
+          <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
+        </div>
+
         </template>
         <!-- 点赞 -->
         <template v-else>
@@ -127,8 +119,9 @@
   })
   export default class exploreDetails extends Vue {
     exploreList = []
-    hotList = []
     allList = []
+    allTotal = 0
+    hotCommentTotal = 0
     classmateList = []
     navTabName = 'comment'
     isCeilingBoxFixed = false
@@ -136,11 +129,6 @@
     disableOperationArr = ['comment', 'praise']
 
     created () {
-      console.log(this.$route)
-      const {target} = this.$route.query
-      if (target === 'praise') {
-        this.navTabName = 'praise'
-      }
       this.pageInit().then(() => {})
     }
 
@@ -151,13 +139,25 @@
       if (this.navTabName !== targetName) {
         this.navTabName = targetName
         if (targetName === 'praise') {
+          let modelType = ''
+          this.isShow = false
+          modelType = this.$route.query.modeType
+          const params = {
+            id: this.$route.params.sourceId,
+            modelType: modelType,
+            page: 1,
+            pageCount: 1000
+          }
           this.$router.replace({path: this.$route.path, query: {target: 'praise'}})
+          if (this.classmateList.length === 0) {
+            this.getFavorList(params).then(res => {
+              this.classmateList = res.list
+              console.log(res)
+            })
+          }
         } else {
-          this.$router.replace({path: this.$route.path})
+          this.isShow = true
         }
-
-        this.pagination.end = false // 初始化数据，必定不是最后一页
-        this.getList({page: 1}).then(() => {})
       }
     }
 
@@ -265,25 +265,14 @@
       let allTotal = 0
       if (navTabName === 'comment') {
         const res = await this.getExploreComments(params)
-        const {comments, total, hotComments} = res
-        allTotal = total
+        const {comments, total, hotCommentTotal} = res
+        this.allTotal = total
+        this.hotCommentTotal = hotCommentTotal
 
         if (page === 1) {
-          this.hotList = hotComments
           this.allList = comments
         } else {
-          this.hotList = this.hotList.concat(hotComments || [])
           this.allList = this.hotList.concat(comments || [])
-        }
-      } else {
-        const res = await this.getFavorList(params)
-        const {list, total} = res
-        allTotal = total
-
-        if (page === 1) {
-          this.classmateList = list
-        } else {
-          this.classmateList = this.classmateList.concat(list || [])
         }
       }
 
@@ -334,7 +323,7 @@
     height: 100%;
     & .header {
     }
-
+    
     & .ceiling-box {
       margin: 0 15px;
       display: flex;

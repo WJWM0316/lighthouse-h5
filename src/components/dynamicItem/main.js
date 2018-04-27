@@ -10,9 +10,17 @@ import moment from 'moment'
       type: Object,
       required: true
     },
+    isFold: {
+      type: Boolean,
+      default: true
+    },
     // 对象下标
     itemIndex: {
       type: Number
+    },
+    isNeedHot: {
+      type: Boolean,
+      default: false
     },
     // 是否隐藏评论按钮
     hideCommentBtn: {

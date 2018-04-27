@@ -25,8 +25,8 @@
       <!-- 发表内容 -->
       <div class="publish-content problem" v-if="item.modelType === 'problem'">
 
-        <p class="content-text">问：{{item.content}}</p>
-
+        <p class="content-text" :class="{'ellipsis' : isFold}">问：{{item.content}}</p>
+        <p class="full-text-btn" v-if="ellipsis">{{isFullText('circle-content')}}</p>
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
 
           <!-- 追问 -->
@@ -67,8 +67,8 @@
         <!--<p class="content-text" v-if="item.circleType === 0">{{item.content}}</p>-->
         <!--限制六行-->
         <div ref="circle-content" v-if="item.circleType === 0">
-          <p class="content-text ellipsis">{{item.content}}</p>
-          <p class="full-text-btn">{{isFullText('circle-content')}}</p>
+          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
+          <p class="full-text-btn" v-if="ellipsis">{{isFullText('circle-content')}}</p>
         </div>
 
         <!-- 音频 -->
@@ -94,8 +94,8 @@
           <!--<p class="content-text">{{item.content}}</p>-->
           <!--限制文本行数-->
           <div ref="circle-content">
-	          <p class="content-text ellipsis">{{item.content}}</p>
-	          <p class="full-text-btn">{{isFullText('circle-content')}}</p>
+	          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
+	          <p class="full-text-btn" v-if="ellipsis">{{isFullText('circle-content')}}</p>
 	        </div>
 	        
           <div class="content-video" @click.stop="videoClick">
@@ -113,8 +113,8 @@
           <!--<p class="content-text">{{item.content}}</p>-->
           <!--限制文本行数-->
           <div ref="circle-content">
-	          <p class="content-text ellipsis">{{item.content}}</p>
-	          <p class="full-text-btn">{{isFullText('circle-content')}}</p>
+	          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
+	          <p class="full-text-btn" v-if="ellipsis">{{isFullText('circle-content')}}</p>
 	        </div>
 	        
           <div class="content-images">
@@ -190,13 +190,23 @@
           </div>
 
         <!-- 评论信息 -->
-        <div class="reply-block" v-if="item.commentTotal > 0">
-          <div class="reply" v-for="reply in item.comments">
-            <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
-          </div>
-          <div class="reply" v-if="item.commentTotal > 3">
-            <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
-          </div>
+        <div class="reply-block" v-if="item.commentTotal > 0 && item.comments">
+          <template  v-if="isNeedHot">
+            <div class="hot-reply">
+              <div class="hot-reply-icon">热门评论</div>
+              <div class="reply" v-for="(reply,index) in item.comments" v-if="index === 0">
+                <p class="favor-content"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
+              </div>
+            </div>
+          </template>
+          <tempalte v-else>
+            <div class="reply" v-for="reply in item.comments">
+              <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
+            </div>
+            <div class="reply" v-if="item.commentTotal > 3">
+              <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
+            </div>
+          </tempalte>
         </div>
       </div>
     </div>

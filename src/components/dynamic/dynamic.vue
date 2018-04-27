@@ -14,6 +14,8 @@
                   :hideCommentArea="hideCommentArea"
                   :disableContentClick="disableContentClick"
                   :disableUserClick="disableUserClick"
+                  :isFold="isFold"
+                  :isNeedHot="isNeedHot"
                   @audioEvent="audioEvent"
                   @videoEvent="videoEvent"
                   @operation="operation"
@@ -35,10 +37,19 @@
         type: Array,
         required: true
       },
+      isNeedHot: {
+        type: Boolean,
+        'default': false
+      },
       // 是否隐藏评论按钮
       hideCommentBtn: {
         type: Boolean,
         'default': false
+      },
+      // 是否折叠
+      isFold: {
+        type: Boolean,
+        'default': true
       },
       // 是否隐藏点赞按钮
       hidePraiseBtn: {
@@ -400,7 +411,7 @@
         })
         this.dynamicList[itemIndex].favors.splice(tempIndex, 1)
       }
-      
+
     }
     /**
      * 删除

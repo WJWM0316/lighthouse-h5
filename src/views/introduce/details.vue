@@ -12,6 +12,7 @@
                  :hideCommentArea="true"
                  :disableContentClick="true"
                  :showIdentification="false"
+                 :isFold="false"
                  @getUserId="getUserId"
         ></dynamic>
       </div>
@@ -335,7 +336,6 @@
               this.classmateList = res.list
               console.log(res)
             })
-            
           }
         } else {
           this.isShow = true
