@@ -263,8 +263,14 @@ export default class PublishContent extends Vue {
         globalLoading: false
       }
 
-			if(this.$route.query.identity==1){
-				await publishPostApi(params)
+			//判断身份发帖还是发布
+			if(this.$route.query.code==='student' || this.$route.query.code==='manager'){
+				if(this.$route.query.code==='manager' && this.$route.query.codeType==='1'){
+					await publishApi(params)
+				}else{
+					await publishPostApi(params)
+				}
+				
 			}else{
 				await publishApi(params)
 			}
