@@ -10,6 +10,10 @@ import moment from 'moment'
       type: Object,
       required: true
     },
+    commentType: {
+      type: String,
+      default: 'all'
+    },
     // 对象下标
     itemIndex: {
       type: Number
@@ -67,7 +71,6 @@ import moment from 'moment'
   },
   watch: {
     item () {
-      console.log(111111111)
     }
   },
   computed: {
@@ -126,6 +129,7 @@ import moment from 'moment'
 })
 export default class discussItem extends Vue {
   created () {
+    console.log(this.commentType)
   }
 
   /**
@@ -135,7 +139,9 @@ export default class discussItem extends Vue {
     const itemIndex = this.itemIndex
     this.$emit('operation', {
       eventType: 'comment',
-      itemIndex
+      itemIndex,
+      item: this.item,
+      commentType: this.commentType
     })
   }
   /**
@@ -145,7 +151,9 @@ export default class discussItem extends Vue {
     const itemIndex = this.itemIndex
     this.$emit('operation', {
       eventType: 'praise',
-      itemIndex
+      itemIndex,
+      item: this.item,
+      commentType: this.commentType
     })
   }
   /**
@@ -155,7 +163,9 @@ export default class discussItem extends Vue {
     const itemIndex = this.itemIndex
     this.$emit('operation', {
       eventType: 'del',
-      itemIndex
+      itemIndex,
+      item: this.item,
+      commentType: this.commentType
     })
   }
   /**
@@ -165,7 +175,9 @@ export default class discussItem extends Vue {
     const itemIndex = this.itemIndex
     this.$emit('operation', {
       eventType: 'comment-area',
-      itemIndex
+      itemIndex,
+      type: this.commentType,
+      commentType: this.commentType
     })
   }
 

@@ -380,8 +380,7 @@
         background:#fff;
         margin-top: 0;
         z-index: 99;
-        padding: 0 15px;
-        margin: 0; 
+        padding: 0 15px; 
       }
     }
     & .hot-area {

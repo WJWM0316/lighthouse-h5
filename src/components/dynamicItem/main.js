@@ -10,6 +10,10 @@ import moment from 'moment'
       type: Object,
       required: true
     },
+    isFold: {
+      type: Boolean,
+      default: true
+    },
     // 对象下标
     itemIndex: {
       type: Number
@@ -185,12 +189,10 @@ export default class dynamicItem extends Vue {
     this.$nextTick(() => {
       const el = this.$refs[ref]
       const contentText = el.firstChild
-      console.log(contentText.offsetHeight, contentText.scrollHeight)
       if (contentText.scrollHeight > contentText.offsetHeight) {
         const fullText = document.createElement('span')
         fullText.className = 'full-text open'
         fullText.innerText = '展开全文'
-        console.log(contentText.classList)
         fullText.onclick = (e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -259,8 +261,6 @@ export default class dynamicItem extends Vue {
     files.forEach((item) => {
       urls.push(item.fileUrl)
     })
-    console.log('当前图片: ', img, '图片数组: ', urls)
-
     this.$emit('operation', {
       eventType: 'previewImage',
       img,
@@ -271,7 +271,6 @@ export default class dynamicItem extends Vue {
    * 打开文件
    */
   fileOpen (url) {
-    console.log('当前打开文件: ', url)
     this.$emit('operation', {
       eventType: 'fileOpen',
       url
@@ -319,9 +318,7 @@ export default class dynamicItem extends Vue {
       return
     }
     const item = this.item
-    console.log('item item', item)
     const {modelType, circleId, problemId, isCanSee} = item
-    console.log('isCanSee', isCanSee)
     if (isCanSee === 0) {
       this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return
@@ -329,7 +326,6 @@ export default class dynamicItem extends Vue {
     let type = 0
     switch (modelType) {
       case 'circle':
-        console.log('circleId')
         type = 1
         break
       case 'post':
