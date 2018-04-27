@@ -1,6 +1,6 @@
 <template>
   <!-- 朋友圈、帖子、问题 详情 -->
-  <div class="all-details">
+  <div class="all-details" :class="{'pdBtom' : isShow}">
     <scroll @refresh="handleRefresh" @pullup="handlePullup">  
         <!-- header -->
         <div class="header">
@@ -186,6 +186,8 @@
         case 'del':
           this.del({item, itemIndex, commentType}).then()
           break
+        case 'comment-area':
+          this.jumpCommentDetail({item, commentType}).then()
       }
     }
 
@@ -200,6 +202,9 @@
      */
     jump (e) {
       this.$router.push('/userInfo/' + e + '/details')
+    }
+    jumpCommentDetail ({item, commentType}) {
+      this.$router.push('/reply/' + item.commentId)
     }
 
     /**
@@ -554,8 +559,10 @@
 <style lang="less" scoped>
   .all-details {
     box-sizing: border-box;
-    padding-bottom: 50px;
     height: 100%;
+    &.pdBtom {
+      padding-bottom: 50px;
+    }
     & .header {
     }
     & .ceiling-box {

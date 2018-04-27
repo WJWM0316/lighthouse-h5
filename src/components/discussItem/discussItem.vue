@@ -1,6 +1,6 @@
 <template>
   <!-- 评论列表项 -->
-  <div class="discuss-item" @click="toCommentList(item['commentId'])">
+  <div class="discuss-item" @click.stop="comment">
 
     <!-- 头像 -->
     <div class="left">
