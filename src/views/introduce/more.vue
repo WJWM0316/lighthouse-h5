@@ -58,7 +58,7 @@
 					</div>
 					<div class="classmate-master">
 						<span class="classmate-name" v-text="item.realName"></span>
-						<span class="classmate-career" v-if="item.career" v-text="item.career"></span>
+						<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
 					</div>
 				</li>
 			</ul>
@@ -309,8 +309,9 @@
 						}
 						
 						& .classmate-master{
+							width: 250px;
 							padding-left: 15px;
-							flex-grow: 1;
+							flex-grow: 0;
 							.classmate-name{
 								display: block;
 								font-size: 16px;
@@ -318,6 +319,8 @@
 								line-height: 20px;
 							}
 							.classmate-career{
+								display: inline-block;
+								width: 100%;
 								white-space: nowrap;
 								overflow: hidden;
 								text-overflow: ellipsis;
