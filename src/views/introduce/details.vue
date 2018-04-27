@@ -28,22 +28,13 @@
           </div>
           <template v-if="navTabName === 'comment'">
              <!-- 热门评论 -->
-            <div class="hot-area" v-if="discussItemList && discussItemList.length > 0">
+            <div class="hot-area">
               <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
             </div>
-            <div class="content-comment" >
-              <discuss-item v-for="item,index in discussItemList"
-                            :item="item"
-                            :key="item.commentId"
-                            :itemIndex="index"
-                            :showDelBtn="true"
-                            :commentType="'hot'"
-                            @operation="operation"></discuss-item>
-            </div>
             <!-- 全部评论 -->
-            <div class="hot-area" v-if="commentTotal > 0">
+            <!-- <div class="hot-area" v-if="commentTotal > 0">
               <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
-            </div>
+            </div> -->
             <div class="content-comment" >
               <discuss-item v-for="item,index in allList"
                             :item="item"
@@ -134,7 +125,6 @@
   })
   export default class introduce extends Vue {
     dynamicList = []
-    discussItemList = []
     allList = []
     commentTotal = 0
     favorTotal = 0
@@ -229,7 +219,6 @@
           isFavor: isFavor     // 是否喜欢：0取消喜欢，1喜欢
         }
       } else {
-        console.log(222222222222222222222)
         favor = this.dynamicList[0].isFavor ? 0 : 1
         let favorType = 0
         switch (this.$route.params.type) {
@@ -242,7 +231,6 @@
           case '3':
             favorType = 4
             break
-
         }
 
         params = {
@@ -251,75 +239,23 @@
           isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
         }
       }
-      let self = this
-     if (params.isFavor === 0) {
-        params.isFavor = 1
+
+      const res = await setFavorApi(params)
+
+      this.allList[itemIndex].isFavor = favor
+      this.allList[itemIndex].favorTotal += favor ? 1 : -1
+      if (favor) {
+        this.allList[itemIndex].favors = this.allList[itemIndex].favors || []
+        this.allList[itemIndex].favors.splice(0, 0, res)
       } else {
-        params.isFavor = 0
-      }
-      let curObj = {}
-      let otherObj = {}
-      let otherObjIndx = 0
-      let needList = {}
-      if (commentType === 'all') {
-        curObj = this.allList[itemIndex]
-        needList = this.discussItemList
-      } else {
-        curObj = this.discussItemList[itemIndex]
-        needList = this.allList
-      }
-      if (needList.length > 0) {
-        needList.forEach((data, index) =>{
-          if (curObj.commentId === data.commentId) {
-            otherObjIndx = index
-            if (commentType === 'all') {
-              otherObj = this.discussItemList[index] || null
-            } else {
-              otherObj = this.allList[index] || null
-            } 
+        let tempIndex = ''
+        this.allList[itemIndex].favors.forEach((item, index) => {
+          if (item.userId === res.userId) {
+            tempIndex = index
           }
         })
+        this.allList[itemIndex].favors.splice(tempIndex, 1)
       }
-      
-      setFavorApi(params).then(res => {
-        curObj.isFavor = params.isFavor
-        otherObj.isFavor = params.isFavor
-        if (params.isFavor === 1) {
-          console.log('1111111111', this.allList)
-          curObj.favors.splice(0, 0, res)
-          otherObj.favors.splice(0, 0, res)
-          if (commentType === 'all') {
-            this.allList[itemIndex] 
-            this.allList[itemIndex].splice(0, 0 , res)
-          } else {
-            this.discussItemList[itemIndex]
-          }
-
-        } else {
-          console.log('1111111111', this.allList)
-          let tempIndex1 = ''
-          curObj.favors.forEach((item, index) => {
-            if (item.userId === res.userId) {
-              tempIndex1 = index
-            }
-          })
-          curObj.favors.splice(tempIndex1, 1)
-          curObj.favorTotal -= 1
-          if (otherObj) {
-            let tempIndex2 = ''
-            otherObj.favors.forEach((item, index) => {
-              if (item.userId === res.userId) {
-                tempIndex2 = index
-              }
-            })
-            console.log(111, otherObj)
-            otherObj.favors.splice(tempIndex2, 1)
-            otherObj.favorTotal -= 1
-          } 
-        }
-      }).catch(res => {
-
-      })
     }
     /**
      * 删除
@@ -344,7 +280,6 @@
         onConfirm () {
           delCommontApi(params).then(res => {
             _this.allList.splice(itemIndex, 1)
-            _this.discussItemList.splice(itemIndex, 1)
             _this.commentTotal -= 1
           }).catch(e => {
             _this.$vux.toast.text('删除失败', 'bottom')
@@ -359,7 +294,7 @@
      * @param data
      */
     async sendComment ({value, commentIndex}) {
-      const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.dynamicList[0]
+      const item = commentIndex > -1 ? this.allList[commentIndex] : this.dynamicList[0]
       const {commentId, problemId, circleId} = item
       let sourceType = 4
       if (commentIndex < 0) {
@@ -383,8 +318,6 @@
       })
       
       if (commentIndex < 0) {
-        this.$set(this.curData, 'isFavor', 0)
-        this.$set(this.curData, 'favors', [])
         this.allList.splice(0, 0, this.curData)
         this.commentTotal += 1
         this.pagination.total += 1
@@ -513,10 +446,8 @@
         allTotal = total
         if (page === 1) {
           this.commentTotal = total
-          this.discussItemList = hotComments
           this.allList = comments
         } else {
-          this.discussItemList = this.discussItemList.concat(hotComments || [])
           this.allList = this.allList.concat(comments || [])
         }
       } else {
