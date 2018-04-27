@@ -251,7 +251,7 @@
           isFavor: isFavor     // 是否喜欢：0取消喜欢，1喜欢
         }
       } else {
-        favor = this.dynamicList[0].isFavor ? 0 : 1
+        favor = this.discussItemList[itemIndex].isFavor ? 0 : 1
         let favorType = 0
         switch (this.$route.params.type) {
           case '1':
