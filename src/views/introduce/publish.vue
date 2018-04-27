@@ -107,6 +107,7 @@ export default class PublishContent extends Vue {
   }
 
   created () {
+  	console.log(this.$route,"12132132132132132")
     this.form.communityId = this.$route.params.communityId
   }
 
@@ -262,7 +263,12 @@ export default class PublishContent extends Vue {
         globalLoading: false
       }
 
-      await publishApi(params)
+			if(this.$route.query.identity==1){
+				await publishPostApi(params)
+			}else{
+				await publishApi(params)
+			}
+      
       this.$vux.toast.text('发布成功', 'bottom')
       this.$router.go(-1)
     } catch (error) {

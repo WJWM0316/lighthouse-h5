@@ -366,10 +366,11 @@
     postQuestions(){
     	// :todo 提问
         this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
+//				this.$router.push(path:''`/introduce/ask/${this.$route.params.communityId}`,query:{identity:1})
     }
     posted(){
     	// :todo 发帖
-        this.$router.push(`/publish/${this.$route.params.communityId}?type=0`)
+        this.$router.push(`/publish/${this.$route.params.communityId}?type=0&identity=1`)
     }
     toMemberList () {
       this.$router.push({name: 'classmates', communityId: this.$route.params.communityId})
