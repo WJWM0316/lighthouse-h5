@@ -265,13 +265,18 @@ export default class PublishContent extends Vue {
 
 			//判断身份发帖还是发布
 			if(this.$route.query.code==='student' || this.$route.query.code==='manager'){
-				if(this.$route.query.code==='manager' && this.$route.query.codeType==='1'){
-					await publishApi(params)
-				}else{
-					await publishPostApi(params)
-				}
+				//学员和管理员
+					if( this.$route.query.code==='manager' && this.$route.query.codeType==='1'){
+						await publishApi(params)
+					}else{
+						await publishPostApi(params)
+					}
 				
+			}else if(this.$route.query.code==='special_manager' || this.$route.query.code==='special_master' ||  this.$route.query.code==='special_guests' ){
+				//无课程灯塔内容发帖
+					await publishPostApi(params)
 			}else{
+				//塔主和嘉宾
 				await publishApi(params)
 			}
       

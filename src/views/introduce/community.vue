@@ -270,7 +270,7 @@
         	this.type=0;
         	let type=0;
         	this.displaySuspensionInput = false
-	        this.dynamicList = []
+//	        this.dynamicList = []
 	        this.showType = type
 	        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
 	        this.showIdentification = !type
@@ -602,7 +602,7 @@
     handleReleaseActionsheetItem (key, item) {
       switch (key) {
         case 'default':
-          this.$router.push(`/publish/${this.pageInfo.communityId}`)
+          this.$router.push(`/publish/${this.pageInfo.communityId}?code=${this.roleInfo.code}&codeType=${this.type}`)
           break
         case 'voice':
           this.$router.push(`/publishVoice/${this.pageInfo.communityId}`)

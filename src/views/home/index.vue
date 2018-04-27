@@ -17,7 +17,7 @@
               @click="tagSelected(indexTag)"></span>
       </div>
     </div>
-<scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+    <scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- 选项卡 -->
       <div  ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
         <ul>
@@ -26,6 +26,11 @@
               <p class="chose-tab-con">{{item.title}}</p>
           </li>
         </ul>
+        <div class="advertising_list" >
+            <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
+                <img class="opt_pic" :src="item.imgUrl"></img>
+            </div>
+        </div>
       </div>
       <!-- 轮播图 -->
       <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
@@ -35,6 +40,7 @@
             </swiper-item>
           </swiper>
       </div> -->
+      
        <!-- 分类 -->
       <div ref="tab2" class="classification fs14" v-if="navTabName === 'picked'" v-show="!isFlex" @scroll.stop="scrollTab">
         <span v-for="itemTag, indexTag in communityTagList"
@@ -96,8 +102,6 @@
 
       <!-- 精选 -->
       <div v-if="navTabName === 'picked'">
-        
-        
         <div class="communities" v-if="communities && communities.length > 0">
           <div class="list">
             <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" />
@@ -120,7 +124,7 @@ import Scroller from '@/components/scroller'
 
 import ListMixin from '@/mixins/list'
 
-import { getBeaconsApi, getBannersApi, getTagsListApi, getJoineListdApi, getTabBardApi } from '@/api/pages/home'
+import { getBeaconsApi, getBannersApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdvertisingApi } from '@/api/pages/home'
 
 @Component({
   name: 'home-index',
@@ -143,6 +147,7 @@ export default class HomeIndex extends Vue {
   isFlex = false
   scrollTabLeft = 0 // tab
   scrollHeight = 0 // 计算banner 跟 tab 的高度
+  advertisingList = []
   // ******************* 已加入 **********************
   creations = []
   joins = []
@@ -245,6 +250,7 @@ export default class HomeIndex extends Vue {
     console.log('精选 Tab 初始')
 
     await this.getTagsList()
+    await this.getAdvertising()
     await this.getList({ page: 1 })
   }
 
@@ -273,6 +279,21 @@ export default class HomeIndex extends Vue {
           this.scrollHeight = this.$refs.tabBanner.clientHeight
         })
       }
+    })
+  }
+  /**
+   * 获取三个广告位
+   */
+  getAdvertising () {
+    let test = 42
+
+    return getAdvertisingApi({
+      adType: test
+    }).then((res) => {
+      console.log('=========',res)
+      this.advertisingList = res.ads
+    }).catch(e => {
+      console.log('=========',e)
     })
   }
   /**
@@ -423,6 +444,14 @@ export default class HomeIndex extends Vue {
       this.$router.push(`/introduce/${item.communityId}`)
     }
   }
+
+  // 点击广告列
+  toAdvertising (type) {
+    console.log(type)
+    if (type) {
+      this.$router.push(`/advertising/${type}`)
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -507,6 +536,39 @@ export default class HomeIndex extends Vue {
     }
   }
 
+  .advertising_list {
+    margin: 0 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px 0;
+    .opt_blo {
+      width: 111px;
+      height: 48px;
+      border-radius: 5px;
+      position: relative;
+      line-height: 48px;
+      text-align: left;
+      overflow: hidden;
+      .opt_pic {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -1;
+      }
+      text {
+        font-family: 'PingFangSC-Regular';
+        font-size: 14px;
+        color: #354048;
+        letter-spacing: 0;
+        margin-left: 12px;
+      }
+    }
+    
+  }
+
   & .classification {
     height: 40px;
     overflow-y: hidden;
@@ -555,7 +617,7 @@ export default class HomeIndex extends Vue {
         display: inline-block;
         margin-left: 15px;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-        margin-bottom: 20px;
+        //margin-bottom: 20px;
         &:last-child {
           margin-right: 15px;
         }
