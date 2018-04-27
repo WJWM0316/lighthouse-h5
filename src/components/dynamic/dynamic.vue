@@ -385,7 +385,7 @@
       }
 
       const res = await setFavorApi(params)
-
+      this.$emit('getUserId', {res, favor})
       this.dynamicList[itemIndex].isFavor = favor
       this.dynamicList[itemIndex].favorTotal += favor ? 1 : -1
       if (favor) {
@@ -400,6 +400,7 @@
         })
         this.dynamicList[itemIndex].favors.splice(tempIndex, 1)
       }
+      
     }
     /**
      * 删除
