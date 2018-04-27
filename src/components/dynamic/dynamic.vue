@@ -5,6 +5,7 @@
                   :item="item"
                   :key="index"
                   :itemIndex="index"
+                  :isFold = "isFold"
                   :hideCommentBtn="hideCommentBtn"
                   :hidePraiseBtn="hidePraiseBtn"
                   :showLightHouseInfo="showLightHouseInfo"
@@ -34,6 +35,10 @@
       dynamicList: {
         type: Array,
         required: true
+      },
+      isFold: {
+        type: Boolean,
+        default: true
       },
       // 是否隐藏评论按钮
       hideCommentBtn: {
@@ -359,6 +364,7 @@
      * @returns {Promise.<void>}
      */
     async praise ({item, itemIndex}) {
+      console.log(3333)
       const {modelType, problemId, circleId, isFavor} = item
       let favorId = circleId || problemId || ''
       let favorType = 0
