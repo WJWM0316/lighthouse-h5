@@ -241,17 +241,17 @@
     async praise ({item, itemIndex, commentType}) {
       let params = ''
       let favor = 0
-      console.log(item)
       if (item) {
         const {commentId, favorId, isFavor} = item
         let favorType = 6
+        favor = isFavor ? 0 : 1
         params = {
           favorId: commentId,    // 喜爱的id
           favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-          isFavor: isFavor     // 是否喜欢：0取消喜欢，1喜欢
+          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
         }
       } else {
-        favor = this.discussItemList[itemIndex].isFavor ? 0 : 1
+        favor = this.dynamicList[0].isFavor ? 0 : 1
         let favorType = 0
         switch (this.$route.params.type) {
           case '1':
@@ -270,23 +270,24 @@
           isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
         }
       }
-      setFavorApi(params).then(res => {
-        if (item) {
-          this.discussItemList[itemIndex].isFavor = favor
-          this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
-          if (favor) {
-            this.discussItemList[itemIndex].favors.splice(0, 0, res)
-          } else {
-            let temp = ""
-            this.discussItemList[itemIndex].favors.forEach((item, index) => {
-              if (item.userId === res.userId) {
-                temp = index
-              }
-            })
-            this.discussItemList[itemIndex].favors.splice(temp, 1)
+      console.log('favor', favor)
+      const res = await setFavorApi(params)
+      this.discussItemList[itemIndex].isFavor = favor
+      this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
+      console.log(this.discussItemList[itemIndex])
+      
+      if (favor) {
+        this.discussItemList[itemIndex].favors = this.discussItemList[itemIndex].favors || []
+        this.discussItemList[itemIndex].favors.splice(0, 0, res)
+      } else {
+        let tempIndex = ''
+        this.discussItemList[itemIndex].favors.forEach((item, index) => {
+          if (item.userId === res.userId) {
+            tempIndex = index
           }
-        }
-      })
+        })
+        this.discussItemList[itemIndex].favors.splice(tempIndex, 1)
+      }
     }
 
     /**
