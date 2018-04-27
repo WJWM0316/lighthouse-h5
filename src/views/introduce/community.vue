@@ -92,7 +92,7 @@
     <div class="footer" v-show="!displaySuspensionInput">
     	<!--在这里增加嘉宾判断-->
       <div v-if="isAuthor || isKayo=='guests'" class="author-operation">
-        <button @click="question">
+        <button @click="question" v-if="this.pageInfo.isCourse===1">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
         <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
@@ -103,7 +103,7 @@
         <img src="./../../assets/icon/icon_writing.png" v-else />
         <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>-->
         <!--4.25改版-->
-        <button @click="postQuestions">
+        <button @click="postQuestions" v-if="this.pageInfo.isCourse===1">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>提问</span>
         </button>
         <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type==1"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
