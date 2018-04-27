@@ -35,7 +35,7 @@ import WechatMixin from '@/mixins/wechat'
 import { Actionsheet } from 'vux'
 import WechatCodeModal from '@/components/wechatCodeModal'
 
-import { publishApi } from '@/api/pages/content'
+import { publishApi,publishPostApi } from '@/api/pages/content'
 import { wechatUploadFileApi } from '@/api/common'
 
 @Component({
@@ -107,6 +107,7 @@ export default class PublishContent extends Vue {
   }
 
   created () {
+  	console.log(this.$route,"12132132132132132")
     this.form.communityId = this.$route.params.communityId
   }
 
@@ -262,7 +263,18 @@ export default class PublishContent extends Vue {
         globalLoading: false
       }
 
-      await publishApi(params)
+			//判断身份发帖还是发布
+			if(this.$route.query.code==='student' || this.$route.query.code==='manager'){
+				if(this.$route.query.code==='manager' && this.$route.query.codeType==='1'){
+					await publishApi(params)
+				}else{
+					await publishPostApi(params)
+				}
+				
+			}else{
+				await publishApi(params)
+			}
+      
       this.$vux.toast.text('发布成功', 'bottom')
       this.$router.go(-1)
     } catch (error) {

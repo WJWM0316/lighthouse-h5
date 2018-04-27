@@ -9,7 +9,7 @@
       <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
     </div>
 
-    <scroll :pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+    <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- header -->
       <div class="header">
       	
@@ -93,9 +93,9 @@
     	<!--在这里增加嘉宾判断-->
       <div v-if="isAuthor || isKayo=='guests'" class="author-operation">
         <button @click="question">
-          <span class="desc"><img src="../../assets/icon/tab-massage-2@3x.png"/>回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
+          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
-        <button @click="release"><img src="../../assets/icon/writing@3x.png"/>发布动态</button>
+        <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
       </div>
       <div class="ask-warp" v-else>
       <!--<div class="ask-btn" @click="askBtnClick" v-else>-->
@@ -104,10 +104,10 @@
         <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>-->
         <!--4.25改版-->
         <button @click="postQuestions">
-          <span class="desc"><img src="../../assets/icon/tab-massage-2@3x.png"/>提问</span>
+          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>提问</span>
         </button>
-        <button @click="posted" class="post-tip"><img src="../../assets/icon/writing@3x.png"/>发帖</button>
-        
+        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type==1"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
+        <button @click="posted" class="post-tip" v-else><img src="../../assets/icon/bnt_post@3x.png"/>发帖</button>
       </div>
     </div>
     <!--分享弹窗-->
@@ -192,6 +192,8 @@
     starTime=''
     communityId=''
     roleInfo=''
+    code=''
+    type=1
     
     //显示标题模式
     titleBoxShow=false;
@@ -256,13 +258,16 @@
         
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
+        	this.roleInfo=res.role;
+        	console.log(this.roleInfo,"8888888888888888888888888888")
         }).catch(res => {
         		this.roleInfo=res.data.role;
-//				    console.log("88888888888888",res.data.role);
+        		console.log(this.roleInfo,"999999999999999999999999")
 				})
         
         //判断是否有课程，无课程则跳转
         if(this.pageInfo.isCourse===2){
+        	this.type=0;
         	let type=0;
         	this.displaySuspensionInput = false
 	        this.dynamicList = []
@@ -274,6 +279,7 @@
 	        this.getList({page: 1}).then(() => {})
         }
      })
+      
     }
     
     //路由跳转more
@@ -294,6 +300,17 @@
         case '64074da38681f864082708b9be959e08':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
+          //新增
+      	case 'aa3b415b564bd95b27da2f0e9c986e6a':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case '25c2ff088da3f757b685a318ab050b5a':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+      	case '8fd72f707af6071a2a7d7bc6693a8ace':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+          //新增
         default:
           this.qrSrc = require('@/assets/page/qr_gzh_1.png')
           break
@@ -335,6 +352,7 @@
     }
 
     toggle (type) {
+    	this.type=type
       if (this.showType !== type) {
         this.displaySuspensionInput = false
         this.dynamicList = []
@@ -366,10 +384,13 @@
     postQuestions(){
     	// :todo 提问
         this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
+//				this.$router.push(path:''`/introduce/ask/${this.$route.params.communityId}`,query:{identity:1})
     }
     posted(){
+    	let code=this.roleInfo.code
+    	console.log(code)
     	// :todo 发帖
-        this.$router.push(`/publish/${this.$route.params.communityId}?type=0`)
+        this.$router.push(`/publish/${this.$route.params.communityId}?type=0&code=${code}&codeType=${this.type}`)
     }
     toMemberList () {
       this.$router.push({name: 'classmates', communityId: this.$route.params.communityId})

@@ -21,7 +21,7 @@
 		<!--塔主和小伙伴-->
 		<div class="more-parner">
 			<img src="../../assets/icon/icon_center_home.png" />
-			<p>塔主和Ta的小伙伴们 <span>({{role.length+1}}人)</span></p>
+			<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
 			<!--塔主和嘉宾列表-->
 			<div class="guestList">
 				<ul class="guestListBox">
@@ -58,7 +58,7 @@
 					</div>
 					<div class="classmate-master">
 						<span class="classmate-name" v-text="item.realName"></span>
-						<span class="classmate-career" v-if="item.career" v-text="item.career"></span>
+						<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
 					</div>
 				</li>
 			</ul>
@@ -112,7 +112,7 @@
 //				console.log("嘉宾列表",that.role);
 //			});
 			//获取同学列表
-			classmatesApi({communityId:id.communityId,page:1,pageCount:20}).then(res=>{
+			classmatesApi({communityId:id.communityId,page:1,pageCount:5}).then(res=>{
 				that.classmate=res.peoples;
 				that.role=res.role;
 				console.log("同学列表",res)
@@ -309,8 +309,9 @@
 						}
 						
 						& .classmate-master{
+							width: 250px;
 							padding-left: 15px;
-							flex-grow: 1;
+							flex-grow: 0;
 							.classmate-name{
 								display: block;
 								font-size: 16px;
@@ -318,6 +319,11 @@
 								line-height: 20px;
 							}
 							.classmate-career{
+								display: inline-block;
+								width: 100%;
+								white-space: nowrap;
+								overflow: hidden;
+								text-overflow: ellipsis;
 								font-size: 14px;
 								color: #929292;
 								letter-spacing: 2;
