@@ -64,7 +64,7 @@
         </div>-->
 
         <!-- 主体内容块 -->
-        <div class="fixed-box" ref="community-title" v-if="pageInfo.isCourse===1">
+        <div class="fixed-box" ref="community-title">
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
             <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
             <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
@@ -96,6 +96,7 @@
         <button @click="question" v-if="this.pageInfo.isCourse===1">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
+        <!--<button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>-->
         <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
       </div>
       <div class="ask-warp" v-else>
@@ -123,7 +124,7 @@
                       @send="sendComment"
     ></suspension-input>
 
-    <actionsheet v-model="releaseActionsheet.show" :menus="releaseActionsheet.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
+    <actionsheet v-model="releaseActionsheet.show" :menus="pageInfo.isCourse===1?releaseActionsheet.menus:releaseActionsheet_no.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
 
     <div class="home-mask" v-if="showSell">
       <div class="sell-container">
@@ -203,7 +204,7 @@
     suspensionInputPlaceholder = '写评论'
     displaySuspensionInput = false
 
-    // 发布操作选项
+    // 有课程塔发布操作选项
     releaseActionsheet = {
       show: false,
       menus: [
@@ -217,6 +218,17 @@
         }
       ]
     }
+    //无课程发布操作选项
+    releaseActionsheet_no = {
+      show: false,
+      menus: [
+        {
+          label: '动态',
+          value: 'default'
+        }
+      ]
+    }
+    
     qrSrc = ''
 
     created () {

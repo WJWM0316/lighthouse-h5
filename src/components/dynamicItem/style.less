@@ -2,13 +2,15 @@
 
 .dynamic-item {
   display: flex;
+  flex-wrap: wrap;
   margin: 0 20px;
 	border-bottom: solid 1px #ededed;
-  overflow: hidden;
+//overflow: hidden;
   & .left {
     flex: 0 0 auto;
     padding: 20px 0;
     margin-right: 15px;
+    padding-bottom: 10px;
     & > .user-image {
       width: 40px;
       height: 40px;
@@ -21,32 +23,42 @@
     flex-grow: 1;
     padding: 20px 0;
     font-size: 15px;
+    padding-bottom: 10px;
+    
+    &:nth-of-type(3){
+//        width: 100%;
+      padding: 0;
+      padding-bottom: 25px;
+      box-sizing: border-box;
+      flex-grow: 1;
+    }
 
     &.border {
       // border-bottom: solid 1px #ededed; /* no */
     }
     //名字和头衔
     & .user-masage{
-        width: 295px;
+//      width: 295px;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         height: 40px;
         
-        & span{
-            margin-right: 20px;
-        }
+//      & span{
+//          margin-right: 20px;
+//      }
         
         & .user-name {
           height: 16px;
           line-height:16px;
-          width: 295px;
+//        width: 295px;
           color: #d7ab70;
           font-weight:400;
         }
         
         & .user-intro{
-          width: 295px;
+            width: 100%;
+//        width: 295px;
           height: 16px;
           line-height:16px;
           font-size:12px;
@@ -65,8 +77,8 @@
       align-items: center;
       font-size: 13px;
       color: #929292;
-			margin-left:-55px;
-			margin-right: 20px;
+//			margin-left:-55px;
+//			margin-right: 20px;
 
       & .operation {
         display: flex;
@@ -87,9 +99,10 @@
           justify-content: flex-start;
           padding: 0 4px;
         }
-        & > button:last-of-type {
-          margin-left: 10px;
-        }
+//      & > button:last-of-type {
+////        margin-left: 10px;
+//        width: 33px;
+//      }
         & > button:after {
           border-style: none;
         }
@@ -116,8 +129,8 @@
       background-color: #f8f8f8;
       box-sizing: border-box;
       font-size: 13px;
-			margin-left:-55px;
-			margin-right: 20px;
+//			margin-left:-55px;
+//			margin-right: 20px;
 
       & .praise-block {
         padding: 5px 0;
@@ -210,8 +223,8 @@
       width: 335px;
     // margin-top: 16px;
 		//调整内容位置 
-		margin-right: 20px;
-		margin-left:-55px;
+//		margin-right: 20px;
+//		margin-left:-55px;
 
     & .content-text {
 			//文本超出省略 
@@ -419,7 +432,7 @@
         height: 40px;
         border: solid 1px #ededed;
         border-radius: 50%;
-        margin-right: 10px;
+//      margin-right: 10px;
       }
 
       & .content-audio {
