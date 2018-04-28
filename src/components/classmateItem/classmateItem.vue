@@ -2,7 +2,7 @@
   <div class="classmate-item" @click="handleOne">
     <div class="userInfo-img">
       <img class="headImg" :src="item.avatar || '../../assets/icon/img_head_default.png'">
-      <img class="sex" v-if="item.gender"
+      <img class="sex" v-if="false"
              :src="item.gender === 1 ? boyImg : girlImg">
     </div>
     <div class="userInfo-desc">
@@ -38,7 +38,7 @@
     girlImg = require('../../assets/icon/icon_girl.png') || ''
     boyImg = require('../../assets/icon/icon_boy.png') || ''
     defaultImg = require('../../assets/icon/img_head_default.png') || ''
-    handleOne (e) { // 点击跳转个人详情
+    handleOne (e) { // 点击跳转个人详 情
       this.$emit('tap-one', this.item.userId)
     }
 

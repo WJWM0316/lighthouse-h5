@@ -497,14 +497,14 @@ export default class HomeIndex extends Vue {
     font-family: PingFangSC;
     font-size: 18px;
     line-height: 1.22;
-    padding: 12px 15px 13px;
+    padding: 12px 15px 10px ;
     background-color: #ffffff;
     /* box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);  */
 
     & span.join.message:before {
       content: '';
       position: absolute;
-      right: 0px;
+      right: -6px;
       top: 0px;
       width: 6px;
       height: 6px;
@@ -515,24 +515,31 @@ export default class HomeIndex extends Vue {
     & span {
       display: inline-block;
       height: 100%;
-      line-height: 24px;
       position: relative;
       margin-right: 22px;
       vertical-align: top;
+      font-family: 'PingFangSC-Regular';
+      font-size: 18px;
+      color: #929292;
+      letter-spacing: 0;
+      line-height: 22px;
       &:nth-of-type(3) {
         margin-right: 0;
         float: right;
         font-size: 15px;
         color: #354048;
-        font-weight: 300;
+        font-family: 'PingFangSC-Light';
+        letter-spacing: 0;
+        //line-height: 40px;
       }
     }
     &.joined span:nth-of-type(2),
     &.picked span:nth-of-type(1) {
-      color: #354048;
-      font-weight: 500;
       font-size: 24px;
       position: relative;
+      font-family: 'PingFangSC-Medium';
+      color: #354048;
+      letter-spacing: -0.26px;
     }
   }
 
@@ -541,7 +548,7 @@ export default class HomeIndex extends Vue {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 15px 0;
+    padding: 5px 0 15px 0;
     .opt_blo {
       width: 111px;
       height: 48px;
@@ -615,9 +622,10 @@ export default class HomeIndex extends Vue {
       li {
         width: 151px;
         display: inline-block;
-        margin-left: 15px;
+        margin-left: 10px;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-        //margin-bottom: 20px;
+        margin-bottom: 10px;
+        border-radius: 6px;
         &:last-child {
           margin-right: 15px;
         }
@@ -630,12 +638,15 @@ export default class HomeIndex extends Vue {
           white-space: normal;
           width: 132px;
           height: 36px;
-          font-family: PingFangSC;
           font-size: 14px;
           font-weight: 500;
           line-height: 1.29;
           margin: 10px 10px 11px 0; 
           padding-left: 9px;
+
+          font-family: 'PingFangSC-Medium';
+          color: #354048;
+          letter-spacing: 0;
           .setEllipsisLn();
           position: relative;
           &::before {
@@ -645,7 +656,7 @@ export default class HomeIndex extends Vue {
             background-color: #ffe266;
             display: block;
             position: absolute;
-            top: 5px;
+            top: 3px;
             left: 0px;
           }
         }
@@ -674,7 +685,7 @@ export default class HomeIndex extends Vue {
   } */
 
   .joined-list {
-    margin-top: 15px;
+    margin-top: 2px;
   }
 
   .communities {
