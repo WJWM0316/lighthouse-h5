@@ -676,8 +676,8 @@
 						content:'';
 						display:block;
 						position:absolute;
-						top:33px;
-						left:0;
+						top:32px;
+						left:5px;
 						width:5px;
 						height:17px;
 						background-color:#ffe266;
@@ -813,10 +813,14 @@
 					/*bing-增加*/
 					flex-grow:1;
 					width:150px;
+          font-family: PingFangSC-Regular;
 					& span:nth-of-type(2){
 						font-size:12px;
 						line-height:16px;
 					}
+          & span:nth-of-type(1){
+            font-family: PingFangSC-Regular;
+          }
 					/*bing-增加*/
         }
         &.pay-btn {

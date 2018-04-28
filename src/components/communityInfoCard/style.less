@@ -20,20 +20,29 @@
       flex: 1;
 
       & .community-title {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 500;
         color: #354048;
-        line-height: 1.2;
+        margin-top: 1px;
+        line-height: 20px;
+        //line-height: 1.5;
+
+        font-family: 'PingFangSC-Medium';
+        letter-spacing: 0;
         .setEllipsisLn(1)
       }
 
       & .community-desc {
-        margin-top: 6px;
+        font-family: 'PingFangSC-Light';
+        line-height: 18px;
+        font-size: 14px;
+        letter-spacing: 0;
+        margin-top: 2px;
         .setEllipsisLn(1);
       }
 
       & .left-desc {
-        margin-bottom: 3px;
+        margin-bottom: 1px;
       }
 
       & .community-status-box {
@@ -51,11 +60,14 @@
         width: 100%;
         & span {
           flex: 1;
+          font-family: 'PingFangSC-Regular';
         }
         .price {
           color: #d7ab70;
           font-size: 14px;
           line-height: 18px;
+          font-family: 'PingFangSC-Regular';
+          letter-spacing: 0;
         }
         .job {
           flex-basis: 150px;

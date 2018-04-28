@@ -10,17 +10,17 @@
     <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
       <div class="user-masage">
-      	<span class="user-name" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}</span>
-      	<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
+      	<span class="user-name" :class="item.releaseUser.role.title === '塔主' || item.releaseUser.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="item.releaseUser.role.title === '管理员'">管理员</span></span>
+      	<span class="user-intro" v-if="item.releaseUser.role.isShow" v-text="item.releaseUser.career"></span>
       </div>
       <!--头衔-->
       <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
 			<!--<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career">1231324654</span>-->
 
-		<!--</div>-->
+		</div>
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
-		<!--<div :class="{right: true, border: !hideBorder}">-->
+		<div :class="{right: true, border: !hideBorder}">
       <!-- 问答类型 -->
       <!-- 发表内容 -->
       <!--<div class="publish-content problem" v-if="item.modelType == 'post'">-->
@@ -164,12 +164,14 @@
           <button v-if="!hidePraiseBtn" @click.stop="praise">
             <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
             <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
-            {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
+            <!--{{item.favorTotal > 0 ? item.favorTotal : '点赞'}}-->
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
-            <img class="icon-pinglun" src="./../../assets/icon/pinglun2@3x.png" />
-            {{item.commentTotal > 0 ? item.commentTotal : '评论'}}
+            <span class="icon-pinglun">
+            	<img src="./../../assets/icon/tab_massage2 copy 2@3x.png" />
+            </span>
+            {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>
           <!-- 灯塔信息 -->
           <div class="info-light-house" v-if="showLightHouseInfo" @click.stop="toCommunity(item.LighthouseId)">

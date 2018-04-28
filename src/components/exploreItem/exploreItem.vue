@@ -1,6 +1,6 @@
 <template>
   <!-- 朋友圈动态列表项 首页发现专用 -->
-  <div class="explore-item" @click="toDetails">
+  <div class="explore-item" :class="{border: !hideBorder}" @click="toDetails">
 
     <!-- 头像 -->
     <div class="content-head">
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div :class="{right: true, border: !hideBorder}">
+    <div :class="{right: true}">
       
 
       <!-- 内容区分 -->
