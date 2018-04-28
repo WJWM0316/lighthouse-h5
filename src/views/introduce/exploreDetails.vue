@@ -41,11 +41,7 @@
           <div class="hot-area" v-if="hotCommentTotal > 0 && index ===0">
             <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
           </div>
-<<<<<<< HEAD
-          <!-- 全部评论 -->
-=======
            <!-- 全部评论 -->
->>>>>>> c25521959a89b1153c0dd752ff77bd07b3da5590
           <div class="hot-area" v-if="allTotal > 0 && index === hotCommentTotal">
             <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
           </div>
@@ -60,11 +56,6 @@
                           @operation="operation">
             </discuss-item>
           </div>
-<<<<<<< HEAD
-          
-=======
-         
->>>>>>> c25521959a89b1153c0dd752ff77bd07b3da5590
         </div>
 
 
