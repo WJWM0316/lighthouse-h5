@@ -280,7 +280,6 @@ export default class CommunityCard extends Vue {
     /*height: 226px;*/
 
     .cover {
-      //background: #ccc;
       width: 100%;
       /*height: 100%;*/
      	height: 100px;
