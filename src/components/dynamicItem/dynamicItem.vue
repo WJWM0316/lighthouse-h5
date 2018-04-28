@@ -164,7 +164,7 @@
           <button v-if="!hidePraiseBtn" @click.stop="praise">
             <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
             <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
-            <!--{{item.favorTotal > 0 ? item.favorTotal : '点赞'}}-->
+            {{item.favorTotal > 0 ? item.favorTotal : ''}}
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
