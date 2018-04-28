@@ -5,7 +5,7 @@
     <div class="cover-container">
       <image-item class="cover" :src="community.detailImg" mode="full" />
       <span class="header-photo">
-      	<img :src="community.detailImg"/>
+      	<img :src="community.icon"/>
       </span>
       <div class="master">
         <p class="name" :class="{ round: type === 1 }">
