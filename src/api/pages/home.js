@@ -71,3 +71,12 @@ export const getTabBardApi = data => request({
   url: '/wap/beacon/tabBar',
   data
 })
+
+/**
+ * 首页广告位
+ * @param {*} data
+ */
+export const getAdvertisingApi = data => request({
+  url: '/wap/currency/ad',
+  data
+})

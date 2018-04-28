@@ -5,7 +5,6 @@
                   :item="item"
                   :key="index"
                   :itemIndex="index"
-                  :isFold = "isFold"
                   :hideCommentBtn="hideCommentBtn"
                   :hidePraiseBtn="hidePraiseBtn"
                   :showLightHouseInfo="showLightHouseInfo"
@@ -15,6 +14,8 @@
                   :hideCommentArea="hideCommentArea"
                   :disableContentClick="disableContentClick"
                   :disableUserClick="disableUserClick"
+                  :isFold="isFold"
+                  :isNeedHot="isNeedHot"
                   @audioEvent="audioEvent"
                   @videoEvent="videoEvent"
                   @operation="operation"
@@ -40,10 +41,19 @@
         type: Boolean,
         default: true
       },
+      isNeedHot: {
+        type: Boolean,
+        'default': false
+      },
       // 是否隐藏评论按钮
       hideCommentBtn: {
         type: Boolean,
         'default': false
+      },
+      // 是否折叠
+      isFold: {
+        type: Boolean,
+        'default': true
       },
       // 是否隐藏点赞按钮
       hidePraiseBtn: {
@@ -392,7 +402,7 @@
       }
 
       const res = await setFavorApi(params)
-
+      this.$emit('getUserId', {res, favor})
       this.dynamicList[itemIndex].isFavor = favor
       this.dynamicList[itemIndex].favorTotal += favor ? 1 : -1
       if (favor) {
@@ -407,6 +417,7 @@
         })
         this.dynamicList[itemIndex].favors.splice(tempIndex, 1)
       }
+
     }
     /**
      * 删除

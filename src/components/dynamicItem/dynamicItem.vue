@@ -29,7 +29,6 @@
         <p class="content-text" :class="{'ellipsis' : isFold}">问：{{item.content}}</p>
         <p class="full-text-btn" v-show="isFold">{{isFullText('circle-content')}}</p>
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
-
           <!-- 追问 -->
           <div class="content-problem" v-if="problemItem.answerType === 1">
             <p>追问: {{problemItem.content}}</p>
@@ -180,7 +179,7 @@
       </div>
 
       <!-- 评论区 -->
-      <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || item.commentTotal > 0)">
+      <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || item.commentTotal > 0) && item.comments">
         <!-- 点赞信息 -->
           <div class="praise-block" v-if="item.favorTotal > 0">
             <img class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
@@ -191,19 +190,24 @@
           </div>
 
         <!-- 评论信息 -->
-        <div class="reply-block" v-if="item.commentTotal > 0">
-          <!-- <div class="reply" v-for="reply in item.comments">
-            <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
-          </div>
-          <div class="reply" v-if="item.commentTotal > 3">
-            <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
-          </div> -->
-          <div class="hot-reply">
-            <div class="hot-reply-icon">热门评论</div>
-            <div class="reply" v-for="(reply,index) in item.comments" v-if="index === 0">
-              <p class="favor-content"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
+
+        <div class="reply-block" v-if="item.commentTotal > 0 && item.comments && item.comments.length > 0">
+          <template  v-if="isNeedHot">
+            <div class="hot-reply">
+              <div class="hot-reply-icon">热门评论</div>
+              <div class="reply" v-for="(reply,index) in item.comments" v-if="index === 0">
+                <p class="favor-content"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
+              </div>
             </div>
-          </div>
+          </template>
+          <tempalte v-else>
+            <div class="reply" v-for="reply in item.comments">
+              <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
+            </div>
+            <div class="reply" v-if="item.commentTotal > 3">
+              <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
+            </div>
+          </tempalte>
         </div>
       </div>
     </div>

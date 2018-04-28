@@ -18,6 +18,10 @@ import moment from 'moment'
     itemIndex: {
       type: Number
     },
+    isNeedHot: {
+      type: Boolean,
+      default: false
+    },
     // 是否隐藏评论按钮
     hideCommentBtn: {
       type: Boolean,
@@ -178,11 +182,16 @@ export default class dynamicItem extends Vue {
   video = ''
 
   created () {
+  	
+  }
+  
+  beforeMount(){
   	console.log(this.item,"******************************")
   }
 
   mounted () {
     this.video = this.$refs['video']
+    console.log(this.item,"=================================+++")
   }
   
   

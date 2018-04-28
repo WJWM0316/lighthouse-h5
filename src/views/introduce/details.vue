@@ -1,78 +1,68 @@
 <template>
-
   <!-- 朋友圈、帖子、问题 详情 -->
   <div class="all-details">
-  <scroll @refresh="handleRefresh" @pullup="handlePullup">  
-      <!-- header -->
-      <div class="header">
-        <dynamic :dynamicList="dynamicList"
-                 :hideCommentBtn="true"
-                 :hidePraiseBtn="false"
-                 :hideBorder="true"
-                 :hideCommentArea="true"
-                 :isFold = "false"
-                 :disableContentClick="true"
-                 :showIdentification="false"
-        ></dynamic>
-      </div>
-  
-      <!-- container -->
-      <div class="container">
-        <!-- 评论 -->
-        
+    <scroll @refresh="handleRefresh" @pullup="handlePullup">  
+        <!-- header -->
+        <div class="header">
+          <dynamic :dynamicList="dynamicList"
+                   :hideCommentBtn="true"
+                   :hidePraiseBtn="false"
+                   :hideBorder="true"
+                   :hideCommentArea="true"
+                   :isFold = "false"
+                   :disableContentClick="true"
+                   :showIdentification="false"
+                   @getUserId="getUserId"
+          ></dynamic>
+        </div>
+    
+        <!-- container -->
+        <div class="container">
+          <!-- 评论 -->
           <div class="fixed-box" ref="ceiling-box">
             <div class="ceiling-box" :class="navTabName">
-              <span @click="toggle('comment')" >评论({{commentTotal}})</span>
-              <span @click="toggle('praise')"  >点赞({{item.favorTotal}})</span>
+              <span @click="toggle('comment')">评论({{allTotal}})</span>
+              <span @click="toggle('praise')">点赞({{item.favorTotal}})</span>
             </div>
           </div>
           <template v-if="navTabName === 'comment'">
-             <!-- 热门评论 -->
-            <div class="hot-area" v-if="discussItemList && discussItemList.length > 0">
-              <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
-            </div>
-            <div class="content-comment" >
-              <discuss-item v-for="item,index in discussItemList"
-                            :item="item"
-                            :key="item.commentId"
-                            :itemIndex="index"
-                            :showDelBtn="true"
-                            :commentType="'hot'"
-                            @operation="operation"></discuss-item>
-            </div>
-            <!-- 全部评论 -->
-            <div class="hot-area" v-if="commentTotal > 0">
-              <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
-            </div>
-            <div class="content-comment" >
-              <discuss-item v-for="item,index in allList"
-                            :item="item"
-                            :key="item.commentId"
-                            :itemIndex="index"
-                            :showDelBtn="true"
-                            :commentType="'all'"
-                            @operation="operation">
-              </discuss-item>
-              <div v-if="commentTotal === 0">
-                <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
+            <div v-for="item,index in discussItemList">
+              <!-- 热门评论 -->
+              <div class="hot-area" v-if="hotCommentTotal > 0 && index === 0">
+                <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
               </div>
+              <!-- 全部评论 -->
+              <div class="hot-area" v-if="index === hotCommentTotal">
+                <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
+              </div>
+              <discuss-item 
+                          :item="item"
+                          :key="index"
+                          :itemIndex="index"
+                          :showDelBtn="true"
+                          @operation="operation"></discuss-item>
+              
+            </div>
+            <div v-if="allTotal === 0">
+              <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
             </div>
           </template>
           <!-- 点赞 -->
           <template v-else>
-            <div class="content-praise">
-              <classmate-item v-for="item, index in classmateList"
-                              :item='item'
-                              :key="index">
-              </classmate-item>
+          <div class="content-praise">
+            <classmate-item v-for="item, index in classmateList"
+                            :item='item'
+                            :key="index"
+                            @tap-one="jump">
+            </classmate-item>
 
-              <div v-if="item.favorTotal === 0">
-                <p class="community-empty-desc fs13">成为第一个点赞的人吧~</p>
-              </div>
+            <div v-if="classmateList.length === 0">
+              <p class="community-empty-desc fs13">成为第一个点赞的人吧~</p>
             </div>
+          </div>
           </template>
-      </div>
-  </scroll>
+        </div>
+    </scroll>
     <!-- footer -->
     <div class="footer" v-if="false">
       <div class="page-operation">
@@ -106,11 +96,11 @@
   import Component from 'vue-class-component'
   import dynamic from '@/components/dynamic/dynamic'
   import discussItem from '@/components/discussItem/discussItem'
-  import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import classmateItem from '@/components/classmateItem/classmateItem'
+  import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getFavorListApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi } from '@/api/pages/pageInfo.js'
+  import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi } from '@/api/pages/pageInfo.js'
 
   @Component({
     name: 'all-details',
@@ -128,24 +118,29 @@
     },
     watch: {
       discussItemList () {
+      },
+      displaySuspensionInput (val) {
       }
     },
     mixins: [ListMixin]
   })
   export default class introduce extends Vue {
     dynamicList = []
-    discussItemList = []
-    allList = []
     commentTotal = 0
     favorTotal = 0
     classmateList = []
     navTabName = 'comment'
+    discussItemList = []
+    hotCommentTotal = 0
     isShow = true
+    allTotal = 0
+    navTabName = 'comment'
     commentIndex = -1
     suspensionInputPlaceholder = '写评论'
     displaySuspensionInput = true
     curData = {} // 评论回来的数据
     modelType = '' // 评论类型
+    classmateList = [] // 点赞列表
 
     created () {
       this.modelType = this.$route.params.type
@@ -193,6 +188,20 @@
           break
       }
     }
+
+    /**
+     * 获取点赞列表
+     */
+    getFavorList (params) {
+      return getFavorListApi(params)
+    }
+    /**
+     * 跳转详情页
+     */
+    jump (e) {
+      this.$router.push('/userInfo/' + e + '/details')
+    }
+
     /**
      * 评论
      * @param item
@@ -209,6 +218,20 @@
       }
       this.displaySuspensionInput = true
     }
+
+    getUserId ({res, favor}) {
+      if (favor === 1) {
+        this.classmateList.splice(0, 0, res)
+      } else {
+        this.classmateList.forEach((data, index) => {
+          if (res.userId === data.userId) {
+            console.log(111111111111, index)
+            this.classmateList.splice(index, 1)
+            console.log(this.classmateList)
+          }
+        })
+      }
+    }
     /**
      * 点赞
      * @param item
@@ -216,20 +239,18 @@
      * @returns {Promise.<void>}
      */
     async praise ({item, itemIndex, commentType}) {
-      
       let params = ''
       let favor = 0
-      console.log(item)
       if (item) {
         const {commentId, favorId, isFavor} = item
         let favorType = 6
+        favor = isFavor ? 0 : 1
         params = {
           favorId: commentId,    // 喜爱的id
           favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-          isFavor: isFavor     // 是否喜欢：0取消喜欢，1喜欢
+          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
         }
       } else {
-        console.log(222222222222222222222)
         favor = this.dynamicList[0].isFavor ? 0 : 1
         let favorType = 0
         switch (this.$route.params.type) {
@@ -242,85 +263,33 @@
           case '3':
             favorType = 4
             break
-
         }
-
         params = {
           favorId: this.$route.params.sourceId,    // 喜爱的id
           favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
           isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
         }
       }
-      let self = this
-     if (params.isFavor === 0) {
-        params.isFavor = 1
+      console.log('favor', favor)
+      const res = await setFavorApi(params)
+      this.discussItemList[itemIndex].isFavor = favor
+      this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
+      console.log(this.discussItemList[itemIndex])
+      
+      if (favor) {
+        this.discussItemList[itemIndex].favors = this.discussItemList[itemIndex].favors || []
+        this.discussItemList[itemIndex].favors.splice(0, 0, res)
       } else {
-        params.isFavor = 0
-      }
-      let curObj = {}
-      let otherObj = {}
-      let otherObjIndx = 0
-      let needList = {}
-      if (commentType === 'all') {
-        curObj = this.allList[itemIndex]
-        needList = this.discussItemList
-      } else {
-        curObj = this.discussItemList[itemIndex]
-        needList = this.allList
-      }
-      if (needList.length > 0) {
-        needList.forEach((data, index) =>{
-          if (curObj.commentId === data.commentId) {
-            otherObjIndx = index
-            if (commentType === 'all') {
-              otherObj = this.discussItemList[index] || null
-            } else {
-              otherObj = this.allList[index] || null
-            } 
+        let tempIndex = ''
+        this.discussItemList[itemIndex].favors.forEach((item, index) => {
+          if (item.userId === res.userId) {
+            tempIndex = index
           }
         })
+        this.discussItemList[itemIndex].favors.splice(tempIndex, 1)
       }
-      
-      setFavorApi(params).then(res => {
-        curObj.isFavor = params.isFavor
-        otherObj.isFavor = params.isFavor
-        if (params.isFavor === 1) {
-          console.log('1111111111', this.allList)
-          curObj.favors.splice(0, 0, res)
-          otherObj.favors.splice(0, 0, res)
-          if (commentType === 'all') {
-            this.allList[itemIndex] 
-            this.allList[itemIndex].splice(0, 0 , res)
-          } else {
-            this.discussItemList[itemIndex]
-          }
-
-        } else {
-          console.log('1111111111', this.allList)
-          let tempIndex1 = ''
-          curObj.favors.forEach((item, index) => {
-            if (item.userId === res.userId) {
-              tempIndex1 = index
-            }
-          })
-          curObj.favors.splice(tempIndex1, 1)
-          curObj.favorTotal -= 1
-          if (otherObj) {
-            let tempIndex2 = ''
-            otherObj.favors.forEach((item, index) => {
-              if (item.userId === res.userId) {
-                tempIndex2 = index
-              }
-            })
-            console.log(111, otherObj)
-            otherObj.favors.splice(tempIndex2, 1)
-            otherObj.favorTotal -= 1
-          } 
-        }
-      }).catch(res => {
-
-      })
     }
+
     /**
      * 删除
      * @param item
@@ -342,10 +311,12 @@
         onCancel () {
         },
         onConfirm () {
-          delCommontApi(params).then(res => {
-            _this.allList.splice(itemIndex, 1)
+          delCommontApi(params).then(res => {            
+            if (_this.discussItemList[itemIndex].isHot) {
+              _this.hotCommentTotal -= 1
+            }
             _this.discussItemList.splice(itemIndex, 1)
-            _this.commentTotal -= 1
+            _this.allTotal -= 1
           }).catch(e => {
             _this.$vux.toast.text('删除失败', 'bottom')
           })
@@ -353,6 +324,47 @@
       })
     }
     // ------------------------------------------------
+
+    /**
+     * 切换nav
+     **/
+    toggle (targetName) {
+      if (this.navTabName !== targetName) {
+        this.navTabName = targetName
+        if (targetName === 'praise') {
+          let modelType = ''
+          this.isShow = false
+          modelType = 'circle'
+          switch (this.$route.params.type * 1) {
+            case 1:
+              modelType = 'circle'
+              break
+            case 2:
+              modelType = 'post'
+              break
+            default:
+              modelType = 'problem'
+              break
+          }
+          const params = {
+            id: this.$route.params.sourceId,
+            modelType: modelType,
+            page: 1,
+            pageCount: 1000
+          }
+          this.$router.replace({path: this.$route.path, query: {target: 'praise'}})
+          if (this.classmateList.length === 0) {
+            this.getFavorList(params).then(res => {
+              this.classmateList = res.list
+              console.log(res)
+            })
+          }
+        } else {
+          this.isShow = true
+        }
+      }
+    }
+
 
     /**
      * 发送评论
@@ -376,36 +388,19 @@
         this.curData = data
         this.$vux.toast.text('评论成功', 'bottom')
         this.suspensionInputPlaceholder = '写评论'
-        // this.commentIndex = -1
+        this.suspensionInputPlaceholder = '写评论'
+        let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
+        this.pagination.end = false // 初始化数据，必定不是最后一页
+        this.getList({ page: page , type: 'comment'})
+        this.commentIndex = -1
       }).catch(e => {
         this.$vux.toast.text('评论失败', 'bottom')
-          this.curData = {}
+        this.curData = {}
       })
+    } 
       
-      if (commentIndex < 0) {
-        this.$set(this.curData, 'isFavor', 0)
-        this.$set(this.curData, 'favors', [])
-        this.allList.splice(0, 0, this.curData)
-        this.commentTotal += 1
-        this.pagination.total += 1
-      } else {
-        this.pagination.end = false // 初始化数据，必定不是最后一页
-        await this.getList({ page: 1 })
-      }
 
-      // if (this.allList[commentIndex] && this.allList[commentIndex].childComments) {
-      //   this.allList[commentIndex].childComments.push(this.curData)// 评价列表已经存在加在尾部
-      //   // this.discussItemList[commentIndex].childComments.splice(0, 0, res)
-      //   this.allList[commentIndex].commentTotal += 1
-      //   this.$set(this.allList[commentIndex].childComments, 'realName', this.allList[commentIndex].childComments.reviewer.realName)
-      //   console.log(this.allList)
-      // } else {
-      //   console.log(222222222222222222222)
-      //   this.$set(this.allList[commentIndex], 'childComments', [])
-      //   this.allList[commentIndex].childComments.push(this.curData)
-      //   this.allList[commentIndex].total = 1
-      // }
-    }
+
 
     async pageInit () {
       const { sourceId, type } = this.$route.params
@@ -431,7 +426,6 @@
         res.videoPlay = false
       }
       this.dynamicList = [res]
-
       await this.getList({page: 1})
     }
 
@@ -504,21 +498,12 @@
       }
 
       this.pagination.busy = true
-
       const navTabName = this.navTabName
-      let allTotal = 0
-      if (navTabName === 'comment') {
-        const res = await this.getCommentList(params)
-        const {comments, total, hotComments} = res
-        allTotal = total
-        if (page === 1) {
-          this.commentTotal = total
-          this.discussItemList = hotComments
-          this.allList = comments
-        } else {
-          this.discussItemList = this.discussItemList.concat(hotComments || [])
-          this.allList = this.allList.concat(comments || [])
-        }
+      const res = await this.getCommentList(params)
+      const {comments, total, hotCommentTotal} = res 
+      this.allTotal = total
+      if (page === 1) {
+        this.discussItemList = comments
       } else {
         const res = await this.getFavorList(params)
         const {list, total} = res
@@ -529,10 +514,14 @@
           this.classmateList = this.classmateList.concat(list || [])
         }
       }
-
+      this.hotCommentTotal = hotCommentTotal
+      for (var i = 0; i<hotCommentTotal; i++) {
+        this.discussItemList[i].isHot = true
+      }
+      console.log(this.discussItemList)
       this.pagination.page = page
       this.pagination.pageSize = pageSize
-      this.pagination.total = allTotal
+      this.pagination.total = this.allTotal
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
     }
@@ -648,6 +637,12 @@
       & .content-praise {
         padding-right: 15px;
       }
+    }
+    & .community-empty-desc {
+      margin-top: 50px;
+      color: #bcbcbc;
+      text-align: center;
+      margin-bottom: 30px;
     }
     & .community-empty-desc {
       margin-top: 50px;
