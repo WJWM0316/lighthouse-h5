@@ -38,6 +38,7 @@ export default class HomeIndex extends Vue {
   }
 
   created () {
+    console.log(this.$route)
     this.init().then(() => {})
   }
 
@@ -50,6 +51,7 @@ export default class HomeIndex extends Vue {
     this.pagination.busy = false
     await this.getList({ page: 1 })
     this.ready = true
+
   }
   
   /**
@@ -88,7 +90,7 @@ export default class HomeIndex extends Vue {
       }
 
       this.pagination.busy = true
-
+      this.pickedParams.tagId = this.$route.params.type
       let res = ''
       let allTotal = 0
 
