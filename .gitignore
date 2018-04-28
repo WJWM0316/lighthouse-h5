@@ -10,4 +10,6 @@ yarn-error.log*
 .vscode
 *.suo
 *.ntvs*
-*.njsproj
+*.njspr*.sln
+src/api/require.js
+oj
