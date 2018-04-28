@@ -175,6 +175,7 @@ export default class discussItem extends Vue {
     this.$emit('operation', {
       eventType: 'comment-area',
       itemIndex,
+      item: this.item,
       type: this.commentType,
       commentType: this.commentType
     })
@@ -189,14 +190,20 @@ export default class discussItem extends Vue {
     console.log(userId)
     this.$router.push(`/userInfo/${userId}/details`)
   }
-  toCommentList (commentId) { // 去评论详情
+  toCommentList (commentId) { // 
     console.log('commentId', this.disableContentClick)
     if (this.disableContentClick) {
       return
     }
-    console.log(commentId)
-    this.$router.push(`/reply/${commentId}`)
+    this.$emit('operation', {
+      eventType: 'comment',
+      itemIndex,
+      item: this.item,
+      type: this.commentType,
+      commentType: this.commentType
+    })
   }
+
 
 }
 // http://localhost:8080/?#/index/details/174

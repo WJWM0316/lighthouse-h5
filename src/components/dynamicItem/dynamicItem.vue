@@ -27,7 +27,7 @@
       <div class="publish-content problem" v-if="item.modelType === 'problem'">
 
         <p class="content-text" :class="{'ellipsis' : isFold}">问：{{item.content}}</p>
-        <p class="full-text-btn" v-show="isFold">{{isFullText('circle-content')}}</p>
+        <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
           <!-- 追问 -->
           <div class="content-problem" v-if="problemItem.answerType === 1">
@@ -68,7 +68,7 @@
         <!--限制六行-->
         <div ref="circle-content" v-if="item.circleType === 0">
           <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
-          <p class="full-text-btn" v-show="isFold">{{isFullText('circle-content')}}</p>
+          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
         </div>
 
         <!-- 音频 -->
@@ -95,7 +95,7 @@
           <!--限制文本行数-->
           <div ref="circle-content">
 	          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
-	          <p class="full-text-btn" v-show="isFold">{{isFullText('circle-content')}}</p>
+	          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
 	        </div>
 	        
           <div class="content-video" @click.stop="videoClick">
@@ -114,7 +114,7 @@
           <!--限制文本行数-->
           <div ref="circle-content">
 	          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
-	          <p class="full-text-btn" v-show="isFold">{{isFullText('circle-content')}}</p>
+	          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
 	        </div>
 	        
           <div class="content-images">
@@ -179,7 +179,7 @@
       </div>
 
       <!-- 评论区 -->
-      <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || item.commentTotal > 0) && item.comments">
+      <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || item.commentTotal > 0)">
         <!-- 点赞信息 -->
           <div class="praise-block" v-if="item.favorTotal > 0">
             <img class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
