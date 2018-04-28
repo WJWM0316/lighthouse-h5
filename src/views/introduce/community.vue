@@ -272,6 +272,7 @@
         	let type=0;
         	this.displaySuspensionInput = false
 	        this.dynamicList = []
+
 	        this.showType = type
 //	        debugger
 	        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
@@ -470,17 +471,16 @@
       } else {
         this.$vux.toast.text('评论失败', 'bottom')
       }
-      // 普通评论不显示
-      // if (this.dynamicList[commentIndex] && this.dynamicList[commentIndex].comments) {
-      //   if (this.dynamicList[commentIndex].commentTotal < 3) {  // 小于3条才显示出来
-      //     this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
-      //   }
-        
-      //   this.dynamicList[commentIndex].commentTotal += 1
-      // } else {
-      //   this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
-      //   this.dynamicList[commentIndex].commentTotal = 1
-      // }
+      // 普通评论不显示评论数据 
+      if (this.dynamicList[commentIndex] && this.dynamicList[commentIndex].commentTotal > 0) {
+        // if (this.dynamicList[commentIndex].commentTotal < 3) {  // 小于3条才显示出来
+        //   this.dynamicList[commentIndex].comments.splice(0, 0, res) // 评价列表已经存在加在尾部
+        // }
+        this.dynamicList[commentIndex].commentTotal += 1
+      } else {
+        this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
+        this.dynamicList[commentIndex].commentTotal = 1
+      }
     }
 
     // ------------------------------------------------
