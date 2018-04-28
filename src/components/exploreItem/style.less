@@ -1,7 +1,7 @@
 @import "./../../styles/mixins";
 
 .explore-item {
-  padding: 0 20px;
+  padding: 0 25px;
 
   & .singleLine {
     max-width: 290px;
@@ -13,8 +13,8 @@
     padding: 15px 0 0 50px;
     position: relative;
     .user-image {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       overflow: hidden;
       position: absolute;
@@ -28,10 +28,14 @@
       .user-career, .user-name {
         width: 100%;
         color: #d7ab70;
+        font-family: 'PingFangSC-Medium';
+        font-size: 14px;
       }
       .user-career {
         color: #929292;
         font-size: 12px;
+        font-family: 'PingFangSC-Light';
+        letter-spacing: 0;
       }
       
     }
@@ -48,15 +52,13 @@
       overflow: hidden;
     }
   }
-
+  .border {
+    border-bottom: solid 1px #ededed; /* no */
+  }
   & .right {
     flex-grow: 1;
     padding: 10px 0;
     font-size: 15px;
-
-    &.border {
-      border-bottom: solid 1px #ededed; /* no */
-    }
 
     & .user-name {
       display: inline-block;
@@ -74,8 +76,8 @@
       margin-top: 12px;
       display: inline-block;
       color: #d7ab70;
-      font-weight: 300;
-      font-size: 13px;
+      font-size: 12px;
+      font-family: 'PingFangSC-Regular';
       line-height: 1;
     }
 
@@ -84,9 +86,9 @@
       margin-top: 10px;
       justify-content: space-between;
       align-items: center;
-      font-size: 13px;
+      font-size: 12px;
       color: #929292;
-
+      font-family: 'PingFangSC-Light';
       & .operation {
         display: flex;
         flex: 0 0 auto;
@@ -137,7 +139,8 @@
       border-radius: 3px;
       background-color: #f8f8f8;
       box-sizing: border-box;
-      font-size: 13px;
+      font-size: 14px;
+      font-family: 'PingFangSC-Light';
 
       & .praise-block {
         padding: 5px 0;
@@ -152,6 +155,7 @@
           overflow: hidden;
           text-overflow:ellipsis;
           white-space: nowrap;
+          font-family: 'PingFangSC-Medium';
         }
       }
 
@@ -212,7 +216,8 @@
       color: #354048;
       white-space: pre-line;
       display: block;
-
+      font-size: 16px;
+      font-family: 'PingFangSC-Light';
       &.ellipsis{
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -229,7 +234,7 @@
         color: #4080ad;
         line-height: 18px;
         position: relative;
-
+        font-family: 'PingFangSC-Medium';
         /* &.open::after {
           content: '';
           .setArrow(down,8px,#576b95,1px);
@@ -423,8 +428,8 @@
 
   & .icon-share, & .icon-zan, .icon-pinglun {
     display: inline-block;
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     margin-right: 4px;
   }
   & .icon-pinglun {
