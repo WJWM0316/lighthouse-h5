@@ -478,7 +478,7 @@
         // }
         this.dynamicList[commentIndex].commentTotal += 1
       } else {
-        this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
+        // this.dynamicList[commentIndex]['comments'] = [res] // 不存在加一个对象
         this.dynamicList[commentIndex].commentTotal = 1
       }
     }
