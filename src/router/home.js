@@ -16,6 +16,7 @@ const homeRoutes = [
   {
     path: '/advertising/:type',
     name: 'advertising',
+    meta: {navHide: true},
     component: resolve => require(['@/views/home/advertising'], resolve),
   },
   {
