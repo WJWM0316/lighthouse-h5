@@ -168,7 +168,9 @@
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
-            <img class="icon-pinglun" src="./../../assets/icon/pinglun2@3x.png" />
+            <span class="icon-pinglun">
+            	<img src="./../../assets/icon/tab_massage2 copy 2@3x.png" />
+            </span>
             {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>
           <!-- 灯塔信息 -->
@@ -195,7 +197,7 @@
           <template  v-if="isNeedHot">
             <div class="hot-reply">
               <div class="hot-reply-icon">热门评论</div>
-              <div class="reply" v-for="(reply,index) in item.comments" v-if="index === 0">
+              <div class="reply" v-for="(reply,index) in item.comments">
                 <p class="favor-content"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
               </div>
             </div>
