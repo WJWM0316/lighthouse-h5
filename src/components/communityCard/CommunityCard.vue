@@ -98,7 +98,7 @@ import Component from 'vue-class-component'
 })
 export default class CommunityCard extends Vue {
 	created(){
-//		console.log("我是触发的community",this.isEntentr);
+    //console.log("我是触发的community",this.isEntentr);
 	}
   // 卡片类名集合
   cardClasses = {
@@ -227,7 +227,7 @@ export default class CommunityCard extends Vue {
       /*height: 171px;*/
       /*头部改变新增属性*/
       position: relative;
-    	
+    	height: 174px;
 			.header-photo{
 					display:block;
 					width:80px;
@@ -235,7 +235,7 @@ export default class CommunityCard extends Vue {
 					border-radius: 50%;
 					overflow:hidden;
 					position: absolute;	
-					top:42px;
+					top:46px;
 					left:50%;
 					transform:translateX(-50%);
 					margin-bottom:7.5px;
@@ -280,7 +280,7 @@ export default class CommunityCard extends Vue {
     /*height: 226px;*/
 
     .cover {
-      background: #ccc;
+      //background: #ccc;
       width: 100%;
       /*height: 100%;*/
      	height: 100px;
@@ -385,6 +385,7 @@ export default class CommunityCard extends Vue {
     }
 
     .desc {
+      font-family: PingFangSC-Light;
       display: block;
       margin-top: 6px;
       margin-bottom: 23px;
@@ -398,7 +399,7 @@ export default class CommunityCard extends Vue {
       font-size: 14px;
       line-height: 18px;
       color: #929292;
-
+      font-family: PingFangSC-Light;
       .left {
         flex: 1 1 auto;
 
