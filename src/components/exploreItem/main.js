@@ -326,8 +326,12 @@ export default class exploreItem extends Vue {
       this.$router.push(`/index/details/${this.item.circleId}?modeType=${this.item.modelType}`)
     }
   }
+  toPerson () {
+    this.$router.push(`/userInfo/${userId}/details`)
+  }
   toCommunity () { // 去大咖介绍页
     const {community} = this.item
     this.$router.push(`/introduce/${community.communityId}`)
+
   }
 }
