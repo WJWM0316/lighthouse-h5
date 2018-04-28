@@ -196,12 +196,12 @@
             <div class="hot-reply">
               <div class="hot-reply-icon">热门评论</div>
               <div class="reply" v-for="(reply,index) in item.comments">
-                <p class="favor-content"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
+                <p class="favor-content ellipsis3"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
               </div>
             </div>
           </template>
           <tempalte v-else>
-            <div class="reply" v-for="reply in item.comments">
+            <div class="reply ellipsis3" v-for="reply in item.comments">
               <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
             </div>
             <div class="reply" v-if="item.commentTotal > 3">
