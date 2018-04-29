@@ -44,9 +44,9 @@
               </a>
               <div class="voice">
                 <a href="#" class="voice-container z-read" @click.prevent.stop="handleTapVoice(item)">
-                  <div class="progress">
+                  <!-- <div class="progress">
                     <div class="bar" :style="{ width: `${item.voice.progress || 0}%` }"></div>
-                  </div>
+                  </div> -->
                   <div class="controls">
                     <image-item class="status" :class="{ 'z-loading': item.voice.status === 'loading' }" :src="audioStatusIcons[item.voice.status]" />
                     <p class="dutraion">{{item.duration || 0}}s</p>
@@ -112,6 +112,14 @@ export default class QuestionItem extends Vue {
     3: '有追问',
     4: '已回答',
     5: '已过期'
+  }
+
+  created () {
+    console.log("111111113333333333333333333",this.model)
+    /*this.model.answer[0].voice = {
+      status: 'default',
+      progress: 0
+    }*/
   }
 
   /**

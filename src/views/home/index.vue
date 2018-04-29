@@ -28,7 +28,7 @@
         </ul>
       </div>
 
-      <div class="advertising_list" >
+      <div class="advertising_list" v-if="navTabName === 'picked'&&advertisingList&&advertisingList.length>0">
           <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
               <img class="opt_pic" :src="item.imgUrl"></img>
           </div>
@@ -461,7 +461,7 @@ export default class HomeIndex extends Vue {
 
 .p-home-index {
   //padding: 50px 0;
-  padding-top: 98rpx;
+  padding-top: 49px;
   box-sizing: border-box;
 
   &.picked {
