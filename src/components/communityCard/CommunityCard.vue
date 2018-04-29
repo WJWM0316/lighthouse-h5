@@ -10,7 +10,8 @@
       <div class="master">
         <p class="name" :class="{ round: type === 1 }">
           <span class="text" v-text="community.master && community.master.realName"></span>
-        </p><span v-if="community.master && community.master.career">/</span><p class="career" v-text="community.master && community.master.career">asdfasdf</p>
+        </p><span v-if="community.master && community.master.career">/</span>
+        <p class="career" v-text="community.master && community.master.career"></p>
       </div>
       <slot name="cover-addon"></slot>
     </div>
@@ -286,6 +287,10 @@ export default class CommunityCard extends Vue {
     }
 
     .master {
+    	display: flex;
+    	justify-content: center;
+    	flex-wrap: nowrap;
+    	align-items: center;
 	    width: 100%;
 	    text-align: center;
       box-sizing: border-box;
