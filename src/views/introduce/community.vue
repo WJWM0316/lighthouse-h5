@@ -188,7 +188,7 @@
     discussItemList = []
     showType = 1 // 1 朋友圈 0 交流社区
     isCommunityTitleFixed = false
-    showIdentification = false
+    showIdentification = true
     communityTitleTop = 0
     disableOperationArr = ['comment']
     starTime=''

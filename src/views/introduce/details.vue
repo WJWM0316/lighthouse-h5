@@ -68,13 +68,13 @@
         <button @click="operation({eventType: 'praise'})">
           <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
           <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
-          {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
+          {{item.favorTotal > 0 ? item.favorTotal : ''}}
         </button>
         <span class="split"></span>
         <!-- 评论按钮 -->
         <button @click="comment({})">
           <img class="icon-pinglun" src="./../../assets/icon/pinglun2@3x.png" />
-          {{pagination.total > 0 ? pagination.total : '评论'}}
+          {{pagination.total > 0 ? pagination.total : ''}}
         </button>
       </div>
     </div>

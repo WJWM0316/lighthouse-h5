@@ -13,7 +13,7 @@
         <div class="user-box" v-if="item.reviewer.role.isShow">
           <div>
             <!-- 用户名 -->
-            <p class="user-name" :class="item.reviewer.role.title === '塔主' || item.reviewer.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.reviewer.userId)">{{item.reviewer.realName}}<span class="label" v-if="item.reviewer.role.title === '管理员'">{{item.reviewer.role.title}}</span></p>
+            <p class="user-name" :class="item.reviewer.role && item.reviewer.role.title === '塔主' || item.reviewer.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.reviewer.userId)">{{item.reviewer.realName}}<span class="label" v-if="item.reviewer.role && item.reviewer.role.title === '管理员'">{{item.reviewer.role.title}}</span></p>
             <!-- 用户头衔 -->
             <p class="user-career"  v-text="item.reviewer.career"></p>
           </div>
@@ -56,12 +56,12 @@
           <button v-if="!hidePraiseBtn" @click.stop="praise">
             <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
             <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
-            {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
+            {{item.favorTotal > 0 ? item.favorTotal : ''}}
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
-            <img class="icon-pinglun" src="./../../assets/icon/bnt_comment@3x.png" />
-            {{item.commentTotal > 0 ? item.commentTotal : '评论'}}
+            <img class="icon-pinglun" src="./../../assets/icon/tab_massage2 copy 2@3x.png" />
+            {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>
           <!-- 灯塔信息 -->
           <div class="info-light-house" v-if="showLightHouseInfo">
