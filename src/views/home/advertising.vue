@@ -1,5 +1,5 @@
 <template>
-  <div class="p-body p-home-index" >
+  <div class="p-body p-home-index" v-if="communities.length>0">
     <scroller @refresh="handleRefresh" @pullup="handlePullup"  :is-none-data="pagination.end">
     <div class="communities" v-if="communities && communities.length > 0" >
       <div class="list">
@@ -8,6 +8,10 @@
     </div>
     </scroller>
 
+  </div>
+  <div class="test_blo" v-else>
+    <img src="./../../assets/page/empty.png" alt="">
+    <p class="test" >暂时没有相关内容哦～</p>
   </div>
 </template>
 <script>
@@ -155,6 +159,20 @@ export default class HomeIndex extends Vue {
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
+.test_blo {
+  img {
+    width: 60px;
+    height: 60px;
+    margin: 40px auto 20px;
+    display: block;
+  }
+  .test {
+    text-align: center;
+    font-size: 14px;
+    color: #929292;
+    font-family: PingFangSC-Ligh
+  }
+}
 
 .p-home-index {
   padding: 0px 0 50px 0;

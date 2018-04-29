@@ -21,7 +21,7 @@
         </div>
 
         <!-- 选中的信息 -->
-        <div class="sel_teach" v-if="teachers.length>0">
+        <div class="sel_teach txt_ellipsis" v-if="teachers.length>0">
           {{teachers[selTeaIndex].realName}}<span class="sel_tit">{{teachers[selTeaIndex].career}}</span>
         </div>
       </div>
@@ -373,10 +373,10 @@
         return
       }
 
-      const isPay = this.isHasFree > 0 ? 2 : 1;
-      const communityId = this.communityId;
-      let userId = this.teachers[this.selTeaIndex].userId;
-
+      const isPay = this.isHasFree > 0 ? 2 : 1
+      const communityId = this.communityId
+      let userId = this.teachers[this.selTeaIndex].userId
+      console.log(userId)
       const params = {
         communityId,
         contact,
@@ -569,7 +569,7 @@
         letter-spacing: 0;
         line-height: 20px;
         height: 20px;
-        margin-top: 25px;
+        margin-top: 17.5px;
         .sel_tit {
           font-family: 'PingFangSC-Regular';
           font-size: 14px;
@@ -626,7 +626,7 @@
           .tea_tit {
             position: absolute;
             left: 50%;
-            top: 62.5px;
+            top: 56.5px;
             margin-left: -16px;
             width: 32px;
             height: 15px;
@@ -776,7 +776,7 @@
       & .user-desc {
         margin-top: 12px;
         font-size: 12px;
-        color: #bcbcbc;
+        color: #d7ab70;
         text-align: center;
       }
     }
