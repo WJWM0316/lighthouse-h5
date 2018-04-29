@@ -310,8 +310,6 @@ export default class HomeIndex extends Vue {
           }
         })
         res[tagIndex].selected = true
-        console.log(res)
-
         this.communityTagList = res
       }
     })
