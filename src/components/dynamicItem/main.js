@@ -180,7 +180,7 @@ import moment from 'moment'
 })
 export default class dynamicItem extends Vue {
   video = ''
-
+  role = this.item.releaseUser.role || {}
   created () {
   	console.log(this.item,"******************************")
   }
