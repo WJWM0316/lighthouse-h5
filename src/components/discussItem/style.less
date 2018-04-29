@@ -3,6 +3,9 @@
 .discuss-item {
   padding: 0 20px;
   display: flex;
+  & .ellipsis3 {
+    .setEllipsisLn(3)
+  }
   .photo {
     flex-basis: 40px;
   }
@@ -34,18 +37,18 @@
       }
       .user-career, .user-name {
         width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        word-wrap: normal;
+        .setEllipsis();
         &.user-career {
           width: 90%;
         }
         &.master {
-          color: #d7ab70;
+            color: #d7ab70;
+          }
+        &.guest {
+          color: #4080AD;
         }
         & .label {
-          color: #D7AB70;
+          color: #d7ab70;
           font-size: 12px;
           padding: 0 10px;
           margin-left: 8px;
@@ -95,7 +98,7 @@
 
         & > button　{
           height: 15px;
-          width: 55px;
+//        width: 55px;
           font-size: 13px;
           color: #929292;
           border-style: none;
@@ -107,7 +110,7 @@
           align-items: center;
           justify-content: flex-start;
           padding: 0 4px;
-          margin-right: 13px;
+          margin-right: 29px;
         }
         & > button:last-of-type {
           margin: 0;

@@ -10,8 +10,8 @@
     <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
       <div class="user-masage">
-      	<span class="user-name" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}</span>
-      	<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
+      	<span class="user-name" :class="item.releaseUser.role.title === '塔主' || item.releaseUser.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="item.releaseUser.role.title === '管理员'">管理员</span></span>
+      	<span class="user-intro" v-if="item.releaseUser.role.isShow" v-text="item.releaseUser.career"></span>
       </div>
       <!--头衔-->
       <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
@@ -164,7 +164,7 @@
           <button v-if="!hidePraiseBtn" @click.stop="praise">
             <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
             <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
-            <!--{{item.favorTotal > 0 ? item.favorTotal : '点赞'}}-->
+            {{item.favorTotal > 0 ? item.favorTotal : ''}}
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
@@ -198,12 +198,12 @@
             <div class="hot-reply">
               <div class="hot-reply-icon">热门评论</div>
               <div class="reply" v-for="(reply,index) in item.comments">
-                <p class="favor-content"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
+                <p class="favor-content ellipsis3"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
               </div>
             </div>
           </template>
           <tempalte v-else>
-            <div class="reply" v-for="reply in item.comments">
+            <div class="reply ellipsis3" v-for="reply in item.comments">
               <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
             </div>
             <div class="reply" v-if="item.commentTotal > 3">

@@ -20,7 +20,7 @@
         <div class="container">
           <!-- 评论 -->
           <div class="fixed-box" ref="ceiling-box">
-            <div class="ceiling-box" :class="navTabName">
+            <div class="ceiling-box" :class="{navTabName}">
               <span @click="toggle('comment')">评论({{allTotal}})</span>
               <span @click="toggle('praise')">点赞({{item.favorTotal}})</span>
             </div>
@@ -41,7 +41,6 @@
                           :itemIndex="index"
                           :showDelBtn="true"
                           @operation="operation"></discuss-item>
-              
             </div>
             <div v-if="allTotal === 0">
               <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
@@ -55,7 +54,6 @@
                             :key="index"
                             @tap-one="jump">
             </classmate-item>
-
             <div v-if="classmateList.length === 0">
               <p class="community-empty-desc fs13">成为第一个点赞的人吧~</p>
             </div>
@@ -70,13 +68,13 @@
         <button @click="operation({eventType: 'praise'})">
           <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
           <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
-          {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
+          {{item.favorTotal > 0 ? item.favorTotal : ''}}
         </button>
         <span class="split"></span>
         <!-- 评论按钮 -->
         <button @click="comment({})">
           <img class="icon-pinglun" src="./../../assets/icon/pinglun2@3x.png" />
-          {{pagination.total > 0 ? pagination.total : '评论'}}
+          {{pagination.total > 0 ? pagination.total : ''}}
         </button>
       </div>
     </div>
@@ -136,7 +134,7 @@
     allTotal = 0
     navTabName = 'comment'
     commentIndex = -1
-    suspensionInputPlaceholder = '写评论'
+    suspensionInputPlaceholder = '来分享你的想法吧～'
     displaySuspensionInput = true
     curData = {} // 评论回来的数据
     modelType = '' // 评论类型
@@ -644,12 +642,6 @@
       & .content-praise {
         padding-right: 15px;
       }
-    }
-    & .community-empty-desc {
-      margin-top: 50px;
-      color: #bcbcbc;
-      text-align: center;
-      margin-bottom: 30px;
     }
     & .community-empty-desc {
       margin-top: 50px;

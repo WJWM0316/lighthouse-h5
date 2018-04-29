@@ -6,11 +6,10 @@
     <div class="content-head">
       <img :src="item.releaseUser.avatar" class="user-image" @click.stop="toCommunity" />
       <div class="user-box">
-        <div>
-          <!-- 用户名 -->
-          <p class="user-name singleLine" @click.stop="toCommunity">{{item.releaseUser.realName}}</p>
-          <!-- 用户头衔 -->
-          <p class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></p>
+        <!-- 用户名 -->
+        <div class="user-masage">
+          <span class="user-name" :class="item.releaseUser.role.title === '塔主' || item.releaseUser.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="item.releaseUser.role.title === '管理员'">管理员</span></span>
+          <span class="user-intro" v-if="item.releaseUser.role.isShow" v-text="item.releaseUser.career"></span>
         </div>
       </div>
     </div>
@@ -182,7 +181,7 @@
         <div class="reply-block" v-if="item.commentTotal > 0 && item.comments && item.comments.length > 0">
           <div class="hot-reply">
             <div class="hot-reply-icon">热门评论</div>
-            <div class="reply" v-for="(reply,index) in item.comments">
+            <div class="reply" v-for="(reply, index) in item.comments">
               <p class="favor-content"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
             </div>
           </div>

@@ -310,8 +310,6 @@ export default class HomeIndex extends Vue {
           }
         })
         res[tagIndex].selected = true
-        console.log(res)
-
         this.communityTagList = res
       }
     })
@@ -535,6 +533,7 @@ export default class HomeIndex extends Vue {
     }
     &.joined span:nth-of-type(2),
     &.picked span:nth-of-type(1) {
+    	font-weight: bold;
       font-size: 24px;
       position: relative;
       font-family: 'PingFangSC-Medium';

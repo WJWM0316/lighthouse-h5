@@ -130,6 +130,7 @@ export default class App extends Vue {
     this.$router.replace(this.tabList[index].src)
   }
   isSelected (src) {
+  	console.log("+++++++++++++++++++++++++++",src)
     return this.$route.path === src
   }
   closeQrCode (type) {

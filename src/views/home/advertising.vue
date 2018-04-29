@@ -11,7 +11,7 @@
   </div>
   <div class="test_blo" v-else>
     <img src="./../../assets/page/empty.png" alt="">
-    <p class="test" style="">暂无数据</p>
+    <p class="test" >暂时没有相关内容哦～</p>
   </div>
 </template>
 <script>
