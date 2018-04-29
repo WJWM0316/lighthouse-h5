@@ -56,12 +56,12 @@
           <button v-if="!hidePraiseBtn" @click.stop="praise">
             <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
             <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
-            {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
+            {{item.favorTotal > 0 ? item.favorTotal : ''}}
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
-            <img class="icon-pinglun" src="./../../assets/icon/bnt_comment@3x.png" />
-            {{item.commentTotal > 0 ? item.commentTotal : '评论'}}
+            <img class="icon-pinglun" src="./../../assets/icon/tab_massage2 copy 2@3x.png" />
+            {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>
           <!-- 灯塔信息 -->
           <div class="info-light-house" v-if="showLightHouseInfo">
