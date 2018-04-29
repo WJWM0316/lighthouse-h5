@@ -176,7 +176,7 @@ import moment from 'moment'
 })
 export default class exploreItem extends Vue {
   video = ''
-
+  role = this.item.releaseUser.role || {}
   created () {
   }
 

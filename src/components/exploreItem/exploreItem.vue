@@ -6,10 +6,10 @@
     <div class="content-head">
       <img :src="item.releaseUser.avatar" class="user-image" @click.stop="toCommunity" />
       <div class="user-box">
-        <!-- 用户名 :class="item.releaseUser.role.title === '塔主' || item.releaseUser.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)" <span class="administrators" v-if="item.releaseUser.role.title === '管理员'">管理员</span> v-if="item.releaseUser.role.isShow"-->
+        <!-- 用户名-->
         <div class="user-masage">
-          <span class="user-name" >{{item.releaseUser.realName}}</span>
-          <span class="user-intro" v-text="item.releaseUser.career"></span>
+          <span class="user-name" :class="item.releaseUser.role.title === '塔主' || item.releaseUser.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="item.releaseUser.role.title === '管理员'">管理员</span></span>
+          <span class="user-intro" v-if="item.releaseUser.role.isShow" v-text="item.releaseUser.career"></span>
         </div>
       </div>
     </div>
