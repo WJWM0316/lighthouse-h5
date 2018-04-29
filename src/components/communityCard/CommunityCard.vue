@@ -223,7 +223,7 @@ export default class CommunityCard extends Vue {
     }
   }
 
-  &.type-2 {
+  &.type-2, &.type-1{
 
     .cover-container {
       /*height: 171px;*/
