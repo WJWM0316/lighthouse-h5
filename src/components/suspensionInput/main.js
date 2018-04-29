@@ -27,7 +27,7 @@ import Component from 'vue-class-component'
     isShow (val) {
     },
     value (val) {
-      // this.isShow = val
+      this.isShow = val
       if (val && this.suspensionInput) {
         this.$nextTick(() => {
           this.suspensionInput.focus()
