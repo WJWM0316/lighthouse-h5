@@ -134,7 +134,7 @@
     allTotal = 0
     navTabName = 'comment'
     commentIndex = -1
-    suspensionInputPlaceholder = '写评论'
+    suspensionInputPlaceholder = '来分享你的想法吧～'
     displaySuspensionInput = true
     curData = {} // 评论回来的数据
     modelType = '' // 评论类型

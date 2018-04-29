@@ -64,7 +64,7 @@
         </div>-->
 
         <!-- 主体内容块 -->
-        <div class="fixed-box" ref="community-title">
+        <div class="fixed-box" ref="community-title" v-if='pageInfo.isCourse==1'>
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
             <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
             <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
@@ -201,7 +201,7 @@
     titleBoxShow=false;
 
     commentIndex = -1
-    suspensionInputPlaceholder = '写评论'
+    suspensionInputPlaceholder = '来分享你的想法吧～'
     displaySuspensionInput = false
 
     // 有课程塔发布操作选项
