@@ -12,8 +12,8 @@
       <div class="content-head">
         <div class="user-box" v-if="item.reviewer.role.isShow">
           <div>
-            <!-- 用户名 -->
-            <p class="user-name" :class="item.reviewer.role.title === '塔主' || item.reviewer.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.reviewer.userId)">{{item.reviewer.realName}}<span class="label" v-if="item.reviewer.role.title === '管理员'">{{item.reviewer.role.title}}</span></p>
+            <!-- 用户名  :class="item.reviewer.role.title === '塔主' || item.reviewer.role.title === '嘉宾' ? 'master' : 'guest'"  <span class="label" v-if="item.reviewer.role.title === '管理员'">{{item.reviewer.role.title}}</span>-->
+            <p class="user-name" @click.stop="toUserInfo(item.reviewer.userId)">{{item.reviewer.realName}}</p>
             <!-- 用户头衔 -->
             <p class="user-career"  v-text="item.reviewer.career"></p>
           </div>
