@@ -224,9 +224,6 @@
         // const {problem = []} = await getAskInfoApi(params)
         this.pageInfo = await getAskInfoApi(params)
 
-
-
-
         this.teachers.push(this.pageInfo.master);
         this.teachers.push(...this.pageInfo.role);
         console.log(this.teachers);

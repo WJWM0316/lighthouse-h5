@@ -5,6 +5,7 @@
       <div>
         <explore :exploreList="finds"
                  :disableOperationArr="disableOperationArr"
+                 :showIdentification="true"
                  @disableOperationEvents="disableOperationEvents"
         ></explore>
       </div>
@@ -114,8 +115,14 @@ export default class HomeIndex extends Vue {
 	          item.videoPlay = false
 	        }
 	      })
-	      console.log('发现: ', res)
-	      this.finds = res.list
+
+        if (page === 1) {
+           this.finds = res.list
+        } else {
+          console.log('发现: ', res.list)
+          this.finds = this.finds.concat(res.list || [])
+        }
+	      console.log(this.finds)
 	      allTotal = res.total
 	    }
 	    this.pagination.page = page

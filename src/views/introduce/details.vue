@@ -11,7 +11,7 @@
                    :hideCommentArea="true"
                    :isFold = "false"
                    :disableContentClick="true"
-                   :showIdentification="false"
+                   :showIdentification="true"
                    @getUserId="getUserId"
           ></dynamic>
         </div>

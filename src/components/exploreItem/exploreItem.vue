@@ -6,7 +6,7 @@
     <div class="content-head">
       <img :src="item.releaseUser.avatar" class="user-image" @click.stop="toCommunity" />
       <div class="user-box">
-        <!-- 用户名 -->
+        <!-- 用户名-->
         <div class="user-masage">
           <span class="user-name" :class="item.releaseUser.role.title === '塔主' || item.releaseUser.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="item.releaseUser.role.title === '管理员'">管理员</span></span>
           <span class="user-intro" v-if="item.releaseUser.role.isShow" v-text="item.releaseUser.career"></span>
@@ -154,8 +154,8 @@
           </button> -->
           <!-- 点赞按钮 -->
           <button v-if="!hidePraiseBtn" @click.stop="praise">
-            <img v-if="item.favorTotal === 0" class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
-            <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
+            <img v-if="item.favorTotal === 0" class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
+            <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
             {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
           </button>
           <!-- 评论按钮 -->

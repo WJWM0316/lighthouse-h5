@@ -10,8 +10,8 @@
     <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
       <div class="user-masage">
-      	<span class="user-name" :class="item.releaseUser.role.title === '塔主' || item.releaseUser.role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="item.releaseUser.role.title === '管理员'">管理员</span></span>
-      	<span class="user-intro" v-if="item.releaseUser.role.isShow" v-text="item.releaseUser.career"></span>
+      	<span class="user-name" :class="role && role.title === '塔主' || role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="role && role.title === '管理员'">管理员</span></span>
+      	<span class="user-intro" v-if="role && role.isShow" v-text="item.releaseUser.career"></span>
       </div>
       <!--头衔-->
       <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->

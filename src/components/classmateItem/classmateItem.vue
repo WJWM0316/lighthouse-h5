@@ -82,7 +82,10 @@
 
     .userInfo-desc {
       margin-left: 15px;
-
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
       .name {
         font-size: 15px;
         line-height: 19px;
