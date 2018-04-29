@@ -26,11 +26,12 @@
               <p class="chose-tab-con">{{item.title}}</p>
           </li>
         </ul>
-        <div class="advertising_list" >
-            <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
-                <img class="opt_pic" :src="item.imgUrl"></img>
-            </div>
-        </div>
+      </div>
+
+      <div class="advertising_list" >
+          <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
+              <img class="opt_pic" :src="item.imgUrl"></img>
+          </div>
       </div>
       <!-- 轮播图 -->
       <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
@@ -457,7 +458,8 @@ export default class HomeIndex extends Vue {
 @import "../../styles/mixins";
 
 .p-home-index {
-  padding: 50px 0;
+  //padding: 50px 0;
+  padding-top: 98rpx;
   box-sizing: border-box;
 
   &.picked {
@@ -547,7 +549,8 @@ export default class HomeIndex extends Vue {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 5px 0 15px 0;
+    padding-bottom: 15px;
+    padding-top: 8px;
     .opt_blo {
       width: 111px;
       height: 48px;
