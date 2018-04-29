@@ -26,9 +26,7 @@ export default {
     })
   },
 
-  hide_nav: ({
-    commit
-  }) => {
+  hide_nav: ({commit}) => {
     return new Promise((resolve, reject) => {
       commit(types.HIDE_NAV)
       resolve()
