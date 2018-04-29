@@ -4,7 +4,7 @@
   <div :class="{'big-shot-community': true, author: isAuthor}">
 
     <!-- tab -->
-    <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed': true}" v-if="isCommunityTitleFixed">
+    <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed2': true}" v-if="isCommunityTitleFixed">
       <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
       <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
     </div>
@@ -91,10 +91,10 @@
 
     <!-- footer -->
     <div class="footer" v-show="!displaySuspensionInput">
-    	<!--在这里增加嘉宾判断-->
+    	<!--在这里增加嘉宾判断 -->
       <div v-if="isAuthor || isKayo=='guests'" class="author-operation">
         <button @click="question" v-if="this.pageInfo.isCourse===1">
-          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count" v-if="pageInfo['answerTotal'] > 0">{{pageInfo['answerTotal']}}</i></span>
+          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count _" v-if=" pageInfo['answerTotal']> 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
         <!--<button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>-->
         <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
@@ -106,10 +106,10 @@
         <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>-->
         <!--4.25改版-->
         <button @click="postQuestions" v-if="this.pageInfo.isCourse===1">
-          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>提问</span>
+          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>我要提问</span>
         </button>
         <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type==1"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
-        <button @click="posted" class="post-tip" v-else><img src="../../assets/icon/bnt_post@3x.png"/>发帖</button>
+        <button @click="posted" class="post-tip" v-else><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
     </div>
     <!--分享弹窗-->
@@ -816,12 +816,12 @@
       align-items: center;
       color: #929292;
       background-image: linear-gradient(-180deg, #FCFCFC 0%, #F8F8F8 100%);
-
       .item {
         display: block;
         flex: 1 1 auto;
         text-align: center;
-
+        font-size: 16px;
+        font-family: PingFangSC-Medium;
         &:active {
           background: #f1f1f1;
         }
@@ -911,7 +911,7 @@
 
       & .fixed-box {
         height: 40px;
-        margin-top: 35px;
+        margin-top: 25px;
       }
 
       & .big-shot-community-content {
@@ -973,9 +973,10 @@
         border-radius: 0;
         height: 50px;
         line-height: 50px;
-        color: #666666;
         font-size: 16px;
         border-style: none;
+        font-family: PingFangSC-Regular;
+        color: #354048;
         & .desc {
           position: relative;
         }
@@ -984,12 +985,12 @@
           min-width: 13px;
           height: 13px;
           line-height: 13px;
-          padding: 0 3px;
+          padding: 0 2px;
           transform: translate(100%, -50%);
           position: absolute;
-          right: 3px;
+          right: 7px;
           top: 3px;
-          font-size: 10px;
+          font-size: 11px;
           /*background-color: #ff4949;*/
           /*border-radius: 50%;*/
           /*line-height: 1;*/
@@ -997,6 +998,8 @@
           font-style: normal;
           /*color: #FFF;*/
           /*padding: 2px 3px;*/
+
+
         }
       }
       & button:last-of-type {
@@ -1067,7 +1070,7 @@
     	& img{
     		padding-right: 12px;
     		width: 20px;
-    		height: 18px;
+    		height: 20px;
     	}
     }
 
@@ -1102,5 +1105,15 @@
         }
       }
     }
+  }
+
+  .fixed2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-top: 0;
+    z-index: 99;
+    background-image: linear-gradient(-180deg, #FCFCFC 0%, #F8F8F8 100%);
   }
 </style>

@@ -8,12 +8,12 @@
 //overflow: hidden;
   & .left {
     flex: 0 0 auto;
-    padding: 20px 0;
-    margin-right: 15px;
-    padding-bottom: 10px;
+    padding: 25px 0;
+    margin-right: 8px;
+    padding-bottom: 0px;
     & > .user-image {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       overflow: hidden;
     }
@@ -21,10 +21,9 @@
 
   & .right {
     flex-grow: 1;
-    padding: 20px 0;
+    padding: 25px 0;
     font-size: 15px;
-    padding-bottom: 10px;
-    
+    padding-bottom: 0px;
     &:nth-of-type(3){
       width: 100%;
       padding: 0;
@@ -38,32 +37,29 @@
     }
     //名字和头衔
     & .user-masage{
-//      width: 295px;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        height: 40px;
-        
-//      & span{
-//          margin-right: 20px;
-//      }
-        
         & .user-name {
           height: 16px;
-          line-height:16px;
-//        width: 295px;
           color: #d7ab70;
-          font-weight:400;
+          font-size: 14px;
+          line-height: 18px;
+          font-family: PingFangSC-Medium;
+
         }
         
         & .user-intro{
-            width: 100%;
-//        width: 295px;
+          width: 100%;
           height: 16px;
           line-height:16px;
           font-size:12px;
           display:block;
           color:#929292;
+
+          font-family: PingFangSC-Light;
+          color: #929292;
+          letter-spacing: 0;
         }
     }
     //名字和头衔
@@ -72,10 +68,11 @@
 		/*日期 */
     & .info-area {
       display: flex;
-      margin-top: 13px;
+      margin-top: 18px;
       justify-content: space-between;
       align-items: center;
-      font-size: 13px;
+      font-size: 12px;
+      line-height: 17px;
       color: #929292;
 //			margin-left:-55px;
 //			margin-right: 20px;
@@ -198,8 +195,8 @@
       width: 335px;
     // margin-top: 16px;
 		//调整内容位置 
-//		margin-right: 20px;
-//		margin-left:-55px;
+    //margin-right: 20px;
+    //margin-left:-55px;
 
     & .content-text {
 			//文本超出省略 
@@ -210,7 +207,7 @@
         overflow: hidden;
       }
 			
-      margin-top: 9px;
+      margin-top: 10px;
       word-break: break-all;
       word-wrap: break-word;
       line-height: 1.5;

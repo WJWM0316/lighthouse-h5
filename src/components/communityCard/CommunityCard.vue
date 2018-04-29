@@ -235,7 +235,7 @@ export default class CommunityCard extends Vue {
 					border-radius: 50%;
 					overflow:hidden;
 					position: absolute;	
-					top:46px;
+					top: 44px;
 					left:50%;
 					transform:translateX(-50%);
 					margin-bottom:7.5px;
@@ -244,6 +244,8 @@ export default class CommunityCard extends Vue {
 						border-radius: 50%;
 						width: 100%;
 						height: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ffffff;
 					}
 			}
 			/*新增*/
@@ -281,7 +283,6 @@ export default class CommunityCard extends Vue {
 
     .cover {
       width: 100%;
-      /*height: 100%;*/
      	height: 100px;
     }
 
@@ -292,6 +293,7 @@ export default class CommunityCard extends Vue {
       padding: 12px;
       padding-top: 32px;
       color: #666666;
+      line-height: 16px;
       /*position: absolute;
       top: 130px;
       left: 50%;*/
@@ -360,7 +362,7 @@ export default class CommunityCard extends Vue {
   
   .communit-enter-title{
   	text-align: center;
-  	
+  	margin-top: -20px;
   	.title{
   		position: relative;
   		display: inline-block;

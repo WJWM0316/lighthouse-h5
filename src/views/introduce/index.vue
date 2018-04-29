@@ -411,7 +411,7 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-
+      console.log(111111111111111111)
       switch (communityId) {
         case 'aa3b415b564bd95b27da2f0e9c986e6a':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')

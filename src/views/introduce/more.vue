@@ -3,7 +3,7 @@
 		<!--灯塔介绍-->
 		<div class="addon-text">
 			<div @click.stop="goTointroduceDetail(id)" class="more-introduce">
-				<img src="../../assets/icon/tab-lighthouse-2@3x.png"/>
+				<img class="icon_1" src="../../assets/icon/icon_list_aboutlh@3x.png"/>
 				<span>灯塔介绍</span>
 				<i><img src="../../assets/icon/icon_center_angle_right.png"/></i>
 	           <!--<img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
@@ -11,7 +11,7 @@
 		</div>
 		<!--开塔时间-->
 		<div class="more-openTime">
-			<img src="../../assets/icon/icon_list_time@3x.png"/>
+			<img class="icon_2" src="../../assets/icon/icon_list_time@3x.png"/>
 			<span>开塔时间</span>
 			<!--<p>2018年1月1日-2018年4月8日</p>-->
 			<p v-if="community.isAuthor === 1 || community.isJoined === 1">{{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}</p>
@@ -20,7 +20,7 @@
 		</div>
 		<!--塔主和小伙伴-->
 		<div class="more-parner">
-			<img src="../../assets/icon/icon_center_home.png" />
+			<img class="icon_3" src="../../assets/icon/icon_center_home.png" />
 			<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
 			<!--塔主和嘉宾列表-->
 			<div class="guestList">
@@ -47,7 +47,7 @@
 		</div>
 		<!--灯塔成员-->
 		<div class="more-classmate">
-			<img src="../../assets/icon/icon_list_number@3x.png" />
+			<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
 			<p>灯塔成员 <span>({{classmate.length}}人)</span></p>
 			<ul class="classmateList">
 				<li class="classmatePerson" v-for="item in classmate" @click.prevent.stop="goUserDetail(item.userId)">
@@ -122,7 +122,7 @@
 		methods:{
 			goUserDetail (userId) {
 		      this.$router.push({name: 'userInfo-details', params: {userId}})
-		  },
+		  	},
 		  goTointroduceDetail(userId){
 		  	console.log(userId.communityId);
 		  	this.$router.push({name: 'introduce-detail', params: {communityId:userId.communityId}})
@@ -140,7 +140,7 @@
 		& .more-introduce, & .more-openTime{
 			box-sizing: border-box;
 			width: 100%;
-			padding: 20px 20px;
+			padding: 18.5px 18.5px;
 			border-bottom: 1px solid #EDEDED;
 			
 			& img{
@@ -177,9 +177,17 @@
 				float: right;
 				font-size: 14px;
 				color: #929292;
-				line-height: 18px;
+				line-height: 20px;
 				
 			}
+			.icon_1 {
+				margin-top: -3px;
+			}
+			.icon_2 {
+				margin-top: -4px;
+
+			}
+			
 		}
 		
 		/*人物列表样式*/
@@ -188,7 +196,12 @@
 			width: 100%;
 			padding: 20px 20px;
 			border-bottom: 1px solid #EDEDED;
-			
+			.icon_3 {
+				margin-top: -7px;
+			}
+			.icon_4 {
+				margin-top: -5px;
+			}
 			& img{
 				width: 20px;
 				height: 20px;
@@ -223,8 +236,8 @@
 					
 					.guestListPerson{
 						display: inline-block;
-						width: 60px;
-						margin-right: 25px;
+						width: 70px;
+						margin-right: 20px;
 						/*text-align: center;*/
 						
 						.name{
@@ -234,7 +247,7 @@
 							font-size: 14px;
 							color: #354048;
 							text-align: center;
-							width: 60px;
+							width: 70px;
 							height: 18px;
 							line-height: 18px;
 							text-overflow: ellipsis;
@@ -243,6 +256,7 @@
 						& .imgBox{
 							width: 60px;
 							height: 60px;
+							margin: 0 auto;
 							margin-bottom: 7.5px;
 							border-radius: 50%;
 							/*overflow: hidden;*/
@@ -252,6 +266,7 @@
 								width: 32px;
 								height: 15px;
 								position: absolute;
+								font-family: PingFangSC-Light;
 								bottom: -2.5px;
 								left: 50%;
 								transform: translateX(-50%);
@@ -259,7 +274,7 @@
 								border-radius: 83px;
 								text-align: center;
 								font-size: 10px;
-								line-height: 14px;
+								line-height: 15px;
 								color: #354048;
 								
 							}
@@ -319,6 +334,7 @@
 								line-height: 20px;
 							}
 							.classmate-career{
+								font-family: PingFangSC-Light;
 								display: inline-block;
 								width: 100%;
 								white-space: nowrap;
@@ -326,7 +342,6 @@
 								text-overflow: ellipsis;
 								font-size: 14px;
 								color: #929292;
-								letter-spacing: 2;
 								line-height: 18px;
 							}
 						}
