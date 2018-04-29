@@ -37,10 +37,7 @@
       }
       .user-career, .user-name {
         width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        word-wrap: normal;
+        .setEllipsis();
         &.user-career {
           width: 90%;
         }
@@ -51,7 +48,7 @@
           color: #4080AD;
         }
         & .label {
-          color: #D7AB70;
+          color: #d7ab70;
           font-size: 12px;
           padding: 0 10px;
           margin-left: 8px;

@@ -53,11 +53,11 @@
 				<li class="classmatePerson" v-for="item in classmate" @click.prevent.stop="goUserDetail(item.userId)">
 					<div class="classmate-imgBox">
 						<img class="titleImg" :src="item.avatar"/>
-						<img class="classmate-sex" v-if="item.gender"
-             				:src="item.gender === 1 ? boyImg : girlImg"/>
+						<!-- <img class="classmate-sex" v-if="item.gender"
+             				:src="item.gender === 1 ? boyImg : girlImg"/> -->
 					</div>
 					<div class="classmate-master">
-						<span class="classmate-name" v-text="item.realName"></span>
+						<span class="classmate-name">{{item.realName}}<span class="label" v-if="item.identityAuthority.title==='管理员'">管理员</span></span>
 						<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
 					</div>
 				</li>
@@ -181,7 +181,18 @@
 				
 			}
 		}
-		
+		& .label {
+          color: #d7ab70;
+          font-size: 12px;
+          padding: 0 10px;
+          margin-left: 8px;
+          line-height: 18px;
+          border-radius: 50px;
+          border: 1px solid #D7AB70;
+          display: inline-block;
+          text-align: center;
+          box-sizing: border-box;
+        }
 		/*人物列表样式*/
 		& .more-parner, & .more-classmate{
 			box-sizing: border-box;
