@@ -154,8 +154,8 @@
           </button> -->
           <!-- 点赞按钮 -->
           <button v-if="!hidePraiseBtn" @click.stop="praise">
-            <img v-if="item.favorTotal === 0" class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
-            <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
+            <img v-if="item.favorTotal === 0" class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
+            <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
             {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
           </button>
           <!-- 评论按钮 -->

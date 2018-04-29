@@ -20,6 +20,7 @@
                  :hideCommentArea="true"
                  :disableContentClick="true"
                  :isFold="false"
+                 :showIdentification = "true"
                  :disableOperationArr="disableOperationArr"
                  @disableOperationEvents="disableOperationEvents"
         ></explore>
