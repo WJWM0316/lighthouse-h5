@@ -10,7 +10,8 @@
       <div class="master">
         <p class="name" :class="{ round: type === 1 }">
           <span class="text" v-text="community.master && community.master.realName"></span>
-        </p><span v-if="community.master && community.master.career">/</span>
+        </p>
+        <span v-if="community.master && community.master.career">/</span>
         <p class="career" v-text="community.master && community.master.career"></p>
       </div>
       <slot name="cover-addon"></slot>
@@ -358,7 +359,7 @@ export default class CommunityCard extends Vue {
 
       .career {
       	display: inline-block;
-        margin-bottom: -7px;
+        /*margin-bottom: -7px;*/
         line-height: 16px;
         font-size: 12px;
       }
