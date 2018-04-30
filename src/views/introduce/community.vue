@@ -9,7 +9,7 @@
       <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
     </div>
 
-    <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+    <scroll v-if="" :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- header -->
       <div class="header">
       	
@@ -988,7 +988,7 @@
           padding: 0 2px;
           transform: translate(100%, -50%);
           position: absolute;
-          right: 7px;
+          right:  -2px;
           top: 3px;
           font-size: 11px;
           /*background-color: #ff4949;*/
@@ -1045,7 +1045,7 @@
           padding: 0 3px;
           transform: translate(100%, -50%);
           position: absolute;
-          right: 3px;
+          right: -2px;
           top: 3px;
           font-size: 10px;
           /*background-color: #ff4949;*/
