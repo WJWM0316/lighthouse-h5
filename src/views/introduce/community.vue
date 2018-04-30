@@ -303,7 +303,7 @@
     	
     	console.log(this.communityId);
     	let that=this;
-    	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId}})
+    	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId,classmateNum:this.pageInfo.joinedNum}})
     }
     
     closeShare () {

@@ -189,6 +189,9 @@ export default class CommunityCard extends Vue {
   display: block;
 
   &.type-1 {
+  	& .master{
+  		display: none;
+  	}
 
     .cover-container {
 			
