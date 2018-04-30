@@ -11,7 +11,7 @@
       
       <div class="content-head">
         <div class="user-box" v-if="role && role.isShow">
-          <div>
+          <div style="width:100%">
             <!-- 用户名 -->
             <p class="user-name" :class="role && role.title === '塔主' || role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.reviewer.userId)">{{item.reviewer.realName}}<span class="label" v-if="role && role.title === '管理员'">{{role.title}}</span></p>
             <!-- 用户头衔 -->
