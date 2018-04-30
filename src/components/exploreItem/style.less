@@ -15,8 +15,8 @@
     padding: 0 0 0 50px;
     position: relative;
     .user-image {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       overflow: hidden;
       position: absolute;
@@ -24,15 +24,16 @@
       left:0;
     }
     .user-box {
-      /*display: flex;
-      align-items: center;*/
-      height: 32px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      height: 31px;
       padding-top: 1px;
-
       & .user-name {
-          height: 20px;
-          line-height:20px;
-          font-weight:400;
+          font-family: PingFangSC-Medium;
+          font-size: 14px;
+          line-height: 14px;
+          display: inline-block;
           .setEllipsis();
           &.master {
             color: #d7ab70;
@@ -50,22 +51,22 @@
               margin-left: 10px;
               display: inline-block;
               font-size: 12px;
-              box-sizeing: border-box;
+              box-sizing: border-box;
             }
           }
         }
-        & .user-intro{
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          width: 100%;
-          height: 16px;
-          line-height:16px;
-          font-size:12px;
-          display:block;
-          color:#929292;
-          .setEllipsis();
-        }
+      & .user-intro{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+        line-height:12px;
+        font-size:12px;
+        display:block;
+        color:#929292;
+        font-family: PingFangSC-Light;
+        .setEllipsis();
+      }
       
     }
 
@@ -75,8 +76,8 @@
     padding: 20px 0;
     margin-right: 15px;
     & > .user-image {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       overflow: hidden;
     }
@@ -244,7 +245,7 @@
     & .content-text {
       word-break: break-all;
       word-wrap: break-word;
-      line-height: 1.4;
+      line-height: 20px;
       color: #354048;
       white-space: pre-line;
       display: block;
