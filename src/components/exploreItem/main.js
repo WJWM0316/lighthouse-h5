@@ -67,59 +67,67 @@ import moment from 'moment'
   computed: {
     picList () {
       let list = []
-      const files = this.item.files
-      if (files.length === 4) {
-        for (let i = 1; i <= files.length; i++) {
-          if (i % 3 === 0) {
-            list.push({holder: true})
+      if (this.item.files && this.item.files.length>0) {
+        const files = this.item.files
+        if (files.length === 4) {
+          for (let i = 1; i <= files.length; i++) {
+            if (i % 3 === 0) {
+              list.push({holder: true})
+            }
+            list.push(files[i - 1])
           }
-          list.push(files[i - 1])
+        } else {
+          list = files
         }
-      } else {
-        list = files
+        return list
       }
-      return list
+      
     },
     // 获取后缀对应类型
     fileType () {
-      const fileName = this.item.files[0].fileName || ''
-      let type = 'other'
-      if (fileName) {
-        // 所有后缀类型
-        const fileTypeArr = {
-          'pdf': ['pdf'],
-          'ppt': ['ppt', 'pptx'],
-          'word': ['doc', 'docx'],
-          'xls': ['xls', 'xlsx']
-        }
-        const fileNames = fileName.split('.') // 分割字符串
-        const fileSuffix = fileNames[fileNames.length - 1] // 取得后缀
-        for (let suffix in fileTypeArr) {
-          const suffixs = fileTypeArr[suffix]
-          if (suffixs.indexOf(fileSuffix) > -1) {
-            type = suffix
-            break
+      if (this.item.files && this.item.files.length>0) {
+        const fileName = this.item.files[0].fileName || ''
+        let type = 'other'
+        if (fileName) {
+          // 所有后缀类型
+          const fileTypeArr = {
+            'pdf': ['pdf'],
+            'ppt': ['ppt', 'pptx'],
+            'word': ['doc', 'docx'],
+            'xls': ['xls', 'xlsx']
+          }
+          const fileNames = fileName.split('.') // 分割字符串
+          const fileSuffix = fileNames[fileNames.length - 1] // 取得后缀
+          for (let suffix in fileTypeArr) {
+            const suffixs = fileTypeArr[suffix]
+            if (suffixs.indexOf(fileSuffix) > -1) {
+              type = suffix
+              break
+            }
           }
         }
+        return type
       }
-      return type
+      
     },
     // 转换字节单位
     byteStr () {
-      const fileSize = this.item.files[0].size || 0
-      let size = 0
-      if (fileSize) {
-        const company = ['B', 'KB', 'MB']
-        for (let index = 0; index < company.length; index++) {
-          const sizes = Math.pow(1024, index)
-          if (fileSize >= sizes) {
-            size = parseInt(fileSize / sizes) + ' ' + company[index]
+      if (this.item.files && this.item.files.length>0) {
+        const fileSize = this.item.files[0].size || 0
+        let size = 0
+        if (fileSize) {
+          const company = ['B', 'KB', 'MB']
+          for (let index = 0; index < company.length; index++) {
+            const sizes = Math.pow(1024, index)
+            if (fileSize >= sizes) {
+              size = parseInt(fileSize / sizes) + ' ' + company[index]
+            }
           }
+        } else {
+          size = '0 B'
         }
-      } else {
-        size = '0 B'
+        return size
       }
-      return size
     },
     // 朋友圈发表时间展示规则
     timeStr () {
@@ -187,30 +195,33 @@ export default class exploreItem extends Vue {
   isFullText (ref) {
     this.$nextTick(() => {
       const el = this.$refs[ref]
-      const contentText = el.firstChild
-      console.log(contentText.offsetHeight, contentText.scrollHeight)
-      if (contentText.scrollHeight > contentText.offsetHeight) {
-        const fullText = document.createElement('span')
-        fullText.className = 'full-text open'
-        fullText.innerText = '展开全文'
-        console.log(contentText.classList)
-        fullText.onclick = (e) => {
-          e.preventDefault()
-          e.stopPropagation()
+      if (el&&el.firstChild) {
+        const contentText = el.firstChild
+        if (contentText.scrollHeight-1 > contentText.offsetHeight) {
+          console.log(contentText.scrollHeight, contentText.offsetHeight)
+          const fullText = document.createElement('span')
+          fullText.className = 'full-text open'
+          fullText.innerText = '展开全文'
+          fullText.onclick = (e) => {
+            e.preventDefault()
+            e.stopPropagation()
 
-          if (fullText.innerText === '展开全文') {
-            contentText.classList.remove('ellipsis')
-            fullText.innerText = '收起全文'
-            fullText.className = 'full-text close'
-          } else {
-            fullText.innerText = '展开全文'
-            contentText.classList.add('ellipsis')
-            fullText.className = 'full-text open'
+            if (fullText.innerText === '展开全文') {
+              contentText.classList.remove('ellipsis')
+              fullText.innerText = '收起全文'
+              fullText.className = 'full-text close'
+            } else {
+              fullText.innerText = '展开全文'
+              contentText.classList.add('ellipsis')
+              fullText.className = 'full-text open'
+            }
           }
+          el.lastChild.innerHTML = ''
+          el.lastChild.appendChild(fullText)
         }
-        el.lastChild.innerHTML = ''
-        el.lastChild.appendChild(fullText)
       }
+
+      
     })
   }
 

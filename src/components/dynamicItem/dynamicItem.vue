@@ -31,13 +31,15 @@
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
           <!-- 追问 -->
           <div class="content-problem" v-if="problemItem.answerType === 1">
-            <p>追问: {{problemItem.content}}</p>
+            <p :class="{'ellipsis' : isFold}">追问: {{problemItem.content}}</p>
+            <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
           </div>
           <!-- 回答 -->
           <div class="content-problem" v-else>
             <img class="user-image" :src="problemItem.releaseUser.avatar" />
             <!-- 纯文本 -->
-            <p v-if="problemItem.type === 1">{{problemItem.content}}</p>
+            <p v-if="problemItem.type === 1" :class="{'ellipsis' : isFold}">{{problemItem.content}}</p>
+            <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
             <!-- 音频 -->
             <div v-else :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">
               <div class="progress-container">
@@ -132,7 +134,8 @@
 
         <!-- 只有文件 -->
         <div v-if="item.circleType === 4">
-          <p class="content-text">{{item.content}}</p>
+          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
+          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
           <div class="content-file" @click.stop="fileOpen(item.files[0].fileUrl)">
             <img class="file-logo" src="./../../assets/suffix/pdf.png" v-if="fileType === 'pdf'" />
             <img class="file-logo" src="./../../assets/suffix/ppt.png" v-else-if="fileType === 'ppt'" />
