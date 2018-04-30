@@ -1009,7 +1009,7 @@
     }
     
     & .ask-warp, & .author-operation{
-    	border-top: 1px solid #DCDCDC;
+    	border-top: 1px solid #ededed;
     	position: fixed;
       bottom: 0;
       right: 0;
