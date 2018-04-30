@@ -558,6 +558,8 @@
   .all-details {
     box-sizing: border-box;
     height: 100%;
+    width: 100%;
+    overflow: hidden;
     &.pdBtom {
       padding-bottom: 50px;
     }
