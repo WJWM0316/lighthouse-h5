@@ -44,9 +44,9 @@
               </a>
               <div class="voice">
                 <a href="#" class="voice-container z-read" @click.prevent.stop="handleTapVoice(item)">
-                  <!-- <div class="progress">
+                  <div class="progress">
                     <div class="bar" :style="{ width: `${item.voice.progress || 0}%` }"></div>
-                  </div> -->
+                  </div>
                   <div class="controls">
                     <image-item class="status" :class="{ 'z-loading': item.voice.status === 'loading' }" :src="audioStatusIcons[item.voice.status]" />
                     <p class="dutraion">{{item.duration || 0}}s</p>

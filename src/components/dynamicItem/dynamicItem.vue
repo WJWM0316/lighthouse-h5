@@ -172,7 +172,7 @@
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
             <span class="icon-pinglun">
-            	<img src="./../../assets/icon/tab_massage2 copy 2@3x.png" />
+            	<img src="./../../assets/icon/tab-massage2 copy 2@3x.png" />
             </span>
             {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>

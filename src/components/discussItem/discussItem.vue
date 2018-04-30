@@ -60,7 +60,7 @@
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
-            <img class="icon-pinglun" src="./../../assets/icon/tab_massage2 copy 2@3x.png" />
+            <img class="icon-pinglun" src="./../../assets/icon/tab-massage2 copy 2@3x.png" />
             {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>
           <!-- 灯塔信息 -->
