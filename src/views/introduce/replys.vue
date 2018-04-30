@@ -233,7 +233,9 @@
       }
 
       const res = await setSubmitCommentApi(params)
-
+      this.suspensionInputPlaceholder = '写评论'
+      this.commentIndex = -1
+      this.displaySuspensionInput = false
       this.pagination.end = false // 初始化数据，必定不是最后一页
       await this.getList({page: 1})
     }
