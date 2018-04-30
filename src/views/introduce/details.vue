@@ -126,7 +126,6 @@
     dynamicList = []
     commentTotal = 0
     favorTotal = 0
-    classmateList = []
     navTabName = 'comment'
     discussItemList = []
     hotCommentTotal = 0
@@ -139,37 +138,13 @@
     curData = {} // 评论回来的数据
     modelType = '' // 评论类型
     classmateList = [] // 点赞列表
+    isFavorList = false
 
     created () {
       this.modelType = this.$route.params.type
       this.pageInit().then(() => {})
     }
-    /**
-     * 切换nav
-     **/
-    toggle (targetName) {
-      if (this.navTabName !== targetName) {
-        this.navTabName = targetName
-        if (targetName === 'praise') {
-          if (this.classmateList) {
-            const params = {
-              id: this.$route.params.sourceId,
-              modelType: 'circle',
-              page: 1,
-              pageCount: 20
-            }
-            this.getFavorList(params).then(res => {
-              const {list, total} = res
-              this.classmateList = list
-              this.favorTotal = total
-              this.$router.replace({path: this.$route.path, query: {target: 'praise'}})
-            })
-          }
-        } else {
-          this.$router.replace({path: this.$route.path})
-        }
-      }
-    }
+   
     // ------------------- 评论区 ----------------------
     operation (e) {
       const {eventType, itemIndex, item, commentType} = e
@@ -334,7 +309,7 @@
     toggle (targetName) {
       if (this.navTabName !== targetName) {
         this.navTabName = targetName
-        if (targetName === 'praise') {
+        if (targetName === 'praise' && !this.isFavorList) {
           let modelType = ''
           this.isShow = false
           modelType = 'circle'
@@ -355,13 +330,10 @@
             page: 1,
             pageCount: 1000
           }
-          this.$router.replace({path: this.$route.path, query: {target: 'praise'}})
-          if (this.classmateList.length === 0) {
-            this.getFavorList(params).then(res => {
-              this.classmateList = res.list
-              console.log(res)
-            })
-          }
+          this.getFavorList(params).then(res => {
+            this.classmateList = res.list
+            this.isFavorList = true
+          })
         } else {
           this.isShow = true
         }
