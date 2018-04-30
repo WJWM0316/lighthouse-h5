@@ -10,8 +10,8 @@
     <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
       <div class="user-masage">
-      	<span class="user-name" :class="role && role.title === '塔主' || role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="role && role.title === '管理员'">管理员</span></span>
-      	<span class="user-intro" v-if="role && role.isShow&&item.releaseUser&&item.releaseUser.career.length>0" v-text="item.releaseUser.career"></span>
+      	<p class="user-name" :class="role && role.title === '塔主' || role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="role && role.title === '管理员'">管理员</span></p>
+      	<span class="user-intro" v-if="role && role.isShow && item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
       </div>
       <!--头衔-->
       <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
@@ -156,7 +156,7 @@
           <span>{{timeStr}}</span>
           <span v-if="showIdentification && item.modelType === 'problem'"> · 问答</span>
           <span v-else-if="showIdentification && item.modelType === 'post'"> · 帖子</span>
-          <span v-if="showDelBtn && item['isSelf'] && item.modelType  !== 'problem'" class="del-btn" @click.stop="del">.删除</span>
+          <span v-if="showDelBtn && item['isSelf'] && item.modelType  !== 'problem'" class="del-btn" @click.stop="del">删除</span>
         </div>
 
         <div class="operation">
