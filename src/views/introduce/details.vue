@@ -20,7 +20,7 @@
         <div class="container">
           <!-- 评论 -->
           <div class="fixed-box" ref="ceiling-box">
-            <div class="ceiling-box" :class="{navTabName}">
+            <div class="ceiling-box" :class="navTabName">
               <span @click="toggle('comment')">评论({{allTotal}})</span>
               <span @click="toggle('praise')">点赞({{item.favorTotal}})</span>
             </div>

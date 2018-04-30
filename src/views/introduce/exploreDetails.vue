@@ -44,7 +44,7 @@
           </div>
           <!-- 全部评论 -->
 
-          <div class="hot-area" v-if="allTotal > 0 && index === hotCommentTotal">
+          <div class="hot-area" v-if="allTotal > 0 && hotCommentTotal === index">
             <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
           </div>
           <div class="content-comment" >
@@ -71,7 +71,8 @@
         <div class="content-praise">
           <classmate-item v-for="item, index in classmateList"
                           :item='item'
-                          :key="index">
+                          :key="index"
+                          @tap-one="jump">
           </classmate-item>
 
           <div v-if="classmateList.length === 0">
@@ -133,7 +134,12 @@
     created () {
       this.pageInit().then(() => {})
     }
-
+    /**
+     * 跳转详情页
+     */
+    jump (e) {
+      this.$router.push('/userInfo/' + e + '/details')
+    }
     /**
      * 切换nav
      **/
@@ -150,7 +156,6 @@
             page: 1,
             pageCount: 1000
           }
-          this.$router.replace({path: this.$route.path, query: {target: 'praise'}})
           if (this.classmateList.length === 0) {
             this.getFavorList(params).then(res => {
               this.classmateList = res.list
@@ -327,12 +332,15 @@
     }
     
     & .ceiling-box {
-      margin: 0 15px;
       display: flex;
       align-items: center;
       color: #929292;
       font-size: 15px;
+      width: 100%;
+      padding-left: 15px;
+      box-sizing: border-box;
       border-bottom: solid 1px #dcdcdc; /* no */
+
       
       & span {
         height: 40px;
