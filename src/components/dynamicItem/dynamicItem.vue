@@ -31,14 +31,14 @@
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
           <!-- 追问 -->
           <div class="content-problem" v-if="problemItem.answerType === 1">
-            <p :class="{'ellipsis' : isFold}">追问: {{problemItem.content}}</p>
+            <p class="content-text" :class="{'ellipsis' : isFold}">追问: {{problemItem.content}}</p>
             <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
           </div>
           <!-- 回答 -->
           <div class="content-problem" v-else>
             <img class="user-image" :src="problemItem.releaseUser.avatar" />
             <!-- 纯文本 -->
-            <p v-if="problemItem.type === 1" :class="{'ellipsis' : isFold}">{{problemItem.content}}</p>
+            <p v-if="problemItem.type === 1" class="content-text" :class="{'ellipsis' : isFold}">{{problemItem.content}}</p>
             <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
             <!-- 音频 -->
             <div v-else :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">

@@ -461,12 +461,12 @@ export default class HomeIndex extends Vue {
 
 .p-home-index {
   //padding: 50px 0;
-  padding-top: 49px;
+  padding: 44px 0 50px;
   box-sizing: border-box;
 
   &.picked {
     // padding: 113px 0 50px;
-    padding: 49px 0 50px;
+    padding: 44px 0 50px;
   }
   &.hasBanner {
      padding: 89px 0 50px;
