@@ -108,6 +108,7 @@
                       :content="pumpContent"
                       :commentIndex="commentIndex"
                       :sendText="'追问'"
+                      ref="input"
                       @send="handleAppendAsk"/>
   </div>
 </template>
@@ -313,6 +314,7 @@
     async submitAnswer (params) {
       try {
         await submitAnswerApi(params)
+        this.$refs.input.isShow = false
         this.$vux.toast.text('追问成功', 'bottom')
         this.pageInit()
       } catch (error) {
@@ -416,6 +418,7 @@
     handleWakeUpPump (index) {
       this.commentIndex = index
       this.displaySuspensionInput = true
+      this.$refs.input.isShow = true
     }
 
     /**
@@ -535,7 +538,7 @@
   .p-ask {
     position: relative;
     background-color: #f9f9f9;
-
+    padding-bottom: 50px;
     .wrapper {
       width: 100%;
       height: 100%;
