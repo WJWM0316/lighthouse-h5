@@ -27,9 +27,10 @@ import Component from 'vue-class-component'
     isShow (val) {
     },
     value (val) {
-      this.isShow = val
+      // this.isShow = val
       if (val && this.suspensionInput) {
         this.$nextTick(() => {
+          console.log(21212)
           this.suspensionInput.focus()
         })
       }
@@ -72,8 +73,8 @@ export default class suspensionInput extends Vue {
   }
 
   hide () {
-    this.$emit('input', false)
     this.isFocused = false
+    this.$emit('input', false)
   }
 
   handleFocus () {

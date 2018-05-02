@@ -85,7 +85,9 @@
                       :commentIndex="commentIndex"
                       :sendText="'发送'"
                       :isShow = 'isShow'
+                      @input = "blur"
                       @send="sendComment"
+                      ref="input"
     ></suspension-input>
   </div>
 </template>
@@ -118,6 +120,7 @@
       discussItemList () {
       },
       displaySuspensionInput (val) {
+        // this.isShow = val
       }
     },
     mixins: [ListMixin]
@@ -134,7 +137,7 @@
     navTabName = 'comment'
     commentIndex = -1
     suspensionInputPlaceholder = '来分享你的想法吧～'
-    displaySuspensionInput = true
+    displaySuspensionInput = false
     curData = {} // 评论回来的数据
     modelType = '' // 评论类型
     classmateList = [] // 点赞列表
@@ -187,6 +190,7 @@
      * @returns {Promise.<void>}
      */
     async comment ({item, itemIndex, commentType}) {
+      console.log(this.$refs.input.isFocused, 1111)
       if (itemIndex > -1) {
         this.suspensionInputPlaceholder = '回复' + item.reviewer.realName + ':'
         this.commentIndex = itemIndex
@@ -340,6 +344,11 @@
       }
     }
 
+    async blur () {
+      console.log(11111111111111)
+      this.suspensionInputPlaceholder = '来分享你的想法吧～'
+      this.commentIndex = -1
+    }
 
     /**
      * 发送评论
@@ -363,10 +372,11 @@
         this.curData = data
         this.$vux.toast.text('评论成功', 'bottom')
         this.suspensionInputPlaceholder = '来分享你的想法吧～'
+        this.commentIndex = -1
         let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
         this.pagination.end = false // 初始化数据，必定不是最后一页
         this.getList({ page: page , type: 'comment'})
-        this.commentIndex = -1
+        
       }).catch(e => {
         this.$vux.toast.text('评论失败', 'bottom')
         this.curData = {}
