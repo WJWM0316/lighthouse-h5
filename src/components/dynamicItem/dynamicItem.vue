@@ -25,21 +25,24 @@
       <!-- 发表内容 -->
       <!--<div class="publish-content problem" v-if="item.modelType == 'post'">-->
       <div class="publish-content problem" v-if="item.modelType === 'problem'">
-
-        <p class="content-text" :class="{'ellipsis' : isFold}">问：{{item.content}}</p>
-        <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
+        <div ref="circle-content">
+          <p class="content-text" :class="{'ellipsis' : isFold}">问：{{item.content}}</p>
+          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
+        </div>
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
           <!-- 追问 -->
-          <div class="content-problem" v-if="problemItem.answerType === 1">
-            <p :class="{'ellipsis' : isFold}">追问: {{problemItem.content}}</p>
+          <div class="content-problem" ref="circle-content" v-if="problemItem.answerType === 1">
+            <p class="content-text" :class="{'ellipsis' : isFold}">追问: {{problemItem.content}}</p>
             <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
           </div>
           <!-- 回答 -->
           <div class="content-problem" v-else>
             <img class="user-image" :src="problemItem.releaseUser.avatar" />
             <!-- 纯文本 -->
-            <p v-if="problemItem.type === 1" :class="{'ellipsis' : isFold}">{{problemItem.content}}</p>
-            <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
+            <div ref="circle-content">
+              <p v-if="problemItem.type === 1" class="content-text" :class="{'ellipsis' : isFold}">{{problemItem.content}}</p>
+              <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
+            </div>
             <!-- 音频 -->
             <div v-if="problemItem.type === 2" :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">
               <div class="progress-container">
@@ -165,14 +168,14 @@
         <div class="operation">
           <!-- 点赞按钮 -->
           <button v-if="!hidePraiseBtn" @click.stop="praise">
-            <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
-            <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+            <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
+            <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
             {{item.favorTotal > 0 ? item.favorTotal : ''}}
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
             <span class="icon-pinglun">
-            	<img src="./../../assets/icon/tab-massage2 copy 2@3x.png" />
+            	<img src="./../../assets/icon/bnt_comment@3x.png" />
             </span>
             {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>
@@ -187,7 +190,7 @@
       <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || (item.commentTotal > 0 && item.comments && item.comments.length > 0))">
         <!-- 点赞信息 -->
           <div class="praise-block" v-if="item.favorTotal > 0">
-            <img class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+            <img class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
             <div class="praise-name">
                 <span class="favor-name" v-for="(favor, favorIndex) in item.favors" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
             </div>

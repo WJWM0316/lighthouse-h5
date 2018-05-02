@@ -3,7 +3,7 @@
 		<!--灯塔介绍-->
 		<div class="addon-text">
 			<div @click.stop="goTointroduceDetail(id)" class="more-introduce">
-				<img class="icon_1" src="../../assets/icon/icon_list_aboutlh@3x.png"/>
+				<img class="icon_1" src="../../assets/icon/icon_list_aboutlh@3x_2.png"/>
 				<span>灯塔介绍</span>
 				<i><img src="../../assets/icon/icon_center_angle_right.png"/></i>
 	           <!--<img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->

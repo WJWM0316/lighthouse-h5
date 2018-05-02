@@ -33,7 +33,7 @@
               </div>
               <!-- 全部评论 -->
               <div class="hot-area" v-if="index === hotCommentTotal">
-                <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
+                <i class="hot-icon"><img src="../../assets/icon/tab-massage-3@3x.png" alt=""></i>全部评论
               </div>
               <discuss-item 
                           :item="item"
@@ -67,7 +67,7 @@
         <!-- 点赞按钮 -->
         <button @click="operation({eventType: 'praise'})">
           <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
-          <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+          <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
           {{item.favorTotal > 0 ? item.favorTotal : ''}}
         </button>
         <span class="split"></span>
@@ -545,6 +545,7 @@
       padding-bottom: 50px;
     }
     & .header {
+      
     }
     & .ceiling-box {
       margin: 0 15px;

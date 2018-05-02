@@ -461,12 +461,12 @@ export default class HomeIndex extends Vue {
 
 .p-home-index {
   //padding: 50px 0;
-  padding-top: 49px;
+  padding: 44px 0 50px;
   box-sizing: border-box;
 
   &.picked {
     // padding: 113px 0 50px;
-    padding: 49px 0 50px;
+    padding: 44px 0 50px;
   }
   &.hasBanner {
      padding: 89px 0 50px;
@@ -515,12 +515,12 @@ export default class HomeIndex extends Vue {
     }
 
     & span {
+      font-family: PingFangSC-Regular;
       display: inline-block;
       height: 100%;
       position: relative;
       margin-right: 22px;
       vertical-align: top;
-      font-family: 'PingFangSC-Regular';
       font-size: 18px;
       color: #929292;
       letter-spacing: 0;
@@ -537,6 +537,7 @@ export default class HomeIndex extends Vue {
     }
     &.joined span:nth-of-type(2),
     &.picked span:nth-of-type(1) {
+      font-family: PingFangSC-Medium;
       font-size: 24px;
       position: relative;
       font-weight: 500;
@@ -626,7 +627,7 @@ export default class HomeIndex extends Vue {
         width: 151px;
         display: inline-block;
         margin-left: 10px;
-        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.08);
         margin-bottom: 10px;
         border-radius: 6px;
         &:last-child {

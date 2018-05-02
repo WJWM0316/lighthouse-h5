@@ -60,7 +60,7 @@
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
-            <img class="icon-pinglun" src="./../../assets/icon/tab-massage2 copy 2@3x.png" />
+            <img class="icon-pinglun" src="./../../assets/icon/bnt_comment@3x.png" />
             {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>
           <!-- 灯塔信息 -->
@@ -75,7 +75,7 @@
       <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || item.commentTotal > 0)" @click="commentAreaClick">
         <!-- 点赞信息 -->
         <div class="praise-block" v-if="item.favorTotal > 0">
-          <img class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+          <img class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
           <div class="praise-name">
             <span class="favor-name" v-for="(favor, favorIndex) in item.favors" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
           </div>
