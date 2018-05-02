@@ -46,7 +46,7 @@
           <!-- 全部评论 -->
 
           <div class="hot-area" v-if="allTotal > 0 && hotCommentTotal === index">
-            <i class="hot-icon"><img class="pic_1" src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
+            <i class="hot-icon"><img class="pic_1" src="../../assets/icon/tab-massage-3@3x.png" alt=""></i>全部评论
           </div>
           <div class="content-comment" >
             <discuss-item
