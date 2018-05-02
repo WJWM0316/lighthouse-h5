@@ -165,14 +165,14 @@
         <div class="operation">
           <!-- 点赞按钮 -->
           <button v-if="!hidePraiseBtn" @click.stop="praise">
-            <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
-            <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+            <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
+            <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
             {{item.favorTotal > 0 ? item.favorTotal : ''}}
           </button>
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
             <span class="icon-pinglun">
-            	<img src="./../../assets/icon/tab-massage2 copy 2@3x.png" />
+            	<img src="./../../assets/icon/bnt_comment@3x.png" />
             </span>
             {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>

@@ -46,7 +46,7 @@
           <!-- 全部评论 -->
 
           <div class="hot-area" v-if="allTotal > 0 && hotCommentTotal === index">
-            <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
+            <i class="hot-icon"><img class="pic_1" src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
           </div>
           <div class="content-comment" >
             <discuss-item
@@ -390,10 +390,14 @@
       color: #354048;
       background: #F8F8F8;
       .hot-icon {
-        width: 15px;
+        width: 20px;
         height: 20px;
         display: inline-block;
         margin-right: 10px;
+        .pic_1 {
+          width: 17px;
+          height: 17.5px;
+        }
       }
     }
     & .container {
