@@ -128,8 +128,9 @@ import moment from 'moment'
   }
 })
 export default class discussItem extends Vue {
-  role = this.item.reviewer.role || {}
+  role = {}
   created () {
+    this.role = this.item.reviewer.role || {}
   }
 
   /**

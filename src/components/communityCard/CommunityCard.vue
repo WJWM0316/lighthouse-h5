@@ -202,7 +202,7 @@ export default class CommunityCard extends Vue {
 
       .master {
         border-radius: 0 0 3px 3px;
-
+        
         .name {
           .text {
             .setEllipsis();
@@ -258,6 +258,9 @@ export default class CommunityCard extends Vue {
 
       .master {
         padding-bottom: 10px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
       }
     }
 
@@ -297,10 +300,10 @@ export default class CommunityCard extends Vue {
     	justify-content: center;
     	/*flex-wrap: nowrap;*/
     	align-items: center;
-	    width: 100%;
+	    width: 90%;
+      margin: 0 auto;
 	    text-align: center;
       box-sizing: border-box;
-      padding: 12px;
       padding-top: 32px;
       color: #666666;
       line-height: 16px;

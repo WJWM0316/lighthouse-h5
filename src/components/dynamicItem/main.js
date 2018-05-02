@@ -198,28 +198,33 @@ export default class dynamicItem extends Vue {
   isFullText (ref) {
     this.$nextTick(() => {
       const el = this.$refs[ref]
-      const contentText = el.firstChild
-      if (contentText.scrollHeight > contentText.offsetHeight) {
-        const fullText = document.createElement('span')
-        fullText.className = 'full-text open'
-        fullText.innerText = '展开全文'
-        fullText.onclick = (e) => {
-          e.preventDefault()
-          e.stopPropagation()
+      if (el&&el.firstChild) {
+        const contentText = el.firstChild
+        if (contentText.scrollHeight > contentText.offsetHeight) {
+          console.log(contentText.scrollHeight, contentText.offsetHeight)
+          const fullText = document.createElement('span')
+          fullText.className = 'full-text open'
+          fullText.innerText = '展开全文'
+          fullText.onclick = (e) => {
+            e.preventDefault()
+            e.stopPropagation()
 
-          if (fullText.innerText === '展开全文') {
-            contentText.classList.remove('ellipsis')
-            fullText.innerText = '收起全文'
-            fullText.className = 'full-text close'
-          } else {
-            fullText.innerText = '展开全文'
-            contentText.classList.add('ellipsis')
-            fullText.className = 'full-text open'
+            if (fullText.innerText === '展开全文') {
+              contentText.classList.remove('ellipsis')
+              fullText.innerText = '收起全文'
+              fullText.className = 'full-text close'
+            } else {
+              fullText.innerText = '展开全文'
+              contentText.classList.add('ellipsis')
+              fullText.className = 'full-text open'
+            }
           }
+          el.lastChild.innerHTML = ''
+          el.lastChild.appendChild(fullText)
         }
-        el.lastChild.innerHTML = ''
-        el.lastChild.appendChild(fullText)
       }
+
+      
     })
   }
 

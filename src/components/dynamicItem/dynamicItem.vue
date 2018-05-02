@@ -10,8 +10,8 @@
     <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
       <div class="user-masage">
-      	<span class="user-name" :class="role && role.title === '塔主' || role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="role && role.title === '管理员'">管理员</span></span>
-      	<span class="user-intro" v-if="role && role.isShow" v-text="item.masterIntro"></span>
+      	<p class="user-name" :class="role && role.title === '塔主' || role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="role && role.title === '管理员'">管理员</span></p>
+      	<span class="user-intro" v-if="role && role.isShow && item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
       </div>
       <!--头衔-->
       <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
@@ -31,13 +31,15 @@
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
           <!-- 追问 -->
           <div class="content-problem" v-if="problemItem.answerType === 1">
-            <p>追问: {{problemItem.content}}</p>
+            <p :class="{'ellipsis' : isFold}">追问: {{problemItem.content}}</p>
+            <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
           </div>
           <!-- 回答 -->
           <div class="content-problem" v-else>
             <img class="user-image" :src="problemItem.releaseUser.avatar" />
             <!-- 纯文本 -->
-            <p v-if="problemItem.type === 1">{{problemItem.content}}</p>
+            <p v-if="problemItem.type === 1" :class="{'ellipsis' : isFold}">{{problemItem.content}}</p>
+            <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
             <!-- 音频 -->
             <div v-else :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">
               <div class="progress-container">
@@ -132,7 +134,8 @@
 
         <!-- 只有文件 -->
         <div v-if="item.circleType === 4">
-          <p class="content-text">{{item.content}}</p>
+          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
+          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
           <div class="content-file" @click.stop="fileOpen(item.files[0].fileUrl)">
             <img class="file-logo" src="./../../assets/suffix/pdf.png" v-if="fileType === 'pdf'" />
             <img class="file-logo" src="./../../assets/suffix/ppt.png" v-else-if="fileType === 'ppt'" />
@@ -169,7 +172,7 @@
           <!-- 评论按钮 -->
           <button v-if="!hideCommentBtn" @click.stop="comment">
             <span class="icon-pinglun">
-            	<img src="./../../assets/icon/tab_massage2 copy 2@3x.png" />
+            	<img src="./../../assets/icon/tab-massage2 copy 2@3x.png" />
             </span>
             {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>

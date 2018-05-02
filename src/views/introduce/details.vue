@@ -11,7 +11,7 @@
                    :hideCommentArea="true"
                    :isFold = "false"
                    :disableContentClick="true"
-                   :showIdentification="false"
+                   :showIdentification="true"
                    @getUserId="getUserId"
           ></dynamic>
         </div>
@@ -20,7 +20,7 @@
         <div class="container">
           <!-- 评论 -->
           <div class="fixed-box" ref="ceiling-box">
-            <div class="ceiling-box" :class="{navTabName}">
+            <div class="ceiling-box" :class="navTabName">
               <span @click="toggle('comment')">评论({{allTotal}})</span>
               <span @click="toggle('praise')">点赞({{item.favorTotal}})</span>
             </div>
@@ -85,7 +85,9 @@
                       :commentIndex="commentIndex"
                       :sendText="'发送'"
                       :isShow = 'isShow'
+                      @input = "blur"
                       @send="sendComment"
+                      ref="input"
     ></suspension-input>
   </div>
 </template>
@@ -118,6 +120,7 @@
       discussItemList () {
       },
       displaySuspensionInput (val) {
+        // this.isShow = val
       }
     },
     mixins: [ListMixin]
@@ -126,7 +129,6 @@
     dynamicList = []
     commentTotal = 0
     favorTotal = 0
-    classmateList = []
     navTabName = 'comment'
     discussItemList = []
     hotCommentTotal = 0
@@ -135,41 +137,17 @@
     navTabName = 'comment'
     commentIndex = -1
     suspensionInputPlaceholder = '来分享你的想法吧～'
-    displaySuspensionInput = true
+    displaySuspensionInput = false
     curData = {} // 评论回来的数据
     modelType = '' // 评论类型
     classmateList = [] // 点赞列表
+    isFavorList = false
 
     created () {
       this.modelType = this.$route.params.type
       this.pageInit().then(() => {})
     }
-    /**
-     * 切换nav
-     **/
-    toggle (targetName) {
-      if (this.navTabName !== targetName) {
-        this.navTabName = targetName
-        if (targetName === 'praise') {
-          if (this.classmateList) {
-            const params = {
-              id: this.$route.params.sourceId,
-              modelType: 'circle',
-              page: 1,
-              pageCount: 20
-            }
-            this.getFavorList(params).then(res => {
-              const {list, total} = res
-              this.classmateList = list
-              this.favorTotal = total
-              this.$router.replace({path: this.$route.path, query: {target: 'praise'}})
-            })
-          }
-        } else {
-          this.$router.replace({path: this.$route.path})
-        }
-      }
-    }
+   
     // ------------------- 评论区 ----------------------
     operation (e) {
       const {eventType, itemIndex, item, commentType} = e
@@ -212,11 +190,12 @@
      * @returns {Promise.<void>}
      */
     async comment ({item, itemIndex, commentType}) {
+      console.log(this.$refs.input.isFocused, 1111)
       if (itemIndex > -1) {
         this.suspensionInputPlaceholder = '回复' + item.reviewer.realName + ':'
         this.commentIndex = itemIndex
       } else {
-        this.suspensionInputPlaceholder = '写评论'
+        this.suspensionInputPlaceholder = '来分享你的想法吧～'
         this.commentIndex = -1
       }
       this.displaySuspensionInput = true
@@ -334,7 +313,7 @@
     toggle (targetName) {
       if (this.navTabName !== targetName) {
         this.navTabName = targetName
-        if (targetName === 'praise') {
+        if (targetName === 'praise' && !this.isFavorList) {
           let modelType = ''
           this.isShow = false
           modelType = 'circle'
@@ -355,19 +334,21 @@
             page: 1,
             pageCount: 1000
           }
-          this.$router.replace({path: this.$route.path, query: {target: 'praise'}})
-          if (this.classmateList.length === 0) {
-            this.getFavorList(params).then(res => {
-              this.classmateList = res.list
-              console.log(res)
-            })
-          }
+          this.getFavorList(params).then(res => {
+            this.classmateList = res.list
+            this.isFavorList = true
+          })
         } else {
           this.isShow = true
         }
       }
     }
 
+    async blur () {
+      console.log(11111111111111)
+      this.suspensionInputPlaceholder = '来分享你的想法吧～'
+      this.commentIndex = -1
+    }
 
     /**
      * 发送评论
@@ -390,12 +371,12 @@
       await setSubmitCommentApi(params).then(data => {
         this.curData = data
         this.$vux.toast.text('评论成功', 'bottom')
-        this.suspensionInputPlaceholder = '写评论'
-        this.suspensionInputPlaceholder = '写评论'
+        this.suspensionInputPlaceholder = '来分享你的想法吧～'
+        this.commentIndex = -1
         let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
         this.pagination.end = false // 初始化数据，必定不是最后一页
         this.getList({ page: page , type: 'comment'})
-        this.commentIndex = -1
+        
       }).catch(e => {
         this.$vux.toast.text('评论失败', 'bottom')
         this.curData = {}
@@ -558,6 +539,8 @@
   .all-details {
     box-sizing: border-box;
     height: 100%;
+    width: 100%;
+    overflow: hidden;
     &.pdBtom {
       padding-bottom: 50px;
     }

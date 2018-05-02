@@ -114,6 +114,14 @@ export default class QuestionItem extends Vue {
     5: '已过期'
   }
 
+  created () {
+    console.log("111111113333333333333333333",this.model)
+    /*this.model.answer[0].voice = {
+      status: 'default',
+      progress: 0
+    }*/
+  }
+
   /**
    * 点击头像，跳转个人详情
    */

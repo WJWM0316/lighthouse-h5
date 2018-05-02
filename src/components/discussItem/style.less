@@ -38,9 +38,6 @@
       .user-career, .user-name {
         width: 100%;
         .setEllipsis();
-        &.user-career {
-          width: 90%;
-        }
         &.master {
             color: #d7ab70;
           }
@@ -79,7 +76,7 @@
     flex-grow: 1;
     padding: 15px 0;
     font-size: 15px;
-
+    width: 280px;
     &.border {
       border-bottom: solid 1px #ededed; /* no */
     }
@@ -146,6 +143,8 @@
       & .praise-block {
         padding: 5px 0;
         display: flex;
+        box-sizing: border-box;
+        width: 260px;
         justify-content: space-between;
         align-items: center;
         & .praise-total {

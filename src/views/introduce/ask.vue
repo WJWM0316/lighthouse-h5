@@ -231,14 +231,16 @@
 
         const problem = this.pageInfo.problem || []
         problem.forEach(item => {
-          const {answers = []} = item
-          answers.forEach(answer => {
-            answer.voice = {
+          const {answer = []} = item
+          answer.forEach(data => {
+            data.voice = {
               status: 'default',
               progress: 0
             }
           })
         })
+
+        console.log(problem)
       } catch (error) {
         this.$vux.toast.text(error.message, 'bottom')
       }

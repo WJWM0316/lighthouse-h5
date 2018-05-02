@@ -26,11 +26,12 @@
               <p class="chose-tab-con">{{item.title}}</p>
           </li>
         </ul>
-        <div class="advertising_list" >
-            <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
-                <img class="opt_pic" :src="item.imgUrl"></img>
-            </div>
-        </div>
+      </div>
+
+      <div class="advertising_list" v-if="navTabName === 'picked'&&advertisingList&&advertisingList.length>0">
+          <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
+              <img class="opt_pic" :src="item.imgUrl"></img>
+          </div>
       </div>
       <!-- 轮播图 -->
       <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
@@ -310,6 +311,8 @@ export default class HomeIndex extends Vue {
           }
         })
         res[tagIndex].selected = true
+        console.log(res)
+
         this.communityTagList = res
       }
     })
@@ -457,7 +460,8 @@ export default class HomeIndex extends Vue {
 @import "../../styles/mixins";
 
 .p-home-index {
-  padding: 50px 0;
+  //padding: 50px 0;
+  padding-top: 49px;
   box-sizing: border-box;
 
   &.picked {
@@ -533,10 +537,9 @@ export default class HomeIndex extends Vue {
     }
     &.joined span:nth-of-type(2),
     &.picked span:nth-of-type(1) {
-    	font-weight: bold;
       font-size: 24px;
       position: relative;
-      font-family: 'PingFangSC-Medium';
+      font-weight: 500;
       color: #354048;
       letter-spacing: -0.26px;
     }
@@ -547,7 +550,8 @@ export default class HomeIndex extends Vue {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 5px 0 15px 0;
+    padding-bottom: 15px;
+    padding-top: 8px;
     .opt_blo {
       width: 111px;
       height: 48px;
