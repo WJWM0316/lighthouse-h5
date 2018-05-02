@@ -190,7 +190,7 @@
       <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || (item.commentTotal > 0 && item.comments && item.comments.length > 0))">
         <!-- 点赞信息 -->
           <div class="praise-block" v-if="item.favorTotal > 0">
-            <img class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+            <img class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
             <div class="praise-name">
                 <span class="favor-name" v-for="(favor, favorIndex) in item.favors" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
             </div>

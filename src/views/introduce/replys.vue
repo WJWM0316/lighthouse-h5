@@ -49,7 +49,7 @@
         <!-- 点赞按钮 -->
         <button @click="operation({eventType: 'praise'})">
           <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/zan_click.png" />
-          <img v-else class="icon-zan" src="./../../assets/icon/zan2@3x.png" />
+          <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
           {{item.favorTotal > 0 ? item.favorTotal : '点赞'}}
         </button>
         <span class="split"></span>
