@@ -80,8 +80,8 @@
         <p>开课倒计时</p>
         <p>{{pageInfo.duration}}</p>
       </div>
-      <p v-else-if="isEnd">课堂已关闭，停止报名</p>
-      <p v-else-if="pageInfo.communityStatus === 2">课堂已下线，停止报名</p>
+      <p v-else-if="isEnd">灯塔已关闭，停止报名</p>
+      <p v-else-if="pageInfo.communityStatus === 2">灯塔已下线，停止报名</p>
       <p v-else-if="pageInfo.remainingJoinNum <= 0">已满员，停止报名</p>
       <div class="btn-box" v-else>
         <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
