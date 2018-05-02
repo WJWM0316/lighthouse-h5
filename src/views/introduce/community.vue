@@ -979,6 +979,7 @@
         color: #354048;
         & .desc {
           position: relative;
+          color:#354048
         }
         & .answer-count {
           .setTag();
@@ -1025,6 +1026,7 @@
         color: #666666;
         font-size: 16px;
         border-style: none;
+        color: #354048;
         & .desc {
           position: relative;
           &::after{
