@@ -205,7 +205,6 @@ export default class exploreItem extends Vue {
           fullText.onclick = (e) => {
             e.preventDefault()
             e.stopPropagation()
-
             if (fullText.innerText === '展开全文') {
               contentText.classList.remove('ellipsis')
               fullText.innerText = '收起全文'

@@ -191,7 +191,7 @@
         this.suspensionInputPlaceholder = '回复' + item.reviewer.realName + ':'
         this.commentIndex = itemIndex
       } else {
-        this.suspensionInputPlaceholder = '写评论'
+        this.suspensionInputPlaceholder = '来分享你的想法吧～'
         this.commentIndex = -1
       }
       this.displaySuspensionInput = true
@@ -362,8 +362,7 @@
       await setSubmitCommentApi(params).then(data => {
         this.curData = data
         this.$vux.toast.text('评论成功', 'bottom')
-        this.suspensionInputPlaceholder = '写评论'
-        this.suspensionInputPlaceholder = '写评论'
+        this.suspensionInputPlaceholder = '来分享你的想法吧～'
         let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
         this.pagination.end = false // 初始化数据，必定不是最后一页
         this.getList({ page: page , type: 'comment'})
