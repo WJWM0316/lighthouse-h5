@@ -204,6 +204,8 @@
       margin-left: 15px;
       padding: 20px 0;
       border-bottom: 1px solid #ededed; /* no */
+      flex: 1;
+      overflow: hidden;
       .desc-top{
         margin-bottom: 7px;
         .setEllipsis(285px);
@@ -243,7 +245,6 @@
           height: 20px;
         }
         .desc-middle-return-two{
-          margin-right: 4px;
           font-size: 13px
         }
       }

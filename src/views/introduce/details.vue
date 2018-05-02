@@ -33,7 +33,7 @@
               </div>
               <!-- 全部评论 -->
               <div class="hot-area" v-if="index === hotCommentTotal">
-                <i class="hot-icon"><img src="../../assets/icon/tab-massage-1@3x.png" alt=""></i>全部评论
+                <i class="hot-icon"><img src="../../assets/icon/tab-massage-3@3x.png" alt=""></i>全部评论
               </div>
               <discuss-item 
                           :item="item"
