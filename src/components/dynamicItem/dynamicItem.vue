@@ -41,7 +41,7 @@
             <p v-if="problemItem.type === 1" class="content-text" :class="{'ellipsis' : isFold}">{{problemItem.content}}</p>
             <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
             <!-- 音频 -->
-            <div v-else :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">
+            <div v-if="problemItem.type === 2" :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">
               <div class="progress-container">
                 <div class="progress" :style="{width: (problemItem.progress ? problemItem.progress : 0) + '%'}"></div>
               </div>
