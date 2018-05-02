@@ -20,7 +20,7 @@
               <template v-if="cardType === 'picked'">
                   <span v-if="community.joinPrice > 0 && showFreeIdentification" class="price">¥ {{community.joinPrice}}</span>
                   <span v-if="community.joinPrice === 0 && showFreeIdentification" class="price">免费</span>
-                  <span v-text="community.master && community.master.career" class="job"></span>
+                  <span v-text="community.master && community.masterIntro" class="job"></span>
               </template>
               
               

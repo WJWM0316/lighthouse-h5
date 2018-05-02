@@ -15,7 +15,7 @@
           <p class="time">{{model.releaseTime * 1000 | date('YYYY-MM-DD HH:mm')}}</p>
         </div>
       </template>
-      <div class="addon-text">{{statusOptions[model.status]}}</div>
+      <div class="addon-text">{{statusOptions[model.status]}}<span v-if='model.payType===1'>（付费）</span></div>
     </div>
 
     <div class="bd">

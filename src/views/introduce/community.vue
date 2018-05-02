@@ -5,8 +5,8 @@
 
     <!-- tab -->
     <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed2': true}" v-if="isCommunityTitleFixed">
-      <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
-      <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
+      <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>塔主内容</span></a>
+      <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>成员交流</span></a>
     </div>
 
     <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
@@ -66,8 +66,8 @@
         <!-- 主体内容块 -->
         <div class="fixed-box" ref="community-title" v-if='pageInfo.isCourse==1'>
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
-            <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>导师内容</span></a>
-            <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>学员交流</span></a>
+            <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>塔主内容</span></a>
+            <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>成员交流</span></a>
           </div>
         </div>
         <div class="big-shot-community-content">
