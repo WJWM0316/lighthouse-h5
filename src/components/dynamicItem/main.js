@@ -66,7 +66,13 @@ import moment from 'moment'
     disableUserClick: {
       type: Boolean,
       default: false
+    },
+    // 临时下划线取消
+    noBorder: {
+      type: Boolean,
+      default: false
     }
+    
   },
   computed: {
     picList () {

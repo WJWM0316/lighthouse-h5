@@ -3,12 +3,15 @@
 .dynamic-item {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 20px;
-	//border-bottom: solid 1px #ededed;
+  padding: 0 20px;
+	border-bottom: solid 1px #ededed;
+  &.testNoBorder {
+    border-bottom: none;
+  }
   & .ellipsis3 {
     .setEllipsisLn(3)
   }
-//overflow: hidden;
+  //overflow: hidden;
   & .left {
     flex: 0 0 auto;
     padding: 25px 0;
@@ -67,7 +70,7 @@
             color: #4080AD;
             & .administrators {
               color: #d7ab70;
-              line-height: 16px;
+              line-height: 14px;
               width: 51px;
               height: 16px;
               border: 1px solid #D7AB70;

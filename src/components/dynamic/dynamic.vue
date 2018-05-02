@@ -15,6 +15,7 @@
                   :disableContentClick="disableContentClick"
                   :disableUserClick="disableUserClick"
                   :isFold="isFold"
+                  :noBorder="noBorder"
                   :isNeedHot="isNeedHot"
                   @audioEvent="audioEvent"
                   @videoEvent="videoEvent"
@@ -98,6 +99,11 @@
       // 拦截操作 传入拦截事件名称
       disableOperationArr: {
         type: Array
+      },
+      // 临时下划线取消
+      noBorder: {
+        type: Boolean,
+        default: false
       }
     },
     components: {

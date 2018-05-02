@@ -412,6 +412,7 @@
      * 点击问题列表追问按钮，唤起悬浮输入框
      * @param {Number} index 问题索引
      */
+     
     handleWakeUpPump (index) {
       this.commentIndex = index
       this.displaySuspensionInput = true
