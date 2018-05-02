@@ -198,7 +198,6 @@ export default class dynamicItem extends Vue {
   isFullText (ref) {
     this.$nextTick(() => {
       const el = this.$refs[ref]
-      console.log(el)
       if (el && el.firstChild) {
         const contentText = el.firstChild
 

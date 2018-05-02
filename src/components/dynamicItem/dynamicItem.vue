@@ -25,12 +25,13 @@
       <!-- 发表内容 -->
       <!--<div class="publish-content problem" v-if="item.modelType == 'post'">-->
       <div class="publish-content problem" v-if="item.modelType === 'problem'">
-
-        <p class="content-text" :class="{'ellipsis' : isFold}">问：{{item.content}}</p>
-        <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
+        <div ref="circle-content">
+          <p class="content-text" :class="{'ellipsis' : isFold}">问：{{item.content}}</p>
+          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
+        </div>
         <div v-for="problemItem, problemIndex in item.answers" :key="problemIndex">
           <!-- 追问 -->
-          <div class="content-problem" v-if="problemItem.answerType === 1">
+          <div class="content-problem" ref="circle-content" v-if="problemItem.answerType === 1">
             <p class="content-text" :class="{'ellipsis' : isFold}">追问: {{problemItem.content}}</p>
             <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
           </div>
@@ -38,8 +39,10 @@
           <div class="content-problem" v-else>
             <img class="user-image" :src="problemItem.releaseUser.avatar" />
             <!-- 纯文本 -->
-            <p v-if="problemItem.type === 1" class="content-text" :class="{'ellipsis' : isFold}">{{problemItem.content}}</p>
-            <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
+            <div ref="circle-content">
+              <p v-if="problemItem.type === 1" class="content-text" :class="{'ellipsis' : isFold}">{{problemItem.content}}</p>
+              <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
+            </div>
             <!-- 音频 -->
             <div v-if="problemItem.type === 2" :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">
               <div class="progress-container">
