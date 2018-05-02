@@ -197,7 +197,7 @@ export default class exploreItem extends Vue {
       const el = this.$refs[ref]
       if (el&&el.firstChild) {
         const contentText = el.firstChild
-        if (contentText.scrollHeight-1 > contentText.offsetHeight) {
+        if (contentText.scrollHeight-10 > contentText.offsetHeight) {
           console.log(contentText.scrollHeight, contentText.offsetHeight)
           const fullText = document.createElement('span')
           fullText.className = 'full-text open'

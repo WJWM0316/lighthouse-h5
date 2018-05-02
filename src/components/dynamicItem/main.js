@@ -198,9 +198,11 @@ export default class dynamicItem extends Vue {
   isFullText (ref) {
     this.$nextTick(() => {
       const el = this.$refs[ref]
-      if (el&&el.firstChild) {
+      if (el && el.firstChild) {
         const contentText = el.firstChild
+
         if (contentText.scrollHeight > contentText.offsetHeight) {
+          console.log(el.firstChild)
           console.log(contentText.scrollHeight, contentText.offsetHeight)
           const fullText = document.createElement('span')
           fullText.className = 'full-text open'
