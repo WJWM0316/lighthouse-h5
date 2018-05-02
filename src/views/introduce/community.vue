@@ -108,7 +108,7 @@
         <button @click="postQuestions" v-if="this.pageInfo.isCourse===1">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>我要提问</span>
         </button>
-        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type==1"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
+        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
         <button @click="posted" class="post-tip" v-else><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
     </div>
@@ -233,9 +233,10 @@
 
     created () {
     	let titleBoxShow=true;
-//  	console.log("5555555555555555",this.$route.query);
+    	console.log("5555555555555555",this.$route.query);
       if (this.$route.query.type !== undefined) {
-        this.showType = parseInt(this.$route.query.type)
+        this.showType = this.$route.query.type
+//      this.type = this.$route.query.type
       }
       console.log('this.showType', this.showType)
       wxUtil.reloadPage()
