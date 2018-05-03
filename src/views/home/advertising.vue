@@ -170,7 +170,8 @@ export default class HomeIndex extends Vue {
     text-align: center;
     font-size: 14px;
     color: #929292;
-    font-family: PingFangSC-Ligh
+    //font-family: PingFangSC-Light;
+    font-weight: 300;
   }
 }
 

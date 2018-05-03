@@ -553,20 +553,22 @@
       white-space:nowrap;
       padding-top: 20px;
       .tea_txt {
-        font-family: 'PingFangSC-Medium';
+        //font-family: 'PingFangSC-Medium';
+        font-weight: 500;
         font-size: 16px;
         color: #354048;
         height: 20px;
         line-height: 20px;
         margin-bottom: 10px;
         .txt {
-          font-family: 'PingFangSC-Regular';
+          //font-family: 'PingFangSC-Regular';
           color: #666666;
           padding-left: 10px;
         }
       }
       .sel_teach {
-        font-family: 'PingFangSC-Medium';
+        //font-family: 'PingFangSC-Medium';
+        font-weight: 500;
         font-size: 16px;
         color: #354048;
         letter-spacing: 0;
@@ -574,7 +576,7 @@
         height: 20px;
         margin-top: 17.5px;
         .sel_tit {
-          font-family: 'PingFangSC-Regular';
+          //font-family: 'PingFangSC-Regular';
           font-size: 14px;
           color: #929292;
 
@@ -637,13 +639,14 @@
             border-radius: 40px;
             background: #FFE266;
 
-            font-family: 'PingFangSC-Light';
+            //font-family: 'PingFangSC-Light';
+            font-weight: 300;
             font-size: 10px;
             color: #354048;
             text-align: center;
           }
           .tea_name {
-            font-family: 'PingFangSC-Regular';
+            //font-family: 'PingFangSC-Regular';
             font-size: 14px;
             color: #354048;
             text-align: center;

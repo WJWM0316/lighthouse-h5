@@ -278,7 +278,8 @@
 								width: 32px;
 								height: 15px;
 								position: absolute;
-								font-family: PingFangSC-Light;
+								//font-family: PingFangSC-Light;
+								font-weight: 300;
 								bottom: -2.5px;
 								left: 50%;
 								transform: translateX(-50%);
@@ -346,7 +347,8 @@
 								line-height: 20px;
 							}
 							.classmate-career{
-								font-family: PingFangSC-Light;
+								//font-family: PingFangSC-Light;
+								font-weight: 300;
 								display: inline-block;
 								width: 100%;
 								white-space: nowrap;
