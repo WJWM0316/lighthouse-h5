@@ -139,7 +139,7 @@
      * 跳转详情页
      */
     jump (e) {
-      this.$router.push('/userInfo/' + e + '/details')
+      // this.$router.push('/userInfo/' + e + '/details')
     }
     /**
      * 切换nav
