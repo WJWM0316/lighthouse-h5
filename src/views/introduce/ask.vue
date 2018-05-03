@@ -6,7 +6,7 @@
 
       <!-- 选择提问导师 -->
       <div class="teachers_sel" v-if="teachers.length>0">
-        <div class="tea_txt">选择提问导师<span class="txt">（{{teachers.length}}人）</span></div>
+        <div class="tea_txt">选择提问对象<span class="txt">（{{teachers.length}}人）</span></div>
 
         <div class="tea_cont" scroll-x="true">
             <div v-for="(item, index) in teachers" :key="index" class="teacher "
@@ -40,7 +40,7 @@
         </div> -->
 
         <div class="user-input">
-        <textarea placeholder="点此输入您想要向大咖提问的问题"
+        <textarea placeholder="点击输入你想问的问题"
                   :maxlength="lengths.textMa"
                   v-model="askContent"/>
           <p class="user-input-length">{{strLength}}/{{lengths.textMax}}</p>
@@ -60,8 +60,8 @@
         </button>
 
         <div class="user-desc">
-          <p v-if="isHasFree > 0">你还有 {{isHasFree}} 次机会向导师免费提问，你的提问将100%得到答复</p>
-          <p v-else>你可以以每条 ￥{{pageInfo.problemPrice}} 的价格向导师进行付费提问。</p>
+          <p v-if="isHasFree > 0">你还有 {{isHasFree}} 次机会免费提问，你的提问将100%得到答复</p>
+          <p v-else style="color: rgb(188, 188, 188);">你可以以每条 <span style="color: #D7AB70;">￥{{pageInfo.problemPrice}}</span> 的价格进行付费提问。</p>
         </div>
       </div>
 
