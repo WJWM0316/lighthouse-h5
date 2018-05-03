@@ -103,6 +103,12 @@
 				console.log("我是获取时间",res);
 				that.community=res;
 				num=res.joinedNum;
+				//获取同学列表
+				classmatesApi({communityId:id.communityId,page:1,pageCount:num}).then(res=>{
+					that.classmate=res.peoples;
+					that.role=res.role;
+					console.log("同学列表",res)
+				})
 			})
 			
 			//申请塔主和嘉宾列表
@@ -112,12 +118,7 @@
 //				that.role=res.role;
 //				console.log("嘉宾列表",that.role);
 //			});
-			//获取同学列表
-			classmatesApi({communityId:id.communityId,page:1,pageCount:8}).then(res=>{
-				that.classmate=res.peoples;
-				that.role=res.role;
-				console.log("同学列表",res)
-			})
+			
 			
 		},
 		methods:{

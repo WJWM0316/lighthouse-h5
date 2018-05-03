@@ -968,8 +968,10 @@
       right: 0;
       left: 0;
       display: flex;
+      width: 100%;
 
       & button {
+      	width: 50%;
         flex-grow: 1;
         background-color: #ffffff;
         border-radius: 0;
@@ -1031,15 +1033,6 @@
         color: #354048;
         & .desc {
           position: relative;
-          &::after{
-          	content: '';
-          	height: 24px;
-          	border: 0.5px solid #DCDCDC;
-          	position: absolute;
-          	right: -50px;
-          	top: 3px;
-          }
-          
         }
         & .answer-count {
           .setTag();
@@ -1060,6 +1053,21 @@
           /*color: #FFF;*/
           /*padding: 2px 3px;*/
         }
+      }
+      & button:first-child{
+      	position: relative;
+      	
+      	&::after{
+          	content: '';
+          	height: 24px;
+          	width: 1px;
+          	/*border: 1px solid #DCDCDC;*/
+          	background-color: #DCDCDC;
+          	position: absolute;
+          	right:0px;
+          	top: 50%;
+          	transform: translateY(-50%);
+          }
       }
       & button:last-of-type {
       	border-right: 1px solid #DCDCDC;
