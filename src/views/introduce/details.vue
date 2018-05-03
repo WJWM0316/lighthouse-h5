@@ -12,6 +12,7 @@
                    :isFold = "false"
                    :disableContentClick="true"
                    :showIdentification="true"
+                   :noBorder ="true"
                    @getUserId="getUserId"
           ></dynamic>
         </div>

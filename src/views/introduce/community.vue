@@ -822,7 +822,8 @@
         flex: 1 1 auto;
         text-align: center;
         font-size: 16px;
-        font-family: PingFangSC-Medium;
+        //font-family: PingFangSC-Medium;
+        font-weight: 500;
         &:active {
           background: #f1f1f1;
         }
@@ -978,7 +979,7 @@
         line-height: 50px;
         font-size: 16px;
         border-style: none;
-        font-family: PingFangSC-Regular;
+        //font-family: PingFangSC-Regular;
         color: #354048;
         & .desc {
           position: relative;

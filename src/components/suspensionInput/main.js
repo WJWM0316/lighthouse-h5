@@ -58,6 +58,8 @@ export default class suspensionInput extends Vue {
   send () {
     const value = this.suspensionInputContent
     const commentIndex = this.commentIndex
+
+    console.log(1111)
     if (!value) {
       this.$vux.toast.text('内容不能为空', 'bottom')
       return

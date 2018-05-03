@@ -386,7 +386,8 @@ export default class CommunityCard extends Vue {
   		line-height: 22px;
   		text-align: center;
   		padding: 0 12%;
-  		font-family: PingFangSC-Medium;
+  		//font-family: PingFangSC-Medium;
+      font-weight: 500;
   	}
   }
 
@@ -401,7 +402,8 @@ export default class CommunityCard extends Vue {
     }
 
     .desc {
-      font-family: PingFangSC-Light;
+      //font-family: PingFangSC-Light;
+      font-weight: 300;
       display: block;
       margin-top: 6px;
       margin-bottom: 23px;
@@ -415,7 +417,8 @@ export default class CommunityCard extends Vue {
       font-size: 14px;
       line-height: 18px;
       color: #929292;
-      font-family: PingFangSC-Light;
+      //font-family: PingFangSC-Light;
+      font-weight: 300;
       .left {
         flex: 1 1 auto;
 
