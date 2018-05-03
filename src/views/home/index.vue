@@ -631,6 +631,7 @@ export default class HomeIndex extends Vue {
         box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.08);
         margin-bottom: 10px;
         border-radius: 6px;
+        vertical-align: top;
         &:last-child {
           margin-right: 15px;
         }
