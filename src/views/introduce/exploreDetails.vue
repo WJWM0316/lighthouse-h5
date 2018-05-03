@@ -53,7 +53,7 @@
                           :item="item"
                           :key="index"
                           :itemIndex="index"
-                          :disableUserClick="false"
+                          :disableUserClick="true"
                           :disableContentClick="true"
                           :disableCommentAreaClick="true"
                           @operation="operation">
