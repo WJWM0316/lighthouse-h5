@@ -644,7 +644,6 @@ export default class HomeIndex extends Vue {
           width: 132px;
           height: 36px;
           font-size: 14px;
-          font-weight: 700;
           line-height: 1.29;
           margin: 10px 10px 11px 0; 
           padding-left: 9px;
