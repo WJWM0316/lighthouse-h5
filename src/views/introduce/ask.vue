@@ -640,7 +640,7 @@
             background: #FFE266;
 
             //font-family: 'PingFangSC-Light';
-            font-weight: 300;
+            font-weight: 100;
             font-size: 10px;
             color: #354048;
             text-align: center;

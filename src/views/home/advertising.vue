@@ -171,7 +171,7 @@ export default class HomeIndex extends Vue {
     font-size: 14px;
     color: #929292;
     //font-family: PingFangSC-Light;
-    font-weight: 300;
+    font-weight: 100;
   }
 }
 
@@ -267,14 +267,14 @@ export default class HomeIndex extends Vue {
       border-radius: 22px;
       border: solid 1px #d7ab70; /* no */
       color: #d7ab70;
-      font-weight: 300;
+      font-weight: 100;
     }
   }
 
   & .community-created {
     margin-top: 15px;
     text-align: center;
-    font-weight: 300;
+    font-weight: 100;
     & > span {
       color: #929292;
       text-decoration: underline;

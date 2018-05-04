@@ -133,7 +133,7 @@
         box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
         align-items: center;
         padding: 12.5px 20px;
-        font-weight: 300;
+        font-weight: 100;
         color: #929292;
 
         .user-img {
@@ -201,7 +201,7 @@
             height: 29px;
             margin-right: 15px;
             font-size: 16px;
-            font-weight: 300;
+            font-weight: 100;
             font-style: normal;
             text-align: center;
             line-height: 29px;
@@ -218,7 +218,7 @@
             white-space: nowrap;
             margin-right: 15px;
             color: #666;
-            font-weight: 300;
+            font-weight: 100;
           }
           .rank-count {
             font-size: 13px;
