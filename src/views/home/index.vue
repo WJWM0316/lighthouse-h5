@@ -649,6 +649,8 @@ export default class HomeIndex extends Vue {
           padding-left: 9px;
 
           //font-family: 'PingFangSC-Medium';
+
+          font-weight: 700;
           color: #354048;
           letter-spacing: 0;
           .setEllipsisLn();

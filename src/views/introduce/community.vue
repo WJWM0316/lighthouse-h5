@@ -823,8 +823,9 @@
         text-align: center;
         font-size: 16px;
         //font-family: PingFangSC-Medium;
-        font-weight: 700;
+        font-weight: 300;
         &:active {
+          font-weight: 700;
           background: #f1f1f1;
         }
       }

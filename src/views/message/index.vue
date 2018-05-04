@@ -321,7 +321,7 @@
     }
     .message-pannel {
       background: #fff;
-      font-weight: 600;
+      font-weight: 700;
       margin: 0 15px;
       padding: 15px 0;
       border-bottom: 1px solid #ededed; /* no */
