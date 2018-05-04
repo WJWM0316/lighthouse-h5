@@ -530,7 +530,7 @@ export default class HomeIndex extends Vue {
         font-size: 15px;
         color: #354048;
         //font-family: 'PingFangSC-Light';
-        font-weight: 100;
+        font-weight: 300;
         letter-spacing: 0;
         //line-height: 40px;
       }
@@ -538,10 +538,9 @@ export default class HomeIndex extends Vue {
     &.joined span:nth-of-type(2),
     &.picked span:nth-of-type(1) {
       //font-family: PingFangSC-Medium;
-      font-weight: 500;
+      font-weight: 700;
       font-size: 24px;
       position: relative;
-      font-weight: 500;
       color: #354048;
       letter-spacing: -0.26px;
     }
@@ -585,7 +584,7 @@ export default class HomeIndex extends Vue {
     height: 40px;
     overflow-y: hidden;
     overflow-x: auto;
-    font-weight: 100;
+    font-weight: 300;
     white-space: nowrap; /*不换行*/
     padding: 0 15px;
     background: #f8f8f8;
@@ -601,7 +600,7 @@ export default class HomeIndex extends Vue {
       }
 
       &.selected {
-        font-weight: 500;
+        font-weight: 700;
         color: #354048;
         
         &::before {
@@ -645,7 +644,7 @@ export default class HomeIndex extends Vue {
           width: 132px;
           height: 36px;
           font-size: 14px;
-          font-weight: 500;
+          font-weight: 700;
           line-height: 1.29;
           margin: 10px 10px 11px 0; 
           padding-left: 9px;
@@ -748,14 +747,14 @@ export default class HomeIndex extends Vue {
       border-radius: 22px;
       border: solid 1px #d7ab70; /* no */
       color: #d7ab70;
-      font-weight: 100;
+      font-weight: 300;
     }
   }
 
   & .community-created {
     margin-top: 15px;
     text-align: center;
-    font-weight: 100;
+    font-weight: 300;
     & > span {
       color: #929292;
       text-decoration: underline;

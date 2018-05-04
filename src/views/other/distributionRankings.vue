@@ -101,7 +101,7 @@
       box-sizing: border-box;
 
       .title {
-        font-weight: 100;
+        font-weight: 300;
         margin: 0 20px;
       }
 
@@ -133,7 +133,7 @@
         box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
         align-items: center;
         padding: 12.5px 20px;
-        font-weight: 100;
+        font-weight: 300;
         color: #929292;
 
         .user-img {
@@ -150,7 +150,7 @@
           & p:nth-of-type(1) {
             margin-bottom: 10px;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 700;
             color: #354048;
             text-overflow:ellipsis;
             white-space: nowrap;
@@ -163,7 +163,7 @@
           font-size: 11px;
           & p:nth-of-type(1) {
             margin-bottom: 5px;
-            font-weight: 500;
+            font-weight: 700;
             font-size: 34px;
             color: #354048;
           }
@@ -201,7 +201,7 @@
             height: 29px;
             margin-right: 15px;
             font-size: 16px;
-            font-weight: 100;
+            font-weight: 300;
             font-style: normal;
             text-align: center;
             line-height: 29px;
@@ -218,7 +218,7 @@
             white-space: nowrap;
             margin-right: 15px;
             color: #666;
-            font-weight: 100;
+            font-weight: 300;
           }
           .rank-count {
             font-size: 13px;

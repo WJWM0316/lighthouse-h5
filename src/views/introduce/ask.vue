@@ -554,7 +554,7 @@
       padding-top: 20px;
       .tea_txt {
         //font-family: 'PingFangSC-Medium';
-        font-weight: 500;
+        font-weight: 700;
         font-size: 16px;
         color: #354048;
         height: 20px;
@@ -568,7 +568,7 @@
       }
       .sel_teach {
         //font-family: 'PingFangSC-Medium';
-        font-weight: 500;
+        font-weight: 700;
         font-size: 16px;
         color: #354048;
         letter-spacing: 0;
@@ -640,7 +640,7 @@
             background: #FFE266;
 
             //font-family: 'PingFangSC-Light';
-            font-weight: 100;
+            font-weight: 300;
             font-size: 10px;
             color: #354048;
             text-align: center;

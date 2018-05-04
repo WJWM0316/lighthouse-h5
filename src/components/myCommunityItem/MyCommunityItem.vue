@@ -221,7 +221,7 @@ export default class MyComponentItem extends Vue {
       padding: 14px 15px 12px;
       line-height: 24px;
       font-size: 13px;
-      font-weight: 100;
+      font-weight: 300;
       color: @font-color-default;
 
       &:active {

@@ -823,7 +823,7 @@
         text-align: center;
         font-size: 16px;
         //font-family: PingFangSC-Medium;
-        font-weight: 500;
+        font-weight: 700;
         &:active {
           background: #f1f1f1;
         }
@@ -837,7 +837,7 @@
       }
       &.circles .item:first-of-type span,
       &.forum .item:last-of-type span {
-        font-weight: 500;
+        font-weight: 700;
         position: relative;
       }
       &.circles .item:first-of-type span:after,

@@ -280,7 +280,7 @@
 								height: 15px;
 								position: absolute;
 								//font-family: PingFangSC-Light;
-								font-weight: 100;
+								font-weight: 300;
 								bottom: -2.5px;
 								left: 50%;
 								transform: translateX(-50%);
@@ -349,7 +349,7 @@
 							}
 							.classmate-career{
 								//font-family: PingFangSC-Light;
-								font-weight: 100;
+								font-weight: 300;
 								display: inline-block;
 								width: 100%;
 								white-space: nowrap;

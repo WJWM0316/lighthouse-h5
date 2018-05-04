@@ -327,7 +327,7 @@
       border-bottom: 1px solid #ededed; /* no */
     }
     .exchange-wx {
-      font-weight: 500;
+      font-weight: 700;
       margin: 0px 15px;
       position: relative;
       height: 49px;
