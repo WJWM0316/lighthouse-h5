@@ -25,7 +25,7 @@
         <!--</div>-->
       </div>
 
-      <div class="module" style="min-height:800px">
+      <div class="module" style="min-height:400px">
         <div class="module-title">
         	<!--<div class="hr"></div>-->
           <p>关于社区</p>
