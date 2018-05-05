@@ -36,6 +36,8 @@
         </div>
         <div class="module-content h5-code" v-html="pageInfo.intro">
         </div>
+        <!-- 添加 空格解决苹果6s 不能滑动bug -->
+        <div style="height:50px"></div>
       </div>
       <div class="how-to-play">
         <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/howplay/index.html">
