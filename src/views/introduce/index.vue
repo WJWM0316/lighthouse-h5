@@ -34,7 +34,7 @@
           <!--<span class="module-title-tip-line"></span>
           <div class="module-title-tip">关于塔主</div>-->
         </div>
-        <div class="module-content h5-code" v-html="pageInfo.intro">
+        <div class="module-content h5-code" v-html="pageInfo.intro" style="padding-bottom:100px">
         </div>
         <!-- 添加 空格解决苹果6s 不能滑动bug -->
         <div style="height:50px"></div>
