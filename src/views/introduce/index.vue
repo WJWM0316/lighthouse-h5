@@ -5,7 +5,7 @@
 
     <div class="container" ref="big-shot-introduce-container" :class="{ 'no-pdb': !completelyShow }">
       <div class="header">
-        
+
         <community-card ref="headCard" :community="pageInfo" :type="2" />
         <div class="share-group fixed">
           <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
@@ -405,7 +405,9 @@
         })
       })
       const { autoPay=''} = this.$route.query
+      console.log('autoPay', autoPay)
       if (autoPay) {
+        alert(autoPay)
         let that = this
         that.payIn()
       }
