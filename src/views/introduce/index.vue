@@ -167,7 +167,6 @@
     },
     watch: {
       '$route' (route) {
-        console.log(1111111111)
       document.documentElement.scrollTop = 0
       document.body.scrollTop = 0
       window.pageYOffset = 0
@@ -405,6 +404,8 @@
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
       })
+    }
+    async mounted () {
       const { autoPay=''} = this.$route.query
       console.log('autoPay', autoPay)
       if (autoPay) {
@@ -412,7 +413,6 @@
         that.payIn()
       }
     }
-
     async pageInit () {
       const { communityId } = this.$route.params
       console.log(111111111111111111)
