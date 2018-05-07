@@ -296,10 +296,8 @@
       if (arr.length !== 0) {
         if (typeof WeixinJSBridge === 'undefined') {
           if (document.addEventListener) {
-            alert(111)
             document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(params), false)
           } else if (document.attachEvent) {
-            alert(222)
             document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(params))
             document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(params))
           }
@@ -404,12 +402,6 @@
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
       })
-      const { autoPay=''} = this.$route.query
-      console.log('autoPay', autoPay)
-      if (autoPay) {
-        let that = this
-        that.payIn()
-      }
     }
 
     async pageInit () {
@@ -484,7 +476,12 @@
     }
 
     mounted () {
-      
+      const { autoPay=''} = this.$route.query
+      console.log('autoPay', autoPay)
+      if (autoPay) {
+        let that = this
+        that.payIn()
+      }
       // this.$refs['body'].addEventListener('touchmove', e => {
       //   e.stopPropagation()
       // })
