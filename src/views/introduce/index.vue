@@ -293,13 +293,14 @@
         productId: this.pageInfo.communityId,
         productType: 1
       })
-      console.log('params', params)
       const arr = Object.keys(params || {})
       if (arr.length !== 0) {
         if (typeof WeixinJSBridge === 'undefined') {
           if (document.addEventListener) {
+            alert(111)
             document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(params), false)
           } else if (document.attachEvent) {
+            alert(222)
             document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(params))
             document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(params))
           }
@@ -407,7 +408,6 @@
       const { autoPay=''} = this.$route.query
       console.log('autoPay', autoPay)
       if (autoPay) {
-        alert(autoPay)
         let that = this
         that.payIn()
       }
