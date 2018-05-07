@@ -9,7 +9,8 @@
                @blur="hide()"
                @focus="handleFocus"
                ref="suspension-input"
-               maxlength="1000"
+               maxlength="1999"
+               rel = 'input'
                 />
       </div>
       <span class="ask-btn" @click="send">{{sendText}}</span>

@@ -5,14 +5,15 @@
         <!-- header -->
         <div class="header">
           <dynamic :dynamicList="dynamicList"
-                   :hideCommentBtn="true"
-                   :hidePraiseBtn="false"
                    :hideBorder="true"
                    :hideCommentArea="true"
                    :isFold = "false"
                    :disableContentClick="true"
                    :showIdentification="true"
                    :noBorder ="true"
+                   :allTotal = "allTotal"
+                   :disableOperationArr="disableOperationArr"
+                   @disableOperationEvents="operation" 
                    @getUserId="getUserId"
           ></dynamic>
         </div>
@@ -138,6 +139,7 @@
     navTabName = 'comment'
     commentIndex = -1
     suspensionInputPlaceholder = '来分享你的想法吧～'
+    disableOperationArr = ['comment']
     displaySuspensionInput = false
     curData = {} // 评论回来的数据
     modelType = '' // 评论类型
@@ -148,14 +150,17 @@
       this.modelType = this.$route.params.type
       this.pageInit().then(() => {})
     }
-   
+    // ------------------- 详情评论区 ----------------------
+    operationDetail () {
+
+    }
     // ------------------- 评论区 ----------------------
     operation (e) {
-      const {eventType, itemIndex, item, commentType} = e
+      const {eventType, itemIndex, item, commentType, isDetail} = e
       switch (eventType) {
         case 'comment':
           // :todo 评论请求
-          this.comment({item, itemIndex, commentType}).then()
+          this.comment({item, itemIndex, commentType, isDetail}).then()
           break
         case 'praise':
           this.praise({item, itemIndex, commentType}).then()
@@ -190,16 +195,16 @@
      * @param itemIndex
      * @returns {Promise.<void>}
      */
-    async comment ({item, itemIndex, commentType}) {
-      console.log(this.$refs.input.isFocused, 1111)
-      if (itemIndex > -1) {
+    async comment ({item, itemIndex, commentType, isDetail}) {
+      this.displaySuspensionInput = true
+      this.$refs.input.$refs['suspension-input'].focus()
+      if (itemIndex > -1 && !isDetail) {
         this.suspensionInputPlaceholder = '回复' + item.reviewer.realName + ':'
         this.commentIndex = itemIndex
       } else {
         this.suspensionInputPlaceholder = '来分享你的想法吧～'
         this.commentIndex = -1
       }
-      this.displaySuspensionInput = true
     }
 
     getUserId ({res, favor}) {
@@ -208,9 +213,7 @@
       } else {
         this.classmateList.forEach((data, index) => {
           if (res.userId === data.userId) {
-            console.log(111111111111, index)
             this.classmateList.splice(index, 1)
-            console.log(this.classmateList)
           }
         })
       }
@@ -346,9 +349,7 @@
     }
 
     async blur () {
-      console.log(11111111111111)
-      this.suspensionInputPlaceholder = '来分享你的想法吧～'
-      this.commentIndex = -1
+      this.displaySuspensionInput = false
     }
 
     /**
@@ -370,14 +371,13 @@
       }
       
       await setSubmitCommentApi(params).then(data => {
-        this.curData = data
-        this.$vux.toast.text('评论成功', 'bottom')
-        this.suspensionInputPlaceholder = '来分享你的想法吧～'
         this.commentIndex = -1
         let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
         this.pagination.end = false // 初始化数据，必定不是最后一页
         this.getList({ page: page , type: 'comment'})
-        
+        this.curData = data
+        this.$vux.toast.text('评论成功', 'bottom')
+        this.suspensionInputPlaceholder = '来分享你的想法吧～'
       }).catch(e => {
         this.$vux.toast.text('评论失败', 'bottom')
         this.curData = {}
@@ -503,7 +503,6 @@
       for (var i = 0; i<hotCommentTotal; i++) {
         this.discussItemList[i].isHot = true
       }
-      console.log(this.discussItemList)
       this.pagination.page = page
       this.pagination.pageSize = pageSize
       this.pagination.total = this.allTotal

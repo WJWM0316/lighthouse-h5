@@ -18,6 +18,10 @@ import moment from 'moment'
     itemIndex: {
       type: Number
     },
+    // 评论总数
+    allTotal: {
+      type: Number
+    },
     isNeedHot: {
       type: Boolean,
       default: false

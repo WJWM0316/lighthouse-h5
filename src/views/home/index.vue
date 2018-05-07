@@ -183,7 +183,7 @@ export default class HomeIndex extends Vue {
       this.communities = []
       this.navTabName = targetName
       const name = targetName === 'picked' ? 'home' : targetName
-      this.$router.replace({name})
+      this.$router.push({name})
       this.init().then(() => {})
     }
   }

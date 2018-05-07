@@ -14,6 +14,7 @@
                   :hideCommentArea="hideCommentArea"
                   :disableContentClick="disableContentClick"
                   :disableUserClick="disableUserClick"
+                  :allTotal="allTotal"
                   :isFold="isFold"
                   :noBorder="noBorder"
                   :isNeedHot="isNeedHot"
@@ -34,6 +35,9 @@
   @Component({
     name: 'dynamic-list',
     props: {
+      allTotal: {
+        type: Number
+      },
       dynamicList: {
         type: Array,
         required: true
@@ -110,6 +114,9 @@
       dynamicItem
     },
     watch: {
+      allTotal (val) {
+        this.allTotal = val
+      },
       dynamicList (dynamicList) {
         const {item, itemIndex} = this.currentPlay
         if (item.modelType && item.modelType !== dynamicList[itemIndex].modelType) {
@@ -130,7 +137,8 @@
     currentVideoIndex = -1
 
     created () {
-    	console.log("111111113333333333333333333",this.dynamicList)
+      console.log(11111111111111)
+      console.log('allTotal', this.allTotal)
     }
 
     mounted () {
@@ -349,7 +357,8 @@
         if (this.disableOperationArr.indexOf(eventType) > -1) {
           this.$emit('disableOperationEvents', {
             eventType,
-            itemIndex
+            itemIndex,
+            isDetail: true
           })
           return
         }

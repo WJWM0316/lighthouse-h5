@@ -176,7 +176,7 @@
             <span class="icon-pinglun">
             	<img src="./../../assets/icon/bnt_comment@3x.png" />
             </span>
-            {{item.commentTotal > 0 ? item.commentTotal : ''}}
+            {{item.commentTotal > 0 ? item.commentTotal : allTotal}}
           </button>
           <!-- 灯塔信息 -->
           <div class="info-light-house" v-if="showLightHouseInfo" @click.stop="toCommunity(item.LighthouseId)">
@@ -201,7 +201,7 @@
         <div class="reply-block" v-if="item.commentTotal > 0 && item.comments && item.comments.length > 0">
           <template  v-if="isNeedHot">
             <div class="hot-reply">
-              <div class="hot-reply-icon">热门评论</div>
+              <div class="hot-reply-icon">热门评论</div> 
               <div class="reply" v-for="(reply,index) in item.comments">
                 <p class="favor-content ellipsis3"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
               </div>

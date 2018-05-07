@@ -5,8 +5,8 @@
 
     <div class="container" ref="big-shot-introduce-container" :class="{ 'no-pdb': !completelyShow }">
       <div class="header">
+        
         <community-card ref="headCard" :community="pageInfo" :type="2" />
-
         <div class="share-group fixed">
           <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
           <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button>
