@@ -402,6 +402,12 @@
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
       })
+      const { autoPay=''} = this.$route.query
+      console.log('autoPay', autoPay)
+      if (autoPay) {
+        let that = this
+        that.payIn()
+      }
     }
 
     async pageInit () {
@@ -476,12 +482,6 @@
     }
 
     mounted () {
-      const { autoPay=''} = this.$route.query
-      console.log('autoPay', autoPay)
-      if (autoPay) {
-        let that = this
-        that.payIn()
-      }
       // this.$refs['body'].addEventListener('touchmove', e => {
       //   e.stopPropagation()
       // })
