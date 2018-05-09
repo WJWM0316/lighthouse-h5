@@ -1,7 +1,7 @@
 <template>
 
   <!-- 大咖精选页 (社区页) -->
-  <div :class="{'big-shot-community': true, author: isAuthor}">
+  <div class="author" :class="{'big-shot-community': true}">
 
     <!-- tab -->
     <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed2': true}" v-if="isCommunityTitleFixed">
@@ -650,7 +650,6 @@
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
-
     &.author {
       padding-bottom: 50px;
     }

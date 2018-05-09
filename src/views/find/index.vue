@@ -119,7 +119,6 @@ export default class HomeIndex extends Vue {
         if (page === 1) {
            this.finds = res.list
         } else {
-          console.log('发现: ', res.list)
           this.finds = this.finds.concat(res.list || [])
         }
 	      console.log(this.finds)

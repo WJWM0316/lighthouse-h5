@@ -279,7 +279,7 @@
         if (page === 1) {
           this.allList = comments
         } else {
-          this.allList = this.hotList.concat(comments || [])
+          this.allList = this.allList.concat(comments || [])
         }
       }
 

@@ -490,14 +490,7 @@
       if (page === 1) {
         this.discussItemList = comments
       } else {
-        const res = await this.getFavorList(params)
-        const {list, total} = res
-        allTotal = total
-        if (page === 1) {
-          this.classmateList = list
-        } else {
-          this.classmateList = this.classmateList.concat(list || [])
-        }
+        this.discussItemList = this.discussItemList.concat(comments || [])
       }
       this.hotCommentTotal = hotCommentTotal
       for (var i = 0; i<hotCommentTotal; i++) {

@@ -481,6 +481,7 @@ export default class HomeIndex extends Vue {
     background:#fff;
     margin-top: 0;
     z-index: 99;
+    background: #fff;
   }
 
   & .tabFixed {
