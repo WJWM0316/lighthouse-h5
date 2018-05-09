@@ -55,7 +55,7 @@
     
 
       <!-- 已加入 -->
-      <div v-if="navTabName === 'joined'">
+      <div v-show="navTabName === 'joined'">
 
         <div class="joined-list">
           <!-- 创建的灯塔列表 -->
@@ -102,7 +102,7 @@
       
 
       <!-- 精选 -->
-      <div v-if="navTabName === 'picked'">
+      <div v-show="navTabName === 'picked'">
         <div class="communities" v-if="communities && communities.length > 0">
           <div class="list">
             <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" />
