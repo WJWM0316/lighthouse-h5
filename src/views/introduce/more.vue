@@ -1,6 +1,6 @@
 <template>
 	<div class="community-more">
-		<scroller  @pullup="handlePullup" :is-none-data="pagination.end" :refreshable="false">
+		<!-- <scroller  @pullup="handlePullup" :is-none-data="pagination.end" :refreshable="false"> -->
 			<!--灯塔介绍-->
 			<div class="addon-text">
 				<div @click.stop="goTointroduceDetail(id)" class="more-introduce">
@@ -65,7 +65,7 @@
 					</li>
 				</ul>
 			</div>
-		</scroller>
+		<!-- </scroller> -->
 	</div>
 </template>
 
@@ -128,7 +128,7 @@
 			// 初始化 请求学院列表
 			this.pagination.busy = false
 			this.pagination.end = false
-			this.getMemberList(1, 8, this.id)
+			this.getMemberList(1, 10000, this.id)
 		}
 
 		goUserDetail (userId) {
@@ -166,7 +166,7 @@
 	      this.pagination.total = res.total
 	      this.pagination.end = this.isLastPage
 	      this.pagination.busy = false
-			}	catch (error) {
+			} catch (error) {
 	      console.log(error)
 	      this.$vux.toast.text(error.message, 'bottom')
 	    }
@@ -189,7 +189,7 @@
 	  handlePullup (loaded) {
 	    setTimeout(() => {
 	      this.loadNext()
-	      loaded('done')
+	      // loaded('done')
 	    }, 500)
 	  }
 	}
