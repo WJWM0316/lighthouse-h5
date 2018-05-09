@@ -345,6 +345,9 @@
               case 'a7f79b000c990dd2658b6af10a37fe3c': // 正式 詹润杰的灯塔
                 self.$store.dispatch('show_qr', {type: 3})
                 break
+              case '70036858d957ad830e89e37c5a8356d2': // 测试分销5月9号
+                self.$store.dispatch('show_qr', {type: 3})
+                break
               default:
                 location.reload()
                 break
