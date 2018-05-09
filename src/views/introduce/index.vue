@@ -346,7 +346,7 @@
                 self.$store.dispatch('show_qr', {type: 3})
                 break
               case '70036858d957ad830e89e37c5a8356d2': // 测试分销5月9号
-                self.$store.dispatch('show_qr', {type: 3})
+                self.$store.dispatch('show_qr', {type: 2})
                 break
               default:
                 location.reload()
