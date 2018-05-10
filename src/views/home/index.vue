@@ -306,9 +306,6 @@ export default class HomeIndex extends Vue {
    * 获取tab列表
    */
   getTagsList () {
-    if (this.communityTagList.length > 0) {
-      return
-    }
     return getTagsListApi().then((res) => {
       if (res && res.length) {
         const tagId = this.pickedParams.tagId
