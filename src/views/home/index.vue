@@ -357,9 +357,9 @@ export default class HomeIndex extends Vue {
 
       switch (navTabName) {
         case 'picked':
-          if (this.communities.length > 0) {
-            return
-          }
+          // if (this.communities.length > 0) {
+          //   return
+          // }
           res = await this.getPickedApi({
             ...params,
             ...this.pickedParams
