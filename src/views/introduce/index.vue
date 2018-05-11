@@ -25,7 +25,7 @@
         <!--</div>-->
       </div>
 
-      <div class="module" style="min-height:400px">
+      <div class="module" style="min-height:600px; overflow-y:auto">
         <div class="module-title">
         	<!--<div class="hr"></div>-->
           <p>关于社区</p>
@@ -34,7 +34,7 @@
           <!--<span class="module-title-tip-line"></span>
           <div class="module-title-tip">关于塔主</div>-->
         </div>
-        <div class="module-content h5-code" v-html="pageInfo.intro" >
+        <div class="module-content h5-code" v-if="pageInfo.intro" v-html="pageInfo.intro" >
         </div>
         <!-- 添加 空格解决苹果6s 不能滑动bug -->
         <div style="height:50px"></div>
