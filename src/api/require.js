@@ -33,6 +33,7 @@ function hideLoading (open) {
 
 let globalLoading = true
 async function process(response) {
+  console.log('请求成功', response)
   let {data} = response
   // console.log('请求接口路径', url)
   // console.log('接口请求参数', datas)
@@ -148,20 +149,23 @@ async function process(response) {
   return Promise.reject(data)
 }
 
-export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
+export const request = ({type = 'post', url, data = {}, isLoading = true, config = {}} = {}) => {
   // 正常r请
   // let datas = type === 'get' ? {params: data} :data
   // let globalLoading = true
+  
   if (data.globalLoading !== undefined) {
     globalLoading = data.globalLoading
     delete data.globalLoading
+  } else {
+    globalLoading = isLoading
   }
-
-  // data.TestUid = 3
-
+  
+  data.TestUid = 3
 
   showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data}} : {...data}
+  
   return Vue.axios[type](url, datas, config)
     .catch(response => {
       /* eslint-disable prefer-promise-reject-errors */

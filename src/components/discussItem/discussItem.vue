@@ -1,13 +1,13 @@
 <template>
   <!-- 评论列表项 -->
-  <div class="discuss-item" @click.stop="comment">
+  <div class="discuss-item" @click.stop="comment" v-if="item.reviewer">
 
     <!-- 头像 -->
     <div class="left">
-    <img :src="item.reviewer.avatar" class="user-image" @click.stop="toUserInfo(item.reviewer.userId)" />
+    <img  :src="item.reviewer.avatar" class="user-image" @click.stop="toUserInfo(item.reviewer.userId)" />
     </div>
 
-    <div :class="{right: true, border: !hideBorder}">
+    <div :class="[{right: true, border: !hideBorder}]">
       
       <div class="content-head">
         <div class="user-box" v-if="role && role.isShow">

@@ -70,7 +70,9 @@ import moment from 'moment'
     }
   },
   watch: {
-    item () {
+    item (val) {
+      this.role = val.reviewer.role || {}
+      console.log(1111, this.role)
     }
   },
   computed: {
@@ -130,7 +132,6 @@ import moment from 'moment'
 export default class discussItem extends Vue {
   role = {}
   created () {
-    this.role = this.item.reviewer.role || {}
   }
 
   /**

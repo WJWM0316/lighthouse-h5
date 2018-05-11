@@ -176,7 +176,7 @@ export const getProblemDetailApi = (data) => {
   return request({
     url: '/wap/problem/detail',
     data,
-    isLoading: true
+    isLoading: false
   })
 }
 
@@ -185,7 +185,7 @@ export const getCircleDetailApi = (data) => {
   return request({
     url: '/wap/beacon/circleInfo',
     data,
-    isLoading: true
+    isLoading: false
   })
 }
 
@@ -194,11 +194,11 @@ export const getPostDetailApi = (data) => {
   return request({
     url: '/wap/post/detail',
     data,
-    isLoading: true
+    isLoading: false
   })
 }
 
-// 帖子详情
+// 评论详情
 export const getCommentDetailApi = (data) => {
   return request({
     url: '/wap/comment/info',

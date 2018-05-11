@@ -2,7 +2,6 @@
   <!-- 朋友圈、帖子、问题 详情 -->
   <div class="all-details" :class="{'pdBtom' : isShow}">
     <scroll @refresh="handleRefresh" @pullup="handlePullup">  
-        <!-- header -->
         <div class="header">
           <dynamic :dynamicList="dynamicList"
                    :hideBorder="true"
@@ -18,7 +17,6 @@
           ></dynamic>
         </div>
     
-        <!-- container -->
         <div class="container">
           <!-- 评论 -->
           <div class="fixed-box" ref="ceiling-box">
@@ -317,7 +315,7 @@
     toggle (targetName) {
       if (this.navTabName !== targetName) {
         this.navTabName = targetName
-        if (targetName === 'praise' && !this.isFavorList) {
+        if (targetName === 'praise') {
           let modelType = ''
           this.isShow = false
           modelType = 'circle'
@@ -338,17 +336,19 @@
             page: 1,
             pageCount: 1000
           }
-          this.getFavorList(params).then(res => {
-            this.classmateList = res.list
-            this.isFavorList = true
-          })
+          if (!this.isFavorList) {
+            this.getFavorList(params).then(res => {
+              this.classmateList = res.list
+              this.isFavorList = true
+            })
+          }
         } else {
           this.isShow = true
         }
       }
     }
 
-    async blur () {
+    blur () {
       this.displaySuspensionInput = false
     }
 
