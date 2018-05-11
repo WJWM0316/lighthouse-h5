@@ -25,7 +25,7 @@
         <!--</div>-->
       </div>
 
-      <div class="module" style="min-height:600px; overflow-y:auto">
+      <div class="module"  style="min-height: 100vh" >
         <div class="module-title">
         	<!--<div class="hr"></div>-->
           <p>关于社区</p>
@@ -36,8 +36,6 @@
         </div>
         <div class="module-content h5-code" v-if="pageInfo.intro" v-html="pageInfo.intro" >
         </div>
-        <!-- 添加 空格解决苹果6s 不能滑动bug -->
-        <div style="height:50px"></div>
       </div>
       <div class="how-to-play">
         <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/howplay/index.html">
