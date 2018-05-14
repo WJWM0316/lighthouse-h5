@@ -46,7 +46,6 @@ async function process(response) {
   }
   if (data && data.statusCode === 200) {
     hideLoading(globalLoading)
-    console.log(1111222)
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 255) { // 登录时openId cookie失效
@@ -159,7 +158,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     delete data.globalLoading
   }
 
-  data.TestUid = 3
+  // data.TestUid = 3
 
 
   showLoading(globalLoading)
