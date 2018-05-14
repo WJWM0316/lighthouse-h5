@@ -161,7 +161,7 @@ export const request = ({type = 'post', url, data = {}, isLoading = true, config
     globalLoading = isLoading
   }
   
-  data.TestUid = 3
+  // data.TestUid = 3
 
   showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data}} : {...data}
