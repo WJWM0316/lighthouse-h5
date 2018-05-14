@@ -46,6 +46,7 @@ async function process(response) {
   }
   if (data && data.statusCode === 200) {
     hideLoading(globalLoading)
+    console.log(1111222)
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 255) { // 登录时openId cookie失效
@@ -149,23 +150,20 @@ async function process(response) {
   return Promise.reject(data)
 }
 
-export const request = ({type = 'post', url, data = {}, isLoading = true, config = {}} = {}) => {
+export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   // 正常r请
   // let datas = type === 'get' ? {params: data} :data
   // let globalLoading = true
-  
   if (data.globalLoading !== undefined) {
     globalLoading = data.globalLoading
     delete data.globalLoading
-  } else {
-    globalLoading = isLoading
   }
-  
-  // data.TestUid = 3
+
+  data.TestUid = 3
+
 
   showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data}} : {...data}
-  
   return Vue.axios[type](url, datas, config)
     .catch(response => {
       /* eslint-disable prefer-promise-reject-errors */
