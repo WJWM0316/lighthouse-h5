@@ -1,5 +1,5 @@
 <template>
-  <div class="p-body p-ask">
+  <div class="p-body p-ask" :class="{'paddingBom' : displaySuspensionInput}">
     <scroller :pullupable="false" :refreshable="false" class="wrapper" @scroll="handleScroll">
 
       
@@ -538,7 +538,9 @@
   .p-ask {
     position: relative;
     background-color: #f9f9f9;
-    padding-bottom: 50px;
+    &.paddingBom {
+      padding-bottom: 50px;
+    }
     .wrapper {
       width: 100%;
       height: 100%;
