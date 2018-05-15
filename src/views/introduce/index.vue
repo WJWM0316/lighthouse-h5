@@ -364,8 +364,6 @@
       )
     }
     async created () {
-    	console.log(this.$refs['big-shot-introduce-container']);
-    	console.log(" 我是测试的route",this.$route)
       wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
