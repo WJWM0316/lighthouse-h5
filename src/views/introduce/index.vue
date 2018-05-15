@@ -25,7 +25,7 @@
         <!--</div>-->
       </div>
 
-      <div class="module" style="min-height:400px">
+      <div class="module"  style="min-height: 70vh" >
         <div class="module-title">
         	<!--<div class="hr"></div>-->
           <p>关于社区</p>
@@ -34,10 +34,8 @@
           <!--<span class="module-title-tip-line"></span>
           <div class="module-title-tip">关于塔主</div>-->
         </div>
-        <div class="module-content h5-code" v-html="pageInfo.intro" >
+        <div class="module-content h5-code" v-if="pageInfo.intro" v-html="pageInfo.intro" >
         </div>
-        <!-- 添加 空格解决苹果6s 不能滑动bug -->
-        <div style="height:50px"></div>
       </div>
       <div class="how-to-play">
         <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/howplay/index.html">
@@ -344,6 +342,12 @@
                 break
               case 'a7f79b000c990dd2658b6af10a37fe3c': // 正式 詹润杰的灯塔
                 self.$store.dispatch('show_qr', {type: 3})
+                break
+              case '70036858d957ad830e89e37c5a8356d2': // 测试分销5月9号
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '6b3974ad38fa6984de73f43a7730e294': // 正式分销5月9号
+                self.$store.dispatch('show_qr', {type: 2})
                 break
               default:
                 location.reload()

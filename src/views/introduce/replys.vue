@@ -214,7 +214,6 @@
           })
         }
       })
-      console.log(this.discussItemList, itemIndex)
     }
     // ------------------------------------------------
 

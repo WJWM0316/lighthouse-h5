@@ -58,7 +58,8 @@ export const getUploadFileConfig = data => request({
  */
 export const getWechatSignApi = data => request({
   url: '/wap/currency/getWxSign',
-  data
+  data,
+  isLoading: false
 })
 
 /**

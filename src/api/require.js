@@ -33,6 +33,7 @@ function hideLoading (open) {
 
 let globalLoading = true
 async function process(response) {
+  console.log('请求成功', response)
   let {data} = response
   // console.log('请求接口路径', url)
   // console.log('接口请求参数', datas)

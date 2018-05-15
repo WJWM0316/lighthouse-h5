@@ -55,7 +55,7 @@
     
 
       <!-- 已加入 -->
-      <div v-if="navTabName === 'joined'">
+      <div v-show="navTabName === 'joined'">
 
         <div class="joined-list">
           <!-- 创建的灯塔列表 -->
@@ -102,7 +102,7 @@
       
 
       <!-- 精选 -->
-      <div v-if="navTabName === 'picked'">
+      <div v-show="navTabName === 'picked'">
         <div class="communities" v-if="communities && communities.length > 0">
           <div class="list">
             <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" />
@@ -179,8 +179,8 @@ export default class HomeIndex extends Vue {
   toggle (targetName) {
     if (this.navTabName !== targetName) {
       this.ready = false
-      this.joins = []
-      this.communities = []
+      // this.joins = []
+      // this.communities = []
       this.navTabName = targetName
       const name = targetName === 'picked' ? 'home' : targetName
       this.$router.push({name})
@@ -273,6 +273,9 @@ export default class HomeIndex extends Vue {
    * 获取banner列表
    */
   getBanners () {
+    if (this.bannerList.length > 0) {
+      return
+    }
     return getBannersApi().then(res => {
       this.bannerList = res
       if (res.length > 0) {
@@ -287,7 +290,9 @@ export default class HomeIndex extends Vue {
    */
   getAdvertising () {
     let test = 42
-
+    if (this.advertisingList.length > 0) {
+      return
+    }
     return getAdvertisingApi({
       adType: test
     }).then((res) => {
@@ -352,6 +357,9 @@ export default class HomeIndex extends Vue {
 
       switch (navTabName) {
         case 'picked':
+          // if (this.communities.length > 0) {
+          //   return
+          // }
           res = await this.getPickedApi({
             ...params,
             ...this.pickedParams
@@ -362,6 +370,9 @@ export default class HomeIndex extends Vue {
           allTotal = res.total
           break
         case 'joined':
+          if (this.joins.length > 0) {
+            return
+          }
           res = await this.getJoinedApi(params)
           console.log('已加入: ', res)
           const {creations, joins, recommends} = res
