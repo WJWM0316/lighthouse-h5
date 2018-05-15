@@ -122,6 +122,7 @@
                       :sendText="'发送'"
                       :isShow = "isShow"
                       @send="sendComment"
+                      ref="input"
     ></suspension-input>
 
     <actionsheet v-model="releaseActionsheet.show" :menus="pageInfo.isCourse===1?releaseActionsheet.menus:releaseActionsheet_no.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
@@ -445,11 +446,14 @@
      * @returns {Promise.<void>}
      */
     async comment ({item, itemIndex}) {
+      
+      
       if (item.modelType !== 'circle') {
         this.suspensionInputPlaceholder = '回复' + item.releaseUser.realName + ':'
       }
       this.displaySuspensionInput = true
       this.commentIndex = itemIndex
+      this.$refs.input.$refs['suspension-input'].focus()
     }
 
     /**

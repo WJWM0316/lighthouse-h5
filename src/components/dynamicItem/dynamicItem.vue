@@ -176,7 +176,7 @@
             <span class="icon-pinglun">
             	<img src="./../../assets/icon/bnt_comment@3x.png" />
             </span>
-            {{item.commentTotal > 0 ? item.commentTotal : allTotal}}
+            {{item.commentTotal > 0 ? item.commentTotal : ''}}
           </button>
           <!-- 灯塔信息 -->
           <div class="info-light-house" v-if="showLightHouseInfo" @click.stop="toCommunity(item.LighthouseId)">
