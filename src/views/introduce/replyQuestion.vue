@@ -85,9 +85,7 @@ export default class ReplyQuestion extends Vue {
     const { params } = this.$route
     this.communityId = params.communityId
     this.id = params.problemId
-
     this.getInfo()
-    alert(111111111)
   }
 
   beforeDestroy () {
@@ -204,7 +202,6 @@ export default class ReplyQuestion extends Vue {
     const fileIds = files.map(item => item.fileId)
     this.serverIds = files.map(item => item.mediaId)
     this.content = fileIds[0]
-    alert(this.content)
     this.reply()
   }
 
