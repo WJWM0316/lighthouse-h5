@@ -87,6 +87,7 @@ export default class ReplyQuestion extends Vue {
     this.id = params.problemId
 
     this.getInfo()
+    alert(111111111)
   }
 
   beforeDestroy () {
