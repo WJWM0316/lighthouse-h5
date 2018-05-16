@@ -21,6 +21,7 @@ function showLoading (open) {
   }
 }
 
+
 /**
  * 隐藏loading
  * @param {*} open 是否开启loading
@@ -30,10 +31,34 @@ function hideLoading (open) {
     Vue.$vux.loading.hide()
   }
 }
+// http request 拦截器  控制loading
+let num = 0
+axios.interceptors.request.use(
+    config => {
+      num ++
+      showLoading(true)
+      return config;
+    },
+    err => {
+      return Promise.reject(err);
+    });
+ 
+// http response 拦截器
+axios.interceptors.response.use(
+    response => {
+      num --
+      if (num <= 0) {
+        hideLoading(true)
+      }
+      return response;
+    },
+    error => {
+        return Promise.reject(error.response.data)   // 返回接口返回的错误信息
+    });
+
 
 let globalLoading = true
 async function process(response) {
-  console.log('请求成功', response)
   let {data} = response
   // console.log('请求接口路径', url)
   // console.log('接口请求参数', datas)
@@ -45,12 +70,12 @@ async function process(response) {
     data.statusCode = parseInt(data.statusCode)
   }
   if (data && data.statusCode === 200) {
-    hideLoading(globalLoading)
+    // hideLoading(globalLoading)
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 255) { // 登录时openId cookie失效
     store.dispatch('remove_userinfo')
-    hideLoading(globalLoading)
+    // hideLoading(globalLoading)
     const hashParams = location.hash.substring(1)
     const hostname = location.href.split('?')[0]
     console.log('hashParams:', hashParams)
@@ -60,7 +85,7 @@ async function process(response) {
   }
   if (data && data.statusCode === 426) { // 没有登录权限,跳去手机号登录
     store.dispatch('remove_userinfo')
-    hideLoading(globalLoading)
+    // hideLoading(globalLoading)
     router.replace({
       name: 'login',
       query: {redirect: location.href}
@@ -68,7 +93,7 @@ async function process(response) {
   }
   if (data && data.statusCode === 433) { // 支付接口没有登录权限,跳去手机号登录
     store.dispatch('remove_userinfo')
-    hideLoading(globalLoading)
+    // hideLoading(globalLoading)
     if (location.href.endsWith('reload=true') || location.href.indexOf('saleId=') > -1) {
       router.replace({
         name: 'login',
@@ -88,7 +113,7 @@ async function process(response) {
     })
   }
   if (data && data.statusCode === 431) { // 需要授权
-    hideLoading(globalLoading)
+    // hideLoading(globalLoading)
     const hashParams = location.hash.substring(1)
     const hostname = location.href.split('?')[0]
     // location.href = encodeURI(`${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`)
@@ -103,7 +128,7 @@ async function process(response) {
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 432) { // 需要授权
-    hideLoading(globalLoading)
+    // hideLoading(globalLoading)
     var hashParams = location.hash.substring(1)
     console.log('xxxx', hashParams, hashParams.endsWith('reload=true'))
     if (hashParams.endsWith('reload=true')) {
@@ -124,7 +149,7 @@ async function process(response) {
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 264) { // 内容找不到
-    hideLoading(globalLoading)
+    // hideLoading(globalLoading)
     const {url} = data.data
     console.log(data.data)
     if (url) {
@@ -136,7 +161,7 @@ async function process(response) {
     })
   }
   if (data && data.statusCode === 271) { // 未入社进入社后请求报的错 跳转到入社介绍页 需要一个社区id
-    hideLoading(globalLoading)
+    // hideLoading(globalLoading)
     if (data.data) {
       router.replace(`/introduce/${data.data.communityId}`)
     } else {
@@ -145,7 +170,7 @@ async function process(response) {
     return {}
   }
 
-  hideLoading(globalLoading)
+  // hideLoading(globalLoading)
   return Promise.reject(data)
 }
 
@@ -158,10 +183,10 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     delete data.globalLoading
   }
 
-  // data.TestUid = 3
+  data.TestUid = 3
 
 
-  showLoading(globalLoading)
+  // showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data}} : {...data}
   return Vue.axios[type](url, datas, config)
     .catch(response => {
@@ -170,7 +195,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     })
     .then(process)
     .catch(err => {
-      hideLoading(globalLoading)
+      // hideLoading(globalLoading)
       return Promise.reject(err)
     })
 }

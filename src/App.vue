@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height: 100%">
+  <div id="app" style="height: 100%" v-cloak>
     <router-view></router-view>
     <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
             @on-index-change="goSomeWhere">
@@ -158,7 +158,9 @@ export default class App extends Vue {
 
 <style lang="less" type="text/less">
 @import "./styles/index";
-
+[v-cloak] {
+  display: none !important;
+} 
 .home-nav {
   left: 50%;
   transform: translateX(-50%);
