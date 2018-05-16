@@ -85,7 +85,6 @@ export default class ReplyQuestion extends Vue {
     const { params } = this.$route
     this.communityId = params.communityId
     this.id = params.problemId
-
     this.getInfo()
   }
 

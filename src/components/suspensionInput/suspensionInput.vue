@@ -1,6 +1,6 @@
 <template>
   <!-- 悬浮输入框 -->
-  <div class="suspension-input" :class="{ 'z-focused': isFocused }" v-if="isShow">
+  <div class="suspension-input" :class="{ 'z-focused': isFocused }" v-show="isShow">
     <div class="ask-box">
       <div class="user-input">
         <input type="text"
@@ -10,7 +10,6 @@
                @focus="handleFocus"
                ref="suspension-input"
                maxlength="1999"
-               rel = 'input'
                 />
       </div>
       <span class="ask-btn" @click="send">{{sendText}}</span>
@@ -29,7 +28,7 @@
     -webkit-overflow-scrolling: touch;
     background-color: #f8f8f8;
     &.z-focused {
-     padding-bottom: 54px;
+     /* padding-bottom: 54px; */
     }
 
     .ask-box {
