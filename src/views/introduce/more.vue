@@ -2,7 +2,7 @@
 	<div class="community-more">
 		<!-- <scroller  @pullup="handlePullup" :is-none-data="pagination.end" :refreshable="false"> -->
 			<!--灯塔介绍-->
-			<div class="addon-text">
+			<div class="block addon-text">
 				<div @click.stop="goTointroduceDetail(id)" class="more-introduce">
 					<img class="icon_1" src="../../assets/icon/icon_list_aboutlh@3x_2.png"/>
 					<span>灯塔介绍</span>
@@ -11,7 +11,7 @@
 				</div>
 			</div>
 			<!--开塔时间-->
-			<div class="more-openTime">
+			<div class="block more-openTime">
 				<img class="icon_2" src="../../assets/icon/icon_list_time@3x.png"/>
 				<span>开塔时间</span>
 				<!--<p>2018年1月1日-2018年4月8日</p>-->
@@ -20,7 +20,7 @@
 	           <!--<img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
 			</div>
 			<!--塔主和小伙伴-->
-			<div class="more-parner">
+			<div class="block more-parner">
 					<img class="icon_3" src="../../assets/icon/icon_center_home.png" />
 					<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
 					<!--塔主和嘉宾列表-->
@@ -48,7 +48,7 @@
 			</div>
 			<!--灯塔成员-->
 			
-			<div class="more-classmate">
+			<div class="block more-classmate">
 				<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
 				<p>灯塔成员 <span>({{total}}人)</span></p>
 				<ul class="classmateList">
@@ -197,9 +197,15 @@
 </script>
 
 <style lang="less" scoped type="text/less">
+
 	.community-more{
 		height: 100%;
-    box-sizing: border-box;
+    	box-sizing: border-box;
+    	background: #EDEDED;
+    	.block {
+    		background: #f8f8f8;
+    	}
+
 		& .more-introduce, & .more-openTime{
 			box-sizing: border-box;
 			width: 100%;
@@ -252,6 +258,9 @@
 			}
 			
 		}
+		& .more-openTime {
+			border-bottom:none;
+		}
 		& .label {
           color: #d7ab70;
           font-size: 12px;
@@ -268,8 +277,7 @@
 		& .more-parner, & .more-classmate{
 			box-sizing: border-box;
 			width: 100%;
-			padding: 0 20px;
-			margin: 20px 0 0;
+			padding: 20px;
 			border-bottom: 1px solid #EDEDED;
 			.icon_3 {
 				margin-top: -7px;
@@ -299,8 +307,7 @@
 			
 			& .guestList, & .classmateList{
 				/*height: 128px;*/
-				padding: 20px 0px;
-				padding-bottom: 0;
+				padding: 20px 0px 0px 0px;
 				
 				.guestListBox{
 					overflow-y: auto;
@@ -334,6 +341,8 @@
 							margin: 0 auto;
 							margin-bottom: 7.5px;
 							border-radius: 50%;
+							border: 1px solid #dcdcdc;
+							box-sizing: border-box;
 							/*overflow: hidden;*/
 							position: relative;
 							

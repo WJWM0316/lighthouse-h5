@@ -60,7 +60,7 @@
         </button>
 
         <div class="user-desc">
-          <p v-if="isHasFree > 0">你还有 {{isHasFree}} 次机会免费提问，你的提问将100%得到答复</p>
+          <p v-if="isHasFree > 0">你还有 <span  style="color: #D7AB70;">{{isHasFree}} </span>次机会免费提问，你的提问将100%得到答复</p>
           <p v-else style="color: rgb(188, 188, 188);">你可以以每条 <span style="color: #D7AB70;">￥{{pageInfo.problemPrice}}</span> 的价格进行付费提问。</p>
         </div>
       </div>
@@ -784,7 +784,7 @@
       & .user-desc {
         margin-top: 12px;
         font-size: 12px;
-        color: #d7ab70;
+        color: #bcbcbc;
         text-align: center;
       }
     }
