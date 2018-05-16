@@ -3,11 +3,11 @@
   <a href="#" class="m-community" :class="cardClasses" @click.prevent.stop="handleTap">
   	<!--灯塔头部-->
     <div class="cover-container">
-      <image-item class="cover" :src="community.detailImg" mode="full" />
+      <image-item v-if='type !==1' class="cover" :src="community.detailImg" mode="full" />
       <span class="header-photo">
       	<img :src="community.icon"/>
       </span>
-      <div class="master">
+      <div v-if='type!==1' class="master">
         <p class="name" :class="{ round: type === 1 }">
           <!--<span class="text" v-text="community.master && community.master.realName"></span>-->
           <span class="text" v-text="community.master && community.masterIntro"></span>
