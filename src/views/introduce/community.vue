@@ -70,7 +70,7 @@
             <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>成员交流</span></a>
           </div>
         </div>
-        <div class="big-shot-community-content">
+        <div class="big-shot-community-content" >
           <div class="module-content" v-if="dynamicList && dynamicList.length > 0">
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
@@ -81,8 +81,10 @@
             ></dynamic>
           </div>
           <div class="blank" v-else>
-            <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
-            <p>暂时没有内容～</p>
+            <block v-if="pagination.end">
+              <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
+              <p>暂时没有内容～</p>
+            </block>
           </div>
         </div>
 
@@ -371,7 +373,7 @@
     }
 
     toggle (type) {
-    	this.type=type
+    	this.type = type
       if (this.showType !== type) {
         this.displaySuspensionInput = false
         this.dynamicList = []
@@ -587,6 +589,8 @@
       this.pagination.total = total
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
+
+      console.log('-------',this.pagination.end)
     }
 
     /**

@@ -96,7 +96,6 @@
             <community-info-card class="community-item" v-for="item in likes" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
           </div>
         </div>
-
       </div>
 
       
@@ -381,7 +380,7 @@ export default class HomeIndex extends Vue {
           if (creations && page === 1) {
             this.creations = creations
           }
-
+          console.log(recommends)
           if (recommends && page === 1) {
             this.likes = recommends
           }
@@ -469,6 +468,7 @@ export default class HomeIndex extends Vue {
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
+::-webkit-scrollbar {display:none; width:0; height: 0;}
 
 .p-home-index {
   //padding: 50px 0;
@@ -600,6 +600,7 @@ export default class HomeIndex extends Vue {
     white-space: nowrap; /*不换行*/
     padding: 0 15px;
     background: #f8f8f8;
+
     & > span {
       margin-left: 25px;
       color: #929292;
@@ -732,7 +733,7 @@ export default class HomeIndex extends Vue {
       font-weight: 500;
       color: #bcbcbc;
       padding: 0 15px 15px;
-      border-bottom: solid 1px #ededed; /* no */
+      //border-bottom: solid 1px #ededed; /* no */
     }
   }
 

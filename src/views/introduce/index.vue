@@ -825,14 +825,13 @@
           background-color: #ffffff;
 					/*bing-增加*/
 					flex-grow:1;
-					width:150px;
-          font-family: PingFangSC-Regular;
+					//width:150px;
+          padding: 0 20px;
 					& span:nth-of-type(2){
 						font-size:12px;
 						line-height:16px;
 					}
           & span:nth-of-type(1){
-            font-family: PingFangSC-Regular;
           }
 					/*bing-增加*/
         }
@@ -845,8 +844,15 @@
           }
 					flex-grow:1;
         }
+        &.free-btn-disable {
+          padding: 0 20px;
+        }
         &.free-btn-disable, &.pay-btn-disable {
           color: #bcbcbc;
+          & span:nth-of-type(2){
+            font-size:12px;
+            line-height:16px;
+          }
         }
       }
     }
