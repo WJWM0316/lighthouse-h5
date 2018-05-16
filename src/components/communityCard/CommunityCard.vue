@@ -44,7 +44,7 @@
     
     <!--已加入灯塔标题-->
     <div v-else class="communit-enter-title">
-    		<h3 class="title"><span v-text="community.title"></span><slot name="cover-addon-more"></slot></h3>
+    		<h3 class="title"><span @click="toMore" v-text="community.title"></span><slot name="cover-addon-more"></slot></h3>
     		
     </div>
     
@@ -117,6 +117,12 @@ export default class CommunityCard extends Vue {
   // 是否已结束
   get isEnd () {
     return this.community.endTime * 1000 < new Date().getTime()
+  }
+  
+  toMore(){
+  	console.log(this.community)
+  	let that=this;
+  	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.community.communityId,classmateNum:this.community.joinedNum}})
   }
 
   /**
