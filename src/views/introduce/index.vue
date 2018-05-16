@@ -349,6 +349,12 @@
               case '6b3974ad38fa6984de73f43a7730e294': // 正式分销5月9号
                 self.$store.dispatch('show_qr', {type: 2})
                 break
+              case 'b2b533754554bec1b9c344a97063891b': // 测试分销5月16号
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '2cdf75243f96bca97ae4341b6400e375': // 正式分销5月16号
+                self.$store.dispatch('show_qr', {type: 2})
+                break
               default:
                 location.reload()
                 break
@@ -414,12 +420,17 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-      console.log(111111111111111111)
       switch (communityId) {
         case 'aa3b415b564bd95b27da2f0e9c986e6a':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
         case '25c2ff088da3f757b685a318ab050b5a':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case 'b2b533754554bec1b9c344a97063891b':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case '2cdf75243f96bca97ae4341b6400e375':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
         default:
