@@ -240,6 +240,12 @@ export const countCodeApi = (data) => {
   })
 }
 
+export const newCountCodeApi = (data) => {
+  return request({
+    url: '/wap/currency/messageAccessRecord',
+    data,
+  })
+}
 // 分销排行榜
 export const rankingApi = (data) => {
   return request({
