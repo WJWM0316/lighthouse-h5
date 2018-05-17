@@ -468,7 +468,7 @@ export default class HomeIndex extends Vue {
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
-::-webkit-scrollbar {display:none; width:0; height: 0;}
+
 
 .p-home-index {
   //padding: 50px 0;
@@ -636,8 +636,12 @@ export default class HomeIndex extends Vue {
       font-size: 0;
       overflow-x: scroll;
       line-height: 0;
-      &::-webkit-scrollbar{
-        background-color:transparent;
+      ::-webkit-scrollbar {
+        //background-color:transparent;
+         width:0; height: 0;
+      }
+      &::-webkit-scrollbar {
+        width:0; height: 0;
       }
       li {
         width: 151px;
