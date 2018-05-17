@@ -596,14 +596,14 @@
       color: #354048;
       background: #F8F8F8;
       .hot-icon {
-        //width: 15px;
-        //height: 20px;
+        width: 20px;
+        height: 20px;
         display: inline-block;
         margin-right: 10px;
         img {
-          object-fit: none;
+          width: 20px;
+          height: 20px;
           margin-top: -4px;
-
         }
       }
     }
