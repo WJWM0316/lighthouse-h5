@@ -183,7 +183,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     delete data.globalLoading
   }
 
-     data.TestUid = 3
+//   data.TestUid = 3
 
 
   // showLoading(globalLoading)
