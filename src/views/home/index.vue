@@ -640,8 +640,14 @@ export default class HomeIndex extends Vue {
       overflow-x: scroll;
       line-height: 0;
       &::-webkit-scrollbar {
-        background-color:transparent;
+        //background-color:transparent;
         width:0; height: 0;
+        display: none;
+      }
+      ::-webkit-scrollbar {
+        //background-color:transparent;
+        width:0; height: 0;
+        display: none;
       }
       li {
         width: 151px;
