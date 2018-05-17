@@ -3,7 +3,7 @@
     <scroller @refresh="handleRefresh" @pullup="handlePullup">
       <div class="exchange-wx" @click="goexChangeList">
         <span class="fs15">交换微信申请</span>
-        <div class="red-dot" v-if="isRead"></div>
+        <div class="red-dot" v-if="!isRead"></div>
         <img class="icon" style="margin-left: 10px;" src="./../../assets/icon/mypage_arrow.png">
       </div>
       <div class="space-line"></div>
@@ -333,13 +333,13 @@
       height: 49px;
       line-height: 49px;
       .red-dot {
-        width: 15px;
-        height: 15px;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
         background: #ff3434;
         position: absolute;
         right: 22px;
-        top: 18px;
+        top: 22px;
       }
       .icon {
         width: 17px;

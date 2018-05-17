@@ -93,7 +93,7 @@
         <div class="module-home likes communities" v-if="joins.length === 0 && creations.length === 0 && likes.length > 0">
           <p class="module-home-title">猜你喜欢</p>
           <div class="list">
-            <community-info-card class="community-item" v-for="item in likes" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+            <community-info-card class="community-item" v-for="item in likes" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" />
           </div>
         </div>
       </div>
@@ -468,7 +468,7 @@ export default class HomeIndex extends Vue {
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
-::-webkit-scrollbar {display:none; width:0; height: 0;}
+
 
 .p-home-index {
   //padding: 50px 0;
@@ -600,7 +600,11 @@ export default class HomeIndex extends Vue {
     white-space: nowrap; /*不换行*/
     padding: 0 15px;
     background: #f8f8f8;
-
+    &::-webkit-scrollbar {
+      //background-color:transparent;
+      width:0; height: 0;
+      display: none;
+    }
     & > span {
       margin-left: 25px;
       color: #929292;
@@ -636,6 +640,11 @@ export default class HomeIndex extends Vue {
       font-size: 0;
       overflow-x: scroll;
       line-height: 0;
+      &::-webkit-scrollbar {
+        //background-color:transparent;
+        width:0; height: 0;
+        display: none;
+      }
       li {
         width: 151px;
         display: inline-block;
