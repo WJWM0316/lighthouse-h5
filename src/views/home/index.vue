@@ -75,7 +75,7 @@
           </div>
         </div>
 
-        <div v-if="joins.length === 0 && creations.length === 0">
+        <div v-if="joins.length === 0 && creations.length === 0 && joinLd">
           <div class="community-empty">
             <img src="./../../assets/page/empty.png" alt="">
           </div>
@@ -143,6 +143,7 @@ export default class HomeIndex extends Vue {
   // 社区列表
   ready = false
   isMessage = false
+  joinLd = false
   // 悬浮控制
   isFlex = false
   scrollTabLeft = 0 // tab
@@ -183,7 +184,10 @@ export default class HomeIndex extends Vue {
       this.navTabName = targetName
       const name = targetName === 'picked' ? 'home' : targetName
       this.$router.push({name})
-      this.init().then(() => {})
+      this.init().then(() => {
+
+        this.joinLd = true;
+      })
     }
   }
 

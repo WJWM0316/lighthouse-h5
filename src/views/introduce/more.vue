@@ -199,11 +199,11 @@
 <style lang="less" scoped type="text/less">
 
 	.community-more{
-		height: 100%;
+		//height: 100%;
     	box-sizing: border-box;
     	background: #EDEDED;
     	.block {
-    		background: #f8f8f8;
+    		background: #ffffff;
     	}
 
 		& .more-introduce, & .more-openTime{
@@ -260,6 +260,7 @@
 		}
 		& .more-openTime {
 			border-bottom:none;
+			margin-bottom: 10px;
 		}
 		& .label {
           color: #d7ab70;
