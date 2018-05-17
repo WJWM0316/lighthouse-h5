@@ -188,7 +188,7 @@ export default class CommunityCard extends Vue {
 }
 </script>
 
-<style lang="less" type="text/less">
+<style lang="less" type="text/less" scoped="scoped">
 @import "../../styles/variables";
 @import "../../styles/mixins";
 

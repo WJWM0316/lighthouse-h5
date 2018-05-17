@@ -55,7 +55,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 @Component({
-  name: 'community-card',
+  name: 'self-detail',
   props: {
     // 大咖信息
     community: {
@@ -99,7 +99,7 @@ import Component from 'vue-class-component'
     }
   }
 })
-export default class CommunityCard extends Vue {
+export default class selfDetail extends Vue {
 	created(){
     //console.log("我是触发的community",this.isEntentr);
 	}
@@ -182,7 +182,7 @@ export default class CommunityCard extends Vue {
 }
 </script>
 
-<style lang="less" type="text/less">
+<style lang="less" type="text/less" scoped="scoped">
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
@@ -273,7 +273,6 @@ export default class CommunityCard extends Vue {
 					border-radius: 50%;
 					overflow:hidden;
 					position: absolute;	
-					/*top: 44px;*/
 					left:50%;
 					transform:translateX(-50%);
 					margin-bottom:7.5px;

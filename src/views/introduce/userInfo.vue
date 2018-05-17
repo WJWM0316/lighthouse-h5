@@ -76,7 +76,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import dynamic from '@/components/dynamic/dynamic'
-  import CommunityCard from '@/components/communityCard'
+//import CommunityCard from '@/components/communityCard'
   import selfDetail from '@/components/selfDetail'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
@@ -86,7 +86,7 @@
     name: 'big-shot-community',
     components: {
       dynamic,
-      CommunityCard,
+//    CommunityCard,
       Scroll,
       selfDetail
     },
