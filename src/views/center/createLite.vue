@@ -233,7 +233,7 @@ export default class CenterCreateLite extends Vue {
 @import "../../styles/variables";
 @import "../../styles/mixins";
 .ft-sz {
-  font-size: 14px;
+  font-size: 16px;
 }
 .p-create-lite {
   font-size: 15px;

@@ -600,7 +600,10 @@ export default class HomeIndex extends Vue {
     white-space: nowrap; /*不换行*/
     padding: 0 15px;
     background: #f8f8f8;
-
+    &::-webkit-scrollbar{
+        background-color:yellow;
+        width: 15px;
+    }
     & > span {
       margin-left: 25px;
       color: #929292;
@@ -636,11 +639,8 @@ export default class HomeIndex extends Vue {
       font-size: 0;
       overflow-x: scroll;
       line-height: 0;
-      ::-webkit-scrollbar {
-        //background-color:transparent;
-         width:0; height: 0;
-      }
       &::-webkit-scrollbar {
+        background-color:transparent;
         width:0; height: 0;
       }
       li {
