@@ -1,18 +1,18 @@
 <template>
   <div class="p-create-lite p-body">
-    <p style="text-align: center;font-size: 14px;font-weight: normal;">norm去问al</p>
-    <p style="text-align: center;font-size: 14px;font-weight: bold;">bol 请问d</p>
-    <p style="text-align: center;font-size: 14px;font-weight: bolder;">bolde请问r</p>
-    <p style="text-align: center;font-size: 14px;font-weight: lighter;">lighte 请问r</p>
-    <p style="text-align: center;font-size: 14px;font-weight: 100;">100 请问</p>
-    <p style="text-align: center;font-size: 14px;font-weight: 200;">200请问</p>
-    <p style="text-align: center;font-size: 14px;font-weight: 300;">300请问</p>
-    <p style="text-align: center;font-size: 14px;font-weight: 400;">400 请问饿</p>
-    <p style="text-align: center;font-size: 14px;font-weight: 500;">500请问</p>
-    <p style="text-align: center;font-size: 14px;font-weight: 600;">600请问</p>
-    <p style="text-align: center;font-size: 14px;font-weight: 700;">700阿斯顿</p>
-    <p style="text-align: center;font-size: 14px;font-weight: 800;">800阿斯顿</p>
-    <p style="text-align: center;font-size: 14px;font-weight: 900;">900撒的</p>
+    <p class="ft-sz" style="text-align: center;font-weight: normal;">norm去问al</p>
+    <p class="ft-sz" style="text-align: center;font-weight: bold;">bol 请问d</p>
+    <p class="ft-sz" style="text-align: center;font-weight: bolder;">bolde请问r</p>
+    <p class="ft-sz" style="text-align: center;font-weight: lighter;">lighte 请问r</p>
+    <p class="ft-sz" style="text-align: center;font-weight: 100;">100 请问</p>
+    <p class="ft-sz" style="text-align: center;font-weight: 200;">200请问</p>
+    <p class="ft-sz" style="text-align: center;font-weight: 300;">300请问</p>
+    <p class="ft-sz" style="text-align: center;font-weight: 400;">400 请问饿</p>
+    <p class="ft-sz" style="text-align: center;font-weight: 500;">500请问</p>
+    <p class="ft-sz" style="text-align: center;font-weight: 600;">600请问</p>
+    <p class="ft-sz" style="text-align: center;font-weight: 700;">700阿斯顿</p>
+    <p class="ft-sz" style="text-align: center;font-weight: 800;">800阿斯顿</p>
+    <p class="ft-sz" style="text-align: center;font-weight: 900;">900撒的</p>
     <p class="error-tips" v-if="form.status === 3">很抱歉您的资料未通过审核，请修改后重新提交</p>
     <div class="form">
       <div class="form-group flex">
@@ -232,7 +232,9 @@ export default class CenterCreateLite extends Vue {
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
-
+.ft-sz {
+  font-size: 14px;
+}
 .p-create-lite {
   font-size: 15px;
   padding-bottom: 70px;
