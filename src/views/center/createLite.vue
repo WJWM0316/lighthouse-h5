@@ -234,6 +234,7 @@ export default class CenterCreateLite extends Vue {
 @import "../../styles/mixins";
 .ft-sz {
   font-size: 16px;
+  display: none;
 }
 .p-create-lite {
   font-size: 15px;
@@ -283,7 +284,7 @@ export default class CenterCreateLite extends Vue {
       & > label {
         padding: 0 5px;
         line-height: 32px;
-        font-weight: lighter;
+        font-weight: 300;
         color: #666;
 
         .asterisk {
@@ -342,7 +343,7 @@ export default class CenterCreateLite extends Vue {
       .label {
         line-height: 25px;
         font-size: 15px;
-        font-weight: lighter;
+        font-weight: 300;
         color: #666;
 
         .asterisk {
