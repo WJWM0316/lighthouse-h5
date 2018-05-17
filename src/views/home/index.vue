@@ -636,6 +636,9 @@ export default class HomeIndex extends Vue {
       font-size: 0;
       overflow-x: scroll;
       line-height: 0;
+      &::-webkit-scrollbar{
+        background-color:transparent;
+      }
       li {
         width: 151px;
         display: inline-block;
