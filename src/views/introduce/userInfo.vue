@@ -27,12 +27,13 @@
       <div class="container">
 
         <!-- 大咖 -->
+        <!--导师灯塔-->
         <!--<block wx:if="{{userIdentify === 1}}">-->
         <div v-if="communityList.length > 0">
           <div class="container-title">导师灯塔</div>
           <div class="container-content">
-            <community-card class="community-item" v-for="(item, index) in communityList" :key="index" :community="item"
-                            @tap-card="handleTap(item)"></community-card>
+            <self-detail class="community-item" v-for="(item, index) in communityList" :key="index" :community="item"
+                            @tap-card="handleTap(item)"></self-detail>
           </div>
         </div>
 
@@ -76,6 +77,7 @@
   import Component from 'vue-class-component'
   import dynamic from '@/components/dynamic/dynamic'
   import CommunityCard from '@/components/communityCard'
+  import selfDetail from '@/components/selfDetail'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
   import { getPersonalDetailsApi } from '@/api/pages/pageInfo.js'
@@ -85,7 +87,8 @@
     components: {
       dynamic,
       CommunityCard,
-      Scroll
+      Scroll,
+      selfDetail
     },
     computed: {
       userCareer () {

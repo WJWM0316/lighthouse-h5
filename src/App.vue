@@ -46,7 +46,7 @@ import { mapState } from 'vuex'
 import wxUtil from '@/util/wx'
 import settings from '@/config/index'
 import WechatMixin from '@/mixins/wechat'
-import {countCodeApi} from '@/api/pages/pageInfo'
+import {newCountCodeApi} from '@/api/pages/pageInfo'
 @Component({
   name: 'app',
   mixins: [WechatMixin],
@@ -87,14 +87,12 @@ import {countCodeApi} from '@/api/pages/pageInfo'
           })
         }
         //  数据统计 如果路由参数测试  则发送统计请求
-        const { ceshi='' } = this.$route.query || ''
-        const { communityId } = this.$route.params || this.$route.query || ''
+        const { messageId='' } = this.$route.query || ''
         const params = {
-          code: ceshi,
-          communityId
+          messageId
         }
-        console.log('code222222', ceshi)
-        if (ceshi) {
+        console.log('code222222', messageId)
+        if (messageId) {
           this.countCode(params)
         }
 
@@ -149,7 +147,7 @@ export default class App extends Vue {
     location.reload()
   }
   async countCode (params) {
-    await countCodeApi(params)
+    await newCountCodeApi(params)
   }
   mounted () {
   }
