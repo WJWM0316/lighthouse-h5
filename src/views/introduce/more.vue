@@ -201,7 +201,7 @@
 	.community-more{
 		//height: 100%;
     	box-sizing: border-box;
-    	background: #EDEDED;
+    	background: #f8f8f8;
     	.block {
     		background: #ffffff;
     	}

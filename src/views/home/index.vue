@@ -190,8 +190,6 @@ export default class HomeIndex extends Vue {
       const name = targetName === 'picked' ? 'home' : targetName
       this.$router.push({name})
       this.init().then(() => {
-
-        this.joinLd = true;
       })
     }
   }
@@ -389,10 +387,18 @@ export default class HomeIndex extends Vue {
           if (creations && page === 1) {
             this.creations = creations
           }
-          console.log(recommends)
           if (recommends && page === 1) {
             this.likes = recommends
           }
+
+          // todo
+          if(this.joins.length == 0 && this,creations.length == 0){
+              this.joinLd = true;
+          }else {
+              this.joinLd = false;
+          }
+
+
           allTotal = res.total
           break
       }
