@@ -161,11 +161,6 @@ export default class HomeIndex extends Vue {
   pickedParams = { // 页面所需参数
     tagId: 0
   }
-  
-  beforeRouteLeave(to, from, next) {
-		 from.meta.keepAlive = true;
-		 next();
-	}
 
   created () {
     const routeName = this.$route.name
