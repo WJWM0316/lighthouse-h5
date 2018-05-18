@@ -32,14 +32,21 @@
         <div v-if="communityList.length > 0">
           <div class="container-title">导师灯塔</div>
           <div class="container-content">
-            <self-detail class="community-item" v-for="(item, index) in communityList" :key="index" :community="item"
+            <self-detail v-show="isShowTower || index < 2" class="community-item" v-for="(item, index) in communityList" :key="index" :community="item"
                             @tap-card="handleTap(item)"></self-detail>
           </div>
+          
+          <!--收起和展开-->
+	        <div v-if="communityList.length > 2" class="control-display" @click="isDisplay"><span>{{displayText}}</span>
+	        	<img v-if="isShowTower" class="take-up-icon" src='./../../assets/icon/btn_enter copy@hhx.png'/>
+	        	<img v-else class="take-up-icon" src='./../../assets/icon/btn_levea copy@hhx.png'/>
+	        </div>
+        
         </div>
 
         <!-- 普通用户 -->
         <div v-if="dynamicList.length > 0">
-          <div class="container-title" style="border-bottom: solid 1px #ededed;">TA的内容</div>
+          <div class="container-title needHeight" style="border-bottom: solid 1px #ededed;">TA的内容</div>
           <div class="container-content">
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
@@ -130,6 +137,8 @@
     communityList = []
     showIdentification = false
     isComplete = true
+    displayText ="展开"
+    isShowTower = false
 
     created () {
       this.pageInit().then(() => {})
@@ -163,6 +172,16 @@
         this.$router.push(`/introduce/${item.communityId}`)
       }
     }
+    
+    //控制tower显示
+      isDisplay(){
+      	this.isShowTower=!this.isShowTower;
+      	if(this.isShowTower){
+      		this.displayText="收起"
+      	}else{
+      		this.displayText="展开"
+      	}
+      }
 
     // ------------------------------------------------
     /**
@@ -354,6 +373,38 @@
 
   .container {
     margin-top: 16px;
+    /*控制按钮*/
+    & .control-display{
+      	
+      	width: 345px;
+      	box-sizing: border-box;
+      	margin:10px 0 0;
+      	margin-left: 15px;
+      	display: flex;
+      	align-items: center;
+      	justify-content: center;
+      	/*width: 100%;*/
+      	border-radius: 50px;
+      	height: 40px;
+      	text-align: center;
+      	background: #F8F8F8;
+      	
+      	
+      	& text{
+      		font-family: PingFangSC-Light;
+					font-size: 15px;
+					color: #666666;
+					letter-spacing: 0;
+					line-height: 40px;
+					margin-right: 5px;
+      	}
+				
+				& .take-up-icon{
+					display: inline-block;
+					width: 20px;
+					height: 20px;
+				}
+      }
 
   .empty-tip {
     margin-top: 100px;
@@ -370,6 +421,10 @@
     color: #929292;
     padding: 10px 0;
     margin: 0 15px;
+  }
+  
+  .needHeight{
+  	 padding-top: 50px;
   }
 
   }
