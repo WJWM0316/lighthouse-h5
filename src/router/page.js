@@ -28,7 +28,7 @@ const routers = [
     // 大咖精选页
     path: '/introduce/:communityId/community',
     name: 'community',
-    meta: {navHide: true},
+    meta: {navHide: true,keepAlive:true},
     component: resolve => require(['@/views/introduce/community'], resolve),
   },
   {
