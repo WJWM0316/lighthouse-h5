@@ -1,6 +1,9 @@
 <template>
   <div id="app" style="height: 100%" v-cloak>
-    <router-view></router-view>
+  	
+  	<router-view>
+      <!-- 这里是不被缓存的视图组件！ -->
+    </router-view>
     <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
             @on-index-change="goSomeWhere">
       <tabbar-item :selected="isSelected(tab.src)"

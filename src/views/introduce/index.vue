@@ -710,7 +710,7 @@
 
         &.h5-code {
           padding: 0 20px;
-          font-size: 15px;
+          /*font-size: 15px;*/
           word-wrap: break-word;
           width: 100%;
           box-sizing: border-box;

@@ -235,6 +235,7 @@
     qrSrc = ''
 
     created () {
+    	
     	let titleBoxShow=true;
     	console.log("5555555555555555",this.$route.query);
       if (this.$route.query.type !== undefined) {
