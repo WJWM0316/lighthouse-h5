@@ -234,15 +234,6 @@
     
     qrSrc = ''
 		
-		//路由跳转前
-		 beforeRouteLeave(to, from, next) {
-		 	console.log(to,"5555555555555555555")
-		 	if(to.path="/index"){
-		 		alert("111111111111111111")
-		 		from.meta.keepAlive = false;
-			 	next();
-		 	}
-		 }
 	
     created () {
     	
