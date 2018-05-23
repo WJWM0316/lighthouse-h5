@@ -333,6 +333,9 @@
       	case '8fd72f707af6071a2a7d7bc6693a8ace':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
+        case '67917ba04abd74c3247245576b1168b0':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
           //新增
         default:
           this.qrSrc = require('@/assets/page/qr_gzh_1.png')
