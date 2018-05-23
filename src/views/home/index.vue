@@ -371,9 +371,6 @@ export default class HomeIndex extends Vue {
           allTotal = res.total
           break
         case 'joined':
-          if (this.joins.length > 0) {
-            return
-          }
           res = await this.getJoinedApi(params)
           console.log('已加入: ', res)
           const {creations, joins, recommends} = res
