@@ -54,7 +54,10 @@ export default class PublishVoice extends Vue {
       })
       await publishApi(params)
       this.$vux.toast.text('发布成功', 'bottom')
-      this.$router.go(-1)
+      
+      let path=`/introduce/${sessionStorage.getItem("nowCommunity")}/community`;
+        this.$router.replace(path);
+      // this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
     } finally {
