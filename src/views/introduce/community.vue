@@ -245,6 +245,7 @@
       let nowCommunity=sessionStorage.getItem("nowCommunity");
      if(!nowCommunity || nowCommunity!==to.params.communityId){
        sessionStorage.setItem("nowCommunity",to.params.communityId)
+       to.meta.keepAlive = false;
       }
 
         if(from.name==="userInfo-details"){
@@ -698,9 +699,9 @@
         this.displaySuspensionInput = false
       }
       const communityTitleTop = this.communityTitleTop
+      const {scrollTop} = e.target
+      sessionStorage.setItem('scrollTop',scrollTop);
       if (communityTitleTop) {
-        const {scrollTop} = e.target
-        sessionStorage.setItem('scrollTop',scrollTop);
         this.isCommunityTitleFixed = scrollTop >= communityTitleTop
       }
     }
