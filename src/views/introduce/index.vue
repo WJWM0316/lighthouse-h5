@@ -28,7 +28,7 @@
       <div class="module"  style="min-height: 70vh" >
         <div class="module-title">
         	<!--<div class="hr"></div>-->
-          <p>关于社区</p>
+          <p>关于灯塔</p>
           
           <!--关于塔主标签-->
           <!--<span class="module-title-tip-line"></span>
@@ -59,7 +59,7 @@
           ></dynamic>
         </div>
         <div class="desc">
-          加入灯塔社区，即可解锁更多内容~
+          加入灯塔，即可解锁更多内容~
         </div>
       </div>
 

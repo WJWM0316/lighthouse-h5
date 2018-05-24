@@ -14,6 +14,21 @@ export default {
   isShowQrcode3: function (state) {
     return state.qr_show3
   },
+  isShowQrcode4: function (state) {
+    return state.qr_show4
+  },
+  isShowQrcode5: function (state) {
+    return state.qr_show5
+  },
+  isShowQrcode6: function (state) {
+    return state.qr_show6
+  },
+  isShowQrcode7: function (state) {
+    return state.qr_show7
+  },
+  isShowQrcode8: function (state) {
+    return state.qr_show8
+  },
   viewScrollTop: function (state) {
     return state.viewScrollTop
   },
