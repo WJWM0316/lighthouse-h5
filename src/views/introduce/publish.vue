@@ -38,6 +38,12 @@ import WechatCodeModal from '@/components/wechatCodeModal'
 import { publishApi,publishPostApi } from '@/api/pages/content'
 import { wechatUploadFileApi } from '@/api/common'
 
+Component.registerHooks([
+    'beforeRouteEnter',
+    'beforeRouteLeave',
+    'beforeRouteUpdate' // for vue-router 2.2+
+  ])
+
 @Component({
   name: 'publish-content',
   components: {
@@ -104,6 +110,12 @@ export default class PublishContent extends Vue {
    */
   get canPublish () {
     return this.form.content.length > 0 || (this.images && this.images.length > 0)
+  }
+
+  //路由离开前
+  beforeRouteLeave(to,from,next){
+    to.meta.keepAlive=false;
+    next()
   }
 
   created () {
@@ -281,7 +293,9 @@ export default class PublishContent extends Vue {
 			}
       
       this.$vux.toast.text('发布成功', 'bottom')
-      this.$router.go(-1)
+      let path=`/introduce/${sessionStorage.getItem("nowCommunity")}/community`;
+      this.$router.push(path);
+      // this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
     } finally {

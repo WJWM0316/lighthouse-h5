@@ -156,6 +156,12 @@
   import WechatMixin from '@/mixins/wechat'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
 
+  Component.registerHooks([
+    'beforeRouteEnter',
+    'beforeRouteLeave',
+    'beforeRouteUpdate' // for vue-router 2.2+
+  ])
+
   @Component({
     name: 'big-shot-community',
     components: {
@@ -233,6 +239,49 @@
     }
     
     qrSrc = ''
+
+    //路由刚进入的时候
+    beforeRouteEnter(to,from,next){
+      let nowCommunity=sessionStorage.getItem("nowCommunity");
+     if(!nowCommunity || nowCommunity!==to.params.communityId){
+       sessionStorage.setItem("nowCommunity",to.params.communityId)
+      }
+
+        if(from.name==="userInfo-details"){
+          to.meta.keepAlive = false;
+          console.log(to,"我是当前路由信息")
+        }
+      next();
+   }
+
+    //页面离开前
+    beforeRouteLeave(to, from, next) {
+      console.log(from,"我是后退的路由信息")
+      // if(from.meta.keepAlive===false){
+      //   from.meta.keepAlive=true;
+      // }
+      let nowCommunity=sessionStorage.getItem("nowCommunity");
+      if(!nowCommunity){
+        sessionStorage.setItem("nowCommunity",from.params.communityId)
+      }
+      if( to.path==="/joined" || 
+          to.path==="/index" || 
+          to.path==="/advertising/115" || 
+          to.path==="/advertising/116" || 
+          to.path==="/advertising/117" || 
+          to.name==="userInfo-details")
+      {
+        from.meta.keepAlive = false;
+      }else{
+        from.meta.keepAlive = true;
+      }
+      next();
+     }
+
+     activated(){
+      const scrollDom=document.getElementsByClassName('scroll-container')[0];
+      scrollDom.scrollTop=sessionStorage.getItem("scrollTop");
+    }
 		
 	
     created () {
@@ -651,6 +700,7 @@
       const communityTitleTop = this.communityTitleTop
       if (communityTitleTop) {
         const {scrollTop} = e.target
+        sessionStorage.setItem('scrollTop',scrollTop);
         this.isCommunityTitleFixed = scrollTop >= communityTitleTop
       }
     }
