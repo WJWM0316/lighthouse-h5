@@ -251,6 +251,8 @@
         if(from.name==="userInfo-details"){
           to.meta.keepAlive = false;
           console.log(to,"我是当前路由信息")
+        }else{
+          to.meta.keepAlive = true;
         }
       next();
    }
