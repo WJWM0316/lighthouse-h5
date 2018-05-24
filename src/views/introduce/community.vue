@@ -272,7 +272,9 @@
           to.path==="/advertising/117" || 
           to.name==="userInfo-details")
       {
-        from.meta.keepAlive = false;
+        this.$destroy();
+        // from.meta.keepAlive = false;
+        debugger
       }else{
         from.meta.keepAlive = true;
       }
