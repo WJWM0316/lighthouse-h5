@@ -322,6 +322,7 @@
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text('已购买成功', 'bottom')
             const { communityId } = self.$route.params
+            let number = Math.random() * 8 + 1
             console.log('communityId', communityId)
             //
             switch (communityId) {
@@ -362,7 +363,7 @@
                 self.$store.dispatch('show_qr', {type: 2})
                 break
               case '85f224b0c5afa3f85fc780dc486bf0b8': // 测试专用
-                self.$store.dispatch('show_qr', {type: 2})
+                self.$store.dispatch('show_qr', {type: number})
                 break
               default:
                 location.reload()
