@@ -28,7 +28,7 @@
       <div class="module"  style="min-height: 70vh" >
         <div class="module-title">
         	<!--<div class="hr"></div>-->
-          <p>关于社区</p>
+          <p>关于灯塔</p>
           
           <!--关于塔主标签-->
           <!--<span class="module-title-tip-line"></span>
@@ -59,7 +59,7 @@
           ></dynamic>
         </div>
         <div class="desc">
-          加入灯塔社区，即可解锁更多内容~
+          加入灯塔，即可解锁更多内容~
         </div>
       </div>
 
@@ -322,6 +322,7 @@
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text('已购买成功', 'bottom')
             const { communityId } = self.$route.params
+            let number = Math.random() * 10 + 1
             console.log('communityId', communityId)
             //
             switch (communityId) {
@@ -360,6 +361,12 @@
                 break
               case 'd71fddeba62a878aecd901198a959674': // 正式分销5月17号
                 self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '85f224b0c5afa3f85fc780dc486bf0b8': // 测试专用
+                self.$store.dispatch('show_qr', {type: number})
+                break
+              case 'db73998f8d1691d3ce75180266e3cba9': // 测试专用
+                self.$store.dispatch('show_qr', {type: number})
                 break
               default:
                 location.reload()
