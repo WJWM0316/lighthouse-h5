@@ -190,7 +190,9 @@
       background-color: #fff;
 
       .userInfo {
-        display: flex;
+        position: relative;
+        padding-left: 60px;
+        height: 60px;
         font-size: 13px;
         color: #929292;
         margin-bottom: 20px;
@@ -202,7 +204,9 @@
         }
 
         .userInfo-img {
-          position: relative;
+          position: absolute;
+          left: 0;
+          top: 0;
           .headImg {
             width: 60px;
             height: 60px;
