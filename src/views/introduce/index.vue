@@ -361,6 +361,9 @@
               case 'd71fddeba62a878aecd901198a959674': // 正式分销5月17号
                 self.$store.dispatch('show_qr', {type: 2})
                 break
+              case '85f224b0c5afa3f85fc780dc486bf0b8': // 测试专用
+                self.$store.dispatch('show_qr', {type: 2})
+                break
               default:
                 location.reload()
                 break
