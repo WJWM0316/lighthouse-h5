@@ -39,6 +39,12 @@ export default {
       case 8:
         state.qr_show8 = true
         break
+      case 9:
+        state.qr_show9 = true
+        break
+      case 10:
+        state.qr_show10 = true
+        break
       default:
         state.qr_show = true
         break
@@ -66,6 +72,12 @@ export default {
         break
       case 8:
         state.qr_show8 = false
+        break
+      case 9:
+        state.qr_show9 = false
+        break
+      case 10:
+        state.qr_show10 = false
         break
       default:
         state.qr_show = false
