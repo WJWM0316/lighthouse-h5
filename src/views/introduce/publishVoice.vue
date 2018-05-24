@@ -17,6 +17,12 @@ import Recorder from '@/components/recorder'
 
 import { publishApi } from '@/api/pages/content'
 
+Component.registerHooks([
+    'beforeRouteEnter',
+    'beforeRouteLeave',
+    'beforeRouteUpdate' // for vue-router 2.2+
+  ])
+
 @Component({
   name: 'publish-voice',
   components: {
@@ -30,6 +36,17 @@ export default class PublishVoice extends Vue {
   }
 
   serverIds = []
+
+  //发送成功
+  sendOK=false
+
+  //路由离开前
+  beforeRouteLeave(to,from,next){
+    if(this.sendOK){
+      to.meta.keepAlive=false;
+    }
+    next()
+  }
 
   created () {
     this.form.communityId = this.$route.params.communityId
@@ -54,8 +71,9 @@ export default class PublishVoice extends Vue {
       })
       await publishApi(params)
       this.$vux.toast.text('发布成功', 'bottom')
-      
+
       let path=`/introduce/${sessionStorage.getItem("nowCommunity")}/community`;
+      this.sendOK=true;
         this.$router.replace(path);
       // this.$router.go(-1)
     } catch (error) {
