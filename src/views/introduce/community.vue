@@ -245,7 +245,7 @@
       let nowCommunity=sessionStorage.getItem("nowCommunity");
      if(!nowCommunity || nowCommunity!==to.params.communityId){
        sessionStorage.setItem("nowCommunity",to.params.communityId)
-       to.meta.keepAlive = false;
+       // to.meta.keepAlive = false;
       }
 
         if(from.name==="userInfo-details"){
