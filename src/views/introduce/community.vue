@@ -262,7 +262,7 @@
 					sessionStorage.setItem('scrollTop',0);
 					sessionStorage.setItem("nowCommunity",to.params.communityId)
 					console.log(to,"我是当前页面的路由信息")
-					sessionStorage.setItem("isNewLoad",true)
+					// sessionStorage.setItem("isNewLoad",true)
 					to.meta.keepAlive = false;
 				}
 			}
@@ -285,16 +285,18 @@
 		//页面离开前
 		beforeRouteLeave(to, from, next) {
 //			console.log(to,"我是后退的路由信息")
-//		 	if(	to.path==="/joined" || 
-//		 			to.path==="/index" || 
-//		 			to.path==="/advertising/115" || 
-//		 			to.path==="/advertising/116" || 
-//		 			to.path==="/advertising/117" || 
-//		 			to.name==="userInfo-details")
-//		 	{
-//		 		this.$destroy()
-////		 		from.meta.keepAlive = false;
-//		 	}
+// 		 	if(	to.path==="/joined" || 
+// 		 			to.path==="/index" || 
+// 		 			to.path==="/advertising/115" || 
+// 		 			to.path==="/advertising/116" || 
+// 		 			to.path==="/advertising/117" || 
+// 		 			to.name==="userInfo-details")
+// 		 	{
+// 		 		this.$destroy()
+// //		 		from.meta.keepAlive = false;
+// 		 	}else{
+//         from.meta.keepAlive = true;
+//       }
 		 	next();
 		 }
 	
@@ -512,7 +514,7 @@
         this.displaySuspensionInput = false
         this.dynamicList = []
         this.showType = type
-        // this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
         this.showIdentification = !type
 
         this.pagination.end = false // 初始化数据，必定不是最后一页

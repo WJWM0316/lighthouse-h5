@@ -39,14 +39,6 @@ router.beforeEach(async (to, from, next) => {
   } else {
     store.dispatch('show_nav')
   }
-  if (to.name === 'all-details' && from.name === 'community') {
-    console.log('离开============================灯塔列表')
-    from.meta.keepAlive = true
-    console.log('缓存成功')
-  } else {
-    from.meta.keepAlive = false
-    console.log('缓存清除')
-  }
   
   next() // 确保一定要调用 next()
 })
