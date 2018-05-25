@@ -116,9 +116,6 @@ export default class PublishContent extends Vue {
 
   //路由离开前
   beforeRouteLeave(to,from,next){
-    if(this.sendOK){
-      to.meta.keepAlive=false;
-    }
     console.log(to,"我是要跳转的路由参数")
     next()
   }
@@ -304,8 +301,10 @@ export default class PublishContent extends Vue {
       this.$vux.toast.text('发布成功', 'bottom')
 
       if(this.sendOK){
-        let path=`/introduce/${sessionStorage.getItem("nowCommunity")}/community`;
-        this.$router.replace(path);
+        // let path=`/introduce/${sessionStorage.getItem("nowCommunity")}/community`;
+        // this.$router.replace(path);
+        sessionStorage.setItem("isNewLoad",true);
+        this.$router.go(-1)
       }else{
         this.$router.go(-1)
       }
