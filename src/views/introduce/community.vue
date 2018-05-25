@@ -233,7 +233,55 @@
     }
     
     qrSrc = ''
+    //路由刚进入的时候
+    beforeRouteEnter(to,from,next){
+      let nowCommunity=sessionStorage.getItem("nowCommunity");
+     if(!nowCommunity || nowCommunity!==to.params.communityId){
+       sessionStorage.setItem("nowCommunity",to.params.communityId)
+       // to.meta.keepAlive = false;
+      }
 
+        if(from.name==="userInfo-details"){
+          to.meta.keepAlive = false;
+          console.log(to,"我是当前路由信息")
+        }else{
+          to.meta.keepAlive = true;
+        }
+      next();
+   }
+
+    //页面离开前
+    beforeRouteLeave(to, from, next) {
+      console.log(from,"我是后退的路由信息")
+      // if(from.meta.keepAlive===false){
+      //   from.meta.keepAlive=true;
+      // }
+      let nowCommunity=sessionStorage.getItem("nowCommunity");
+      if(!nowCommunity){
+        sessionStorage.setItem("nowCommunity",from.params.communityId)
+      }
+      if( to.path==="/joined" || 
+          to.path==="/index" || 
+          to.path==="/advertising/115" || 
+          to.path==="/advertising/116" || 
+          to.path==="/advertising/117" || 
+          to.name==="userInfo-details")
+      {
+        this.$destroy();
+        // from.meta.keepAlive = false;
+        debugger
+      }else{
+        from.meta.keepAlive = true;
+      }
+      next();
+     }
+
+     activated(){
+      const scrollDom=document.getElementsByClassName('scroll-container')[0];
+      scrollDom.scrollTop=sessionStorage.getItem("scrollTop");
+    }
+		
+	
     created () {
     	const selfqq = this
     	let titleBoxShow=true;

@@ -5,7 +5,7 @@ class WxUtil {
   reloadPage () {
     const iosWX = brower.isWechat() && brower.isIos()
     const {name, params, query} = router.app._route
-    if (!(query && query.reload) && iosWX) {
+    if (!(query && query.reload)) {
       // 用window.location.href跳转刷新，会导致多一个页面，要返回两次。（所以不用它）
       router.replace({name, params, query: {...query, reload: true}}) // 改变路由
       // router.go(0) // 刷新当前页

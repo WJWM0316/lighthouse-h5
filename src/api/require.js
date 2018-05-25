@@ -80,7 +80,8 @@ async function process(response) {
     const hostname = location.href.split('?')[0]
     console.log('hashParams:', hashParams)
     console.log('hostname:', hostname)
-    location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
+    window.location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
+    window.location.reload()
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 426) { // 没有登录权限,跳去手机号登录
@@ -183,7 +184,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     delete data.globalLoading
   }
 
-  // data.TestUid = 3
+  data.TestUid = 3
 
 
   // showLoading(globalLoading)
