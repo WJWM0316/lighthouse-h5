@@ -278,15 +278,15 @@
       // if(!nowCommunity){
       //   sessionStorage.setItem("nowCommunity",from.params.communityId)
       // }
-      if( to.path==="/joined" || 
-          to.path==="/index" || 
-          to.path==="/advertising/115" || 
-          to.path==="/advertising/116" || 
-          to.path==="/advertising/117" || 
-          to.name==="userInfo-details")
-      {
-        this.$destroy();
-      }
+      // if( to.path==="/joined" || 
+      //     to.path==="/index" || 
+      //     to.path==="/advertising/115" || 
+      //     to.path==="/advertising/116" || 
+      //     to.path==="/advertising/117" || 
+      //     to.name==="userInfo-details")
+      // {
+      //   this.$destroy();
+      // }
       next();
      }
 
