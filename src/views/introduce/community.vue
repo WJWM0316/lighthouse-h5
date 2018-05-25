@@ -250,11 +250,13 @@
         sessionStorage.setItem("isNewLoad",false)
       }else{
         if(nowCommunity===to.params.communityId){
+          to.meta.keepAlive = true;
           console.log(to,"community相同时候打印我")
         }else{
           sessionStorage.setItem("nowCommunity",to.params.communityId)
           console.log(to,"我是当前页面的路由信息")
           sessionStorage.setItem("isNewLoad",true)
+          to.meta.keepAlive = false;
         }
       }  
 
