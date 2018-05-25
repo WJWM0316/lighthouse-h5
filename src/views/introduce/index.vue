@@ -365,8 +365,8 @@
               case '85f224b0c5afa3f85fc780dc486bf0b8': // 测试专用
                 self.$store.dispatch('show_qr', {type: number})
                 break
-              case 'db73998f8d1691d3ce75180266e3cba9': // 测试专用
-                self.$store.dispatch('show_qr', {type: number})
+              case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
+                self.$store.dispatch('show_qr', {type: 4})
                 break
               default:
                 location.reload()
