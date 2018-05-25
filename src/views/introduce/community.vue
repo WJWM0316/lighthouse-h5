@@ -244,6 +244,16 @@
         to.meta.keepAlive = true;
       }
 
+      if( from.path==="/joined" || 
+          from.path==="/index" || 
+          from.path==="/advertising/115" || 
+          from.path==="/advertising/116" || 
+          from.path==="/advertising/117" || 
+          from.name==="userInfo-details")
+        {
+          to.meta.keepAlive = false;
+        }
+
       next();
    }
 
