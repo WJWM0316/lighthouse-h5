@@ -6,12 +6,6 @@ export default {
   qr_show2: false,
   qr_show3: false,
   qr_show4: false,
-  qr_show5: false,
-  qr_show6: false,
-  qr_show7: false,
-  qr_show8: false,
-  qr_show9: false,
-  qr_show10: false,
   viewScrollTop: 0,                 // 记录页面滚动高度
   musicStripBottomHeight: 88,       // 音乐悬浮条距离底部高度
   musicStripIsShow: true,           // 音乐悬浮条是否展示
