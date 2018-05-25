@@ -236,23 +236,37 @@
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
 
-     let nowCommunity=sessionStorage.getItem("nowCommunity");
-     if(!nowCommunity || nowCommunity!==to.params.communityId){
-       sessionStorage.setItem("nowCommunity",to.params.communityId)
-       to.meta.keepAlive = false;
+     // let nowCommunity=sessionStorage.getItem("nowCommunity");
+     // if(!nowCommunity || nowCommunity!==to.params.communityId){
+     //   sessionStorage.setItem("nowCommunity",to.params.communityId)
+     //   to.meta.keepAlive = false;
+     //  }else{
+     //    to.meta.keepAlive = true;
+     //  }
+      let nowCommunity=sessionStorage.getItem("nowCommunity");
+      if(!nowCommunity){
+        sessionStorage.setItem("nowCommunity",to.params.communityId)
+        console.log(to,"我是没有记录community的时候")
+        sessionStorage.setItem("isNewLoad",false)
       }else{
-        to.meta.keepAlive = true;
-      }
-
-      if( from.path==="/joined" || 
-          from.path==="/index" || 
-          from.path==="/advertising/115" || 
-          from.path==="/advertising/116" || 
-          from.path==="/advertising/117" || 
-          from.name==="userInfo-details")
-        {
-          to.meta.keepAlive = false;
+        if(nowCommunity===to.params.communityId){
+          console.log(to,"community相同时候打印我")
+        }else{
+          sessionStorage.setItem("nowCommunity",to.params.communityId)
+          console.log(to,"我是当前页面的路由信息")
+          sessionStorage.setItem("isNewLoad",true)
         }
+      }  
+
+      // if( from.path==="/joined" || 
+      //     from.path==="/index" || 
+      //     from.path==="/advertising/115" || 
+      //     from.path==="/advertising/116" || 
+      //     from.path==="/advertising/117" || 
+      //     from.name==="userInfo-details")
+      //   {
+      //     to.meta.keepAlive = false;
+      //   }
 
       next();
    }
