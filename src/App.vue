@@ -47,55 +47,7 @@
         <i class="u-icon-close icon-close" @click="closeQrCode(4)"></i>
         <div class="title">支付成功</div>
         <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_4.jpg">
-      </div>
-    </div>
-    <div class="home-mask" v-if="isShowQrcodes5">
-      <div class="qr-container">
-        <i class="u-icon-close icon-close" @click="closeQrCode(5)"></i>
-        <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_5.jpg">
-      </div>
-    </div>
-    <div class="home-mask" v-if="isShowQrcodes6">
-      <div class="qr-container">
-        <i class="u-icon-close icon-close" @click="closeQrCode(6)"></i>
-        <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_6.jpg">
-      </div>
-    </div>
-    <div class="home-mask" v-if="isShowQrcodes7">
-      <div class="qr-container">
-        <i class="u-icon-close icon-close" @click="closeQrCode(7)"></i>
-        <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_7.jpg">
-      </div>
-    </div>
-    <div class="home-mask" v-if="isShowQrcodes8">
-      <div class="qr-container">
-        <i class="u-icon-close icon-close" @click="closeQrCode(8)"></i>
-        <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_8.jpg">
-      </div>
-    </div>
-    <div class="home-mask" v-if="isShowQrcodes9">
-      <div class="qr-container">
-        <i class="u-icon-close icon-close" @click="closeQrCode(9)"></i>
-        <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_9.jpg">
-      </div>
-    </div>
-    <div class="home-mask" v-if="isShowQrcodes10">
-      <div class="qr-container">
-        <i class="u-icon-close icon-close" @click="closeQrCode(10)"></i>
-        <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_10.jpg">
+        <img class="qrcode" src="./assets/page/qr_kf_4.png">
       </div>
     </div>
   </div>
@@ -134,24 +86,6 @@ import {newCountCodeApi} from '@/api/pages/pageInfo'
     },
     isShowQrcodes4: function () { // 公众号二维码是否展示
       return this.$store.getters.isShowQrcode4
-    },
-    isShowQrcodes5: function () { // 公众号二维码是否展示
-      return this.$store.getters.isShowQrcode5
-    },
-    isShowQrcodes6: function () { // 公众号二维码是否展示
-      return this.$store.getters.isShowQrcode6
-    },
-    isShowQrcodes7: function () { // 公众号二维码是否展示
-      return this.$store.getters.isShowQrcode7
-    },
-    isShowQrcodes8: function () { // 公众号二维码是否展示
-      return this.$store.getters.isShowQrcode8
-    },
-    isShowQrcodes9: function () { // 公众号二维码是否展示
-      return this.$store.getters.isShowQrcode7
-    },
-    isShowQrcodes10: function () { // 公众号二维码是否展示
-      return this.$store.getters.isShowQrcode8
     }
   },
   watch: {
