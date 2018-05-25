@@ -86,7 +86,7 @@ import {newCountCodeApi} from '@/api/pages/pageInfo'
     },
     isShowQrcodes4: function () { // 公众号二维码是否展示
       return this.$store.getters.isShowQrcode4
-    } 
+    }
   },
   watch: {
     '$route': {
