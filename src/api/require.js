@@ -80,6 +80,7 @@ async function process(response) {
     const hostname = location.href.split('?')[0]
     console.log('hashParams:', hashParams)
     console.log('hostname:', hostname)
+    console.log(`${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`)
     window.location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
     window.location.reload()
     return data.data === undefined ? {} : data.data
