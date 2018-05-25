@@ -81,10 +81,10 @@
             ></dynamic>
           </div>
           <div class="blank" v-else>
-            <block v-if="pagination.end">
+            <template v-if="pagination.end">
               <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
               <p>暂时没有内容～</p>
-            </block>
+            </template>
           </div>
         </div>
 
@@ -155,12 +155,6 @@
 
   import WechatMixin from '@/mixins/wechat'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
-
-  Component.registerHooks([
-    'beforeRouteEnter',
-    'beforeRouteLeave',
-    'beforeRouteUpdate' // for vue-router 2.2+
-  ])
 
   @Component({
     name: 'big-shot-community',
@@ -239,7 +233,6 @@
     }
     
     qrSrc = ''
-
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
 
@@ -337,9 +330,8 @@
 		
 	
     created () {
-    	
+    	const selfqq = this
     	let titleBoxShow=true;
-    	console.log("5555555555555555",this.$route.query);
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
 //      this.type = this.$route.query.type
@@ -379,10 +371,8 @@
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
         	this.roleInfo=res.role;
-        	console.log(this.roleInfo,"8888888888888888888888888888")
         }).catch(res => {
         		this.roleInfo=res.data.role;
-        		console.log(this.roleInfo,"999999999999999999999999")
 				})
         
         //判断是否有课程，无课程则跳转
@@ -407,7 +397,6 @@
     
     //路由跳转more
     toMore(){
-    	
     	console.log(this.communityId);
     	let that=this;
     	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId,classmateNum:this.pageInfo.joinedNum}})
@@ -469,7 +458,9 @@
       await this.getList({page: 1})
 
       this.$nextTick(() => {
-        this.communityTitleTop = this.$refs['community-title'].offsetTop
+        if (this.$refs['community-title']) {
+          this.communityTitleTop = this.$refs['community-title'].offsetTop
+        }
         console.log(this.$refs)
         //console.log(this.$refs['community-title'].offsetTop)
       })
@@ -695,8 +686,6 @@
       this.pagination.total = total
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
-
-      console.log('-------',this.pagination.end)
     }
 
     /**
@@ -751,7 +740,6 @@
       }
       const communityTitleTop = this.communityTitleTop
       const {scrollTop} = e.target
-      sessionStorage.setItem('scrollTop',scrollTop);
       if (communityTitleTop) {
         this.isCommunityTitleFixed = scrollTop >= communityTitleTop
       }

@@ -1,6 +1,11 @@
 <template>
   <div id="app" style="height: 100%" v-cloak>
-  	<router-view>
+  	<keep-alive>
+       <router-view v-if="$route.meta.keepAlive">
+          <!-- 这里是会被缓存的视图组件！ -->
+       </router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive">
       <!-- 这里是不被缓存的视图组件！ -->
     </router-view>
     <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
