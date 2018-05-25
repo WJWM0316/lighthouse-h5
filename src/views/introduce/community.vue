@@ -9,7 +9,7 @@
       <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>成员交流</span></a>
     </div>
 
-    <scroll v-if="" :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+    <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- header -->
       <div class="header">
       	
@@ -81,10 +81,10 @@
             ></dynamic>
           </div>
           <div class="blank" v-else>
-            <template v-if="pagination.end">
+            <div v-if="pagination.end">
               <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
               <p>暂时没有内容～</p>
-            </template>
+            </div>
           </div>
         </div>
 
@@ -156,6 +156,12 @@
   import WechatMixin from '@/mixins/wechat'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
 
+	Component.registerHooks([
+	  'beforeRouteEnter',
+	  'beforeRouteLeave',
+	  'beforeRouteUpdate' // for vue-router 2.2+
+	])
+	
   @Component({
     name: 'big-shot-community',
     components: {
@@ -166,6 +172,7 @@
       Actionsheet,
       ShareDialog
     },
+    
     computed: {
       isAuthor () {
         return this.pageInfo.isAuthor
@@ -233,129 +240,69 @@
     }
     
     qrSrc = ''
+    
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
-
-     // let nowCommunity=sessionStorage.getItem("nowCommunity");
-     // if(!nowCommunity || nowCommunity!==to.params.communityId){
-     //   sessionStorage.setItem("nowCommunity",to.params.communityId)
-     //   to.meta.keepAlive = false;
-     //  }else{
-     //    to.meta.keepAlive = true;
-     //  }
-      let nowCommunity=sessionStorage.getItem("nowCommunity");
-      if(!nowCommunity){
-        sessionStorage.setItem("nowCommunity",to.params.communityId)
-        console.log(to,"我是没有记录community的时候")
-        sessionStorage.setItem("isNewLoad",false)
-      }else{
-        if(nowCommunity===to.params.communityId){
-          to.meta.keepAlive = true;
-          console.log(to,"community相同时候打印我")
-        }else{
-          sessionStorage.setItem("nowCommunity",to.params.communityId)
-          console.log(to,"我是当前页面的路由信息")
-          sessionStorage.setItem("isNewLoad",true)
-          to.meta.keepAlive = false;
-        }
-      }  
-
-      // if( from.path==="/joined" || 
-      //     from.path==="/index" || 
-      //     from.path==="/advertising/115" || 
-      //     from.path==="/advertising/116" || 
-      //     from.path==="/advertising/117" || 
-      //     from.name==="userInfo-details")
-      //   {
-      //     to.meta.keepAlive = false;
-      //   }
-
-      next();
+    	
+				let nowCommunity=sessionStorage.getItem("nowCommunity");
+			if(!nowCommunity){
+				sessionStorage.setItem("nowCommunity",to.params.communityId)
+				console.log(to,"我是没有记录community的时候")
+				sessionStorage.setItem("isNewLoad",false)
+			}else{
+				if(nowCommunity===to.params.communityId){
+					to.meta.keepAlive = true;
+//					if(from.name==="publish-content" || from.name==="publish-voice"){
+//						sessionStorage.setItem("isNewLoad",true)
+//					}else{
+//						sessionStorage.setItem("isNewLoad",false)
+//					}
+					console.log(to,"community相同时候打印我")
+				}else{
+					sessionStorage.setItem('scrollTop',0);
+					sessionStorage.setItem("nowCommunity",to.params.communityId)
+					console.log(to,"我是当前页面的路由信息")
+					// sessionStorage.setItem("isNewLoad",true)
+					to.meta.keepAlive = false;
+				}
+			}
+			
+			//是否从列表页进来
+//  		if( from.path==="/joined" || 
+//        from.path==="/index" || 
+//        from.path==="/advertising/115" || 
+//        from.path==="/advertising/116" || 
+//        from.path==="/advertising/117" || 
+//        from.name==="userInfo-details")
+//      {
+//        to.meta.keepAlive = false;
+//        console.log(to,"我是当前路由信息")
+//      }
+			
+			next();
    }
-
-    //页面离开前
-    beforeRouteLeave(to, from, next) {
-      // console.log(from,"我是后退的路由信息")
-      // let nowCommunity=sessionStorage.getItem("nowCommunity");
-      // if(!nowCommunity){
-      //   sessionStorage.setItem("nowCommunity",from.params.communityId)
-      // }
-      // if( to.path==="/joined" || 
-      //     to.path==="/index" || 
-      //     to.path==="/advertising/115" || 
-      //     to.path==="/advertising/116" || 
-      //     to.path==="/advertising/117" || 
-      //     to.name==="userInfo-details")
-      // {
-      //   this.$destroy();
-      // }
-      next();
-     }
-
-     //缓存处理
-     activated(){
-      const scrollDom=document.getElementsByClassName('scroll-container')[0];
-      scrollDom.scrollTop=sessionStorage.getItem("scrollTop");
-      if(JSON.parse(sessionStorage.getItem("isNewLoad"))){
-        sessionStorage.setItem("isNewLoad",false)
-        //重试请求数据
-          this.pageInit().then(() => {
-            const {
-              title,
-              simpleIntro,
-              master,
-              shareImg, // 分享图片
-              sharePoint, // 分享摘要
-              shareIntroduction,  // 分享标题
-              communityId,
-              startTime
-            } = this.pageInfo
-            const {realName, career} = master
-            this.communityId=communityId
-            this.starTime=startTime
-            const str = realName ? realName + (career ? '|' + career : '') : ''
-            // 页面分享信息
-            this.wechatShare({
-              'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-              'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-              'desc': sharePoint || simpleIntro,
-              'imgUrl': shareImg,
-              'link': location.origin + `/beaconweb/#/introduce/${communityId}`
-            })
-            
-            //判断嘉宾身份
-            this.getRoleInfo(communityId).then(res=>{
-              this.roleInfo=res.role;
-              console.log(this.roleInfo,"8888888888888888888888888888")
-            }).catch(res => {
-                this.roleInfo=res.data.role;
-                console.log(this.roleInfo,"999999999999999999999999")
-            })
-            
-            //判断是否有课程，无课程则跳转
-            if(this.pageInfo.isCourse===2){
-              this.type=0;
-              let type=0;
-              this.displaySuspensionInput = false
-              this.dynamicList = []
-    
-              this.showType = type
-    //          debugger
-              this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-    //          debugger
-              this.showIdentification = !type
-      
-              this.pagination.end = false // 初始化数据，必定不是最后一页
-              this.getList({page: 1}).then(() => {})
-            }
-         })
-      }
-    }
 		
+		//页面离开前
+		beforeRouteLeave(to, from, next) {
+//			console.log(to,"我是后退的路由信息")
+// 		 	if(	to.path==="/joined" || 
+// 		 			to.path==="/index" || 
+// 		 			to.path==="/advertising/115" || 
+// 		 			to.path==="/advertising/116" || 
+// 		 			to.path==="/advertising/117" || 
+// 		 			to.name==="userInfo-details")
+// 		 	{
+// 		 		this.$destroy()
+// //		 		from.meta.keepAlive = false;
+// 		 	}else{
+//         from.meta.keepAlive = true;
+//       }
+		 	next();
+		 }
 	
     created () {
-    	const selfqq = this
     	let titleBoxShow=true;
+    	console.log("5555555555555555",this.$route.query);
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
 //      this.type = this.$route.query.type
@@ -367,8 +314,9 @@
       if (showShare && (showShare.toString() === 'true')) {
         this.showShare = true
       }
-
-      this.pageInit().then(() => {
+			
+      
+      	this.pageInit().then(() => {
         const {
           title,
           simpleIntro,
@@ -395,8 +343,10 @@
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
         	this.roleInfo=res.role;
+        	console.log(this.roleInfo,"8888888888888888888888888888")
         }).catch(res => {
         		this.roleInfo=res.data.role;
+        		console.log(this.roleInfo,"999999999999999999999999")
 				})
         
         //判断是否有课程，无课程则跳转
@@ -417,14 +367,75 @@
         }
      })
       
+      
     }
-
+   
+   	activated(){
+   		const scrollDom=document.getElementsByClassName('scroll-container')[0];
+    	scrollDom.scrollTop=sessionStorage.getItem("scrollTop");
+    	if(JSON.parse(sessionStorage.getItem("isNewLoad"))){
+    		sessionStorage.setItem("isNewLoad",false)
+    		//重试请求数据
+    			this.pageInit().then(() => {
+		        const {
+		          title,
+		          simpleIntro,
+		          master,
+		          shareImg, // 分享图片
+		          sharePoint, // 分享摘要
+		          shareIntroduction,  // 分享标题
+		          communityId,
+		          startTime
+		        } = this.pageInfo
+		        const {realName, career} = master
+		        this.communityId=communityId
+		        this.starTime=startTime
+		        const str = realName ? realName + (career ? '|' + career : '') : ''
+		        // 页面分享信息
+		        this.wechatShare({
+		          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+		          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+		          'desc': sharePoint || simpleIntro,
+		          'imgUrl': shareImg,
+		          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
+		        })
+		        
+		        //判断嘉宾身份
+		        this.getRoleInfo(communityId).then(res=>{
+		        	this.roleInfo=res.role;
+		        	console.log(this.roleInfo,"8888888888888888888888888888")
+		        }).catch(res => {
+		        		this.roleInfo=res.data.role;
+		        		console.log(this.roleInfo,"999999999999999999999999")
+						})
+		        
+		        //判断是否有课程，无课程则跳转
+		        if(this.pageInfo.isCourse===2){
+		        	this.type=0;
+		        	let type=0;
+		        	this.displaySuspensionInput = false
+			        this.dynamicList = []
+		
+			        this.showType = type
+		//	        debugger
+			        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+		//	        debugger
+			        this.showIdentification = !type
+			
+			        this.pagination.end = false // 初始化数据，必定不是最后一页
+			        this.getList({page: 1}).then(() => {})
+		        }
+		     })
+    	}
+   	}
+   	
     mounted(){
-      console.log("修改成功了")
+    	console.log("修改成功了")
     }
     
     //路由跳转more
     toMore(){
+    	
     	console.log(this.communityId);
     	let that=this;
     	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId,classmateNum:this.pageInfo.joinedNum}})
@@ -486,9 +497,9 @@
       await this.getList({page: 1})
 
       this.$nextTick(() => {
-        if (this.$refs['community-title']) {
-          this.communityTitleTop = this.$refs['community-title'].offsetTop
-        }
+      	if(this.$refs['community-title']){
+      		this.communityTitleTop = this.$refs['community-title'].offsetTop
+      	}
         console.log(this.$refs)
         //console.log(this.$refs['community-title'].offsetTop)
       })
@@ -714,6 +725,8 @@
       this.pagination.total = total
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
+
+      console.log('-------',this.pagination.end)
     }
 
     /**
@@ -763,12 +776,18 @@
     }
 
     scroll (e) {
+//  	e.target.scrollTop=sessionStorage.getItem("scrollTop")
+//  	e.target.scrollTop=1000;
+//  	console.log(e.target,"我是scroll信息")
       if (this.displaySuspensionInput) {
         this.displaySuspensionInput = false
       }
       const communityTitleTop = this.communityTitleTop
       const {scrollTop} = e.target
+      sessionStorage.setItem('scrollTop',scrollTop);
       if (communityTitleTop) {
+//      const {scrollTop} = e.target
+//      sessionStorage.setItem('scrollTop',scrollTop);
         this.isCommunityTitleFixed = scrollTop >= communityTitleTop
       }
     }
@@ -1064,6 +1083,7 @@
             height: 130px;
           }
           & p {
+          	text-align: center;
             margin-top: 20px;
           }
         }
