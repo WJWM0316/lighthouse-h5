@@ -236,6 +236,19 @@
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
 
+      if( from.path==="/joined" || 
+          from.path==="/index" || 
+          from.path==="/advertising/115" || 
+          from.path==="/advertising/116" || 
+          from.path==="/advertising/117" || 
+          from.name==="userInfo-details")
+        {
+          to.meta.keepAlive = false;
+          console.log(to,"我是当前路由信息")
+        }else{
+          to.meta.keepAlive = true;
+        }
+
      let nowCommunity=sessionStorage.getItem("nowCommunity");
      if(!nowCommunity || nowCommunity!==to.params.communityId){
        sessionStorage.setItem("nowCommunity",to.params.communityId)
