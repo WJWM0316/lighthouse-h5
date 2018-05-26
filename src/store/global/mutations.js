@@ -27,24 +27,6 @@ export default {
       case 4:
         state.qr_show4 = true
         break
-      case 5:
-        state.qr_show5 = true
-        break
-      case 6:
-        state.qr_show6 = true
-        break
-      case 7:
-        state.qr_show7 = true
-        break
-      case 8:
-        state.qr_show8 = true
-        break
-      case 9:
-        state.qr_show9 = true
-        break
-      case 10:
-        state.qr_show10 = true
-        break
       default:
         state.qr_show = true
         break
@@ -60,24 +42,6 @@ export default {
         break
       case 4:
         state.qr_show4 = false
-        break
-      case 5:
-        state.qr_show5 = false
-        break
-      case 6:
-        state.qr_show6 = false
-        break
-      case 7:
-        state.qr_show7 = false
-        break
-      case 8:
-        state.qr_show8 = false
-        break
-      case 9:
-        state.qr_show9 = false
-        break
-      case 10:
-        state.qr_show10 = false
         break
       default:
         state.qr_show = false
