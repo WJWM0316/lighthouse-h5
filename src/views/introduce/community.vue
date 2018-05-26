@@ -1,4 +1,4 @@
-<template>
+block<template>
 
   <!-- 大咖精选页 (社区页) -->
   <div class="author" :class="{'big-shot-community': true}">
@@ -81,10 +81,10 @@
             ></dynamic>
           </div>
           <div class="blank" v-else>
-            <block v-if="pagination.end">
+            <div v-if="pagination.end">
               <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
               <p>暂时没有内容～</p>
-            </block>
+            </div>
           </div>
         </div>
 
@@ -368,9 +368,9 @@
       await this.getList({page: 1})
 
       this.$nextTick(() => {
-        this.communityTitleTop = this.$refs['community-title'].offsetTop
-        console.log(this.$refs)
-        //console.log(this.$refs['community-title'].offsetTop)
+        if (this.$refs['community-title']) {
+          this.communityTitleTop = this.$refs['community-title'].offsetTop
+        }
       })
 
 
