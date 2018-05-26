@@ -26,7 +26,7 @@
         <i class="u-icon-close icon-close" @click="closeQrCode(2)"></i>
         <div class="title">支付成功</div>
         <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_2.png">
+        <img class="qrcode" src="./assets/page/qr_kf_2.jpg">
       </div>
     </div>
     <div class="home-mask" v-if="isShowQrcodes3">
@@ -34,7 +34,7 @@
         <i class="u-icon-close icon-close" @click="closeQrCode(3)"></i>
         <div class="title">支付成功</div>
         <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_3.png">
+        <img class="qrcode" src="./assets/page/qr_kf_3.jpg">
       </div>
     </div>
     <div class="home-mask" v-if="isShowQrcodes4">
