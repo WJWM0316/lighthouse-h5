@@ -39,11 +39,10 @@ router.beforeEach(async (to, from, next) => {
   } else {
     store.dispatch('show_nav')
   }
-  
   next() // 确保一定要调用 next()
 })
 //
-router.afterEach(function (to, from) {
+router.afterEach(function (to) {
 })
 
 // 全局路由生命周期

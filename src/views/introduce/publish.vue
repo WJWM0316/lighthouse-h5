@@ -38,12 +38,6 @@ import WechatCodeModal from '@/components/wechatCodeModal'
 import { publishApi,publishPostApi } from '@/api/pages/content'
 import { wechatUploadFileApi } from '@/api/common'
 
-Component.registerHooks([
-    'beforeRouteEnter',
-    'beforeRouteLeave',
-    'beforeRouteUpdate' // for vue-router 2.2+
-  ])
-
 @Component({
   name: 'publish-content',
   components: {
@@ -90,8 +84,6 @@ export default class PublishContent extends Vue {
     show: false
   }
 
-  sendOK=false
-
   // 图文类型： 0:无文件(文本) 1:音频 2:视频 3:图片
   get addonType () {
     let type = 0
@@ -112,12 +104,6 @@ export default class PublishContent extends Vue {
    */
   get canPublish () {
     return this.form.content.length > 0 || (this.images && this.images.length > 0)
-  }
-
-  //路由离开前
-  beforeRouteLeave(to,from,next){
-    console.log(to,"我是要跳转的路由参数")
-    next()
   }
 
   created () {
@@ -282,33 +268,20 @@ export default class PublishContent extends Vue {
 				//学员和管理员
 					if( this.$route.query.code==='manager' && this.$route.query.codeType==='1'){
 						await publishApi(params)
-            this.sendOK=true
 					}else{
 						await publishPostApi(params)
-            this.sendOK=true
 					}
 				
 			}else if(this.$route.query.code==='special_manager' || this.$route.query.code==='special_master' ||  this.$route.query.code==='special_guests' ){
 				//无课程灯塔内容发帖
 					await publishPostApi(params)
-          this.sendOK=true
 			}else{
 				//塔主和嘉宾
 				await publishApi(params)
-        this.sendOK=true
 			}
       
       this.$vux.toast.text('发布成功', 'bottom')
-
-      if(this.sendOK){
-        // let path=`/introduce/${sessionStorage.getItem("nowCommunity")}/community`;
-        // this.$router.replace(path);
-        sessionStorage.setItem("isNewLoad",true);
-        this.$router.go(-1)
-      }else{
-        this.$router.go(-1)
-      }
-      // this.$router.go(-1)
+      this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
     } finally {

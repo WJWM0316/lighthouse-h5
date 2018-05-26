@@ -1,11 +1,6 @@
 <template>
   <div id="app" style="height: 100%" v-cloak>
-  	<keep-alive>
-       <router-view v-if="$route.meta.keepAlive">
-          <!-- 这里是会被缓存的视图组件！ -->
-       </router-view>
-    </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive">
+  	<router-view>
       <!-- 这里是不被缓存的视图组件！ -->
     </router-view>
     <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
@@ -31,7 +26,7 @@
         <i class="u-icon-close icon-close" @click="closeQrCode(2)"></i>
         <div class="title">支付成功</div>
         <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_2.jpg">
+        <img class="qrcode" src="./assets/page/qr_kf_2.png">
       </div>
     </div>
     <div class="home-mask" v-if="isShowQrcodes3">
@@ -39,7 +34,7 @@
         <i class="u-icon-close icon-close" @click="closeQrCode(3)"></i>
         <div class="title">支付成功</div>
         <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_3.jpg">
+        <img class="qrcode" src="./assets/page/qr_kf_3.png">
       </div>
     </div>
     <div class="home-mask" v-if="isShowQrcodes4">
@@ -50,6 +45,7 @@
         <img class="qrcode" src="./assets/page/qr_kf_4.png">
       </div>
     </div>
+
   </div>
 </template>
 
