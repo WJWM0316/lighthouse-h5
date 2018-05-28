@@ -519,7 +519,7 @@
         this.displaySuspensionInput = false
         this.dynamicList = []
         this.showType = type
-        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+//      this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
         this.showIdentification = !type
 
         this.pagination.end = false // 初始化数据，必定不是最后一页
