@@ -75,6 +75,7 @@
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
                      :isNeedHot="true"
+                     :isPause="isPause"
                      :showIdentification="showIdentification"
                      :disableOperationArr="disableOperationArr"
                      @disableOperationEvents="operation"
@@ -206,7 +207,7 @@
     roleInfo=''
     code=''
     type=1
-    
+    isPause = false
     //显示标题模式
     titleBoxShow=false;
 
@@ -297,7 +298,9 @@
 // 		 	}else{
 //         from.meta.keepAlive = true;
 //       }
-		 	next();
+      console.log('触发一下·······')
+      this.isPause = true
+		 	next()
 		 }
 	
     created () {
