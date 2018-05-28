@@ -428,7 +428,7 @@ export default class selfDetail extends Vue {
       display: block;
       line-height: 22px;
       font-weight: 600;
-      font-size: 18px;
+      font-size: 16px;
       color: @font-color-default;
     }
 
