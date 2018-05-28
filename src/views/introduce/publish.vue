@@ -304,6 +304,7 @@ export default class PublishContent extends Vue {
         // let path=`/introduce/${sessionStorage.getItem("nowCommunity")}/community`;
         // this.$router.replace(path);
         sessionStorage.setItem("isNewLoad",true);
+        sessionStorage.setItem("scrollTop",0);
         this.$router.go(-1)
       }else{
         this.$router.go(-1)
