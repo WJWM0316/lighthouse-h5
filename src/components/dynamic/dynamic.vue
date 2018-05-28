@@ -16,7 +16,6 @@
                   :disableUserClick="disableUserClick"
                   :allTotal="allTotal"
                   :isFold="isFold"
-                  :isPause = "isPause"
                   :noBorder="noBorder"
                   :isNeedHot="isNeedHot"
                   @audioEvent="audioEvent"
@@ -38,10 +37,6 @@
     props: {
       allTotal: {
         type: Number
-      },
-      isPause: {
-        type: Boolean,
-        default: false
       },
       dynamicList: {
         type: Array,
@@ -128,14 +123,6 @@
           console.log('暂停')
           this.music.pause()
         }
-      },
-      isPause (val) {
-        console.log('触发一下111111111111111111')
-        if (val) {
-          this.music.pause()
-          this.music.src = ''
-          this.music = ''
-        }
       }
     },
     mixins: [WechatMixin]
@@ -215,6 +202,8 @@
 
     destroyed () {
       this.music.pause()
+      this.music.src = ''
+      this.music = ''
     }
 
     /**
