@@ -40,7 +40,7 @@ router.beforeEach(async (to, from, next) => {
     store.dispatch('show_nav')
   }
 
-  // 集call页面需要做百度统计
+  // 介绍页面需要做百度统计
   if (to.name === 'introduce') {
     setTimeout(()=>{
      var _hmt = _hmt || [];
