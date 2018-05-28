@@ -39,11 +39,29 @@ router.beforeEach(async (to, from, next) => {
   } else {
     store.dispatch('show_nav')
   }
-  
+
+  // 集call页面需要做百度统计
+  if (to.name === 'introduce') {
+    setTimeout(()=>{
+     var _hmt = _hmt || [];
+     (function() {
+      //每次执行前，先移除上次插入的代码
+      document.getElementById('baidu_tj') && document.getElementById('baidu_tj').remove();
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1b0222be6ebebf7e6f77215105fe92f1";
+      hm.id = "baidu_tj"
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+     })();
+   },0);
+  } else {
+    document.getElementById('baidu_tj') && document.getElementById('baidu_tj').remove();
+  }
   next() // 确保一定要调用 next()
 })
 //
 router.afterEach(function (to, from) {
+
 })
 
 // 全局路由生命周期
