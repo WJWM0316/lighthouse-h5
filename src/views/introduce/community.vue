@@ -78,6 +78,7 @@
                      :showIdentification="showIdentification"
                      :disableOperationArr="disableOperationArr"
                      @disableOperationEvents="operation"
+                     @saveAudio="controlAudio"
             ></dynamic>
           </div>
           <div class="blank" v-else>
@@ -206,6 +207,8 @@
     roleInfo=''
     code=''
     type=1
+    saveAudio={}
+    nowItem={}
     
     //显示标题模式
     titleBoxShow=false;
@@ -284,19 +287,14 @@
 		
 		//页面离开前
 		beforeRouteLeave(to, from, next) {
-//			console.log(to,"我是后退的路由信息")
-// 		 	if(	to.path==="/joined" || 
-// 		 			to.path==="/index" || 
-// 		 			to.path==="/advertising/115" || 
-// 		 			to.path==="/advertising/116" || 
-// 		 			to.path==="/advertising/117" || 
-// 		 			to.name==="userInfo-details")
-// 		 	{
-// 		 		this.$destroy()
-// //		 		from.meta.keepAlive = false;
-// 		 	}else{
-//         from.meta.keepAlive = true;
-//       }
+		  if((this.nowItem.answer && this.nowItem.answer[0].type===2) || this.nowItem.circleType===1){
+        this.saveAudio.pause();
+        if(this.nowItem.modelType && this.nowItem.modelType==="problem"){
+          this.nowItem.answers[0].musicState=0;
+        }else{
+          this.nowItem.musicState=0;
+        }
+      }
 		 	next();
 		 }
 	
@@ -431,6 +429,13 @@
    	
     mounted(){
     	console.log("修改成功了")
+    }
+
+    //控制音频
+    controlAudio(e){
+      this.saveAudio=e.nowaudio;
+      this.nowItem=e.nowItem;
+      console.log(e,"我是传递过来的对象")
     }
     
     //路由跳转more
