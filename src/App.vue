@@ -46,8 +46,8 @@
       <div class="qr-container">
         <i class="u-icon-close icon-close" @click="closeQrCode(4)"></i>
         <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
-        <img class="qrcode" src="./assets/page/qr_kf_4.jpg">
+        <div class="content">长按识别二维码，立即进入课程学员交流群~~</div>
+        <img class="qrcode" src="./assets/page/qr_kf_4.png">
       </div>
     </div>
   </div>
