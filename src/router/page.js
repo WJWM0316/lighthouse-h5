@@ -100,6 +100,13 @@ const routers = [
     name: 'distribution-rankings',
     meta: {navHide: true},
     component: resolve => require(['@/views/other/distributionRankings'], resolve),
+  },
+  {
+    // 拼音测试
+    path: '/music',
+    name: 'music',
+    meta: {navHide: true},
+    component: resolve => require(['@/components/media/music'], resolve),
   }
 ]
 
