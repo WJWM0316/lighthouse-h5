@@ -1,4 +1,4 @@
-block<template>
+<template>
 
   <!-- 大咖精选页 (社区页) -->
   <div class="author" :class="{'big-shot-community': true}">
@@ -78,6 +78,7 @@ block<template>
                      :showIdentification="showIdentification"
                      :disableOperationArr="disableOperationArr"
                      @disableOperationEvents="operation"
+                     @saveAudio="controlAudio"
             ></dynamic>
           </div>
           <div class="blank" v-else>
@@ -99,7 +100,7 @@ block<template>
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count _" v-if=" pageInfo['answerTotal']> 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
         <!--<button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>-->
-        <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
+        <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布内容</button>
       </div>
       <div class="ask-warp" v-else>
       <!--<div class="ask-btn" @click="askBtnClick" v-else>-->
@@ -110,7 +111,7 @@ block<template>
         <button @click="postQuestions" v-if="this.pageInfo.isCourse===1">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>我要提问</span>
         </button>
-        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>
+        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发布内容</button>
         <button @click="posted" class="post-tip" v-else><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
     </div>
@@ -199,6 +200,8 @@ block<template>
     roleInfo=''
     code=''
     type=1
+    saveAudio={}
+    nowItem={}
     
     //显示标题模式
     titleBoxShow=false;
@@ -234,6 +237,18 @@ block<template>
     
     qrSrc = ''
 		
+		//页面离开前
+		beforeRouteLeave(to, from, next) {
+		  if((this.nowItem.answer && this.nowItem.answer[0].type===2) || this.nowItem.circleType===1){
+        this.saveAudio.pause();
+        if(this.nowItem.modelType && this.nowItem.modelType==="problem"){
+          this.nowItem.answers[0].musicState=0;
+        }else{
+          this.nowItem.musicState=0;
+        }
+      }
+		 	next();
+		 }
 	
     created () {
     	
@@ -302,6 +317,13 @@ block<template>
         }
      })
       
+    }
+
+    //控制音频
+    controlAudio(e){
+      this.saveAudio=e.nowaudio;
+      this.nowItem=e.nowItem;
+      console.log(e,"我是传递过来的对象")
     }
     
     //路由跳转more
@@ -383,7 +405,7 @@ block<template>
         this.displaySuspensionInput = false
         this.dynamicList = []
         this.showType = type
-        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+//      this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
         this.showIdentification = !type
 
         this.pagination.end = false // 初始化数据，必定不是最后一页

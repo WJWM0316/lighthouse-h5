@@ -282,6 +282,17 @@ export default class PublishContent extends Vue {
       
       this.$vux.toast.text('发布成功', 'bottom')
       this.$router.go(-1)
+
+      if(this.sendOK){
+        // let path=`/introduce/${sessionStorage.getItem("nowCommunity")}/community`;
+        // this.$router.replace(path);
+        sessionStorage.setItem("isNewLoad",true);
+        sessionStorage.setItem("scrollTop",0);
+        this.$router.go(-1)
+      }else{
+        this.$router.go(-1)
+      }
+      // this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
     } finally {

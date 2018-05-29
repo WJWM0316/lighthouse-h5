@@ -319,6 +319,7 @@
           this.audioStateSet()
           break
       }
+      this.$emit("saveAudio",{nowaudio:this.music,nowItem:this.dynamicList[itemIndex]});
     }
 
     videoEvent (e) {
