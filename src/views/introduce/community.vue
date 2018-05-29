@@ -407,7 +407,7 @@
         this.showType = type
 //      this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
         this.showIdentification = !type
-
+				this.pagination.busy = false
         this.pagination.end = false // 初始化数据，必定不是最后一页
         this.getList({page: 1}).then(() => {})
       }
