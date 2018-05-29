@@ -39,11 +39,6 @@ router.beforeEach(async (to, from, next) => {
   } else {
     store.dispatch('show_nav')
   }
-  next() // 确保一定要调用 next()
-})
-//
-router.afterEach(function (to) {
-
   // 介绍页面需要做百度统计
   if (to.name === 'introduce') {
     setTimeout(()=>{
@@ -64,8 +59,7 @@ router.afterEach(function (to) {
   next() // 确保一定要调用 next()
 })
 //
-router.afterEach(function (to, from) {
-
+router.afterEach(function (to) {
 })
 
 // 全局路由生命周期
