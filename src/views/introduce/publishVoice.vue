@@ -73,6 +73,7 @@ export default class PublishVoice extends Vue {
       // this.sendOK=true;
       //   this.$router.replace(path);
       sessionStorage.setItem("isNewLoad",true);  
+      sessionStorage.setItem("scrollTop",0);
       this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')
