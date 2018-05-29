@@ -1,9 +1,6 @@
 <template>
   <div class="p-body p-ask" :class="{'paddingBom' : displaySuspensionInput}">
     <scroller :pullupable="false" :refreshable="false" class="wrapper" @scroll="handleScroll">
-
-      
-
       <!-- 选择提问导师 -->
       <div class="teachers_sel" v-if="teachers.length>0">
         <div class="tea_txt">选择提问对象<span class="txt">（{{teachers.length}}人）</span></div>
