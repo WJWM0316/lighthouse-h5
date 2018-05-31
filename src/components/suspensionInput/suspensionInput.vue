@@ -28,7 +28,7 @@
     -webkit-overflow-scrolling: touch;
     background-color: #f8f8f8;
     &.z-focused {
-      padding-bottom: 54px;
+      padding-bottom: 23px;
     }
 
     .ask-box {
