@@ -16,6 +16,13 @@ export default {
       resolve()
     })
   },
+  // 更新播放列表
+  undate_play_list: ({commit}, status) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_PLAYLIST, list)
+      resolve()
+    })
+  },
   // 播放音乐
   music_play: ({commit}) => {
     return new Promise((resolve, reject) => {
@@ -79,6 +86,14 @@ export default {
       resolve()
     })
   },
+  // 更新下架状态
+  update_music_off: ({commit}, status) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_MUSICOFF, status)
+      resolve()
+    })
+  },
+
   // 更新下架状态
   update_music_off: ({commit}, status) => {
     return new Promise((resolve, reject) => {

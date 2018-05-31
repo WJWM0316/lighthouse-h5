@@ -2,6 +2,9 @@ export default {
   musicList: function (state) { // 播放列表
     return state.musicList
   },
+  playList: function (state) { // 播放列表
+    return state.play
+  },
   musicPlay: function (state) { // 播放状态
     return state.musicPlay
   },

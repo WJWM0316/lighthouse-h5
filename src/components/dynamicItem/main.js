@@ -1,6 +1,7 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import audioBox from '@/Components/media/music'
 import moment from 'moment'
 
 @Component({
@@ -75,8 +76,10 @@ import moment from 'moment'
     noBorder: {
       type: Boolean,
       default: false
-    }
-    
+    }  
+  },
+  components: {
+    audioBox
   },
   computed: {
     picList () {

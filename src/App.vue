@@ -86,7 +86,15 @@ import {newCountCodeApi} from '@/api/pages/pageInfo'
     },
     isShowQrcodes4: function () { // 公众号二维码是否展示
       return this.$store.getters.isShowQrcode4
-    }
+    },
+    ...mapState({
+      musicPlay: state => state.musicController.musicPlay || false, // 是否播放
+      musicStatus: state => state.musicController.musicStatus || 1, // 播放状态
+      musicCurrentTime: state => state.musicController.musicCurrentTime || 0, // 当前播放时间
+      musicCurrentIndex: state => state.musicController.musicCurrentIndex || 0, // 播放音频序号
+      musicCurrent: state => state.musicController.musicCurrent, // 当前音频信息
+      // musicList: state => state.musicController.musicList, // 播放列表
+    })
   },
   watch: {
     '$route': {
@@ -148,6 +156,37 @@ export default class App extends Vue {
   ]
   data () {
     return {
+      audio: '',
+      musicList: [
+        {
+          filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-30/60f67a38cb7d8eb52e3de18c61c29c7a.mp3',
+          playStatus: 1,
+          duration: 0,
+          disabled: false,
+          isShowLabel: false
+        },
+        {
+          filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-28/0b24c0853dcbda79e6dfce592e8f4468.mp3',
+          playStatus: 1,
+          duration: 0,
+          disabled: false,
+          isShowLabel: false
+        },
+        {
+          filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-28/225d3f8c5e68367f16274fcb5eea7c06.mp3',
+          playStatus: 1,
+          duration: 0,
+          disabled: false,
+          isShowLabel: false
+        },
+        {
+          filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-16/5732e9861a9cb2dde9b0ba607c6594f7.mp3',
+          playStatus: 1,
+          duration: 0,
+          disabled: false,
+          isShowLabel: false
+        } 
+      ]
     }
   }
   goSomeWhere (index) {
@@ -168,6 +207,20 @@ export default class App extends Vue {
     await newCountCodeApi(params)
   }
   mounted () {
+    this.audio = new Audio()
+    this.audio.reload = false
+    this.$store.dispatch('undate_play_list', this.playList)
+  }
+
+  // 控制全局音乐播放
+  audioEven (index) {
+    console.log('播放音乐', this.musicPlay)
+    if (this.musicPlay) {
+      this.audio.src = this.musicList[index].filePath
+      this.audio.play()
+    } else {
+      this.audio.pause()
+    }
   }
 }
 </script>

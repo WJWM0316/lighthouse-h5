@@ -101,13 +101,13 @@ const routers = [
     meta: {navHide: true},
     component: resolve => require(['@/views/other/distributionRankings'], resolve),
   },
-  {
-    // 音频测试
-    path: '/music',
-    name: 'music',
-    meta: {navHide: true},
-    component: resolve => require(['@/components/media/music'], resolve),
-  }
+  // {
+  //   // 音频测试
+  //   path: '/music',
+  //   name: 'music',
+  //   meta: {navHide: true},
+  //   component: resolve => require(['@/components/media/music'], resolve),
+  // }
 ]
 
 export default routers

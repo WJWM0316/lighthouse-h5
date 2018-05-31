@@ -28,5 +28,6 @@ export default {
   musicFastSeekPercentage: 0,  // 跳转进度
   musicIsPrev: false,     // 是否有上一曲
   musicIsNext: false,
-  musicImmediately: false // 立即播放
+  musicImmediately: false, // 立即播放
+  playList: []
 }

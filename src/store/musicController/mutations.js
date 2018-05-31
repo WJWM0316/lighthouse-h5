@@ -104,6 +104,9 @@ export default {
       state.musicStripImg = data['cover_plan_player'] // 悬浮条展示图
     }
   },
+  [types.UPDATE_PLAYLIST] (state, playList) {
+    state.playList = playList
+  },
   [types.UPDATE_MUSICPLAY] (state, musicPlay) {
     state.musicPlay = musicPlay
   },
