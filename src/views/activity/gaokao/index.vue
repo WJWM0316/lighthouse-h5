@@ -21,7 +21,7 @@
 			<div class="inner">
 				<p>成功生成海报！<br>长按识别前往查看</p>
 				<div class="close" @click.stop="close"><img src="./../../../assets/icon/close.png" alt=""></div>
-				<img src="./../../../assets/page/ceshi.jpg" alt="">
+				<img src="./../../../assets/page/feidekuai.jpg" alt="">
 			</div>
 		</div>
 	</div>
@@ -53,9 +53,6 @@
 	    PopupPicker,
 	    XAddress
 	  },
-	  computed: {
-
-	  },
 	  watch: {
 	  	city (val) {
 	  		console.log(val)
@@ -72,6 +69,7 @@
 	  	}
 	  },
 	  methods: {
+
 	  	sublime () {
 	  		if (this.year.length === 0) {
 	  			this.$vux.toast.text('请选择毕业年份！', 'bottom')
@@ -81,7 +79,8 @@
 	  			this.$vux.toast.text('请选择毕业城市！', 'bottom')
 	  			return
 	  		}
-	  		
+	  		var reg = new RegExp("市")
+	  		this.cityName = this.cityName.replace(reg, "")
 	  		const data = {
 	  			year: this.year[0],
 	  			city: this.cityName
@@ -110,18 +109,19 @@
 		.bg {
 			width: 100%;
 			height: 100%;
-			padding: 15px 23px;
+			padding: 10px 15px;
 			box-sizing: border-box;
-			display: flex;
-			justify-content: center;
-    	align-items: center;
     	.box {
 				overflow: hidden;
+				display: flex;
+				justify-content: center;
+	    	align-items: center;
 				width: 100%;
 				height: 100%;
     	}
 			img {
 				display: block;
+				width: 100%;
 			}
 		}
 		.form {
@@ -157,7 +157,7 @@
 			}
 			.vux-popup-picker-value {
 				font-size: 15px;
-				color: #BCBCBC;
+				color: #000;
 			}
 			.cityBar {
 				position: relative;
@@ -167,7 +167,7 @@
 					font-size: 15px;
 				}
 				.cityName {
-					color: #999;
+					color: #000;
 					height: 41px;
 					line-height: 41px;
 					font-size: 15px;
@@ -175,7 +175,6 @@
 					top: 0;
 					right: 30px;
 					z-index: -1;
-					color: #BCBCBC;
 				}
 			}
 			.btn {
