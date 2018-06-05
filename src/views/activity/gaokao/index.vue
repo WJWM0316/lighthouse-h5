@@ -30,7 +30,6 @@
 	import Vue from 'vue'
 	import { Group, PopupPicker, XAddress, ChinaAddressV4Data } from 'vux'
 	import { gaokaoApi } from '@/api/pages/pageInfo'
-	import { getInformationApi } from '@/api/pages/center'
 	let years = []
 	for (var i = 2018; i >= 1977; i--) {
 	  years.push({
@@ -53,12 +52,6 @@
 			Group,
 	    PopupPicker,
 	    XAddress
-	  },
-	  computed: {
-
-	  },
-	  created () {
-	  	getInformationApi()
 	  },
 	  watch: {
 	  	city (val) {
