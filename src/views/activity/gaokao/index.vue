@@ -121,8 +121,7 @@
     	}
 			img {
 				display: block;
-				width: auto;
-				height: 100%;
+				width: 100%;
 			}
 		}
 		.form {
