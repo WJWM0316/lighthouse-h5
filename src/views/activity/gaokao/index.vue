@@ -76,7 +76,7 @@
 	  			return
 	  		}
 	  		if (this.city.length === 0) {
-	  			this.$vux.toast.text('请选择城市！', 'bottom')
+	  			this.$vux.toast.text('请选择城市', 'bottom')
 	  			return
 	  		}
 	  		var reg = new RegExp("市")
