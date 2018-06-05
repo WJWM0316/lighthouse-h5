@@ -157,7 +157,7 @@
 			}
 			.vux-popup-picker-value {
 				font-size: 15px;
-				color: #BCBCBC;
+				color: #000;
 			}
 			.cityBar {
 				position: relative;
@@ -167,7 +167,7 @@
 					font-size: 15px;
 				}
 				.cityName {
-					color: #999;
+					color: #000;
 					height: 41px;
 					line-height: 41px;
 					font-size: 15px;
@@ -175,7 +175,6 @@
 					top: 0;
 					right: 30px;
 					z-index: -1;
-					color: #BCBCBC;
 				}
 			}
 			.btn {
