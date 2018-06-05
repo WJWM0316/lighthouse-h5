@@ -261,6 +261,13 @@ export const userJurisdictionApi = (data) => {
     data,
   })
 }
+// 音乐播放列表
+export const musicListApi = (data) => {
+  return request({
+    url: '/wap/beacon/circleManages',
+    data,
+  })
+}
 
 // 高考活动页面
 export const gaokaoApi = (data) => {

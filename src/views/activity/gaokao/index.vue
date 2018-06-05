@@ -88,6 +88,7 @@
 	  		gaokaoApi(data).then(res => {
 	  			this.show = true
 	  		}).catch(err => {
+	  			this.$vux.toast.text(err, 'bottom')
 	  			return Promise.reject(err)
 	  		})
 	  	},

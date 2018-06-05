@@ -61,7 +61,7 @@ import { mapState } from 'vuex'
 import wxUtil from '@/util/wx'
 import settings from '@/config/index'
 import WechatMixin from '@/mixins/wechat'
-import {newCountCodeApi} from '@/api/pages/pageInfo'
+import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
 @Component({
   name: 'app',
   mixins: [WechatMixin],
@@ -209,10 +209,8 @@ export default class App extends Vue {
   }
   // 控制全局音乐播放
   audioEven (data) {
-    // this.prev = this.cur
-    this.cur = data
     
-
+    this.cur = data
     if (this.musicPlay) {
       try {
         if (this.audio.src != this.curPath(data.fileId)[0].filePath) {
