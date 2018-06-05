@@ -72,11 +72,11 @@
 
 	  	sublime () {
 	  		if (this.year.length === 0) {
-	  			this.$vux.toast.text('请选择毕业年份！', 'bottom')
+	  			this.$vux.toast.text('请选择高考年份', 'bottom')
 	  			return
 	  		}
 	  		if (this.city.length === 0) {
-	  			this.$vux.toast.text('请选择毕业城市！', 'bottom')
+	  			this.$vux.toast.text('请选择城市！', 'bottom')
 	  			return
 	  		}
 	  		var reg = new RegExp("市")
