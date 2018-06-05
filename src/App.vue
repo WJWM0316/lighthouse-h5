@@ -89,12 +89,11 @@ import {newCountCodeApi} from '@/api/pages/pageInfo'
     },
     ...mapState({
       musicPlay: state => state.musicController.musicPlay || false, // 是否播放
-      musicStatus: state => state.musicController.musicStatus || 1, // 播放状态
-      musicCurrentTime: state => state.musicController.musicCurrentTime || 0, // 当前播放时间
-      musicCurrentIndex: state => state.musicController.musicCurrentIndex || 0, // 播放音频序号
-      musicCurrent: state => state.musicController.musicCurrent, // 当前音频信息
-      // musicList: state => state.musicController.musicList, // 播放列表
-    })
+      playList: state => state.musicController.playList || [], // 播放列表
+      prevMusic: state => state.musicController.prevMusic // 上一首播放
+    }),
+
+    
   },
   watch: {
     '$route': {
@@ -121,10 +120,10 @@ import {newCountCodeApi} from '@/api/pages/pageInfo'
         if (messageId) {
           this.countCode(params)
         }
-
       },
       immediate: true
-    }
+    },
+    prevMusic () {}
   }
 })
 export default class App extends Vue {
@@ -157,34 +156,24 @@ export default class App extends Vue {
   data () {
     return {
       audio: '',
+      cur: {},
+      prev: [],
       musicList: [
         {
+          fileId: 5090,
           filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-30/60f67a38cb7d8eb52e3de18c61c29c7a.mp3',
-          playStatus: 1,
-          duration: 0,
-          disabled: false,
-          isShowLabel: false
         },
-        {
+        { 
+          fileId: 5051,
           filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-28/0b24c0853dcbda79e6dfce592e8f4468.mp3',
-          playStatus: 1,
-          duration: 0,
-          disabled: false,
-          isShowLabel: false
         },
         {
+          fileId: 5045,
           filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-28/225d3f8c5e68367f16274fcb5eea7c06.mp3',
-          playStatus: 1,
-          duration: 0,
-          disabled: false,
-          isShowLabel: false
         },
         {
+          fileId: 4460,
           filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-16/5732e9861a9cb2dde9b0ba607c6594f7.mp3',
-          playStatus: 1,
-          duration: 0,
-          disabled: false,
-          isShowLabel: false
         } 
       ]
     }
@@ -209,15 +198,47 @@ export default class App extends Vue {
   mounted () {
     this.audio = new Audio()
     this.audio.reload = false
-    this.$store.dispatch('undate_play_list', this.playList)
+    // this.$store.dispatch('undate_play_list', this.playList)
   }
-
+  curPath (id) {
+    return this.musicList.filter(item => {
+      if (id == item.fileId) {
+        return item
+      }
+    })
+  }
   // 控制全局音乐播放
-  audioEven (index) {
-    console.log('播放音乐', this.musicPlay)
+  audioEven (data) {
+    // this.prev = this.cur
+    this.cur = data
+    
+
     if (this.musicPlay) {
-      this.audio.src = this.musicList[index].filePath
-      this.audio.play()
+      try {
+        if (this.audio.src != this.curPath(data.fileId)[0].filePath) {
+          this.curMusic = data
+          if (this.prev.length === 0 || this.prev[this.prev.length-1] && this.prev[this.prev.length-1].fileId !== data.fileId) { 
+            this.prev.push(this.cur)
+            this.prev[0].currentTime = this.audio.currentTime
+            this.audio.ended ? this.prev[0].playStatus = 1 : this.prev[0].playStatus = 2
+            this.$store.dispatch('undate_prevMusic', this.prev[this.prev.length-1])
+            console.log('切换音乐了')
+            if (this.prev.length > 2) {
+              this.prev.shift()
+            }
+          }
+          this.audio.src = this.curPath(data.fileId)[0].filePath
+        }
+        const _this = this
+        console.log(this.prev)
+        this.audio.play().catch(function (e) {
+          console.log(e, '阻塞了重新调起播放')
+          _this.audio.play()
+        })
+      }
+      catch (e) {
+        console.log(1111, '播放啊', e)
+      }
     } else {
       this.audio.pause()
     }

@@ -261,3 +261,11 @@ export const userJurisdictionApi = (data) => {
     data,
   })
 }
+
+// 高考活动页面
+export const gaokaoApi = (data) => {
+  return request({
+    url: '/wap/special/gaoKaoPosterSetUserInfo',
+    data,
+  })
+}

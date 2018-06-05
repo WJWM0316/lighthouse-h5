@@ -55,12 +55,26 @@
       },
       ...mapState({
         playList: state => state.musicController.playList, // 播放列表
+        prevMusic: state => state.musicController.prevMusic, // 上一首播放
       }),
     },
     watch: {
       progress (val, old) {
-        this.moveLeft = this.$refs.range.range.handle.style.left
+        if (this.$refs.range) { this.moveLeft = this.$refs.range.range.handle.style.left }
         this.currentTime = val
+      },
+      prevMusic (val) {
+        if (this.playStatus === 4) {
+          this.playStatus = 2
+        }
+        if (val.currentTime > 0 && val.fileId === this.source.fileId) {
+          console.log(val, '我预备的啊')
+          this.audio.currentTime = val.currentTime
+          this.currentTime = val.currentTime
+          this.playStatus = val.playStatus
+          this.disabled = true
+          this.isShowLabel = false
+        }
       }
     }
   })
@@ -79,7 +93,6 @@
 
 
     mounted () {
-      
       this.audio = this.$root.$children[0].audio
       let _this = this
       // 监听加载过程开始
@@ -116,7 +129,7 @@
           if (!_this.audio.paused) {
             _this.playStatus = 4
           }
-          _this.moveLeft = _this.$refs.range.range.handle.style.left
+          if (_this.$refs.range) { _this.moveLeft = _this.$refs.range.range.handle.style.left }
           _this.progress = _this.audio.currentTime
         }
       }, false)
@@ -138,13 +151,23 @@
 
     // 按钮操作
     oper () {
-      if (this.audio.paused) {
+      if (this.playStatus !== 4) {
         this.playMusic()
-        this.duration = parseInt(this.audio.duration)
+        // this.duration = parseInt(this.audio.duration)
       } else {
         this.pauseMusci()
       }
-      this.$root.$children[0].audioEven(this.itemIndex)
+      let data = {
+        fileId: this.source.fileId,
+        filePath: this.src,
+        playStatus: this.playStatus,
+        index: this.itemIndex,
+        progress: this.progress,
+        currentTime: this.currentTime,
+        disabled: this.disabled,
+        isShowLabel: this.isShowLabel
+      }
+      this.$root.$children[0].audioEven(data)
     }
 
     // 播放
@@ -216,17 +239,14 @@
           this.audio.currentTime = this.progress
           this.endTime = 0
           this.startTime = 0
-          
         }
       }
     }
-
-    
   }
 </script>
 <style>
 .audio-wrapper {
-  width: 210px;
+  width: 240px;
   height: 40px;
   border-radius: 0 20px 20px 20px;
   background-color: rgba(255, 226, 102, 0.35);
@@ -272,6 +292,8 @@
 .progressBar .range-handle {
   width: 12px !important;
   height: 12px !important;
+  top: 50% !important;
+  margin-top: -6px !important;
   background-color: #ffe266 !important;
 }
 
@@ -280,28 +302,15 @@
   height: 33px;
   border-radius: 1px;
   text-align: center;
-  line-height: 33px;
-  background-color: #ffe266;
+  line-height: 26px;
+  background: url('./../../assets/icon/bg_progressbar_up@3x.png') no-repeat;
+  background-size: 100% 100%;
   position: absolute;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.06);
-  top: -48px;
+  top: -35px;
   left: 0;
   font-size: 13px;
   color: #354048;
-  margin-left: -17.5px;
-}
-.curTime::after {
-  content: '';
-  display: inline-block;
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 16px solid #ffe266;
-  position: absolute;
-  bottom: -14px;
-  left: 50%;
-  transform: translate3d(-50%, 0, 0);
+  margin-left: -21.5px;
 }
 
 .audio-time {

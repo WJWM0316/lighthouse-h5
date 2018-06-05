@@ -17,9 +17,23 @@ export default {
     })
   },
   // 更新播放列表
-  undate_play_list: ({commit}, status) => {
+  undate_play_list: ({commit}, list) => {
     return new Promise((resolve, reject) => {
       commit(types.UPDATE_PLAYLIST, list)
+      resolve()
+    })
+  },
+  // 更新当前播放音乐
+  undate_curMusic: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_CURMUSIC, data)
+      resolve()
+    })
+  },
+  // 更新上一个音乐
+  undate_prevMusic: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_PREVMUSIC, data)
       resolve()
     })
   },

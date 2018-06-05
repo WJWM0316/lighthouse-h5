@@ -5,6 +5,12 @@ export default {
   playList: function (state) { // 播放列表
     return state.play
   },
+  curMusic:  function (state) { // 当前播放音乐
+    return state.curMusic
+  },
+  prevMusic:  function (state) { // 当前播放音乐
+    return state.prevMusic
+  },
   musicPlay: function (state) { // 播放状态
     return state.musicPlay
   },

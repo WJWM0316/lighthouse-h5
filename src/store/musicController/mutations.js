@@ -110,6 +110,14 @@ export default {
   [types.UPDATE_MUSICPLAY] (state, musicPlay) {
     state.musicPlay = musicPlay
   },
+
+  [types.UPDATE_CURMUSIC] (state, curMusic) {
+    state.curMusic = curMusic
+  },
+  
+  [types.UPDATE_PREVMUSIC] (state, prevMusic) {
+    state.prevMusic = prevMusic
+  },
   /**
    * 切换歌曲
    * @param state

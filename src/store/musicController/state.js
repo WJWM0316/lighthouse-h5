@@ -1,6 +1,26 @@
 export default {
   isFirstClick: true,     // 针对ios 必须用户行为一次
   musicList: [],          // 播放列表
+  curMusic: {
+    fileId: '',
+    filePath: '',
+    playStatus: 1,
+    index: 0,
+    progress: 0,
+    currentTime: 0,
+    disabled: false,
+    isShowLabel: false
+  },           // 当前播放音乐
+  prevMusic: {
+    fileId: '',
+    filePath: '',
+    playStatus: 1,
+    index: 0,
+    progress: 0,
+    currentTime: 0,
+    disabled: false,
+    isShowLabel: false
+  },          // 上一个音乐
   musicPlay: false,       // 是否播放
   musicTotalTime: 0,      // 播放总时长
   musicOff: 0,            // 是否下架 0=>正常 1=>已下架

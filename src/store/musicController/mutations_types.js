@@ -1,6 +1,9 @@
 // 更新播放列表
 export const UPDATE_MUSICLIST = 'UPDATE_MUSICLIST'
 export const UPDATE_PLAYLIST = 'UPDATE_PLAYLIST'
+export const UPDATE_CURMUSIC = 'UPDATE_CURMUSIC'
+export const UPDATE_PREVMUSIC = 'UPDATE_PREVMUSIC'
+
 // 切换音乐播放暂停
 export const UPDATE_MUSICPLAY = 'UPDATE_MUSICPLAY'
 // 切换音乐
