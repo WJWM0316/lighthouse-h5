@@ -21,7 +21,7 @@
 			<div class="inner">
 				<p>成功生成海报！<br>长按识别前往查看</p>
 				<div class="close" @click.stop="close"><img src="./../../../assets/icon/close.png" alt=""></div>
-				<img src="./../../../assets/page/ceshi.jpg" alt="">
+				<img src="./../../../assets/page/feidekuai.jpg" alt="">
 			</div>
 		</div>
 	</div>
@@ -109,7 +109,7 @@
 		.bg {
 			width: 100%;
 			height: 100%;
-			padding: 15px 23px;
+			padding: 10px 15px;
 			box-sizing: border-box;
     	.box {
 				overflow: hidden;
@@ -121,6 +121,8 @@
     	}
 			img {
 				display: block;
+				width: auto;
+				height: 100%;
 			}
 		}
 		.form {
