@@ -30,6 +30,7 @@
 	import Vue from 'vue'
 	import { Group, PopupPicker, XAddress, ChinaAddressV4Data } from 'vux'
 	import { gaokaoApi } from '@/api/pages/pageInfo'
+	import { getInformationApi } from '@/api/pages/center'
 	let years = []
 	for (var i = 2018; i >= 1977; i--) {
 	  years.push({
@@ -56,6 +57,9 @@
 	  computed: {
 
 	  },
+	  created () {
+	  	getInformationApi()
+	  },
 	  watch: {
 	  	city (val) {
 	  		console.log(val)
@@ -72,6 +76,7 @@
 	  	}
 	  },
 	  methods: {
+
 	  	sublime () {
 	  		if (this.year.length === 0) {
 	  			this.$vux.toast.text('请选择毕业年份！', 'bottom')
@@ -81,7 +86,8 @@
 	  			this.$vux.toast.text('请选择毕业城市！', 'bottom')
 	  			return
 	  		}
-	  		
+	  		var reg = new RegExp("市")
+	  		this.cityName = this.cityName.replace(reg, "")
 	  		const data = {
 	  			year: this.year[0],
 	  			city: this.cityName
@@ -112,11 +118,11 @@
 			height: 100%;
 			padding: 15px 23px;
 			box-sizing: border-box;
-			display: flex;
-			justify-content: center;
-    	align-items: center;
     	.box {
 				overflow: hidden;
+				display: flex;
+				justify-content: center;
+	    	align-items: center;
 				width: 100%;
 				height: 100%;
     	}
