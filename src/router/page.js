@@ -100,6 +100,13 @@ const routers = [
     name: 'distribution-rankings',
     meta: {navHide: true},
     component: resolve => require(['@/views/other/distributionRankings'], resolve),
+  },
+  {
+    // 社区分销排行榜
+    path: '/examination',
+    name: 'gaokao',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/activity/gaokao'], resolve),
   }
 ]
 
