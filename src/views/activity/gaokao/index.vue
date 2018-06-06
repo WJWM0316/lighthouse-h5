@@ -21,7 +21,7 @@
 			<div class="inner">
 				<p>成功生成海报！<br>长按识别前往查看</p>
 				<div class="close" @click.stop="close"><img src="./../../../assets/icon/close.png" alt=""></div>
-				<img src="./../../../assets/page/jingxun.png" alt="">
+				<img src="./../../../assets/page/qr_gzh_1.png" alt="">
 			</div>
 		</div>
 	</div>
