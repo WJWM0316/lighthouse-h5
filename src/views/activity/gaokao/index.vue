@@ -69,7 +69,6 @@
 	  	}
 	  },
 	  methods: {
-
 	  	sublime () {
 	  		if (this.year.length === 0) {
 	  			this.$vux.toast.text('请选择高考年份', 'bottom')
@@ -94,6 +93,11 @@
 	  	},
 	  	close () {
 	  		this.show = false
+	  	}
+	  },
+	  created () {
+	  	if (document.querySelector('title').innerHTML = '小灯塔') {
+	  		document.querySelector('title').innerHTML = '为考生加油'
 	  	}
 	  }
 	}
