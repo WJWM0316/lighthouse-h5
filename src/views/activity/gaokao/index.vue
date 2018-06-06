@@ -1,5 +1,5 @@
 <template>
-	<div class="gaokao">
+	<div class="gaokao" @touchmove.stop="defaultFun($event)">
 		<!-- <div class="title">高考加油生成器</div> -->
 		<div class="bg">
 			<div class="box">
@@ -21,7 +21,7 @@
 			<div class="inner">
 				<p>成功生成海报！<br>长按识别前往查看</p>
 				<div class="close" @click.stop="close"><img src="./../../../assets/icon/close.png" alt=""></div>
-				<img src="./../../../assets/page/jingxun.png" alt="">
+				<img src="./../../../assets/page/feidekuai.jpg" alt="">
 			</div>
 		</div>
 	</div>
@@ -68,14 +68,20 @@
 	  		}, 50)
 	  	}
 	  },
+	  created () {
+	  	document.querySelector('title').innerHTML = "为考生加油"
+	  },
 	  methods: {
+	  	defaultFun (event) {
+	  		event.preventDefault();
+	  	},
 	  	sublime () {
 	  		if (this.year.length === 0) {
-	  			this.$vux.toast.text('请选择高考年份', 'bottom')
+	  			this.$vux.toast.text('请选择毕业年份！', 'bottom')
 	  			return
 	  		}
 	  		if (this.city.length === 0) {
-	  			this.$vux.toast.text('请选择城市', 'bottom')
+	  			this.$vux.toast.text('请选择毕业城市！', 'bottom')
 	  			return
 	  		}
 	  		var reg = new RegExp("市")
@@ -94,11 +100,6 @@
 	  	close () {
 	  		this.show = false
 	  	}
-	  },
-	  created () {
-	  	if (document.querySelector('title').innerHTML = '小灯塔') {
-	  		document.querySelector('title').innerHTML = '为考生加油'
-	  	}
 	  }
 	}
 </script>
@@ -108,6 +109,7 @@
 		box-sizing: border-box;
 		background:rgba(248,248,248,1);
 		padding-bottom: 165px;
+		overflow: hidden;
 		.title {
 			text-align: center;
 		}
