@@ -1,5 +1,5 @@
 <template>
-	<div class="gaokao">
+	<div class="gaokao" @touchmove.stop="defaultFun($event)">
 		<!-- <div class="title">高考加油生成器</div> -->
 		<div class="bg">
 			<div class="box">
@@ -69,7 +69,9 @@
 	  	}
 	  },
 	  methods: {
-
+	  	defaultFun (event) {
+	  		event.preventDefault();
+	  	},
 	  	sublime () {
 	  		if (this.year.length === 0) {
 	  			this.$vux.toast.text('请选择毕业年份！', 'bottom')
@@ -104,6 +106,7 @@
 		box-sizing: border-box;
 		background:rgba(248,248,248,1);
 		padding-bottom: 165px;
+		overflow: hidden;
 		.title {
 			text-align: center;
 		}

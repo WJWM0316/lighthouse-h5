@@ -200,6 +200,8 @@ export default class App extends Vue {
     this.audio.reload = false
     // this.$store.dispatch('undate_play_list', this.playList)
   }
+
+  // 过滤拿到音频url
   curPath (id) {
     return this.musicList.filter(item => {
       if (id == item.fileId) {
@@ -209,13 +211,15 @@ export default class App extends Vue {
   }
   // 控制全局音乐播放
   audioEven (data) {
-    
     this.cur = data
+    // 总开关
     if (this.musicPlay) {
       try {
         if (this.audio.src != this.curPath(data.fileId)[0].filePath) {
           this.curMusic = data
-          if (this.prev.length === 0 || this.prev[this.prev.length-1] && this.prev[this.prev.length-1].fileId !== data.fileId) { 
+
+          // 记录上一个播放记录
+          if (this.prev.length === 0 || this.prev[this.prev.length-1] && this.prev[this.prev.length-1].fileId !== data.fileId) {
             this.prev.push(this.cur)
             this.prev[0].currentTime = this.audio.currentTime
             this.audio.ended ? this.prev[0].playStatus = 1 : this.prev[0].playStatus = 2
@@ -225,12 +229,14 @@ export default class App extends Vue {
               this.prev.shift()
             }
           }
+
+          // 点击不一样的音频就要换url了
           this.audio.src = this.curPath(data.fileId)[0].filePath
         }
         const _this = this
-        console.log(this.prev)
+        // 开始播放
         this.audio.play().catch(function (e) {
-          console.log(e, '阻塞了重新调起播放')
+          console.log(e, '阻塞了重新调起play')
           _this.audio.play()
         })
       }
@@ -238,6 +244,7 @@ export default class App extends Vue {
         console.log(1111, '播放啊', e)
       }
     } else {
+      // 暂停
       this.audio.pause()
     }
   }
