@@ -1,7 +1,7 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import audioBox from '@/Components/media/music'
+import audioBox from '@/components/media/music'
 import moment from 'moment'
 
 @Component({
