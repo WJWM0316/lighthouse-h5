@@ -18,7 +18,7 @@
         <span slot="label">{{tab.label}}</span>
       </tabbar-item>
     </tabbar>
-    <div class="musicControl" v-show="isShowContrler">
+    <div class="musicControl" v-show="isShowController && !$route.meta.hideController">
       <div class="fileImg" :class="{'playing' : musicPlay}"><img src="https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-04/10e47b75b8395107d0a516cce1c2032c.png" alt=""></div>
       <div class="playBtn" @click.stop="musicControl()">
         <img src="./assets/icon/bnt_yuyin_play@3x.png" v-show="!musicPlay">
@@ -166,7 +166,7 @@ export default class App extends Vue {
   data () {
     return {
       audio: '', // 音频载体
-      isShowContrler: false, // 是否现在音频悬浮窗
+      isShowController: false, // 是否现在音频悬浮窗
       curUrl: '', // 记录播放路径，用来判断音频切换
       cur: {}, // 当前播放音频的对象
       prev: [], // 播放过音频的记录
@@ -209,11 +209,11 @@ export default class App extends Vue {
   }
   // 关闭悬浮窗
   closeContraler () {
-    this.isShowContrler = false
+    this.isShowController = false
   }
   // 控制全局音乐播放被音频组件调用
   audioEven (data) {
-    this.isShowContrler = true // 打开悬浮窗
+    this.isShowController = true // 打开悬浮窗
     this.cur = data
     // 总开关
     if (this.musicPlay) {

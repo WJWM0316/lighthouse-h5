@@ -6,7 +6,7 @@ const routers = [
     path: '/login',
     name: 'login',
     component: resolve => require(['@/views/login/index'], resolve),
-    meta: {navHide: true}
+    meta: {navHide: true, hideController:true}
   },
 ]
 

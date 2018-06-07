@@ -49,21 +49,21 @@ const routers = [
     // 发布内容
     path: '/publish/:communityId',
     name: 'publish-content',
-    meta: {navHide: true},
+    meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/introduce/publish'], resolve),
   },
   {
     // 发布语音
     path: '/publishVoice/:communityId',
     name: 'publish-voice',
-    meta: {navHide: true},
+    meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/introduce/publishVoice'], resolve),
   },
   {
     // 同学列表
     path: '/classmates/:communityId',
     name: 'classmates',
-    meta: {navHide: true},
+    meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/introduce/classmates'], resolve),
   },
   {
@@ -77,7 +77,7 @@ const routers = [
     // 用户提问
     path: '/introduce/ask/:communityId',
     name: 'ask',
-    meta: {navHide: true},
+    meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/introduce/ask'], resolve),
   },
   {
@@ -98,14 +98,14 @@ const routers = [
     // 社区分销排行榜
     path: '/introduce/ranking/:communityId',
     name: 'distribution-rankings',
-    meta: {navHide: true},
+    meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/other/distributionRankings'], resolve),
   },
   {
     // 高考活动
     path: '/examination',
     name: 'gaokao',
-    meta: {navHide: true},
+    meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/activity/gaokao'], resolve),
   }
 ]

@@ -198,9 +198,11 @@
     }
 
     beforeDestroy () {
-      this.audio && this.audio.pause()
-      this.audio.src = ''
-      this.audio = null
+      if (this.audio) {
+        this.audio && this.audio.pause()
+        this.audio.src = ''
+        this.audio = null
+      }
     }
 
     /**

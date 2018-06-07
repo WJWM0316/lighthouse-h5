@@ -40,19 +40,19 @@ const homeRoutes = [
     path: '/undefined',
     name: 'undefined',
     component: resolve => require(['@/views/abnormal/notFound'], resolve),
-    meta: {navHide: true}
+    meta: {navHide: true, hideController:true}
   },
   {
     path: '/404',
     name: '404',
     component: resolve => require(['@/views/abnormal/404'], resolve),
-    meta: {navHide: true}
+    meta: {navHide: true, hideController:true}
   },
   {
     path: '/offline',
     name: 'offline',
     component: resolve => require(['@/views/abnormal/offline'], resolve),
-    meta: {navHide: true}
+    meta: {navHide: true, hideController:true}
   }
 ]
 
