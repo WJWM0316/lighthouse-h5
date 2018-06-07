@@ -18,6 +18,10 @@
                   :isFold="isFold"
                   :noBorder="noBorder"
                   :isNeedHot="isNeedHot"
+                  :isPlayList='isPlayList'
+                  :isTeacher='isTeacher'
+                  :isTeacherCon='isTeacherCon'
+                  :communityId="communityId"
                   @audioEvent="audioEvent"
                   @videoEvent="videoEvent"
                   @operation="operation"
@@ -41,6 +45,18 @@
       dynamicList: {
         type: Array,
         required: true
+      },
+      isPlayList: {
+        type: Boolean,
+        default: false
+      },
+      isTeacher: {
+        type: Boolean,
+        default: false
+      },
+      isTeacherCon: {
+        type: Boolean,
+        default: false
       },
       isFold: {
         type: Boolean,
@@ -108,6 +124,10 @@
       noBorder: {
         type: Boolean,
         default: false
+      },
+      communityId: {
+        type: String,
+        default: ''
       }
     },
     components: {
@@ -137,8 +157,6 @@
     currentVideoIndex = -1
 
     created () {
-      console.log(11111111111111)
-      console.log('allTotal', this.allTotal)
     }
 
     mounted () {

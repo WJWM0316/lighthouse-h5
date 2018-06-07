@@ -43,8 +43,16 @@
               <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
             </div>
             <!-- 音频 -->
-            <div v-if="problemItem.type === 2" :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">
-              <!-- <audioBox></audioBox> -->
+            <div v-if="problemItem.type === 2" :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}">
+              <audioBox 
+                :communityId="communityId"
+                :isPlayList="isPlayList"
+                :isTeacher="isTeacher"
+                :isTeacherCon="isTeacherCon"
+                :circleId="problemItem.circleId" 
+                :source="problemItem.file" 
+                :itemIndex="problemIndex" 
+                :key="problemIndex"></audioBox>
             </div>
           </div>
 
@@ -65,7 +73,15 @@
 
         <!-- 音频 -->
         <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}">
-          <audioBox :source="item.files[0]" :itemIndex="itemIndex" :key="itemIndex"></audioBox>
+          <audioBox 
+            :communityId="communityId"
+            :isPlayList="isPlayList"
+            :isTeacher="isTeacher"
+            :isTeacherCon="isTeacherCon"
+            :circleId="item.circleId" 
+            :source="item.files[0]" 
+            :itemIndex="itemIndex"
+            :key="itemIndex"></audioBox>
         </div>
 
         <!-- 文字与视频 -->

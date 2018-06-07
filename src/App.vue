@@ -18,6 +18,16 @@
         <span slot="label">{{tab.label}}</span>
       </tabbar-item>
     </tabbar>
+    <div class="musicControl" v-show="isShowContrler">
+      <div class="fileImg" :class="{'playing' : musicPlay}"><img src="https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-04/10e47b75b8395107d0a516cce1c2032c.png" alt=""></div>
+      <div class="playBtn" @click.stop="musicControl()">
+        <img src="./assets/icon/bnt_yuyin_play@3x.png" v-show="!musicPlay">
+        <img src="./assets/icon/stop@3x.png" v-show="musicPlay">
+      </div>
+      <div class="closeBtn" v-show="!musicPlay" @click.stop="closeContraler()">
+        <img src="./assets/icon/bnt_suspensionbar_clos@3x.png" alt="">
+      </div>
+    </div>
     <div class="home-mask" v-if="isShowQrcodes">
       <div class="qr-container">
         <i class="u-icon-close icon-close" @click="closeQrCode(1)"></i>
@@ -116,14 +126,14 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
         const params = {
           messageId
         }
-        console.log('code222222', messageId)
         if (messageId) {
           this.countCode(params)
         }
       },
       immediate: true
     },
-    prevMusic () {}
+    musicPlay () {
+    }
   }
 })
 export default class App extends Vue {
@@ -155,27 +165,12 @@ export default class App extends Vue {
   ]
   data () {
     return {
-      audio: '',
-      cur: {},
-      prev: [],
-      musicList: [
-        {
-          fileId: 5090,
-          filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-30/60f67a38cb7d8eb52e3de18c61c29c7a.mp3',
-        },
-        { 
-          fileId: 5051,
-          filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-28/0b24c0853dcbda79e6dfce592e8f4468.mp3',
-        },
-        {
-          fileId: 5045,
-          filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-28/225d3f8c5e68367f16274fcb5eea7c06.mp3',
-        },
-        {
-          fileId: 4460,
-          filePath: 'https://cdnstatic.ziwork.com/test/audio/2018-05-16/5732e9861a9cb2dde9b0ba607c6594f7.mp3',
-        } 
-      ]
+      audio: '', // 音频载体
+      isShowContrler: false, // 是否现在音频悬浮窗
+      curUrl: '', // 记录播放路径，用来判断音频切换
+      cur: {}, // 当前播放音频的对象
+      prev: [], // 播放过音频的记录
+      isAutoPlay: false // 是否自动播放
     }
   }
   goSomeWhere (index) {
@@ -195,31 +190,38 @@ export default class App extends Vue {
   async countCode (params) {
     await newCountCodeApi(params)
   }
+
   mounted () {
     this.audio = new Audio()
     this.audio.reload = false
     // this.$store.dispatch('undate_play_list', this.playList)
   }
 
-  // 过滤拿到音频url
-  curPath (id) {
-    return this.musicList.filter(item => {
-      if (id == item.fileId) {
-        return item
-      }
-    })
+  // 悬浮窗开关
+  musicControl () {
+    if (this.audio.paused) { 
+      this.audio.play()
+      this.$store.dispatch('music_play')
+    } else {
+      this.audio.pause()
+      this.$store.dispatch('music_pause')
+    }
   }
-  // 控制全局音乐播放
+  // 关闭悬浮窗
+  closeContraler () {
+    this.isShowContrler = false
+  }
+  // 控制全局音乐播放被音频组件调用
   audioEven (data) {
+    this.isShowContrler = true // 打开悬浮窗
     this.cur = data
     // 总开关
     if (this.musicPlay) {
       try {
-        if (this.audio.src != this.curPath(data.fileId)[0].filePath) {
-          this.curMusic = data
-
+        if (this.curUrl !== data.filePath) {
+          this.curUrl = data.filePath
           // 记录上一个播放记录
-          if (this.prev.length === 0 || this.prev[this.prev.length-1] && this.prev[this.prev.length-1].fileId !== data.fileId) {
+          if (this.prev.length === 0 || this.prev[this.prev.length-1] && this.prev[this.prev.length-1].fileId !== data.fileId && this.isAutoPlay) {
             this.prev.push(this.cur)
             this.prev[0].currentTime = this.audio.currentTime
             this.audio.ended ? this.prev[0].playStatus = 1 : this.prev[0].playStatus = 2
@@ -230,22 +232,25 @@ export default class App extends Vue {
             }
           }
 
-          // 点击不一样的音频就要换url了
-          this.audio.src = this.curPath(data.fileId)[0].filePath
+          // // 点击不一样的音频就要换url了
+          // this.audio.src = data.filePath
         }
         const _this = this
         // 开始播放
+        console.log('开始播放')
         this.audio.play().catch(function (e) {
           console.log(e, '阻塞了重新调起play')
           _this.audio.play()
         })
       }
       catch (e) {
-        console.log(1111, '播放啊', e)
+        // this.audio.play()
+        console.log(e, 'src还未赋予报错后直接重新调起play')
       }
     } else {
       // 暂停
       this.audio.pause()
+      console.log('暂停播放')
     }
   }
 }
@@ -308,5 +313,43 @@ export default class App extends Vue {
 }
 .weui-tabbar {
   background-color: #FFF !important;
+}
+.musicControl {
+  height: 44px;
+  padding: 0 15px 0 3px;
+  border-radius: 44px;
+  background: #fff;
+  position: fixed;
+  left: 10px;
+  bottom: 64px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.18);
+  .fileImg {
+    width: 38px;
+    height:38px;
+    border-radius: 50%;
+    overflow: hidden;
+    &.playing {
+      animation: playing 20000s linear infinite;
+    }
+    @keyframes playing {
+      0% { transform: rotate(0deg) }
+      100% { transform: rotate(3600000deg) }
+    }
+    img {
+      width: 38px;
+      height:38px;
+      display: block;
+    }
+  }
+  .playBtn, .closeBtn {
+    width: 20px;
+    margin-left: 15px;
+    img {
+      width: 100%;
+      display: block;
+    }
+  }
 }
 </style>

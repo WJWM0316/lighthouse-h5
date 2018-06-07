@@ -114,7 +114,15 @@ export default {
   [types.UPDATE_CURMUSIC] (state, curMusic) {
     state.curMusic = curMusic
   },
-  
+  [types.UPDATE_ISLASTPAGE] (state, isLastPage) {
+    state.isLastPage = isLastPage
+  },
+  [types.UPDATE_ISPRELOAD] (state, isPreload) {
+    state.isPreload = isPreload
+  },
+  [types.UPDATE_CURINDEX] (state, curIndex) {
+    state.curIndex = curIndex
+  },
   [types.UPDATE_PREVMUSIC] (state, prevMusic) {
     state.prevMusic = prevMusic
   },

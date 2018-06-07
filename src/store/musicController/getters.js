@@ -3,12 +3,21 @@ export default {
     return state.musicList
   },
   playList: function (state) { // 播放列表
-    return state.play
+    return state.playList
   },
   curMusic:  function (state) { // 当前播放音乐
     return state.curMusic
   },
-  prevMusic:  function (state) { // 当前播放音乐
+  isLastPage:  function (state) { // 是否有下一页
+    return state.isLastPage
+  },
+  curIndex:  function (state) { // 序号
+    return state.curIndex
+  },
+  isPreload:  function (state) { // 是否需要预加载
+    return state.isPreload
+  },
+  prevMusic:  function (state) { // 上一个播放音乐
     return state.prevMusic
   },
   musicPlay: function (state) { // 播放状态

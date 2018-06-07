@@ -76,7 +76,23 @@ import moment from 'moment'
     noBorder: {
       type: Boolean,
       default: false
-    }  
+    },
+    communityId: {
+      type: String,
+      default: ''
+    },
+    isPlayList: {
+      type: Boolean,
+      default: false
+    },
+    isTeacher: {
+      type: Boolean,
+      default: false
+    },
+    isTeacherCon: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
     audioBox
@@ -189,13 +205,15 @@ import moment from 'moment'
       }
       return timeStr
     }
+  },
+  watch: {
+    isPlayList () {}
   }
 })
 export default class dynamicItem extends Vue {
   video = ''
   role = this.item.releaseUser.role || {}
   created () {
-  	console.log(this.item,"******************************")
   }
   
   beforeMount(){
@@ -369,8 +387,9 @@ export default class dynamicItem extends Vue {
       // 跳转详情页 sourceId type
       const sourceId = circleId || problemId
       console.log('跳转详情页: ', sourceId, type)
+      const communityId = this.communityId
       // this.$router.push({name: 'all-details', params: {sourceId, type}})
-      this.$router.push(`/details/${sourceId}/${type}`)
+      this.$router.push(`/details/${sourceId}/${type}?communityId=${communityId}`)
     }
   }
 

@@ -1,6 +1,9 @@
 export default {
   isFirstClick: true,     // 针对ios 必须用户行为一次
   musicList: [],          // 播放列表
+  isLastPage: true,      // 是否最后一页
+  isPreload: false,       // 是否预先加载下一页
+  curIndex: 0,             // 播放音频在列表中的位置
   curMusic: {
     fileId: '',
     filePath: '',
@@ -49,5 +52,5 @@ export default {
   musicIsPrev: false,     // 是否有上一曲
   musicIsNext: false,
   musicImmediately: false, // 立即播放
-  playList: []
+  playList: {}
 }

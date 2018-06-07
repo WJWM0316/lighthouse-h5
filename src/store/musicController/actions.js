@@ -17,9 +17,9 @@ export default {
     })
   },
   // 更新播放列表
-  undate_play_list: ({commit}, list) => {
+  undate_play_list: ({commit}, data) => {
     return new Promise((resolve, reject) => {
-      commit(types.UPDATE_PLAYLIST, list)
+      commit(types.UPDATE_PLAYLIST, data)
       resolve()
     })
   },
@@ -34,6 +34,27 @@ export default {
   undate_prevMusic: ({commit}, data) => {
     return new Promise((resolve, reject) => {
       commit(types.UPDATE_PREVMUSIC, data)
+      resolve()
+    })
+  },
+  // 是否预加载
+  undate_isPreload: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_ISPRELOAD, data)
+      resolve()
+    })
+  },
+  // 是否有下一页
+  undate_isLastPage: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_ISLASTPAGE, data)
+      resolve()
+    })
+  },
+  // 序号
+  undate_curIndex: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_CURINDEX, data)
       resolve()
     })
   },

@@ -4,12 +4,15 @@
     <scroll @refresh="handleRefresh" @pullup="handlePullup">  
         <div class="header">
           <dynamic :dynamicList="dynamicList"
+                   :communityId="communityId"
                    :hideBorder="true"
                    :hideCommentArea="true"
                    :isFold = "false"
                    :disableContentClick="true"
                    :showIdentification="true"
                    :noBorder ="true"
+                   :isPlayList = 'isPlayList'
+                   :isTeacherCon = 'isPlayList'
                    :allTotal = "allTotal"
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="operation" 
@@ -117,6 +120,7 @@
       }
     },
     watch: {
+      isPlayList () {},
       discussItemList () {
       },
       displaySuspensionInput (val) {
@@ -143,9 +147,16 @@
     modelType = '' // 评论类型
     classmateList = [] // 点赞列表
     isFavorList = false
-
+    isPlayList = true
+    communityId = ''
     created () {
       this.modelType = this.$route.params.type
+      if (this.modelType == 1) {
+        this.isPlayList = true
+      } else {
+        this.isPlayList = false
+      }
+      this.communityId = this.$route.query.communityId
       this.pageInit().then(() => {})
     }
     // ------------------- 详情评论区 ----------------------
@@ -254,12 +265,9 @@
           isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
         }
       }
-      console.log('favor', favor)
       const res = await setFavorApi(params)
       this.discussItemList[itemIndex].isFavor = favor
       this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
-      console.log(this.discussItemList[itemIndex])
-      
       if (favor) {
         this.discussItemList[itemIndex].favors = this.discussItemList[itemIndex].favors || []
         this.discussItemList[itemIndex].favors.splice(0, 0, res)

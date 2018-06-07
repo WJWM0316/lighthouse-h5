@@ -261,7 +261,7 @@ export const userJurisdictionApi = (data) => {
     data,
   })
 }
-// 音乐播放列表
+// 获取社区音频列表
 export const musicListApi = (data) => {
   return request({
     url: '/wap/beacon/circleManages',

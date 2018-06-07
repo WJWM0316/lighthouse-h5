@@ -75,8 +75,11 @@
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
                      :isNeedHot="true"
+                     :communityId="pageInfo.communityId"
                      :showIdentification="showIdentification"
                      :disableOperationArr="disableOperationArr"
+                     :isPlayList="isPlayList"
+                     :isTeacher="isPlayList"
                      @disableOperationEvents="operation"
                      @saveAudio="controlAudio"
             ></dynamic>
@@ -209,7 +212,7 @@
     type=1
     saveAudio={}
     nowItem={}
-    
+    isPlayList = true
     //显示标题模式
     titleBoxShow=false;
 
@@ -521,6 +524,11 @@
         this.showType = type
 //      this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
         this.showIdentification = !type
+        if (type === 1) {
+          this.isPlayList = true
+        } else {
+          this.isPlayList = false
+        }
 				this.pagination.busy = false
         this.pagination.end = false // 初始化数据，必定不是最后一页
         this.getList({page: 1}).then(() => {})
