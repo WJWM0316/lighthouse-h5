@@ -365,8 +365,8 @@
               case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
                 self.$store.dispatch('show_qr', {type: 4})
                 break
-              case 'db73998f8d1691d3ce75180266e3cba9': // 测试专用
-                self.$store.dispatch('show_qr', {type: 4})
+              case '9eb2275d266b83a717a50a5827250b8a': // 0607分销
+                self.$store.dispatch('show_qr', {type: 2})
                 break
               default:
                 location.reload()
@@ -447,6 +447,9 @@
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
         case '67917ba04abd74c3247245576b1168b0':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case '9eb2275d266b83a717a50a5827250b8a':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
         default:

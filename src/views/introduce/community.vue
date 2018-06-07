@@ -470,6 +470,9 @@
         case '67917ba04abd74c3247245576b1168b0':
           this.qrSrc = require('@/assets/page/qr_gzh_2.png')
           break
+        case '9eb2275d266b83a717a50a5827250b8a': // 0607
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
           //新增
         default:
           this.qrSrc = require('@/assets/page/qr_gzh_1.png')
