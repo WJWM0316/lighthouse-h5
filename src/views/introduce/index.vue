@@ -437,9 +437,7 @@
 
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
-      if(res.isSell==1){
-        this.qrSrc = res.sellImg
-      }
+      this.qrSrc = res.sellImg
       this.pageInfo = res
 
       // 是否已入社
