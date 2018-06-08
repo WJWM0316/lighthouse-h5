@@ -52,7 +52,7 @@
                 :circleId="problemItem.circleId" 
                 :source="problemItem.file" 
                 :itemIndex="problemIndex" 
-                :key="problemIndex"></audioBox>
+                ></audioBox>
             </div>
           </div>
 
@@ -73,7 +73,7 @@
 
         <!-- 音频 -->
         <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}">
-          <audioBox 
+          <audioBox
             :communityId="communityId"
             :isPlayList="isPlayList"
             :isTeacher="isTeacher"
@@ -81,7 +81,7 @@
             :circleId="item.circleId" 
             :source="item.files[0]" 
             :itemIndex="itemIndex"
-            :key="itemIndex"></audioBox>
+            ></audioBox>
         </div>
 
         <!-- 文字与视频 -->

@@ -183,61 +183,63 @@
       // 监听播放完成事件
       this.audio.addEventListener('ended', function () {
         // 同一个组件  或者 导师内容详情
-        if (_this.source.fileUrl === _this.audio.src  && _this.isPlayList || _this.isTeacherCon) {
+        console.log(_this.source.fileUrl, _this.audio.src)
+        if (_this.source.fileUrl === _this.audio.src) {
           _this.audioEnded()
           // 播放下一首
-          console.log('我播完了准备下一首状态', _this.curIndex)
+          // console.log(_this.source.fileUrl, _this.audio.src)
+          let isSome = false
           // 不是播放到列表最后且是需要列表播放
-          if (_this.curIndex < _this.playList.circles.length - 1) {
-            try {
-              _this.$store.dispatch('music_play')
-              _this.$root.$children[0].isAutoPlay = false
-              let index = _this.curIndex + 1
-              _this.$store.dispatch('undate_curIndex', index)
-              console.log('我的列表播放序号', _this.curIndex, _this.$store.getters.curIndex)
-              console.log('我要播放的音频', _this.playList.circles[_this.curIndex].files[0].fileUrl)
-              _this.audio.src = ''
-              _this.audio.src = _this.playList.circles[_this.curIndex].files[0].fileUrl
-              // _this.audio.pause()
-              setTimeout(function () {
-                _this.audio.play()
-              }, 100)
+          // if (_this.isPlayList && _this.curIndex < _this.playList.circles.length - 1  && !isSome) {
+          //   isSome = true
+          //   console.log('我播完了准备下一首状态', _this.curIndex)
+          //   try {
+          //     _this.$store.dispatch('music_play')
+          //     _this.$root.$children[0].isAutoPlay = false
+          //     let index = _this.curIndex + 1
+          //     _this.$store.dispatch('undate_curIndex', index)
+          //     console.log('我要播放的音频', index, _this.playList.circles[index].files[0].fileUrl)
+          //     _this.audio.src = ''
+          //     _this.audio.src = _this.playList.circles[index].files[0].fileUrl
+          //     // _this.audio.pause()
+          //     setTimeout(function () {
+          //       _this.audio.play()
+          //     }, 100)
               
-              console.log('播放下一首', _this.curIndex,  _this.audio.src)
-              // 如果还剩2条音频则提前加载下一个列表且还有下一页
-              if (_this.isLastPage && _this.curIndex >= _this.playList.circles.length - 2) {
-                _this.$store.dispatch('undate_isPreload', true)
-                let data = {
-                  communityId: _this.communityId,
-                  circleId: _this.playList.circles[_this.playList.circles.length - 1].circleId,
-                  count: 5,
-                  orderBy: 'asc' //顺序 asc 或者倒叙 desc，默认 asc
-                }
-                musicListApi(data).then(res => {
-                  if (res.circles.length < 5) {
-                    _this.$store.dispatch('undate_isLastPage', false)
-                  }
-                  _this.playList.circles = _this.playList.circles.concat(res.circles || [])
-                  res.circles = _this.distinct(_this.playList.circles)
-                  console.log('预加载后的音频列表', _this.playList.circles)
-                  _this.$store.dispatch('undate_play_list', res)
-                })
-              }
-            }
-            catch (e) {
-              console.log('调起播放请求被新的加载请求中断,重新播放', e)
-              _this.audio.play()
-            }
-          } else {
-            console.log('已经全部播放完毕')
-            _this.audioEnded()
-          }
+          //     // 如果还剩2条音频则提前加载下一个列表且还有下一页
+          //     if (_this.isLastPage && _this.curIndex >= _this.playList.circles.length - 2) {
+          //       _this.$store.dispatch('undate_isPreload', true)
+          //       let data = {
+          //         communityId: _this.communityId,
+          //         circleId: _this.playList.circles[_this.playList.circles.length - 1].circleId,
+          //         count: 5,
+          //         orderBy: 'asc' //顺序 asc 或者倒叙 desc，默认 asc
+          //       }
+          //       musicListApi(data).then(res => {
+          //         if (res.circles.length < 5) {
+          //           _this.$store.dispatch('undate_isLastPage', false)
+          //         }
+          //         _this.playList.circles = _this.playList.circles.concat(res.circles || [])
+          //         res.circles = _this.distinct(_this.playList.circles)
+          //         console.log('预加载后的音频列表', _this.playList.circles)
+          //         _this.$store.dispatch('undate_play_list', res)
+          //       })
+          //     }
+          //   }
+          //   catch (e) {
+          //     console.log('调起播放请求被新的加载请求中断,重新播放', e)
+          //     _this.audio.play()
+          //   }
+          // } else {
+          //   console.log('已经全部播放完毕')
+          //   _this.audioEnded()
+          // }
         }
         // 如果不是导师列表音频 音频结束手动重置组件状态
         if (!_this.isTeacherCon){
           _this.progress = 0
           _this.playStatus = 1
-          
+
         }
       }, false)
 
@@ -254,7 +256,7 @@
     checkCircleId () {
       if (this.playList && this.playList.circles) {
         this.playList.circles.filter((item, index) => {
-          if (this.curCircleId === item.circleId) {
+          if (this.curCircleId === item.circleId && this.isGetList) {
             if (this.isTeacher) {
               this.$store.dispatch('undate_curIndex', index)
             }
