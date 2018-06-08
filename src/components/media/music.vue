@@ -85,7 +85,7 @@
     },
     watch: {
       isPlayList (val) {
-        console.log('我被改变了', val)
+        this.musicList = val.circles
       },
       isLastPage (val) {},
       curIndex (val) {},
@@ -129,7 +129,6 @@
     isGetList = true // 检测是否需要重新请求列表
     musicList = [] // 本地记录播放列表 用来累加
     mounted () {
-      console.log('_this.isPlayList', this.isTeacherCon, this.isPlayList)
       this.curCircleId = this.circleId
       this.audio = this.$root.$children[0].audio
       let _this = this
@@ -178,36 +177,43 @@
         // 同一个组件  或者 导师内容详情
         if (_this.source.fileUrl === _this.audio.src || _this.isTeacherCon) {
           _this.audioEnded()
-        
           // 播放下一首
           console.log('下一首状态', _this.curIndex)
           // 不是播放到列表最后且是需要列表播放
           if (_this.isPlayList  &&  _this.curIndex < _this.playList.circles.length - 1) {
-            _this.$store.dispatch('music_play')
-            _this.$root.$children[0].isAutoPlay = false
-            let index = _this.curIndex + 1
-            _this.$store.dispatch('undate_curIndex', index)
-            _this.audio.src = _this.playList.circles[_this.curIndex].files[0].fileUrl
-            _this.audio.play()
-            console.log('播放下一首', _this.curIndex,  _this.audio.src)
-            // 如果还剩2条音频则提前加载下一个列表且还有下一页
-            if (_this.isLastPage && _this.curIndex >= _this.playList.circles.length - 3) {
-              _this.$store.dispatch('undate_isPreload', true)
-              let data = {
-                communityId: _this.communityId,
-                circleId: _this.playList.circles[_this.playList.circles.length - 1].circleId,
-                count: 5,
-                orderBy: 'asc' //顺序 asc 或者倒叙 desc，默认 asc
-              }
-              musicListApi(data).then(res => {
-                if (res.circles.length < 5) {
-                  _this.$store.dispatch('undate_isLastPage', false)
+            try {
+              _this.$store.dispatch('music_play')
+              _this.$root.$children[0].isAutoPlay = false
+              let index = _this.curIndex + 1
+              _this.$store.dispatch('undate_curIndex', index)
+              _this.audio.src = _this.playList.circles[_this.curIndex].files[0].fileUrl
+              _this.audio.play()
+              console.log('播放下一首', _this.curIndex,  _this.audio.src)
+              // 如果还剩2条音频则提前加载下一个列表且还有下一页
+              if (_this.isLastPage && _this.curIndex >= _this.playList.circles.length - 2) {
+                _this.$store.dispatch('undate_isPreload', true)
+                let data = {
+                  communityId: _this.communityId,
+                  circleId: _this.playList.circles[_this.playList.circles.length - 1].circleId,
+                  count: 5,
+                  orderBy: 'asc' //顺序 asc 或者倒叙 desc，默认 asc
                 }
-                _this.musicList = _this.musicList.concat(res.circles || [])
-                res.circles = _this.distinct(_this.musicList)
-                _this.$store.dispatch('undate_play_list', res)
-              })
+                musicListApi(data).then(res => {
+                  if (res.circles.length < 5) {
+                    _this.$store.dispatch('undate_isLastPage', false)
+                  }
+                  _this.playList.circles = _this.playList.circles.concat(res.circles || [])
+                  res.circles = _this.distinct(_this.playList.circles)
+                  console.log('预加载后的音频列表', _this.playList.circles)
+                  _this.$store.dispatch('undate_play_list', res)
+                })
+              }
             }
+            catch (e) {
+              console.log('调起播放请求被新的加载请求中断,重新播放', e)
+              _this.audio.play()
+            }
+            
           } else {
             _this.audioEnded()
           }
@@ -231,7 +237,6 @@
     // 检测播放音频是否存在列表中
     checkCircleId () {
       if (this.playList && this.playList.circles) {
-        console.log(this.playList.circles, '列表长度')
         this.playList.circles.filter((item, index) => {
           if (this.curCircleId === item.circleId) {
             this.$store.dispatch('undate_curIndex', index)
@@ -279,7 +284,6 @@
           }
           this.musicList = this.musicList.concat(res.circles || [])
           res.circles = this.distinct(this.musicList)
-          // this.musicList = res.circles
           this.$store.dispatch('undate_play_list', res)
           this.checkCircleId()
           this.operRoot()
@@ -310,7 +314,6 @@
 
     // 按钮操作
     oper () {
-      console.log('我是测试', this.isPlayList)
       if (this.isPlayList) {
         this.getList()
       } else {
