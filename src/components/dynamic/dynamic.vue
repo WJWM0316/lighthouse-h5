@@ -143,7 +143,10 @@
           console.log('暂停')
           this.music.pause()
         }
-      }
+      },
+      isPlayList () {},
+      isTeacherCon () {},
+      isTeacher () {}
     },
     mixins: [WechatMixin]
   })

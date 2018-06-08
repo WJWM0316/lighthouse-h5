@@ -207,7 +207,9 @@ import moment from 'moment'
     }
   },
   watch: {
-    isPlayList () {}
+    isPlayList () {},
+    isTeacherCon () {},
+    isTeacher () {}
   }
 })
 export default class dynamicItem extends Vue {

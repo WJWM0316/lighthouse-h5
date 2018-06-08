@@ -11,20 +11,16 @@
       <!--文字-->
       <div class="desc-middle" v-if="item.contentType === 1">{{item.replyContent}}</div>
       <!--音频-->
-      <div v-else :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
-        <div class="progress-container">
-          <div class="progress" :style="{width: (item.progress ? item.progress : 0) + '%'}"></div>
-        </div>
-        <div class="audio-controller-container">
-          <div class="audio-controller">
-            <div :class="{play: !item.musicState, playing: item.musicState === 1, loading: item.musicState === 2}">
-              <img class="icon-play" src="./../../assets/icon/music_play.png">
-              <img class="icon-loading rotateZ" src="./../../assets/icon/music_loading.png">
-              <img class="icon-playing" src="./../../assets/icon/music_listen.gif">
-            </div>
-            <span class="duration">{{item.files[0].duration}}s</span>
-          </div>
-        </div>
+      <div v-else :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}">
+        <audioBox 
+          :communityId="communityId"
+          :isPlayList="isPlayList"
+          :isTeacher="isTeacher"
+          :isTeacherCon="isTeacherCon"
+          :circleId="problemItem.circleId" 
+          :source="problemItem.file" 
+          :itemIndex="problemIndex" 
+          :key="problemIndex"></audioBox>
       </div>
 
       <div class="desc-middle-return">
@@ -46,12 +42,14 @@
   import Component from 'vue-class-component'
   import { XInput, XButton } from 'vux'
   import { testApi } from '@/api/pages/login'
+  import audioBox from '@/components/media/music'
   import moment from 'moment'
   @Component({
     name: 'messageItme-component',
     components: {
       XInput,
       XButton,
+      audioBox
     },
     props: {
       item: {

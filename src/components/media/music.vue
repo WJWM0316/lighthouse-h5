@@ -56,11 +56,11 @@
         type: Boolean,
         default: false
       },
-      isTeacher: {
+      isTeacher: { // 是否是导师内容列表
         type: Boolean,
         default: false
       },
-      isTeacherCon: {
+      isTeacherCon: { // 是否是朋友圈详情
         type: Boolean,
         default: false
       }
@@ -84,9 +84,16 @@
       }),
     },
     watch: {
+      communityId (val, old) {
+        // this.$store.dispatch('undate_play_list', {})
+        // console.log('当前塔' + val, '上一个塔' + old, this.playList)
+      },
       isPlayList (val) {
         this.musicList = val.circles
+        console.log('进入音频续播页面', val)
       },
+      isTeacher () {},
+      isTeacherCon () {},
       isLastPage (val) {},
       curIndex (val) {},
       isPreload (val) {},
@@ -129,6 +136,7 @@
     isGetList = true // 检测是否需要重新请求列表
     musicList = [] // 本地记录播放列表 用来累加
     mounted () {
+      console.log(this.isPlayList, '111111111111111')
       this.curCircleId = this.circleId
       this.audio = this.$root.$children[0].audio
       let _this = this
@@ -175,19 +183,26 @@
       // 监听播放完成事件
       this.audio.addEventListener('ended', function () {
         // 同一个组件  或者 导师内容详情
-        if (_this.source.fileUrl === _this.audio.src || _this.isTeacherCon) {
+        if (_this.source.fileUrl === _this.audio.src  && _this.isPlayList || _this.isTeacherCon) {
           _this.audioEnded()
           // 播放下一首
-          console.log('下一首状态', _this.curIndex)
+          console.log('我播完了准备下一首状态', _this.curIndex)
           // 不是播放到列表最后且是需要列表播放
-          if (_this.isPlayList  &&  _this.curIndex < _this.playList.circles.length - 1) {
+          if (_this.curIndex < _this.playList.circles.length - 1) {
             try {
               _this.$store.dispatch('music_play')
               _this.$root.$children[0].isAutoPlay = false
               let index = _this.curIndex + 1
               _this.$store.dispatch('undate_curIndex', index)
+              console.log('我的列表播放序号', _this.curIndex, _this.$store.getters.curIndex)
+              console.log('我要播放的音频', _this.playList.circles[_this.curIndex].files[0].fileUrl)
+              _this.audio.src = ''
               _this.audio.src = _this.playList.circles[_this.curIndex].files[0].fileUrl
-              _this.audio.play()
+              // _this.audio.pause()
+              setTimeout(function () {
+                _this.audio.play()
+              }, 100)
+              
               console.log('播放下一首', _this.curIndex,  _this.audio.src)
               // 如果还剩2条音频则提前加载下一个列表且还有下一页
               if (_this.isLastPage && _this.curIndex >= _this.playList.circles.length - 2) {
@@ -213,16 +228,12 @@
               console.log('调起播放请求被新的加载请求中断,重新播放', e)
               _this.audio.play()
             }
-            
           } else {
+            console.log('已经全部播放完毕')
             _this.audioEnded()
           }
         }
-        // 如果不是导师列表音频 音频结束手动重置组件状态
-        if (!_this.isTeacherCon){
-          _this.progress = 0
-          _this.playStatus = 1
-        }
+        
       }, false)
 
       // 监听数据不可用时
@@ -239,7 +250,10 @@
       if (this.playList && this.playList.circles) {
         this.playList.circles.filter((item, index) => {
           if (this.curCircleId === item.circleId) {
-            this.$store.dispatch('undate_curIndex', index)
+            console.log('我是导师内容', this.isTeacherCon)
+            if (this.isTeacherCon) {
+              this.$store.dispatch('undate_curIndex', index)
+            }
             this.src = item.files[0].fileUrl || item.files.fileUrl
             this.isGetList = false
             console.log(this.curIndex, this.curCircleId, this.src, '我当前的点击')
@@ -352,6 +366,7 @@
       this.audio.currentTime = 0
       this.currentTime = 0
       this.playStatus = 1
+      this.audio.pause()
       this.$store.dispatch('music_pause')
     }
 
