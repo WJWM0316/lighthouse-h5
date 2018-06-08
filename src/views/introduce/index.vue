@@ -369,7 +369,7 @@
                 self.$store.dispatch('show_qr', {type: 4})
                 break
               default:
-                location.reload()
+                self.$store.dispatch('show_qr', {type: 2})
                 break
             }
 //            self.$store.dispatch('show_qr')

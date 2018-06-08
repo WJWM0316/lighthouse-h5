@@ -233,7 +233,12 @@
             _this.audioEnded()
           }
         }
-        
+        // 如果不是导师列表音频 音频结束手动重置组件状态
+        if (!_this.isTeacherCon){
+          _this.progress = 0
+          _this.playStatus = 1
+          
+        }
       }, false)
 
       // 监听数据不可用时
@@ -250,8 +255,7 @@
       if (this.playList && this.playList.circles) {
         this.playList.circles.filter((item, index) => {
           if (this.curCircleId === item.circleId) {
-            console.log('我是导师内容', this.isTeacherCon)
-            if (this.isTeacherCon) {
+            if (this.isTeacher) {
               this.$store.dispatch('undate_curIndex', index)
             }
             this.src = item.files[0].fileUrl || item.files.fileUrl

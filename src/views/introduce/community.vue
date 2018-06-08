@@ -460,10 +460,7 @@
       this.pagination.end = false // 初始化数据，必定不是最后一页
 
       let res = await this.getCommunity(communityId)
-      if(res.isSell==1){
-        this.qrSrc = res.sellImg
-      }
-      console.log('=========',res)
+      this.qrSrc = res.sellImg
       //嘉宾身份
       if(res.isAuthor == 0){
           let res2 = await this.getRoleInfo(communityId)

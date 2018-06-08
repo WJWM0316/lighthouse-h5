@@ -98,8 +98,8 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
       return this.$store.getters.isShowQrcode4
     },
     ...mapState({
-      musicPlay: state => state.musicController.musicPlay || false, // 是否播放
-      playList: state => state.musicController.playList || [], // 播放列表
+      musicPlay: state => state.musicController.musicPlay, // 是否播放
+      playList: state => state.musicController.playList, // 播放列表
       prevMusic: state => state.musicController.prevMusic // 上一首播放
     }),
 
@@ -132,8 +132,7 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
       },
       immediate: true
     },
-    musicPlay () {
-    }
+    musicPlay () {}
   }
 })
 export default class App extends Vue {
