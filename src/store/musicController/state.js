@@ -1,15 +1,6 @@
 export default {
   isFirstClick: true,     // 针对ios 必须用户行为一次
   musicList: [],          // 播放列表
-  musicListener: {        // 音频事件绑定
-    loadstart: 0,
-    waiting: 0,
-    canplay: 0,
-    canplaythrough: 0,
-    timeupdate: 0,
-    ended: 0,
-    stalled: 0
-  },
   isLastPage: true,      // 是否最后一页
   isPreload: false,       // 是否预先加载下一页
   curIndex: 0,             // 播放音频在列表中的位置

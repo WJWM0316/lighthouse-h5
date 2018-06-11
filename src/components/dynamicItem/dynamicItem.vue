@@ -74,7 +74,6 @@
         <!-- 音频 -->
         <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}">
           <audioBox
-            v-if="item.circleType === 1"
             :communityId="communityId"
             :isPlayList="isPlayList"
             :isTeacher="isTeacher"

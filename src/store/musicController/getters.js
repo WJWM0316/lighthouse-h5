@@ -1,7 +1,4 @@
 export default {
-  musicListener: function (state) {
-    return state.musicListener
-  },
   musicList: function (state) { // 播放列表
     return state.musicList
   },

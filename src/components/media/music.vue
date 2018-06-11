@@ -1,5 +1,5 @@
 <template>
-	<div class="audio-wrapper"  @click.stop="oper()" ref="musicWrap">
+	<div class="audio-wrapper"  @click.stop="oper()">
     <div class="audio-left">
       <img src="./../../assets/icon/music_play.png" v-if="playStatus === 1"></img>
       <img src="./../../assets/icon/stop@3x.png" v-else-if="playStatus === 2"></img>
@@ -32,7 +32,6 @@
   import { Range, Cell, Group } from 'vux'
 	import Component from 'vue-class-component'
   import { musicListApi } from '@/api/pages/pageInfo'
-  import storage from '@/util/sessionstorage'
   require('./../../assets/icon/music_play.png')
 	@Component({
     name: 'music',
@@ -76,13 +75,12 @@
         return this.source.duration
       },
       ...mapState({
-        musicPlay: state => state.musicController.musicPlay, // 是否播放
+        musicPlay: state => state.musicController.musicPlay || false, // 是否播放
         curIndex: state => state.musicController.curIndex, // 播放序号
         isLastPage: state => state.musicController.isLastPage, // 是否有下一页
         isPreload: state => state.musicController.isPreload, // 是否需要预加载
         playList: state => state.musicController.playList, // 播放列表
         prevMusic: state => state.musicController.prevMusic, // 上一首播放
-        musicListener: state => state.musicController.musicListener // 监听状态
       }),
     },
     watch: {
@@ -119,15 +117,6 @@
           this.disabled = true
           this.isShowLabel = false
         }
-      },
-      musicListener (val) {
-        let oldMusicListener = storage.get('musicListener')
-        for(var i in val) {
-          if (val[i] > oldMusicListener[i]) {
-            this.musicListenerFun(i)
-          }
-        }
-        storage.set('musicListener', val)
       }
     }
   })
@@ -147,109 +136,121 @@
     isGetList = true // 检测是否需要重新请求列表
     musicList = [] // 本地记录播放列表 用来累加
     mounted () {
+      console.log(this.isPlayList, '111111111111111')
       this.curCircleId = this.circleId
-      storage.set('musicListener', this.musicListener)
       this.audio = this.$root.$children[0].audio
+      let _this = this
+      // 监听加载过程开始
+      this.audio.addEventListener('loadstart ', function () {
+        if (_this.source.fileUrl === _this.audio.src) {
+          _this.playStatus = 3
+        }
+      }, false)
+
+      // 监听缓冲暂停时
+      this.audio.addEventListener('waiting', function () {
+        if (_this.source.fileUrl === _this.audio.src) {
+          _this.playStatus = 3
+        }
+      }, false)
+
+      // 监听可以播放时
+      this.audio.addEventListener('canplay', function () {
+        if (_this.source.fileUrl === _this.audio.src) {
+          _this.playStatus = 1
+        }
+      }, false)
+
+      // 监听缓冲暂停又开始时
+      this.audio.addEventListener('canplaythrough', function () {
+        if (_this.source.fileUrl === _this.audio.src) {
+          _this.playStatus = 1
+        }
+      }, false)
+
+      // 监听播放过程
+      this.audio.addEventListener('timeupdate', function () {
+        if (_this.source.fileUrl === _this.audio.src) {
+          if (!_this.audio.paused) {
+            _this.playStatus = 4
+            _this.disabled = true
+          }
+          if (_this.$refs.range) { _this.moveLeft = _this.$refs.range.range.handle.style.left }
+          _this.progress = _this.audio.currentTime
+        }
+      }, false)
+
+      // 监听播放完成事件
+      this.audio.addEventListener('ended', function () {
+        // 同一个组件  或者 导师内容详情
+        console.log(_this.source.fileUrl, _this.audio.src)
+        if (_this.source.fileUrl === _this.audio.src) {
+          _this.audioEnded()
+          // 播放下一首
+          // console.log(_this.source.fileUrl, _this.audio.src)
+          let isSome = false
+          // 不是播放到列表最后且是需要列表播放
+          // if (_this.isPlayList && _this.curIndex < _this.playList.circles.length - 1  && !isSome) {
+          //   isSome = true
+          //   console.log('我播完了准备下一首状态', _this.curIndex)
+          //   try {
+          //     _this.$store.dispatch('music_play')
+          //     _this.$root.$children[0].isAutoPlay = false
+          //     let index = _this.curIndex + 1
+          //     _this.$store.dispatch('undate_curIndex', index)
+          //     console.log('我要播放的音频', index, _this.playList.circles[index].files[0].fileUrl)
+          //     _this.audio.src = ''
+          //     _this.audio.src = _this.playList.circles[index].files[0].fileUrl
+          //     // _this.audio.pause()
+          //     setTimeout(function () {
+          //       _this.audio.play()
+          //     }, 100)
+              
+          //     // 如果还剩2条音频则提前加载下一个列表且还有下一页
+          //     if (_this.isLastPage && _this.curIndex >= _this.playList.circles.length - 2) {
+          //       _this.$store.dispatch('undate_isPreload', true)
+          //       let data = {
+          //         communityId: _this.communityId,
+          //         circleId: _this.playList.circles[_this.playList.circles.length - 1].circleId,
+          //         count: 5,
+          //         orderBy: 'asc' //顺序 asc 或者倒叙 desc，默认 asc
+          //       }
+          //       musicListApi(data).then(res => {
+          //         if (res.circles.length < 5) {
+          //           _this.$store.dispatch('undate_isLastPage', false)
+          //         }
+          //         _this.playList.circles = _this.playList.circles.concat(res.circles || [])
+          //         res.circles = _this.distinct(_this.playList.circles)
+          //         console.log('预加载后的音频列表', _this.playList.circles)
+          //         _this.$store.dispatch('undate_play_list', res)
+          //       })
+          //     }
+          //   }
+          //   catch (e) {
+          //     console.log('调起播放请求被新的加载请求中断,重新播放', e)
+          //     _this.audio.play()
+          //   }
+          // } else {
+          //   console.log('已经全部播放完毕')
+          //   _this.audioEnded()
+          // }
+        }
+        // 如果不是导师列表音频 音频结束手动重置组件状态
+        if (!_this.isTeacherCon){
+          _this.progress = 0
+          _this.playStatus = 1
+
+        }
+      }, false)
+
+      // 监听数据不可用时
+      this.audio.addEventListener('stalled', function () {
+        if (_this.source.fileUrl === _this.audio.src) {
+          _this.$vux.toast.text('音频加载失败，请刷新页面', 'bottom')
+        }
+      }, false)
     }
 
-
-    musicListenerFun (type) {
-      console.log(this.source.fileUrl)
-      console.log('=====================')
-      switch (type) {
-        case 'loadstart':
-          if (this.source.fileUrl === this.audio.src) {
-            this.playStatus = 3
-          }
-          break
-        case 'waiting':
-          if (this.source.fileUrl === this.audio.src) {
-            this.playStatus = 3
-          }
-          break
-        case 'canplay':
-          if (this.source.fileUrl === this.audio.src) {
-            this.playStatus = 1
-          }
-          break
-        case 'canplaythrough':
-          if (this.source.fileUrl === this.audio.src) {
-            this.playStatus = 1
-          }
-          break
-        case 'timeupdate':
-          if (this.source.fileUrl === this.audio.src) {
-            if (!this.audio.paused) {
-              this.playStatus = 4
-              this.disabled = true
-            }
-            if (this.$refs.range) { this.moveLeft = this.$refs.range.range.handle.style.left }
-            this.progress = this.audio.currentTime
-          }
-          break
-        case 'ended':
-          // 同一个组件  或者 导师内容详情
-          if (this.source.fileUrl === this.audio.src) {
-            this.audioEnded()
-            // 播放下一首
-            // console.log(_this.source.fileUrl, _this.audio.src)
-            if (this.isPlayList && this.curIndex < this.playList.circles.length - 1) {
-              console.log('我播完了准备下一首状态', this.curIndex)
-              try {
-                this.$store.dispatch('music_play')
-                this.$root.$children[0].isAutoPlay = false
-                let index = this.curIndex + 1
-                this.$store.dispatch('undate_curIndex', index)
-                console.log('我要播放的音频', index, this.playList.circles[index].files[0].fileUrl)
-                this.audio.src = ''
-                this.audio.src = this.playList.circles[index].files[0].fileUrl
-                // _this.audio.pause()
-                setTimeout(function () {
-                  this.audio.play()
-                }, 100)
-                
-                // 如果还剩2条音频则提前加载下一个列表且还有下一页
-                if (this.isLastPage && _this.curIndex >= this.playList.circles.length - 2) {
-                  this.$store.dispatch('undate_isPreload', true)
-                  let data = {
-                    communityId: this.communityId,
-                    circleId: this.playList.circles[this.playList.circles.length - 1].circleId,
-                    count: 5,
-                    orderBy: 'asc' //顺序 asc 或者倒叙 desc，默认 asc
-                  }
-                  musicListApi(data).then(res => {
-                    if (res.circles.length < 5) {
-                      this.$store.dispatch('undate_isLastPage', false)
-                    }
-                    this.playList.circles = this.playList.circles.concat(res.circles || [])
-                    res.circles = _this.distinct(this.playList.circles)
-                    console.log('预加载后的音频列表', this.playList.circles)
-                    this.$store.dispatch('undate_play_list', res)
-                  })
-                }
-              }
-              catch (e) {
-                console.log('调起播放请求被新的加载请求中断,重新播放', e)
-                this.audio.play()
-              }
-            } else {
-              console.log('已经全部播放完毕')
-              this.audioEnded()
-            }
-          }
-          // 如果不是导师列表音频 音频结束手动重置组件状态
-          if (!this.isTeacherCon){
-            this.progress = 0
-            this.playStatus = 1
-          }
-          break
-        case 'stalled':
-          if (this.source.fileUrl === _this.audio.src) {
-            this.$vux.toast.text('音频加载失败，请刷新页面', 'bottom')
-          }
-          break
-      }
-    }
 
     // 检测播放音频是否存在列表中
     checkCircleId () {
@@ -312,6 +313,7 @@
 
     // 调用根组件开关
     operRoot () {
+
       if (this.audio.paused || this.audio.src !== this.src) {
         this.playMusic()
       } else {
@@ -401,15 +403,12 @@
     touchStart () {
       this.startTime = this.progress
       this.isShowLabel = true
-      this.$store.dispatch('music_pause')
       this.audio.pause()
-
     }
 
     // 滑动结束播放音乐获取结束位置
     touchEnd () {
       if (this.audio.paused && !this.audio.ended) {
-        this.$store.dispatch('music_play')
         this.audio.play()
         this.endTime = this.progress
         this.isShowLabel = false
