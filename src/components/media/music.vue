@@ -272,6 +272,8 @@
         case 'stalled':
           if (this.source.fileUrl === _this.audio.src) {
             this.$vux.toast.text('音频加载失败，请刷新页面', 'bottom')
+          }
+      }
     }
 
 

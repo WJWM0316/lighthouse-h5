@@ -108,8 +108,6 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
       listener_timeupdate: state => state.musicController.listener_timeupdate, // 监听状态
       listener_ended: state => state.musicController.listener_ended, // 监听状态
       listener_stalled: state => state.musicController.listener_stalled // 监听状态
-    })
-      prevMusic: state => state.musicController.prevMusic // 上一首播放
     }),
     
   },
@@ -184,7 +182,6 @@ export default class App extends Vue {
         circleId: '',
         type: ''
       }
-      isAutoPlay: false // 是否自动播放
     }
   }
   goSomeWhere (index) {
