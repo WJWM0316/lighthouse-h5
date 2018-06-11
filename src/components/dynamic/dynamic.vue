@@ -165,7 +165,6 @@
     currentVideoIndex = -1
 
     created () {
-      console.log(111, this.touerImg)
     }
 
     mounted () {

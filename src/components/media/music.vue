@@ -1,5 +1,5 @@
 <template>
-	<div class="audio-wrapper"  @click.stop="oper()" ref="musicWrap">
+	<div class="audio-wrapper"  @click.stop="oper()">
     <div class="audio-left">
       <img src="./../../assets/icon/music_play.png" v-if="playStatus === 1"></img>
       <img src="./../../assets/icon/stop@3x.png" v-else-if="playStatus === 2"></img>
@@ -32,7 +32,6 @@
   import { Range, Cell, Group } from 'vux'
 	import Component from 'vue-class-component'
   import { musicListApi } from '@/api/pages/pageInfo'
-  import storage from '@/util/sessionstorage'
   require('./../../assets/icon/music_play.png')
 	@Component({
     name: 'music',
@@ -154,7 +153,7 @@
       },
       listener_stalled (val) {
         this.musicListenerFun('stalled')
-      },
+      }
     }
   })
   export default class music extends Vue {
@@ -176,7 +175,6 @@
       this.curCircleId = this.circleId
       this.audio = this.$root.$children[0].audio
     }
-
 
     musicListenerFun (type) {
       switch (type) {
@@ -274,10 +272,8 @@
         case 'stalled':
           if (this.source.fileUrl === _this.audio.src) {
             this.$vux.toast.text('音频加载失败，请刷新页面', 'bottom')
-          }
-          break
-      }
     }
+
 
     // 检测播放音频是否存在列表中
     checkCircleId () {
@@ -340,6 +336,7 @@
 
     // 调用根组件开关
     operRoot () {
+
       if (this.audio.paused || this.audio.src !== this.src) {
         this.playMusic()
       } else {
@@ -434,15 +431,12 @@
     touchStart () {
       this.startTime = this.progress
       this.isShowLabel = true
-      this.$store.dispatch('music_pause')
       this.audio.pause()
-
     }
 
     // 滑动结束播放音乐获取结束位置
     touchEnd () {
       if (this.audio.paused && !this.audio.ended) {
-        this.$store.dispatch('music_play')
         this.audio.play()
         this.endTime = this.progress
         this.isShowLabel = false
