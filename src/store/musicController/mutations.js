@@ -126,6 +126,9 @@ export default {
   [types.UPDATE_PREVMUSIC] (state, prevMusic) {
     state.prevMusic = prevMusic
   },
+  [types.UPDATE_MUSICLISTENER] (state, musicListener) {
+    state.musicListener = musicListener
+  },
   /**
    * 切换歌曲
    * @param state

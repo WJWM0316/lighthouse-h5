@@ -10,6 +10,13 @@ export default {
    * @param immediately   是否立即播放(非必传)
    * @returns {Promise}
    */
+  // 更新播放列表
+  undate_music_listener: ({commit}, {loadstart,waiting,canplay,canplaythrough,timeupdate,ended,stalled}) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_MUSICLISTENER, {loadstart,waiting,canplay,canplaythrough,timeupdate,ended,stalled})
+      resolve()
+    })
+  },
   update_musicList: ({commit}, {data, type, id, immediately}) => {
     return new Promise((resolve, reject) => {
       commit(types.UPDATE_MUSICLIST, {data, type, id, immediately})

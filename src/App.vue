@@ -100,8 +100,9 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
     ...mapState({
       musicPlay: state => state.musicController.musicPlay, // 是否播放
       playList: state => state.musicController.playList, // 播放列表
-      prevMusic: state => state.musicController.prevMusic // 上一首播放
-    }),
+      prevMusic: state => state.musicController.prevMusic, // 上一首播放
+      musicListener: state => state.musicController.musicListener // 监听状态
+    })
 
     
   },
@@ -132,7 +133,8 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
       },
       immediate: true
     },
-    musicPlay () {}
+    musicPlay () {},
+    musicListener (val) {}
   }
 })
 export default class App extends Vue {
@@ -169,7 +171,7 @@ export default class App extends Vue {
       curUrl: '', // 记录播放路径，用来判断音频切换
       cur: {}, // 当前播放音频的对象
       prev: [], // 播放过音频的记录
-      isAutoPlay: false // 是否自动播放
+      isAutoPlay: false, // 是否自动播放
     }
   }
   goSomeWhere (index) {
@@ -193,7 +195,35 @@ export default class App extends Vue {
   mounted () {
     this.audio = new Audio()
     this.audio.reload = false
-    // this.$store.dispatch('undate_play_list', this.playList)
+    const _this = this
+    this.audio.addEventListener('loadstart', function () {
+      _this.musicListener.loadstart ++
+      _this.$store.dispatch('undate_music_listener', _this.musicListener)
+    }, false)
+    // this.audio.addEventListener('waiting', function () {
+    //   _this.musicListener.waiting ++
+    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
+    // }, false)
+    // this.audio.addEventListener('canplay', function () {
+    //   _this.musicListener.canplay ++
+    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
+    // }, false)
+    // this.audio.addEventListener('canplaythrough', function () {
+    //   _this.musicListener.canplaythrough ++
+    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
+    // }, false)
+    // this.audio.addEventListener('timeupdate', function () {
+    //   _this.musicListener.timeupdate ++
+    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
+    // }, false)
+    // this.audio.addEventListener('ended', function () {
+    //   _this.musicListener.ended ++
+    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
+    // }, false)
+    // this.audio.addEventListener('stalled', function () {
+    //   _this.musicListener.stalled ++
+    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
+    // }, false)
   }
 
   // 悬浮窗开关
@@ -230,7 +260,6 @@ export default class App extends Vue {
               this.prev.shift()
             }
           }
-
           // // 点击不一样的音频就要换url了
           // this.audio.src = data.filePath
         }
