@@ -433,12 +433,14 @@
     touchStart () {
       this.startTime = this.progress
       this.isShowLabel = true
-      this.audio.pause()
+      this.$store.dispatch('music_pause')
+      this.audio.pause() 
     }
 
     // 滑动结束播放音乐获取结束位置
     touchEnd () {
       if (this.audio.paused && !this.audio.ended) {
+        this.$store.dispatch('music_play')
         this.audio.play()
         this.endTime = this.progress
         this.isShowLabel = false

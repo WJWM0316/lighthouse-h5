@@ -237,6 +237,10 @@ export default class App extends Vue {
       data ++
       _this.$store.dispatch('undate_listener_stalled', data)
     }, false)
+    this.audio.addEventListener('paused', function () {
+      _this.audio.pause()
+      _this.$store.dispatch('music_pause')
+    }, false)
   }
   jumpDeatil () {
     this.$router.push('/details/' + this.controllerDetail.circleId + '/' + this.controllerDetail.type + '?communityId=' + this.controllerDetail.communityId)
