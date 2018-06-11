@@ -41,6 +41,14 @@
         type: String,
         default: ''
       },
+      touerImg: {
+        type: String,
+        default: ''
+      },
+      type: {
+        type: Number,
+        default: 1
+      },
       circleId: {
         type: String,
         default: ''
@@ -82,7 +90,13 @@
         isPreload: state => state.musicController.isPreload, // 是否需要预加载
         playList: state => state.musicController.playList, // 播放列表
         prevMusic: state => state.musicController.prevMusic, // 上一首播放
-        musicListener: state => state.musicController.musicListener // 监听状态
+        listener_loadstart: state => state.musicController.listener_loadstart, // 监听状态
+        listener_waiting: state => state.musicController.listener_waiting, // 监听状态
+        listener_canplay: state => state.musicController.listener_canplay, // 监听状态
+        listener_canplaythrough: state => state.musicController.listener_canplaythrough, // 监听状态
+        listener_timeupdate: state => state.musicController.listener_timeupdate, // 监听状态
+        listener_ended: state => state.musicController.listener_ended, // 监听状态
+        listener_stalled: state => state.musicController.listener_stalled // 监听状态
       }),
     },
     watch: {
@@ -104,7 +118,7 @@
         this.currentTime = val
       },
       musicPlay (val) {
-        if (val === false && this.src === this.audio.src) {
+        if (val === false && this.source.fileUrl === this.audio.src) {
           this.playStatus = 2
         }
       },
@@ -120,15 +134,27 @@
           this.isShowLabel = false
         }
       },
-      musicListener (val) {
-        let oldMusicListener = storage.get('musicListener')
-        for(var i in val) {
-          if (val[i] > oldMusicListener[i]) {
-            this.musicListenerFun(i)
-          }
-        }
-        storage.set('musicListener', val)
-      }
+      listener_loadstart (val) {
+        this.musicListenerFun('loadstart')
+      },
+      listener_waiting (val) {
+        this.musicListenerFun('waiting')
+      },
+      listener_canplay (val) {
+        this.musicListenerFun('canplay')
+      },
+      listener_canplaythrough (val) {
+        this.musicListenerFun('canplaythrough')
+      },
+      listener_timeupdate (val) {
+        this.musicListenerFun('timeupdate')
+      },
+      listener_ended (val) {
+        this.musicListenerFun('ended')
+      },
+      listener_stalled (val) {
+        this.musicListenerFun('stalled')
+      },
     }
   })
   export default class music extends Vue {
@@ -148,14 +174,11 @@
     musicList = [] // 本地记录播放列表 用来累加
     mounted () {
       this.curCircleId = this.circleId
-      storage.set('musicListener', this.musicListener)
       this.audio = this.$root.$children[0].audio
     }
 
 
     musicListenerFun (type) {
-      console.log(this.source.fileUrl)
-      console.log('=====================')
       switch (type) {
         case 'loadstart':
           if (this.source.fileUrl === this.audio.src) {
@@ -203,11 +226,16 @@
                 console.log('我要播放的音频', index, this.playList.circles[index].files[0].fileUrl)
                 this.audio.src = ''
                 this.audio.src = this.playList.circles[index].files[0].fileUrl
-                // _this.audio.pause()
+                const _this = this
                 setTimeout(function () {
-                  this.audio.play()
+                  _this.audio.play()
                 }, 100)
-                
+                this.$root.$children[0].controllerDetail = {
+                  imgUrl: this.touerImg,
+                  communityId: this.communityId,
+                  circleId: this.playList.circles[index].circleId,
+                  type: this.playList.circles[index].circleType
+                }
                 // 如果还剩2条音频则提前加载下一个列表且还有下一页
                 if (this.isLastPage && _this.curIndex >= this.playList.circles.length - 2) {
                   this.$store.dispatch('undate_isPreload', true)
@@ -327,6 +355,12 @@
         disabled: this.disabled,
         isShowLabel: this.isShowLabel
       }
+      this.$root.$children[0].controllerDetail = {
+        imgUrl: this.touerImg,
+        communityId: this.communityId,
+        circleId: this.circleId,
+        type: this.type
+      }
       this.$root.$children[0].audioEven(data)
     }
 
@@ -337,8 +371,7 @@
       } else {
         this.src = this.source.fileUrl
         this.operRoot()
-      }
-      
+      }  
     }
 
     // 播放

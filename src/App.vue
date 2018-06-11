@@ -19,7 +19,7 @@
       </tabbar-item>
     </tabbar>
     <div class="musicControl" v-show="isShowController && !$route.meta.hideController">
-      <div class="fileImg" :class="{'playing' : musicPlay}"><img src="https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-04/10e47b75b8395107d0a516cce1c2032c.png" alt=""></div>
+      <div class="fileImg" :class="{'playing' : musicPlay}" @click.stop="jumpDeatil()"><img :src="controllerDetail.imgUrl" alt=""></div>
       <div class="playBtn" @click.stop="musicControl()">
         <img src="./assets/icon/bnt_yuyin_play@3x.png" v-show="!musicPlay">
         <img src="./assets/icon/stop@3x.png" v-show="musicPlay">
@@ -101,7 +101,13 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
       musicPlay: state => state.musicController.musicPlay, // 是否播放
       playList: state => state.musicController.playList, // 播放列表
       prevMusic: state => state.musicController.prevMusic, // 上一首播放
-      musicListener: state => state.musicController.musicListener // 监听状态
+      listener_loadstart: state => state.musicController.listener_loadstart, // 监听状态
+      listener_waiting: state => state.musicController.listener_waiting, // 监听状态
+      listener_canplay: state => state.musicController.listener_canplay, // 监听状态
+      listener_canplaythrough: state => state.musicController.listener_canplaythrough, // 监听状态
+      listener_timeupdate: state => state.musicController.listener_timeupdate, // 监听状态
+      listener_ended: state => state.musicController.listener_ended, // 监听状态
+      listener_stalled: state => state.musicController.listener_stalled // 监听状态
     })
 
     
@@ -172,13 +178,15 @@ export default class App extends Vue {
       cur: {}, // 当前播放音频的对象
       prev: [], // 播放过音频的记录
       isAutoPlay: false, // 是否自动播放
+      controllerDetail: {
+        imgUrl: '',
+        communityId: '',
+        circleId: '',
+        type: ''
+      }
     }
   }
   goSomeWhere (index) {
-//    if (index === 1) {
-//      window.location.href = this.tabList[1].src
-//      return
-//    }
     this.$router.replace(this.tabList[index].src)
   }
   isSelected (src) {
@@ -197,35 +205,44 @@ export default class App extends Vue {
     this.audio.reload = false
     const _this = this
     this.audio.addEventListener('loadstart', function () {
-      _this.musicListener.loadstart ++
-      _this.$store.dispatch('undate_music_listener', _this.musicListener)
+      let data = _this.listener_loadstart
+      data ++
+      _this.$store.dispatch('undate_listener_loadstart', data)
     }, false)
-    // this.audio.addEventListener('waiting', function () {
-    //   _this.musicListener.waiting ++
-    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
-    // }, false)
-    // this.audio.addEventListener('canplay', function () {
-    //   _this.musicListener.canplay ++
-    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
-    // }, false)
-    // this.audio.addEventListener('canplaythrough', function () {
-    //   _this.musicListener.canplaythrough ++
-    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
-    // }, false)
-    // this.audio.addEventListener('timeupdate', function () {
-    //   _this.musicListener.timeupdate ++
-    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
-    // }, false)
-    // this.audio.addEventListener('ended', function () {
-    //   _this.musicListener.ended ++
-    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
-    // }, false)
-    // this.audio.addEventListener('stalled', function () {
-    //   _this.musicListener.stalled ++
-    //   _this.$store.dispatch('undate_music_listener', _this.musicListener)
-    // }, false)
+    this.audio.addEventListener('waiting', function () {
+      let data = _this.listener_waiting
+      data ++
+      _this.$store.dispatch('undate_listener_waiting', data)
+    }, false)
+    this.audio.addEventListener('canplay', function () {
+      let data = _this.listener_canplay
+      data ++
+      _this.$store.dispatch('undate_listener_canplay', data)
+    }, false)
+    this.audio.addEventListener('canplaythrough', function () {
+      let data = _this.listener_canplaythrough
+      data ++
+      _this.$store.dispatch('undate_listener_canplaythrough', data)
+    }, false)
+    this.audio.addEventListener('timeupdate', function () {
+      let data = _this.listener_timeupdate
+      data ++
+      _this.$store.dispatch('undate_listener_timeupdate', data)
+    }, false)
+    this.audio.addEventListener('ended', function () {
+      let data = _this.listener_ended
+      data ++
+      _this.$store.dispatch('undate_listener_ended', data)
+    }, false)
+    this.audio.addEventListener('stalled', function () {
+      let data = _this.listener_stalled
+      data ++
+      _this.$store.dispatch('undate_listener_stalled', data)
+    }, false)
   }
-
+  jumpDeatil () {
+    this.$router.push('/details/' + this.controllerDetail.circleId + '/' + this.controllerDetail.type + '?communityId=' + this.controllerDetail.communityId)
+  }
   // 悬浮窗开关
   musicControl () {
     if (this.audio.paused) { 
@@ -255,7 +272,6 @@ export default class App extends Vue {
             this.prev[0].currentTime = this.audio.currentTime
             this.audio.ended ? this.prev[0].playStatus = 1 : this.prev[0].playStatus = 2
             this.$store.dispatch('undate_prevMusic', this.prev[this.prev.length-1])
-            console.log('切换音乐了')
             if (this.prev.length > 2) {
               this.prev.shift()
             }

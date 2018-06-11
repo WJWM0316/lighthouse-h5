@@ -11,9 +11,45 @@ export default {
    * @returns {Promise}
    */
   // 更新播放列表
-  undate_music_listener: ({commit}, {loadstart,waiting,canplay,canplaythrough,timeupdate,ended,stalled}) => {
+  undate_listener_loadstart: ({commit}, data) => {
     return new Promise((resolve, reject) => {
-      commit(types.UPDATE_MUSICLISTENER, {loadstart,waiting,canplay,canplaythrough,timeupdate,ended,stalled})
+      commit(types.UPDATE_LOADSTART, data)
+      resolve()
+    })
+  },
+  undate_listener_waiting: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_WAITING, data)
+      resolve()
+    })
+  },
+  undate_listener_canplay: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_CANPLAY, data)
+      resolve()
+    })
+  },
+  undate_listener_canplaythrough: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_CANPLAYTHROUGH, data)
+      resolve()
+    })
+  },
+  undate_listener_timeupdate: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_TIMEUPDATA, data)
+      resolve()
+    })
+  },
+  undate_listener_ended: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_ENDED, data)
+      resolve()
+    })
+  },
+  undate_listener_stalled: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_STALLED, data)
       resolve()
     })
   },

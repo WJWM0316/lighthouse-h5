@@ -11,6 +11,10 @@ import moment from 'moment'
       type: Object,
       required: true
     },
+    touerImg: {
+      type: String,
+      default: ''
+    },
     isFold: {
       type: Boolean,
       default: true
@@ -215,7 +219,24 @@ import moment from 'moment'
 export default class dynamicItem extends Vue {
   video = ''
   role = this.item.releaseUser.role || {}
+  type = 0
   created () {
+    const {modelType, circleId, problemId, isCanSee} = this.item
+    if (isCanSee === 0) {
+      this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
+      return
+    }
+    switch (modelType) {
+      case 'circle':
+        this.type = 1
+        break
+      case 'post':
+        this.type = 2
+        break
+      case 'problem':
+        this.type = 3
+        break
+    }
   }
   
   beforeMount(){
@@ -373,25 +394,13 @@ export default class dynamicItem extends Vue {
       this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return
     }
-    let type = 0
-    switch (modelType) {
-      case 'circle':
-        type = 1
-        break
-      case 'post':
-        type = 2
-        break
-      case 'problem':
-        type = 3
-        break
-    }
-    if (type) {
+
+    if (this.type) {
       // 跳转详情页 sourceId type
       const sourceId = circleId || problemId
-      console.log('跳转详情页: ', sourceId, type)
       const communityId = this.communityId
       // this.$router.push({name: 'all-details', params: {sourceId, type}})
-      this.$router.push(`/details/${sourceId}/${type}?communityId=${communityId}`)
+      this.$router.push(`/details/${sourceId}/${this.type}?communityId=${communityId}`)
     }
   }
 

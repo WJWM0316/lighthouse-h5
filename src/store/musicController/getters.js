@@ -1,6 +1,24 @@
 export default {
-  musicListener: function (state) {
-    return state.musicListener
+  listener_loadstart: function (state) {
+    return state.listener_loadstart
+  },
+  listener_waiting: function (state) {
+    return state.listener_waiting
+  },
+  listener_canplay: function (state) {
+    return state.listener_canplay
+  },
+  listener_canplaythrough: function (state) {
+    return state.listener_canplaythrough
+  },
+  listener_timeupdate: function (state) {
+    return state.listener_timeupdate
+  },
+  listener_ended: function (state) {
+    return state.listener_ended
+  },
+  listener_stalled: function (state) {
+    return state.listener_stalled
   },
   musicList: function (state) { // 播放列表
     return state.musicList

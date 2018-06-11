@@ -16,6 +16,7 @@
                   :disableUserClick="disableUserClick"
                   :allTotal="allTotal"
                   :isFold="isFold"
+                  :touerImg="touerImg"
                   :noBorder="noBorder"
                   :isNeedHot="isNeedHot"
                   :isPlayList='isPlayList'
@@ -41,6 +42,10 @@
     props: {
       allTotal: {
         type: Number
+      },
+      touerImg: {
+        type: String,
+        default: ''
       },
       dynamicList: {
         type: Array,
@@ -160,6 +165,7 @@
     currentVideoIndex = -1
 
     created () {
+      console.log(111, this.touerImg)
     }
 
     mounted () {

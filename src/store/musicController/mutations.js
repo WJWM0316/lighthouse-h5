@@ -126,8 +126,26 @@ export default {
   [types.UPDATE_PREVMUSIC] (state, prevMusic) {
     state.prevMusic = prevMusic
   },
-  [types.UPDATE_MUSICLISTENER] (state, musicListener) {
-    state.musicListener = musicListener
+  [types.UPDATE_LOADSTART] (state, listener_loadstart) {
+    state.listener_loadstart = listener_loadstart
+  },
+  [types.UPDATE_WAITING] (state, listener_waiting) {
+    state.listener_waiting = listener_waiting
+  },
+  [types.UPDATE_CANPLAY] (state, listener_canplay) {
+    state.listener_canplay = listener_canplay
+  },
+  [types.UPDATE_CANPLAYTHROUGH] (state, listener_canplaythrough) {
+    state.listener_canplaythrough = listener_canplaythrough
+  },
+  [types.UPDATE_TIMEUPDATA] (state, listener_timeupdate) {
+    state.listener_timeupdate = listener_timeupdate
+  },
+  [types.UPDATE_ENDED] (state, listener_ended) {
+    state.listener_ended = listener_ended
+  },
+  [types.UPDATE_STALLED] (state, listener_stalled) {
+    state.listener_stalled = listener_stalled
   },
   /**
    * 切换歌曲

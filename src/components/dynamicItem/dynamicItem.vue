@@ -51,7 +51,9 @@
                 :isTeacherCon="isTeacherCon"
                 :circleId="problemItem.circleId" 
                 :source="problemItem.file" 
-                :itemIndex="problemIndex" 
+                :itemIndex="problemIndex"
+                :touerImg="touerImg"
+                :type="type"
                 ></audioBox>
             </div>
           </div>
@@ -82,6 +84,8 @@
             :circleId="item.circleId" 
             :source="item.files[0]" 
             :itemIndex="itemIndex"
+            :touerImg="touerImg"
+            :type="type"
             ></audioBox>
         </div>
 
