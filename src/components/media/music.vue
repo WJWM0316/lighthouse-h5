@@ -1,5 +1,5 @@
 <template>
-	<div class="audio-wrapper"  @click.stop="oper()">
+	<div class="audio-wrapper"  @click.stop="oper()" ref="musicWrap">
     <div class="audio-left">
       <img src="./../../assets/icon/music_play.png" v-if="playStatus === 1"></img>
       <img src="./../../assets/icon/stop@3x.png" v-else-if="playStatus === 2"></img>
@@ -31,6 +31,7 @@
   import { mapState } from 'vuex'
   import { Range, Cell, Group } from 'vux'
 	import Component from 'vue-class-component'
+  import sessionstorage from '@/util/sessionstorage'
   import { musicListApi } from '@/api/pages/pageInfo'
   require('./../../assets/icon/music_play.png')
 	@Component({
@@ -167,6 +168,8 @@
     src = ''
     curCircleId = '' // 当前circleId
     moveLeft = ''
+    isExist = false
+    isBackStage = false // 切换不同塔后续播问题
     disabled = false //音乐未播放禁止操作进度条
     isShowLabel = false // 是否显示游标
     isGetList = true // 检测是否需要重新请求列表
@@ -174,6 +177,15 @@
     mounted () {
       this.curCircleId = this.circleId
       this.audio = this.$root.$children[0].audio
+      if (sessionstorage.get('storageMusic')) {
+        let storageMusic = sessionstorage.get('storageMusic')
+        const storageId = storageMusic.controllerDetail.communityId
+        if (storageId !== this.communityId) {
+          this.isBackStage = true
+        } else {
+          this.isBackStage = false
+        }
+      }
     }
 
     musicListenerFun (type) {
@@ -210,14 +222,13 @@
           break
         case 'ended':
           // 同一个组件  或者 导师内容详情
-          if (this.source.fileUrl === this.audio.src) {
+          if (this.source.fileUrl === this.audio.src || this.isBackStage) {
+            console.log('liebiao',  this.playList.circles)
             this.audioEnded()
             // 播放下一首
             // console.log(_this.source.fileUrl, _this.audio.src)
             if (this.isPlayList && this.curIndex < this.playList.circles.length - 1) {
-              console.log('我播完了准备下一首状态', this.curIndex)
               try {
-
                 this.$store.dispatch('music_play')
                 this.$root.$children[0].isAutoPlay = false
                 let index = this.curIndex + 1
@@ -236,7 +247,7 @@
                   type: this.playList.circles[index].circleType
                 }
                 // 如果还剩2条音频则提前加载下一个列表且还有下一页
-                if (this.isLastPage && _this.curIndex >= this.playList.circles.length - 2) {
+                if (this.isLastPage && this.curIndex >= this.playList.circles.length - 2) {
                   this.$store.dispatch('undate_isPreload', true)
                   let data = {
                     communityId: this.communityId,
@@ -247,6 +258,8 @@
                   musicListApi(data).then(res => {
                     if (res.circles.length < 5) {
                       this.$store.dispatch('undate_isLastPage', false)
+                    } else {
+                      this.$store.dispatch('undate_isLastPage', true)
                     }
                     let list = res.circles
                     this.playList.circles = this.playList.circles.concat(list || [])
@@ -280,16 +293,16 @@
 
 
     // 检测播放音频是否存在列表中
-    checkCircleId () {
+    checkCircleId (id) {
       if (this.playList && this.playList.circles) {
         this.playList.circles.filter((item, index) => {
-          if (this.curCircleId === item.circleId && this.isGetList) {
+          if (id === item.circleId) {
             if (this.isTeacher) {
               this.$store.dispatch('undate_curIndex', index)
             }
             this.src = item.files[0].fileUrl || item.files.fileUrl
             this.isGetList = false
-            console.log(this.curIndex, this.curCircleId, this.src, '我当前的点击')
+            console.log(this.curIndex, id, this.src, '我当前的点击')
           }
         })
       }
@@ -313,7 +326,7 @@
 
     // 获取音频列表
     async getList () {
-      this.checkCircleId()
+      this.checkCircleId(this.curCircleId)
       // 判断是否需要重新获取音频列表
       if (this.communityId === this.playList.communityId && !this.isGetList) {
         this.operRoot()
@@ -329,12 +342,14 @@
         await musicListApi(data).then(res => {
           if (res.circles.length < 5) {
             this.$store.dispatch('undate_isLastPage', false)
+          } else {
+            this.$store.dispatch('undate_isLastPage', true)
           }
           let list = res
           this.musicList = this.musicList.concat(list.circles || [])
           list.circles = this.distinct(this.musicList)
           this.$store.dispatch('undate_play_list', list)
-          this.checkCircleId()
+          this.checkCircleId(this.curCircleId)
           this.operRoot()
         })
       // }

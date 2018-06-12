@@ -69,6 +69,7 @@ import Component from 'vue-class-component'
 import { Tabbar, TabbarItem, ViewBox, XCircle, cookie } from 'vux'
 import { mapState } from 'vuex'
 import wxUtil from '@/util/wx'
+import sessionstorage from '@/util/sessionstorage'
 import settings from '@/config/index'
 import WechatMixin from '@/mixins/wechat'
 import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
@@ -101,6 +102,9 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
       musicPlay: state => state.musicController.musicPlay, // 是否播放
       playList: state => state.musicController.playList, // 播放列表
       prevMusic: state => state.musicController.prevMusic, // 上一首播放
+      isLastPage: state => state.musicController.isLastPage, // 是否有下一页
+      isPreload: state => state.musicController.isPreload, // 是否需要预加载
+      curIndex: state => state.musicController.curIndex, // 播放序号
       listener_loadstart: state => state.musicController.listener_loadstart, // 监听状态
       listener_waiting: state => state.musicController.listener_waiting, // 监听状态
       listener_canplay: state => state.musicController.listener_canplay, // 监听状态
@@ -181,7 +185,7 @@ export default class App extends Vue {
         communityId: '',
         circleId: '',
         type: ''
-      }
+      },
     }
   }
   goSomeWhere (index) {
@@ -199,6 +203,7 @@ export default class App extends Vue {
   }
 
   mounted () {
+    
     this.audio = new Audio()
     this.audio.reload = false
     const _this = this
@@ -236,18 +241,42 @@ export default class App extends Vue {
       _this.$store.dispatch('music_pause')
     }, false)
 
+    function storageFun () {
+      let storageMusic = {
+        musicPlay: _this.musicPlay,
+        playList: _this.playList,
+        curIndex: _this.curIndex,
+        currentTime: _this.audio.currentTime,
+        controllerDetail: _this.controllerDetail,
+        isLastPage: _this.isLastPage,
+        isPreload: _this.isPreload,
+        listener_loadstart: _this.listener_loadstart,
+        listener_waiting: _this.listener_waiting,
+        listener_canplay: _this.listener_canplay,
+        listener_loadstart: _this.listener_loadstart,
+        listener_canplaythrough: _this.listener_canplaythrough,
+        listener_timeupdate: _this.listener_timeupdate,
+        listener_ended: _this.listener_ended,
+        listener_stalled: _this.listener_stalled
+      }
+      sessionstorage.set('storageMusic', storageMusic)
+    }
+
     // 当播放位置改变时（比如当用户快进到媒介中一个不同的位置时）运行的脚本。
     this.audio.addEventListener('timeupdate', function () {
       let data = _this.listener_timeupdate
       data ++
       _this.$store.dispatch('undate_listener_timeupdate', data)
+      storageFun()
     }, false)
 
     // 当媒介已到达结尾时运行的脚本（可发送类似“感谢观看”之类的消息）
     this.audio.addEventListener('ended', function () {
       let data = _this.listener_ended
       data ++
+      console.log('我是根我要下一首了')
       _this.$store.dispatch('undate_listener_ended', data)
+      storageFun()
     }, false)
 
     // 在浏览器不论何种原因未能取回媒介数据时运行的脚本。
@@ -257,6 +286,40 @@ export default class App extends Vue {
       data ++
       _this.$store.dispatch('undate_listener_stalled', data)
     }, false)
+
+
+    // 页面刷新后 用于本地存储记录播放位置
+    if (sessionstorage.get('storageMusic') && !this.$route.meta.hideController) {
+      let storageMusic = sessionstorage.get('storageMusic')
+      console.log(storageMusic, 2222222222)
+      this.$store.dispatch('undate_isLastPage', true)
+      this.controllerDetail = storageMusic.controllerDetail
+      this.$store.dispatch('undate_play_list', storageMusic.playList)
+      this.$store.dispatch('undate_curIndex', storageMusic.curIndex)
+      this.$store.dispatch('undate_isPreload', storageMusic.isPreload)
+      this.$store.dispatch('undate_play_list', storageMusic.playList)
+      this.$store.dispatch('undate_listener_loadstart', storageMusic.listener_loadstart)
+      this.$store.dispatch('undate_listener_waiting', storageMusic.listener_waiting)
+      this.$store.dispatch('undate_listener_canplay', storageMusic.listener_canplay)
+      this.$store.dispatch('undate_listener_canplaythrough', storageMusic.listener_canplaythrough)
+      this.$store.dispatch('undate_listener_timeupdate', storageMusic.listener_timeupdate)
+      this.$store.dispatch('undate_listener_ended', storageMusic.listener_ended)
+      this.$store.dispatch('undate_listener_stalled', storageMusic.listener_stalled)
+      if (storageMusic.musicPlay) {
+        this.$store.dispatch('music_play')
+        this.isShowController = true
+        console.log(111, storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl)
+        this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
+        this.audio.currentTime = storageMusic.currentTime
+        let _this = this
+        setTimeout(function (){
+          _this.audio.play()
+        }, 500)
+      } else {
+        this.isShowController = false
+        this.$store.dispatch('music_pause')
+      } 
+    }
     
   }
   jumpDeatil () {
