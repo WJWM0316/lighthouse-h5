@@ -180,6 +180,7 @@ export default class App extends Vue {
       cur: {}, // 当前播放音频的对象
       prev: [], // 播放过音频的记录
       isAutoPlay: false, // 是否自动播放
+      isBackStage: false, // 切换不同塔后续播问题
       controllerDetail: {
         imgUrl: '',
         communityId: '',
@@ -318,7 +319,13 @@ export default class App extends Vue {
       } else {
         this.isShowController = false
         this.$store.dispatch('music_pause')
-      } 
+      }
+      const storageId = storageMusic.controllerDetail.communityId
+      if (storageId !== this.controllerDetail.communityId) {
+        this.isBackStage = true
+      } else {
+        this.isBackStage = false
+      }
     }
     
   }

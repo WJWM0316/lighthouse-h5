@@ -169,7 +169,7 @@
     curCircleId = '' // 当前circleId
     moveLeft = ''
     isExist = false
-    isBackStage = false // 切换不同塔后续播问题
+    
     disabled = false //音乐未播放禁止操作进度条
     isShowLabel = false // 是否显示游标
     isGetList = true // 检测是否需要重新请求列表
@@ -177,15 +177,6 @@
     mounted () {
       this.curCircleId = this.circleId
       this.audio = this.$root.$children[0].audio
-      if (sessionstorage.get('storageMusic')) {
-        let storageMusic = sessionstorage.get('storageMusic')
-        const storageId = storageMusic.controllerDetail.communityId
-        if (storageId !== this.communityId) {
-          this.isBackStage = true
-        } else {
-          this.isBackStage = false
-        }
-      }
     }
 
     musicListenerFun (type) {
@@ -222,7 +213,7 @@
           break
         case 'ended':
           // 同一个组件  或者 导师内容详情
-          if (this.source.fileUrl === this.audio.src || this.isBackStage) {
+          if (this.source.fileUrl === this.audio.src) {
             console.log('liebiao',  this.playList.circles)
             this.audioEnded()
             // 播放下一首
