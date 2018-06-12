@@ -433,33 +433,11 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-      switch (communityId) {
-        case 'aa3b415b564bd95b27da2f0e9c986e6a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '25c2ff088da3f757b685a318ab050b5a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case 'b2b533754554bec1b9c344a97063891b':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '2cdf75243f96bca97ae4341b6400e375':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '67917ba04abd74c3247245576b1168b0':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '9eb2275d266b83a717a50a5827250b8a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        default:
-          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
-          break
-      }
+      
 
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
-
+      this.qrSrc = res.sellImg
       this.pageInfo = res
 
       // 是否已入社
