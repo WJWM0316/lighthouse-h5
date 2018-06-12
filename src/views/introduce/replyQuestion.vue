@@ -85,6 +85,9 @@ export default class ReplyQuestion extends Vue {
     const { params } = this.$route
     this.communityId = params.communityId
     this.id = params.problemId
+    if (!this.$root.$children[0].audio.paused) {
+      this.$root.$children[0].audio.pause()
+    }
     this.getInfo()
   }
 

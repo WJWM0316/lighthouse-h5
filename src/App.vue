@@ -133,16 +133,36 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
         }
         //  数据统计 如果路由参数测试  则发送统计请求
         const { messageId='' } = this.$route.query || ''
+        const { communityId } = this.$route.params || ''
         const params = {
           messageId
         }
         if (messageId) {
           this.countCode(params)
         }
+        let storageMusic = sessionstorage.get('storageMusic')
+        if (storageMusic && communityId) {
+          const storageId = storageMusic.controllerDetail.communityId
+          if (storageId !== communityId && this.$route.name === 'community') {
+            this.isBackStage = true
+          } else {
+            this.isBackStage = false
+          }
+          if (storageId === communityId) {
+            const _this = this
+            setTimeout(function (){
+              if (_this.audio && !_this.audio.paused) { 
+                _this.audio.pause()
+                _this.$store.dispatch('music_pause')
+              }
+            }, 300)
+            sessionstorage.remove('storageMusic')
+          }
+        }
       },
       immediate: true
     },
-    musicPlay () {}
+    musicPlay (val) {}
   }
 })
 export default class App extends Vue {
@@ -181,6 +201,7 @@ export default class App extends Vue {
       prev: [], // 播放过音频的记录
       isAutoPlay: false, // 是否自动播放
       isBackStage: false, // 切换不同塔后续播问题
+      communityId: '', // 获取路径communityId
       controllerDetail: {
         imgUrl: '',
         communityId: '',
@@ -204,7 +225,6 @@ export default class App extends Vue {
   }
 
   mounted () {
-    
     this.audio = new Audio()
     this.audio.reload = false
     const _this = this
@@ -275,10 +295,56 @@ export default class App extends Vue {
     this.audio.addEventListener('ended', function () {
       let data = _this.listener_ended
       data ++
-      console.log('我是根我要下一首了')
       _this.$store.dispatch('undate_listener_ended', data)
       storageFun()
-      
+      if (_this.isBackStage) {
+        // 播放下一首
+        console.log('我是根我要下一首了', _this.curIndex, _this.playList.circles.length - 1)
+        if (_this.curIndex < _this.playList.circles.length - 1) {
+          try {
+            _this.$store.dispatch('music_play')
+            _this.$root.$children[0].isAutoPlay = false
+            let index = _this.curIndex + 1
+            _this.$store.dispatch('undate_curIndex', index)
+            console.log('我要播放的音频', index, _this.playList.circles[index].files[0].fileUrl)
+            _this.audio.src = ''
+            _this.audio.src = _this.playList.circles[index].files[0].fileUrl
+            setTimeout(function () {
+              _this.audio.play()
+            }, 100)
+            let storageMusic = sessionstorage.get('storageMusic')
+            _this.controllerDetail = storageMusic.controllerDetail
+            // 如果还剩2条音频则提前加载下一个列表且还有下一页
+            if (_this.isLastPage && _this.curIndex >= _this.playList.circles.length - 2) {
+              _this.$store.dispatch('undate_isPreload', true)
+              let data = {
+                communityId: _this.controllerDetail.communityId,
+                circleId: _this.playList.circles[_this.playList.circles.length - 1].circleId,
+                count: 5,
+                orderBy: 'asc' //顺序 asc 或者倒叙 desc，默认 asc
+              }
+              musicListApi(data).then(res => {
+                if (res.circles.length < 5) {
+                  _this.$store.dispatch('undate_isLastPage', false)
+                } else {
+                  _this.$store.dispatch('undate_isLastPage', true)
+                }
+                let list = res.circles
+                _this.playList.circles = _this.playList.circles.concat(list || [])
+                _this.playList.circles = _this.distinct(_this.playList.circles)
+                _this.$store.dispatch('undate_play_list', _this.playList)
+                console.log('预加载后的音频列表', _this.playList.circles)
+              })
+            }
+          }
+          catch (e) {
+            console.log('调起播放请求被新的加载请求中断,重新播放', e)
+            _this.audio.play()
+          }
+        } else {
+          console.log('已经全部播放完毕')
+        }
+      }
     }, false)
 
     // 在浏览器不论何种原因未能取回媒介数据时运行的脚本。
@@ -292,10 +358,9 @@ export default class App extends Vue {
 
     // 页面刷新后 用于本地存储记录播放位置
     let storageMusic = sessionstorage.get('storageMusic')
-    if (storageMusic && !this.$route.meta.hideController && storageMusic.controllerDetail.communityId !== this.$route.params.communityId) {
-      
-      console.log(storageMusic, 2222222222)
-      this.$store.dispatch('undate_isLastPage', true)
+    if (storageMusic && !this.$route.meta.hideController) {
+      console.log(storageMusic, '本地存储')
+      this.$store.dispatch('undate_isLastPage', storageMusic.isLastPage)
       this.controllerDetail = storageMusic.controllerDetail
       this.$store.dispatch('undate_play_list', storageMusic.playList)
       this.$store.dispatch('undate_curIndex', storageMusic.curIndex)
@@ -311,25 +376,33 @@ export default class App extends Vue {
       if (storageMusic.musicPlay) {
         this.$store.dispatch('music_play')
         this.isShowController = true
-        console.log(111, storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl)
         this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
         this.audio.currentTime = storageMusic.currentTime
         let _this = this
         setTimeout(function (){
           _this.audio.play()
-        }, 500)
+        }, 300)
       } else {
         this.isShowController = false
         this.$store.dispatch('music_pause')
       }
-      const storageId = storageMusic.controllerDetail.communityId
-      if (storageId !== this.controllerDetail.communityId) {
-        this.isBackStage = true
-      } else {
-        this.isBackStage = false
-      }
     }
     
+  }
+  // 音频列表数组去重
+  distinct (data) {
+    let i, j, len = data.length
+    for(i = 0; i < len; i++){
+      for(j = i + 1; j < len; j++){
+       if(data[i].circleId === data[j].circleId){
+        data.splice(j,1);
+        len--;
+        j--;
+       }
+      }
+    }
+    console.log('去重', data)
+    return data;
   }
   jumpDeatil () {
     this.$router.push('/details/' + this.controllerDetail.circleId + '/' + this.controllerDetail.type + '?communityId=' + this.controllerDetail.communityId)
@@ -363,6 +436,7 @@ export default class App extends Vue {
             this.prev[0].currentTime = this.audio.currentTime
             this.audio.ended ? this.prev[0].playStatus = 1 : this.prev[0].playStatus = 2
             this.$store.dispatch('undate_prevMusic', this.prev[this.prev.length-1])
+            console.log(this.prev[this.prev.length-1])
             if (this.prev.length > 2) {
               this.prev.shift()
             }
@@ -373,9 +447,11 @@ export default class App extends Vue {
         const _this = this
         // 开始播放
         console.log('开始播放')
-        this.audio.play().catch(function (e) {
-          console.log(e, '阻塞了重新调起play')
-          _this.audio.play()
+        setTimeout(function () {
+          _this.audio.play().catch(function (e) {
+            console.log(e, '阻塞了重新调起play')
+            _this.audio.play()
+          })
         })
       }
       catch (e) {

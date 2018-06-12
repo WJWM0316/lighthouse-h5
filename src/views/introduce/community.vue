@@ -432,20 +432,16 @@
    	}
    	
     mounted(){
-    	console.log("修改成功了")
     }
 
     //控制音频
     controlAudio(e){
       this.saveAudio=e.nowaudio;
       this.nowItem=e.nowItem;
-      console.log(e,"我是传递过来的对象")
     }
     
     //路由跳转more
     toMore(){
-    	
-    	console.log(this.communityId);
     	let that=this;
     	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId,classmateNum:this.pageInfo.joinedNum}})
     }
@@ -468,7 +464,6 @@
           if(res2.role && (res2.role.code =='guests'||res2.role.code =='special_guests')){
             res.isAuthor = 1;
           }
-          console.log('+++++++++++++++++++++',res2)
       }
       this.pageInfo = res
       
@@ -486,8 +481,6 @@
       	if(this.$refs['community-title']){
       		this.communityTitleTop = this.$refs['community-title'].offsetTop
       	}
-        console.log(this.$refs)
-        //console.log(this.$refs['community-title'].offsetTop)
       })
 
 
@@ -536,7 +529,6 @@
     }
     posted(){
     	let code=this.roleInfo.code
-    	console.log(code)
     	// :todo 发帖
         this.$router.push(`/publish/${this.$route.params.communityId}?type=0&code=${code}&codeType=${this.type}`)
     }
@@ -704,7 +696,6 @@
         }
       })
 
-      console.log(temp)
       if (page === 1) {
         this.dynamicList = temp
       } else {
@@ -717,7 +708,6 @@
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
 
-      console.log('-------',this.pagination.end)
     }
 
     /**

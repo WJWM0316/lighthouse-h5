@@ -56,7 +56,7 @@ const routers = [
     // 发布语音
     path: '/publishVoice/:communityId',
     name: 'publish-voice',
-    meta: {navHide: true, hideController:true},
+    meta: {navHide: true, hideController:true, stopMusic: true},
     component: resolve => require(['@/views/introduce/publishVoice'], resolve),
   },
   {
@@ -91,7 +91,7 @@ const routers = [
     // 大咖问题详情
     path: '/introduce/replyQuestion/:communityId/:problemId',
     name: 'question-reply',
-    meta: {navHide: true},
+    meta: {navHide: true, stopMusic: true},
     component: resolve => require(['@/views/introduce/replyQuestion'], resolve),
   },
   {

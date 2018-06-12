@@ -208,6 +208,11 @@
             }
             if (this.$refs.range) { this.moveLeft = this.$refs.range.range.handle.style.left }
             this.progress = this.audio.currentTime
+          } else {
+            // 其他的如果是显示播放状态的改为暂停状态
+            if (this.playStatus === 4) {
+              this.playStatus = 2
+            }
           }
           break
         case 'ended':
@@ -378,6 +383,7 @@
 
     // 按钮操作
     oper () {
+      this.$root.$children[0].isBackStage = false
       if (this.isPlayList) {
         this.getList()
       } else {
