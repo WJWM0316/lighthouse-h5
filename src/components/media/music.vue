@@ -217,6 +217,7 @@
             if (this.isPlayList && this.curIndex < this.playList.circles.length - 1) {
               console.log('我播完了准备下一首状态', this.curIndex)
               try {
+
                 this.$store.dispatch('music_play')
                 this.$root.$children[0].isAutoPlay = false
                 let index = this.curIndex + 1
@@ -247,10 +248,11 @@
                     if (res.circles.length < 5) {
                       this.$store.dispatch('undate_isLastPage', false)
                     }
-                    this.playList.circles = this.playList.circles.concat(res.circles || [])
-                    res.circles = _this.distinct(this.playList.circles)
+                    let list = res.circles
+                    this.playList.circles = this.playList.circles.concat(list || [])
+                    this.playList.circles = this.distinct(this.playList.circles)
+                    this.$store.dispatch('undate_play_list', this.playList)
                     console.log('预加载后的音频列表', this.playList.circles)
-                    this.$store.dispatch('undate_play_list', res)
                   })
                 }
               }
@@ -270,7 +272,7 @@
           }
           break
         case 'stalled':
-          if (this.source.fileUrl === _this.audio.src) {
+          if (this.source.fileUrl === this.audio.src) {
             this.$vux.toast.text('音频加载失败，请刷新页面', 'bottom')
           }
       }
@@ -298,13 +300,14 @@
       let i, j, len = data.length
       for(i = 0; i < len; i++){
         for(j = i + 1; j < len; j++){
-         if(data[i] === data[j]){
+         if(data[i].circleId === data[j].circleId){
           data.splice(j,1);
           len--;
           j--;
          }
         }
       }
+      console.log('去重', data)
       return data;
     }
 
@@ -327,9 +330,10 @@
           if (res.circles.length < 5) {
             this.$store.dispatch('undate_isLastPage', false)
           }
-          this.musicList = this.musicList.concat(res.circles || [])
-          res.circles = this.distinct(this.musicList)
-          this.$store.dispatch('undate_play_list', res)
+          let list = res
+          this.musicList = this.musicList.concat(list.circles || [])
+          list.circles = this.distinct(this.musicList)
+          this.$store.dispatch('undate_play_list', list)
           this.checkCircleId()
           this.operRoot()
         })
@@ -375,8 +379,8 @@
 
     // 播放
     playMusic () {
-      this.$root.$children[0].isAutoPlay = true
       this.$store.dispatch('music_play')
+      this.$root.$children[0].isAutoPlay = true
       this.disabled = true
       if (this.audio.src !== this.src) {
         this.audio.src = this.src

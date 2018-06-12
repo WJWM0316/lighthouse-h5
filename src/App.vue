@@ -202,45 +202,62 @@ export default class App extends Vue {
     this.audio = new Audio()
     this.audio.reload = false
     const _this = this
+    // 在文件开始加载且未实际加载任何数据前运行的脚本。
     this.audio.addEventListener('loadstart', function () {
       let data = _this.listener_loadstart
       data ++
       _this.$store.dispatch('undate_listener_loadstart', data)
     }, false)
+
+    // 当媒介已停止播放但打算继续播放时（比如当媒介暂停已缓冲更多数据）运行脚本
     this.audio.addEventListener('waiting', function () {
       let data = _this.listener_waiting
       data ++
       _this.$store.dispatch('undate_listener_waiting', data)
     }, false)
+
+    // 当文件就绪可以开始播放时运行的脚本（缓冲已足够开始时）
     this.audio.addEventListener('canplay', function () {
       let data = _this.listener_canplay
       data ++
       _this.$store.dispatch('undate_listener_canplay', data)
     }, false)
+
+    // 当媒介能够无需因缓冲而停止即可播放至结尾时运行的脚本
     this.audio.addEventListener('canplaythrough', function () {
       let data = _this.listener_canplaythrough
       data ++
       _this.$store.dispatch('undate_listener_canplaythrough', data)
     }, false)
+
+    // 当媒介被用户或程序暂停时运行的脚本。
+    this.audio.addEventListener('pause', function () {
+      _this.audio.pause()
+      _this.$store.dispatch('music_pause')
+    }, false)
+
+    // 当播放位置改变时（比如当用户快进到媒介中一个不同的位置时）运行的脚本。
     this.audio.addEventListener('timeupdate', function () {
       let data = _this.listener_timeupdate
       data ++
       _this.$store.dispatch('undate_listener_timeupdate', data)
     }, false)
+
+    // 当媒介已到达结尾时运行的脚本（可发送类似“感谢观看”之类的消息）
     this.audio.addEventListener('ended', function () {
       let data = _this.listener_ended
       data ++
       _this.$store.dispatch('undate_listener_ended', data)
     }, false)
+
+    // 在浏览器不论何种原因未能取回媒介数据时运行的脚本。
     this.audio.addEventListener('stalled', function () {
+      _this.audio.load()
       let data = _this.listener_stalled
       data ++
       _this.$store.dispatch('undate_listener_stalled', data)
     }, false)
-    this.audio.addEventListener('paused', function () {
-      _this.audio.pause()
-      _this.$store.dispatch('music_pause')
-    }, false)
+    
   }
   jumpDeatil () {
     this.$router.push('/details/' + this.controllerDetail.circleId + '/' + this.controllerDetail.type + '?communityId=' + this.controllerDetail.communityId)
