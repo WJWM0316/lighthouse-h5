@@ -167,9 +167,8 @@ export default class HomeIndex extends Vue {
     if (routeName === 'home') {
       this.navTabName = 'picked'
     } else {
-      this.navTabName = routeName
+      this.navTabName = 'joined'
     }
-
     this.init().then(() => {})
   }
 
@@ -182,7 +181,7 @@ export default class HomeIndex extends Vue {
       // this.joins = []
       // this.communities = []
       this.navTabName = targetName
-      const name = targetName === 'picked' ? 'home' : targetName
+      const name = targetName === 'picked' ? 'home' : 'joined'
       this.$router.push({name})
       this.init().then(() => {
       })

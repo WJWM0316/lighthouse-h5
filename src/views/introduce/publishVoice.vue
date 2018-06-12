@@ -47,6 +47,10 @@ export default class PublishVoice extends Vue {
 
   created () {
     this.form.communityId = this.$route.params.communityId
+    if (this.$root.$children[0].audio.paused) {
+      this.$root.$children[0].audio.pause()
+      this.$store.dispatch('music_pause')
+    }
   }
 
   beforeDestroy () {
