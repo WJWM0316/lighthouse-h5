@@ -11,7 +11,6 @@ const homeRoutes = [
   {
     path: '/index',
     name: 'home',
-    meta:{keepAlive:true},
     component: resolve => require(['@/views/home/index'], resolve),
   },
   {

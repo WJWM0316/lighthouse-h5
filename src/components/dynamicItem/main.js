@@ -222,10 +222,6 @@ export default class dynamicItem extends Vue {
   type = 0
   created () {
     const {modelType, circleId, problemId, isCanSee} = this.item
-    if (isCanSee === 0) {
-      this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
-      return
-    }
     switch (modelType) {
       case 'circle':
         this.type = 1

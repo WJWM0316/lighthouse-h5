@@ -169,7 +169,6 @@
     curCircleId = '' // 当前circleId
     moveLeft = ''
     isExist = false
-    
     disabled = false //音乐未播放禁止操作进度条
     isShowLabel = false // 是否显示游标
     isGetList = true // 检测是否需要重新请求列表
@@ -231,11 +230,13 @@
                 setTimeout(function () {
                   _this.audio.play()
                 }, 100)
-                this.$root.$children[0].controllerDetail = {
-                  imgUrl: this.touerImg,
-                  communityId: this.communityId,
-                  circleId: this.playList.circles[index].circleId,
-                  type: this.playList.circles[index].circleType
+                if (this.isTeacher) {
+                  this.$root.$children[0].controllerDetail = {
+                    imgUrl: this.touerImg,
+                    communityId: this.communityId,
+                    circleId: this.playList.circles[index].circleId,
+                    type: this.playList.circles[index].circleType
+                  }
                 }
                 // 如果还剩2条音频则提前加载下一个列表且还有下一页
                 if (this.isLastPage && this.curIndex >= this.playList.circles.length - 2) {
@@ -348,7 +349,6 @@
 
     // 调用根组件开关
     operRoot () {
-
       if (this.audio.paused || this.audio.src !== this.src) {
         this.playMusic()
       } else {
@@ -364,12 +364,15 @@
         disabled: this.disabled,
         isShowLabel: this.isShowLabel
       }
-      this.$root.$children[0].controllerDetail = {
-        imgUrl: this.touerImg,
-        communityId: this.communityId,
-        circleId: this.circleId,
-        type: this.type
+      if (this.isTeacher) {
+        this.$root.$children[0].controllerDetail = {
+          imgUrl: this.touerImg,
+          communityId: this.communityId,
+          circleId: this.circleId,
+          type: this.type
+        }
       }
+      
       this.$root.$children[0].audioEven(data)
     }
 

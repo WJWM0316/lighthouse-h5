@@ -278,6 +278,7 @@ export default class App extends Vue {
       console.log('我是根我要下一首了')
       _this.$store.dispatch('undate_listener_ended', data)
       storageFun()
+      
     }, false)
 
     // 在浏览器不论何种原因未能取回媒介数据时运行的脚本。
@@ -290,8 +291,9 @@ export default class App extends Vue {
 
 
     // 页面刷新后 用于本地存储记录播放位置
-    if (sessionstorage.get('storageMusic') && !this.$route.meta.hideController) {
-      let storageMusic = sessionstorage.get('storageMusic')
+    let storageMusic = sessionstorage.get('storageMusic')
+    if (storageMusic && !this.$route.meta.hideController && storageMusic.controllerDetail.communityId !== this.$route.params.communityId) {
+      
       console.log(storageMusic, 2222222222)
       this.$store.dispatch('undate_isLastPage', true)
       this.controllerDetail = storageMusic.controllerDetail
