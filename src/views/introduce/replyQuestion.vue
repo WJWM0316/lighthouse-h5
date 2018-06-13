@@ -91,11 +91,6 @@ export default class ReplyQuestion extends Vue {
     this.getInfo()
   }
 
-  beforeDestroy () {
-    this.audio && this.audio.pause()
-    this.audio.src = ''
-    this.audio = null
-  }
 
   /**
    * 获取问题信息

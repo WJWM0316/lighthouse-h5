@@ -43,15 +43,14 @@
                 <image-item class="image" :src="item.user.avatar || require('@/assets/icon/img_head_default.png')" />
               </a>
               <div class="voice">
-                <a href="#" class="voice-container z-read" @click.prevent.stop="handleTapVoice(item)">
-                  <div class="progress">
-                    <div class="bar" :style="{ width: `${item.voice.progress || 0}%` }"></div>
-                  </div>
-                  <div class="controls">
-                    <image-item class="status" :class="{ 'z-loading': item.voice.status === 'loading' }" :src="audioStatusIcons[item.voice.status]" />
-                    <p class="dutraion">{{item.duration || 0}}s</p>
-                  </div>
-                </a>
+                <audioBox 
+                :communityId="communityId"
+                :circleId="model.problemId" 
+                :source="item.file" 
+                :itemIndex="index"
+                :touerImg="item.user.avatar"
+                :type='3'
+                ></audioBox>
               </div>
             </div>
           </template>
@@ -67,9 +66,12 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
+import audioBox from '@/components/media/music'
 @Component({
   name: 'question-item',
+  components: {
+    audioBox
+  },
   props: {
     // 类型，默认1带头像，2不带头像
     type: {
@@ -136,17 +138,6 @@ export default class QuestionItem extends Vue {
     this.$emit('card-tap', this.communityId, this.model)
   }
 
-  /**
-   * 播放音频
-   */
-  handleTapVoice (answerItem) {
-    if (answerItem.voice.status === 'default') {
-      // 通知父级组件播放音频
-      this.$emit('play-voice', answerItem.content, this.communityId, this.model.problemId, answerItem.answerId)
-    } else if (answerItem.voice.status === 'loading' || answerItem.voice.status === 'playing') {
-      this.$emit('pause-voice', this.communityId, this.model.problemId, answerItem.answerId)
-    }
-  }
 }
 </script>
 

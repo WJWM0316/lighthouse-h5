@@ -81,7 +81,6 @@
                      :isPlayList="isPlayList"
                      :isTeacher="isPlayList"
                      @disableOperationEvents="operation"
-                     @saveAudio="controlAudio"
             ></dynamic>
           </div>
           <div class="blank" v-else>
@@ -210,7 +209,6 @@
     roleInfo=''
     code=''
     type=1
-    saveAudio={}
     nowItem={}
     isPlayList = true
     //显示标题模式
@@ -432,11 +430,6 @@
     mounted(){
     }
 
-    //控制音频
-    controlAudio(e){
-      this.saveAudio=e.nowaudio;
-      this.nowItem=e.nowItem;
-    }
     
     //路由跳转more
     toMore(){

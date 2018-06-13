@@ -484,9 +484,13 @@ export default class App extends Vue {
         const _this = this
         // 开始播放
         console.log('开始播放')
+        this.audio.play()
         setTimeout(function () {
+
           _this.audio.play().catch(function (e) {
+            window.alert(e)
             console.log(e, '阻塞了重新调起play()')
+            _this.audio.play()
             _this.audio.play()
           })
         }, 500)
