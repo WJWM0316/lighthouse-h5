@@ -153,7 +153,9 @@ import {newCountCodeApi, musicListApi, playAudioApi} from '@/api/pages/pageInfo'
       },
       immediate: true
     },
-    musicPlay (val) {}
+    musicPlay (val) {
+      console.log(111111111, val)
+    }
   }
 })
 export default class App extends Vue {
@@ -380,12 +382,14 @@ export default class App extends Vue {
       if (storageMusic.musicPlay) {
         this.$store.dispatch('music_play')
         this.isShowController = true
-        if (!storageMusic.curUrl) {
+        if (this.controllerDetail.isJoin) {
           this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
         }
         this.audio.currentTime = storageMusic.currentTime
         let _this = this
         // ios 自动播放
+        // _this.audio.play()
+        console.log(1111, '我要播放', this.audio.src)
         document.addEventListener("WeixinJSBridgeReady", function () { 
           _this.audio.play()
         }, false)
@@ -483,7 +487,10 @@ export default class App extends Vue {
         // 开始播放
         console.log('开始播放')
         setTimeout(function () {
-          _this.audio.play()
+          _this.audio.play().catch(function (e) {
+            console.log(e, '阻塞了重新调起play')
+            _this.audio.play()
+          })
         }, 100)
       }
       catch (e) {
