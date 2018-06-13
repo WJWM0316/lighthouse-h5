@@ -5,7 +5,7 @@
       <div class="nav-bar fs15" :class="navTabName">
         <span @click="toggle('picked')">精选</span>
         <span class="join" :class="{'message': isMessage}" @click="toggle('joined')">已加入</span>
-        <span class="create" @click="toggle('center-create-lite')">创建灯塔</span>
+        <span class="create" @click="toggleCreate()">创建灯塔</span>
        <!--  <span @click="toggle('find')">发现</span> -->
       </div>
        <!-- 分类  用于悬浮顶格-->
@@ -188,6 +188,10 @@ export default class HomeIndex extends Vue {
     }
   }
 
+  toggleCreate () {
+    this.$router.push({name: 'center-create-lite'})
+  }
+
   /**
    * 切换 Tag 标签
    **/
@@ -280,7 +284,7 @@ export default class HomeIndex extends Vue {
       this.bannerList = res
       if (res.length > 0) {
         this.$nextTick(() => {
-          this.scrollHeight = this.$refs.tabBanner.clientHeight
+          if (this.$refs.tabBanner) { this.scrollHeight = this.$refs.tabBanner.clientHeight }
         })
       }
     })

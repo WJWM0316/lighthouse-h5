@@ -212,6 +212,7 @@
             // 其他的如果是显示播放状态的改为暂停状态
             if (this.playStatus === 4) {
               this.playStatus = 2
+              console.log(11111111111)
             }
           }
           break

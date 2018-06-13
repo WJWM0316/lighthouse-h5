@@ -292,7 +292,6 @@
 		//页面离开前
 		beforeRouteLeave(to, from, next) {
 		  if((this.nowItem.answer && this.nowItem.answer[0].type===2) || this.nowItem.circleType===1){
-        this.saveAudio.pause();
         if(this.nowItem.modelType && this.nowItem.modelType==="problem"){
           this.nowItem.answers[0].musicState=0;
         }else{
