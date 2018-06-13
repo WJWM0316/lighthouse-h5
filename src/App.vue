@@ -464,7 +464,7 @@ export default class App extends Vue {
     this.isShowController = true // 打开悬浮窗
     this.cur = data
     // 总开关
-    if (this.musicPlay) {
+    if (!this.audio.paused) {
       try {
         if (this.curUrl !== data.filePath) {
           this.curUrl = data.filePath
@@ -486,10 +486,10 @@ export default class App extends Vue {
         console.log('开始播放')
         setTimeout(function () {
           _this.audio.play().catch(function (e) {
-            console.log(e, '阻塞了重新调起play')
+            console.log(e, '阻塞了重新调起play()')
             _this.audio.play()
           })
-        }, 100)
+        }, 500)
       }
       catch (e) {
         // this.audio.play()

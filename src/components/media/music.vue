@@ -377,7 +377,6 @@
         list.circles = this.distinct(this.musicList)
         this.$store.dispatch('undate_play_list', list)
         this.checkCircleId(this.curCircleId)
-        this.operRoot()
         setTimeout(res => {
           this.operRoot()
         }, 100)
@@ -415,7 +414,6 @@
         isJoin: isJoin,
         jumpFind: jumpFind
       }
-      
       this.$root.$children[0].audioEven(data)
     }
 
