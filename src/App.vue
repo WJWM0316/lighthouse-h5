@@ -153,9 +153,7 @@ import {newCountCodeApi, musicListApi, playAudioApi} from '@/api/pages/pageInfo'
       },
       immediate: true
     },
-    musicPlay (val) {
-      console.log(111111111, val)
-    }
+    musicPlay (val) {}
   }
 })
 export default class App extends Vue {
