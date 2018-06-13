@@ -148,16 +148,6 @@ import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
           } else {
             this.isBackStage = false
           }
-          if (storageId === communityId) {
-            const _this = this
-            setTimeout(function (){
-              if (_this.audio && !_this.audio.paused) { 
-                _this.audio.pause()
-                _this.$store.dispatch('music_pause')
-              }
-            }, 300)
-            sessionstorage.remove('storageMusic')
-          }
         }
       },
       immediate: true
@@ -436,7 +426,6 @@ export default class App extends Vue {
             this.prev[0].currentTime = this.audio.currentTime
             this.audio.ended ? this.prev[0].playStatus = 1 : this.prev[0].playStatus = 2
             this.$store.dispatch('undate_prevMusic', this.prev[this.prev.length-1])
-            console.log(this.prev[this.prev.length-1])
             if (this.prev.length > 2) {
               this.prev.shift()
             }

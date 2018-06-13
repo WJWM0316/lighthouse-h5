@@ -32,7 +32,7 @@
   import { Range, Cell, Group } from 'vux'
 	import Component from 'vue-class-component'
   import sessionstorage from '@/util/sessionstorage'
-  import { musicListApi } from '@/api/pages/pageInfo'
+  import { musicListApi, playAudioApi } from '@/api/pages/pageInfo'
   require('./../../assets/icon/music_play.png')
 	@Component({
     name: 'music',
@@ -212,24 +212,24 @@
             // 其他的如果是显示播放状态的改为暂停状态
             if (this.playStatus === 4) {
               this.playStatus = 2
-              console.log(11111111111)
             }
           }
           break
         case 'ended':
           // 同一个组件  或者 导师内容详情
           if (this.source.fileUrl === this.audio.src) {
-            console.log('liebiao',  this.playList.circles)
             this.audioEnded()
             // 播放下一首
             // console.log(_this.source.fileUrl, _this.audio.src)
             if (this.isPlayList && this.curIndex < this.playList.circles.length - 1) {
+              this.removeRed(this.playList.circles[this.curIndex].files[0].fileId)
               try {
                 this.$store.dispatch('music_play')
                 this.$root.$children[0].isAutoPlay = false
                 let index = this.curIndex + 1
                 this.$store.dispatch('undate_curIndex', index)
                 console.log('我要播放的音频', index, this.playList.circles[index].files[0].fileUrl)
+                
                 this.audio.src = ''
                 this.audio.src = this.playList.circles[index].files[0].fileUrl
                 const _this = this
@@ -244,6 +244,7 @@
                     type: this.playList.circles[index].circleType
                   }
                 }
+
                 // 如果还剩2条音频则提前加载下一个列表且还有下一页
                 if (this.isLastPage && this.curIndex >= this.playList.circles.length - 2) {
                   this.$store.dispatch('undate_isPreload', true)
@@ -288,7 +289,14 @@
           }
       }
     }
-
+    
+    // 消除红点
+    async removeRed (fileId) {
+      await playAudioApi({fileId}).then(res => {
+        this.source.isPlayed = true
+      })
+    }
+    
 
     // 检测播放音频是否存在列表中
     checkCircleId (id) {
@@ -318,7 +326,6 @@
          }
         }
       }
-      console.log('去重', data)
       return data;
     }
 
@@ -385,6 +392,7 @@
     // 按钮操作
     oper () {
       this.$root.$children[0].isBackStage = false
+      this.removeRed(this.source.fileId)
       if (this.isPlayList) {
         this.getList()
       } else {
