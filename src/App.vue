@@ -483,13 +483,7 @@ export default class App extends Vue {
         // 开始播放
         console.log('开始播放')
         setTimeout(function () {
-          _this.audio.play().catch(function (e) {
-            console.log(e, '阻塞了重新调起play')
-            _this.audio.play()
-          })
-          if (_this.audio.paused) {
-            _this.audioEven(this.cur)
-          }
+          _this.audio.play()
         }, 100)
       }
       catch (e) {

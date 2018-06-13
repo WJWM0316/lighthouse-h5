@@ -317,8 +317,7 @@
         await playAudioApi({fileId}).then(res => {
           this.source.isPlayed = true
         })
-      }
-      
+      } 
     }
     
 
@@ -330,7 +329,7 @@
             if (this.isTeacher) {
               this.$store.dispatch('undate_curIndex', index)
             }
-            this.src = item.files[0].fileUrl || item.files.fileUrl
+            this.src = this.source.fileUrl
             this.isGetList = false
             console.log(this.curIndex, id, this.src, '我当前的点击')
           }
