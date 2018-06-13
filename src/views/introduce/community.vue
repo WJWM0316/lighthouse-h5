@@ -76,7 +76,6 @@
                      :showDelBtn="true"
                      :isNeedHot="true"
                      :communityId="pageInfo.communityId"
-                     :touerImg="pageInfo.icon"
                      :showIdentification="showIdentification"
                      :disableOperationArr="disableOperationArr"
                      :isPlayList="isPlayList"

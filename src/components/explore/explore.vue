@@ -15,7 +15,7 @@
                   :hideCommentArea="hideCommentArea"
                   :disableContentClick="disableContentClick"
                   :disableUserClick="disableUserClick"
-                  @audioEvent="audioEvent"
+                  :isDetailCon='isDetailCon'
                   @videoEvent="videoEvent"
                   @operation="operation"
                   ref="dynamic-item"
@@ -89,6 +89,10 @@
       // 拦截操作 传入拦截事件名称
       disableOperationArr: {
         type: Array
+      },
+      isDetailCon: {
+        type: Boolean,
+        default: false
       }
     },
     components: {
@@ -118,183 +122,7 @@
     }
 
     mounted () {
-      const music = new Audio()
-
-      /**
-       * 音频加载中
-       */
-      music.onloadstart = () => {
-        this.audioStateSet('loading')
-      }
-      /**
-       * 可获取音频总时长
-       */
-      music.ondurationchange = () => {
-      }
-      /**
-       * 缓冲时触发
-       */
-      music.onprogress = () => {
-      }
-      /**
-       * 音频处于可播放状态
-       */
-      music.oncanplay = () => {
-        this.audioStateSet('playing')
-      }
-      /**
-       * 当媒介能够无需因缓冲而停止即可播放至结尾时运行脚本
-       */
-      music.oncanplaythrough = () => {
-        this.audioStateSet('playing')
-      }
-      /**
-       * 播放中
-       */
-      music.ontimeupdate = () => {
-        let progress = parseInt((music.currentTime / music.duration).toFixed(2) * 100)
-        this.audioProgressSet(progress)
-      }
-      /**
-       * 播放完成
-       */
-      music.onended = () => {
-        this.audioStateSet()
-        this.audioProgressSet()
-      }
-      /**
-       * 等待数据
-       */
-      music.onwaiting = () => {
-        this.audioStateSet('loading')
-      }
-      /**
-       * 错误
-       */
-      music.onerror = (e) => {
-      }
-      this.music = music
-    }
-
-    destroyed () {
-      this.music.pause()
-      this.music.src = ''
-      this.music = ''
-    }
-
-    /**
-     * 设置当前播放状态
-     * @param state play | playing | loading
-     */
-    audioStateSet (state) {
-      const {itemIndex, problemIndex} = this.currentPlay
-      const item = this.exploreList[itemIndex]
-
-      if (itemIndex < 0) {
-        return
-      }
-
-      let musicState = 0
-      switch (state) {
-        case 'playing':
-          musicState = 1
-          break
-        case 'loading':
-          musicState = 2
-          break
-        default:
-          musicState = 0
-          break
-      }
-
-      if (item.modelType && item.modelType === 'problem') {
-        this.exploreList[itemIndex].answers[problemIndex].musicState = musicState
-      } else {
-        this.exploreList[itemIndex].musicState = musicState
-      }
-    }
-
-    /**
-     * 播放进度设置
-     */
-    audioProgressSet (progress) {
-      progress = progress || 0
-      console.log(progress)
-      const {itemIndex, problemIndex} = this.currentPlay
-      const item = this.exploreList[itemIndex]
-
-      if (itemIndex < 0) {
-        return
-      }
-
-      if (item.modelType && item.modelType === 'problem') {
-        this.exploreList[itemIndex].answers[problemIndex].progress = progress
-      } else {
-        this.exploreList[itemIndex].progress = progress
-      }
-    }
-
-    audioEvent (e) {
-      // 如果播放视频 关闭音频
-      if (this.currentVideoIndex > -1) {
-        this.exploreList[this.currentVideoIndex].videoPlay = false
-        this.$refs['dynamic-item'][this.currentVideoIndex].videoStop()
-      }
-
-      const {eventType, itemIndex, problemIndex} = e
-      const temp = this.exploreList[itemIndex]
-      let item = temp
-      if (temp.modelType === 'problem') {
-        item = temp.answers[problemIndex]
-      }
-      console.log(eventType, item)
-
-      // 是否听过
-      const {isPlayed, fileId} = item.file || item.files[0]
-      if (!isPlayed && fileId) {
-        playAudioApi({fileId}).then(res => {
-          if (temp.modelType === 'problem') {
-            this.exploreList[itemIndex].answers[problemIndex].file.isPlayed = true
-          } else {
-            this.exploreList[itemIndex].files[0].isPlayed = true
-          }
-        })
-      }
-
-      switch (eventType) {
-        case 'play':
-          const {itemIndex: lastItemIndex, problemIndex: lastProblemIndex} = this.currentPlay
-          if (lastItemIndex !== itemIndex) {
-            this.music['src'] = e.url
-            this.audioStateSet()
-            this.audioProgressSet()
-            this.music.play()
-          } else if (temp.modelType === 'problem' && lastProblemIndex !== problemIndex) {
-            this.music['src'] = e.url
-            this.audioStateSet()
-            this.audioProgressSet()
-            this.music.play()
-          } else {
-            console.log(this.music.paused)
-            if (this.music.paused) {
-              this.music.play()
-              this.audioStateSet('playing')
-            } else {
-              this.music.pause()
-              this.audioStateSet()
-            }
-          }
-          this.currentPlay = {
-            item,
-            itemIndex,
-            problemIndex
-          }
-          break
-        case 'pause':
-          this.music.pause()
-          this.audioStateSet()
-          break
-      }
+    
     }
 
     videoEvent (e) {
@@ -303,15 +131,7 @@
         this.exploreList[this.currentVideoIndex].videoPlay = false
         this.$refs['dynamic-item'][this.currentVideoIndex].videoStop()
       }
-
       const {itemIndex: audioIndex} = this.currentPlay
-      if (audioIndex > -1) {
-        this.audioEvent({
-          eventType: 'pause',
-          itemIndex: audioIndex
-        })
-      }
-
       switch (eventType) {
         case 'play':
           this.exploreList[itemIndex].videoPlay = true

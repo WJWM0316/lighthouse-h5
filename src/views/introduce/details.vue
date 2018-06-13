@@ -14,6 +14,7 @@
                    :isPlayList = 'isPlayList'
                    :isTeacherCon = 'isPlayList'
                    :allTotal = "allTotal"
+                   :isDetailCon = 'true'
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="operation" 
                    @getUserId="getUserId"

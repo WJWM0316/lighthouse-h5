@@ -56,8 +56,7 @@
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="disableOperationEvents"
                    :disableUserClick="true"
-                   :touerImg="pageInfo.icon"
-                   :isTeacher="true"
+                   :isTeacher="false"
                    :communityId="pageInfo.communityId"
           ></dynamic>
         </div>

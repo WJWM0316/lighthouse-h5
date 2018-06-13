@@ -11,10 +11,6 @@ import moment from 'moment'
       type: Object,
       required: true
     },
-    touerImg: {
-      type: String,
-      default: ''
-    },
     isFold: {
       type: Boolean,
       default: true
@@ -94,6 +90,10 @@ import moment from 'moment'
       default: false
     },
     isTeacherCon: {
+      type: Boolean,
+      default: false
+    },
+    isDetailCon: {
       type: Boolean,
       default: false
     }

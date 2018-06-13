@@ -1,10 +1,14 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import audioBox from '@/components/media/music'
 import moment from 'moment'
 
 @Component({
   name: 'explore-item',
+  components: {
+    audioBox
+  },
   props: {
     item: {
       type: Object,
@@ -60,6 +64,10 @@ import moment from 'moment'
     },
     // 禁止头像名字点击
     disableUserClick: {
+      type: Boolean,
+      default: false
+    },
+    isDetailCon: {
       type: Boolean,
       default: false
     }

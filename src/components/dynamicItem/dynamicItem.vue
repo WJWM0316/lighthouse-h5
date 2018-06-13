@@ -52,8 +52,9 @@
                 :circleId="problemItem.circleId" 
                 :source="problemItem.file" 
                 :itemIndex="problemIndex"
-                :touerImg="touerImg"
+                :touerImg="problemItem.releaseUser.avatar"
                 :type="type"
+                :isDetailCon='isDetailCon'
                 ></audioBox>
             </div>
           </div>
@@ -83,8 +84,9 @@
             :circleId="item.circleId" 
             :source="item.files[0]" 
             :itemIndex="itemIndex"
-            :touerImg="touerImg"
+            :touerImg="item.releaseUser.avatar"
             :type="type"
+            :isDetailCon='isDetailCon'
             ></audioBox>
         </div>
 

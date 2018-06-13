@@ -16,13 +16,13 @@
                   :disableUserClick="disableUserClick"
                   :allTotal="allTotal"
                   :isFold="isFold"
-                  :touerImg="touerImg"
                   :noBorder="noBorder"
                   :isNeedHot="isNeedHot"
                   :isPlayList='isPlayList'
                   :isTeacher='isTeacher'
                   :isTeacherCon='isTeacherCon'
                   :communityId="communityId"
+                  :isDetailCon="isDetailCon"
                   @videoEvent="videoEvent"
                   @operation="operation"
                   ref="dynamic-item"
@@ -132,6 +132,10 @@
       communityId: {
         type: String,
         default: ''
+      },
+      isDetailCon: {
+        type: Boolean,
+        default: false
       }
     },
     components: {

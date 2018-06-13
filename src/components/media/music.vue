@@ -72,6 +72,14 @@
       isTeacherCon: { // 是否是朋友圈详情
         type: Boolean,
         default: false
+      },
+      jumpFind: { // 是否是发现页面跳转
+        type: Boolean,
+        default: false
+      },
+      isDetailCon: {
+        type: Boolean,
+        default: false
       }
     },
     components: {
@@ -240,10 +248,10 @@
                     imgUrl: this.touerImg,
                     communityId: this.communityId,
                     circleId: this.playList.circles[index].circleId,
-                    type: this.playList.circles[index].circleType
+                    type: this.playList.circles[index].circleType,
+                    isJoin: true
                   }
                 }
-
                 // 如果还剩2条音频则提前加载下一个列表且还有下一页
                 if (this.isLastPage && this.curIndex >= this.playList.circles.length - 2) {
                   this.$store.dispatch('undate_isPreload', true)
@@ -278,11 +286,22 @@
               console.log('已经全部播放完毕')
               this.audioEnded()
             }
+          } else {
+            // 重置内容详情播放完的状态
+            if (this.playStatus === 2) {
+              this.progress = 0
+              this.moveLeft = 0
+              this.audio.currentTime = 0
+              this.currentTime = 0
+              this.playStatus = 1
+              this.audio.pause()
+            }
           }
           // 如果不是导师列表音频 音频结束手动重置组件状态
           if (!this.isTeacherCon){
             this.progress = 0
             this.playStatus = 1
+            this.currentTime = 0
           }
           break
         case 'stalled':
@@ -342,27 +361,28 @@
         this.operRoot()
         return false
       }
-      // if (this.isLastPage) {
-        let data = {
-          communityId: this.communityId,
-          circleId: this.curCircleId,
-          count: 5,
-          orderBy: 'asc' //顺序 asc 或者倒叙 desc，默认 asc
+      let data = {
+        communityId: this.communityId,
+        circleId: this.curCircleId,
+        count: 5,
+        orderBy: 'asc' //顺序 asc 或者倒叙 desc，默认 asc
+      }
+      await musicListApi(data).then(res => {
+        if (res.circles.length < 5) {
+          this.$store.dispatch('undate_isLastPage', false)
+        } else {
+          this.$store.dispatch('undate_isLastPage', true)
         }
-        await musicListApi(data).then(res => {
-          if (res.circles.length < 5) {
-            this.$store.dispatch('undate_isLastPage', false)
-          } else {
-            this.$store.dispatch('undate_isLastPage', true)
-          }
-          let list = res
-          this.musicList = this.musicList.concat(list.circles || [])
-          list.circles = this.distinct(this.musicList)
-          this.$store.dispatch('undate_play_list', list)
-          this.checkCircleId(this.curCircleId)
+        let list = res
+        this.musicList = this.musicList.concat(list.circles || [])
+        list.circles = this.distinct(this.musicList)
+        this.$store.dispatch('undate_play_list', list)
+        this.checkCircleId(this.curCircleId)
+        this.operRoot()
+        setTimeout(res => {
           this.operRoot()
-        })
-      // }
+        }, 100)
+      })
     }
 
     // 调用根组件开关
@@ -384,13 +404,17 @@
         disabled: this.disabled,
         isShowLabel: this.isShowLabel
       }
-      if (this.isTeacher) {
-        this.$root.$children[0].controllerDetail = {
-          imgUrl: this.touerImg,
-          communityId: this.communityId,
-          circleId: this.circleId,
-          type: this.type
-        }
+      let isJoin = false
+      let jumpFind = false
+      this.jumpFind ? jumpFind = true : jumpFind = false
+      this.isTeacher ? isJoin = true : isJoin = false
+      this.$root.$children[0].controllerDetail = {
+        imgUrl: this.touerImg,
+        communityId: this.communityId,
+        circleId: this.circleId,
+        type: this.type,
+        isJoin: isJoin,
+        jumpFind: jumpFind
       }
       
       this.$root.$children[0].audioEven(data)
@@ -492,10 +516,13 @@
 </script>
 <style>
 .audio-wrapper {
-  width: 210px;
+  width: 240px;
   height: 40px;
   border-radius: 0 20px 20px 20px;
   background-color: rgba(255, 226, 102, 0.35);
+}
+.audio-wrapper.detail {
+  width: 210px;
 }
 
 .audio-left {

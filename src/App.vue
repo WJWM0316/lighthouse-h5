@@ -1,6 +1,5 @@
 <template>
   <div id="app" style="height: 100%" v-cloak>
-    <div class="btm"  @click.stop="musicBtn" style="width:150px;height: 120px;background: #000;"></div>
   	<keep-alive>
        <router-view v-if="$route.meta.keepAlive">
           <!-- 这里是会被缓存的视图组件！ -->
@@ -198,12 +197,14 @@ export default class App extends Vue {
         imgUrl: '',
         communityId: '',
         circleId: '',
-        type: ''
+        type: '',
+        isJoin: false,
+        jumpFind: false
       }
     }
   }
   goSomeWhere (index) {
-    this.$router.replace(this.tabList[index].src)
+    this.$router.push(this.tabList[index].src)
   }
   isSelected (src) {
     return this.$route.path === src
@@ -215,10 +216,7 @@ export default class App extends Vue {
   async countCode (params) {
     await newCountCodeApi(params)
   }
-  musicBtn () {
-    this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-12/aa82c14fb73417c4fec97e55530f4387.mp3'
-    this.audio.play()
-  }
+
   mounted () {
     this.audio = new Audio()
     this.audio.reload = false
@@ -253,13 +251,14 @@ export default class App extends Vue {
 
     // 当媒介被用户或程序暂停时运行的脚本。
     this.audio.addEventListener('pause', function () {
-      _this.audio.pause()
       _this.$store.dispatch('music_pause')
+      _this.audio.pause()
     }, false)
 
     function storageFun () {
       let storageMusic = {
         musicPlay: _this.musicPlay,
+        curUrl: _this.audio.src,
         playList: _this.playList,
         curIndex: _this.curIndex,
         currentTime: _this.audio.currentTime,
@@ -361,23 +360,29 @@ export default class App extends Vue {
     let storageMusic = sessionstorage.get('storageMusic')
     if (storageMusic && !this.$route.meta.hideController) {
       console.log(storageMusic, '本地存储')
-      this.$store.dispatch('undate_isLastPage', storageMusic.isLastPage)
       this.controllerDetail = storageMusic.controllerDetail
-      this.$store.dispatch('undate_play_list', storageMusic.playList)
-      this.$store.dispatch('undate_curIndex', storageMusic.curIndex)
-      this.$store.dispatch('undate_isPreload', storageMusic.isPreload)
-      this.$store.dispatch('undate_play_list', storageMusic.playList)
-      this.$store.dispatch('undate_listener_loadstart', storageMusic.listener_loadstart)
-      this.$store.dispatch('undate_listener_waiting', storageMusic.listener_waiting)
-      this.$store.dispatch('undate_listener_canplay', storageMusic.listener_canplay)
-      this.$store.dispatch('undate_listener_canplaythrough', storageMusic.listener_canplaythrough)
-      this.$store.dispatch('undate_listener_timeupdate', storageMusic.listener_timeupdate)
-      this.$store.dispatch('undate_listener_ended', storageMusic.listener_ended)
-      this.$store.dispatch('undate_listener_stalled', storageMusic.listener_stalled)
+      if (this.controllerDetail.isJoin) {
+        this.$store.dispatch('undate_isLastPage', storageMusic.isLastPage)
+        this.$store.dispatch('undate_play_list', storageMusic.playList)
+        this.$store.dispatch('undate_curIndex', storageMusic.curIndex)
+        this.$store.dispatch('undate_isPreload', storageMusic.isPreload)
+        this.$store.dispatch('undate_play_list', storageMusic.playList)
+        this.$store.dispatch('undate_listener_loadstart', storageMusic.listener_loadstart)
+        this.$store.dispatch('undate_listener_waiting', storageMusic.listener_waiting)
+        this.$store.dispatch('undate_listener_canplay', storageMusic.listener_canplay)
+        this.$store.dispatch('undate_listener_canplaythrough', storageMusic.listener_canplaythrough)
+        this.$store.dispatch('undate_listener_timeupdate', storageMusic.listener_timeupdate)
+        this.$store.dispatch('undate_listener_ended', storageMusic.listener_ended)
+        this.$store.dispatch('undate_listener_stalled', storageMusic.listener_stalled)
+      } else {
+        this.audio.src = storageMusic.curUrl
+      }
       if (storageMusic.musicPlay) {
         this.$store.dispatch('music_play')
         this.isShowController = true
-        this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
+        if (!storageMusic.curUrl) {
+          this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
+        }
         this.audio.currentTime = storageMusic.currentTime
         let _this = this
         // ios 自动播放
@@ -412,7 +417,28 @@ export default class App extends Vue {
     return data;
   }
   jumpDeatil () {
-    this.$router.push('/details/' + this.controllerDetail.circleId + '/' + this.controllerDetail.type + '?communityId=' + this.controllerDetail.communityId)
+    if (this.controllerDetail.isJoin) {
+      this.$router.push('/details/' + this.controllerDetail.circleId + '/' + this.controllerDetail.type + '?communityId=' + this.controllerDetail.communityId)
+    } else {
+      if (this.controllerDetail.jumpFind) {
+        let modeType = 'circle'
+        switch (this.controllerDetail.type) {
+          case 1:
+            modeType = 'circle'
+            break
+          case 2:
+            modeType = 'post'
+            break
+          case 3:
+            modeType = 'problem'
+            break
+        }
+        this.$router.push('/index/details/' + this.controllerDetail.circleId + '/?modeType=' + modeType)
+      } else {
+        // this.$router.push('/introduce/' + this.controllerDetail.communityId)
+      }
+      
+    }
   }
   // 悬浮窗开关
   musicControl () {

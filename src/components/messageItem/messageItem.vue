@@ -13,14 +13,14 @@
       <!--音频-->
       <div v-else :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}">
         <audioBox 
-          :communityId="communityId"
-          :isPlayList="isPlayList"
-          :isTeacher="isTeacher"
-          :isTeacherCon="isTeacherCon"
-          :circleId="problemItem.circleId" 
-          :source="problemItem.file" 
-          :itemIndex="problemIndex" 
-          :key="problemIndex"></audioBox>
+          :communityId="item.LighthouseId"
+          :circleId="circleId" 
+          :source="item.files[0]" 
+          :itemIndex="itemIndex"
+          :touerImg="item.avatarUrl"
+          :isTeacher='true'
+          :type = '3'
+          :key="itemIndex"></audioBox>
       </div>
 
       <div class="desc-middle-return">
@@ -51,6 +51,11 @@
       XButton,
       audioBox
     },
+    computed: {
+      circleId () {
+        return String(this.item.beReturnedId)
+      }
+    },
     props: {
       item: {
         type: Object,
@@ -59,7 +64,7 @@
       // 对象下标
       itemIndex: {
         type: Number
-      },
+      }
     },
     data () {
       return {
