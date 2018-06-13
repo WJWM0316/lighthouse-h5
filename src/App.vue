@@ -464,7 +464,7 @@ export default class App extends Vue {
     this.isShowController = true // 打开悬浮窗
     this.cur = data
     // 总开关
-    if (!this.audio.paused) {
+    if (this.audio.paused) {
       try {
         if (this.curUrl !== data.filePath) {
           this.curUrl = data.filePath
