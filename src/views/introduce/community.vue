@@ -21,7 +21,7 @@
           </router-link>-->
           
           <!--<router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon-more">:to="{name: 'introduce-more'}"-->
-      		<div :starTime="starTime" @click.prevent.stop="toMore" class="addon-text" slot="cover-addon-more">
+      		<div :starTime="starTime" @click.stop="toMore()" class="addon-text" slot="cover-addon-more">
              <img class="icon" src="../../assets/icon/bnt_more@3x.png" />
           </div>
         </community-card>
@@ -439,8 +439,7 @@
     }
     
     //路由跳转more
-    toMore(){
-    	
+    toMore() {
     	console.log(this.communityId);
     	let that=this;
     	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId,classmateNum:this.pageInfo.joinedNum}})
