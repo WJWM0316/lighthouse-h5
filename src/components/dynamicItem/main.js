@@ -300,25 +300,7 @@ export default class dynamicItem extends Vue {
       itemIndex
     })
   }
-  /**
-   * 播放对应音频
-   */
-  audioPlay (problemIndex) {
-    let url = ''
-    const itemIndex = this.itemIndex
-    if (problemIndex >= 0) {
-      url = this.item.answers[problemIndex].file.fileUrl
-    } else {
-      url = this.item.files[0].fileUrl
-    }
 
-    this.$emit('audioEvent', {
-      eventType: 'play',
-      url,
-      itemIndex,
-      problemIndex
-    })
-  }
   /**
    * 点击预览图片
    */

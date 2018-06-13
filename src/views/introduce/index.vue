@@ -56,6 +56,9 @@
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="disableOperationEvents"
                    :disableUserClick="true"
+                   :touerImg="pageInfo.icon"
+                   :isTeacher="true"
+                   :communityId="pageInfo.communityId"
           ></dynamic>
         </div>
         <div class="desc">
@@ -148,7 +151,6 @@
       },
       // 是否已入社
       isJoinAgency () {
-      	console.log("333333333333",this.pageInfo.isJoined,this.pageInfo.isAuthor)
         return this.pageInfo.isAuthor || this.pageInfo.isJoined
       },
       // 是否已结束

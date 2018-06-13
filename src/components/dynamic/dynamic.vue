@@ -160,7 +160,6 @@
       itemIndex: -1,
       problemIndex: -1
     }
-    music = ''
     currentVideoIndex = -1
 
     created () {

@@ -222,14 +222,13 @@
             // 播放下一首
             // console.log(_this.source.fileUrl, _this.audio.src)
             if (this.isPlayList && this.curIndex < this.playList.circles.length - 1) {
-              this.removeRed(this.playList.circles[this.curIndex].files[0].fileId)
               try {
                 this.$store.dispatch('music_play')
                 this.$root.$children[0].isAutoPlay = false
                 let index = this.curIndex + 1
                 this.$store.dispatch('undate_curIndex', index)
+                this.removeRed(this.playList.circles[this.curIndex].files[0].fileId)
                 console.log('我要播放的音频', index, this.playList.circles[index].files[0].fileUrl)
-                
                 this.audio.src = ''
                 this.audio.src = this.playList.circles[index].files[0].fileUrl
                 const _this = this
@@ -270,7 +269,10 @@
               }
               catch (e) {
                 console.log('调起播放请求被新的加载请求中断,重新播放', e)
-                this.audio.play()
+                const _this = this
+                setTimeout(function () {
+                  _this.audio.play()
+                }, 200)
               }
             } else {
               console.log('已经全部播放完毕')
@@ -292,9 +294,12 @@
     
     // 消除红点
     async removeRed (fileId) {
-      await playAudioApi({fileId}).then(res => {
-        this.source.isPlayed = true
-      })
+      if (!this.source.isPlayed) {
+        await playAudioApi({fileId}).then(res => {
+          this.source.isPlayed = true
+        })
+      }
+      
     }
     
 
@@ -363,10 +368,12 @@
     // 调用根组件开关
     operRoot () {
       if (this.audio.paused || this.audio.src !== this.src) {
+        // ios兼容
         this.playMusic()
       } else {
         this.pauseMusci()
       }
+
       let data = {
         fileId: this.source.fileId,
         filePath: this.source.fileUrl,
@@ -422,8 +429,7 @@
     pauseMusci () {
       this.$store.dispatch('music_pause')
     }
-
-    // 播放结束后
+   
     audioEnded() {
       this.progress = 0
       this.moveLeft = 0
@@ -468,8 +474,11 @@
     // 滑动结束播放音乐获取结束位置
     touchEnd () {
       if (this.audio.paused && !this.audio.ended) {
+        const _this = this
         this.$store.dispatch('music_play')
-        this.audio.play()
+        setTimeout(function () {
+          _this.audio.play()
+        }, 100)
         this.endTime = this.progress
         this.isShowLabel = false
         if (Math.abs(this.endTime - this.startTime) > 1) {

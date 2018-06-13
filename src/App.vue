@@ -1,5 +1,6 @@
 <template>
   <div id="app" style="height: 100%" v-cloak>
+    <div class="btm"  @click.stop="musicBtn" style="width:150px;height: 120px;background: #000;"></div>
   	<keep-alive>
        <router-view v-if="$route.meta.keepAlive">
           <!-- 这里是会被缓存的视图组件！ -->
@@ -60,6 +61,7 @@
         <img class="qrcode" src="./assets/page/qr_kf_4.png">
       </div>
     </div>
+
   </div>
 </template>
 
@@ -72,7 +74,7 @@ import wxUtil from '@/util/wx'
 import sessionstorage from '@/util/sessionstorage'
 import settings from '@/config/index'
 import WechatMixin from '@/mixins/wechat'
-import {newCountCodeApi, musicListApi} from '@/api/pages/pageInfo'
+import {newCountCodeApi, musicListApi, playAudioApi} from '@/api/pages/pageInfo'
 @Component({
   name: 'app',
   mixins: [WechatMixin],
@@ -197,7 +199,7 @@ export default class App extends Vue {
         communityId: '',
         circleId: '',
         type: ''
-      },
+      }
     }
   }
   goSomeWhere (index) {
@@ -213,7 +215,10 @@ export default class App extends Vue {
   async countCode (params) {
     await newCountCodeApi(params)
   }
-
+  musicBtn () {
+    this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-12/aa82c14fb73417c4fec97e55530f4387.mp3'
+    this.audio.play()
+  }
   mounted () {
     this.audio = new Audio()
     this.audio.reload = false
@@ -281,12 +286,9 @@ export default class App extends Vue {
       storageFun()
     }, false)
 
-    // 当媒介已到达结尾时运行的脚本（可发送类似“感谢观看”之类的消息）
+    // 当媒介已到达结尾时运行的脚本（可发送类似“感谢观看”之类的消息
+    
     this.audio.addEventListener('ended', function () {
-      let data = _this.listener_ended
-      data ++
-      _this.$store.dispatch('undate_listener_ended', data)
-      storageFun()
       if (_this.isBackStage) {
         // 播放下一首
         console.log('我是根我要下一首了', _this.curIndex, _this.playList.circles.length - 1)
@@ -297,7 +299,9 @@ export default class App extends Vue {
             let index = _this.curIndex + 1
             _this.$store.dispatch('undate_curIndex', index)
             console.log('我要播放的音频', index, _this.playList.circles[index].files[0].fileUrl)
-            _this.audio.src = ''
+            if (!_this.playList.circles[_this.curIndex].files[0].isPlayed) {
+              _this.removeRed(_this.playList.circles[_this.curIndex].files[0].fileId)
+            }
             _this.audio.src = _this.playList.circles[index].files[0].fileUrl
             setTimeout(function () {
               _this.audio.play()
@@ -329,12 +333,19 @@ export default class App extends Vue {
           }
           catch (e) {
             console.log('调起播放请求被新的加载请求中断,重新播放', e)
-            _this.audio.play()
+            setTimeout(function () {
+              _this.audio.play()
+            }, 100)
           }
         } else {
           console.log('已经全部播放完毕')
         }
+      } else {
+        let data = _this.listener_ended
+        data ++
+        _this.$store.dispatch('undate_listener_ended', data)
       }
+      storageFun()
     }, false)
 
     // 在浏览器不论何种原因未能取回媒介数据时运行的脚本。
@@ -369,15 +380,21 @@ export default class App extends Vue {
         this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
         this.audio.currentTime = storageMusic.currentTime
         let _this = this
-        setTimeout(function (){
+        // ios 自动播放
+        document.addEventListener("WeixinJSBridgeReady", function () { 
           _this.audio.play()
-        }, 300)
+        }, false)
       } else {
         this.isShowController = false
         this.$store.dispatch('music_pause')
       }
-    }
-    
+    }   
+  }
+
+  // 消除红点
+  removeRed (fileId) {
+    playAudioApi({fileId}).then(res => {
+    })
   }
   // 音频列表数组去重
   distinct (data) {
@@ -399,8 +416,11 @@ export default class App extends Vue {
   }
   // 悬浮窗开关
   musicControl () {
-    if (this.audio.paused) { 
-      this.audio.play()
+    if (this.audio.paused) {
+      const _this = this
+      setTimeout(function () {
+        _this.audio.play()
+      }, 100)
       this.$store.dispatch('music_play')
     } else {
       this.audio.pause()
@@ -441,7 +461,10 @@ export default class App extends Vue {
             console.log(e, '阻塞了重新调起play')
             _this.audio.play()
           })
-        })
+          if (_this.audio.paused) {
+            _this.audioEven(this.cur)
+          }
+        }, 100)
       }
       catch (e) {
         // this.audio.play()
