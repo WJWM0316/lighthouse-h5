@@ -358,15 +358,11 @@ export default class App extends Vue {
     // 在浏览器不论何种原因未能取回媒介数据时运行的脚本。
     this.audio.addEventListener('stalled', function () {
       _this.audio.src = ''
+      _this.audio.pause()
+      _this.$store.dispatch('music_pause')
       let data = _this.listener_stalled
       data ++
       _this.$store.dispatch('undate_listener_stalled', data)
-    }, false)
-
-     // 当在音频/视频加载期间发生错误时
-    this.audio.addEventListener('error', function () {
-      _this.audio.src = ''
-      _this.$vux.toast.text('音频加载失败，请重新点击播放11111111', 'bottom')
     }, false)
 
 

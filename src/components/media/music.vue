@@ -431,6 +431,9 @@
 
     // 播放
     playMusic () {
+      if (this.playStatus === 4) {
+        this.audio.src = ''
+      }
       this.$store.dispatch('music_play')
       this.$root.$children[0].isAutoPlay = true
       this.disabled = true
@@ -552,6 +555,7 @@
 .progressBar {
   width: 100% !important;
   margin: 0 !important;
+  overflow: hidden;
 }
 .range-bar {
   background-color: #fff !important;
