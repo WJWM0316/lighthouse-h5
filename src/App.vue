@@ -223,10 +223,13 @@ export default class App extends Vue {
 
     const _this = this
     // ios 第一次授权播放 空语音
-    if (browser._version.ios) {
-      this.audio.muted = true
+
+    if (browser._version.ios && !sessionstorage.get('storageMusic')) {
+      // this.audio.muted = true
       this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
-      document.addEventListener("WeixinJSBridgeReady", function () { 
+
+      document.addEventListener("WeixinJSBridgeReady", function () {
+        console.log(1111111111111111) 
         _this.audio.play()
       }, false)
     }
@@ -297,9 +300,6 @@ export default class App extends Vue {
     // 当媒介已到达结尾时运行的脚本（可发送类似“感谢观看”之类的消息
     
     this.audio.addEventListener('ended', function () {
-      if (_this.audio.muted) {
-        _this.audio.muted = false
-      }
       if (_this.isBackStage) {
         // 播放下一首
         console.log('我是根我要下一首了', _this.curIndex, _this.playList.circles.length - 1)
@@ -387,15 +387,13 @@ export default class App extends Vue {
         this.$store.dispatch('undate_listener_timeupdate', storageMusic.listener_timeupdate)
         this.$store.dispatch('undate_listener_ended', storageMusic.listener_ended)
         this.$store.dispatch('undate_listener_stalled', storageMusic.listener_stalled)
+        this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
       } else {
         this.audio.src = storageMusic.curUrl
       }
       if (storageMusic.musicPlay) {
         this.$store.dispatch('music_play')
         this.isShowController = true
-        if (this.controllerDetail.isJoin) {
-          this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
-        }
         this.audio.currentTime = storageMusic.currentTime
         let _this = this
         // ios 自动播放
