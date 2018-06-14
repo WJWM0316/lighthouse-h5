@@ -23,6 +23,7 @@
                   :isTeacherCon='isTeacherCon'
                   :communityId="communityId"
                   :isDetailCon="isDetailCon"
+                  :isTower='isTower'
                   @videoEvent="videoEvent"
                   @operation="operation"
                   ref="dynamic-item"
@@ -45,6 +46,10 @@
       touerImg: {
         type: String,
         default: ''
+      },
+      isTower: {
+        type: Boolean,
+        default: false
       },
       dynamicList: {
         type: Array,

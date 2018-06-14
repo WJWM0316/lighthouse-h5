@@ -80,6 +80,7 @@
                      :disableOperationArr="disableOperationArr"
                      :isPlayList="isPlayList"
                      :isTeacher="isPlayList"
+                     :isTower='true'
                      @disableOperationEvents="operation"
             ></dynamic>
           </div>

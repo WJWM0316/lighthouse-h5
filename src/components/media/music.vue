@@ -79,7 +79,11 @@
       isDetailCon: {
         type: Boolean,
         default: false
-      }
+      },
+      isTower: {
+        type: Boolean,
+        default: false
+      },
     },
     components: {
       Range,
@@ -400,7 +404,7 @@
       let isJoin = false
       let jumpFind = false
       this.jumpFind ? jumpFind = true : jumpFind = false
-      this.isTeacher ? isJoin = true : isJoin = false
+      this.isTower ? isJoin = true : isJoin = false
       this.$root.$children[0].controllerDetail = {
         imgUrl: this.touerImg,
         communityId: this.communityId,
@@ -409,6 +413,7 @@
         isJoin: isJoin,
         jumpFind: jumpFind
       }
+      console.log(this.$root.$children[0].controllerDetail, 2222222222222)
       this.$root.$children[0].audioEven(data)
     }
 

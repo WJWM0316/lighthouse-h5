@@ -49,12 +49,13 @@
                 :isPlayList="isPlayList"
                 :isTeacher="isTeacher"
                 :isTeacherCon="isTeacherCon"
-                :circleId="problemItem.circleId" 
+                :circleId="item.problemId" 
                 :source="problemItem.file" 
                 :itemIndex="problemIndex"
                 :touerImg="problemItem.releaseUser.avatar"
                 :type="type"
                 :isDetailCon='isDetailCon'
+                :isTower='isTower'
                 ></audioBox>
             </div>
           </div>
@@ -86,6 +87,7 @@
             :itemIndex="itemIndex"
             :touerImg="item.releaseUser.avatar"
             :type="type"
+            :isTower='isTower'
             :isDetailCon='isDetailCon'
             ></audioBox>
         </div>

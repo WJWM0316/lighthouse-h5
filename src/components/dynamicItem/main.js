@@ -11,6 +11,10 @@ import moment from 'moment'
       type: Object,
       required: true
     },
+    isTower: {
+      type: Boolean,
+      default: false
+    },
     isFold: {
       type: Boolean,
       default: true
