@@ -362,7 +362,7 @@ export default class App extends Vue {
      // 当在音频/视频加载期间发生错误时
     this.audio.addEventListener('error', function () {
       _this.audio.src = ''
-      _this.$vux.toast.text('音频加载失败，请重新点击播放', 'bottom')
+      _this.$vux.toast.text('音频加载失败，请重新点击播放11111111', 'bottom')
     }, false)
 
 
@@ -498,7 +498,6 @@ export default class App extends Vue {
         this.audio.play()
         setTimeout(function () {
           _this.audio.play().catch(function (e) {
-            window.alert(e)
             console.log(e, '阻塞了重新调起play()')
             _this.audio.play()
           })

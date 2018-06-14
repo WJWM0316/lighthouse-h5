@@ -525,7 +525,7 @@
 .audio-left {
     float: left;
     text-align: center;
-    width: 15%;
+    width: 17%;
     height: 100%;
     display: flex;
     justify-content: center;
