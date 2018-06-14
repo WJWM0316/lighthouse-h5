@@ -537,7 +537,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    padding-right: 53px;
+    padding-right: 58px;
     box-sizing: border-box;
 }
 
@@ -598,10 +598,12 @@
 
 .audio-time {
   width: 53px;
-  text-align: center;
+  text-align: right;
   color: #666666;
-  font-size: 12px;
+  font-size: 14px;
   position: absolute;
+  padding-right: 15px;
+  box-sizing: border-box;
   right: 0;
 }
 
