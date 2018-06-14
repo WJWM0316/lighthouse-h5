@@ -558,11 +558,11 @@
   background-color: #ffe266 !important;
 }
 .progressBar .range-handle {
-  width: 8px !important;
-  height: 8px !important;
+  width: 12px !important;
+  height: 12px !important;
   top: 50% !important;
-  margin-top: -4px !important;
-  margin-left: -4px !important;
+  margin-top: -6px !important;
+  margin-left: -6px !important;
   background: none !important;
   box-shadow: none !important;
   display: block;
