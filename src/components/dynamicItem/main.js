@@ -225,7 +225,7 @@ export default class dynamicItem extends Vue {
   role = this.item.releaseUser.role || {}
   type = 0
   created () {
-    const {modelType, circleId, problemId, isCanSee} = this.item
+    const {modelType, circleId, problemId, isCanSee, circleType} = this.item
     switch (modelType) {
       case 'circle':
         this.type = 1
@@ -236,6 +236,9 @@ export default class dynamicItem extends Vue {
       case 'problem':
         this.type = 3
         break
+    }
+    if (circleType) {
+      this.type = circleType
     }
   }
   

@@ -56,16 +56,16 @@
           case 1: // 回答我的提问
           case 2: // 回答我的追问
           case 3: // 评论我的问答
-            this.$router.push(`/details/${item.beReturnedId}/3`)
+            this.$router.push(`/details/${item.beReturnedId}/3?communityId=${item.LighthouseId}`)
             break
           case 4: // 评论我帖子
-            this.$router.push(`/details/${item.beReturnedId}/2`)
+            this.$router.push(`/details/${item.beReturnedId}/2?communityId=${item.LighthouseId}`)
             break
           case 5: // 回复我的评论
             this.$router.push(`/reply/${item.beReturnedId}`)
             break
           case 6: // 6评论导师内容（朋友圈）
-            this.$router.push(`/details/${item.beReturnedId}/1`)
+            this.$router.push(`/details/${item.beReturnedId}/1?communityId=${item.LighthouseId}`)
             break
         }
       },
@@ -92,8 +92,8 @@
       this.$router.push({name: 'exchange-list'})
     }
 
-    goUserDetail (userId, communityId) {
-      this.$router.push({name: 'userInfo-details', params: {userId}, query: {communityId}})
+    goUserDetail (userId) {
+      this.$router.push({name: 'userInfo-details', params: {userId}})
     }
 
     async getList ({page, pageSize} = {}) { // 请求列表
