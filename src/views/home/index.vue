@@ -124,7 +124,7 @@ import Scroller from '@/components/scroller'
 
 import ListMixin from '@/mixins/list'
 
-import { getBeaconsApi, getBannersApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdvertisingApi } from '@/api/pages/home'
+import { getBeaconsApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdvertisingApi } from '@/api/pages/home'
 
 @Component({
   name: 'home-index',
@@ -277,9 +277,12 @@ export default class HomeIndex extends Vue {
     if (this.bannerList.length > 0) {
       return
     }
-    return getBannersApi().then(res => {
-      this.bannerList = res
-      if (res.length > 0) {
+    let test = 40
+    return getAdvertisingApi({
+      adType: test
+    }).then(res => {
+      this.bannerList = res.ads
+      if (res.ads.length > 0) {
         this.$nextTick(() => {
           this.scrollHeight = this.$refs.tabBanner.clientHeight
         })
