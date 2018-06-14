@@ -203,10 +203,10 @@
           }
           break
         case 'canplaythrough':
-          if (this.source.fileUrl === this.audio.src) {
-            this.playStatus = 1
-          }
-          break
+          // if (this.source.fileUrl === this.audio.src) {
+          //   this.playStatus = 1
+          // }
+          // break
         case 'timeupdate':
           if (this.source.fileUrl === this.audio.src) {
             if (!this.audio.paused) {
@@ -227,16 +227,16 @@
           if (this.source.fileUrl === this.audio.src) {
             this.audioEnded()
             // 播放下一首
-            // console.log(_this.source.fileUrl, _this.audio.src)
             if (this.isPlayList && this.curIndex < this.playList.circles.length - 1) {
               try {
                 this.$store.dispatch('music_play')
                 this.$root.$children[0].isAutoPlay = false
                 let index = this.curIndex + 1
                 this.$store.dispatch('undate_curIndex', index)
-                this.removeRed(this.playList.circles[this.curIndex].files[0].fileId)
+                
+                
+                this.removeRed(this.playList.circles[index].files[0].fileId)
                 console.log('我要播放的音频', index, this.playList.circles[index].files[0].fileUrl)
-                this.audio.src = ''
                 this.audio.src = this.playList.circles[index].files[0].fileUrl
                 const _this = this
                 setTimeout(function () {
@@ -312,6 +312,7 @@
     
     // 消除红点
     async removeRed (fileId) {
+      console.log(this.source.isPlayed, this.source.fileId)
       if (!this.source.isPlayed) {
         await playAudioApi({fileId}).then(res => {
           this.source.isPlayed = true

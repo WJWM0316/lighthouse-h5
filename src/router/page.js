@@ -84,14 +84,14 @@ const routers = [
     // 大咖问题列表
     path: '/introduce/questions/:communityId',
     name: 'questions',
-    meta: {navHide: true},
+    meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/introduce/questions'], resolve),
   },
   {
     // 大咖问题详情
     path: '/introduce/replyQuestion/:communityId/:problemId',
     name: 'question-reply',
-    meta: {navHide: true, stopMusic: true},
+    meta: {navHide: true, stopMusic: true, hideController:true},
     component: resolve => require(['@/views/introduce/replyQuestion'], resolve),
   },
   {

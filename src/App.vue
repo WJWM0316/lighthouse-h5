@@ -315,7 +315,7 @@ export default class App extends Vue {
       let data = _this.listener_canplay
       data ++
       _this.$store.dispatch('undate_listener_canplay', data)
-      if (storageMusic.currentTime > 0 && iosAutoPlay) {
+      if (storageMusic && storageMusic.currentTime > 0 && iosAutoPlay) {
         iosAutoPlay = false
         _this.audio.currentTime = storageMusic.currentTime
       }
@@ -364,6 +364,7 @@ export default class App extends Vue {
             }, 100)
             let storageMusic = sessionstorage.get('storageMusic')
             _this.controllerDetail = storageMusic.controllerDetail
+            _this.controllerDetail.circleId = _this.playList.circles[index].circleId
             // 如果还剩2条音频则提前加载下一个列表且还有下一页
             if (_this.isLastPage && _this.curIndex >= _this.playList.circles.length - 2) {
               _this.$store.dispatch('undate_isPreload', true)
