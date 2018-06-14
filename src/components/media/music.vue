@@ -431,7 +431,7 @@
 
     // 播放
     playMusic () {
-      if (this.playStatus === 4) {
+      if (this.playStatus === 3) {
         this.audio.src = ''
       }
       this.$store.dispatch('music_play')
@@ -555,7 +555,6 @@
 .progressBar {
   width: 100% !important;
   margin: 0 !important;
-  overflow: hidden;
 }
 .range-bar {
   background-color: #fff !important;
