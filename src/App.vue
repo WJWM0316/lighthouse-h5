@@ -224,7 +224,7 @@ export default class App extends Vue {
     const _this = this
     // ios 第一次授权播放 空语音
 
-    if (browser._version.ios && !sessionstorage.get('storageMusic')) {
+    if (browser._version.ios) {
       // this.audio.muted = true
       this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
       document.addEventListener("WeixinJSBridgeReady", function () {
