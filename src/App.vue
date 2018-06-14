@@ -222,6 +222,14 @@ export default class App extends Vue {
     this.audio = new Audio()
 
     const _this = this
+    // ios 第一次授权播放 空语音
+    if (browser._version.ios) {
+      this.audio.muted = true
+      this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
+      document.addEventListener("WeixinJSBridgeReady", function () { 
+        _this.audio.play()
+      }, false)
+    }
     // 在文件开始加载且未实际加载任何数据前运行的脚本。
     this.audio.addEventListener('loadstart', function () {
       let data = _this.listener_loadstart
@@ -360,6 +368,7 @@ export default class App extends Vue {
     }, false)
 
 
+    // 
     // 页面刷新后 用于本地存储记录播放位置
     let storageMusic = sessionstorage.get('storageMusic')
     if (storageMusic && !this.$route.meta.hideController) {
@@ -398,15 +407,6 @@ export default class App extends Vue {
       } else {
         this.isShowController = false
         this.$store.dispatch('music_pause')
-      }
-    } else {
-      // ios 第一次授权播放 空语音
-      if (browser._version.ios) {
-        this.audio.muted = true
-        this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
-        document.addEventListener("WeixinJSBridgeReady", function () { 
-          _this.audio.play()
-        }, false)
       }
     }
   }
