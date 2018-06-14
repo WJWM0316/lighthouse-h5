@@ -4,9 +4,8 @@
       <img src="./../../assets/icon/music_play.png" v-if="playStatus === 1"></img>
       <img src="./../../assets/icon/stop@3x.png" v-else-if="playStatus === 2"></img>
       <img class="rotateZ" src="./../../assets/icon/music_loading.png" v-else-if="playStatus === 3">
-      <img src="./../../assets/icon/music_listen.gif" v-else>
     </div>
-    <div class="audio-right" v-if="durationData > 0">
+    <div class="audio-right" v-if="durationData > 0" :class="{'big' : isShowLabel}">
       <range class="progressBar"
         ref="range"
         :key="itemIndex"
@@ -108,13 +107,9 @@
       }),
     },
     watch: {
-      communityId (val, old) {
-        // this.$store.dispatch('undate_play_list', {})
-        // console.log('当前塔' + val, '上一个塔' + old, this.playList)
-      },
+      communityId (val, old) {},
       isPlayList (val) {
         this.musicList = val.circles
-        console.log('进入音频续播页面', val)
       },
       isTeacher () {},
       isTeacherCon () {},
@@ -127,13 +122,13 @@
       },
       musicPlay (val) {
         if (val === false && this.source.fileUrl === this.audio.src) {
-          this.playStatus = 2
+          this.playStatus = 1
         }
       },
       prevMusic (val) {
-        if (this.playStatus === 4) {
-          this.playStatus = 2
-        }
+        // if (this.playStatus === 4) {
+        //   this.playStatus = 2
+        // }
         if (val.currentTime > 0 && val.fileId === this.source.fileId) {
           this.audio.currentTime = val.currentTime
           this.currentTime = val.currentTime
@@ -166,7 +161,7 @@
     }
   })
   export default class music extends Vue {
-  	playStatus = 1 // 1未播放 2暂停 3加载中 4播放中
+  	playStatus = 1 // 待播放 2播放中 3加载中
     progress = 0 // 进度条
     currentTime = 0 // 播放帧
     duration = 0 // 音频时长
@@ -211,15 +206,15 @@
         case 'timeupdate':
           if (this.source.fileUrl === this.audio.src) {
             if (!this.audio.paused) {
-              this.playStatus = 4
+              this.playStatus = 2
               this.disabled = true
             }
             if (this.$refs.range) { this.moveLeft = this.$refs.range.range.handle.style.left }
             this.progress = this.audio.currentTime
           } else {
             // 其他的如果是显示播放状态的改为暂停状态
-            if (this.playStatus === 4) {
-              this.playStatus = 2
+            if (this.playStatus === 2) {
+              this.playStatus = 1
             }
           }
           break
@@ -288,7 +283,7 @@
             }
           } else {
             // 重置内容详情播放完的状态
-            if (this.playStatus === 2) {
+            if (this.playStatus === 1) {
               this.progress = 0
               this.moveLeft = 0
               this.audio.currentTime = 0
@@ -326,12 +321,12 @@
       if (this.playList && this.playList.circles) {
         this.playList.circles.filter((item, index) => {
           if (id === item.circleId) {
-            if (this.isTeacher) {
+            if (this.isTeacher || this.isTeacherCon) {
               this.$store.dispatch('undate_curIndex', index)
             }
             this.src = this.source.fileUrl
             this.isGetList = false
-            console.log(this.curIndex, id, this.src, '我当前的点击')
+            console.log(this.curIndex, id, this.src, '我当前的播放')
           }
         })
       }
@@ -431,7 +426,7 @@
 
     // 播放
     playMusic () {
-      if (this.playStatus === 3) {
+      if (this.playStatus === 2) {
         this.audio.src = ''
       }
       this.$store.dispatch('music_play')
@@ -439,13 +434,6 @@
       this.disabled = true
       if (this.audio.src !== this.src) {
         this.audio.src = this.src
-      }
-      // 监听数据不可用时
-      if (this.audio.defaultMuted || this.audio.muted) {
-        this.$vux.alert.show({
-          title: '提示',
-          content: '您已设置静音，请开启声音！',
-        })
       }
     }
 
@@ -460,6 +448,7 @@
       this.audio.currentTime = 0
       this.currentTime = 0
       this.playStatus = 1
+      this.disabled = false
       this.audio.pause()
       this.$store.dispatch('music_pause')
     }
@@ -559,16 +548,36 @@
 .range-bar {
   background-color: #fff !important;
 }
+
 .range-quantity {
   background-color: #ffe266 !important;
 }
 .progressBar .range-handle {
+  width: 20px !important;
+  height: 20px !important;
+  top: 50% !important;
+  margin-top: -10px !important;
+  margin-left: -10px !important;
+  background: none !important;
+  box-shadow: none !important;
+  display: block;
+}
+.progressBar .range-handle::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
   width: 8px !important;
   height: 8px !important;
-  top: 50% !important;
-  margin-top: -4px !important;
   background-color: #ffe266 !important;
-  box-shadow: none !important;
+}
+.big .progressBar .range-handle::after {
+  width: 12px !important;
+  height: 12px !important;
+  margin: -6px 0 0 -6px !important;
 }
 
 .curTime {
@@ -584,7 +593,7 @@
   left: 0;
   font-size: 13px;
   color: #354048;
-  margin-left: -21.5px;
+  margin-left: -25px;
 }
 
 .audio-time {

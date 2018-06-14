@@ -221,13 +221,6 @@ export default class App extends Vue {
   mounted () {
     this.audio = new Audio()
 
-    // ios 第一次授权播放 空语音
-    if (browser._version.ios) {
-      this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
-      document.addEventListener("WeixinJSBridgeReady", function () { 
-        _this.audio.play()
-      }, false)
-    }
     const _this = this
     // 在文件开始加载且未实际加载任何数据前运行的脚本。
     this.audio.addEventListener('loadstart', function () {
@@ -296,6 +289,9 @@ export default class App extends Vue {
     // 当媒介已到达结尾时运行的脚本（可发送类似“感谢观看”之类的消息
     
     this.audio.addEventListener('ended', function () {
+      if (_this.audio.muted) {
+        _this.audio.muted = false
+      }
       if (_this.isBackStage) {
         // 播放下一首
         console.log('我是根我要下一首了', _this.curIndex, _this.playList.circles.length - 1)
@@ -357,8 +353,6 @@ export default class App extends Vue {
 
     // 在浏览器不论何种原因未能取回媒介数据时运行的脚本。
     this.audio.addEventListener('stalled', function () {
-      _this.audio.src = ''
-      _this.audio.pause()
       _this.$store.dispatch('music_pause')
       let data = _this.listener_stalled
       data ++
@@ -405,8 +399,16 @@ export default class App extends Vue {
         this.isShowController = false
         this.$store.dispatch('music_pause')
       }
-
-    }   
+    } else {
+      // ios 第一次授权播放 空语音
+      if (browser._version.ios) {
+        this.audio.muted = true
+        this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
+        document.addEventListener("WeixinJSBridgeReady", function () { 
+          _this.audio.play()
+        }, false)
+      }
+    }
   }
 
   // 消除红点
@@ -447,8 +449,6 @@ export default class App extends Vue {
             break
         }
         this.$router.push('/index/details/' + this.controllerDetail.circleId + '/?modeType=' + modeType)
-      } else {
-        // this.$router.push('/introduce/' + this.controllerDetail.communityId)
       }
       
     }
@@ -483,7 +483,7 @@ export default class App extends Vue {
           if (this.prev.length === 0 || this.prev[this.prev.length-1] && this.prev[this.prev.length-1].fileId !== data.fileId && this.isAutoPlay) {
             this.prev.push(this.cur)
             this.prev[0].currentTime = this.audio.currentTime
-            this.audio.ended ? this.prev[0].playStatus = 1 : this.prev[0].playStatus = 2
+            this.audio.ended ? this.prev[0].playStatus = 1 : this.prev[0].playStatus = 1
             this.$store.dispatch('undate_prevMusic', this.prev[this.prev.length-1])
             if (this.prev.length > 2) {
               this.prev.shift()
