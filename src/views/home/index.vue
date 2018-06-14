@@ -23,7 +23,7 @@
         <ul>
           <li v-for="(item, index) in bannerList" :key="`banner_${index}`" @click.prevent.stop="handleTapBanner(item)">
               <image-item class="chose-tab-img" :src="item.imgUrl" />
-              <p class="chose-tab-con">{{item.title}}</p>
+              <p class="chose-tab-con">{{item.name}}</p>
           </li>
         </ul>
       </div>
