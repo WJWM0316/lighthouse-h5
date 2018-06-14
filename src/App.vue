@@ -219,6 +219,10 @@ export default class App extends Vue {
 
   mounted () {
     this.audio = new Audio()
+    this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
+    document.addEventListener("WeixinJSBridgeReady", function () { 
+      _this.audio.play()
+    }, false)
     this.audio.reload = false
     const _this = this
     // 在文件开始加载且未实际加载任何数据前运行的脚本。
@@ -349,10 +353,16 @@ export default class App extends Vue {
 
     // 在浏览器不论何种原因未能取回媒介数据时运行的脚本。
     this.audio.addEventListener('stalled', function () {
-      _this.audio.load()
+      _this.audio.src = ''
       let data = _this.listener_stalled
       data ++
       _this.$store.dispatch('undate_listener_stalled', data)
+    }, false)
+
+     // 当在音频/视频加载期间发生错误时
+    this.audio.addEventListener('error', function () {
+      _this.audio.src = ''
+      _this.$vux.toast.text('音频加载失败，请重新点击播放', 'bottom')
     }, false)
 
 
@@ -395,6 +405,7 @@ export default class App extends Vue {
         this.isShowController = false
         this.$store.dispatch('music_pause')
       }
+
     }   
   }
 
@@ -486,11 +497,9 @@ export default class App extends Vue {
         console.log('开始播放')
         this.audio.play()
         setTimeout(function () {
-
           _this.audio.play().catch(function (e) {
             window.alert(e)
             console.log(e, '阻塞了重新调起play()')
-            _this.audio.play()
             _this.audio.play()
           })
         }, 500)

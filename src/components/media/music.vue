@@ -306,7 +306,7 @@
           break
         case 'stalled':
           if (this.source.fileUrl === this.audio.src) {
-            this.$vux.toast.text('音频加载失败，请刷新页面', 'bottom')
+            this.$vux.toast.text('音频加载失败，请重新点击播放', 'bottom')
           }
       }
     }
@@ -329,7 +329,7 @@
             if (this.isTeacher) {
               this.$store.dispatch('undate_curIndex', index)
             }
-            this.src = item.files[0].fileUrl || item.files.fileUrl
+            this.src = this.source.fileUrl
             this.isGetList = false
             console.log(this.curIndex, id, this.src, '我当前的点击')
           }
@@ -438,7 +438,7 @@
         this.audio.src = this.src
       }
       // 监听数据不可用时
-      if (this.audio.defaultMuted) {
+      if (this.audio.defaultMuted || this.audio.muted) {
         this.$vux.alert.show({
           title: '提示',
           content: '您已设置静音，请开启声音！',

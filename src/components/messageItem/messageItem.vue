@@ -85,25 +85,6 @@
       },
       handleThree (e) { // 跳转大咖社区
         this.$emit('tap-three', this.item.LighthouseId)
-      },
-      /**
-       * 播放对应音频
-       */
-      audioPlay (problemIndex) {
-        let url = ''
-        const itemIndex = this.itemIndex
-        if (problemIndex >= 0) {
-          url = this.item.answers[problemIndex].file.fileUrl
-        } else {
-          url = this.item.files[0].fileUrl
-        }
-
-        this.$emit('audioEvent', {
-          eventType: 'play',
-          url,
-          itemIndex,
-          problemIndex
-        })
       }
     }
   })
