@@ -227,9 +227,7 @@ export default class App extends Vue {
     if (browser._version.ios && !sessionstorage.get('storageMusic')) {
       // this.audio.muted = true
       this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
-
       document.addEventListener("WeixinJSBridgeReady", function () {
-        console.log(1111111111111111) 
         _this.audio.play()
       }, false)
     }
@@ -399,8 +397,10 @@ export default class App extends Vue {
         // ios 自动播放
         // _this.audio.play()
         console.log(1111, '我要播放', this.audio.src)
-        document.addEventListener("WeixinJSBridgeReady", function () { 
-          _this.audio.play()
+        document.addEventListener("WeixinJSBridgeReady", function () {
+          setTimeout(function () {
+            _this.audio.play()
+          }, 300)
         }, false)
       } else {
         this.isShowController = false

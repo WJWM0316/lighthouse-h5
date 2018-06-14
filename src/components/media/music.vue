@@ -5,7 +5,7 @@
       <img src="./../../assets/icon/stop@3x.png" v-else-if="playStatus === 2"></img>
       <img class="rotateZ" src="./../../assets/icon/music_loading.png" v-else-if="playStatus === 3">
     </div>
-    <div class="audio-right" v-if="durationData > 0" :class="{'big' : isShowLabel}">
+    <div class="audio-right" :class="{'big' : isShowLabel}">
       <range class="progressBar"
         ref="range"
         :key="itemIndex"
@@ -558,11 +558,11 @@
   background-color: #ffe266 !important;
 }
 .progressBar .range-handle {
-  width: 30px !important;
-  height: 30px !important;
+  width: 8px !important;
+  height: 8px !important;
   top: 50% !important;
-  margin-top: -15px !important;
-  margin-left: -15px !important;
+  margin-top: -4px !important;
+  margin-left: -4px !important;
   background: none !important;
   box-shadow: none !important;
   display: block;
