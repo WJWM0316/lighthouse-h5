@@ -525,7 +525,7 @@
 .audio-left {
     float: left;
     text-align: center;
-    width: 17%;
+    width: 18%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -539,13 +539,13 @@
 
 .audio-right {
     float: right;
-    width: 85%;
+    width: 82%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    padding-right: 40px;
+    padding-right: 53px;
     box-sizing: border-box;
 }
 
@@ -560,11 +560,12 @@
   background-color: #ffe266 !important;
 }
 .progressBar .range-handle {
-  width: 12px !important;
-  height: 12px !important;
+  width: 8px !important;
+  height: 8px !important;
   top: 50% !important;
-  margin-top: -6px !important;
+  margin-top: -4px !important;
   background-color: #ffe266 !important;
+  box-shadow: none !important;
 }
 
 .curTime {
@@ -584,7 +585,7 @@
 }
 
 .audio-time {
-  width: 40px;
+  width: 53px;
   text-align: center;
   color: #666666;
   font-size: 12px;

@@ -19,7 +19,7 @@
       </tabbar-item>
     </tabbar>
     <div class="musicControl" v-show="isShowController && !$route.meta.hideController">
-      <div class="fileImg" :class="{'playing' : musicPlay}" @click.stop="jumpDeatil()"><img :src="controllerDetail.imgUrl" alt=""></div>
+      <div class="fileImg" @click.stop="jumpDeatil()"><img :src="controllerDetail.imgUrl" alt=""></div>
       <div class="playBtn" @click.stop="musicControl()">
         <img src="./assets/icon/bnt_yuyin_play@3x.png" v-show="!musicPlay">
         <img src="./assets/icon/stop@3x.png" v-show="musicPlay">
@@ -70,6 +70,7 @@ import Component from 'vue-class-component'
 import { Tabbar, TabbarItem, ViewBox, XCircle, cookie } from 'vux'
 import { mapState } from 'vuex'
 import wxUtil from '@/util/wx'
+import browser from '@/util/browser'
 import sessionstorage from '@/util/sessionstorage'
 import settings from '@/config/index'
 import WechatMixin from '@/mixins/wechat'
@@ -219,11 +220,14 @@ export default class App extends Vue {
 
   mounted () {
     this.audio = new Audio()
-    this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
-    document.addEventListener("WeixinJSBridgeReady", function () { 
-      _this.audio.play()
-    }, false)
-    this.audio.reload = false
+
+    // ios 第一次授权播放 空语音
+    if (browser._version.ios) {
+      this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
+      document.addEventListener("WeixinJSBridgeReady", function () { 
+        _this.audio.play()
+      }, false)
+    }
     const _this = this
     // 在文件开始加载且未实际加载任何数据前运行的脚本。
     this.audio.addEventListener('loadstart', function () {
@@ -584,7 +588,7 @@ export default class App extends Vue {
   bottom: 64px;
   display: flex;
   align-items: center;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1.5px 6px 0 rgba(0, 0, 0, 0.18);
   .fileImg {
     width: 38px;
     height:38px;
