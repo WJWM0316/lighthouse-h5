@@ -92,8 +92,8 @@
       this.$router.push({name: 'exchange-list'})
     }
 
-    goUserDetail (userId) {
-      this.$router.push({name: 'userInfo-details', params: {userId}})
+    goUserDetail (userId, communityId) {
+      this.$router.push({name: 'userInfo-details', params: {userId}, query: {communityId}})
     }
 
     async getList ({page, pageSize} = {}) { // 请求列表
