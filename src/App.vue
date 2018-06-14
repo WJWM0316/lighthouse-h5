@@ -145,7 +145,7 @@ import {newCountCodeApi, musicListApi, playAudioApi} from '@/api/pages/pageInfo'
         let storageMusic = sessionstorage.get('storageMusic')
         if (storageMusic && communityId) {
           const storageId = storageMusic.controllerDetail.communityId
-          if (storageId !== communityId && this.$route.name === 'community') {
+          if (storageId !== communityId) {
             this.isBackStage = true
           } else {
             this.isBackStage = false
@@ -222,6 +222,7 @@ export default class App extends Vue {
   mounted () {
     this.audio = new Audio()
     const _this = this
+    let iosAutoPlay = false
     if (browser._version.ios) {
       let _this = this
       this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
@@ -231,42 +232,48 @@ export default class App extends Vue {
         }
       }, false)
     }
-    
-    
-    // 在文件开始加载且未实际加载任何数据前运行的脚本。
-    this.audio.addEventListener('loadstart', function () {
-      let data = _this.listener_loadstart
-      data ++
-      _this.$store.dispatch('undate_listener_loadstart', data)
-    }, false)
-
-    // 当媒介已停止播放但打算继续播放时（比如当媒介暂停已缓冲更多数据）运行脚本
-    this.audio.addEventListener('waiting', function () {
-      let data = _this.listener_waiting
-      data ++
-      _this.$store.dispatch('undate_listener_waiting', data)
-    }, false)
-
-    // 当文件就绪可以开始播放时运行的脚本（缓冲已足够开始时）
-    this.audio.addEventListener('canplay', function () {
-      let data = _this.listener_canplay
-      data ++
-      _this.$store.dispatch('undate_listener_canplay', data)
-    }, false)
-
-    // 当媒介能够无需因缓冲而停止即可播放至结尾时运行的脚本
-    this.audio.addEventListener('canplaythrough', function () {
-      let data = _this.listener_canplaythrough
-      data ++
-      _this.$store.dispatch('undate_listener_canplaythrough', data)
-    }, false)
-
-    // 当媒介被用户或程序暂停时运行的脚本。
-    this.audio.addEventListener('pause', function () {
-      _this.$store.dispatch('music_pause')
-      _this.audio.pause()
-    }, false)
-
+    // 页面刷新后 用于本地存储记录播放位置
+    let storageMusic = sessionstorage.get('storageMusic')
+    if (storageMusic && !this.$route.meta.hideController) {
+      console.log(storageMusic, '本地存储')
+      this.controllerDetail = storageMusic.controllerDetail
+      if (this.controllerDetail.isJoin) {
+        this.$store.dispatch('undate_isLastPage', storageMusic.isLastPage)
+        this.$store.dispatch('undate_play_list', storageMusic.playList)
+        this.$store.dispatch('undate_curIndex', storageMusic.curIndex)
+        this.$store.dispatch('undate_isPreload', storageMusic.isPreload)
+        this.$store.dispatch('undate_play_list', storageMusic.playList)
+        this.$store.dispatch('undate_listener_loadstart', storageMusic.listener_loadstart)
+        this.$store.dispatch('undate_listener_waiting', storageMusic.listener_waiting)
+        this.$store.dispatch('undate_listener_canplay', storageMusic.listener_canplay)
+        this.$store.dispatch('undate_listener_canplaythrough', storageMusic.listener_canplaythrough)
+        this.$store.dispatch('undate_listener_timeupdate', storageMusic.listener_timeupdate)
+        this.$store.dispatch('undate_listener_ended', storageMusic.listener_ended)
+        this.$store.dispatch('undate_listener_stalled', storageMusic.listener_stalled)
+        this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
+      } else {
+        this.audio.src = storageMusic.curUrl
+      }
+      if (storageMusic.musicPlay) {
+        this.$store.dispatch('music_play')
+        this.isShowController = true
+        this.audio.currentTime = storageMusic.currentTime
+        // ios 自动播放
+        this.audio.play()
+        document.addEventListener("WeixinJSBridgeReady", function () {
+          iosAutoPlay = true
+          if (storageMusic.currentTime > 0) {
+             _this.audio.currentTime = storageMusic.currentTime
+           setTimeout(function () {
+              _this.audio.play()
+            }, 300)
+          }
+        }, false)
+      } else {
+        this.isShowController = false
+        this.$store.dispatch('music_pause')
+      }
+    }
     function storageFun () {
       let storageMusic = {
         musicPlay: _this.musicPlay,
@@ -288,8 +295,46 @@ export default class App extends Vue {
       }
       sessionstorage.set('storageMusic', storageMusic)
     }
+    
+    // 在文件开始加载且未实际加载任何数据前运行的脚本。
+    this.audio.addEventListener('loadstart', function () {
+      let data = _this.listener_loadstart
+      data ++
+      _this.$store.dispatch('undate_listener_loadstart', data)
+    }, false)
 
-    // 当播放位置改变时（比如当用户快进到媒介中一个不同的位置时）运行的脚本。
+    // 当媒介已停止播放但打算继续播放时（比如当媒介暂停已缓冲更多数据）运行脚本
+    this.audio.addEventListener('waiting', function () {
+      let data = _this.listener_waiting
+      data ++
+      _this.$store.dispatch('undate_listener_waiting', data)
+    }, false)
+
+    // 当文件就绪可以开始播放时运行的脚本（缓冲已足够开始时）
+    this.audio.addEventListener('canplay', function () {
+      let data = _this.listener_canplay
+      data ++
+      _this.$store.dispatch('undate_listener_canplay', data)
+      if (storageMusic.currentTime > 0 && iosAutoPlay) {
+        iosAutoPlay = false
+        _this.audio.currentTime = storageMusic.currentTime
+      }
+    }, false)
+
+    // 当媒介能够无需因缓冲而停止即可播放至结尾时运行的脚本
+    this.audio.addEventListener('canplaythrough', function () {
+      let data = _this.listener_canplaythrough
+      data ++
+      _this.$store.dispatch('undate_listener_canplaythrough', data)
+    }, false)
+
+    // 当媒介被用户或程序暂停时运行的脚本。
+    this.audio.addEventListener('pause', function () {
+      _this.$store.dispatch('music_pause')
+      _this.audio.pause()
+    }, false)
+
+    // // 当播放位置改变时（比如当用户快进到媒介中一个不同的位置时）运行的脚本。
     this.audio.addEventListener('timeupdate', function () {
       let data = _this.listener_timeupdate
       data ++
@@ -297,7 +342,7 @@ export default class App extends Vue {
       storageFun()
     }, false)
 
-    // 当媒介已到达结尾时运行的脚本（可发送类似“感谢观看”之类的消息
+    // // 当媒介已到达结尾时运行的脚本（可发送类似“感谢观看”之类的消息
     
     this.audio.addEventListener('ended', function () {
       if (_this.isBackStage) {
@@ -369,46 +414,7 @@ export default class App extends Vue {
 
 
     // 
-    // 页面刷新后 用于本地存储记录播放位置
-    let storageMusic = sessionstorage.get('storageMusic')
-    if (storageMusic && !this.$route.meta.hideController) {
-      console.log(storageMusic, '本地存储')
-      this.controllerDetail = storageMusic.controllerDetail
-      if (this.controllerDetail.isJoin) {
-        this.$store.dispatch('undate_isLastPage', storageMusic.isLastPage)
-        this.$store.dispatch('undate_play_list', storageMusic.playList)
-        this.$store.dispatch('undate_curIndex', storageMusic.curIndex)
-        this.$store.dispatch('undate_isPreload', storageMusic.isPreload)
-        this.$store.dispatch('undate_play_list', storageMusic.playList)
-        this.$store.dispatch('undate_listener_loadstart', storageMusic.listener_loadstart)
-        this.$store.dispatch('undate_listener_waiting', storageMusic.listener_waiting)
-        this.$store.dispatch('undate_listener_canplay', storageMusic.listener_canplay)
-        this.$store.dispatch('undate_listener_canplaythrough', storageMusic.listener_canplaythrough)
-        this.$store.dispatch('undate_listener_timeupdate', storageMusic.listener_timeupdate)
-        this.$store.dispatch('undate_listener_ended', storageMusic.listener_ended)
-        this.$store.dispatch('undate_listener_stalled', storageMusic.listener_stalled)
-        this.audio.src = storageMusic.playList.circles[storageMusic.curIndex].files[0].fileUrl
-      } else {
-        this.audio.src = storageMusic.curUrl
-      }
-      if (storageMusic.musicPlay) {
-        this.$store.dispatch('music_play')
-        this.isShowController = true
-        this.audio.currentTime = storageMusic.currentTime
-        let _this = this
-        // ios 自动播放
-        // _this.audio.play()
-        console.log(1111, '我要播放', this.audio.src)
-        document.addEventListener("WeixinJSBridgeReady", function () {
-          setTimeout(function () {
-            _this.audio.play()
-          }, 300)
-        }, false)
-      } else {
-        this.isShowController = false
-        this.$store.dispatch('music_pause')
-      }
-    }
+    
   }
 
   // 消除红点
