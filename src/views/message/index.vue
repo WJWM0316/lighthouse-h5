@@ -51,7 +51,6 @@
       videoEvent () {},
       handleDetails () {},
       goDetail (item) {
-        console.log('item', item.type)
         switch (item.type) {
           case 1: // 回答我的提问
           case 2: // 回答我的追问

@@ -223,14 +223,17 @@ export default class App extends Vue {
 
     const _this = this
     // ios 第一次授权播放 空语音
-
-    if (browser._version.ios) {
-      // this.audio.muted = true
-      this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
-      document.addEventListener("WeixinJSBridgeReady", function () {
-        _this.audio.play()
-      }, false)
+    if (!sessionstorage.get('firstEnter')) {
+      sessionstorage.set('firstEnter', true)
+      if (browser._version.ios) {
+        // this.audio.muted = true
+        this.audio.src = 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3'
+        document.addEventListener("WeixinJSBridgeReady", function () {
+          _this.audio.play()
+        }, false)
+      }
     }
+    
     // 在文件开始加载且未实际加载任何数据前运行的脚本。
     this.audio.addEventListener('loadstart', function () {
       let data = _this.listener_loadstart
