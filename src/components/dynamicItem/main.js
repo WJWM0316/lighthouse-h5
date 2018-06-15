@@ -1,6 +1,7 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import audioBox from '@/components/media/music'
 import moment from 'moment'
 
 @Component({
@@ -9,6 +10,10 @@ import moment from 'moment'
     item: {
       type: Object,
       required: true
+    },
+    isTower: {
+      type: Boolean,
+      default: false
     },
     isFold: {
       type: Boolean,
@@ -75,8 +80,30 @@ import moment from 'moment'
     noBorder: {
       type: Boolean,
       default: false
+    },
+    communityId: {
+      type: String,
+      default: ''
+    },
+    isPlayList: {
+      type: Boolean,
+      default: false
+    },
+    isTeacher: {
+      type: Boolean,
+      default: false
+    },
+    isTeacherCon: {
+      type: Boolean,
+      default: false
+    },
+    isDetailCon: {
+      type: Boolean,
+      default: false
     }
-    
+  },
+  components: {
+    audioBox
   },
   computed: {
     picList () {
@@ -186,13 +213,33 @@ import moment from 'moment'
       }
       return timeStr
     }
+  },
+  watch: {
+    isPlayList () {},
+    isTeacherCon () {},
+    isTeacher () {}
   }
 })
 export default class dynamicItem extends Vue {
   video = ''
   role = this.item.releaseUser.role || {}
+  type = 0
   created () {
-  	console.log(this.item,"******************************")
+    const {modelType, circleId, problemId, isCanSee, circleType} = this.item
+    switch (modelType) {
+      case 'circle':
+        this.type = 1
+        break
+      case 'post':
+        this.type = 2
+        break
+      case 'problem':
+        this.type = 3
+        break
+    }
+    if (circleType) {
+      this.type = circleType
+    }
   }
   
   beforeMount(){
@@ -260,25 +307,7 @@ export default class dynamicItem extends Vue {
       itemIndex
     })
   }
-  /**
-   * 播放对应音频
-   */
-  audioPlay (problemIndex) {
-    let url = ''
-    const itemIndex = this.itemIndex
-    if (problemIndex >= 0) {
-      url = this.item.answers[problemIndex].file.fileUrl
-    } else {
-      url = this.item.files[0].fileUrl
-    }
 
-    this.$emit('audioEvent', {
-      eventType: 'play',
-      url,
-      itemIndex,
-      problemIndex
-    })
-  }
   /**
    * 点击预览图片
    */
@@ -350,24 +379,13 @@ export default class dynamicItem extends Vue {
       this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return
     }
-    let type = 0
-    switch (modelType) {
-      case 'circle':
-        type = 1
-        break
-      case 'post':
-        type = 2
-        break
-      case 'problem':
-        type = 3
-        break
-    }
-    if (type) {
+
+    if (this.type) {
       // 跳转详情页 sourceId type
       const sourceId = circleId || problemId
-      console.log('跳转详情页: ', sourceId, type)
+      const communityId = this.communityId
       // this.$router.push({name: 'all-details', params: {sourceId, type}})
-      this.$router.push(`/details/${sourceId}/${type}`)
+      this.$router.push(`/details/${sourceId}/${this.type}?communityId=${communityId}`)
     }
   }
 

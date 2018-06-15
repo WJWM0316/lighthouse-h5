@@ -41,20 +41,17 @@
             <!-- 纯文本 -->
             <p v-if="problemItem.type === 1">{{problemItem.content}}</p>
             <!-- 音频 -->
-            <div v-else :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}" @click.stop="audioPlay(problemIndex)">
-              <div class="progress-container">
-                <div class="progress" :style="{width: (problemItem.progress ? problemItem.progress : 0) + '%'}"></div>
-              </div>
-              <div class="audio-controller-container">
-                <div class="audio-controller">
-                  <div :class="{play: !problemItem.musicState, playing: problemItem.musicState === 1, loading: problemItem.musicState === 2}">
-                    <img class="icon-play" src="./../../assets/icon/music_play.png">
-                    <img class="icon-loading rotateZ" src="./../../assets/icon/music_loading.png">
-                    <img class="icon-playing" src="./../../assets/icon/music_listen.gif">
-                  </div>
-                  <span class="duration">{{problemItem.file.duration}}s</span>
-                </div>
-              </div>
+            <div v-else :class="{'content-audio': true, 'not-played': !problemItem.file.isPlayed}">
+              <audioBox 
+                :communityId="problemItem.community.communityId"
+                :circleId="problemItem.circleId" 
+                :source="problemItem.files[0]" 
+                :itemIndex="itemIndex"
+                :touerImg="problemItem.releaseUser.avatar"
+                :type="problemItem.circleType"
+                :jumpFind='true'
+                :isDetailCon='isDetailCon'
+                ></audioBox>
             </div>
           </div>
 
@@ -72,21 +69,17 @@
         </div>
 
         <!-- 音频 -->
-        <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" @click.stop="audioPlay()">
-          <div class="progress-container">
-
-            <div class="progress" :style="{width: (item.progress ? item.progress : 0) + '%'}"></div>
-          </div>
-          <div class="audio-controller-container">
-            <div class="audio-controller">
-              <div :class="{play: !item.musicState, playing: item.musicState === 1, loading: item.musicState === 2}">
-                <img class="icon-play" src="./../../assets/icon/music_play.png">
-                <img class="icon-loading rotateZ" src="./../../assets/icon/music_loading.png">
-                <img class="icon-playing" src="./../../assets/icon/music_listen.gif">
-              </div>
-              <span class="duration">{{item.files[0].duration}}s</span>
-            </div>
-          </div>
+        <div v-if="item.circleType === 1" :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}">
+          <audioBox 
+              :communityId="item.community.communityId"
+              :circleId="item.circleId" 
+              :source="item.files[0]" 
+              :itemIndex="itemIndex"
+              :touerImg="item.releaseUser.avatar"
+              :type="item.circleType"
+              :jumpFind='true'
+              :isDetailCon='isDetailCon'
+              ></audioBox>
         </div>
   
         <!-- 文字与视频 -->

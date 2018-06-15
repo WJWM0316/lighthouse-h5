@@ -17,7 +17,6 @@
                         @tap-two='goUserDetail'
                         @tap-three='goCommunityDetail'
                         @tap-four='handleDetails'
-                        @audioEvent="audioEvent"
           ></message-item>
         </div>
       </div>
@@ -52,21 +51,20 @@
       videoEvent () {},
       handleDetails () {},
       goDetail (item) {
-        console.log('item', item.type)
         switch (item.type) {
           case 1: // 回答我的提问
           case 2: // 回答我的追问
           case 3: // 评论我的问答
-            this.$router.push(`/details/${item.beReturnedId}/3`)
+            this.$router.push(`/details/${item.beReturnedId}/3?communityId=${item.LighthouseId}`)
             break
           case 4: // 评论我帖子
-            this.$router.push(`/details/${item.beReturnedId}/2`)
+            this.$router.push(`/details/${item.beReturnedId}/2?communityId=${item.LighthouseId}`)
             break
           case 5: // 回复我的评论
             this.$router.push(`/reply/${item.beReturnedId}`)
             break
           case 6: // 6评论导师内容（朋友圈）
-            this.$router.push(`/details/${item.beReturnedId}/1`)
+            this.$router.push(`/details/${item.beReturnedId}/1?communityId=${item.LighthouseId}`)
             break
         }
       },
@@ -152,161 +150,6 @@
       this.getList()
     }
 
-    mounted () {
-      const music = new Audio()
-      music.autoplay = true
-
-      /**
-       * 音频加载中
-       */
-      music.onloadstart = () => {
-        this.audioStateSet('loading')
-      }
-      /**
-       * 可获取音频总时长
-       */
-      music.ondurationchange = () => {
-      }
-      /**
-       * 缓冲时触发
-       */
-      music.onprogress = () => {
-      }
-      /**
-       * 音频处于可播放状态
-       */
-      music.oncanplay = () => {
-        this.audioStateSet('playing')
-      }
-      /**
-       * 当媒介能够无需因缓冲而停止即可播放至结尾时运行脚本
-       */
-      music.oncanplaythrough = () => {
-        this.audioStateSet('playing')
-      }
-      /**
-       * 播放中
-       */
-      music.ontimeupdate = () => {
-        let progress = parseInt((music.currentTime / music.duration).toFixed(2) * 100)
-        this.audioProgressSet(progress)
-      }
-      /**
-       * 播放完成
-       */
-      music.onended = () => {
-        this.audioStateSet()
-        this.audioProgressSet()
-      }
-      /**
-       * 等待数据
-       */
-      music.onwaiting = () => {
-        this.audioStateSet('loading')
-      }
-      /**
-       * 错误
-       */
-      music.onerror = (e) => {
-      }
-      this.music = music
-    }
-
-    destroyed () {
-      this.music.pause()
-      this.music.src = ''
-      this.music = ''
-    }
-
-    /**
-     * 设置当前播放状态
-     * @param state play | playing | loading
-     */
-    audioStateSet (state) {
-      const {itemIndex, problemIndex} = this.currentPlay
-      const item = this.dataList[itemIndex]
-
-      if (itemIndex < 0) {
-        return
-      }
-
-      let musicState = 0
-      switch (state) {
-        case 'playing':
-          musicState = 1
-          break
-        case 'loading':
-          musicState = 2
-          break
-        default:
-          musicState = 0
-          break
-      }
-
-      if (item.modelType && item.modelType === 'problem') {
-        this.dataList[itemIndex].answers[problemIndex].musicState = musicState
-      } else {
-        this.dataList[itemIndex].musicState = musicState
-      }
-    }
-
-    /**
-     * 播放进度设置
-     */
-    audioProgressSet (progress) {
-      progress = progress || 0
-      console.log(progress)
-      const {itemIndex, problemIndex} = this.currentPlay
-      const item = this.dataList[itemIndex]
-
-      if (itemIndex < 0) {
-        return
-      }
-
-      if (item.modelType && item.modelType === 'problem') {
-        this.dataList[itemIndex].answers[problemIndex].progress = progress
-      } else {
-        this.dataList[itemIndex].progress = progress
-      }
-    }
-
-    audioEvent (e) {
-      const {eventType, itemIndex, problemIndex} = e
-      const temp = this.dataList[itemIndex]
-      let item = temp
-      if (temp.modelType === 'problem') {
-        item = temp.answers[problemIndex]
-      }
-      console.log(eventType, item)
-
-      switch (eventType) {
-        case 'play':
-          const {itemIndex: lastItemIndex, problemIndex: lastProblemIndex} = this.currentPlay
-          if (lastItemIndex !== itemIndex) {
-            this.music['src'] = e.url
-            this.audioStateSet()
-            this.audioProgressSet()
-          } else if (temp.modelType === 'problem' && lastProblemIndex !== problemIndex) {
-            this.music['src'] = e.url
-            this.audioStateSet()
-            this.audioProgressSet()
-          } else {
-            console.log(this.music.paused)
-            if (this.music.paused) {
-              this.music.play()
-              this.audioStateSet('playing')
-            } else {
-              this.music.pause()
-              this.audioStateSet()
-            }
-          }
-          this.currentPlay = {
-            itemIndex,
-            problemIndex
-          }
-          break
-      }
-    }
   }
 </script>
 

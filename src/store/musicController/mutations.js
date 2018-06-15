@@ -104,8 +104,48 @@ export default {
       state.musicStripImg = data['cover_plan_player'] // 悬浮条展示图
     }
   },
+  [types.UPDATE_PLAYLIST] (state, playList) {
+    state.playList = playList
+  },
   [types.UPDATE_MUSICPLAY] (state, musicPlay) {
     state.musicPlay = musicPlay
+  },
+
+  [types.UPDATE_CURMUSIC] (state, curMusic) {
+    state.curMusic = curMusic
+  },
+  [types.UPDATE_ISLASTPAGE] (state, isLastPage) {
+    state.isLastPage = isLastPage
+  },
+  [types.UPDATE_ISPRELOAD] (state, isPreload) {
+    state.isPreload = isPreload
+  },
+  [types.UPDATE_CURINDEX] (state, curIndex) {
+    state.curIndex = curIndex
+  },
+  [types.UPDATE_PREVMUSIC] (state, prevMusic) {
+    state.prevMusic = prevMusic
+  },
+  [types.UPDATE_LOADSTART] (state, listener_loadstart) {
+    state.listener_loadstart = listener_loadstart
+  },
+  [types.UPDATE_WAITING] (state, listener_waiting) {
+    state.listener_waiting = listener_waiting
+  },
+  [types.UPDATE_CANPLAY] (state, listener_canplay) {
+    state.listener_canplay = listener_canplay
+  },
+  [types.UPDATE_CANPLAYTHROUGH] (state, listener_canplaythrough) {
+    state.listener_canplaythrough = listener_canplaythrough
+  },
+  [types.UPDATE_TIMEUPDATA] (state, listener_timeupdate) {
+    state.listener_timeupdate = listener_timeupdate
+  },
+  [types.UPDATE_ENDED] (state, listener_ended) {
+    state.listener_ended = listener_ended
+  },
+  [types.UPDATE_STALLED] (state, listener_stalled) {
+    state.listener_stalled = listener_stalled
   },
   /**
    * 切换歌曲

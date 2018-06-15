@@ -56,6 +56,8 @@
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="disableOperationEvents"
                    :disableUserClick="true"
+                   :isTeacher="false"
+                   :communityId="pageInfo.communityId"
           ></dynamic>
         </div>
         <div class="desc">
@@ -148,7 +150,6 @@
       },
       // 是否已入社
       isJoinAgency () {
-      	console.log("333333333333",this.pageInfo.isJoined,this.pageInfo.isAuthor)
         return this.pageInfo.isAuthor || this.pageInfo.isJoined
       },
       // 是否已结束
@@ -369,7 +370,7 @@
                 self.$store.dispatch('show_qr', {type: 2})
                 break
               default:
-                location.reload()
+                self.$store.dispatch('show_qr', {type: 2})
                 break
             }
 //            self.$store.dispatch('show_qr')

@@ -10,9 +10,94 @@ export default {
    * @param immediately   是否立即播放(非必传)
    * @returns {Promise}
    */
+  // 更新播放列表
+  undate_listener_loadstart: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_LOADSTART, data)
+      resolve()
+    })
+  },
+  undate_listener_waiting: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_WAITING, data)
+      resolve()
+    })
+  },
+  undate_listener_canplay: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_CANPLAY, data)
+      resolve()
+    })
+  },
+  undate_listener_canplaythrough: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_CANPLAYTHROUGH, data)
+      resolve()
+    })
+  },
+  undate_listener_timeupdate: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_TIMEUPDATA, data)
+      resolve()
+    })
+  },
+  undate_listener_ended: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_ENDED, data)
+      resolve()
+    })
+  },
+  undate_listener_stalled: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_STALLED, data)
+      resolve()
+    })
+  },
   update_musicList: ({commit}, {data, type, id, immediately}) => {
     return new Promise((resolve, reject) => {
       commit(types.UPDATE_MUSICLIST, {data, type, id, immediately})
+      resolve()
+    })
+  },
+  // 更新播放列表
+  undate_play_list: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_PLAYLIST, data)
+      resolve()
+    })
+  },
+  // 更新当前播放音乐
+  undate_curMusic: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_CURMUSIC, data)
+      resolve()
+    })
+  },
+  // 更新上一个音乐
+  undate_prevMusic: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_PREVMUSIC, data)
+      resolve()
+    })
+  },
+  // 是否预加载
+  undate_isPreload: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_ISPRELOAD, data)
+      resolve()
+    })
+  },
+  // 是否有下一页
+  undate_isLastPage: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_ISLASTPAGE, data)
+      resolve()
+    })
+  },
+  // 序号
+  undate_curIndex: ({commit}, data) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_CURINDEX, data)
       resolve()
     })
   },
@@ -79,6 +164,14 @@ export default {
       resolve()
     })
   },
+  // 更新下架状态
+  update_music_off: ({commit}, status) => {
+    return new Promise((resolve, reject) => {
+      commit(types.UPDATE_MUSICOFF, status)
+      resolve()
+    })
+  },
+
   // 更新下架状态
   update_music_off: ({commit}, status) => {
     return new Promise((resolve, reject) => {
