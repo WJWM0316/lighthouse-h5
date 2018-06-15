@@ -251,6 +251,14 @@
                     isJoin: true
                   }
                 }
+                console.log('我要播放的音频', index, this.playList.circles[this.curIndex].files[0].fileId)
+                if (!this.playList.circles[this.curIndex].files[0].isPlayed) {
+                  let id = this.playList.circles[this.curIndex].files[0].fileId
+                    playAudioApi({id}).then(res => {
+                    this.source.isPlayed = true
+                  })
+                } 
+                // this.removeRed(this.playList.circles[this.curIndex].files[0].fileId)
                 // 如果还剩2条音频则提前加载下一个列表且还有下一页
                 if (this.isLastPage && this.curIndex >= this.playList.circles.length - 2) {
                   this.$store.dispatch('undate_isPreload', true)
@@ -543,7 +551,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    padding-right: 58px;
+    padding-right: 63px;
     box-sizing: border-box;
 }
 
@@ -559,11 +567,11 @@
   background-color: #ffe266 !important;
 }
 .progressBar .range-handle {
-  width: 12px !important;
-  height: 12px !important;
+  width: 14px !important;
+  height: 14px !important;
   top: 50% !important;
-  margin-top: -6px !important;
-  margin-left: -6px !important;
+  margin-top: -7px !important;
+  margin-left: -7px !important;
   background: none !important;
   box-shadow: none !important;
   display: block;
@@ -603,12 +611,15 @@
 }
 
 .audio-time {
-  width: 53px;
+  width: 56px;
   text-align: right;
   color: #666666;
   font-size: 14px;
+  height: 40px;
+  line-height: 40px;
   position: absolute;
   padding-right: 15px;
+  padding-left: 3px;
   box-sizing: border-box;
   right: 0;
 }
