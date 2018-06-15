@@ -19,6 +19,7 @@
           :itemIndex="itemIndex"
           :touerImg="item.avatarUrl"
           :isTeacher='true'
+          :isTower='true'
           :type = '3'
           :key="itemIndex"></audioBox>
       </div>
