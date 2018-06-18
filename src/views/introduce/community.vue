@@ -255,11 +255,6 @@
 			}else{
 				if(nowCommunity===to.params.communityId){
 					to.meta.keepAlive = true;
-//					if(from.name==="publish-content" || from.name==="publish-voice"){
-//						sessionStorage.setItem("isNewLoad",true)
-//					}else{
-//						sessionStorage.setItem("isNewLoad",false)
-//					}
 					console.log(to,"community相同时候打印我")
 				}else{
 					sessionStorage.setItem('scrollTop',0);
@@ -364,67 +359,69 @@
 	        this.getList({page: 1}).then(() => {})
         }
      })
-      
-      
+       
     }
    
+   //发布内容后刷新数据
    	activated(){
    		const scrollDom=document.getElementsByClassName('scroll-container')[0];
     	scrollDom.scrollTop=sessionStorage.getItem("scrollTop");
     	if(JSON.parse(sessionStorage.getItem("isNewLoad"))){
     		sessionStorage.setItem("isNewLoad",false)
+    		this.isCommunityTitleFixed=false
     		//重试请求数据
-    			this.pageInit().then(() => {
-		        const {
-		          title,
-		          simpleIntro,
-		          master,
-		          shareImg, // 分享图片
-		          sharePoint, // 分享摘要
-		          shareIntroduction,  // 分享标题
-		          communityId,
-		          startTime
-		        } = this.pageInfo
-		        const {realName, career} = master
-		        this.communityId=communityId
-		        this.starTime=startTime
-		        const str = realName ? realName + (career ? '|' + career : '') : ''
-		        // 页面分享信息
-		        this.wechatShare({
-		          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-		          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-		          'desc': sharePoint || simpleIntro,
-		          'imgUrl': shareImg,
-		          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
-		        })
-		        
-		        //判断嘉宾身份
-		        this.getRoleInfo(communityId).then(res=>{
-		        	this.roleInfo=res.role;
-		        	console.log(this.roleInfo,"8888888888888888888888888888")
-		        }).catch(res => {
-		        		this.roleInfo=res.data.role;
-		        		console.log(this.roleInfo,"999999999999999999999999")
-						})
-		        
-		        //判断是否有课程，无课程则跳转
-		        if(this.pageInfo.isCourse===2){
-		        	this.type=0;
-		        	let type=0;
-		        	this.displaySuspensionInput = false
-			        this.dynamicList = []
+    		this.pageInit().then(() => {
+	        const {
+	          title,
+	          simpleIntro,
+	          master,
+	          shareImg, // 分享图片
+	          sharePoint, // 分享摘要
+	          shareIntroduction,  // 分享标题
+	          communityId,
+	          startTime
+	        } = this.pageInfo
+	        const {realName, career} = master
+	        this.communityId=communityId
+	        this.starTime=startTime
+	        const str = realName ? realName + (career ? '|' + career : '') : ''
+	        // 页面分享信息
+	        this.wechatShare({
+	          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+	          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+	          'desc': sharePoint || simpleIntro,
+	          'imgUrl': shareImg,
+	          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
+	        })
+	        
+	        //判断嘉宾身份
+	        this.getRoleInfo(communityId).then(res=>{
+	        	this.roleInfo=res.role;
+	        	console.log(this.roleInfo,"8888888888888888888888888888")
+	        }).catch(res => {
+	        		this.roleInfo=res.data.role;
+	        		console.log(this.roleInfo,"999999999999999999999999")
+					})
+	        
+	        //判断是否有课程，无课程则跳转
+	        if(this.pageInfo.isCourse===2){
+	        	this.type=0;
+	        	let type=0;
+	        	this.displaySuspensionInput = false
+		        this.dynamicList = []
+	
+		        this.showType = type
+	//	        debugger
+		        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+	//	        debugger
+		        this.showIdentification = !type
 		
-			        this.showType = type
-		//	        debugger
-			        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-		//	        debugger
-			        this.showIdentification = !type
-			
-			        this.pagination.end = false // 初始化数据，必定不是最后一页
-			        this.getList({page: 1}).then(() => {})
-		        }
-		     })
-    	}
+		        this.pagination.end = false // 初始化数据，必定不是最后一页
+		        this.getList({page: 1}).then(() => {})
+	        }
+	     })
+    			
+    	} 
    	}
    	
     mounted(){

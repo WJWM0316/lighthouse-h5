@@ -280,22 +280,26 @@ export default class PublishContent extends Vue {
 			//判断身份发帖还是发布
 			if(this.$route.query.code==='student' || this.$route.query.code==='manager'){
 				//学员和管理员
-					if( this.$route.query.code==='manager' && this.$route.query.codeType==='1'){
+					if( this.$route.query.code==='manager' && this.$route.query.codeType==='1'){//管理员
 						await publishApi(params)
             this.sendOK=true
+            sessionStorage.setItem("loadType",1)
 					}else{
 						await publishPostApi(params)
             this.sendOK=true
+            sessionStorage.setItem("loadType",0)
 					}
 				
 			}else if(this.$route.query.code==='special_manager' || this.$route.query.code==='special_master' ||  this.$route.query.code==='special_guests' ){
 				//无课程灯塔内容发帖
 					await publishPostApi(params)
           this.sendOK=true
+          sessionStorage.setItem("loadType",0)
 			}else{
 				//塔主和嘉宾
 				await publishApi(params)
         this.sendOK=true
+        sessionStorage.setItem("loadType",1)
 			}
       
       this.$vux.toast.text('发布成功', 'bottom')
