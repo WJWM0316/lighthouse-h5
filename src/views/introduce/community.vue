@@ -21,7 +21,7 @@
           </router-link>-->
           
           <!--<router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon-more">:to="{name: 'introduce-more'}"-->
-      		<div :starTime="starTime" @click.prevent.stop="toMore" class="addon-text" slot="cover-addon-more">
+      		<div :starTime="starTime" @click.stop="toMore()" class="addon-text" slot="cover-addon-more">
              <img class="icon" src="../../assets/icon/bnt_more@3x.png" />
           </div>
         </community-card>
@@ -75,10 +75,13 @@
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
                      :isNeedHot="true"
+                     :communityId="pageInfo.communityId"
                      :showIdentification="showIdentification"
                      :disableOperationArr="disableOperationArr"
+                     :isPlayList="isPlayList"
+                     :isTeacher="isPlayList"
+                     :isTower='true'
                      @disableOperationEvents="operation"
-                     @saveAudio="controlAudio"
             ></dynamic>
           </div>
           <div class="blank" v-else>
@@ -207,9 +210,8 @@
     roleInfo=''
     code=''
     type=1
-    saveAudio={}
     nowItem={}
-    
+    isPlayList = true
     //显示标题模式
     titleBoxShow=false;
 
@@ -283,7 +285,6 @@
 		//页面离开前
 		beforeRouteLeave(to, from, next) {
 		  if((this.nowItem.answer && this.nowItem.answer[0].type===2) || this.nowItem.circleType===1){
-        this.saveAudio.pause();
         if(this.nowItem.modelType && this.nowItem.modelType==="problem"){
           this.nowItem.answers[0].musicState=0;
         }else{
@@ -425,20 +426,11 @@
    	}
    	
     mounted(){
-    	console.log("修改成功了")
     }
 
-    //控制音频
-    controlAudio(e){
-      this.saveAudio=e.nowaudio;
-      this.nowItem=e.nowItem;
-      console.log(e,"我是传递过来的对象")
-    }
     
     //路由跳转more
     toMore(){
-    	
-    	console.log(this.communityId);
     	let that=this;
     	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId,classmateNum:this.pageInfo.joinedNum}})
     }
@@ -449,42 +441,15 @@
     }
     async pageInit () {
       const { communityId } = this.$route.params
-
-      switch (communityId) {
-        case '64074da38681f864082708b9be959e08':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-          //新增
-      	case 'aa3b415b564bd95b27da2f0e9c986e6a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '25c2ff088da3f757b685a318ab050b5a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-      	case '8fd72f707af6071a2a7d7bc6693a8ace':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '67917ba04abd74c3247245576b1168b0':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-          //新增
-        default:
-          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
-          break
-      }
-
       this.pagination.end = false // 初始化数据，必定不是最后一页
-
       let res = await this.getCommunity(communityId)
-
-      console.log('=========',res)
+      this.qrSrc = res.sellImg
       //嘉宾身份
       if(res.isAuthor == 0){
           let res2 = await this.getRoleInfo(communityId)
           if(res2.role && (res2.role.code =='guests'||res2.role.code =='special_guests')){
             res.isAuthor = 1;
           }
-          console.log('+++++++++++++++++++++',res2)
       }
       this.pageInfo = res
       
@@ -502,8 +467,6 @@
       	if(this.$refs['community-title']){
       		this.communityTitleTop = this.$refs['community-title'].offsetTop
       	}
-        console.log(this.$refs)
-        //console.log(this.$refs['community-title'].offsetTop)
       })
 
 
@@ -518,6 +481,11 @@
         this.showType = type
 //      this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
         this.showIdentification = !type
+        if (type === 1) {
+          this.isPlayList = true
+        } else {
+          this.isPlayList = false
+        }
 				this.pagination.busy = false
         this.pagination.end = false // 初始化数据，必定不是最后一页
         this.getList({page: 1}).then(() => {})
@@ -547,7 +515,6 @@
     }
     posted(){
     	let code=this.roleInfo.code
-    	console.log(code)
     	// :todo 发帖
         this.$router.push(`/publish/${this.$route.params.communityId}?type=0&code=${code}&codeType=${this.type}`)
     }
@@ -715,7 +682,6 @@
         }
       })
 
-      console.log(temp)
       if (page === 1) {
         this.dynamicList = temp
       } else {
@@ -728,7 +694,6 @@
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
 
-      console.log('-------',this.pagination.end)
     }
 
     /**

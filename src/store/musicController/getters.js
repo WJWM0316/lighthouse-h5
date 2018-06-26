@@ -1,6 +1,45 @@
 export default {
+  listener_loadstart: function (state) {
+    return state.listener_loadstart
+  },
+  listener_waiting: function (state) {
+    return state.listener_waiting
+  },
+  listener_canplay: function (state) {
+    return state.listener_canplay
+  },
+  listener_canplaythrough: function (state) {
+    return state.listener_canplaythrough
+  },
+  listener_timeupdate: function (state) {
+    return state.listener_timeupdate
+  },
+  listener_ended: function (state) {
+    return state.listener_ended
+  },
+  listener_stalled: function (state) {
+    return state.listener_stalled
+  },
   musicList: function (state) { // 播放列表
     return state.musicList
+  },
+  playList: function (state) { // 播放列表
+    return state.playList
+  },
+  curMusic:  function (state) { // 当前播放音乐
+    return state.curMusic
+  },
+  isLastPage:  function (state) { // 是否有下一页
+    return state.isLastPage
+  },
+  curIndex:  function (state) { // 序号
+    return state.curIndex
+  },
+  isPreload:  function (state) { // 是否需要预加载
+    return state.isPreload
+  },
+  prevMusic:  function (state) { // 上一个播放音乐
+    return state.prevMusic
   },
   musicPlay: function (state) { // 播放状态
     return state.musicPlay

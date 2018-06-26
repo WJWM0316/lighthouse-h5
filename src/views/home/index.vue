@@ -5,7 +5,7 @@
       <div class="nav-bar fs15" :class="navTabName">
         <span @click="toggle('picked')">精选</span>
         <span class="join" :class="{'message': isMessage}" @click="toggle('joined')">已加入</span>
-        <span class="create" @click="toggle('center-create-lite')">创建灯塔</span>
+        <span class="create" @click="toggleCreate()">创建灯塔</span>
        <!--  <span @click="toggle('find')">发现</span> -->
       </div>
        <!-- 分类  用于悬浮顶格-->
@@ -23,7 +23,7 @@
         <ul>
           <li v-for="(item, index) in bannerList" :key="`banner_${index}`" @click.prevent.stop="handleTapBanner(item)">
               <image-item class="chose-tab-img" :src="item.imgUrl" />
-              <p class="chose-tab-con">{{item.title}}</p>
+              <p class="chose-tab-con">{{item.name}}</p>
           </li>
         </ul>
       </div>
@@ -124,7 +124,7 @@ import Scroller from '@/components/scroller'
 
 import ListMixin from '@/mixins/list'
 
-import { getBeaconsApi, getBannersApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdvertisingApi } from '@/api/pages/home'
+import { getBeaconsApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdvertisingApi } from '@/api/pages/home'
 
 @Component({
   name: 'home-index',
@@ -167,9 +167,8 @@ export default class HomeIndex extends Vue {
     if (routeName === 'home') {
       this.navTabName = 'picked'
     } else {
-      this.navTabName = routeName
+      this.navTabName = 'joined'
     }
-
     this.init().then(() => {})
   }
 
@@ -182,11 +181,15 @@ export default class HomeIndex extends Vue {
       // this.joins = []
       // this.communities = []
       this.navTabName = targetName
-      const name = targetName === 'picked' ? 'home' : targetName
+      const name = targetName === 'picked' ? 'home' : 'joined'
       this.$router.push({name})
       this.init().then(() => {
       })
     }
+  }
+
+  toggleCreate () {
+    this.$router.push({name: 'center-create-lite'})
   }
 
   /**
@@ -277,11 +280,14 @@ export default class HomeIndex extends Vue {
     if (this.bannerList.length > 0) {
       return
     }
-    return getBannersApi().then(res => {
-      this.bannerList = res
-      if (res.length > 0) {
+    let test = 40
+    return getAdvertisingApi({
+      adType: test
+    }).then(res => {
+      this.bannerList = res.ads
+      if (res.ads.length > 0) {
         this.$nextTick(() => {
-          this.scrollHeight = this.$refs.tabBanner.clientHeight
+          if (this.$refs.tabBanner) { this.scrollHeight = this.$refs.tabBanner.clientHeight }
         })
       }
     })

@@ -85,14 +85,12 @@ export default class ReplyQuestion extends Vue {
     const { params } = this.$route
     this.communityId = params.communityId
     this.id = params.problemId
+    if (!this.$root.$children[0].audio.paused) {
+      this.$root.$children[0].audio.pause()
+    }
     this.getInfo()
   }
 
-  beforeDestroy () {
-    this.audio && this.audio.pause()
-    this.audio.src = ''
-    this.audio = null
-  }
 
   /**
    * 获取问题信息

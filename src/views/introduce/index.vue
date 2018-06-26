@@ -56,6 +56,8 @@
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="disableOperationEvents"
                    :disableUserClick="true"
+                   :isTeacher="false"
+                   :communityId="pageInfo.communityId"
           ></dynamic>
         </div>
         <div class="desc">
@@ -92,6 +94,7 @@
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
+          <span class="userCoupon">我是优惠金额</span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="freeJoin" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice === 0">
@@ -148,7 +151,6 @@
       },
       // 是否已入社
       isJoinAgency () {
-      	console.log("333333333333",this.pageInfo.isJoined,this.pageInfo.isAuthor)
         return this.pageInfo.isAuthor || this.pageInfo.isJoined
       },
       // 是否已结束
@@ -365,11 +367,11 @@
               case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
                 self.$store.dispatch('show_qr', {type: 4})
                 break
-              case 'db73998f8d1691d3ce75180266e3cba9': // 测试专用
-                self.$store.dispatch('show_qr', {type: 4})
+              case '9eb2275d266b83a717a50a5827250b8a': // 0607分销
+                self.$store.dispatch('show_qr', {type: 2})
                 break
               default:
-                location.reload()
+                self.$store.dispatch('show_qr', {type: 2})
                 break
             }
 //            self.$store.dispatch('show_qr')
@@ -383,6 +385,7 @@
       )
     }
     async created () {
+    	console.log(location,'我是页面路径')
       wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
@@ -433,30 +436,11 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-      switch (communityId) {
-        case 'aa3b415b564bd95b27da2f0e9c986e6a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '25c2ff088da3f757b685a318ab050b5a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case 'b2b533754554bec1b9c344a97063891b':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '2cdf75243f96bca97ae4341b6400e375':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '67917ba04abd74c3247245576b1168b0':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        default:
-          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
-          break
-      }
+      
 
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
-
+      this.qrSrc = res.sellImg
       this.pageInfo = res
 
       // 是否已入社
@@ -859,6 +843,9 @@
             color: rgba(53, 64, 72, 0.8);
           }
 					flex-grow:1;
+					& .userCoupon{
+						font-size: 12px; 
+					}
         }
         &.free-btn-disable {
           padding: 0 20px;

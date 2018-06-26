@@ -62,6 +62,9 @@ export default class Questions extends Vue {
 
   created () {
     this.communityId = this.$route.params.communityId
+    if (!this.$root.$children[0].audio.paused) {
+      this.$root.$children[0].audio.pause()
+    }
     this.init()
   }
 

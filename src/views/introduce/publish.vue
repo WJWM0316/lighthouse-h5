@@ -121,7 +121,9 @@ export default class PublishContent extends Vue {
   }
 
   created () {
-  	console.log(this.$route,"12132132132132132")
+  	if (!this.$root.$children[0].audio.paused) {
+      this.$root.$children[0].audio.pause()
+    }
     this.form.communityId = this.$route.params.communityId
   }
 

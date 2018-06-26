@@ -261,3 +261,28 @@ export const userJurisdictionApi = (data) => {
     data,
   })
 }
+
+// 获取社区音频列表
+export const musicListApi = (data) => {
+  return request({
+    url: '/wap/beacon/circleManages',
+    data,
+  })
+}
+
+// 高考活动页面
+export const gaokaoApi = (data) => {
+  return request({
+    url: '/wap/special/gaoKaoPosterSetUserInfo',
+    data,
+  })
+}
+
+// 优惠券页面
+export const couponsApi = (couponid) => {
+  return request({
+    url: '/wap/coupon/'+couponid,
+    type:'get',
+  })
+}
+
