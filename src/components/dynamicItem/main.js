@@ -237,9 +237,9 @@ export default class dynamicItem extends Vue {
         this.type = 3
         break
     }
-    if (circleType) {
-      this.type = circleType
-    }
+    // if (circleType) {
+    //   this.type = circleType
+    // }
   }
   
   beforeMount(){
