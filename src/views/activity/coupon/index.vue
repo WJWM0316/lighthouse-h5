@@ -1,17 +1,17 @@
 <template>
-	<div class="receive-coupons">
+	<div class="receive-coupons" v-if="item.id!==''">
 		<div class="headPhoto">
-			<img src="./../../../assets/icon/couponhead.png" alt="" />
+			<img :src="item.imgUrl" alt="" />
 		</div>
-		<div class="content">
+		<div class="content {isReceive:true}">
 			<div class="top">
 				<div class="left">
-					<span>￥</span><span>19.99</span>
+					<span>￥</span><span>{{item.discount}}</span>
 					<p>优惠金额</p>
 				</div>
 				<div class="right">
 					<span>
-						仅可购买《手把手教你学产 品从入门到放弃仅可购买《手把手教你学产 品从入门到放弃仅可购买《手把手教你学产 品从入门到放弃仅可购买《手把手教你学产 品从入门到放弃
+						仅可购买《{{item.relationCommunity.title}}》
 					</span>
 					<span>
 						有效期：2017.12.1-2018.1
@@ -44,40 +44,51 @@
 	import Vue from 'vue'
 	import { couponAuthorizationApi,couponsApi } from '@/api/pages/pageInfo'
 	export default {
+		data(){
+			return {
+				item:{
+					id:'',
+					title:'',
+					discount:'',
+					imgUrl:'',
+					relationCommunity:{
+						title:'',
+					}
+				}
+			}
+		},
 		methods:{
 			receive(){
 				
 			}
 		},
 		created(){
-			this.$vux.confirm.show({
-					title:'微信授权',
-					content:'小灯塔Lite申请获得以下权限： 获得你的公开信息(昵称、头像等)',
-				  onCancel () {},
-				  onConfirm () {
-//				  	alert("1111111111111111")
-				  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
-				  	couponsApi(11).then((res)=>{
-							console.log(res)
-						}).catch((res)=>{
-							console.log(res)
-							if(res.statusCode===413){
-								let {url}=res.data;
-								console.log(url);
-//								couponAuthorizationApi(url,backUrl)
-									console.log(url+"?redirect_url=http://localhost:8080/#/coupon");
-								window.location.href=url+"?coupon_id=11";
-								
-							}
-						})
-//				  	couponAuthorizationApi(backUrl).then((res)=>{
-//				  		console.log(res)
-//				  	}).catch((res)=>{
-//				  		console.log(res)
-//				  	})
-				  }
-				})
-			
+			document.querySelector('title').innerHTML = "领取优惠券"
+			let that = this;
+			couponsApi(11).then((res)=>{
+				//已授权请求成功
+				that.item=res.coupon;
+				console.log(res,that.item,"我是res  和     item   。。。")
+			}).catch((res)=>{
+				//未授权
+				console.log(res)
+				if(res.statusCode===413){
+					that.$vux.confirm.show({
+						title:'微信授权',
+						content:'小灯塔Lite申请获得以下权限： 获得你的公开信息(昵称、头像等)',
+					  onCancel () {
+					  	window.opener = null;
+							window.close();
+					  },
+					  onConfirm () {
+					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
+					  	let {url}=res.data;
+							console.log(url);
+							window.location.href=url+"?coupon_id=11";
+					  }
+					})
+				}
+			})
 		},
 		mounted(){
 			
@@ -258,6 +269,11 @@
 				}
 			}
 		}
+		.isReceive{
+			height: 429px !important;
+		}
+		
+		/*底部文案*/
 		.footer{
 			display: flex;
 			align-items: center;
