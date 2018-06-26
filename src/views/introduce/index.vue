@@ -364,6 +364,9 @@
                 self.$store.dispatch('show_qr', {type: 2})
                 break
               case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '95137f42811b2010a025bf28e35aeb69': // 活动塔
                 self.$store.dispatch('show_qr', {type: 4})
                 break
               case '9eb2275d266b83a717a50a5827250b8a': // 0607分销
