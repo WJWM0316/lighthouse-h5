@@ -66,7 +66,7 @@
 								console.log(url);
 //								couponAuthorizationApi(url,backUrl)
 									console.log(url+"?redirect_url=http://localhost:8080/#/coupon");
-								window.location.href=url+"?redirect_url=https://www.ziwork.com/beaconweb/#/examination";
+								window.location.href=url+"?coupon_id=11";
 								
 							}
 						})
