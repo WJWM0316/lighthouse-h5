@@ -88,7 +88,7 @@
 			//免费领取
 			receive(){
 //				alert("我是正常领取调用")
-				couponReceiveApi(this.item.id).then((res)=>{
+				couponReceiveApi(this.item.couponId).then((res)=>{
 					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
 				}).catch((res)=>{
 					console.log("领取出错信息：",res)
