@@ -14,7 +14,7 @@
 						仅可购买《{{item.relationCommunity.title}}》
 					</span>
 					<span>
-						有效期：{{starTime}}-{{EndTime}}
+						有效期：{{item.useStartTime*1000 | date('YYYY.M.D')}}-{{item.useEndTime*1000 | date('YYYY.M.D')}}
 					</span>
 				</div>
 			</div>
@@ -65,6 +65,8 @@
 							title:'',
 						},
 						status:'',		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+						useEndTime:'',		//优惠券结束时间
+						useStartTime:'',		//优惠券开始时间
 					},
 //				item:{
 //					id:'11',		//优惠券的id
@@ -75,11 +77,11 @@
 //						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
 //					},
 //					status:2,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+//					useEndTime:1532745050,
+//					useStartTime:1529980249,
 //				},
 				isReceive:'',		//是否领取
 				status:'',			//路劲带过来的id
-				starTime:'',		//优惠券开始时间
-				EndTime:'',			//优惠券结束时间
 			}
 		},
 		methods:{
@@ -118,12 +120,7 @@
 				//已授权请求成功
 				this.item=res.coupon;
 				this.isReceive = res.isReceive;
-				let star =  new Date(res.coupon.useStartTime);
-				let end =  new Date(res.coupon.useEndTime);//
-				console.log(`${end.getFullYear()}.${end.getMonth()+1}.${end.getDate()}`,res,"我是返回数据")
-				this.starTime = `${star.getFullYear()}.${star.getMonth()+1}.${star.getDate()}`;
-				this.EndTime = `${end.getFullYear()}.${end.getMonth()+1}.${end.getDate()}`;
-				console.log(res,that.item,"我是res  和     item   。。。")
+				console.log(res,"返回的信息。。。。。。")
 				
 			}).catch((res)=>{
 				
