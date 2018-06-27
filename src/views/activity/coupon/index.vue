@@ -56,24 +56,25 @@
 	export default {
 		data(){
 			return {
-				item:{
-					id:'11',		//优惠券的id
-					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
-					discount:'9',		//优惠券的金额
-					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
-					relationCommunity:{
-						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
-					},
-					status:2,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
-				},
+//				item:{
+//					id:'11',		//优惠券的id
+//					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
+//					discount:'9',		//优惠券的金额
+//					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
+//					relationCommunity:{
+//						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+//					},
+//					status:2,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+//				},
 				isReceive:false,
+				status:'',
 			}
 		},
 		methods:{
 			//免费领取
 			receive(){
 //				alert("我是正常领取调用")
-				couponReceiveApi(11).then((res)=>{
+				couponReceiveApi(this.status).then((res)=>{
 					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
 				}).catch((res)=>{
 					console.log("领取出错信息：",res)
@@ -91,9 +92,17 @@
 			}
 		},
 		created(){
+			//获取优惠券id
+			let pattern = /(\d+)*[2,3]/ig;
+			let str = window.location.href;
+			let status = parseInt(str.match(pattern));
+			this.status = status;
+			console.log(status,str,"优惠券id")
+			
+			
 			document.querySelector('title').innerHTML = "领取优惠券"
 			let that = this;
-			couponsApi(11).then((res)=>{
+			couponsApi(status).then((res)=>{
 				//已授权请求成功
 				that.item=res.coupon;
 				console.log(res,that.item,"我是res  和     item   。。。")
