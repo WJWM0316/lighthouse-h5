@@ -103,11 +103,11 @@
 		},
 		created(){
 			//获取优惠券id
-			let pattern = /(\d+)*[2,3]/ig;
-			let str = window.location.href;
-			let status = parseInt(str.match(pattern));
-			this.status = status;
-			console.log(status,str,"优惠券id")
+			let pattern = /(\d+)/ig;
+			let str = window.location.hash;
+			let status = str.match(pattern);
+			this.status = parseInt(status[0]);
+//			console.log(this.status,window.location.hash,"优惠券id")
 			
 			
 			document.querySelector('title').innerHTML = "领取优惠券"
