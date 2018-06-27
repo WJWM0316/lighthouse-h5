@@ -1,5 +1,5 @@
 <template>
-	<div class="receive-coupons" v-if="item.id!==''">
+	<div class="receive-coupons" v-if="item.couponId!==''">
 		<div class="headPhoto">
 			<img :src="item.imgUrl" alt="" />
 		</div>
@@ -14,7 +14,7 @@
 						仅可购买《{{item.relationCommunity.title}}》
 					</span>
 					<span>
-						有效期：{{startTime}}-{{endTime}}
+						有效期：{{starTime}}-{{EndTime}}
 					</span>
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 		data(){
 			return {
 					item:{
-						id:'',		//优惠券的id
+						couponId:'',		//优惠券的id
 						title:'',
 						discount:'',		//优惠券的金额
 						imgUrl:"",
@@ -78,8 +78,8 @@
 //				},
 				isReceive:'',		//是否领取
 				status:'',			//路劲带过来的id
-				starTime:{},		//优惠券开始时间
-				EndTime:{},			//优惠券结束时间
+				starTime:'',		//优惠券开始时间
+				EndTime:'',			//优惠券结束时间
 			}
 		},
 		methods:{
