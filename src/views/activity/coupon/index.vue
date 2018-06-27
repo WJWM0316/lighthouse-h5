@@ -14,7 +14,7 @@
 						仅可购买《{{item.relationCommunity.title}}》
 					</span>
 					<span>
-						有效期：2017.12.1-2018.1
+						有效期：{{startTime}}-{{endTime}}
 					</span>
 				</div>
 			</div>
@@ -76,15 +76,17 @@
 //					},
 //					status:2,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
 //				},
-				isReceive:false,
-				status:'',
+				isReceive:'',		//是否领取
+//				status:'',			
+				starTime:'',		//优惠券开始时间
+				EndTime:'',			//优惠券结束时间
 			}
 		},
 		methods:{
 			//免费领取
 			receive(){
 //				alert("我是正常领取调用")
-				couponReceiveApi(this.status).then((res)=>{
+				couponReceiveApi(this.item.id).then((res)=>{
 					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
 				}).catch((res)=>{
 					console.log("领取出错信息：",res)
@@ -97,7 +99,7 @@
 			},
 			//领取完了
 			toLate(){
-//				alert("无法领取调用")
+				alert("无法领取调用")
 				window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=3";
 			}
 		},
@@ -106,17 +108,24 @@
 			let pattern = /(\d+)/ig;
 			let str = window.location.hash;
 			let status = str.match(pattern);
-			this.status = parseInt(status[0]);
-//			console.log(this.status,window.location.hash,"优惠券id")
+//			console.log(status,"...............")
+//			this.status = parseInt(status[0]);
 			
 			
 			document.querySelector('title').innerHTML = "领取优惠券"
-			let that = this;
 			couponsApi(status).then((res)=>{
+				
 				//已授权请求成功
-				that.item=res.coupon;
+				this.item=res.coupon;
+				this.isReceive = res.isReceive;
+				let star =  new Date(res.coupon.useStartTime);
+				let end =  new Date(res.coupon.useEndTime);
+				this.starTime = `${star.getFullYear()}.${star.getMonth()+1}.${star.getDate()}`;
+				this.EndTime = `${end.getFullYear()}.${end.getMonth()+1}.${end.getDate()}`;
 				console.log(res,that.item,"我是res  和     item   。。。")
+				
 			}).catch((res)=>{
+				
 				//未授权
 				console.log(res)
 				if(res.statusCode===413){
@@ -128,13 +137,16 @@
 							window.close();
 					  },
 					  onConfirm () {
+					  	let a = new Date(1532745050)
+					  	console.log(a.getFullYear(),"................")
 					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
 					  	let {url}=res.data;
-							console.log(url);
-							window.location.href=url+"?coupon_id=11";
+//							console.log(url+"?redirect_url="+parseInt(status[0]));
+							window.location.href=url+"?redirect_url="+parseInt(status[0]);
 					  }
 					})
 				}
+				
 			})
 		},
 		mounted(){
