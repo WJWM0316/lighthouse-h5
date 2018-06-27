@@ -129,7 +129,7 @@
 				//未授权
 				console.log(res)
 				if(res.statusCode===413){
-					that.$vux.confirm.show({
+					this.$vux.confirm.show({
 						title:'微信授权',
 						content:'小灯塔Lite申请获得以下权限： 获得你的公开信息(昵称、头像等)',
 					  onCancel () {
