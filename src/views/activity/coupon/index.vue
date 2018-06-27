@@ -56,16 +56,26 @@
 	export default {
 		data(){
 			return {
-//				item:{
-//					id:'11',		//优惠券的id
-//					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
-//					discount:'9',		//优惠券的金额
-//					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
-//					relationCommunity:{
-//						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+//					item:{
+//						id:'',		//优惠券的id
+//						title:'',
+//						discount:'',		//优惠券的金额
+//						imgUrl:"",
+//						relationCommunity:{
+//							title:'',
+//						},
+//						status:'',		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
 //					},
-//					status:2,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
-//				},
+				item:{
+					id:'11',		//优惠券的id
+					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
+					discount:'9',		//优惠券的金额
+					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
+					relationCommunity:{
+						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+					},
+					status:2,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+				},
 				isReceive:false,
 				status:'',
 			}
