@@ -20,14 +20,14 @@
 			</div>
 			<div class="line"></div>
 			<div class="bottom">
-				<div class="receive" v-if="item.status===1" @click.stop="receive">免费领取优惠券</div>
-				<div class="unReceive" v-else>
-					<span class="littleTitle" v-show="isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
-					<span class="littleTitle" v-show="!isReceive">来晚啦～优惠券已经被领完了！</span>
-					<div v-show="isReceive" @click.stop="toUse">
+				<div class="receive" v-show="item.status===1 && !isReceive" @click.stop="receive">免费领取优惠券</div>
+				<div class="unReceive" v-if="item.status===2 || isReceive">
+					<span class="littleTitle" v-show="item.status===1 && isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
+					<span class="littleTitle" v-show="item.status===2">来晚啦～优惠券已经被领完了！</span>
+					<div v-show="item.status===1 && isReceive" @click.stop="toUse">
 						已经领取
 					</div>
-					<div v-show="!isReceive" @click.stop="toLate">
+					<div v-show="item.status===2" @click.stop="toLate">
 						查看更多职场福利
 					</div>
 				</div>
@@ -76,7 +76,7 @@
 //					relationCommunity:{
 //						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
 //					},
-//					status:2,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+//					status:1,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
 //					useEndTime:1532745050,
 //					useStartTime:1529980249,
 //				},
@@ -89,7 +89,7 @@
 			receive(){
 //				alert("我是正常领取调用")
 				couponReceiveApi(this.item.couponId).then((res)=>{
-					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
+					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=receive";
 				}).catch((res)=>{
 					console.log("领取出错信息：",res)
 				})
@@ -97,7 +97,7 @@
 			//已经领取，去使用
 			toUse(){
 //				alert("已领取调用")
-				window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=2";
+				window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=issued";
 			},
 			//领取完了
 			toLate(){
@@ -105,7 +105,7 @@
 //				couponReceiveApi(this.item.couponId).then((res)=>{
 //					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
 //				})
-				window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=3";
+				window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=end";
 			}
 		},
 		created(){
@@ -134,8 +134,7 @@
 						title:'微信授权',
 						content:'小灯塔Lite申请获得以下权限： 获得你的公开信息(昵称、头像等)',
 					  onCancel () {
-					  	window.opener = null;
-							window.close();
+					  	WeixinJSBridge.call('closeWindow');
 					  },
 					  onConfirm () {
 					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}

@@ -2,9 +2,17 @@
 	<div class="resultPage">
 		<img src="../../../assets/icon/activebg.png"/>
 		<!--标题-->
-		<div class="title">
+		<div class="title" v-show="status===3">
 			<span>关注小灯塔公众号</span>
 			<span>有更多精彩内容和福利</span>
+		</div>
+		<div class="title" v-show="status===2">
+			<span>你已经领过该优惠券</span>
+			<span>请到小灯塔小程序体验</span>
+		</div>
+		<div class="title" v-show="status===1">
+			<span>领取成功</span>
+			<span>请到小灯塔公众号体验</span>
 		</div>
 		<!--二维码-->
 		<div class="QRcode">
@@ -23,7 +31,32 @@
 </template>
 
 <script>
-	
+	import Vue from 'vue'
+	export default {
+		data(){
+			return{
+				status:'',
+			}
+		},
+		created(){
+			let pattern = /(\w+)=(\w+)/ig;
+			let str = window.location.hash;
+			let status = str.match(pattern);
+//			this.status=1;
+			switch(status[0]){
+				case "status=receive":
+							this.status=1;
+							break;
+				case "status=issued":
+							this.status=2;
+							break;
+				case "status=end":
+							this.status=3;
+							break;	
+			}
+			console.log(this.status,"111111111111111111")
+		}
+	}
 </script>
 
 <style lang="less" scoped>
