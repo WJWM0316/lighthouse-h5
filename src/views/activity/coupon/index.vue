@@ -87,7 +87,7 @@
 		methods:{
 			//免费领取
 			receive(){
-//				alert("我是正常领取调用")
+				alert("我是正常领取调用")
 				couponReceiveApi(this.item.couponId).then((res)=>{
 					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=receive";
 				}).catch((res)=>{
@@ -140,15 +140,7 @@
 					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
 					  	let {url}=res.data;
 //							console.log(url+"?redirect_url="+parseInt(status[0]));
-//							window.location.href=url+"?redirect_url="+parseInt(status[0]);
-							
-							WeixinJSBridge.invoke("openSpecificView",
-							{
-              	"specificview" : "www.baidu.com"   
-              },   
-            	function(e){   
-                  alert(e.err_msg)   
-             });
+							window.location.href=url+"?redirect_url="+parseInt(status[0]);
 							
 					  }
 					})
