@@ -140,7 +140,16 @@
 					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
 					  	let {url}=res.data;
 //							console.log(url+"?redirect_url="+parseInt(status[0]));
-							window.location.href=url+"?redirect_url="+parseInt(status[0]);
+//							window.location.href=url+"?redirect_url="+parseInt(status[0]);
+							
+							WeixinJSBridge.invoke("openSpecificView",
+							{
+              	"specificview" : "www.baidu.com"   
+              },   
+            	function(e){   
+                  alert(e.err_msg)   
+             });
+							
 					  }
 					})
 				}
