@@ -126,7 +126,7 @@
 				console.log(res,"返回的信息。。。。。。")
 				
 			}).catch((res)=>{
-				
+				alert(res)
 				//未授权
 				console.log(res)
 				if(res.statusCode===413){
