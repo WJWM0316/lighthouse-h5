@@ -69,7 +69,7 @@
 						useStartTime:'',		//优惠券开始时间
 					},
 //				item:{
-//					id:'11',		//优惠券的id
+//					couponId:11,		//优惠券的id
 //					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
 //					discount:'9',		//优惠券的金额
 //					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
@@ -102,6 +102,9 @@
 			//领取完了
 			toLate(){
 				alert("无法领取调用")
+//				couponReceiveApi(this.item.couponId).then((res)=>{
+//					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
+//				})
 				window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=3";
 			}
 		},
@@ -135,8 +138,6 @@
 							window.close();
 					  },
 					  onConfirm () {
-					  	let a = new Date(1532745050)
-					  	console.log(a.getFullYear(),"................")
 					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
 					  	let {url}=res.data;
 //							console.log(url+"?redirect_url="+parseInt(status[0]));
