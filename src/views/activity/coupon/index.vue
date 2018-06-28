@@ -20,14 +20,14 @@
 			</div>
 			<div class="line"></div>
 			<div class="bottom">
-				<div class="receive" v-show="item.status===1 && !isReceive" @click.stop="receive">免费领取优惠券</div>
+				<div class="receive" v-if="item.status===1 && !isReceive" @click.stop="receive">免费领取优惠券</div>
 				<div class="unReceive" v-if="item.status===2 || isReceive">
 					<span class="littleTitle" v-show="item.status===1 && isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
 					<span class="littleTitle" v-show="item.status===2">来晚啦～优惠券已经被领完了！</span>
-					<div v-show="item.status===1 && isReceive" @click.stop="toUse">
+					<div v-if="item.status===1 && isReceive" @click.stop="toUse">
 						已经领取
 					</div>
-					<div v-show="item.status===2" @click.stop="toLate">
+					<div v-if="item.status===2" @click.stop="toLate">
 						查看更多职场福利
 					</div>
 				</div>
