@@ -20,7 +20,7 @@
 			</div>
 			<div class="line"></div>
 			<div class="bottom">
-				<div class="receive" v-if="item.status===1 && !isReceive" @click.stop="receive">免费领取优惠券</div>
+				<div class="receive" v-if="item.status===1 && !isReceive" @click.stop="receive()">免费领取优惠券</div>
 				<div class="unReceive" v-if="item.status===2 || isReceive">
 					<span class="littleTitle" v-show="item.status===1 && isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
 					<span class="littleTitle" v-show="item.status===2">来晚啦～优惠券已经被领完了！</span>
@@ -87,7 +87,7 @@
 		methods:{
 			//免费领取
 			receive(){
-				alert("我是正常领取调用")
+//				alert("我是正常领取调用")
 				couponReceiveApi(this.item.couponId).then((res)=>{
 					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=receive";
 				}).catch((res)=>{
@@ -101,7 +101,7 @@
 			},
 			//领取完了
 			toLate(){
-				alert("无法领取调用")
+//				alert("无法领取调用")
 //				couponReceiveApi(this.item.couponId).then((res)=>{
 //					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
 //				})
@@ -126,7 +126,6 @@
 				console.log(res,"返回的信息。。。。。。")
 				
 			}).catch((res)=>{
-				alert(res)
 				//未授权
 				console.log(res)
 				if(res.statusCode===413){
