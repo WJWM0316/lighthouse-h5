@@ -52,6 +52,7 @@
 
 <script>
 	import Vue from 'vue'
+	import wxUtil from '@/util/wx/index'
 	import { couponReceiveApi,couponsApi } from '@/api/pages/pageInfo'
 	export default {
 		data(){
@@ -136,7 +137,7 @@
 					  	WeixinJSBridge.call('closeWindow');
 					  },
 					  onConfirm () {
-					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
+//					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
 					  	let {url}=res.data;
 //							console.log(url+"?redirect_url="+parseInt(status[0]));
 							window.location.href=url+"?redirect_url="+parseInt(status[0]);

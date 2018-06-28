@@ -39,7 +39,6 @@
 			}
 		},
 		created(){
-			console.log(WeixinJSBridge);
 			let pattern = /(\w+)=(\w+)/ig;
 			let str = window.location.hash;
 			let status = str.match(pattern);
