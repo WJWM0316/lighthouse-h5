@@ -118,7 +118,7 @@
 			this.status = parseInt(status[0]);
 			
 			
-			document.querySelector('title').innerHTML = "领取优惠券"
+			document.querySelector('title').innerHTML = "小灯塔"
 			couponsApi(this.status).then((res)=>{
 				
 				//已授权请求成功

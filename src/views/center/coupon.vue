@@ -21,10 +21,19 @@
 </template>
 
 <script>
+	var isTopay;
+	var communityId;
 	import Vue from 'vue'
 	import Component from 'vue-class-component'
 	import CouponItem from '@/components/couponItem/couponItem'
-	import { couponListApi,RedemptionCodeApi } from '@/api/pages/pageInfo.js'
+	import { couponListApi,RedemptionCodeApi,canUseCouponsApi } from '@/api/pages/pageInfo.js'
+	
+	Component.registerHooks([
+	  'beforeRouteEnter',
+	  'beforeRouteLeave',
+	  'beforeRouteUpdate' // for vue-router 2.2+
+	])
+	
 	@Component({
 	  name: 'coupon-page',
 	  components: {
@@ -36,16 +45,36 @@
 //	  	}
 //	  }
 	})
+	
 	export default class CenterCouponPage extends Vue {
 		couponList = []		//存放优惠券列表
 		val = ''			//输入框值
 		content = ''
+		isToPay = isTopay
+		
+		beforeRouteEnter(to,from,next){
+			console.log(from,"woshilaide lu")
+			if(from.name==="introduce"){
+				communityId = from.params.communityId;
+				isTopay = true;
+			}else{
+				isTopay = false;
+				communityId = '';
+			}
+			next();
+		}
+		
 		created(){
 			let param={
 				page:1,
-				pageCount:20
+				pageCount:20,
+				productId:communityId
 			}
-			this.getCouponList(param)
+			if(this.isToPay){
+				this.getCanUseCouponList(param)
+			}else{
+				this.getCouponList(param)
+			}
 		}
 		
 		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
@@ -71,11 +100,11 @@
 				
 			}).catch(res=>{
 				let that = this
-				this.content = "快去使用优惠券吧～"
+				let content = "快去使用优惠券吧～"
 				//兑换失败
 				this.$vux.alert.show({
           title: '兑换失败',
-          content: that.content,
+          content: content,
           buttonText: '好的',
           onHide () {
           	
@@ -91,6 +120,21 @@
 				let {userCoupons} = res;
 				this.couponList=userCoupons;
 				console.log(res,this.couponList,"我是正确信息")
+			}).catch(res=>{
+				console.log(res,"我是错误信息")
+			})
+		}
+		
+		//请求支付页面可使用优惠券列表
+		getCanUseCouponList(param){
+			canUseCouponsApi(param).then(res=>{
+				let newList=[];
+				for(let i=0; i<res.selectCoupons.length;i++){
+					newList.push(res.selectCoupons.userCoupon)
+				}
+//				let {userCoupons} = res.selectCoupons;
+				this.couponList=res.selectCoupons;
+				console.log(newList,this.couponList,"我是正确信息")
 			}).catch(res=>{
 				console.log(res,"我是错误信息")
 			})

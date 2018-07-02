@@ -311,3 +311,12 @@ export const RedemptionCodeApi = (coupon_code) => {
   })
 }
 
+// 优惠券可选择列表
+export const canUseCouponsApi = (data) => {
+  return request({
+    url: '/wap/coupon/canUseCoupons',
+    type:'post',
+    data
+  })
+}
+

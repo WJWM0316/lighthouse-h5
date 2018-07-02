@@ -94,7 +94,10 @@
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
-          <span>用券省 <span class="coupon_price">50.00</span> 元</span>
+          <span v-if="pageInfo.selectCoupon">用券省 
+          	<span class="coupon_price" v-if="pageInfo.selectCoupon.userCoupon.coupon.discount<pageInfo.joinPrice">{{pageInfo.selectCoupon.userCoupon.coupon.discount}}</span> 
+          	<span class="coupon_price" v-else>{{pageInfo.joinPrice}}</span> 元
+          </span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="freeJoin" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice === 0">
@@ -102,6 +105,32 @@
         </div>
       </div>
     </div>
+    
+    <!--支付弹窗-->
+    <div class="pay_window" v-if="toPay" @click="closePya">
+    	<div class="pay_box" @click.stop="isPay">
+    		<h3>{{this.pageInfo.masterIntro}}</h3>
+    		<div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
+    		<div class="price">
+    			<span>社区价格</span>
+    			<span>¥ {{this.pageInfo.joinPrice}}</span>
+    		</div>
+    		<div class="coupon_price" @click.stop="toCoupon">
+    			<span>优惠券</span>
+    			<div class="coupon_price_right">
+    				<span>-¥ {{this.pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
+    				<div class="more_coupon"></div>
+    			</div>
+    		</div>
+    		<div class="payment">
+    			<div class="payment_num">
+    				实付：<span>¥</span><span>{{this.pageInfo.selectCoupon.couponPrice}}</span>
+    			</div>
+    			<div class="payment_btn">立即支付</div>
+    		</div>
+    	</div>
+    </div>
+    
     <!--分享弹窗-->
     <share-dialog :isShow="showShare" @close-share="showShare = false"
                   :shareType="1"></share-dialog>
@@ -208,6 +237,7 @@
     mixins: [WechatMixin]
   })
   export default class introduce extends Vue {
+  	toPay = false			//是否调起支付
     showShare = false // 显示分享弹框
     showSell = false // 显示分销弹框
     pageInfo = {}
@@ -235,9 +265,27 @@
         this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
       }
     }
+    
+    closePya(){
+    	this.toPay = false
+    }
+    
+   isPay(){
+   	
+   }
+   
+   toCoupon(){
+   	this.$router.push('/center/coupon');
+   }
+    
     payOrFree () {
       let that = this
-      that.payIn()
+      this.toPay = true;
+//   	if(that.pageInfo.selectCoupon.couponPrice===0){
+//   		that.freeJoin()
+//   	}else{
+//   		that.payIn()
+//   	}
 //      let {startTime, endTime} = this.pageInfo
 //      startTime = new Date(startTime * 1000)
 //      endTime = new Date(endTime * 1000)
@@ -593,7 +641,7 @@
 
         .u-btn {
           position: relative;
-          line-height: 18px;
+          line-height: 22px;
           min-height: 32px;
           font-size: 13px;
           color: @font-color-default;
@@ -918,5 +966,118 @@
         }
       }
     }
+    
+    /*支付弹窗*/
+   .pay_window{
+   	position: absolute;
+   	top: 0;
+   	left: 0;
+   	z-index: 9999;
+   	width: 100%;
+   	height: 100%;
+   	background-color: rgba(0,0,0,0.6);
+   	.pay_box{
+   		box-sizing: border-box;
+   		width: 375px;
+   		height: 287px;
+   		background:rgba(255,255,255,1);
+			border-radius:20px 20px 0px 0px;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			padding: 40px 25px 0;
+			/*支付灯塔名字*/
+			h3{
+				font-size:18px;
+				color:rgba(53,64,72,1);
+				line-height:22px;
+				margin-bottom: 10px;
+			}
+			/*支付副标题*/
+			.tip{
+				font-size:13px;
+				color:rgba(146,146,146,1);
+				line-height:17px;
+				margin-bottom: 36px;
+			}
+			/*支付原价格*/
+			.price{
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 31px;
+				span{
+					font-size:15px;
+					color:rgba(102,102,102,1);
+					line-height:21px;
+				}
+			}
+			/*支付优惠券处*/
+			.coupon_price{
+				display: flex;
+				justify-content: space-between;
+				>span{
+					font-size:15px;
+					color:rgba(102,102,102,1);
+					line-height:21px;
+				}
+				.coupon_price_right{
+					display: flex;
+					align-items: center;
+					>span{
+						display: inline-block;
+						font-size:15px;
+						color:rgba(250,106,48,1);
+						line-height:21px;
+					}
+					>.more_coupon{
+						display: inline-block;
+						width: 15px;
+						height: 15px;
+						background: url(../../assets/icon/btn_enter@2x.png) no-repeat 100%;
+					}
+				}
+				/*margin-bottom:39px;*/
+			}
+			/*支付最底支付按钮*/
+			.payment{
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				display: flex;
+				justify-content: flex-end;
+				align-items: center;
+				border-top:1px solid rgba(220,220,220,1);
+				height:49px;
+				.payment_num{
+					margin-right: 20px;
+					font-size:13px;
+					color:rgba(53,64,72,1);
+					span{
+						color:rgba(250,106,48,1);
+						&:nth-child(1){
+							font-size: 13px;
+						}
+						&:nth-child(2){
+							padding-left: 4px;
+							font-size: 18px;
+						}
+					}
+				}
+				/*支付按钮*/
+				.payment_btn{
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					width:150px;
+					height:49px;
+					background:rgba(255,226,102,1);
+					font-size:16px;
+					color:rgba(53,64,72,1);	
+				}
+			}
+			
+   	}
+   }
   }
 </style>

@@ -21,7 +21,8 @@
         </div>
         <div class="right" v-if="!isChoose" @click.stop="useConpon">
           <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status===1">立即使用</div>
-          <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status!==1">已过期</div>
+          <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status===5">已过期</div>
+          <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status===4">未开始</div>
           <img v-show="item.coupon.status===1" class="gloden-arrow" src="../../assets/icon/btn_gloden_enter.png"/>
         </div>
         <!--支付选择圆点-->
@@ -79,7 +80,7 @@
 	export default class couponItem extends Vue {
 	    itemBg = 'http://cdnstatic.zike.com/Uploads/static/beacon/error_emp_coupon.png'
 //	    instruction = '使用说明使用说明使用说明使用说明使用说明使用说明大沙发是的发送到发送到发斯蒂芬'		//优惠券说明
-		  isChoose=0 	//1：可以选择圆圈状态 ，0：文字状态
+		  isChoose=this.$parent.isToPay 	//1：可以选择圆圈状态 ，0：文字状态
 		  useConpon(){
 		  	
 		  	if(this.item.coupon.relationCommunity){
