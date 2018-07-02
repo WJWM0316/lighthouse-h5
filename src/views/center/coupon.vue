@@ -6,13 +6,16 @@
 			<button class="btn-exchange" @click.stop="showResults">兑换</button>
 		</div>
 		<!--优惠券-->
-		<CouponItem></CouponItem>
-		<CouponItem></CouponItem>
+		<div v-if="couponList.length>0">
+			<CouponItem v-for="item in couponList" :item='item'></CouponItem>
+		</div>
+
+		<!--<CouponItem></CouponItem>-->
 		<!--没有优惠券-->
-		<div class="empty-part">
+		<div class="empty-part" v-else>
 	      <img :src="emptyImg" class="empty-img"/>
 	      <div class="empty-tip">暂无优惠券哦～</div>
-	    </div>
+	  </div>
 	    <!--没有优惠券-->
 	</div>
 </template>
@@ -21,6 +24,7 @@
 	import Vue from 'vue'
 	import Component from 'vue-class-component'
 	import CouponItem from '@/components/couponItem/couponItem'
+	import {couponListApi} from '@/api/pages/pageInfo.js'
 	@Component({
 	  name: 'coupon-page',
 	  components: {
@@ -28,7 +32,22 @@
 	  }
 	})
 	export default class CenterCouponPage extends Vue {
+		
+		created(){
+			let param={
+				page:1,
+				pageCount:20
+			}
+			this.getCouponList(param)
+		}
+		
 		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
+		data(){
+			return {
+				couponList:[],
+			}
+		}
+		
 		showResults(){
 			this.$vux.alert.show({
 	          title: '兑换成功',
@@ -39,6 +58,19 @@
 	          }
 	        })
 		}
+		//请求优惠券列表
+		getCouponList(param){
+			couponListApi(param).then(res=>{
+				
+				let {userCoupons} = res;
+				this.couponList=userCoupons;
+				console.log(res,this.couponList,"我是正确信息")
+			}).catch(res=>{
+				console.log(res,"我是错误信息")
+			})
+		}
+		
+		
 	}
 </script>
 

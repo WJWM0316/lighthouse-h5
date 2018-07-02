@@ -1,26 +1,27 @@
 <template>
   <div class="coupon-item">
-    <div class="item-bg" @click.stop="emitInfo">
-    	<!--优惠券上半部-->
+    <div class="item-bg"> 
+    	<!--优惠券上半部  @click.stop="emitInfo"-->
       <div class="top-part">
         <div class="left">
-          <div class="coupon-title" :class="{'unavail':!item.available}">{{item.title}}</div>
-          <div class="outtime" v-if="item.isNearlyOutTime && !item.isUse">即将过期</div>
-          <div class="time-during">{{item.useStartTimeStr}} 至 {{item.useEndTimeStr}}</div>
+          <div class="coupon-title" :class="{'unavail':item.coupon.status!==1}">{{item.coupon.title}}</div>
+          <div class="outtime" v-show="item.isSoonPast===1">即将过期</div>
+          <div class="time-during">{{item.coupon.useStartTime*1000 | date('YYYY-M-D')}} 至 {{item.coupon.useEndTime*1000 | date('YYYY-M-D')}}</div>
         </div>
         <div class="right">
-          <span :class="{'unavail': !item.available}">¥</span><span :class="{'unavail':!item.available}">{{item.creditAmount}}</span>
+          <span :class="{'unavail': item.coupon.status!==1}">¥</span><span :class="{'unavail':item.coupon.status!==1}">{{item.coupon.discount}}</span>
         </div>
       </div>
       <!--优惠券上半部-->
       <div class="border-sty"></div>
       <!--优惠券下半部-->
       <div class="bottom-part">
-        <div class="left">{{item.instruction}}</div>
-        <div class="right" v-if="!item.isChoose">
-          <div :class="{'unavail':!item.available}">{{item.status}}</div>
-          <iamge v-if="item.available" class="gloden-arrow" src="../../static/icon/btn_gloden_enter.png"/>
+        <div class="left">{{instruction}}</div>
+        <div class="right" v-if="!isChoose" @click.stop="useConpon">
+          <div :class="{'unavail':item.coupon.status!==1}">立即使用</div>
+          <img v-show="item.coupon.status===1" class="gloden-arrow" src="../../assets/icon/btn_gloden_enter.png"/>
         </div>
+        <!--支付选择圆点-->
         <div v-else class="select-circle" :class="{'selected-circle':item.isChecked}">
           <div class="circle-center"></div>
         </div>
@@ -40,41 +41,45 @@
 	      item: {
 	        type: Object,
 	        twoWay: true,
-	        default: function () {
-	          return {
-	              couponId: '1',
-		          title: '优惠劵名称',
-		          creditAmount: 19.3,
-		          instruction: '使用说明使用说明使用说明使用说明使用说明使用说明大沙发是的发送到发送到发斯蒂芬',
-		          isUse: 0, // 0: 未使用 1：已使用
-		          isOutTime: 0, // 0: 未过期，1：已过期
-		          isNearlyOutTime: 1, // 0:未即到期，1:即将到期
-		          useStartTime: 1388307215,
-		          useEndTime: 1388307215,
-		          useStartTimeStr: '2033-8-12', // 开始时间字符串
-		          useEndTimeStr: '2088-3-20', // 结束时间字符串
-		          status:'立即使用',
-		          available:1,		//可以使用状态
-		          isChoose:1,		//1：可以选择圆圈状态 ，0：文字状态
-		          isChecked:1,		//0：未选中 ，1：选中
-	          }
+//	        default: function () {
+//	          return {
+//	            couponId: '1',			//优惠券id
+//		          title: '优惠劵名称',			//优惠券名称
+//		          discount: 19.3,		//折扣金额
+//		          instruction: '使用说明使用说明使用说明使用说明使用说明使用说明大沙发是的发送到发送到发斯蒂芬',		//优惠券说明
+//		          isUse: 0, // 0: 未使用 1：已使用
+//		          isOutTime: 0, // 0: 未过期，1：已过期
+//		          isNearlyOutTime: 1, // 0:未即到期，1:即将到期
+//		          useStartTime: 1388307215,			//优惠券开始时间戳
+//		          useEndTime: 1388307215,				//优惠券结束时间戳
+//		          status:'立即使用',
+//		          available:1,		//可以使用状态
+//		          isChoose:0,		//1：可以选择圆圈状态 ，0：文字状态
+//		          isChecked:1,		//0：未选中 ，1：选中
+//							}
+//	          }
 	        },
-	        itemBg: {
-		      	type:Object,
-		      	default:function(){
-		      		return 'http://cdnstatic.zike.com/Uploads/static/beacon/error_emp_coupon.png'
-		      	}
-		      }
-	      },
-	    },
+//	        itemBg: {
+//		      	type:Object,
+//		      	default:function(){
+//		      		return 'http://cdnstatic.zike.com/Uploads/static/beacon/error_emp_coupon.png'
+//		      	}
+//		      }
+	     },
 	    computed:{
 	      selectStyle () {
 	        return this.isSelected ? 'select-circle' : 'selected-circle'
 	      }
-	    }
+	    },
 	})
     
 	export default class couponItem extends Vue {
+	    itemBg = 'http://cdnstatic.zike.com/Uploads/static/beacon/error_emp_coupon.png'
+	    instruction = '使用说明使用说明使用说明使用说明使用说明使用说明大沙发是的发送到发送到发斯蒂芬'		//优惠券说明
+		  isChoose=0 	//1：可以选择圆圈状态 ，0：文字状态
+		  useConpon(){
+		  	console.log(this.item.coupon.status)
+		  }
 //	  emitInfo (e) { // 点击跳转个人详情
 //      
 //   },
@@ -153,7 +158,7 @@
           margin-right:15px;
         }
         .bottom-part{
-          padding: 10px 18px;
+          padding: 8px 18px 12px;
           display: flex;
           justify-content: space-between;
           align-items: center;

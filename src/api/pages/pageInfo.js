@@ -294,3 +294,12 @@ export const couponReceiveApi = (couponid) => {
   })
 }
 
+// 个人中心展示列表优惠券列表
+export const couponListApi = (data) => {
+  return request({
+    url: '/wap/coupon/userCoupons',
+    type:'post',
+    data,
+  })
+}
+

@@ -199,6 +199,7 @@ export default class HomeIndex extends Vue {
         }
 
         .addon {
+        	position: relative;
           flex: 0 0 auto;
 
           .addon-icon {
