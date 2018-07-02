@@ -90,7 +90,7 @@
 			receive(){
 //				alert("我是正常领取调用")
 				couponReceiveApi(this.item.couponId).then((res)=>{
-					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=receive";
+					location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=receive";
 				}).catch((res)=>{
 					console.log("领取出错信息：",res)
 				})
@@ -98,7 +98,7 @@
 			//已经领取，去使用
 			toUse(){
 //				alert("已领取调用")
-				window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=issued";
+				location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=issued";
 			},
 			//领取完了
 			toLate(){
@@ -106,7 +106,7 @@
 //				couponReceiveApi(this.item.couponId).then((res)=>{
 //					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
 //				})
-				window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=end";
+				location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=end";
 			}
 		},
 		created(){
@@ -139,8 +139,8 @@
 					  onConfirm () {
 //					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
 					  	let {url}=res.data;
-//							console.log(url+"?redirect_url="+parseInt(status[0]));
-							window.location.href=url+"?redirect_url="+parseInt(status[0]);
+							console.log(url+"?redirect_url="+parseInt(status[0]));
+							location.href=url+"?redirect_url="+parseInt(status[0]);
 							
 					  }
 					})

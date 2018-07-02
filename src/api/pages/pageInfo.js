@@ -303,3 +303,11 @@ export const couponListApi = (data) => {
   })
 }
 
+// 优惠券兑换码兑换接口
+export const RedemptionCodeApi = (coupon_code) => {
+  return request({
+    url: '/wap/coupon/codeReceive/'+coupon_code,
+    type:'post',
+  })
+}
+

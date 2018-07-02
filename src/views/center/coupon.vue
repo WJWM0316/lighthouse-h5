@@ -2,12 +2,12 @@
 <template>
 	<div class='coupon-page' :class="{bgColor:true}">
 		<div class="exchange-inp">
-			<input type="text" placeholder="输入兑换码"/>
-			<button class="btn-exchange" @click.stop="showResults">兑换</button>
+			<input type="text" v-model="val" placeholder="输入兑换码"/>
+			<button class="btn-exchange" :class="{inputBtn:val.length>0}" @click.stop="showResults">兑换</button>
 		</div>
 		<!--优惠券-->
-		<div v-if="couponList.length>0">
-			<CouponItem v-for="item in couponList" :item='item'></CouponItem>
+		<div v-if="couponList.length>0"  v-for="item in couponList">
+			<CouponItem :item='item'></CouponItem>
 		</div>
 
 		<!--<CouponItem></CouponItem>-->
@@ -24,15 +24,22 @@
 	import Vue from 'vue'
 	import Component from 'vue-class-component'
 	import CouponItem from '@/components/couponItem/couponItem'
-	import {couponListApi} from '@/api/pages/pageInfo.js'
+	import { couponListApi,RedemptionCodeApi } from '@/api/pages/pageInfo.js'
 	@Component({
 	  name: 'coupon-page',
 	  components: {
 	    CouponItem
-	  }
+	  },
+//	  watch:{
+//	  	'val'(newval,oldval){
+//	  		console.log(newval,oldval,"我是输入框的val")
+//	  	}
+//	  }
 	})
 	export default class CenterCouponPage extends Vue {
-		
+		couponList = []		//存放优惠券列表
+		val = ''			//输入框值
+		content = ''
 		created(){
 			let param={
 				page:1,
@@ -42,21 +49,40 @@
 		}
 		
 		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
-		data(){
-			return {
-				couponList:[],
-			}
-		}
+//		data(){
+//			return {
+//				couponList:[],
+//				val:'',
+//			}
+//		}
 		
 		showResults(){
-			this.$vux.alert.show({
-	          title: '兑换成功',
-	          content: '快去使用优惠券吧～',
-	          buttonText: '好的',
-	          onHide () {
-	          	console.log(this)
-	          }
-	        })
+			console.log(this.val,"我是优惠券兑换码。。。。。")
+			RedemptionCodeApi(this.val).then(res=>{
+				//兑换成功
+				this.$vux.alert.show({
+          title: '兑换成功',
+          content: '快去使用优惠券吧～',
+          buttonText: '好的',
+          onHide () {
+//        	console.log(this)
+          }
+        })
+				
+			}).catch(res=>{
+				let that = this
+				this.content = "快去使用优惠券吧～"
+				//兑换失败
+				this.$vux.alert.show({
+          title: '兑换失败',
+          content: that.content,
+          buttonText: '好的',
+          onHide () {
+          	
+          }
+        })
+			})
+			
 		}
 		//请求优惠券列表
 		getCouponList(param){
@@ -110,13 +136,18 @@
    	.btn-exchange{
    		width:70px;
 		height:34px;
-		background:rgba(255,226,102,1);
+		background:rgba(248,248,248,1);
+		/*background:rgba(255,226,102,1);*/
 		border-radius:20px;
 		outline: none;
 		border: 0;
 		font-size:15px;
 		line-height:21px;
-		color: #354048;
+		color:rgba(188,188,188,1);
+   	}
+   	.inputBtn{
+   		background:rgba(255,226,102,1) !important;
+   		color:rgba(53,64,72,1) !important;
    	}
    }
     

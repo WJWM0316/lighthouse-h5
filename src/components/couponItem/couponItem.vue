@@ -16,9 +16,12 @@
       <div class="border-sty"></div>
       <!--优惠券下半部-->
       <div class="bottom-part">
-        <div class="left">{{instruction}}</div>
+        <div class="left">
+        	<span v-show="item.coupon.relationCommunity">仅“{{item.coupon.relationCommunity.title}}”可使用</span>
+        </div>
         <div class="right" v-if="!isChoose" @click.stop="useConpon">
-          <div :class="{'unavail':item.coupon.status!==1}">立即使用</div>
+          <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status===1">立即使用</div>
+          <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status!==1">已过期</div>
           <img v-show="item.coupon.status===1" class="gloden-arrow" src="../../assets/icon/btn_gloden_enter.png"/>
         </div>
         <!--支付选择圆点-->
@@ -40,7 +43,7 @@
 	     props:{
 	      item: {
 	        type: Object,
-	        twoWay: true,
+	        required: true
 //	        default: function () {
 //	          return {
 //	            couponId: '1',			//优惠券id
@@ -75,10 +78,17 @@
     
 	export default class couponItem extends Vue {
 	    itemBg = 'http://cdnstatic.zike.com/Uploads/static/beacon/error_emp_coupon.png'
-	    instruction = '使用说明使用说明使用说明使用说明使用说明使用说明大沙发是的发送到发送到发斯蒂芬'		//优惠券说明
+//	    instruction = '使用说明使用说明使用说明使用说明使用说明使用说明大沙发是的发送到发送到发斯蒂芬'		//优惠券说明
 		  isChoose=0 	//1：可以选择圆圈状态 ，0：文字状态
 		  useConpon(){
-		  	console.log(this.item.coupon.status)
+		  	
+		  	if(this.item.coupon.relationCommunity){
+		  		console.log(this.item.coupon.relationCommunity.title,"我是专用券。。。。")
+		  		this.$router.push(`/introduce/${this.item.coupon.relationCommunity.communityId}?reload=true`)
+		  	}else{
+		  		console.log("我是通用券。。。")
+		  		this.$router.replace(`/index`)
+		  	}
 		  }
 //	  emitInfo (e) { // 点击跳转个人详情
 //      
@@ -162,6 +172,7 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
+          min-height: 34px;
           .left{
             display: -webkit-box;
             -webkit-box-orient: vertical;
