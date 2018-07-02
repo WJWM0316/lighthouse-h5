@@ -94,6 +94,7 @@
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
+          <span>用券省 <span class="coupon_price">50.00</span> 元</span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="freeJoin" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice === 0">
@@ -840,6 +841,14 @@
           background-color: #ffe266;
           & span:not(:first-of-type) {
             color: rgba(53, 64, 72, 0.8);
+          }
+          span:nth-child(2){
+          	.coupon_price{
+            	display: inline-block;
+            	font-size:12px;
+            	line-height:16px;
+            	color:#FB7A37;
+            }
           }
 					flex-grow:1;
 					& .userCoupon{

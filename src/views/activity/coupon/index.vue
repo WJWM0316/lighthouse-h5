@@ -25,7 +25,7 @@
 					<span class="littleTitle" v-show="item.status===1 && isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
 					<span class="littleTitle" v-show="item.status===2">来晚啦～优惠券已经被领完了！</span>
 					<div v-if="item.status===1 && isReceive" @click.stop="toUse">
-						已经领取
+						立即使用
 					</div>
 					<div v-if="item.status===2" @click.stop="toLate">
 						查看更多职场福利
