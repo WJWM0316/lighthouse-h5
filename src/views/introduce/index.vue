@@ -108,25 +108,30 @@
     
     <!--支付弹窗-->
     <div class="pay_window" v-if="toPay" @click="closePya">
-    	<div class="pay_box" @click.stop="isPay">
-    		<h3>{{this.pageInfo.masterIntro}}</h3>
+    	<div class="pay_box" @click.stop="showPayWindow">
+    		<h3>{{pageInfo.masterIntro}}</h3>
     		<div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
     		<div class="price">
     			<span>社区价格</span>
-    			<span>¥ {{this.pageInfo.joinPrice}}</span>
+    			<span>¥ {{pageInfo.joinPrice}}</span>
     		</div>
     		<div class="coupon_price" @click.stop="toCoupon">
     			<span>优惠券</span>
     			<div class="coupon_price_right">
-    				<span>-¥ {{this.pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
+    				<span v-if="SelectCouponItem.userCouponId">-¥ {{SelectCouponItem.coupon.discount}} </span>
+    				<span v-else-if="SelectCouponItem.userCouponId===0">不使用优惠券</span>
+    				<span v-else-if=" pageInfo.selectCoupon==='null' ">无可用优惠券</span>
+    				<span v-else>-¥ {{pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
     				<div class="more_coupon"></div>
     			</div>
     		</div>
     		<div class="payment">
     			<div class="payment_num">
-    				实付：<span>¥</span><span>{{this.pageInfo.selectCoupon.couponPrice}}</span>
+    				实付：<span>¥</span>
+    				<span v-if="SelectCouponItem.userCouponId">{{SelectedPrice}}</span>
+    				<span v-else>{{pageInfo.selectCoupon.couponPrice}}</span>
     			</div>
-    			<div class="payment_btn">立即支付</div>
+    			<div class="payment_btn" @click.stop="isPay">立即支付</div>
     		</div>
     	</div>
     </div>
@@ -158,6 +163,11 @@
   import {payApi, freePay} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
+  Component.registerHooks([
+	  'beforeRouteEnter',
+	  'beforeRouteLeave',
+	  'beforeRouteUpdate' // for vue-router 2.2+
+	])
 
   @Component({
     name: 'big-shot-introduce',
@@ -237,7 +247,7 @@
     mixins: [WechatMixin]
   })
   export default class introduce extends Vue {
-  	toPay = false			//是否调起支付
+  	toPay = false			//是否调起支付窗口
     showShare = false // 显示分享弹框
     showSell = false // 显示分销弹框
     pageInfo = {}
@@ -247,6 +257,9 @@
     completelyShow = true
     el = ''
     qrSrc = ''
+    SelectCouponItem = {}		//当前选择的优惠券信息
+    SelectedPrice = ''		//选择其他优惠券后的价格
+    UsedUserCouponId = 0		//支付时使用的优惠券id
 
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
@@ -270,12 +283,45 @@
     	this.toPay = false
     }
     
+    showPayWindow(){}
+    
    isPay(){
-   	
+   	if(this.SelectCouponItem.userCouponId && this.SelectCouponItem.userCouponId!==0){
+   		//选择其他优惠券
+   		if(this.SelectedPrice>0){
+   			this.UsedUserCouponId = this.SelectCouponItem.userCouponId;
+   			this.payIn()
+   		}else{
+   			//选择的优惠券金额够大，可以免费加入
+   			this.UsedUserCouponId = this.SelectCouponItem.userCouponId;
+   			this.freeJoin()
+   		}
+   		
+   	}else if(this.SelectCouponItem.userCouponId===0){
+   		//选择不使用优惠券
+   		this.UsedUserCouponId = 0;
+ 			this.payIn()
+   	}else{
+   		//默认优惠券
+   		if(this.pageInfo.selectCoupon){
+   			//有默认优惠券
+   			this.UsedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+   			this.payIn()
+   		}else{
+   			//没有优惠券
+   			this.UsedUserCouponId = 0;
+ 				this.payIn()
+   		}
+   		
+   	}
    }
    
    toCoupon(){
-   	this.$router.push('/center/coupon');
+   	if(this.SelectCouponItem.userCouponId){
+   		this.$router.push({path:'/center/coupon',query:{userCouponId:this.SelectCouponItem.userCouponId,communityId:this.pageInfo.communityId}});
+   	}else{
+   		this.$router.push({path:'/center/coupon',query:{userCouponId:this.pageInfo.selectCoupon.userCoupon.userCouponId,communityId:this.pageInfo.communityId}});
+   	}
    }
     
     payOrFree () {
@@ -302,8 +348,11 @@
     async freeJoin () {
       await freePay({
         productId: this.pageInfo.communityId,
-        productType: 1
+        productType: 1,
+        userCouponId:this.UsedUserCouponId
       }).then((res) => {
+      	this.toPay = false;		//关闭支付窗口
+      	sessionStorage.removeItem("coupon");		//移除优惠券信息
         const _this = this
         this.$vux.alert.show({
           title: '加入成功',
@@ -338,7 +387,8 @@
     async payIn () {
       const params = await payApi({
         productId: this.pageInfo.communityId,
-        productType: 1
+        productType: 1,
+        userCouponId:this.UsedUserCouponId
       })
       const arr = Object.keys(params || {})
       if (arr.length !== 0) {
@@ -450,6 +500,7 @@
           this.$vux.toast.text(e.message, 'bottom')
         }
       }
+      
       const self = this
       await this.pageInit().then(() => {
         const {
@@ -490,6 +541,17 @@
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
       this.qrSrc = res.sellImg
       this.pageInfo = res
+      
+      //是否调起支付
+      let Selectcoupon=sessionStorage.getItem("coupon");
+      if(Selectcoupon){
+      	this.toPay = true;
+      	let CouponItem = sessionStorage.getItem("coupon");
+      	this.SelectCouponItem = JSON.parse(CouponItem);
+      	this.SelectedPrice = this.pageInfo.joinPrice>this.SelectCouponItem.coupon.discount?this.pageInfo.joinPrice-this.SelectCouponItem.coupon.discount:0;
+      	
+      	console.log(this.SelectCouponItem,this.SelectedPrice,"我是当前选择的优惠券信息")
+      }
 
       // 是否已入社
       if (this.completelyShow && this.isJoinAgency) {
@@ -548,6 +610,10 @@
       // })
     }
     
+    beforeRouteLeave(to,from,next){
+    	sessionStorage.removeItem("coupon");
+    	next();
+    }
   }
 </script>
 <style lang="less" scoped type="text/less">

@@ -1,5 +1,5 @@
 <template>
-  <div class="coupon-item">
+  <div class="coupon-item" @click.stop="selectCoupon">
     <div class="item-bg"> 
     	<!--优惠券上半部  @click.stop="emitInfo"-->
       <div class="top-part">
@@ -17,7 +17,8 @@
       <!--优惠券下半部-->
       <div class="bottom-part">
         <div class="left">
-        	<span v-show="item.coupon.relationCommunity">仅“{{item.coupon.relationCommunity.title}}”可使用</span>
+        	<span v-if="item.coupon.relationCommunity">仅“{{item.coupon.relationCommunity.title}}”可使用</span>
+        	<span v-else>小灯塔内所有灯塔均可使用</span>
         </div>
         <div class="right" v-if="!isChoose" @click.stop="useConpon">
           <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status===1">立即使用</div>
@@ -26,7 +27,7 @@
           <img v-show="item.coupon.status===1" class="gloden-arrow" src="../../assets/icon/btn_gloden_enter.png"/>
         </div>
         <!--支付选择圆点-->
-        <div v-else class="select-circle" :class="{'selected-circle':item.isChecked}">
+        <div v-else class="select-circle" :class="{'selected-circle':item.userCouponId===nowUseCoupon}">
           <div class="circle-center"></div>
         </div>
       </div>
@@ -63,6 +64,15 @@
 //							}
 //	          }
 	        },
+	        index:{
+	        	type:Number,
+	        	required: true
+	        },
+	        nowUseCoupon:{
+	        	type:Number,
+	        	required: true,
+	        	default: 0
+	        }
 //	        itemBg: {
 //		      	type:Object,
 //		      	default:function(){
@@ -79,6 +89,8 @@
     
 	export default class couponItem extends Vue {
 	    itemBg = 'http://cdnstatic.zike.com/Uploads/static/beacon/error_emp_coupon.png'
+	    isChecked = false			//是否被选择，默认为没选中
+//	    nowCoupon= this.$parent.nowUseCoupon
 //	    instruction = '使用说明使用说明使用说明使用说明使用说明使用说明大沙发是的发送到发送到发斯蒂芬'		//优惠券说明
 		  isChoose=this.$parent.isToPay 	//1：可以选择圆圈状态 ，0：文字状态
 		  useConpon(){
@@ -89,6 +101,16 @@
 		  	}else{
 		  		console.log("我是通用券。。。")
 		  		this.$router.replace(`/index`)
+		  	}
+		  }
+		  //选择优惠券
+		  selectCoupon(){
+		  	if(this.isChoose){
+		  		this.isChecked = true
+		  		console.log(this.item.coupon.couponId,"我是优惠券的id。。。。。。。")
+		  		this.$parent.nowUseCoupon=this.item.userCouponId;
+		  		sessionStorage.setItem("coupon",JSON.stringify(this.item))
+		  		this.$router.go(-1)
 		  	}
 		  }
 //	  emitInfo (e) { // 点击跳转个人详情

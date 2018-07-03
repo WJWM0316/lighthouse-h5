@@ -6,8 +6,8 @@
 			<button class="btn-exchange" :class="{inputBtn:val.length>0}" @click.stop="showResults">兑换</button>
 		</div>
 		<!--优惠券-->
-		<div v-if="couponList.length>0"  v-for="item in couponList">
-			<CouponItem :item='item'></CouponItem>
+		<div v-if="couponList.length>0"  v-for="(item,index) in couponList">
+			<CouponItem :item='item' :index='index' :nowUseCoupon='nowUseCoupon'></CouponItem>
 		</div>
 
 		<!--<CouponItem></CouponItem>-->
@@ -21,8 +21,9 @@
 </template>
 
 <script>
-	var isTopay;
-	var communityId;
+	let isTopay;
+	let communityId;
+	let nowUseCoupon1 = 0;
 	import Vue from 'vue'
 	import Component from 'vue-class-component'
 	import CouponItem from '@/components/couponItem/couponItem'
@@ -51,12 +52,15 @@
 		val = ''			//输入框值
 		content = ''
 		isToPay = isTopay
+		nowUseCoupon = nowUseCoupon1
 		
 		beforeRouteEnter(to,from,next){
-			console.log(from,"woshilaide lu")
-			if(from.name==="introduce"){
-				communityId = from.params.communityId;
+			console.log(from,to,"woshilaide lu")
+			if(from.name==="introduce" || to.query.userCouponId){
+				communityId = to.query.communityId;
+				nowUseCoupon1 = parseInt(to.query.userCouponId);
 				isTopay = true;
+				console.log(to.query.couponId)
 			}else{
 				isTopay = false;
 				communityId = '';
@@ -68,7 +72,8 @@
 			let param={
 				page:1,
 				pageCount:20,
-				productId:communityId
+				productId:communityId,
+				userCouponId:nowUseCoupon1
 			}
 			if(this.isToPay){
 				this.getCanUseCouponList(param)
@@ -130,10 +135,10 @@
 			canUseCouponsApi(param).then(res=>{
 				let newList=[];
 				for(let i=0; i<res.selectCoupons.length;i++){
-					newList.push(res.selectCoupons.userCoupon)
+					newList.push(res.selectCoupons[i].userCoupon)
 				}
 //				let {userCoupons} = res.selectCoupons;
-				this.couponList=res.selectCoupons;
+				this.couponList=newList;
 				console.log(newList,this.couponList,"我是正确信息")
 			}).catch(res=>{
 				console.log(res,"我是错误信息")
