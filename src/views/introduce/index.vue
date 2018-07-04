@@ -118,9 +118,9 @@
     		<div class="coupon_price" @click.stop="toCoupon">
     			<span>优惠券</span>
     			<div class="coupon_price_right">
-    				<span v-if="SelectCouponItem.userCouponId!==0">-¥ {{SelectCouponItem.coupon.discount}} </span>
-    				<span v-else-if="SelectCouponItem.userCouponId===0 && pageInfo.selectCoupon!=='null'">不使用优惠券</span>
-    				<span v-else-if=" pageInfo.selectCoupon==='null' ">无可用优惠券</span>
+    				<span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">-¥ {{SelectCouponItem.coupon.discount}} </span>
+    				<span v-else-if=" pageInfo.selectCoupon!==null && SelectCouponItem.userCouponId===0 ">不使用优惠券</span>
+    				<span v-else-if=" pageInfo.selectCoupon===null ">无可用优惠券</span>
     				<span v-else>-¥ {{pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
     				<div class="more_coupon"></div>
     			</div>
@@ -128,8 +128,12 @@
     		<div class="payment">
     			<div class="payment_num">
     				实付：<span>¥</span>
-    				<span v-if="SelectCouponItem.userCouponId">{{SelectedPrice}}</span>
-    				<span v-else>{{pageInfo.selectCoupon.couponPrice}}</span>
+    				<!--选择其他优惠券-->
+    				<span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">{{SelectedPrice}}</span>
+    				<!--使用默认优惠券-->
+    				<span v-else-if="pageInfo.selectCoupon!==null ">{{pageInfo.selectCoupon.couponPrice}}</span>
+    				<!--不使用优惠券和无优惠券-->
+    				<span v-else-if="SelectCouponItem.userCouponId===0 || pageInfo.selectCoupon===null">{{pageInfo.joinPrice}}</span>
     			</div>
     			<div class="payment_btn" @click.stop="isPay">立即支付</div>
     		</div>
