@@ -1,4 +1,4 @@
-<!--优惠券-->
+<!--不可用优惠券页-->
 <template>
 	<div class='coupon-page' :class="{bgColor:couponList.length>0}">
 		<div class="exchange-inp">
@@ -6,19 +6,13 @@
 			<button class="btn-exchange" :class="{inputBtn:val.length>0}" @click.stop="showResults">兑换</button>
 		</div>
 		
-		<div class="noUse" @click.stop="noUseCoupon" v-if="isToPay">
-			<span class="noUseTxt">不使用优惠券</span>
-			<div class="cir" :class="{selCir:nowUseCoupon===0}">
-				<div :class="{cirCenter:nowUseCoupon===0}"></div>
-			</div>
-		</div>
 		<!--优惠券-->
 		<div v-if="couponList.length>0"  v-for="(item,index) in couponList">
-			<CouponItem :item='item' :index='index' :nowUseCoupon='nowUseCoupon' :canOrcant='1' ></CouponItem>
+			<CouponItem :item='item' :index='index' :nowUseCoupon='nowUseCoupon' :canOrcant='0'></CouponItem>
 		</div>
 		
-		<div class="invalidCoupon" v-if="isToPay && listLength>=couponList.length" @click.stop="toinvalidCoupon">
-			没有更多的可用优惠卷了 | 查看不可用优惠卷 >>
+		<div class="invalidCoupon" v-if="listLength>=couponList.length" @click.stop="toinvalidCoupon">
+			没有更多优惠券了～
 		</div>
 
 		<!--<CouponItem></CouponItem>-->
@@ -38,7 +32,7 @@
 	import Vue from 'vue'
 	import Component from 'vue-class-component'
 	import CouponItem from '@/components/couponItem/couponItem'
-	import { couponListApi,RedemptionCodeApi,canUseCouponsApi } from '@/api/pages/pageInfo.js'
+	import { invalidCouponsApi,RedemptionCodeApi } from '@/api/pages/pageInfo.js'
 	
 	Component.registerHooks([
 	  'beforeRouteEnter',
@@ -51,11 +45,6 @@
 	  components: {
 	    CouponItem
 	  },
-//	  watch:{
-//	  	'val'(newval,oldval){
-//	  		console.log(newval,oldval,"我是输入框的val")
-//	  	}
-//	  }
 	})
 	
 	export default class CenterCouponPage extends Vue {
@@ -68,15 +57,8 @@
 		
 		beforeRouteEnter(to,from,next){
 			console.log(from,to,"woshilaide lu")
-			if((from.name==="introduce" && to.query.communityId) || (from.name===null && to.query.communityId)){
-				communityId = to.query.communityId;
-				nowUseCoupon1 = parseInt(to.query.userCouponId);
-				isTopay = true;
-				console.log(to.query.couponId)
-			}else{
-				isTopay = false;
-				communityId = '';
-			}
+			communityId = to.query.communityId;
+			isTopay = true;
 			next();
 		}
 		
@@ -84,15 +66,9 @@
 			let param={
 				page:1,
 				pageCount:20,
-				productId:communityId,
-				userCouponId:nowUseCoupon1
+				productId:communityId
 			}
-			if(this.isToPay){
-				this.getCanUseCouponList(param)
-				console.log(this.couponList.length,"数组的长度。。。。。。")
-			}else{
-				this.getCouponList(param)
-			}
+			this.getInvalidCoupons(param)
 		}
 		
 		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
@@ -125,49 +101,17 @@
 			})
 			
 		}
-		//请求优惠券列表
-		getCouponList(param){
-			couponListApi(param).then(res=>{
-				
-				let {userCoupons} = res;
-				this.couponList=userCoupons;
-				console.log(res,this.couponList,"我是正确信息")
-			}).catch(res=>{
-				console.log(res,"我是错误信息")
-			})
-		}
 		
-		//请求支付页面可使用优惠券列表
-		getCanUseCouponList(param){
-			canUseCouponsApi(param).then(res=>{
+		//请求支付页面不可使用优惠券列表
+		getInvalidCoupons(param){
+			invalidCouponsApi(param).then(res=>{
 				this.listLength = res.total;
-				let newList=[];
-				for(let i=0; i<res.selectCoupons.length;i++){
-					newList.push(res.selectCoupons[i].userCoupon)
-				}
-//				let {userCoupons} = res.selectCoupons;
-				this.couponList=newList;
-				console.log(newList,this.couponList,"我是正确信息")
+				this.couponList=res.userCoupons;
+				console.log(this.couponList,"我是正确信息")
 			}).catch(res=>{
 				console.log(res,"我是错误信息")
 			})
 		}
-		
-		//不使用优惠券
-		noUseCoupon(){
-			console.log("我是不使用优惠券")
-			this.nowUseCoupon=0;
-			let noUseCoupon={userCouponId:0}
-			sessionStorage.setItem("coupon",JSON.stringify(noUseCoupon))
-  		this.$router.go(-1)
-		}
-		
-		//去查看无法使用优惠券列表
-		toinvalidCoupon(){
-			console.log(111111111111111)
-			this.$router.replace({path:'/center/invalidCoupon',query:{communityId:communityId}});
-		}
-		
 		
 	}
 </script>
@@ -182,48 +126,6 @@
     &.bgColor{
     	background-color: #F8F8F8;
     }
-    
-    /*不使用优惠券*/
-   .noUse{
-   	box-sizing: border-box;
-   	margin: 0 auto;
-   	margin-top: 15px;
-   	width: 350px;
-   	height: 60px;
-   	display: flex;
-   	justify-content: space-between;
-   	align-items: center;
-		box-shadow:0px 2px 5px 0px rgba(0,0,0,0.06);
-		border-radius:8px;
-		border:1px solid rgba(237,237,237,1);
-		padding-right: 20px;
-		padding-left: 15px;
-   	.noUseTxt{
-   		font-weight: 700;
-   		font-size:15px;
-			color:rgba(53,64,72,1);
-			line-height:21px;
-   	}
-   	/*圆圈*/
-   	.cir{
-   		width:18px;
-			height:18px;
-			border:1px solid rgba(188,188,188,1);
-			border-radius: 50%;
-   	}
-   	.selCir{
-      border: 1px solid #fa6a30;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      >.cirCenter{
-        background: #fa6a30;
-        border-radius: 50%;
-        width: 14px;
-        height: 14px;
-      }
-   	}
-   }
     
     /*兑换输入框*/
    .exchange-inp{

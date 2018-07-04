@@ -4,12 +4,18 @@
     	<!--优惠券上半部  @click.stop="emitInfo"-->
       <div class="top-part">
         <div class="left">
-          <div class="coupon-title" :class="{'unavail':item.coupon.status!==1}">{{item.coupon.title}}</div>
+          <div class="coupon-title" :class="{'unavail':item.coupon.status!==1 || item.useState===1 || canOrcant===0}">
+          	<!--全场通用名字-->
+          	<span v-if="item.coupon.relationCommunity===null">全场通用优惠券</span>
+          	<!--专属名字-->
+          	<span v-else>{{item.coupon.relationCommunity.title}}优惠券</span>
+          </div>
           <div class="outtime" v-show="item.isSoonPast===1">即将过期</div>
           <div class="time-during">{{item.coupon.useStartTime*1000 | date('YYYY-M-D')}} 至 {{item.coupon.useEndTime*1000 | date('YYYY-M-D')}}</div>
         </div>
         <div class="right">
-          <span :class="{'unavail': item.coupon.status!==1}">¥</span><span :class="{'unavail':item.coupon.status!==1}">{{item.coupon.discount}}</span>
+          <span :class="{'unavail': item.coupon.status!==1 || item.useState===1 || canOrcant===0}">¥</span>
+          <span :class="{'unavail':item.coupon.status!==1 || item.useState===1 || canOrcant===0}">{{item.coupon.discount}}</span>
         </div>
       </div>
       <!--优惠券上半部-->
@@ -17,18 +23,27 @@
       <!--优惠券下半部-->
       <div class="bottom-part">
         <div class="left">
-        	<span v-if="item.coupon.relationCommunity">仅“{{item.coupon.relationCommunity.title}}”可使用</span>
-        	<span v-else>小灯塔内所有灯塔均可使用</span>
+        	<span v-if="item.coupon.relationCommunity">
+        		<!--是否有门槛规则-->
+        		<span v-if="item.coupon.demand===0">仅限“{{item.coupon.relationCommunity.title}}”可使用</span>
+        		<span v-else>当灯塔价格满{{item.coupon.demand}}元时，仅限该灯塔可使用</span>
+        	</span>
+        	<span v-else>
+        		<!--是否有门槛规则-->
+        		<span v-if="item.coupon.demand===0">小灯塔内所有灯塔均可使用</span>
+        		<span v-else>当灯塔价格满{{item.coupon.demand}}元时可以使用</span>
+        	</span>
         </div>
         <div class="right" v-if="!isChoose" @click.stop="useConpon">
-          <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status===1">立即使用</div>
-          <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status===5">已过期</div>
-          <div :class="{'unavail':item.coupon.status!==1}" v-show="item.coupon.status===4">未开始</div>
+          <div :class="{'unavail':item.coupon.status!==1 || item.useState===1}" v-show="item.coupon.status===1 && item.useState===0">立即使用</div>
+          <div :class="{'unavail':item.coupon.status!==1 || item.useState===1}" v-show="item.coupon.status===5 && item.useState===0">已过期</div>
+          <div :class="{'unavail':item.coupon.status!==1 || item.useState===1}" v-show="item.coupon.status===4 && item.useState===0">未开始</div>
+          <div :class="{'unavail':item.coupon.status!==1 || item.useState===1}" v-show="item.useState===1">已使用</div>
           <img v-show="item.coupon.status===1" class="gloden-arrow" src="../../assets/icon/btn_gloden_enter.png"/>
         </div>
         <!--支付选择圆点-->
-        <div v-else class="select-circle" :class="{'selected-circle':item.userCouponId===nowUseCoupon}">
-          <div class="circle-center"></div>
+        <div v-else class="select-circle" :class="{'selectedCircle':item.userCouponId===nowUseCoupon,'disable':canOrcant===0}">
+          <div class="circleCenter"></div>
         </div>
       </div>
       <!--优惠券下半部-->
@@ -72,6 +87,10 @@
 	        	type:Number,
 	        	required: true,
 	        	default: 0
+	        },
+	        canOrcant:{
+	        	type:Number,
+	        	require:true
 	        }
 //	        itemBg: {
 //		      	type:Object,
@@ -105,7 +124,7 @@
 		  }
 		  //选择优惠券
 		  selectCoupon(){
-		  	if(this.isChoose){
+		  	if(this.isChoose && this.canOrcant===1){
 		  		this.isChecked = true
 		  		console.log(this.item.coupon.couponId,"我是优惠券的id。。。。。。。")
 		  		this.$parent.nowUseCoupon=this.item.userCouponId;
@@ -225,7 +244,10 @@
       border-radius: 50%;
       border: 1px solid #bcbcbc;
     }
-    .selected-circle{
+    .disable{
+    	display: none;
+    }
+    .selectedCircle{
       width: 18px;
       height: 18px;
       border-radius: 50%;
@@ -233,7 +255,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      .circle-center{
+      .circleCenter{
         background: #fa6a30;
         border-radius: 50%;
         width: 14px;

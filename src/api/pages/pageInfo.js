@@ -320,3 +320,12 @@ export const canUseCouponsApi = (data) => {
   })
 }
 
+// 优惠券不可使用择列表
+export const invalidCouponsApi = (data) => {
+  return request({
+    url: '/wap/coupon/cantUseCoupons',
+    type:'post',
+    data
+  })
+}
+

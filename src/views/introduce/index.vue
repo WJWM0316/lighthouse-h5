@@ -118,10 +118,10 @@
     		<div class="coupon_price" @click.stop="toCoupon">
     			<span>优惠券</span>
     			<div class="coupon_price_right">
-    				<span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">-¥ {{SelectCouponItem.coupon.discount}} </span>
+    				<span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">-¥ {{SelectCouponItem.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:SelectCouponItem.coupon.discount}}</span>
     				<span v-else-if=" pageInfo.selectCoupon!==null && SelectCouponItem.userCouponId===0 ">不使用优惠券</span>
     				<span v-else-if=" pageInfo.selectCoupon===null ">无可用优惠券</span>
-    				<span v-else>-¥ {{pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
+    				<span v-else>-¥ {{pageInfo.selectCoupon.userCoupon.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
     				<div class="more_coupon"></div>
     			</div>
     		</div>
@@ -130,10 +130,10 @@
     				实付：<span>¥</span>
     				<!--选择其他优惠券-->
     				<span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">{{SelectedPrice}}</span>
-    				<!--使用默认优惠券-->
-    				<span v-else-if="pageInfo.selectCoupon!==null ">{{pageInfo.selectCoupon.couponPrice}}</span>
     				<!--不使用优惠券和无优惠券-->
-    				<span v-else-if="SelectCouponItem.userCouponId===0 || pageInfo.selectCoupon===null">{{pageInfo.joinPrice}}</span>
+    				<span v-else-if=" pageInfo.selectCoupon===null || SelectCouponItem.userCouponId===0 ">{{pageInfo.joinPrice}}</span>
+    				<!--使用默认优惠券-->
+    				<span v-else>{{pageInfo.selectCoupon.couponPrice}}</span>
     			</div>
     			<div class="payment_btn" @click.stop="isPay">立即支付</div>
     		</div>
@@ -293,43 +293,48 @@
    	if(this.SelectCouponItem.userCouponId && this.SelectCouponItem.userCouponId!==0){
    		//选择其他优惠券
    		if(this.SelectedPrice>0){
+   			console.log("我是付费")
    			this.UsedUserCouponId = this.SelectCouponItem.userCouponId;
    			this.payIn()
    		}else{
+   			console.log("我是免费免费")
    			//选择的优惠券金额够大，可以免费加入
    			this.UsedUserCouponId = this.SelectCouponItem.userCouponId;
    			this.freeJoin()
    		}
    		
-   	}else if(this.SelectCouponItem.userCouponId===0){
-   		//选择不使用优惠券
+   	}else if(this.SelectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
+   		//选择不使用优惠券 和 无可用优惠券
+   		console.log("我是没有优惠券和不用优惠券")
    		this.UsedUserCouponId = 0;
  			this.payIn()
    	}else{
    		//默认优惠券
-   		if(this.pageInfo.selectCoupon){
+   		if(this.pageInfo.selectCoupon.couponPrice>0){
+   			console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
    			//有默认优惠券
    			this.UsedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
    			this.payIn()
    		}else{
-   			//没有优惠券
-   			this.UsedUserCouponId = 0;
- 				this.payIn()
+   			console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
+   			this.UsedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+   			this.freeJoin()
    		}
-   		
    	}
    }
    
    toCoupon(){
    	if(this.SelectCouponItem.userCouponId){
    		this.$router.push({path:'/center/coupon',query:{userCouponId:this.SelectCouponItem.userCouponId,communityId:this.pageInfo.communityId}});
+   	}else if(this.SelectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
+   		this.$router.push({path:'/center/coupon',query:{userCouponId:0,communityId:this.pageInfo.communityId}});
    	}else{
    		this.$router.push({path:'/center/coupon',query:{userCouponId:this.pageInfo.selectCoupon.userCoupon.userCouponId,communityId:this.pageInfo.communityId}});
    	}
    }
     
     payOrFree () {
-      let that = this
+      let that = this;
       this.toPay = true;
 //   	if(that.pageInfo.selectCoupon.couponPrice===0){
 //   		that.freeJoin()
@@ -552,7 +557,12 @@
       	this.toPay = true;
       	let CouponItem = sessionStorage.getItem("coupon");
       	this.SelectCouponItem = JSON.parse(CouponItem);
-      	this.SelectedPrice = this.pageInfo.joinPrice>this.SelectCouponItem.coupon.discount?this.pageInfo.joinPrice-this.SelectCouponItem.coupon.discount:0;
+      	if(this.SelectCouponItem.userCouponId!==0){
+      		let paynum=this.pageInfo.joinPrice-this.SelectCouponItem.coupon.discount;
+      		this.SelectedPrice = this.pageInfo.joinPrice>this.SelectCouponItem.coupon.discount?paynum.toFixed(2):0;
+      	}else{
+      		this.SelectedPrice =this.pageInfo.joinPrice
+      	}
       	
       	console.log(this.SelectCouponItem,this.SelectedPrice,"我是当前选择的优惠券信息")
       }
