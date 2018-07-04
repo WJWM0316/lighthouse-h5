@@ -1,9 +1,16 @@
 <!--优惠券-->
 <template>
-	<div class='coupon-page' :class="{bgColor:true}">
+	<div class='coupon-page' :class="{bgColor:false}">
 		<div class="exchange-inp">
 			<input type="text" v-model="val" placeholder="输入兑换码"/>
 			<button class="btn-exchange" :class="{inputBtn:val.length>0}" @click.stop="showResults">兑换</button>
+		</div>
+		
+		<div class="noUse">
+			<span class="noUseTxt">不使用优惠券</span>
+			<div class="cir sel-cir">
+				<div class="cir-center"></div>
+			</div>
 		</div>
 		<!--优惠券-->
 		<div v-if="couponList.length>0"  v-for="(item,index) in couponList">
@@ -159,6 +166,48 @@
     &.bgColor{
     	/*background-color: #F8F8F8;*/
     }
+    
+    /*不使用优惠券*/
+   .noUse{
+   	box-sizing: border-box;
+   	margin: 0 auto;
+   	margin-top: 15px;
+   	width: 350px;
+   	height: 60px;
+   	display: flex;
+   	justify-content: space-between;
+   	align-items: center;
+		box-shadow:0px 2px 5px 0px rgba(0,0,0,0.06);
+		border-radius:8px;
+		border:1px solid rgba(237,237,237,1);
+		padding-right: 20px;
+		padding-left: 15px;
+   	.noUseTxt{
+   		font-weight: 700;
+   		font-size:15px;
+			color:rgba(53,64,72,1);
+			line-height:21px;
+   	}
+   	/*圆圈*/
+   	.cir{
+   		width:18px;
+			height:18px;
+			border:1px solid rgba(188,188,188,1);
+			border-radius: 50%;
+   	}
+   	.sel-cir{
+      border: 1px solid #fa6a30;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      >.cir-center{
+        background: #fa6a30;
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+      }
+   	}
+   }
     
     /*兑换输入框*/
    .exchange-inp{

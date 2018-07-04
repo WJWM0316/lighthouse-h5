@@ -118,8 +118,8 @@
     		<div class="coupon_price" @click.stop="toCoupon">
     			<span>优惠券</span>
     			<div class="coupon_price_right">
-    				<span v-if="SelectCouponItem.userCouponId">-¥ {{SelectCouponItem.coupon.discount}} </span>
-    				<span v-else-if="SelectCouponItem.userCouponId===0">不使用优惠券</span>
+    				<span v-if="SelectCouponItem.userCouponId!==0">-¥ {{SelectCouponItem.coupon.discount}} </span>
+    				<span v-else-if="SelectCouponItem.userCouponId===0 && pageInfo.selectCoupon!=='null'">不使用优惠券</span>
     				<span v-else-if=" pageInfo.selectCoupon==='null' ">无可用优惠券</span>
     				<span v-else>-¥ {{pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
     				<div class="more_coupon"></div>
