@@ -98,21 +98,52 @@
 		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
 		
 		showResults(){
-			console.log(this.val,"我是优惠券兑换码。。。。。")
+			
 			RedemptionCodeApi(this.val).then(res=>{
+				let that = this;
 				//兑换成功
 				this.$vux.alert.show({
           title: '兑换成功',
           content: '快去使用优惠券吧～',
           buttonText: '好的',
           onHide () {
-//        	console.log(this)
+          	let param={
+							page:1,
+							pageCount:20,
+							productId:communityId,
+							userCouponId:nowUseCoupon1
+						}
+						if(that.isToPay){
+							that.getCanUseCouponList(param)
+							console.log(that.couponList.length,"数组的长度。。。。。。")
+						}else{
+							that.getCouponList(param)
+						}
+//        	console.log("这个是点击好的后触发的。。。。。")
           }
         })
 				
 			}).catch(res=>{
+				console.log(this.val,"我是优惠券兑换码。。。。。")
 				let that = this
-				let content = "快去使用优惠券吧～"
+				let content;
+				switch(res.statusCode){
+					case 424:
+						content = '兑换码失效'
+						break;
+					case 423:
+						content = '兑换码已经兑换'
+						break;
+					case 422:
+						content = '兑换码错误'
+						break;
+					case 421:
+						content = '来晚了，优惠券已经兑换完了~'
+						break;
+					default :
+						content = '未知错误'
+						break;
+				}
 				//兑换失败
 				this.$vux.alert.show({
           title: '兑换失败',
