@@ -91,6 +91,10 @@
 	        canOrcant:{
 	        	type:Number,
 	        	require:true
+	        },
+	        isChoose:{//true：可以选择圆圈状态 ，false：文字状态
+	        	type:Boolean,
+	        	require:true
 	        }
 //	        itemBg: {
 //		      	type:Object,
@@ -111,7 +115,10 @@
 	    isChecked = false			//是否被选择，默认为没选中
 //	    nowCoupon= this.$parent.nowUseCoupon
 //	    instruction = '使用说明使用说明使用说明使用说明使用说明使用说明大沙发是的发送到发送到发斯蒂芬'		//优惠券说明
-		  isChoose=this.$parent.isToPay 	//1：可以选择圆圈状态 ，0：文字状态
+//		  isChoose=this.$parent.isToPay 	//1：可以选择圆圈状态 ，0：文字状态
+		  created(){
+		  	console.log(this.$parent.$parent,"1111111111111111111111111111111111111")
+		  }
 		  useConpon(){
 		  	if(this.item.coupon.status===1 && this.item.useState===0){
 		  		if(this.item.coupon.relationCommunity){
@@ -146,8 +153,9 @@
 <style lang="less" scoped>
  @import "../../styles/mixins";
   .coupon-item {
-  	margin-top:15px;
+  	margin-top:5px;
     width: 100%;
+    
     .unavail{
       color: #929292!important;
     }
@@ -158,7 +166,7 @@
       background: url('http://cdnstatic.zike.com/Uploads/static/beacon/coupon/bg_coupon.png') no-repeat;
       background-size: 355px 132px;
         .top-part {
-          padding: 20px 17.5px 11px;
+          padding: 20px 21.5px 11px;
           display: flex;
           justify-content: space-between;
           .coupon-title {
@@ -211,7 +219,7 @@
           margin-right:15px;
         }
         .bottom-part{
-          padding: 8px 17.5px 12px;
+          padding: 8px 21.5px 12px;
           display: flex;
           justify-content: space-between;
           align-items: center;

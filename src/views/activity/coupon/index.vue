@@ -6,7 +6,8 @@
 		<div class="content" :class="{'isReceive':item.status===2}">
 			<div class="top">
 				<div class="left">
-					<span>￥</span><span>{{item.discount}}</span>
+					<!--<span>￥</span>-->
+					<span>{{item.discount}}</span>
 					<p>优惠金额</p>
 				</div>
 				<div class="right">
@@ -39,9 +40,9 @@
 					<span></span>
 				</div>
 				<div class="rule-content">
-					<span>1.红包新老用户同享；</span>
-					<span>2.红包仅限在线支付使用，且不可与其他优惠叠加使用；</span>
-					<span>3.其他未尽事宜，请咨询客服，客服微信号zike02。</span>
+					<span>1. 红包新老用户同享；</span>
+					<span>2. 红包仅限在线支付使用，且不可与其他优惠叠加使用；</span>
+					<span>3. 其他未尽事宜，请咨询客服，客服微信号zike02。</span>
 				</div>
 			</div>
 		</div>
@@ -59,30 +60,30 @@
 	export default {
 		data(){
 			return {
-					item:{
-						couponId:'',		//优惠券的id
-						title:'',
-						discount:'',		//优惠券的金额
-						imgUrl:"",
-						relationCommunity:{
-							title:'',
-						},
-						status:'',		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
-						useEndTime:'',		//优惠券结束时间
-						useStartTime:'',		//优惠券开始时间
-					},
-//				item:{
-//					couponId:11,		//优惠券的id
-//					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
-//					discount:'199.99',		//优惠券的金额
-//					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
-//					relationCommunity:{
-//						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+//					item:{
+//						couponId:'',		//优惠券的id
+//						title:'',
+//						discount:'',		//优惠券的金额
+//						imgUrl:"",
+//						relationCommunity:{
+//							title:'',
+//						},
+//						status:'',		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+//						useEndTime:'',		//优惠券结束时间
+//						useStartTime:'',		//优惠券开始时间
 //					},
-//					status:1,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
-//					useEndTime:1532745050,
-//					useStartTime:1529980249,
-//				},
+				item:{
+					couponId:11,		//优惠券的id
+					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
+					discount:'199',		//优惠券的金额
+					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
+					relationCommunity:{
+						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+					},
+					status:1,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+					useEndTime:1532745050,
+					useStartTime:1529980249,
+				},
 				isReceive:'',		//是否领取
 				status:'',			//路劲带过来的id
 			}
@@ -187,26 +188,38 @@
 				display: flex;
 				.left{
 					display: flex;
+					flex-direction: column;
 					flex-shrink: 0;
-					flex-wrap: wrap;
-					align-items: flex-end;
+					flex-wrap: nowrap;
+					align-items: center;
 					justify-content: center;
-					width: 130px;
+					/*width: 130px;*/
 					/*max-width: 140px;*/
-					border-right: 1px solid #EEEEEE;
+					border-right: 0.5px solid #EEEEEE;
+					padding-left: 12px;
+					padding-right: 10px;
 					span{
-						&:nth-child(1){
+						/*&:nth-child(1){
 							font-size: 12px;
 							color: #FA6A30;
 							line-height: 20px;
-						}
-						&:nth-child(2){
+						}*/
+						&:nth-child(1){
 							text-align: center;
-							min-width: 75px;
 							font-size: 36px;
 							font-weight: 600;
 							color: #FA6A30;
 							line-height: 36px;
+							position: relative;
+							margin-left: 14px;
+							&::before{
+								content: '￥';
+								color: #FA6A30;
+								font-size: 12px;
+								position: absolute;
+								bottom: -8px;
+								left: -14px;
+							}
 						}
 					}
 					p{
@@ -214,15 +227,20 @@
 						/*line-height: 12px;*/
 						color: #666666;
 						text-align: center;
+						white-space: nowrap;
 					}
 				}
 				.right{
+					overflow: hidden;
+					box-sizing: border-box;
 					display: flex;
 					flex-wrap: wrap;
 					align-items: center;
 					justify-content: center;
+					padding-left: 13px;
+					padding-right: 20px;
 					span{
-						width: 180px;
+						width: 100%;
 						&:nth-child(1){
 							font-size:15px;
 							line-height: 20px;
@@ -235,6 +253,10 @@
 	            -webkit-box-orient: vertical;
 						}
 						&:nth-child(2){
+							width: 100%;
+							white-space: nowrap;
+							overflow: hidden;
+	            text-overflow: ellipsis;
 							font-size: 13px;
 							color: #929292;
 							margin-top: 5px;
@@ -275,7 +297,7 @@
 				.unReceive>div{
 					width: 285px;
 					height: 49px;
-					border-radius: 22px;
+					border-radius: 24.5px;
 					background-color: #FA6A30;
 					color: #FFFFFF;
 					margin: 25px auto 45px;

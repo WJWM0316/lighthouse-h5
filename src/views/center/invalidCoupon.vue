@@ -8,10 +8,10 @@
 		
 		<!--优惠券-->
 		<div v-if="couponList.length>0"  v-for="(item,index) in couponList">
-			<CouponItem :item='item' :index='index' :nowUseCoupon='nowUseCoupon' :canOrcant='0'></CouponItem>
+			<CouponItem :item='item' :index='index' :nowUseCoupon='nowUseCoupon' :canOrcant='0' :isChoose="isToPay"></CouponItem>
 		</div>
 		
-		<div class="invalidCoupon" v-if="listLength>=couponList.length" @click.stop="toinvalidCoupon">
+		<div class="invalidCoupon" v-if="listLength>=couponList.length && couponList.length!==0">
 			没有更多优惠券了～
 		</div>
 
@@ -75,24 +75,60 @@
 		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
 		
 		showResults(){
-			console.log(this.val,"我是优惠券兑换码。。。。。")
+			
 			RedemptionCodeApi(this.val).then(res=>{
+				let that = this;
 				//兑换成功
 				this.$vux.alert.show({
           title: '兑换成功',
           content: '快去使用优惠券吧～',
           buttonText: '好的',
           onHide () {
-//        	console.log(this)
+          	let param={
+							page:1,
+							pageCount:20,
+							productId:communityId,
+							userCouponId:nowUseCoupon1
+						}
+						if(that.isToPay){
+							that.getCanUseCouponList(param)
+							console.log(that.couponList.length,"数组的长度。。。。。。")
+						}else{
+							that.getCouponList(param)
+						}
+//        	console.log("这个是点击好的后触发的。。。。。")
           }
         })
 				
 			}).catch(res=>{
+				console.log(this.val,"我是优惠券兑换码。。。。。")
 				let that = this
-				let content = "快去使用优惠券吧～"
+				let content,title;
+				switch(res.statusCode){
+					case 424:
+						title = '兑换码已失效'
+						content = '不要伤心啦，持续关注我们 还会有更多优惠哦！'
+						break;
+					case 423:
+						title = '兑换失败'
+						content = '该兑换码已经被兑换啦～'
+						break;
+					case 422:
+						title = '兑换码错误'
+						content = '看看有没有数错哦～'
+						break;
+					case 421:
+						title = '兑换失败'
+						content = '来晚了，优惠券已经兑换完了~'
+						break;
+					default :
+						title = '兑换失败'
+						content = '未知错误'
+						break;
+				}
 				//兑换失败
 				this.$vux.alert.show({
-          title: '兑换失败',
+          title: title,
           content: content,
           buttonText: '好的',
           onHide () {
@@ -137,6 +173,7 @@
    	box-sizing: border-box;
    	display: flex;
    	align-items: center;
+   	margin-bottom: 10px;
    	input{
    		width:265px;
    		height: 34px;

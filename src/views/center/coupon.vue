@@ -1,6 +1,8 @@
 <!--优惠券-->
 <template>
 	<div class='coupon-page' :class="{bgColor:couponList.length>0}">
+		<!--<scroll  :pullupable="false" :refreshable="false" :infinite-scroll="true" @infinite-scroll="handlePullup">-->
+	
 		<div class="exchange-inp">
 			<input type="text" v-model="val" placeholder="输入兑换码"/>
 			<button class="btn-exchange" :class="{inputBtn:val.length>0}" @click.stop="showResults">兑换</button>
@@ -14,12 +16,13 @@
 		</div>
 		<!--优惠券-->
 		<div v-if="couponList.length>0"  v-for="(item,index) in couponList">
-			<CouponItem :item='item' :index='index' :nowUseCoupon='nowUseCoupon' :canOrcant='1' ></CouponItem>
+			<CouponItem :item='item' :index='index' :nowUseCoupon='nowUseCoupon' :canOrcant='1' :isChoose="isToPay"></CouponItem>
 		</div>
 		
 		<div class="invalidCoupon" v-if="isToPay && listLength>=couponList.length" @click.stop="toinvalidCoupon">
 			没有更多的可用优惠卷了 | 查看不可用优惠卷 >>
 		</div>
+		<!--</scroll>-->
 
 		<!--<CouponItem></CouponItem>-->
 		<!--没有优惠券-->
@@ -38,6 +41,7 @@
 	import Vue from 'vue'
 	import Component from 'vue-class-component'
 	import CouponItem from '@/components/couponItem/couponItem'
+	import Scroll from '@/components/scroller'
 	import { couponListApi,RedemptionCodeApi,canUseCouponsApi } from '@/api/pages/pageInfo.js'
 	
 	Component.registerHooks([
@@ -49,7 +53,8 @@
 	@Component({
 	  name: 'coupon-page',
 	  components: {
-	    CouponItem
+	    CouponItem,
+	    Scroll
 	  },
 //	  watch:{
 //	  	'val'(newval,oldval){
@@ -65,6 +70,7 @@
 		isToPay = isTopay
 		nowUseCoupon = nowUseCoupon1
 		listLength = 0
+		page = 1
 		
 		beforeRouteEnter(to,from,next){
 			console.log(from,to,"woshilaide lu")
@@ -72,7 +78,6 @@
 				communityId = to.query.communityId;
 				nowUseCoupon1 = parseInt(to.query.userCouponId);
 				isTopay = true;
-				console.log(to.query.couponId)
 			}else{
 				isTopay = false;
 				communityId = '';
@@ -82,7 +87,7 @@
 		
 		created(){
 			let param={
-				page:1,
+				page:this.page,
 				pageCount:20,
 				productId:communityId,
 				userCouponId:nowUseCoupon1
@@ -98,6 +103,7 @@
 		
 		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
 		
+		//兑换优惠券
 		showResults(){
 			
 			RedemptionCodeApi(this.val).then(res=>{
@@ -165,7 +171,7 @@
 		//请求优惠券列表
 		getCouponList(param){
 			couponListApi(param).then(res=>{
-				
+				this.listLength = res.total;
 				let {userCoupons} = res;
 				this.couponList=userCoupons;
 				console.log(res,this.couponList,"我是正确信息")
@@ -201,10 +207,24 @@
 		
 		//去查看无法使用优惠券列表
 		toinvalidCoupon(){
-			console.log(111111111111111)
-			this.$router.replace({path:'/center/invalidCoupon',query:{communityId:communityId}});
+			this.$router.push({path:'/center/invalidCoupon',query:{communityId:communityId}});
 		}
 		
+		
+		async handlePullup (loaded) {
+			console.log("2222222222222222222222222222")
+			if(this.couponList.length===this.listLength){
+				
+				loaded('ended')
+			}
+//			console.log(loaded,"我是上拉刷新、、、、、、、")
+//    await this.loadNext()
+//    if (this.pagination.end) {
+//      loaded('ended')
+//    } else {
+//      loaded('done')
+//    }
+    }
 		
 	}
 </script>
@@ -272,6 +292,7 @@
    	box-sizing: border-box;
    	display: flex;
    	align-items: center;
+   	margin-bottom: 10px;
    	input{
    		width:265px;
    		height: 34px;

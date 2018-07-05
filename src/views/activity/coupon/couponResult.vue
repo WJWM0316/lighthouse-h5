@@ -74,7 +74,7 @@
 			width: 100%;
 			height: 55px;
 			position: absolute;
-			top: 40px;
+			top: 50px;
 			left: 0;
 			font-size:23px;
 			color:rgba(255,255,255,1);
@@ -89,14 +89,14 @@
 		/*二维码*/
 		.QRcode{
 			position: absolute;
-			top: 135px;
+			top: 145px;
 			left: 42.5px;
 			width: 290px;
 			height: 388px;
 			background-color: #FFFFFF;
 			.tip{
 				position: absolute;
-				top: 230px;
+				top: 228px;
 				left: 50%;
 				transform: translateX(-50%);
 				font-size:15px;
@@ -110,7 +110,7 @@
 					position: absolute;
 					top: 8px;
 					left: -32px;
-					border-top:1px solid rgba(146,146,146,1);
+					border-top:0.5px solid #929292;
 				}
 				&::after{
 					content: '';
@@ -120,7 +120,7 @@
 					position: absolute;
 					top: 8px;
 					right: -32px;
-					border-top:1px solid rgba(146,146,146,1);
+					border-top:0.5px solid #929292;
 				}
 			}
 			.QR{
@@ -128,7 +128,7 @@
 				width:190px;
 				height:190px;
 				padding: 22.5px 50px 56px;
-				border-bottom: 1px solid rgba(151,151,151,1);
+				border-bottom: 0.5px solid #DCDCDC;
 			}
 			.txt{
 				padding: 25px 0 30px;

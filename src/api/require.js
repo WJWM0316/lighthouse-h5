@@ -182,7 +182,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   }
   
 
-//   data.TestUid = 5
+     data.TestUid = 5
 
 
 

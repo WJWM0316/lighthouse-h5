@@ -321,6 +321,8 @@
    			this.freeJoin()
    		}
    	}
+   	this.toPay = false;
+   	sessionStorage.removeItem("coupon");
    }
    
    toCoupon(){
