@@ -21,15 +21,15 @@
 			</div>
 			<div class="line"></div>
 			<div class="bottom">
-				<div class="receive" v-if="item.status===1 && !isReceive" @click.stop="receive()">免费领取优惠券</div>
-				<div class="unReceive" v-if="item.status===2 || isReceive">
-					<span class="littleTitle" v-show="item.status===1 && isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
-					<span class="littleTitle" v-show="item.status===2">来晚啦～优惠券已经被领完了！</span>
-					<span class="littleTitle" v-show="item.status===5">来晚啦～优惠券已经过期！</span>
-					<div v-if="item.status===1 && isReceive" @click.stop="toUse">
+				<div class="receive" v-if="item.status!==5 && !isReceive && !item.isFullCodeNumber" @click.stop="receive">免费领取优惠券</div>
+				<div class="unReceive" v-else>
+					<span class="littleTitle" v-show="isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
+					<span class="littleTitle" v-show="!isReceive && item.isFullCodeNumber && item.status!==5">来晚啦～优惠券已经被领完了！</span>
+					<span class="littleTitle" v-show="!isReceive && item.status===5">来晚啦～优惠券已经过期！</span>
+					<div v-if="isReceive" @click.stop="toUse">
 						立即使用
 					</div>
-					<div v-if="item.status===2 || item.status===5" @click.stop="toLate">
+					<div v-else @click.stop="toLate">
 						查看更多职场福利
 					</div>
 				</div>
@@ -59,30 +59,30 @@
 	export default {
 		data(){
 			return {
-					item:{
-						couponId:'',		//优惠券的id
-						title:'',
-						discount:'',		//优惠券的金额
-						imgUrl:"",
-						relationCommunity:{
-							title:'',
-						},
-						status:'',		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
-						useEndTime:'',		//优惠券结束时间
-						useStartTime:'',		//优惠券开始时间
-					},
-//				item:{
-//					couponId:11,		//优惠券的id
-//					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
-//					discount:'9',		//优惠券的金额
-//					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
-//					relationCommunity:{
-//						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+//					item:{
+//						couponId:'',		//优惠券的id
+//						title:'',
+//						discount:'',		//优惠券的金额
+//						imgUrl:"",
+//						relationCommunity:{
+//							title:'',
+//						},
+//						status:'',		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+//						useEndTime:'',		//优惠券结束时间
+//						useStartTime:'',		//优惠券开始时间
 //					},
-//					status:1,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
-//					useEndTime:1532745050,
-//					useStartTime:1529980249,
-//				},
+				item:{
+					couponId:11,		//优惠券的id
+					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
+					discount:'199.99',		//优惠券的金额
+					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
+					relationCommunity:{
+						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+					},
+					status:1,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+					useEndTime:1532745050,
+					useStartTime:1529980249,
+				},
 				isReceive:'',		//是否领取
 				status:'',			//路劲带过来的id
 			}

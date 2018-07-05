@@ -16,6 +16,7 @@
 		</div>
 		<!--二维码-->
 		<div class="QRcode">
+			<div class="tip">长按识别二维码</div>
 			<img class="QR" src="../../../assets/icon/wx-qrcode.png" alt="" />
 			<div class="txt">
 				<span>非微信打开，怎么办？</span>
@@ -24,9 +25,9 @@
 			</div>
 		</div>
 		<!--按钮-->
-		<div class="btn">
+		<!--<div class="btn">
 			保存图片
-		</div>
+		</div>-->
 	</div>
 </template>
 
@@ -70,11 +71,11 @@
 		}
 		/*标题*/
 		.title{
-			width: 230px;
+			width: 100%;
 			height: 55px;
 			position: absolute;
 			top: 40px;
-			left: 73px;
+			left: 0;
 			font-size:23px;
 			color:rgba(255,255,255,1);
 			span{
@@ -82,6 +83,7 @@
 				width: 100%;
 				text-align: center;
 				height: 27px;
+				white-space: nowrap;
 			}
 		}
 		/*二维码*/
@@ -90,13 +92,42 @@
 			top: 135px;
 			left: 42.5px;
 			width: 290px;
-			height: 352px;
+			height: 388px;
 			background-color: #FFFFFF;
+			.tip{
+				position: absolute;
+				top: 230px;
+				left: 50%;
+				transform: translateX(-50%);
+				font-size:15px;
+				color:rgba(53,64,72,1);
+				line-height:16px;
+				&::before{
+					content: '';
+					display: block;
+					width: 20px;
+					height: 0px;
+					position: absolute;
+					top: 8px;
+					left: -32px;
+					border-top:1px solid rgba(146,146,146,1);
+				}
+				&::after{
+					content: '';
+					display: block;
+					width: 20px;
+					height: 0px;
+					position: absolute;
+					top: 8px;
+					right: -32px;
+					border-top:1px solid rgba(146,146,146,1);
+				}
+			}
 			.QR{
 				display: block;
 				width:190px;
 				height:190px;
-				padding: 22.5px 50px 27px;
+				padding: 22.5px 50px 56px;
 				border-bottom: 1px solid rgba(151,151,151,1);
 			}
 			.txt{
@@ -110,6 +141,7 @@
 					height:13px;
 					line-height: 13px;
 					padding-top: 5px;
+					white-space: nowrap;
 				}
 			}
 		}
