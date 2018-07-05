@@ -8,7 +8,7 @@
 		</div>
 		<div class="title" v-show="status===2">
 			<span>你已经领过该优惠券</span>
-			<span>请到小灯塔小程序体验</span>
+			<span>请到小灯塔公众号体验</span>
 		</div>
 		<div class="title" v-show="status===1">
 			<span>领取成功</span>

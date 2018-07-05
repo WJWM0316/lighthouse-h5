@@ -88,6 +88,7 @@
 				userCouponId:nowUseCoupon1
 			}
 			if(this.isToPay){
+				document.querySelector('title').innerHTML = "选择优惠券"
 				this.getCanUseCouponList(param)
 				console.log(this.couponList.length,"数组的长度。。。。。。")
 			}else{

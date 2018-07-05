@@ -109,7 +109,7 @@
     <!--支付弹窗-->
     <div class="pay_window" v-if="toPay" @click="closePya">
     	<div class="pay_box" @click.stop="showPayWindow">
-    		<h3>{{pageInfo.masterIntro}}</h3>
+    		<h3>{{pageInfo.title}}</h3>
     		<div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
     		<div class="price">
     			<span>社区价格</span>

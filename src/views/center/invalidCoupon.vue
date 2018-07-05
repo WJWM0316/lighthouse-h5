@@ -63,6 +63,7 @@
 		}
 		
 		created(){
+			document.querySelector('title').innerHTML = "不可用优惠券";
 			let param={
 				page:1,
 				pageCount:20,
