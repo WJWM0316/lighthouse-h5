@@ -158,7 +158,7 @@
       background: url('http://cdnstatic.zike.com/Uploads/static/beacon/coupon/bg_coupon.png') no-repeat;
       background-size: 355px 132px;
         .top-part {
-          padding: 20px 18px 11px;
+          padding: 20px 17.5px 11px;
           display: flex;
           justify-content: space-between;
           .coupon-title {
@@ -206,12 +206,12 @@
           }
         }
         .border-sty{
-          border-bottom: 1px solid #ededed;
+          border-bottom: 0.5px solid #ededed;
           margin-left:15px;
           margin-right:15px;
         }
         .bottom-part{
-          padding: 8px 18px 12px;
+          padding: 8px 17.5px 12px;
           display: flex;
           justify-content: space-between;
           align-items: center;

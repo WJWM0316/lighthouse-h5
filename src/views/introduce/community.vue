@@ -845,12 +845,12 @@
 
         .u-btn {
           position: relative;
-          line-height: 18px;
+          line-height: 22px;
           font-size: 13px;
           color: @font-color-default;
 
           &:first-child {
-            padding: 8px 12px 6px 15px;
+            padding: 7px 12px 7px 15px;
           }
 
           &:last-child {

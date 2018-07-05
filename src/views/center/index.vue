@@ -44,6 +44,8 @@
         </div>
         <div class="addon">
           <i class="addon-icon u-icon-center-angle-right" />
+          <span class="soonPsat" v-if="model.hasSoonPastCoupon">有即将过期的优惠券</span>
+          <span class="redTip" :class="{'redTipMove':model.hasSoonPastCoupon}"  v-if="model.hasCouponRedDot"></span>
         </div>
       </router-link>
       <!--我的主页-->
@@ -207,6 +209,30 @@ export default class HomeIndex extends Vue {
             top: auto;
             vertical-align: middle;
           }
+          /*即将过期*/
+          .soonPsat{
+          	position: absolute;
+          	top: 50%;
+          	right: 19px;
+          	transform: translateY(-50%);
+          	white-space: nowrap;
+						font-size:13px;
+						color:rgba(188,188,188,1);
+         	}
+         	/*红点*/
+         	.redTip{
+         		position: absolute;
+         		top: 50%;
+         		right: 21px;
+         		transform: translateY(-50%);
+         		width: 6px;
+         		height: 6px;
+         		border-radius: 50%;
+         		background-color: #FF3434;
+         	}
+         	.redTipMove{
+         		right: 144px;
+         	}
         }
       }
     }

@@ -127,27 +127,32 @@
 			}).catch(res=>{
 				console.log(this.val,"我是优惠券兑换码。。。。。")
 				let that = this
-				let content;
+				let content,title;
 				switch(res.statusCode){
 					case 424:
-						content = '兑换码失效'
+						title = '兑换码已失效'
+						content = '不要伤心啦，持续关注我们 还会有更多优惠哦！'
 						break;
 					case 423:
-						content = '兑换码已经兑换'
+						title = '兑换失败'
+						content = '该兑换码已经被兑换啦～'
 						break;
 					case 422:
-						content = '兑换码错误'
+						title = '兑换码错误'
+						content = '看看有没有数错哦～'
 						break;
 					case 421:
+						title = '兑换失败'
 						content = '来晚了，优惠券已经兑换完了~'
 						break;
 					default :
+						title = '兑换失败'
 						content = '未知错误'
 						break;
 				}
 				//兑换失败
 				this.$vux.alert.show({
-          title: '兑换失败',
+          title: title,
           content: content,
           buttonText: '好的',
           onHide () {
@@ -226,10 +231,11 @@
    	justify-content: space-between;
    	align-items: center;
 		box-shadow:0px 2px 5px 0px rgba(0,0,0,0.06);
-		border-radius:8px;
+		border-radius:4px;
 		border:1px solid rgba(237,237,237,1);
 		padding-right: 20px;
 		padding-left: 15px;
+		background-color: #FFFFFF;
    	.noUseTxt{
    		font-weight: 700;
    		font-size:15px;
@@ -271,7 +277,7 @@
    		height: 34px;
    		box-sizing: border-box;
    		padding: 0 20px;
-   		border: 1px solid #DCDCDC;
+   		border: 0.5px solid #DCDCDC;
    		border-radius: 20px;
    		margin-right: 10px;
    		color: #354048;
@@ -321,6 +327,8 @@
    		justify-content: center;
    		align-items: center;
    		padding-top: 25px;
+   		padding-bottom: 25px;
+   		font-weight: 300;
    		font-size:12px;
 			color:rgba(146,146,146,1);
    	}

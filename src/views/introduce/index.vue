@@ -1061,7 +1061,7 @@
    		width: 375px;
    		height: 287px;
    		background:rgba(255,255,255,1);
-			border-radius:20px 20px 0px 0px;
+			border-radius:10px 10px 0px 0px;
 			position: absolute;
 			bottom: 0;
 			left: 0;
@@ -1127,7 +1127,7 @@
 				display: flex;
 				justify-content: flex-end;
 				align-items: center;
-				border-top:1px solid rgba(220,220,220,1);
+				border-top:0.5px solid rgba(220,220,220,1);
 				height:49px;
 				.payment_num{
 					margin-right: 20px;
