@@ -14,6 +14,7 @@
 					<span v-if="item.relationCommunity">
 						仅可购买《{{item.relationCommunity.title}}》
 					</span>
+					<span v-else-if="!item.relationCommunity && item.demand!==0">适用于小灯塔内满{{item.demand}}的灯塔均可使用</span>
 					<span v-else>小灯塔内所有灯塔均可使用</span>
 					<span>
 						有效期：{{item.useStartTime*1000 | date('YYYY.M.D')}}-{{item.useEndTime*1000 | date('YYYY.M.D')}}

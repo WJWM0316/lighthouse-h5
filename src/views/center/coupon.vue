@@ -97,6 +97,7 @@
 				this.getCanUseCouponList(param)
 				console.log(this.couponList.length,"数组的长度。。。。。。")
 			}else{
+				document.querySelector('title').innerHTML = "优惠券";
 				this.getCouponList(param)
 			}
 		}
