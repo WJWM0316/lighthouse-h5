@@ -20,6 +20,12 @@ const routers = [
     meta: {navHide: true, hideController:true}
   },
   {
+    path: '/center/jicall',
+    name: 'center-jicall',
+    component: resolve => require(['@/views/center/jicall'], resolve),
+    meta: {navHide: true, hideController:true}
+  },
+  {
     path: '/center/protocol',
     name: 'center-protocol',
     component: resolve => require(['@/views/center/protocol'], resolve),
