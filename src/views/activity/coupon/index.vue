@@ -237,6 +237,7 @@
 					}
 					p{
 						font-size: 12px;
+						font-weight: 300;
 						/*line-height: 12px;*/
 						color: #666666;
 						text-align: center;
