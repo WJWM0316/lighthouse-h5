@@ -224,7 +224,6 @@
 		
 		
 		async handlePullup (loaded) {
-			console.log("2222222222222222222222222222",loaded)
 			if(this.couponList.length===this.listLength){
 				loaded('ended')
 			}else{

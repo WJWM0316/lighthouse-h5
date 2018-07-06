@@ -128,7 +128,17 @@
 				//已授权请求成功
 				this.item=res.coupon;
 				this.isReceive = res.isReceive;
+				let that = this;
 				console.log(res,"返回的信息。。。。。。")
+				
+				// 页面分享信息
+	      this.wechatShare({
+	        'titles': `121313212313212312312312312312312312312312121`,
+	        'title': `456456465465456465464654654654564564654656545645645`,
+	        'desc': `789`,
+	        'imgUrl': res.imgUrl,
+	        'link': location.origin + `/beaconweb/#/coupon?${that.status}`
+	      })
 				
 			}).catch((res)=>{
 				//未授权
