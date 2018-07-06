@@ -1,7 +1,7 @@
 <!--优惠券-->
 <template>
 	<div class='coupon-page' :class="{bgColor:couponList.length>0}">
-		<!--<scroll  :pullupable="false" :refreshable="false" :infinite-scroll="true" @infinite-scroll="handlePullup">-->
+		<scroll  :pullupable="false" :refreshable="false" :infinite-scroll="true" @infinite-scroll="handlePullup" :is-none-data="couponList.length===listLength">
 	
 		<div class="exchange-inp">
 			<input type="text" v-model="val" placeholder="输入兑换码"/>
@@ -22,7 +22,7 @@
 		<div class="invalidCoupon" v-if="isToPay && listLength>=couponList.length" @click.stop="toinvalidCoupon">
 			没有更多的可用优惠卷了 | 查看不可用优惠卷 >>
 		</div>
-		<!--</scroll>-->
+		</scroll>
 
 		<!--<CouponItem></CouponItem>-->
 		<!--没有优惠券-->
@@ -74,7 +74,7 @@
 		
 		beforeRouteEnter(to,from,next){
 			console.log(from,to,"woshilaide lu")
-			if((from.name==="introduce" && to.query.communityId) || (from.name===null && to.query.communityId)){
+			if(to.query.communityId){
 				communityId = to.query.communityId;
 				nowUseCoupon1 = parseInt(to.query.userCouponId);
 				isTopay = true;
@@ -88,7 +88,7 @@
 		created(){
 			let param={
 				page:this.page,
-				pageCount:20,
+				pageCount:10,
 				productId:communityId,
 				userCouponId:nowUseCoupon1
 			}
@@ -117,7 +117,7 @@
           onHide () {
           	let param={
 							page:1,
-							pageCount:20,
+							pageCount:10,
 							productId:communityId,
 							userCouponId:nowUseCoupon1
 						}
@@ -174,8 +174,14 @@
 			couponListApi(param).then(res=>{
 				this.listLength = res.total;
 				let {userCoupons} = res;
-				this.couponList=userCoupons;
-				console.log(res,this.couponList,"我是正确信息")
+				
+				if(this.page>1){
+					this.couponList = this.couponList.concat(userCoupons || [])
+				}else{
+					this.couponList=userCoupons;
+				}
+			
+				console.log(res,this.couponList,this.page,"我是正确信息")
 			}).catch(res=>{
 				console.log(res,"我是错误信息")
 			})
@@ -189,8 +195,13 @@
 				for(let i=0; i<res.selectCoupons.length;i++){
 					newList.push(res.selectCoupons[i].userCoupon)
 				}
-//				let {userCoupons} = res.selectCoupons;
-				this.couponList=newList;
+				
+				if(this.page>1){
+					this.couponList = this.couponList.concat(newList || [])
+				}else{
+					this.couponList=newList;
+				}
+				
 				console.log(newList,this.couponList,"我是正确信息")
 			}).catch(res=>{
 				console.log(res,"我是错误信息")
@@ -213,10 +224,23 @@
 		
 		
 		async handlePullup (loaded) {
-			console.log("2222222222222222222222222222")
+			console.log("2222222222222222222222222222",loaded)
 			if(this.couponList.length===this.listLength){
-				
 				loaded('ended')
+			}else{
+				this.page+=1;
+				let param={
+					page:this.page,
+					pageCount:10,
+					productId:communityId,
+					userCouponId:nowUseCoupon1
+				}
+				if(this.isToPay){
+					this.getCanUseCouponList(param)
+					console.log(this.couponList.length,"数组的长度。。。。。。")
+				}else{
+					this.getCouponList(param)
+				}
 			}
 //			console.log(loaded,"我是上拉刷新、、、、、、、")
 //    await this.loadNext()
@@ -354,5 +378,8 @@
    		font-size:12px;
 			color:rgba(146,146,146,1);
    	}
+  }
+  .u-bottom-loading{
+  	display: none !important;
   }
 </style>

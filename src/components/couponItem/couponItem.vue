@@ -117,7 +117,7 @@
 //	    instruction = '使用说明使用说明使用说明使用说明使用说明使用说明大沙发是的发送到发送到发斯蒂芬'		//优惠券说明
 //		  isChoose=this.$parent.isToPay 	//1：可以选择圆圈状态 ，0：文字状态
 		  created(){
-		  	console.log(this.$parent.$parent,"1111111111111111111111111111111111111")
+//		  	console.log(this.$parent.$parent,"1111111111111111111111111111111111111")
 		  }
 		  useConpon(){
 		  	if(this.item.coupon.status===1 && this.item.useState===0){
