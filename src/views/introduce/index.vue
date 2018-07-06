@@ -94,7 +94,6 @@
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
-          <span class="userCoupon">我是优惠金额</span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="freeJoin" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice === 0">
@@ -326,49 +325,15 @@
             const { communityId } = self.$route.params
             let number = Math.random() * 10 + 1
             console.log('communityId', communityId)
-            //
             switch (communityId) {
-              case 'ca7cfa129f1d7ce4a04aebeb51e2a1aa':
-                self.$store.dispatch('show_qr', {type: 1})
-                break
-              case '25c2ff088da3f757b685a318ab050b5a': // 测试
-                self.$store.dispatch('show_qr', {type: 1})
-                break
-              case '64074da38681f864082708b9be959e08':
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '67917ba04abd74c3247245576b1168b0': // 测试
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '16a2f4a61d870978f1598b466a48f12e': // 测试 詹润杰的灯塔
-                self.$store.dispatch('show_qr', {type: 3})
-                break
-              case 'a7f79b000c990dd2658b6af10a37fe3c': // 正式 詹润杰的灯塔
-                self.$store.dispatch('show_qr', {type: 3})
-                break
-              case '70036858d957ad830e89e37c5a8356d2': // 测试分销5月9号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '6b3974ad38fa6984de73f43a7730e294': // 正式分销5月9号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case 'b2b533754554bec1b9c344a97063891b': // 测试分销5月16号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '2cdf75243f96bca97ae4341b6400e375': // 正式分销5月16号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '67917ba04abd74c3247245576b1168b0': // 分销5月22号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case 'd71fddeba62a878aecd901198a959674': // 正式分销5月17号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
               case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '95137f42811b2010a025bf28e35aeb69': // 活动塔
                 self.$store.dispatch('show_qr', {type: 4})
                 break
-              case '9eb2275d266b83a717a50a5827250b8a': // 0607分销
-                self.$store.dispatch('show_qr', {type: 2})
+              case '270abb50e490783896f2396e58bfbfad': // 活动塔0628
+                self.$store.dispatch('show_qr', {type: 1})
                 break
               default:
                 self.$store.dispatch('show_qr', {type: 2})

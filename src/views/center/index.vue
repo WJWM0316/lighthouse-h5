@@ -36,15 +36,6 @@
           <i class="addon-icon u-icon-center-angle-right" />
         </div>
       </router-link>
-      <router-link to="/center/coupon" class="item">
-        <div class="left">
-          <i class="icon u-icon-center-coupon" />
-          <span class="title">优惠券</span>
-        </div>
-        <div class="addon">
-          <i class="addon-icon u-icon-center-angle-right" />
-        </div>
-      </router-link>
       <router-link :to="`/userInfo/${model.userId}/details`" class="item">
         <div class="left">
           <i class="icon u-icon-center-home" />
