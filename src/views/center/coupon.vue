@@ -1,7 +1,7 @@
 <!--优惠券-->
 <template>
 	<div class='coupon-page' :class="{bgColor:couponList.length>0}">
-		<scroll  :pullupable="false" :refreshable="false" :infinite-scroll="true" @infinite-scroll="handlePullup" :is-none-data="couponList.length===listLength">
+		<scroll  :pullupable="false" :refreshable="false" :infinite-scroll="true" @infinite-scroll="handlePullup" :is-none-data="couponList.length===listLength" :show-bottom-loading='!isToPay'>
 	
 		<div class="exchange-inp">
 			<input type="text" v-model="val" placeholder="输入兑换码"/>
@@ -19,7 +19,7 @@
 			<CouponItem :item='item' :index='index' :nowUseCoupon='nowUseCoupon' :canOrcant='1' :isChoose="isToPay"></CouponItem>
 		</div>
 		
-		<div class="invalidCoupon" v-if="isToPay && listLength>=couponList.length" @click.stop="toinvalidCoupon">
+		<div class="invalidCoupon" v-if="isToPay && listLength===couponList.length" @click.stop="toinvalidCoupon">
 			没有更多的可用优惠卷了 | 查看不可用优惠卷 >>
 		</div>
 		</scroll>
