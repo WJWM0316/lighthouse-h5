@@ -57,8 +57,10 @@
 <script>
 	import Vue from 'vue'
 	import wxUtil from '@/util/wx/index'
+	import WechatMixin from '@/mixins/wechat'
 	import { couponReceiveApi,couponsApi } from '@/api/pages/pageInfo'
 	export default {
+		mixins: [WechatMixin],
 		data(){
 			return {
 					item:{
