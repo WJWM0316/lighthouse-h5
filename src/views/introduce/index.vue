@@ -711,7 +711,7 @@
         top: 15px;
         background: #fff;
         line-height: 1;
-        border-radius: 16px;
+        border-radius: 18px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
         font-size: 0;
         overflow: hidden;
