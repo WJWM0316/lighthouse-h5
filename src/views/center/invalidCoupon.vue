@@ -1,7 +1,7 @@
 <!--不可用优惠券页-->
 <template>
 	<div class='coupon-page' :class="{bgColor:couponList.length>0}">
-		<scroll  :pullupable="false" :refreshable="false" :infinite-scroll="true" @infinite-scroll="handlePullup" :is-none-data="couponList.length===listLength">
+		<scroll  :pullupable="false" :refreshable="false" :infinite-scroll="true" @infinite-scroll="handlePullup" :is-none-data="couponList.length===listLength" :show-bottom-loading='!isToPay'>
 		<div class="exchange-inp">
 			<input type="text" v-model="val" placeholder="输入兑换码"/>
 			<button class="btn-exchange" :class="{inputBtn:val.length>0}" @click.stop="showResults">兑换</button>
@@ -34,6 +34,7 @@
 	import Vue from 'vue'
 	import Component from 'vue-class-component'
 	import CouponItem from '@/components/couponItem/couponItem'
+	import Scroll from '@/components/scroller'
 	import { invalidCouponsApi,RedemptionCodeApi } from '@/api/pages/pageInfo.js'
 	
 	Component.registerHooks([
@@ -45,7 +46,8 @@
 	@Component({
 	  name: 'coupon-page',
 	  components: {
-	    CouponItem
+	    CouponItem,
+	    Scroll
 	  },
 	})
 	
@@ -173,7 +175,7 @@
 				}
 				this.getInvalidCoupons(param)
 				console.log(this.couponList.length,"数组的长度。。。。。。")
-				loaded()
+//				loaded()
 			}
     }
 		
