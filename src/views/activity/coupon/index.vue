@@ -1,33 +1,37 @@
 <template>
-	<div class="receive-coupons" v-if="item.id!==''">
+	<div class="receive-coupons" v-if="item.couponId!==''">
 		<div class="headPhoto">
 			<img :src="item.imgUrl" alt="" />
 		</div>
 		<div class="content" :class="{'isReceive':item.status===2}">
 			<div class="top">
 				<div class="left">
-					<span>￥</span><span>{{item.discount}}</span>
+					<!--<span>￥</span>-->
+					<span>{{item.discount}}</span>
 					<p>优惠金额</p>
 				</div>
 				<div class="right">
-					<span>
+					<span v-if="item.relationCommunity">
 						仅可购买《{{item.relationCommunity.title}}》
 					</span>
+					<span v-else-if="!item.relationCommunity && item.demand!==0">适用于小灯塔内满{{item.demand}}元的灯塔均可使用</span>
+					<span v-else>小灯塔内所有灯塔均可使用</span>
 					<span>
-						有效期：2017.12.1-2018.1
+						有效期：{{item.useStartTime*1000 | date('YYYY.M.D')}}-{{item.useEndTime*1000 | date('YYYY.M.D')}}
 					</span>
 				</div>
 			</div>
 			<div class="line"></div>
 			<div class="bottom">
-				<div class="receive" v-if="item.status===1" @click.stop="receive">免费领取优惠券</div>
+				<div class="receive" v-if="item.status!==5 && !isReceive && !item.isFullCodeNumber" @click.stop="receive">免费领取优惠券</div>
 				<div class="unReceive" v-else>
-					<span class="littleTitle" v-show="isReceive" @click.stop="toUse">你已经领取过该优惠券啦，快去使用吧！</span>
-					<span class="littleTitle" v-show="!isReceive" @click.stop="toLate">来晚啦～优惠券已经被领完了！</span>
-					<div v-show="isReceive">
-						已经领取
+					<span class="littleTitle" v-show="isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
+					<span class="littleTitle" v-show="!isReceive && item.isFullCodeNumber && item.status!==5">来晚啦～优惠券已经被领完了！</span>
+					<span class="littleTitle" v-show="!isReceive && item.status===5">来晚啦～优惠券已经过期！</span>
+					<div v-if="isReceive" @click.stop="toUse">
+						立即使用
 					</div>
-					<div v-show="!isReceive">
+					<div v-else @click.stop="toLate">
 						查看更多职场福利
 					</div>
 				</div>
@@ -37,9 +41,9 @@
 					<span></span>
 				</div>
 				<div class="rule-content">
-					<span>1.红包新老用户同享；</span>
-					<span>2.红包仅限在线支付使用，且不可与其他优惠叠加使用；</span>
-					<span>3.其他未尽事宜，请咨询客服，客服微信号zike02。</span>
+					<span>1. 红包新老用户同享；</span>
+					<span>2. 红包仅限在线支付使用，且不可与其他优惠叠加使用；</span>
+					<span>3. 其他未尽事宜，请咨询客服，客服微信号zike02。</span>
 				</div>
 			</div>
 		</div>
@@ -52,63 +56,112 @@
 
 <script>
 	import Vue from 'vue'
-	import { couponAuthorizationApi,couponsApi } from '@/api/pages/pageInfo'
+	import wxUtil from '@/util/wx/index'
+	import WechatMixin from '@/mixins/wechat'
+	import { couponReceiveApi,couponsApi } from '@/api/pages/pageInfo'
 	export default {
+		mixins: [WechatMixin],
 		data(){
 			return {
-				item:{
-					id:'11',		//优惠券的id
-					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
-					discount:'9',		//优惠券的金额
-					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
-					relationCommunity:{
-						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+					item:{
+						couponId:'',		//优惠券的id
+						title:'',
+						discount:'',		//优惠券的金额
+						imgUrl:"",
+						relationCommunity:{
+							title:'',
+						},
+						status:'',		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+						useEndTime:'',		//优惠券结束时间
+						useStartTime:'',		//优惠券开始时间
 					},
-					status:2,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
-				},
-				isReceive:false,
+//				item:{
+//					couponId:11,		//优惠券的id
+//					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
+//					discount:'199',		//优惠券的金额
+//					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
+//					relationCommunity:{
+//						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+//					},
+//					status:1,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+//					useEndTime:1532745050,
+//					useStartTime:1529980249,
+//				},
+				isReceive:'',		//是否领取
+				status:'',			//路劲带过来的id
 			}
 		},
 		methods:{
 			//免费领取
 			receive(){
-				
+//				alert("我是正常领取调用")
+				couponReceiveApi(this.item.couponId).then((res)=>{
+					location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=receive";
+				}).catch((res)=>{
+					console.log("领取出错信息：",res)
+				})
 			},
 			//已经领取，去使用
 			toUse(){
-				
+//				alert("已领取调用")
+				location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=issued";
 			},
 			//领取完了
 			toLate(){
-				
+//				alert("无法领取调用")
+//				couponReceiveApi(this.item.couponId).then((res)=>{
+//					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
+//				})
+				location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=end";
 			}
 		},
 		created(){
-			document.querySelector('title').innerHTML = "领取优惠券"
-			let that = this;
-			couponsApi(11).then((res)=>{
+			//获取优惠券id
+			let pattern = /(\d+)/ig;
+			let str = window.location.hash;
+			let status = str.match(pattern);
+			console.log(status,"...............")
+			this.status = parseInt(status[0]);
+			
+			
+			document.querySelector('title').innerHTML = "小灯塔"
+			couponsApi(this.status).then((res)=>{
+				
 				//已授权请求成功
-				that.item=res.coupon;
-				console.log(res,that.item,"我是res  和     item   。。。")
+				this.item=res.coupon;
+				this.isReceive = res.isReceive;
+				let that = this;
+				console.log(res,"返回的信息。。。。。。")
+				
+				// 页面分享信息
+	      this.wechatShare({
+	        'titles': `恭喜你获得${res.coupon.discount}元小灯塔优惠券`,
+//	        'title': `456456465465456465464654654654564564654656545645645`,
+	        'desc': `点击即可领取，手快有，手慢无`,
+	        'imgUrl': "https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png",
+	        'link': location.origin + `/beaconweb/#/coupon?${that.status}`
+	      })
+				
 			}).catch((res)=>{
 				//未授权
 				console.log(res)
 				if(res.statusCode===413){
-					that.$vux.confirm.show({
+					this.$vux.confirm.show({
 						title:'微信授权',
 						content:'小灯塔Lite申请获得以下权限： 获得你的公开信息(昵称、头像等)',
 					  onCancel () {
-					  	window.opener = null;
-							window.close();
+					  	WeixinJSBridge.call('closeWindow');
 					  },
 					  onConfirm () {
-					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
+//					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
 					  	let {url}=res.data;
-							console.log(url);
-							window.location.href=url+"?coupon_id=11";
+							console.log(url+"?redirect_url="+parseInt(status[0]));
+							location.href=url+"?redirect_url="+parseInt(status[0]);
+							
 					  }
 					})
 				}
+				
 			})
 		},
 		mounted(){
@@ -148,42 +201,60 @@
 				display: flex;
 				.left{
 					display: flex;
+					flex-direction: column;
 					flex-shrink: 0;
-					flex-wrap: wrap;
-					align-items: flex-end;
+					flex-wrap: nowrap;
+					align-items: center;
 					justify-content: center;
-					width: 130px;
+					/*width: 130px;*/
 					/*max-width: 140px;*/
-					border-right: 1px solid #EEEEEE;
+					border-right: 0.5px solid #EEEEEE;
+					padding-left: 12px;
+					padding-right: 10px;
 					span{
-						&:nth-child(1){
+						/*&:nth-child(1){
 							font-size: 12px;
 							color: #FA6A30;
 							line-height: 20px;
-						}
-						&:nth-child(2){
+						}*/
+						&:nth-child(1){
 							text-align: center;
-							min-width: 75px;
 							font-size: 36px;
 							font-weight: 600;
 							color: #FA6A30;
 							line-height: 36px;
+							position: relative;
+							margin-left: 14px;
+							&::before{
+								content: '￥';
+								color: #FA6A30;
+								font-size: 12px;
+								position: absolute;
+								bottom: -8px;
+								left: -14px;
+							}
 						}
 					}
 					p{
 						font-size: 12px;
+						font-weight: 300;
 						/*line-height: 12px;*/
 						color: #666666;
 						text-align: center;
+						white-space: nowrap;
 					}
 				}
 				.right{
+					overflow: hidden;
+					box-sizing: border-box;
 					display: flex;
 					flex-wrap: wrap;
 					align-items: center;
 					justify-content: center;
+					padding-left: 13px;
+					padding-right: 20px;
 					span{
-						width: 180px;
+						width: 100%;
 						&:nth-child(1){
 							font-size:15px;
 							line-height: 20px;
@@ -196,6 +267,10 @@
 	            -webkit-box-orient: vertical;
 						}
 						&:nth-child(2){
+							width: 100%;
+							white-space: nowrap;
+							overflow: hidden;
+	            text-overflow: ellipsis;
 							font-size: 13px;
 							color: #929292;
 							margin-top: 5px;
@@ -236,7 +311,7 @@
 				.unReceive>div{
 					width: 285px;
 					height: 49px;
-					border-radius: 22px;
+					border-radius: 24.5px;
 					background-color: #FA6A30;
 					color: #FFFFFF;
 					margin: 25px auto 45px;

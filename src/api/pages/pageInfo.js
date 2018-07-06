@@ -278,11 +278,54 @@ export const gaokaoApi = (data) => {
   })
 }
 
-// 优惠券页面
+// 优惠信息接口
 export const couponsApi = (couponid) => {
   return request({
     url: '/wap/coupon/'+couponid,
     type:'get',
+  })
+}
+
+// 优惠券领取
+export const couponReceiveApi = (couponid) => {
+  return request({
+    url: '/wap/coupon/receive/'+couponid,
+    type:'post',
+  })
+}
+
+// 个人中心展示列表优惠券列表
+export const couponListApi = (data) => {
+  return request({
+    url: '/wap/coupon/userCoupons',
+    type:'post',
+    data,
+  })
+}
+
+// 优惠券兑换码兑换接口
+export const RedemptionCodeApi = (coupon_code) => {
+  return request({
+    url: '/wap/coupon/codeReceive/'+coupon_code,
+    type:'post',
+  })
+}
+
+// 优惠券可选择列表
+export const canUseCouponsApi = (data) => {
+  return request({
+    url: '/wap/coupon/canUseCoupons',
+    type:'post',
+    data
+  })
+}
+
+// 优惠券不可使用择列表
+export const invalidCouponsApi = (data) => {
+  return request({
+    url: '/wap/coupon/cantUseCoupons',
+    type:'post',
+    data
   })
 }
 

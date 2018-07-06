@@ -73,6 +73,12 @@ const routers = [
     component: resolve => require(['@/views/center/coupon'], resolve),
     meta: {navHide: true, hideController:true}
   },
+  { // 不可使用优惠券
+    path: '/center/invalidCoupon',
+    name: 'center-coupon-invalidCoupon-page',
+    component: resolve => require(['@/views/center/invalidCoupon'], resolve),
+    meta: {navHide: true, hideController:true}
+  },
 ]
 
 export default routers

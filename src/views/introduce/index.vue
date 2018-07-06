@@ -94,6 +94,10 @@
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
           <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
+          <span v-if="pageInfo.selectCoupon">用券省 
+          	<span class="coupon_price" v-if="pageInfo.selectCoupon.userCoupon.coupon.discount<pageInfo.joinPrice">{{pageInfo.selectCoupon.userCoupon.coupon.discount}}</span> 
+          	<span class="coupon_price" v-else>{{pageInfo.joinPrice}}</span> 元
+          </span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="freeJoin" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice === 0">
@@ -101,6 +105,41 @@
         </div>
       </div>
     </div>
+    
+    <!--支付弹窗-->
+    <div class="pay_window" v-if="toPay" @click="closePya">
+    	<div class="pay_box" @click.stop="showPayWindow">
+    		<h3>{{pageInfo.title}}</h3>
+    		<div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
+    		<div class="price">
+    			<span>社区价格</span>
+    			<span>¥ {{pageInfo.joinPrice}}</span>
+    		</div>
+    		<div class="coupon_price" @click.stop="toCoupon">
+    			<span>优惠券</span>
+    			<div class="coupon_price_right">
+    				<span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">-¥ {{SelectCouponItem.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:SelectCouponItem.coupon.discount}}</span>
+    				<span v-else-if=" pageInfo.selectCoupon!==null && SelectCouponItem.userCouponId===0 ">不使用优惠券</span>
+    				<span v-else-if=" pageInfo.selectCoupon===null ">无可用优惠券</span>
+    				<span v-else>-¥ {{pageInfo.selectCoupon.userCoupon.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
+    				<div class="more_coupon"></div>
+    			</div>
+    		</div>
+    		<div class="payment">
+    			<div class="payment_num">
+    				实付：<span>¥</span>
+    				<!--选择其他优惠券-->
+    				<span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">{{SelectedPrice}}</span>
+    				<!--不使用优惠券和无优惠券-->
+    				<span v-else-if=" pageInfo.selectCoupon===null || SelectCouponItem.userCouponId===0 ">{{pageInfo.joinPrice}}</span>
+    				<!--使用默认优惠券-->
+    				<span v-else>{{pageInfo.selectCoupon.couponPrice}}</span>
+    			</div>
+    			<div class="payment_btn" @click.stop="isPay">立即支付</div>
+    		</div>
+    	</div>
+    </div>
+    
     <!--分享弹窗-->
     <share-dialog :isShow="showShare" @close-share="showShare = false"
                   :shareType="1"></share-dialog>
@@ -128,6 +167,11 @@
   import {payApi, freePay} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
+  Component.registerHooks([
+	  'beforeRouteEnter',
+	  'beforeRouteLeave',
+	  'beforeRouteUpdate' // for vue-router 2.2+
+	])
 
   @Component({
     name: 'big-shot-introduce',
@@ -207,6 +251,7 @@
     mixins: [WechatMixin]
   })
   export default class introduce extends Vue {
+  	toPay = false			//是否调起支付窗口
     showShare = false // 显示分享弹框
     showSell = false // 显示分销弹框
     pageInfo = {}
@@ -216,6 +261,9 @@
     completelyShow = true
     el = ''
     qrSrc = ''
+    SelectCouponItem = {}		//当前选择的优惠券信息
+    SelectedPrice = ''		//选择其他优惠券后的价格
+    UsedUserCouponId = 0		//支付时使用的优惠券id
 
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
@@ -234,9 +282,67 @@
         this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
       }
     }
+    
+    closePya(){
+    	this.toPay = false
+    }
+    
+    showPayWindow(){}
+    
+   isPay(){
+   	if(this.SelectCouponItem.userCouponId && this.SelectCouponItem.userCouponId!==0){
+   		//选择其他优惠券
+   		if(this.SelectedPrice>0){
+   			console.log("我是付费")
+   			this.UsedUserCouponId = this.SelectCouponItem.userCouponId;
+   			this.payIn()
+   		}else{
+   			console.log("我是免费免费")
+   			//选择的优惠券金额够大，可以免费加入
+   			this.UsedUserCouponId = this.SelectCouponItem.userCouponId;
+   			this.freeJoin()
+   		}
+   		
+   	}else if(this.SelectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
+   		//选择不使用优惠券 和 无可用优惠券
+   		console.log("我是没有优惠券和不用优惠券")
+   		this.UsedUserCouponId = 0;
+ 			this.payIn()
+   	}else{
+   		//默认优惠券
+   		if(this.pageInfo.selectCoupon.couponPrice>0){
+   			console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
+   			//有默认优惠券
+   			this.UsedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+   			this.payIn()
+   		}else{
+   			console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
+   			this.UsedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+   			this.freeJoin()
+   		}
+   	}
+   	this.toPay = false;
+   	sessionStorage.removeItem("coupon");
+   }
+   
+   toCoupon(){
+   	if(this.SelectCouponItem.userCouponId){
+   		this.$router.push({path:'/center/coupon',query:{userCouponId:this.SelectCouponItem.userCouponId,communityId:this.pageInfo.communityId}});
+   	}else if(this.SelectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
+   		this.$router.push({path:'/center/coupon',query:{userCouponId:0,communityId:this.pageInfo.communityId}});
+   	}else{
+   		this.$router.push({path:'/center/coupon',query:{userCouponId:this.pageInfo.selectCoupon.userCoupon.userCouponId,communityId:this.pageInfo.communityId}});
+   	}
+   }
+    
     payOrFree () {
-      let that = this
-      that.payIn()
+      let that = this;
+      this.toPay = true;
+//   	if(that.pageInfo.selectCoupon.couponPrice===0){
+//   		that.freeJoin()
+//   	}else{
+//   		that.payIn()
+//   	}
 //      let {startTime, endTime} = this.pageInfo
 //      startTime = new Date(startTime * 1000)
 //      endTime = new Date(endTime * 1000)
@@ -253,8 +359,11 @@
     async freeJoin () {
       await freePay({
         productId: this.pageInfo.communityId,
-        productType: 1
+        productType: 1,
+        userCouponId:this.UsedUserCouponId
       }).then((res) => {
+      	this.toPay = false;		//关闭支付窗口
+      	sessionStorage.removeItem("coupon");		//移除优惠券信息
         const _this = this
         this.$vux.alert.show({
           title: '加入成功',
@@ -289,7 +398,8 @@
     async payIn () {
       const params = await payApi({
         productId: this.pageInfo.communityId,
-        productType: 1
+        productType: 1,
+        userCouponId:this.UsedUserCouponId
       })
       const arr = Object.keys(params || {})
       if (arr.length !== 0) {
@@ -367,6 +477,7 @@
           this.$vux.toast.text(e.message, 'bottom')
         }
       }
+      
       const self = this
       await this.pageInit().then(() => {
         const {
@@ -407,6 +518,22 @@
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
       this.qrSrc = res.sellImg
       this.pageInfo = res
+      
+      //是否调起支付
+      let Selectcoupon=sessionStorage.getItem("coupon");
+      if(Selectcoupon){
+      	this.toPay = true;
+      	let CouponItem = sessionStorage.getItem("coupon");
+      	this.SelectCouponItem = JSON.parse(CouponItem);
+      	if(this.SelectCouponItem.userCouponId!==0){
+      		let paynum=this.pageInfo.joinPrice-this.SelectCouponItem.coupon.discount;
+      		this.SelectedPrice = this.pageInfo.joinPrice>this.SelectCouponItem.coupon.discount?paynum.toFixed(2):0;
+      	}else{
+      		this.SelectedPrice =this.pageInfo.joinPrice
+      	}
+      	
+      	console.log(this.SelectCouponItem,this.SelectedPrice,"我是当前选择的优惠券信息")
+      }
 
       // 是否已入社
       if (this.completelyShow && this.isJoinAgency) {
@@ -465,6 +592,10 @@
       // })
     }
     
+    beforeRouteLeave(to,from,next){
+    	sessionStorage.removeItem("coupon");
+    	next();
+    }
   }
 </script>
 <style lang="less" scoped type="text/less">
@@ -546,7 +677,7 @@
         top: 15px;
         background: #fff;
         line-height: 1;
-        border-radius: 16px;
+        border-radius: 18px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
         font-size: 0;
         overflow: hidden;
@@ -558,7 +689,7 @@
 
         .u-btn {
           position: relative;
-          line-height: 18px;
+          line-height: 22px;
           min-height: 32px;
           font-size: 13px;
           color: @font-color-default;
@@ -807,6 +938,14 @@
           & span:not(:first-of-type) {
             color: rgba(53, 64, 72, 0.8);
           }
+          span:nth-child(2){
+          	.coupon_price{
+            	display: inline-block;
+            	font-size:12px;
+            	line-height:16px;
+            	color:#FB7A37;
+            }
+          }
 					flex-grow:1;
 					& .userCoupon{
 						font-size: 12px; 
@@ -875,5 +1014,118 @@
         }
       }
     }
+    
+    /*支付弹窗*/
+   .pay_window{
+   	position: absolute;
+   	top: 0;
+   	left: 0;
+   	z-index: 9999;
+   	width: 100%;
+   	height: 100%;
+   	background-color: rgba(0,0,0,0.6);
+   	.pay_box{
+   		box-sizing: border-box;
+   		width: 375px;
+   		height: 287px;
+   		background:rgba(255,255,255,1);
+			border-radius:10px 10px 0px 0px;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			padding: 40px 25px 0;
+			/*支付灯塔名字*/
+			h3{
+				font-size:18px;
+				color:rgba(53,64,72,1);
+				line-height:22px;
+				margin-bottom: 10px;
+			}
+			/*支付副标题*/
+			.tip{
+				font-size:13px;
+				color:rgba(146,146,146,1);
+				line-height:17px;
+				margin-bottom: 36px;
+			}
+			/*支付原价格*/
+			.price{
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 31px;
+				span{
+					font-size:15px;
+					color:rgba(102,102,102,1);
+					line-height:21px;
+				}
+			}
+			/*支付优惠券处*/
+			.coupon_price{
+				display: flex;
+				justify-content: space-between;
+				>span{
+					font-size:15px;
+					color:rgba(102,102,102,1);
+					line-height:21px;
+				}
+				.coupon_price_right{
+					display: flex;
+					align-items: center;
+					>span{
+						display: inline-block;
+						font-size:15px;
+						color:rgba(250,106,48,1);
+						line-height:21px;
+					}
+					>.more_coupon{
+						display: inline-block;
+						width: 15px;
+						height: 15px;
+						background: url(../../assets/icon/btn_enter@2x.png) no-repeat 100%;
+					}
+				}
+				/*margin-bottom:39px;*/
+			}
+			/*支付最底支付按钮*/
+			.payment{
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				display: flex;
+				justify-content: flex-end;
+				align-items: center;
+				border-top:0.5px solid rgba(220,220,220,1);
+				height:49px;
+				.payment_num{
+					margin-right: 20px;
+					font-size:13px;
+					color:rgba(53,64,72,1);
+					span{
+						color:rgba(250,106,48,1);
+						&:nth-child(1){
+							font-size: 13px;
+						}
+						&:nth-child(2){
+							padding-left: 4px;
+							font-size: 18px;
+						}
+					}
+				}
+				/*支付按钮*/
+				.payment_btn{
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					width:150px;
+					height:49px;
+					background:rgba(255,226,102,1);
+					font-size:16px;
+					color:rgba(53,64,72,1);	
+				}
+			}
+			
+   	}
+   }
   }
 </style>
