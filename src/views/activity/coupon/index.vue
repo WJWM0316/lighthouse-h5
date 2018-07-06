@@ -3,7 +3,7 @@
 		<div class="headPhoto">
 			<img :src="item.imgUrl" alt="" />
 		</div>
-		<div class="content {isReceive:true}">
+		<div class="content" :class="{'isReceive':item.status===2}">
 			<div class="top">
 				<div class="left">
 					<span>￥</span><span>{{item.discount}}</span>
@@ -20,7 +20,17 @@
 			</div>
 			<div class="line"></div>
 			<div class="bottom">
-				<div class="receive" @click="receive">免费领取优惠券</div>
+				<div class="receive" v-if="item.status===1" @click.stop="receive">免费领取优惠券</div>
+				<div class="unReceive" v-else>
+					<span class="littleTitle" v-show="isReceive" @click.stop="toUse">你已经领取过该优惠券啦，快去使用吧！</span>
+					<span class="littleTitle" v-show="!isReceive" @click.stop="toLate">来晚啦～优惠券已经被领完了！</span>
+					<div v-show="isReceive">
+						已经领取
+					</div>
+					<div v-show="!isReceive">
+						查看更多职场福利
+					</div>
+				</div>
 				<div class="rule">
 					<span></span>
 					活动规则
@@ -47,18 +57,29 @@
 		data(){
 			return {
 				item:{
-					id:'',
-					title:'',
-					discount:'',
-					imgUrl:'',
+					id:'11',		//优惠券的id
+					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
+					discount:'9',		//优惠券的金额
+					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
 					relationCommunity:{
-						title:'',
-					}
-				}
+						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+					},
+					status:2,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
+				},
+				isReceive:false,
 			}
 		},
 		methods:{
+			//免费领取
 			receive(){
+				
+			},
+			//已经领取，去使用
+			toUse(){
+				
+			},
+			//领取完了
+			toLate(){
 				
 			}
 		},
@@ -114,7 +135,7 @@
 			margin-right: auto;
 			z-index: 999;
 			width: 345px;
-			height: 428px;
+			/*height: 428px;*/
 			background-color: #FFFFFF;
 			border-radius: 10px;
 			
@@ -141,6 +162,8 @@
 							line-height: 20px;
 						}
 						&:nth-child(2){
+							text-align: center;
+							min-width: 75px;
 							font-size: 36px;
 							font-weight: 600;
 							color: #FA6A30;
@@ -209,7 +232,8 @@
 			/*优惠券下半部分*/
 			.bottom{
 				/*领取按钮*/
-				.receive{
+				.receive,
+				.unReceive>div{
 					width: 285px;
 					height: 49px;
 					border-radius: 22px;
@@ -219,6 +243,29 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
+				}
+				.unReceive{
+					display: flex;
+					justify-content: center;
+					flex-wrap: wrap;
+					margin: 20px 18px 28px;
+					padding: 20px 12.5px;
+					background-color: #FFFDF3;
+					>.littleTitle{
+						text-align: center;
+						line-height:20px;
+						padding-bottom: 12px;
+						font-size: 14px;
+						color:rgba(53,64,72,1);
+						display: block;
+						min-width: 252px;
+					}
+				}
+				.unReceive>div{
+					min-width: 285px;
+					margin: 0;
+					background-color:#FFE266;
+					color: #354048;
 				}
 				/*底部规则*/
 				.rule{
@@ -257,6 +304,7 @@
 				}
 				/*规则内容*/
 				.rule-content{
+					padding-bottom: 27px;
 					span{
 						display: block;
 						width: 291px;
@@ -270,7 +318,7 @@
 			}
 		}
 		.isReceive{
-			height: 429px !important;
+			/*height: 429px !important;*/
 		}
 		
 		/*底部文案*/
