@@ -138,7 +138,7 @@
 	        'titles': `恭喜你获得${res.coupon.discount}元小灯塔优惠券`,
 //	        'title': `456456465465456465464654654654564564654656545645645`,
 	        'desc': `点击即可领取，手快有，手慢无`,
-	        'imgUrl': "https://cdnstatic.ziwork.com/Uploads/static/picture/2018-07-05/89ae9bc8d316d97d9f79336cb7cd3bd0.jpeg",
+	        'imgUrl': "https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png",
 	        'link': location.origin + `/beaconweb/#/coupon?${that.status}`
 	      })
 				
