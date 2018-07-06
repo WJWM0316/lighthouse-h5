@@ -146,7 +146,7 @@
 						break;
 					case 422:
 						title = '兑换码错误'
-						content = '看看有没有数错哦～'
+						content = '看看有没有输错哦～'
 						break;
 					case 421:
 						title = '兑换失败'
