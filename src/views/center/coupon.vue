@@ -226,6 +226,7 @@
 		async handlePullup (loaded) {
 			if(this.couponList.length===this.listLength){
 				loaded('ended')
+				return
 			}else{
 				this.page+=1;
 				let param={
