@@ -122,6 +122,9 @@ export default class HomeIndex extends Vue {
 <style lang="less" type="text/less">
 @import "../../styles/variables";
 @import "../../styles/mixins";
+.p-body{
+	padding-bottom: 53px;
+}
 
 .p-center-index {
   .header {
