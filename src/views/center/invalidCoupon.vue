@@ -1,6 +1,7 @@
 <!--不可用优惠券页-->
 <template>
 	<div class='coupon-page' :class="{bgColor:couponList.length>0}">
+		<scroll  :pullupable="false" :refreshable="false" :infinite-scroll="true" @infinite-scroll="handlePullup" :is-none-data="couponList.length===listLength">
 		<div class="exchange-inp">
 			<input type="text" v-model="val" placeholder="输入兑换码"/>
 			<button class="btn-exchange" :class="{inputBtn:val.length>0}" @click.stop="showResults">兑换</button>
@@ -22,6 +23,7 @@
 	      <div class="empty-tip">暂无优惠券哦～</div>
 	  </div>
 	    <!--没有优惠券-->
+	  </scroll>
 	</div>
 </template>
 
@@ -54,6 +56,7 @@
 		isToPay = isTopay
 		nowUseCoupon = nowUseCoupon1
 		listLength = 0
+		page = 1
 		
 		beforeRouteEnter(to,from,next){
 			console.log(from,to,"woshilaide lu")
@@ -86,7 +89,7 @@
           onHide () {
           	let param={
 							page:1,
-							pageCount:20,
+							pageCount:10,
 							productId:communityId,
 							userCouponId:nowUseCoupon1
 						}
@@ -143,12 +146,36 @@
 		getInvalidCoupons(param){
 			invalidCouponsApi(param).then(res=>{
 				this.listLength = res.total;
-				this.couponList=res.userCoupons;
+				
+				if(this.page>1){
+					this.couponList = this.couponList.concat(res.userCoupons || [])
+				}else{
+					this.couponList=res.userCoupons;
+				}
+				
 				console.log(this.couponList,"我是正确信息")
 			}).catch(res=>{
 				console.log(res,"我是错误信息")
 			})
 		}
+		
+		//上拉翻页
+		async handlePullup (loaded) {
+			if(this.couponList.length===this.listLength){
+				loaded('ended')
+			}else{
+				this.page+=1;
+				let param={
+					page:this.page,
+					pageCount:10,
+					productId:communityId,
+					userCouponId:nowUseCoupon1
+				}
+				this.getInvalidCoupons(param)
+				console.log(this.couponList.length,"数组的长度。。。。。。")
+				loaded()
+			}
+    }
 		
 	}
 </script>
