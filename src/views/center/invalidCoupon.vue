@@ -91,7 +91,7 @@
           onHide () {
           	let param={
 							page:1,
-							pageCount:10,
+							pageCount:20,
 							productId:communityId,
 							userCouponId:nowUseCoupon1
 						}
@@ -155,7 +155,7 @@
 					this.couponList=res.userCoupons;
 				}
 				
-				console.log(this.couponList,"我是正确信息")
+				console.log("请求数据成功")
 			}).catch(res=>{
 				console.log(res,"我是错误信息")
 			})
@@ -169,13 +169,12 @@
 				this.page+=1;
 				let param={
 					page:this.page,
-					pageCount:10,
+					pageCount:20,
 					productId:communityId,
 					userCouponId:nowUseCoupon1
 				}
 				this.getInvalidCoupons(param)
-				console.log(this.couponList.length,"数组的长度。。。。。。")
-//				loaded()
+				loaded('done')
 			}
     }
 		

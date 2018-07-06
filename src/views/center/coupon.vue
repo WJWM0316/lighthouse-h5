@@ -88,7 +88,7 @@
 		created(){
 			let param={
 				page:this.page,
-				pageCount:10,
+				pageCount:20,
 				productId:communityId,
 				userCouponId:nowUseCoupon1
 			}
@@ -117,7 +117,7 @@
           onHide () {
           	let param={
 							page:1,
-							pageCount:10,
+							pageCount:20,
 							productId:communityId,
 							userCouponId:nowUseCoupon1
 						}
@@ -181,7 +181,7 @@
 					this.couponList=userCoupons;
 				}
 			
-				console.log(res,this.couponList,this.page,"我是正确信息")
+				console.log(this.listLength,this.page,"我是正确信息")
 			}).catch(res=>{
 				console.log(res,"我是错误信息")
 			})
@@ -202,7 +202,7 @@
 					this.couponList=newList;
 				}
 				
-				console.log(newList,this.couponList,"我是正确信息")
+				console.log("请求数据成功")
 			}).catch(res=>{
 				console.log(res,"我是错误信息")
 			})
@@ -210,7 +210,7 @@
 		
 		//不使用优惠券
 		noUseCoupon(){
-			console.log("我是不使用优惠券")
+			console.log("不使用优惠券")
 			this.nowUseCoupon=0;
 			let noUseCoupon={userCouponId:0}
 			sessionStorage.setItem("coupon",JSON.stringify(noUseCoupon))
@@ -230,24 +230,17 @@
 				this.page+=1;
 				let param={
 					page:this.page,
-					pageCount:10,
+					pageCount:20,
 					productId:communityId,
 					userCouponId:nowUseCoupon1
 				}
 				if(this.isToPay){
 					this.getCanUseCouponList(param)
-					console.log(this.couponList.length,"数组的长度。。。。。。")
 				}else{
 					this.getCouponList(param)
 				}
+				loaded('done')
 			}
-//			console.log(loaded,"我是上拉刷新、、、、、、、")
-//    await this.loadNext()
-//    if (this.pagination.end) {
-//      loaded('ended')
-//    } else {
-//      loaded('done')
-//    }
     }
 		
 	}
