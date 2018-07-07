@@ -126,7 +126,7 @@
 			  		this.$router.push(`/introduce/${this.item.coupon.relationCommunity.communityId}?reload=true`)
 			  	}else{
 			  		console.log("我是通用券。。。")
-			  		this.$router.replace(`/index`)
+			  		this.$router.push(`/index`)
 			  	}
 		  	}
 		  }

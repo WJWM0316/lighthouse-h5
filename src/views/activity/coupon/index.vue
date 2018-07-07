@@ -250,19 +250,19 @@
 					display: flex;
 					flex-wrap: wrap;
 					align-items: center;
+					align-content: center;
 					justify-content: center;
 					padding-left: 13px;
 					padding-right: 20px;
 					span{
+						display: block;
 						width: 100%;
 						&:nth-child(1){
 							font-size:15px;
 							line-height: 20px;
 							color:#354048;
-							
 							overflow: hidden;
 	            text-overflow: ellipsis;
-	            display: -webkit-box;
 	            -webkit-line-clamp:2;
 	            -webkit-box-orient: vertical;
 						}

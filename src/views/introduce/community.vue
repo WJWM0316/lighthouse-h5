@@ -248,7 +248,6 @@
     
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
-    	
 				let nowCommunity=sessionStorage.getItem("nowCommunity");
 			if(!nowCommunity){
 				sessionStorage.setItem("nowCommunity",to.params.communityId)
