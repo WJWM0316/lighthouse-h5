@@ -81,7 +81,7 @@
 //					discount:'199',		//优惠券的金额
 //					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
 //					relationCommunity:{
-//						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+//						title:'手把手教你',
 //					},
 //					status:1,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
 //					useEndTime:1532745050,
@@ -194,7 +194,7 @@
 			
 			.top{
 				width: 100%;
-				height: 116px;
+				/*height: 116px;*/
 				box-sizing: border-box;
 				/*background-color: #FFFFFF;*/
 				padding: 28px 0;
@@ -273,7 +273,7 @@
 	            text-overflow: ellipsis;
 							font-size: 13px;
 							color: #929292;
-							margin-top: 5px;
+							margin-top: 9px;
 							line-height: 12px;
 						}
 					}

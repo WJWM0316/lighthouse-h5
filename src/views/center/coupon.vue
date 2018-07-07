@@ -263,6 +263,7 @@
    	box-sizing: border-box;
    	margin: 0 auto;
    	margin-top: 15px;
+   	margin-bottom: 10px;
    	width: 350px;
    	height: 60px;
    	display: flex;

@@ -695,11 +695,11 @@
           color: @font-color-default;
 
           &:first-child {
-            padding: 8px 12px 6px 15px;
+            padding: 7.5px 12px 6.5px 15px;
           }
 
           &:last-child {
-            padding: 8px 15px 6px 12px;
+            padding: 7px 15px 7px 12px;
           }
 
           &.home,
