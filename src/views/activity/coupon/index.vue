@@ -78,7 +78,7 @@
 //				item:{
 //					couponId:11,		//优惠券的id
 //					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
-//					discount:'199',		//优惠券的金额
+//					discount:'19.9',		//优惠券的金额
 //					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
 //					relationCommunity:{
 //						title:'手把手教你',
@@ -209,7 +209,7 @@
 					/*width: 130px;*/
 					/*max-width: 140px;*/
 					border-right: 0.5px solid #EEEEEE;
-					padding-left: 12px;
+					padding-left: 17px;
 					padding-right: 10px;
 					span{
 						/*&:nth-child(1){
