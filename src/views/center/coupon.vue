@@ -20,7 +20,7 @@
 		</div>
 		
 		<div class="invalidCoupon" v-if="isToPay && listLength===couponList.length" @click.stop="toinvalidCoupon">
-			没有更多的可用优惠卷了 | 查看不可用优惠卷 >>
+			没有更多的可用优惠券了 | 查看不可用优惠券 >>
 		</div>
 		</scroll>
 

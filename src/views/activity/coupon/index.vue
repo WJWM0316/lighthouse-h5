@@ -81,7 +81,7 @@
 //					discount:'19.9',		//优惠券的金额
 //					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
 //					relationCommunity:{
-//						title:'手把手教你',
+//						title:'手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你',
 //					},
 //					status:1,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
 //					useEndTime:1532745050,
@@ -194,7 +194,7 @@
 			
 			.top{
 				width: 100%;
-				/*height: 116px;*/
+				/*height: 118px;*/
 				box-sizing: border-box;
 				/*background-color: #FFFFFF;*/
 				padding: 28px 0;
@@ -262,6 +262,7 @@
 							line-height: 20px;
 							color:#354048;
 							overflow: hidden;
+							display: -webkit-inline-box;
 	            text-overflow: ellipsis;
 	            -webkit-line-clamp:2;
 	            -webkit-box-orient: vertical;
