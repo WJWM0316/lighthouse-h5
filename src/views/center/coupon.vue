@@ -85,6 +85,11 @@
 			next();
 		}
 		
+		beforeRouteLeave(to,from,next){
+			document.querySelector('title').innerHTML = "小灯塔"
+			next();
+		}
+		
 		created(){
 			let param={
 				page:this.page,
