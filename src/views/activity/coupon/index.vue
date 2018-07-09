@@ -43,7 +43,7 @@
 				<div class="rule-content">
 					<span>1. 红包新老用户同享；</span>
 					<span>2. 红包仅限在线支付使用，且不可与其他优惠叠加使用；</span>
-					<span>3. 其他未尽事宜，请咨询客服，客服微信号zike02。</span>
+					<span>3. 其他未尽事宜，请咨询客服，客服微信号zike03。</span>
 				</div>
 			</div>
 		</div>

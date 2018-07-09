@@ -56,11 +56,6 @@
 	    CouponItem,
 	    Scroll
 	  },
-//	  watch:{
-//	  	'val'(newval,oldval){
-//	  		console.log(newval,oldval,"我是输入框的val")
-//	  	}
-//	  }
 	})
 	
 	export default class CenterCouponPage extends Vue {
@@ -71,6 +66,8 @@
 		nowUseCoupon = nowUseCoupon1
 		listLength = 0
 		page = 1
+		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
+		
 		
 		beforeRouteEnter(to,from,next){
 			console.log(from,to,"woshilaide lu")
@@ -107,7 +104,7 @@
 			}
 		}
 		
-		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
+
 		
 		//兑换优惠券
 		showResults(){
@@ -132,7 +129,6 @@
 						}else{
 							that.getCouponList(param)
 						}
-//        	console.log("这个是点击好的后触发的。。。。。")
           }
         })
 				
