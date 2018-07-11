@@ -336,7 +336,6 @@
    }
     
     payOrFree () {
-      let that = this;
       this.toPay = true;
 //   	if(that.pageInfo.selectCoupon.couponPrice===0){
 //   		that.freeJoin()

@@ -136,7 +136,7 @@
 				// 页面分享信息
 	      this.wechatShare({
 	        'titles': `恭喜你获得${res.coupon.discount}元小灯塔优惠券`,
-//	        'title': `456456465465456465464654654654564564654656545645645`,
+	        'title': `恭喜你获得${res.coupon.discount}元学习优惠券！点击即可领取，手快有，手慢无哦~`,
 	        'desc': `点击即可领取，手快有，手慢无`,
 	        'imgUrl': "https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png",
 	        'link': location.origin + `/beaconweb/#/coupon?${that.status}`
