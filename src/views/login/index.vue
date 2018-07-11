@@ -133,7 +133,7 @@
         if (e.statusCode === 434) {
           this.$vux.alert.show({
             title: '手机号已存在',
-            content: '请更换其他绑定手机，或联系客服处理\n（客服微信：zike02）',
+            content: '请更换其他绑定手机，或联系客服处理\n（客服微信：zike03）',
             'button-text': '好的'
           })
         } else {
