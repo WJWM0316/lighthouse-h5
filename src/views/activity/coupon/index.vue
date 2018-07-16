@@ -156,8 +156,8 @@
 					  onConfirm () {
 //					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
 					  	let {url}=res.data;
-							console.log(url+"?redirect_url="+parseInt(status[0]));
-							location.href=url+"?redirect_url="+parseInt(status[0]);
+							console.log(url+"?redirect_url="+status[0]);
+							location.href=url+"?redirect_url="+status[0];
 							
 					  }
 					})
