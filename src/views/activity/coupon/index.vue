@@ -117,13 +117,13 @@
 			}
 		},
 		created(){
+//			console.log(window.location)
 			//获取优惠券id
-			let pattern = /(\d+)/ig;
+			let pattern = /([^?]+)$/ig;
 			let str = window.location.hash;
 			let status = str.match(pattern);
 			console.log(status,"...............")
-			this.status = parseInt(status[0]);
-			
+			this.status = status[0];
 			
 			document.querySelector('title').innerHTML = "小灯塔"
 			couponsApi(this.status).then((res)=>{
