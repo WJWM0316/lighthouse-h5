@@ -97,7 +97,7 @@
 			receive(){
 //				alert("我是正常领取调用")
 				couponReceiveApi(this.status).then((res)=>{
-					location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=receive";
+					location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=receive";
 				}).catch((res)=>{
 					console.log("领取出错信息：",res)
 				})
@@ -105,7 +105,7 @@
 			//已经领取，去使用
 			toUse(){
 //				alert("已领取调用")
-				location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=issued";
+				location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=issued";
 			},
 			//领取完了
 			toLate(){
@@ -113,7 +113,7 @@
 //				couponReceiveApi(this.item.couponId).then((res)=>{
 //					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
 //				})
-				location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=end";
+				location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=end";
 			}
 		},
 		created(){
