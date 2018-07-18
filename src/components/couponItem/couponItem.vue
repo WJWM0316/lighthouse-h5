@@ -40,7 +40,7 @@
           <div :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1}" v-show="item.coupon.status===5 && item.useState===0">已过期</div>
           <div :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1}" v-show="item.coupon.status===4 && item.useState===0">未开始</div>
           <div :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1}" v-show="item.useState===1">已使用</div>
-          <img v-show="item.coupon.status===1 && item.useState===0" class="gloden-arrow" src="../../assets/icon/btn_gloden_enter.png"/>
+          <img v-show="(item.coupon.status===1 || item.coupon.status===2) && item.useState===0" class="gloden-arrow" src="../../assets/icon/btn_gloden_enter.png"/>
         </div>
         <!--支付选择圆点-->
         <div v-else class="select-circle" :class="{'selectedCircle':item.userCouponId===nowUseCoupon,'disable':canOrcant===0}">
@@ -121,7 +121,7 @@
 //		  	console.log(this.$parent.$parent,"1111111111111111111111111111111111111")
 		  }
 		  useConpon(){
-		  	if(this.item.coupon.status===1 && this.item.useState===0){
+		  	if((this.item.coupon.status===1 || this.item.coupon.status===2) && this.item.useState===0){
 		  		if(this.item.coupon.relationCommunity){
 			  		console.log(this.item.coupon.relationCommunity.title,"我是专用券。。。。")
 			  		this.$router.push(`/introduce/${this.item.coupon.relationCommunity.communityId}?reload=true`)
