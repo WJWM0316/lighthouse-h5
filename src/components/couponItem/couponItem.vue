@@ -4,7 +4,7 @@
     	<!--优惠券上半部  @click.stop="emitInfo"-->
       <div class="top-part">
         <div class="left">
-          <div class="coupon-title" :class="{'unavail':item.coupon.status!==1 || item.useState===1 || canOrcant===0}">
+          <div class="coupon-title" :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1 || canOrcant===0}">
           	<!--全场通用名字-->
           	<span v-if="item.coupon.relationCommunity===null">全场通用优惠券</span>
           	<!--专属名字-->
@@ -14,8 +14,8 @@
           <div class="time-during">{{item.coupon.useStartTime*1000 | date('YYYY-M-D')}} 至 {{item.coupon.useEndTime*1000 | date('YYYY-M-D')}}</div>
         </div>
         <div class="right">
-          <span :class="{'unavail': item.coupon.status!==1 || item.useState===1 || canOrcant===0}">¥</span>
-          <span :class="{'unavail':item.coupon.status!==1 || item.useState===1 || canOrcant===0}">{{item.coupon.discount}}</span>
+          <span :class="{'unavail': (item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1 || canOrcant===0}">¥</span>
+          <span :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1 || canOrcant===0}">{{item.coupon.discount}}</span>
         </div>
       </div>
       <!--优惠券上半部-->
@@ -35,10 +35,11 @@
         	</span>
         </div>
         <div class="right" v-if="!isChoose" @click.stop="useConpon">
-          <div :class="{'unavail':item.coupon.status!==1 || item.useState===1}" v-show="item.coupon.status===1 && item.useState===0">立即使用</div>
-          <div :class="{'unavail':item.coupon.status!==1 || item.useState===1}" v-show="item.coupon.status===5 && item.useState===0">已过期</div>
-          <div :class="{'unavail':item.coupon.status!==1 || item.useState===1}" v-show="item.coupon.status===4 && item.useState===0">未开始</div>
-          <div :class="{'unavail':item.coupon.status!==1 || item.useState===1}" v-show="item.useState===1">已使用</div>
+        	<div :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1}" v-show="item.coupon.status===2 && item.useState===0">立即使用</div>
+          <div :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1}" v-show="item.coupon.status===1 && item.useState===0">立即使用</div>
+          <div :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1}" v-show="item.coupon.status===5 && item.useState===0">已过期</div>
+          <div :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1}" v-show="item.coupon.status===4 && item.useState===0">未开始</div>
+          <div :class="{'unavail':(item.coupon.status!==1 && item.coupon.status!==2) || item.useState===1}" v-show="item.useState===1">已使用</div>
           <img v-show="item.coupon.status===1 && item.useState===0" class="gloden-arrow" src="../../assets/icon/btn_gloden_enter.png"/>
         </div>
         <!--支付选择圆点-->

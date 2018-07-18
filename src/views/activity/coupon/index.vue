@@ -23,7 +23,7 @@
 			</div>
 			<div class="line"></div>
 			<div class="bottom">
-				<div class="receive" v-if="item.status!==5 && !isReceive && !item.isFullCodeNumber" @click.stop="receive">免费领取优惠券</div>
+				<div class="receive" v-if="item.status!==5 && !isReceive && !item.isFullCodeNumber && item.status!==2" @click.stop="receive">免费领取优惠券</div>
 				<div class="unReceive" v-else>
 					<span class="littleTitle" v-show="isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
 					<span class="littleTitle" v-show="!isReceive && item.isFullCodeNumber && item.status!==5">来晚啦～优惠券已经被领完了！</span>
@@ -97,8 +97,17 @@
 			receive(){
 //				alert("我是正常领取调用")
 				couponReceiveApi(this.status).then((res)=>{
+					couponsApi(this.status).then((res)=>{
+						
+						//已授权请求成功
+						this.item=res.coupon;
+						this.isReceive = res.isReceive;
+						
+					})
 					location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=receive";
+					
 				}).catch((res)=>{
+					this.$vux.toast.text('网络错误，请刷新重试', 'bottom')
 					console.log("领取出错信息：",res)
 				})
 			},
