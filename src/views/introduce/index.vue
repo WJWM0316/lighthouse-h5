@@ -444,6 +444,9 @@
               case '270abb50e490783896f2396e58bfbfad': // 活动塔0628
                 self.$store.dispatch('show_qr', {type: 1})
                 break
+              case '953c439c79fdd336bf5864aa2d6356ac': // 活动塔271考拉塔
+                self.$store.dispatch('show_qr', {type: 4})
+                break
               default:
                 self.$store.dispatch('show_qr', {type: 2})
                 break
