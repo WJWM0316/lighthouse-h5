@@ -17,7 +17,7 @@
 		<!--二维码-->
 		<div class="QRcode">
 			<div class="tip">长按识别二维码</div>
-			<img class="QR" src="../../../assets/icon/wx-qrcode.png" alt="" />
+			<img class="QR" src="../../../assets/icon/wx-qrcode2.png" alt="" />
 			<div class="txt">
 				<span>非微信打开，怎么办？</span>
 				<span>请先保存图片，再用微信扫一扫或者</span>
