@@ -438,9 +438,9 @@
               case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
                 self.$store.dispatch('show_qr', {type: 2})
                 break
-              case '95137f42811b2010a025bf28e35aeb69': // 活动塔
-                self.$store.dispatch('show_qr', {type: 4})
-                break
+//            case '95137f42811b2010a025bf28e35aeb69': // 活动塔（90天裂变塔）
+//              self.$store.dispatch('show_qr', {type: 2})
+//              break
               case '270abb50e490783896f2396e58bfbfad': // 活动塔0628
                 self.$store.dispatch('show_qr', {type: 1})
                 break

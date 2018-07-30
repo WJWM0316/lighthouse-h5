@@ -137,6 +137,11 @@
             'button-text': '好的'
           })
         } else {
+//      	this.$vux.alert.show({
+//          title: '绑定失败',
+//          content: '绑定手机号失败，请联系客服微信zike03）',
+//          'button-text': '好的'
+//        })
           this.$vux.toast.text(e.message, 'bottom')
         }
       }

@@ -79,6 +79,18 @@ const routers = [
     component: resolve => require(['@/views/center/invalidCoupon'], resolve),
     meta: {navHide: true, hideController:true}
   },
+  { // 小灯塔合作协议-个体导师版
+    path: '/center/personalProtocol',
+    name: 'center-personalProtocol',
+    component: resolve => require(['@/views/center/personalProtocol'], resolve),
+    meta: {navHide: true, hideController:true}
+  },
+  { // 小灯塔合作协议-机构导师版
+    path: '/center/mechanismProtocol',
+    name: 'center-mechanismProtocol',
+    component: resolve => require(['@/views/center/mechanismProtocol'], resolve),
+    meta: {navHide: true, hideController:true}
+  },
 ]
 
 export default routers
