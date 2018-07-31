@@ -37,8 +37,15 @@
            :class="loginBtnValid ? '' : 'btn-disabled'"
            :disabled="!loginBtnValid"
            @click="goSubmit"
-      >登录
+      >绑定手机
       </div>
+    </div>
+    <!--底部协议-->
+    <div class="custom-argee">
+    	绑定手机号即表明您同意
+      	<div @click.stop="toProtocol('protocol')" class="argee-link">《小灯塔用户服务协议》</div>、<br />
+      	<div @click.stop="toProtocol('personalProtocol')" class="argee-link">《小灯塔合作协议-个体导师版》</div>、
+      	<div @click.stop="toProtocol('mechanismProtocol')" class="argee-link">《小灯塔合作协议-机构导师版》</div>
     </div>
   </div>
 </template>
@@ -93,6 +100,17 @@
         const hostname = location.href.split('?')[0]
         location.href = `${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`
       }
+    }
+    
+    //跳转相应协议页面
+    toProtocol(toUrl){
+    	if(toUrl === "protocol"){
+    		this.$router.push({name: 'center-protocol'})
+    	}else if(toUrl === "personalProtocol"){
+    		this.$router.push({name: 'center-personalProtocol'})
+    	}else{
+    		this.$router.push({name: 'center-mechanismProtocol'})
+    	}
     }
 
     onSend (imgcodeUrl) { // 显示图片验证码
@@ -224,6 +242,20 @@
     .weui-vcode-img {
       width: 90px;
       height: 30px;
+    }
+    
+    /*底部协议*/
+    .custom-argee{
+    	text-align: center;
+      margin-top: 40px;
+      font-size: 10px;
+      color: #BCBCBC;
+      .argee-link{
+      	white-space: nowrap;
+      	font-size:10px;
+        display: inline-block;
+        color: #D7AB70;
+      }
     }
   }
 </style>
