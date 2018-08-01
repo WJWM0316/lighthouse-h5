@@ -176,8 +176,8 @@
       height: 49px;
       line-height: 49px;
       .red-dot {
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
         background: #ff3434;
         position: absolute;
