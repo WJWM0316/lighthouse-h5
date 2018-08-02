@@ -435,8 +435,8 @@
             let number = Math.random() * 10 + 1
             console.log('communityId', communityId)
             switch (communityId) {
-              case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
-                self.$store.dispatch('show_qr', {type: 2})
+              case '0125347d17e7c24d7e969783a26b922d': // 好点子塔
+                self.$store.dispatch('show_qr', {type: 3})
                 break
 //            case '95137f42811b2010a025bf28e35aeb69': // 活动塔（90天裂变塔）
 //              self.$store.dispatch('show_qr', {type: 2})
