@@ -1,57 +1,29 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import audioBox from '@/components/media/music'
 import moment from 'moment'
 
 @Component({
-  name: 'dynamic-item',
+  name: 'lesson-dynamic-item',
   props: {
     item: {
       type: Object,
       required: true
     },
-    isTower: {
-      type: Boolean,
-      default: false
-    },
     isFold: {
       type: Boolean,
       default: true
-    },
-    // 对象下标
-    itemIndex: {
-      type: Number
-    },
-    // 评论总数
-    allTotal: {
-      type: Number
     },
     isNeedHot: {
       type: Boolean,
       default: false
     },
-    // 是否隐藏评论按钮
-    hideCommentBtn: {
-      type: Boolean,
-      default: false
+      //是否是课节页面
+    isLesson: {
+    	type: Boolean,
+    	default: true
     },
-    // 是否隐藏点赞按钮
-    hidePraiseBtn: {
-      type: Boolean,
-      default: false
-    },
-    // 是否显示社区信息
-    showLightHouseInfo: {
-      type: Boolean,
-      default: false
-    },
-    // 是否显示标识
-    showIdentification: {
-      type: Boolean,
-      default: false
-    },
-    // 是否删除按钮
+    // 是否隐藏删除按钮
     showDelBtn: {
       type: Boolean,
       default: false
@@ -61,7 +33,7 @@ import moment from 'moment'
       type: Boolean,
       default: false
     },
-    // 是否隐藏评论区域
+    // 是否隐藏评论区域,详情页时需要隐藏
     hideCommentArea: {
       type: Boolean,
       default: false
@@ -76,34 +48,10 @@ import moment from 'moment'
       type: Boolean,
       default: false
     },
-    // 临时下划线取消
-    noBorder: {
-      type: Boolean,
-      default: false
-    },
     communityId: {
       type: String,
       default: ''
-    },
-    isPlayList: {
-      type: Boolean,
-      default: false
-    },
-    isTeacher: {
-      type: Boolean,
-      default: false
-    },
-    isTeacherCon: {
-      type: Boolean,
-      default: false
-    },
-    isDetailCon: {
-      type: Boolean,
-      default: false
     }
-  },
-  components: {
-    audioBox
   },
   computed: {
     picList () {
@@ -120,30 +68,6 @@ import moment from 'moment'
         list = files
       }
       return list
-    },
-    // 获取后缀对应类型
-    fileType () {
-      const fileName = this.item.files[0].fileName || ''
-      let type = 'other'
-      if (fileName) {
-        // 所有后缀类型
-        const fileTypeArr = {
-          'pdf': ['pdf'],
-          'ppt': ['ppt', 'pptx'],
-          'word': ['doc', 'docx'],
-          'xls': ['xls', 'xlsx']
-        }
-        const fileNames = fileName.split('.') // 分割字符串
-        const fileSuffix = fileNames[fileNames.length - 1] // 取得后缀
-        for (let suffix in fileTypeArr) {
-          const suffixs = fileTypeArr[suffix]
-          if (suffixs.indexOf(fileSuffix) > -1) {
-            type = suffix
-            break
-          }
-        }
-      }
-      return type
     },
     // 转换字节单位
     byteStr () {
@@ -213,19 +137,14 @@ import moment from 'moment'
       }
       return timeStr
     }
-  },
-  watch: {
-    isPlayList () {},
-    isTeacherCon () {},
-    isTeacher () {}
   }
 })
-export default class dynamicItem extends Vue {
+export default class lessondynamicItem extends Vue {
   video = ''
   role = this.item.releaseUser.role || {}
   type = 0
   created () {
-    const {modelType, circleId, problemId, isCanSee, circleType} = this.item
+    const {modelType, circleId, circleType} = this.item
     switch (modelType) {
       case 'circle':
         this.type = 1
@@ -233,22 +152,14 @@ export default class dynamicItem extends Vue {
       case 'post':
         this.type = 2
         break
-      case 'problem':
-        this.type = 3
-        break
     }
-    // if (circleType) {
-    //   this.type = circleType
-    // }
   }
   
   beforeMount(){
-//	console.log(this.item,"******************************")
   }
 
   mounted () {
     this.video = this.$refs['video']
-//  console.log(this.item,"=================================+++")
   }
   
   
@@ -286,32 +197,71 @@ export default class dynamicItem extends Vue {
       
     })
   }
+  /**
+     * 操作事件
+     * @param e :{eventType} eventType: 事件名称 itemIndex: 触发对象下标
+     */
+    operation (e) {
+      const {eventType} = e
+
+      if (this.disableOperationArr && this.disableOperationArr.length > 0) {
+        if (this.disableOperationArr.indexOf(eventType) > -1) {
+          this.$emit('disableOperationEvents', {
+            eventType,
+            itemIndex,
+            isDetail: true
+          })
+          return
+        }
+      }
+
+      const item = this.item
+
+      switch (eventType) {
+        case 'comment':
+          break
+        case 'praise':
+          this.praise({item, itemIndex}).then()
+          break
+        case 'del':
+          this.del({item, itemIndex}).then()
+          break
+        case 'previewImage':
+          this.wechatPreviewImage(e).then()
+          break
+        case 'fileOpen':
+          window.location.href = e.url
+          break
+      }
+    }
 
   /**
    * 发表评论
    */
   comment () {
-    const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'comment',
-      itemIndex
-    })
+  	if(this.isLesson){
+  		this.$router.push(`/PunchList`);
+  		return;
+  	}
   }
   /**
    * 点赞
    */
   praise () {
-    const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'praise',
-      itemIndex
-    })
+  	if(this.isLesson){
+  		this.$router.push(`/PunchList`);
+  		return;
+  	}
   }
 
   /**
    * 点击预览图片
    */
   previewImage (img) {
+  	if(this.isLesson){
+  		this.$router.push(`/PunchList`);
+  		return;
+  	}
     const files = this.item.files
     let urls = []
     files.forEach((item) => {
@@ -323,21 +273,11 @@ export default class dynamicItem extends Vue {
       urls
     })
   }
-  /**
-   * 打开文件
-   */
-  fileOpen (url) {
-    this.$emit('operation', {
-      eventType: 'fileOpen',
-      url
-    })
-  }
   videoClick () {
-    const itemIndex = this.itemIndex
-    this.$emit('videoEvent', {
-      eventType: 'play',
-      itemIndex
-    })
+    if(this.isLesson){
+  		this.$router.push(`/PunchList`);
+  		return;
+  	}
   }
   videoPlay () {
     this.video.currentTime = 0
@@ -351,14 +291,13 @@ export default class dynamicItem extends Vue {
   }
 
   /**
-   * 删除
+   * 编辑
    */
   del () {
-    const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'del',
-      itemIndex
-    })
+  	if(this.isLesson){
+  		this.$router.push(`/PunchList`);
+  		return;
+  	}
   }
 
   // -------------------- 页面跳转 ------------------------
@@ -370,20 +309,19 @@ export default class dynamicItem extends Vue {
     this.$router.push(`/userInfo/${userId}/details`)
   }
   toDetails () { // 去朋友圈、帖子、问题详情
-  	console.log(this.$parent,"5555555555555555555")
+  	if(this.isLesson){
+  		this.$router.push(`/PunchList`);
+  		return;
+  	}
     if (this.disableContentClick) {
       return
     }
     const item = this.item
-    const {modelType, circleId, problemId, isCanSee} = item
-    if (isCanSee === 0) {
-      this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
-      return
-    }
+    const {modelType, circleId} = item
 
     if (this.type) {
       // 跳转详情页 sourceId type
-      const sourceId = circleId || problemId
+      const sourceId = circleId
       const communityId = this.communityId
       // this.$router.push({name: 'all-details', params: {sourceId, type}})
       this.$router.push(`/details/${sourceId}/${this.type}?communityId=${communityId}`)

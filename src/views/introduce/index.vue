@@ -34,7 +34,7 @@
           <!--<span class="module-title-tip-line"></span>
           <div class="module-title-tip">关于塔主</div>-->
         </div>
-        <div class="module-content h5-code" v-if="pageInfo.intro" v-html="pageInfo.intro" >
+        <div ref="h5Code" v-if="pageInfo.intro" class="module-content h5-code" v-html="pageInfo.intro" @click.stop="readPic($event)">
         </div>
       </div>
       <div class="how-to-play">
@@ -336,7 +336,6 @@
    }
     
     payOrFree () {
-      let that = this;
       this.toPay = true;
 //   	if(that.pageInfo.selectCoupon.couponPrice===0){
 //   		that.freeJoin()
@@ -435,49 +434,18 @@
             const { communityId } = self.$route.params
             let number = Math.random() * 10 + 1
             console.log('communityId', communityId)
-            //
             switch (communityId) {
-              case 'ca7cfa129f1d7ce4a04aebeb51e2a1aa':
-                self.$store.dispatch('show_qr', {type: 1})
-                break
-              case '25c2ff088da3f757b685a318ab050b5a': // 测试
-                self.$store.dispatch('show_qr', {type: 1})
-                break
-              case '64074da38681f864082708b9be959e08':
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '67917ba04abd74c3247245576b1168b0': // 测试
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '16a2f4a61d870978f1598b466a48f12e': // 测试 詹润杰的灯塔
+              case '0125347d17e7c24d7e969783a26b922d': // 好点子塔
                 self.$store.dispatch('show_qr', {type: 3})
                 break
-              case 'a7f79b000c990dd2658b6af10a37fe3c': // 正式 詹润杰的灯塔
-                self.$store.dispatch('show_qr', {type: 3})
+//            case '95137f42811b2010a025bf28e35aeb69': // 活动塔（90天裂变塔）
+//              self.$store.dispatch('show_qr', {type: 2})
+//              break
+              case '270abb50e490783896f2396e58bfbfad': // 活动塔0628
+                self.$store.dispatch('show_qr', {type: 1})
                 break
-              case '70036858d957ad830e89e37c5a8356d2': // 测试分销5月9号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '6b3974ad38fa6984de73f43a7730e294': // 正式分销5月9号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case 'b2b533754554bec1b9c344a97063891b': // 测试分销5月16号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '2cdf75243f96bca97ae4341b6400e375': // 正式分销5月16号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '67917ba04abd74c3247245576b1168b0': // 分销5月22号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case 'd71fddeba62a878aecd901198a959674': // 正式分销5月17号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
+              case '953c439c79fdd336bf5864aa2d6356ac': // 活动塔271考拉塔
                 self.$store.dispatch('show_qr', {type: 4})
-                break
-              case '9eb2275d266b83a717a50a5827250b8a': // 0607分销
-                self.$store.dispatch('show_qr', {type: 2})
                 break
               default:
                 self.$store.dispatch('show_qr', {type: 2})
@@ -619,8 +587,28 @@
         }
       })
     }
+    
+    //预览富文本图片
+    readPic(e){
+    	if(e.target.tagName==='IMG'){
+    		let urls = [];
+    		let img=e.target.src;
+    		let parma={
+    			urls,
+    			img
+    		}
+    		this.wechatPreviewImage(e).then()
+    	}
+    }
 
     mounted () {
+//  	var aImg = document.getElementsByClassName("h5-code")[0];
+//  	console.log(aImg,"我是捕获到的富文本图片")
+//  	this.$refs['h5Code'].getElementsByTagName('img').forEach((item)=>{
+//  		item.addEventListener("click",()=>{
+//	    		alert("我是富文本里的图片")
+//	    	})
+//  	})
       // this.$refs['body'].addEventListener('touchmove', e => {
       //   e.stopPropagation()
       // })
@@ -729,11 +717,11 @@
           color: @font-color-default;
 
           &:first-child {
-            padding: 8px 12px 6px 15px;
+            padding: 7.5px 12px 6.5px 15px;
           }
 
           &:last-child {
-            padding: 8px 15px 6px 12px;
+            padding: 7px 15px 7px 12px;
           }
 
           &.home,
@@ -1059,6 +1047,7 @@
    	height: 100%;
    	background-color: rgba(0,0,0,0.6);
    	.pay_box{
+   		animation: 0.4s ease-in-out window-fade-in;
    		box-sizing: border-box;
    		width: 375px;
    		height: 287px;
@@ -1161,5 +1150,15 @@
 			
    	}
    }
+  }
+  @keyframes window-fade-in{
+  	from{
+  		opacity: 0;
+  		transform: translateY(100%);
+  	}
+  	to{
+  		opacity: 1;
+  		transform: translateY(0);
+  	}
   }
 </style>

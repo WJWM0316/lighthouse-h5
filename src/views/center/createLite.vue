@@ -47,7 +47,7 @@
         <label class="label"><span class="asterisk">*</span> 如有疑问，请联系顾问</label>
         <div class="contents">
           <p>顾问热线：020-2816 3063</p>
-          <p>顾问微信号：zike02</p>
+          <p>顾问微信号：zike03</p>
         </div>
       </div>
     </div>

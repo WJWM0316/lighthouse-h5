@@ -82,6 +82,7 @@ async function process(response) {
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 426) { // 没有登录权限,跳去手机号登录
+//	alert("你没有绑定手机。。。。")
     store.dispatch('remove_userinfo')
     // hideLoading(globalLoading)
     router.replace({
@@ -182,7 +183,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   }
   
 
-//   data.TestUid = 5
+     data.TestUid = 5
 
 
 

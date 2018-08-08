@@ -121,7 +121,28 @@ const routers = [
     name: 'couponResult',
     meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/activity/coupon/couponResult'], resolve),
-	}
+	},
+	{
+    // 课节页面
+    path: '/Lesson',
+    name: 'Lesson',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/Lesson'], resolve),
+	},
+	{
+    // 打卡编辑页
+    path: '/PunchEditing',
+    name: 'PunchEditing',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/PunchEditing'], resolve),
+	},
+	{
+    // 打卡内容列表页
+    path: '/PunchList',
+    name: 'PunchList',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/punchList'], resolve),
+	},
 ]
 
 export default routers

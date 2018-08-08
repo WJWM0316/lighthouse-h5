@@ -248,7 +248,6 @@
     
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
-    	
 				let nowCommunity=sessionStorage.getItem("nowCommunity");
 			if(!nowCommunity){
 				sessionStorage.setItem("nowCommunity",to.params.communityId)
@@ -834,7 +833,7 @@
         background: #fff;
         line-height: 1;
         font-size: 0;
-        border-radius: 16px;
+        border-radius: 18px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
         overflow: hidden;
         z-index: 99;
@@ -854,7 +853,7 @@
           }
 
           &:last-child {
-            padding: 8px 15px 6px 12px;
+            padding: 7px 15px 7px 12px;
           }
 
           &.home,
@@ -871,7 +870,7 @@
             display: block;
             position: absolute;
             right: 100%;
-            top: 8px;
+            top: 8.5px;
             background: #d8d8d8;
             width: 1px; /* no */
             height: 18px;

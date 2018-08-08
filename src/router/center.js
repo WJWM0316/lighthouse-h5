@@ -20,6 +20,12 @@ const routers = [
     meta: {navHide: true, hideController:true}
   },
   {
+    path: '/center/jicall',
+    name: 'center-jicall',
+    component: resolve => require(['@/views/center/jicall'], resolve),
+    meta: {navHide: true, hideController:true}
+  },
+  {
     path: '/center/protocol',
     name: 'center-protocol',
     component: resolve => require(['@/views/center/protocol'], resolve),
@@ -71,6 +77,18 @@ const routers = [
     path: '/center/invalidCoupon',
     name: 'center-coupon-invalidCoupon-page',
     component: resolve => require(['@/views/center/invalidCoupon'], resolve),
+    meta: {navHide: true, hideController:true}
+  },
+  { // 小灯塔合作协议-个体导师版
+    path: '/center/personalProtocol',
+    name: 'center-personalProtocol',
+    component: resolve => require(['@/views/center/personalProtocol'], resolve),
+    meta: {navHide: true, hideController:true}
+  },
+  { // 小灯塔合作协议-机构导师版
+    path: '/center/mechanismProtocol',
+    name: 'center-mechanismProtocol',
+    component: resolve => require(['@/views/center/mechanismProtocol'], resolve),
     meta: {navHide: true, hideController:true}
   },
 ]

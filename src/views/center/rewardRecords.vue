@@ -9,7 +9,7 @@
     <template v-if="records.length > 0">
       <div class="records">
         <h3 class="title">收入记录</h3>
-        <scroller :refreshable="false":pullupable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end">
+        <scroller :refreshable="false" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end">
           <ul class="list">
             <li v-for="(item, index) in records" :key="index">
               <div class="auto">

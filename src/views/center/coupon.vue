@@ -20,7 +20,7 @@
 		</div>
 		
 		<div class="invalidCoupon" v-if="isToPay && listLength===couponList.length" @click.stop="toinvalidCoupon">
-			没有更多的可用优惠卷了 | 查看不可用优惠卷 >>
+			没有更多的可用优惠券了 | 查看不可用优惠券 >>
 		</div>
 		</scroll>
 
@@ -56,11 +56,6 @@
 	    CouponItem,
 	    Scroll
 	  },
-//	  watch:{
-//	  	'val'(newval,oldval){
-//	  		console.log(newval,oldval,"我是输入框的val")
-//	  	}
-//	  }
 	})
 	
 	export default class CenterCouponPage extends Vue {
@@ -71,6 +66,8 @@
 		nowUseCoupon = nowUseCoupon1
 		listLength = 0
 		page = 1
+		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
+		
 		
 		beforeRouteEnter(to,from,next){
 			console.log(from,to,"woshilaide lu")
@@ -82,6 +79,11 @@
 				isTopay = false;
 				communityId = '';
 			}
+			next();
+		}
+		
+		beforeRouteLeave(to,from,next){
+			document.querySelector('title').innerHTML = "小灯塔"
 			next();
 		}
 		
@@ -102,7 +104,7 @@
 			}
 		}
 		
-		emptyImg = 'http://cdnstatic.zike.com/Uploads/static/beacon/coupon/error_emp_coupon.png'
+
 		
 		//兑换优惠券
 		showResults(){
@@ -127,7 +129,6 @@
 						}else{
 							that.getCouponList(param)
 						}
-//        	console.log("这个是点击好的后触发的。。。。。")
           }
         })
 				
@@ -263,6 +264,7 @@
    	box-sizing: border-box;
    	margin: 0 auto;
    	margin-top: 15px;
+   	margin-bottom: 10px;
    	width: 350px;
    	height: 60px;
    	display: flex;

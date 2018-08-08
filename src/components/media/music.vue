@@ -17,8 +17,7 @@
         :disabled="disabled" 
         :max="durationData"
         @touchstart.native="touchStart" 
-        @touchend.native="touchEnd" 
-        @touchMove.native="touchMove" >
+        @touchend.native="touchEnd" >
       </range>
       <div class="audio-time" v-text="formatTime(transTime(durationData))"></div>
       <div class="curTime" v-show="isShowLabel" v-text="formatTime(transTime(currentTime))" :style="{'left': moveLeft}"></div>
@@ -60,7 +59,7 @@
         type: Number,
         default: 0
       },
-      isPlayList: {
+      isPlayList: {	//是否列表播放
         type: Boolean,
         default: false
       },
@@ -76,11 +75,15 @@
         type: Boolean,
         default: false
       },
-      isDetailCon: {
+      isLesson: { // 是否是课节音频
         type: Boolean,
         default: false
       },
-      isTower: {
+      isDetailCon: {	//暂无作用
+        type: Boolean,
+        default: false
+      },
+      isTower: {	
         type: Boolean,
         default: false
       },

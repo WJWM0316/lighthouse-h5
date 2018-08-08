@@ -23,7 +23,7 @@
 			</div>
 			<div class="line"></div>
 			<div class="bottom">
-				<div class="receive" v-if="item.status!==5 && !isReceive && !item.isFullCodeNumber" @click.stop="receive">免费领取优惠券</div>
+				<div class="receive" v-if="item.status!==5 && !isReceive && !item.isFullCodeNumber && item.status!==2" @click.stop="receive">免费领取优惠券</div>
 				<div class="unReceive" v-else>
 					<span class="littleTitle" v-show="isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
 					<span class="littleTitle" v-show="!isReceive && item.isFullCodeNumber && item.status!==5">来晚啦～优惠券已经被领完了！</span>
@@ -41,9 +41,10 @@
 					<span></span>
 				</div>
 				<div class="rule-content">
-					<span>1. 红包新老用户同享；</span>
-					<span>2. 红包仅限在线支付使用，且不可与其他优惠叠加使用；</span>
-					<span>3. 其他未尽事宜，请咨询客服，客服微信号zike02。</span>
+					<span>1. 优惠券新老用户同享，领完即止;</span>
+					<span>2. 优惠券仅限在线支付使用，且不可与其他优惠叠加使用;</span>
+					<span>3. 其他未尽事宜，请咨询客服，客服微信号zike03;</span>
+					<span>4. 本优惠券最终解释权归小灯塔官方所有。</span>
 				</div>
 			</div>
 		</div>
@@ -78,10 +79,10 @@
 //				item:{
 //					couponId:11,		//优惠券的id
 //					title:'手把手教你学产品 从入门到放弃放弃放弃放… ',
-//					discount:'199',		//优惠券的金额
+//					discount:'19.9',		//优惠券的金额
 //					imgUrl:"https://cdnstatic.ziwork.com/Uploads/static/picture/2018-06-26/dd3aca0483c85eea2be91589c1f0e71c.jpeg",
 //					relationCommunity:{
-//						title:'手把手教你学产品 从入门到放弃放弃放弃放…',
+//						title:'手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你手把手教你',
 //					},
 //					status:1,		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
 //					useEndTime:1532745050,
@@ -95,16 +96,25 @@
 			//免费领取
 			receive(){
 //				alert("我是正常领取调用")
-				couponReceiveApi(this.item.couponId).then((res)=>{
-					location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=receive";
+				couponReceiveApi(this.status).then((res)=>{
+					couponsApi(this.status).then((res)=>{
+						
+						//已授权请求成功
+						this.item=res.coupon;
+						this.isReceive = res.isReceive;
+						location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=receive";
+					})
+					
+					
 				}).catch((res)=>{
+					this.$vux.toast.text('网络错误，请刷新重试', 'bottom')
 					console.log("领取出错信息：",res)
 				})
 			},
 			//已经领取，去使用
 			toUse(){
 //				alert("已领取调用")
-				location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=issued";
+				location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=issued";
 			},
 			//领取完了
 			toLate(){
@@ -112,17 +122,17 @@
 //				couponReceiveApi(this.item.couponId).then((res)=>{
 //					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
 //				})
-				location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=end";
+				location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=end";
 			}
 		},
 		created(){
+//			console.log(window.location)
 			//获取优惠券id
-			let pattern = /(\d+)/ig;
+			let pattern = /([^?]+)$/ig;
 			let str = window.location.hash;
 			let status = str.match(pattern);
 			console.log(status,"...............")
-			this.status = parseInt(status[0]);
-			
+			this.status = status[0];
 			
 			document.querySelector('title').innerHTML = "小灯塔"
 			couponsApi(this.status).then((res)=>{
@@ -136,7 +146,7 @@
 				// 页面分享信息
 	      this.wechatShare({
 	        'titles': `恭喜你获得${res.coupon.discount}元小灯塔优惠券`,
-//	        'title': `456456465465456465464654654654564564654656545645645`,
+	        'title': `恭喜你获得${res.coupon.discount}元学习优惠券！点击即可领取，手快有，手慢无哦~`,
 	        'desc': `点击即可领取，手快有，手慢无`,
 	        'imgUrl': "https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png",
 	        'link': location.origin + `/beaconweb/#/coupon?${that.status}`
@@ -155,8 +165,8 @@
 					  onConfirm () {
 //					  	let backUrl={redirect_url:"'https://www.ziwork.com/beaconweb/#/examination'"}
 					  	let {url}=res.data;
-							console.log(url+"?redirect_url="+parseInt(status[0]));
-							location.href=url+"?redirect_url="+parseInt(status[0]);
+							console.log(url+"?redirect_url="+status[0]);
+							location.href=url+"?redirect_url="+status[0];
 							
 					  }
 					})
@@ -186,7 +196,7 @@
 			margin-top: -60px;
 			margin-left: auto;
 			margin-right: auto;
-			z-index: 999;
+			/*z-index: 999;*/
 			width: 345px;
 			/*height: 428px;*/
 			background-color: #FFFFFF;
@@ -194,7 +204,7 @@
 			
 			.top{
 				width: 100%;
-				height: 116px;
+				/*height: 118px;*/
 				box-sizing: border-box;
 				/*background-color: #FFFFFF;*/
 				padding: 28px 0;
@@ -209,7 +219,7 @@
 					/*width: 130px;*/
 					/*max-width: 140px;*/
 					border-right: 0.5px solid #EEEEEE;
-					padding-left: 12px;
+					padding-left: 17px;
 					padding-right: 10px;
 					span{
 						/*&:nth-child(1){
@@ -250,19 +260,20 @@
 					display: flex;
 					flex-wrap: wrap;
 					align-items: center;
+					align-content: center;
 					justify-content: center;
 					padding-left: 13px;
 					padding-right: 20px;
 					span{
+						display: block;
 						width: 100%;
 						&:nth-child(1){
 							font-size:15px;
 							line-height: 20px;
 							color:#354048;
-							
 							overflow: hidden;
+							display: -webkit-inline-box;
 	            text-overflow: ellipsis;
-	            display: -webkit-box;
 	            -webkit-line-clamp:2;
 	            -webkit-box-orient: vertical;
 						}
@@ -273,7 +284,7 @@
 	            text-overflow: ellipsis;
 							font-size: 13px;
 							color: #929292;
-							margin-top: 5px;
+							margin-top: 9px;
 							line-height: 12px;
 						}
 					}
