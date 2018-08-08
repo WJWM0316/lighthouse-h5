@@ -122,6 +122,7 @@ const routers = [
     meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/activity/coupon/couponResult'], resolve),
 	},
+<<<<<<< HEAD
 	{
     // 课节页面
     path: '/Lesson',
@@ -143,6 +144,15 @@ const routers = [
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/punchList'], resolve),
 	},
+=======
+//	{
+//  // 课节页面
+//  path: '/Lesson',
+//  name: 'Lesson',
+//  meta: {navHide: true},
+//  component: resolve => require(['@/views/introduce/Lesson'], resolve),
+//},
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
 ]
 
 export default routers

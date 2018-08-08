@@ -17,6 +17,7 @@
       	</div>
       	<div class="date">{{1533139200000 | date('YYYY-MM-DD')}}</div>
       </div>
+<<<<<<< HEAD
       <!--视频-->
       <div class="Lesson-video" @click.stop="playVideo">
       	<video controls ref="video"></video>
@@ -35,10 +36,14 @@
       </div>
       <div class="module-content h5-code">
       	我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本
+=======
+      <div class="module-content h5-code">
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
       </div>
     </div>
     <!--本节任务-->
 		<div class="Lesson-task">
+<<<<<<< HEAD
 			<!--头部标题-->
 			<div class="headerBox">
 				<div class="title-pic1">
@@ -47,6 +52,9 @@
 				<div class="title-pic2"></div>
 			</div>
 			<!--头部标题-->
+=======
+			<div class="task-photo"></div>
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
 			<div class="content-txt">
 				本节中提到的运营心法，那针对以下几个点说 说你们的想法： 
 				1、如果遇到同样的用户运营问题，你会怎么处 理？ 
@@ -56,6 +64,7 @@
 				
 			</div>
 		</div>
+<<<<<<< HEAD
 		<!--优秀打卡区-->
 		<div class="Lesson-punch" v-if="dynamicList!=={}">
 			<!--头部标题-->
@@ -98,6 +107,16 @@
          :disableContentClick="false"
       ></lessondynamicItem>
       <div class="Expand-btn all-show">查看所有打卡 <span>(32)</span></div>
+=======
+		<!--打卡区-->
+		<div class="Lesson-punch">
+			<div class="punch-photo"></div>
+			<!--优秀打卡-->
+			<div class="Excellent-punch">
+				<div class="Excellent-punch-title"></div>
+			</div>
+			<!--所有打卡-->
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
 		</div>
 		
 		<!--底部打卡按钮区-->
@@ -116,6 +135,7 @@
 <script>
 	import Vue from 'vue'
   import Component from 'vue-class-component'
+<<<<<<< HEAD
 	import lessondynamicItem from '@/components/lessondynamicItem/lessondynamicItem'
   import audioBox from '@/components/media/music'
   @Component({
@@ -123,6 +143,13 @@
     components: {
       lessondynamicItem,
       audioBox
+=======
+  import dynamic from '@/components/dynamic/dynamic'
+  @Component({
+    name: 'Lesson',
+    components: {
+      dynamic
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
     },
     computed: {
     	
@@ -132,6 +159,7 @@
     },
   })
   export default class Lesson extends Vue {
+<<<<<<< HEAD
   	video = '' //视频
   	videoPlay = true //视频是否在播放
   	showIdentification = true
@@ -275,12 +303,23 @@
   	mounted () {
 	    this.video = this.$refs['video']
 	  }
+=======
+  	isPunch = 0	//是否已经打卡
+  	
+  	toPunch(){
+  		alert("我是要跳转去打卡页面的")
+//		this.$router.push({path:'去打卡的页面'})
+  	}
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
   }
 </script>
 
 <style lang="less" scoped>
 	.Lesson{
+<<<<<<< HEAD
 		padding-bottom: 49px;
+=======
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
 		/*课节头部*/
 		.Lesson-header{
 			
@@ -322,6 +361,7 @@
 				}
 				
 			}
+<<<<<<< HEAD
 			/*课节视频*/
 			.Lesson-video{
 				margin-top: 28px;
@@ -367,10 +407,21 @@
 				margin-top: 30px;
 				width: 100%;
 			}
+=======
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
 		}
 		/*本节打卡任务*/
 		.Lesson-task{
 			
+<<<<<<< HEAD
+=======
+			.task-photo{
+				width: 100%;
+				height: 54px;
+				background-color: #C9C9C9;
+				margin-bottom: 30px;
+			}
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
 			.content-txt{
 				width: 100%;
 			}
@@ -380,6 +431,7 @@
 				}
 			}
 		}
+<<<<<<< HEAD
 		/*优秀打卡区*/
 		.Lesson-punch,.all-punch{
 			
@@ -440,6 +492,22 @@
 				margin-bottom: 50px;
 			}
 		}
+=======
+		/*打卡区*/
+		.Lesson-punch{
+			.punch-photo{
+				width: 100%;
+				height: 54px;
+				background-color: #666666;
+			}
+			/*优秀打卡*/
+			.Excellent-punch{
+				.Excellent-punch-title{
+					
+				}
+			}
+		}
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
 		/*课节底部按钮区*/
 		.Lesson-footer{
 			width: 100%;
@@ -447,7 +515,11 @@
 			position: absolute;
 			bottom: 0;
 			left: 0;
+<<<<<<< HEAD
 			z-index: 9998;
+=======
+			z-index: 9999;
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
 			display: flex;
 			flex-wrap: nowrap;
 			align-items: center;
@@ -482,6 +554,7 @@
 			padding: 0 20px;
 			box-sizing: border-box;
 		}
+<<<<<<< HEAD
 		/*头部标题样式*/
 		.headerBox{
 			width: 100%;
@@ -539,6 +612,8 @@
 				z-index: 0;
 			}
 		}
+=======
+>>>>>>> 3683e2698d618f338416412fabcbf9edd1800f04
 		
 	}
 </style>
