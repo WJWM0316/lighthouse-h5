@@ -592,11 +592,13 @@
     readPic(e){
     	if(e.target.tagName==='IMG'){
     		let urls = [];
-    		let img=e.target.src;
+    		urls.push(e.target.src)
+    		let img=String(e.target.src);
     		let parma={
     			urls,
     			img
     		}
+    		console.log(img,"我是图片路径信息")
     		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
     	}
     }

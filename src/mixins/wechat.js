@@ -106,6 +106,7 @@ export default {
      * @param {*} options
      */
     wechatPreviewImage (options = {}) {
+//  	console.log(options,"我是预览图片功能....")
       return new Promise((resolve, reject) => {
         this.$wechat.previewImage({
           current: options.img,
