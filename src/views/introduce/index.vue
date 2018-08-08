@@ -597,7 +597,7 @@
     			urls,
     			img
     		}
-    		this.wechatPreviewImage(e).then()
+    		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
     	}
     }
 
