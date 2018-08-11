@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import moment from 'moment'
 import WechatMixin from '@/mixins/wechat'
-import { courseCardFavorApi } from '@/api/pages/pageInfo'
+import { courseCardFavorApi, courseCardCommentApi } from '@/api/pages/pageInfo'
 
 @Component({
   name: 'lesson-dynamic-item',
@@ -243,19 +243,55 @@ export default class lessondynamicItem extends Vue {
    */
   comment () {
   	if(this.isLesson){
-  		this.$router.push(`/PunchList`);
+  		this.$router.push({path:'/PunchDetails',query:{courseId:this.item.courseId,peopleId:this.item.peopleId}});
   		return;
   	}
+  	
+  	let param={
+  		peopleCourseId:this.item.courseId,
+  		id:this.item.peopleCourseId,
+  		commentContent:"我是评论内容",
+  		type:1
+  	}
+  	
+//	this.$emit('operation', {
+//    eventType: 'comment',
+//    itemIndex
+//  })
+  	
+	courseCardCommentApi(param).then(res=>{
+		console.log(res,"评论成功")
+	}).catch(res=>{
+		console.log(res,"评论失败")
+	})
+  	
   }
   /**
    * 点赞
    */
   praise (courseId,peopleId) {
   	if(this.isLesson){
-  		this.$router.push({path:'/PunchList',query:{courseId:courseId,peopleId:peopleId}});
+  		this.$router.push({path:'/PunchDetails',query:{courseId:courseId,peopleId:peopleId}});
   		return;
   	}
-  	
+  	//点击后的点赞状态
+  	let nowFavor = 1
+  	if(this.item.isFavor === 0){
+  		nowFavor = 1 
+  	}else{
+  		nowFavor = 0
+  	}
+  	let parama= {
+  		isFavor:nowFavor,
+  		type:1,
+  		sourceId:this.item.peopleCourseId //打卡信息id
+  	}
+  	courseCardFavorApi(parama).then(res=>{
+  		console.log(res,"打卡成功")
+  		this.item.isFavor=nowFavor
+  	}).catch(res=>{
+  		console.log(res,"打卡失败")
+  	})
   }
 
   /**
@@ -312,7 +348,7 @@ export default class lessondynamicItem extends Vue {
   }
   toDetails () { // 去朋友圈、帖子、问题详情
   	if(this.isLesson){
-  		this.$router.push(`/PunchList`);
+  		this.$router.push({path:'/PunchDetails',query:{courseId:this.item.courseId,peopleId:this.item.peopleId}});
   		return;
   	}
     if (this.disableContentClick) {

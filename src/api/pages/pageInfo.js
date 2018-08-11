@@ -332,7 +332,7 @@ export const invalidCouponsApi = (data) => {
 // 课节详情内容
 export const lessonContentApi = (data) => {
   return request({
-    url: '/wap/course/1',
+    url: '/wap/course/34',
     type:'get',
     data
   })
@@ -354,3 +354,21 @@ export const courseCardFavorApi = (data) => {
     data
   })
 }
+
+// 打卡详情
+export const getCourseCardInfoApi = (courseId,peopleId) => {
+  return request({
+    url: `/wap/courseCard/getCourseCardInfo/${courseId}/${peopleId}`,
+    type:'get'
+  })
+}
+
+// 课节详情评论
+export const courseCardCommentApi = (data) => {
+  return request({
+    url: `/wap/courseCard/courseCardComment`,
+    type:'post',
+    data
+  })
+}
+

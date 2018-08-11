@@ -90,7 +90,7 @@
          :isLesson="true"
          :disableContentClick="false"
       ></lessondynamicItem>
-      <div class="Expand-btn" @click.stop="toPunchList">查看所有优秀打卡 <span>(12)</span></div>
+      <div class="Expand-btn" @click.stop="toPunchList('excellent')">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
 		</div>
 		<!--所有打卡区-->
 		<div class="all-punch">
@@ -109,7 +109,7 @@
          :isLesson="true"
          :disableContentClick="false"
       ></lessondynamicItem>
-      <div class="Expand-btn all-show">查看所有打卡 <span>(32)</span></div>
+      <div class="Expand-btn all-show" @click.stop="toPunchList('all')">查看所有打卡 <span>({{peopleCourseCardList.length}})</span></div>
 		</div>
 		
 		<!--底部打卡按钮区-->
@@ -120,7 +120,7 @@
 		</div>
 		<div class="Lesson-footer" v-else>
 				<div class="peacock">炫耀一下</div><span class="line"></span>
-				<div class="mine">我的打卡</div>
+				<div class="mine" @click.stop="toMindDetail(communityCourse.peopleId,communityCourse.id)">我的打卡</div>
 		</div>
 	</div>
 </template>
@@ -177,16 +177,23 @@
     //最新课节信息
     communityCourse = ''
     
-    communityId = "aa111e6adee61456f37ae317570774e2"
+    communityId = ""
   	isPunch = 0	//是否已经打卡
   	
   	//去打卡编辑页
   	toPunch(){
 			this.$router.push({path:`/PunchEditing?courseId=${this.courseId}`})
   	}
+  	
+  	//去个人打卡详情页
+  	toMindDetail(peopleId,courseId){
+  		console.log(peopleId,courseId,"我是个人信息")
+  		this.$router.push({path:'/PunchDetails',query:{courseId:courseId.courseId,peopleId:peopleId}});
+  	}
+  	
   	//去打卡内容列表页
-  	toPunchList(){
-  		this.$router.push(`/PunchList`);
+  	toPunchList(txt){
+  		this.$router.push(`/PunchList?toList=${txt}`);
   		return;
   	}
   	//预览富文本图片
@@ -230,6 +237,7 @@
   	created(){
   		Promise.all([lessonContentApi(),getCourseCardListApi()]).then((res)=>{
   			console.log(res,"请求回来的数据")
+  			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse
   			this.peopleCourseCardList = res[1].peopleCourseCardList
   			this.excellentPunchList = res[1].excellentPeopleCourseCardList
