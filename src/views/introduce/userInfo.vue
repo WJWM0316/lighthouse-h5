@@ -39,7 +39,7 @@
           <!--收起和展开-->
 	        <div v-if="communityList.length > 2" class="control-display" @click="isDisplay"><span>{{displayText}}</span>
 	        	<img v-if="isShowTower" class="take-up-icon" src='./../../assets/icon/btn_enter copy@hhx.png'/>
-	        	<img v-else class="take-up-icon" src='./../../assets/icon/btn_levea copy@hhx.png'/>
+	        	<img v-else class="take-up-icon" src='./../../assets/icon/btn_levea_copy@hhx.png'/>
 	        </div>
         
         </div>

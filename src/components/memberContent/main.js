@@ -1,25 +1,14 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import audioBox from '@/components/media/music'
 import moment from 'moment'
-import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
 
 @Component({
-  name: 'dynamic-item',
+  name: 'member-content',
   props: {
-    //
-    isMe: {
-      type: Boolean,
-      default: false
-    },
     item: {
       type: Object,
       required: true
-    },
-    isTower: {
-      type: Boolean,
-      default: false
     },
     isFold: {
       type: Boolean,
@@ -86,30 +75,8 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     noBorder: {
       type: Boolean,
       default: false
-    },
-    communityId: {
-      type: String,
-      default: ''
-    },
-    isPlayList: {
-      type: Boolean,
-      default: false
-    },
-    isTeacher: {
-      type: Boolean,
-      default: false
-    },
-    isTeacherCon: {
-      type: Boolean,
-      default: false
-    },
-    isDetailCon: {
-      type: Boolean,
-      default: false
     }
-  },
-  components: {
-    audioBox
+    
   },
   computed: {
     picList () {
@@ -219,45 +186,23 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
       }
       return timeStr
     }
-  },
-  watch: {
-    isPlayList () {},
-    isTeacherCon () {},
-    isTeacher () {}
   }
 })
 export default class dynamicItem extends Vue {
-  user_op = false
   video = ''
   role = this.item.releaseUser.role || {}
-  type = 0
   created () {
-    const {modelType, circleId, problemId, isCanSee, circleType} = this.item
-    switch (modelType) {
-      case 'circle':
-        this.type = 1
-        break
-      case 'post':
-        this.type = 2
-        break
-      case 'problem':
-        this.type = 3
-        break
-    }
-    // if (circleType) {
-    //   this.type = circleType
-    // }
+  	console.log(this.item,"******************************")
   }
   
   beforeMount(){
-    //console.log(this.item,"******************************")
+//	console.log(this.item,"******************************")
   }
 
   mounted () {
     this.video = this.$refs['video']
 //  console.log(this.item,"=================================+++")
   }
-
   
   
   isFullText (ref) {
@@ -315,7 +260,25 @@ export default class dynamicItem extends Vue {
       itemIndex
     })
   }
+  /**
+   * 播放对应音频
+   */
+  audioPlay (problemIndex) {
+    let url = ''
+    const itemIndex = this.itemIndex
+    if (problemIndex >= 0) {
+      url = this.item.answers[problemIndex].file.fileUrl
+    } else {
+      url = this.item.files[0].fileUrl
+    }
 
+    this.$emit('audioEvent', {
+      eventType: 'play',
+      url,
+      itemIndex,
+      problemIndex
+    })
+  }
   /**
    * 点击预览图片
    */
@@ -340,7 +303,6 @@ export default class dynamicItem extends Vue {
       url
     })
   }
-
   videoClick () {
     const itemIndex = this.itemIndex
     this.$emit('videoEvent', {
@@ -348,7 +310,6 @@ export default class dynamicItem extends Vue {
       itemIndex
     })
   }
-
   videoPlay () {
     this.video.currentTime = 0
     this.video.src = this.item.files[0].fileUrl
@@ -358,60 +319,6 @@ export default class dynamicItem extends Vue {
   videoStop () {
     this.video.pause()
     this.video.src = ''
-  }
-  /**
-   * 帖子置顶 or op
-   */
-  topOp(){
-    console.log(this.item)
-    let data = {
-      communityId: 'e37bfaedef82e565f21bae9d59183763',
-      postId: this.item.circleId
-    }
-
-    if(this.item.topPostStatus==0){
-      addTopApi(data).then(res=>{
-        console.log(res)
-      })
-    }else {
-      delTopApi(data).then(res=>{
-        console.log(res)
-      })
-    }
-  }
-
-  op_member(res){
-    //this.user_op = !this.user_op
-    let menus = []
-    let itemIndex = this.itemIndex
-    let item = this.item
-
-    if(this.role == '塔主'){
-      if(this.item.topPostStatus == 0){
-        menus.push({
-          label: '置顶',
-          value: '1'
-        })
-      }else {
-        menus.push({
-          label: '取消置顶',
-          value: '2'
-        })
-      }
-    }
-
-    console.log('qweqweqweqwe',this.role,this.menus)
-
-    menus.push({
-      label: '删除',
-      value: '3'
-    })
-
-    item.itemIndex = itemIndex
-    this.$emit('opMember', {
-      item: item,
-      menus,
-    })
   }
 
   /**
@@ -433,9 +340,7 @@ export default class dynamicItem extends Vue {
     console.log('去个人详情: ', userId)
     this.$router.push(`/userInfo/${userId}/details`)
   }
-
   toDetails () { // 去朋友圈、帖子、问题详情
-  	console.log(this.$parent,"5555555555555555555")
     if (this.disableContentClick) {
       return
     }
@@ -445,13 +350,24 @@ export default class dynamicItem extends Vue {
       this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return
     }
-
-    if (this.type) {
+    let type = 0
+    switch (modelType) {
+      case 'circle':
+        type = 1
+        break
+      case 'post':
+        type = 2
+        break
+      case 'problem':
+        type = 3
+        break
+    }
+    if (type) {
       // 跳转详情页 sourceId type
       const sourceId = circleId || problemId
-      const communityId = this.communityId
+      console.log('跳转详情页: ', sourceId, type)
       // this.$router.push({name: 'all-details', params: {sourceId, type}})
-      this.$router.push(`/details/${sourceId}/${this.type}?communityId=${communityId}`)
+      this.$router.push(`/details/${sourceId}/${type}`)
     }
   }
 

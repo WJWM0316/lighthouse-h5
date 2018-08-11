@@ -1,115 +1,20 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import audioBox from '@/components/media/music'
 import moment from 'moment'
-import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
 
 @Component({
-  name: 'dynamic-item',
+  name: 'share-group',
   props: {
     //
     isMe: {
       type: Boolean,
       default: false
     },
-    item: {
+    pageInfo: {
       type: Object,
       required: true
-    },
-    isTower: {
-      type: Boolean,
-      default: false
-    },
-    isFold: {
-      type: Boolean,
-      default: true
-    },
-    // 对象下标
-    itemIndex: {
-      type: Number
-    },
-    // 评论总数
-    allTotal: {
-      type: Number
-    },
-    isNeedHot: {
-      type: Boolean,
-      default: false
-    },
-    // 是否隐藏评论按钮
-    hideCommentBtn: {
-      type: Boolean,
-      default: false
-    },
-    // 是否隐藏点赞按钮
-    hidePraiseBtn: {
-      type: Boolean,
-      default: false
-    },
-    // 是否显示社区信息
-    showLightHouseInfo: {
-      type: Boolean,
-      default: false
-    },
-    // 是否显示标识
-    showIdentification: {
-      type: Boolean,
-      default: false
-    },
-    // 是否删除按钮
-    showDelBtn: {
-      type: Boolean,
-      default: false
-    },
-    // 是否隐藏边框
-    hideBorder: {
-      type: Boolean,
-      default: false
-    },
-    // 是否隐藏评论区域
-    hideCommentArea: {
-      type: Boolean,
-      default: false
-    },
-    // 禁止内容点击事件
-    disableContentClick: {
-      type: Boolean,
-      default: false
-    },
-    // 禁止头像名字点击
-    disableUserClick: {
-      type: Boolean,
-      default: false
-    },
-    // 临时下划线取消
-    noBorder: {
-      type: Boolean,
-      default: false
-    },
-    communityId: {
-      type: String,
-      default: ''
-    },
-    isPlayList: {
-      type: Boolean,
-      default: false
-    },
-    isTeacher: {
-      type: Boolean,
-      default: false
-    },
-    isTeacherCon: {
-      type: Boolean,
-      default: false
-    },
-    isDetailCon: {
-      type: Boolean,
-      default: false
     }
-  },
-  components: {
-    audioBox
   },
   computed: {
     picList () {
@@ -219,34 +124,16 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
       }
       return timeStr
     }
-  },
-  watch: {
-    isPlayList () {},
-    isTeacherCon () {},
-    isTeacher () {}
   }
 })
 export default class dynamicItem extends Vue {
   user_op = false
   video = ''
   role = this.item.releaseUser.role || {}
-  type = 0
+
+  
   created () {
-    const {modelType, circleId, problemId, isCanSee, circleType} = this.item
-    switch (modelType) {
-      case 'circle':
-        this.type = 1
-        break
-      case 'post':
-        this.type = 2
-        break
-      case 'problem':
-        this.type = 3
-        break
-    }
-    // if (circleType) {
-    //   this.type = circleType
-    // }
+  	console.log(this.item,"******************************")
   }
   
   beforeMount(){
@@ -315,7 +202,25 @@ export default class dynamicItem extends Vue {
       itemIndex
     })
   }
+  /**
+   * 播放对应音频
+   */
+  audioPlay (problemIndex) {
+    let url = ''
+    const itemIndex = this.itemIndex
+    if (problemIndex >= 0) {
+      url = this.item.answers[problemIndex].file.fileUrl
+    } else {
+      url = this.item.files[0].fileUrl
+    }
 
+    this.$emit('audioEvent', {
+      eventType: 'play',
+      url,
+      itemIndex,
+      problemIndex
+    })
+  }
   /**
    * 点击预览图片
    */
@@ -435,7 +340,6 @@ export default class dynamicItem extends Vue {
   }
 
   toDetails () { // 去朋友圈、帖子、问题详情
-  	console.log(this.$parent,"5555555555555555555")
     if (this.disableContentClick) {
       return
     }
@@ -445,13 +349,24 @@ export default class dynamicItem extends Vue {
       this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return
     }
-
-    if (this.type) {
+    let type = 0
+    switch (modelType) {
+      case 'circle':
+        type = 1
+        break
+      case 'post':
+        type = 2
+        break
+      case 'problem':
+        type = 3
+        break
+    }
+    if (type) {
       // 跳转详情页 sourceId type
       const sourceId = circleId || problemId
-      const communityId = this.communityId
+      console.log('跳转详情页: ', sourceId, type)
       // this.$router.push({name: 'all-details', params: {sourceId, type}})
-      this.$router.push(`/details/${sourceId}/${this.type}?communityId=${communityId}`)
+      this.$router.push(`/details/${sourceId}/${type}`)
     }
   }
 

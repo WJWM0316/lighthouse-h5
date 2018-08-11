@@ -6,35 +6,20 @@
     <div class="container" ref="big-shot-introduce-container" :class="{ 'no-pdb': !completelyShow }">
       <div class="header">
 
-        <community-card ref="headCard" :community="pageInfo" :type="2" :isCommunityIntroduce="completelyShow"/>
+        <community-card ref="headCard" :community="pageInfo" :type="2" />
         <div class="share-group fixed">
           <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
           <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button>
           <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">分享赚¥{{pageInfo.sellPrice}}</button>
           <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
         </div>
-
-        <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
-        <!--</div>-->
-        <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
-          <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
-        <!--</div>-->
-        <!--<div class="share-btn" v-else @click="showShare = true">-->
-          <!--<img class="share-icon" src="./../../assets/icon/icon_share.png" />-->
-          <!--<span>分享</span>-->
-        <!--</div>-->
       </div>
 
       <div class="module"  style="min-height: 70vh" >
         <div class="module-title">
-        	<!--<div class="hr"></div>-->
           <p>关于灯塔</p>
-          
-          <!--关于塔主标签-->
-          <!--<span class="module-title-tip-line"></span>
-          <div class="module-title-tip">关于塔主</div>-->
         </div>
-        <div ref="h5Code" v-if="pageInfo.intro" class="module-content h5-code" v-html="pageInfo.intro" @click.stop="readPic($event)">
+        <div class="module-content h5-code" v-if="pageInfo.intro" v-html="pageInfo.intro" >
         </div>
       </div>
       <div class="how-to-play">
@@ -56,8 +41,6 @@
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="disableOperationEvents"
                    :disableUserClick="true"
-                   :isTeacher="false"
-                   :communityId="pageInfo.communityId"
           ></dynamic>
         </div>
         <div class="desc">
@@ -65,14 +48,20 @@
         </div>
       </div>
 
-      <!-- 相关推荐 -->
-      <div class="module relevant" v-if="relevantList.length > 0">
+      <!-- 试读内容 -->
+      <div class="module relevant" v-if="pageInfo.tryCourses&&pageInfo.tryCourses.length>0">
         <div class="module-title">
-          <p>相关灯塔</p>
+          <p>试读内容</p>
           <div class="hr"></div>
         </div>
         <div class="module-content">
-          <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          <div class="attempt_list" v-for="item,index in pageInfo.tryCourses">
+            <div class="attempt_block">
+              <img class='blo_left' :src="item.coverPicture" />
+              <div class='blo_center'>{{item.title}}</div>
+              <div class='blo_right'>试读</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -82,22 +71,17 @@
         <p>开课倒计时</p>
         <p>{{pageInfo.duration}}</p>
       </div>
-      <p v-else-if="isEnd">灯塔已关闭，停止报名</p>
-      <p v-else-if="pageInfo.communityStatus === 2">灯塔已下线，停止报名</p>
-      <p v-else-if="pageInfo.remainingJoinNum <= 0">已满员，停止报名</p>
+      <p v-else-if="pageInfo.communityStatus === 2">课程已下线，暂时不可加入</p>
+      <p v-else-if="pageInfo.remainingJoinNum <= 0">课程已满员，暂时不可加入</p>
       <div class="btn-box" v-else>
         <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
                 :disabled="!isFreeBtn" v-if="pageInfo.freeJoinNum > 0" @click="freeIn">
           <span>集Call免费加入</span>
-          <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
+          <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员'}})</span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
-          <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
-          <span v-if="pageInfo.selectCoupon">用券省 
-          	<span class="coupon_price" v-if="pageInfo.selectCoupon.userCoupon.coupon.discount<pageInfo.joinPrice">{{pageInfo.selectCoupon.userCoupon.coupon.discount}}</span> 
-          	<span class="coupon_price" v-else>{{pageInfo.joinPrice}}</span> 元
-          </span>
+          <span>付费加入:¥{{pageInfo.joinPrice}}</span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="freeJoin" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice === 0">
@@ -105,41 +89,6 @@
         </div>
       </div>
     </div>
-    
-    <!--支付弹窗-->
-    <div class="pay_window" v-if="toPay" @click="closePya">
-    	<div class="pay_box" @click.stop="showPayWindow">
-    		<h3>{{pageInfo.title}}</h3>
-    		<div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
-    		<div class="price">
-    			<span>社区价格</span>
-    			<span>¥ {{pageInfo.joinPrice}}</span>
-    		</div>
-    		<div class="coupon_price" @click.stop="toCoupon">
-    			<span>优惠券</span>
-    			<div class="coupon_price_right">
-    				<span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">-¥ {{SelectCouponItem.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:SelectCouponItem.coupon.discount}}</span>
-    				<span v-else-if=" pageInfo.selectCoupon!==null && SelectCouponItem.userCouponId===0 ">不使用优惠券</span>
-    				<span v-else-if=" pageInfo.selectCoupon===null ">无可用优惠券</span>
-    				<span v-else>-¥ {{pageInfo.selectCoupon.userCoupon.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
-    				<div class="more_coupon"></div>
-    			</div>
-    		</div>
-    		<div class="payment">
-    			<div class="payment_num">
-    				实付：<span>¥</span>
-    				<!--选择其他优惠券-->
-    				<span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">{{SelectedPrice}}</span>
-    				<!--不使用优惠券和无优惠券-->
-    				<span v-else-if=" pageInfo.selectCoupon===null || SelectCouponItem.userCouponId===0 ">{{pageInfo.joinPrice}}</span>
-    				<!--使用默认优惠券-->
-    				<span v-else>{{pageInfo.selectCoupon.couponPrice}}</span>
-    			</div>
-    			<div class="payment_btn" @click.stop="isPay">立即支付</div>
-    		</div>
-    	</div>
-    </div>
-    
     <!--分享弹窗-->
     <share-dialog :isShow="showShare" @close-share="showShare = false"
                   :shareType="1"></share-dialog>
@@ -167,11 +116,6 @@
   import {payApi, freePay} from '@/api/pages/pay'
   import wxUtil from '@/util/wx/index'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
-  Component.registerHooks([
-	  'beforeRouteEnter',
-	  'beforeRouteLeave',
-	  'beforeRouteUpdate' // for vue-router 2.2+
-	])
 
   @Component({
     name: 'big-shot-introduce',
@@ -194,6 +138,7 @@
       },
       // 是否已入社
       isJoinAgency () {
+      	console.log("333333333333",this.pageInfo.isJoined,this.pageInfo.isAuthor)
         return this.pageInfo.isAuthor || this.pageInfo.isJoined
       },
       // 是否已结束
@@ -251,20 +196,16 @@
     mixins: [WechatMixin]
   })
   export default class introduce extends Vue {
-  	toPay = false			//是否调起支付窗口
     showShare = false // 显示分享弹框
     showSell = false // 显示分销弹框
     pageInfo = {}
     dynamicList = []
-    relevantList = []
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
     el = ''
     qrSrc = ''
-    SelectCouponItem = {}		//当前选择的优惠券信息
-    SelectedPrice = ''		//选择其他优惠券后的价格
-    UsedUserCouponId = 0		//支付时使用的优惠券id
-
+    testCoures = true   //新版测试使用
+    isEndSock = false  //已结束的锁   
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
       const reg = /(\:|: )+(\d)+(px)/gi
@@ -275,6 +216,12 @@
       return newStr
     }
     freeIn () { // 跳转到一个图文消息
+      if(this.isEnd ){
+        if(!this.isEndSock){
+          this.endHint(1)
+        }
+      }
+
       if (!this.isFreeBtn) return
       if (this.pageInfo.wechatIntroUrl) {
         location.href = this.pageInfo.wechatIntroUrl
@@ -282,87 +229,66 @@
         this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
       }
     }
-    
-    closePya(){
-    	this.toPay = false
+
+    // 已结束提示 
+    endHint(type){
+      if(!type){
+        return
+      }
+      
+      this.$vux.confirm.show({
+        title: '加入须知',
+         content: `该课程已经全部更新完毕了！ /n 加入后你获得以下内容： /n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；/n  2、和成员们一起交流学习； /n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
+         confirmText: '马上加入',
+         cancelText: '我再想想',
+         onConfirm: function (res) {
+          this.isEndSock = true
+           if(type == 1){
+              this.freeIn()
+           }else if(type == 2) {
+              this.payOrFree()
+           }else {
+              this.freeJoin()
+           }
+         },
+       })
     }
-    
-    showPayWindow(){}
-    
-   isPay(){
-   	if(this.SelectCouponItem.userCouponId && this.SelectCouponItem.userCouponId!==0){
-   		//选择其他优惠券
-   		if(this.SelectedPrice>0){
-   			console.log("我是付费")
-   			this.UsedUserCouponId = this.SelectCouponItem.userCouponId;
-   			this.payIn()
-   		}else{
-   			console.log("我是免费免费")
-   			//选择的优惠券金额够大，可以免费加入
-   			this.UsedUserCouponId = this.SelectCouponItem.userCouponId;
-   			this.freeJoin()
-   		}
-   		
-   	}else if(this.SelectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
-   		//选择不使用优惠券 和 无可用优惠券
-   		console.log("我是没有优惠券和不用优惠券")
-   		this.UsedUserCouponId = 0;
- 			this.payIn()
-   	}else{
-   		//默认优惠券
-   		if(this.pageInfo.selectCoupon.couponPrice>0){
-   			console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
-   			//有默认优惠券
-   			this.UsedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
-   			this.payIn()
-   		}else{
-   			console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
-   			this.UsedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
-   			this.freeJoin()
-   		}
-   	}
-   	this.toPay = false;
-   	sessionStorage.removeItem("coupon");
-   }
-   
-   toCoupon(){
-   	if(this.SelectCouponItem.userCouponId){
-   		this.$router.push({path:'/center/coupon',query:{userCouponId:this.SelectCouponItem.userCouponId,communityId:this.pageInfo.communityId}});
-   	}else if(this.SelectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
-   		this.$router.push({path:'/center/coupon',query:{userCouponId:0,communityId:this.pageInfo.communityId}});
-   	}else{
-   		this.$router.push({path:'/center/coupon',query:{userCouponId:this.pageInfo.selectCoupon.userCoupon.userCouponId,communityId:this.pageInfo.communityId}});
-   	}
-   }
-    
+
+
     payOrFree () {
-      this.toPay = true;
-//   	if(that.pageInfo.selectCoupon.couponPrice===0){
-//   		that.freeJoin()
-//   	}else{
-//   		that.payIn()
-//   	}
-//      let {startTime, endTime} = this.pageInfo
-//      startTime = new Date(startTime * 1000)
-//      endTime = new Date(endTime * 1000)
-//      this.$vux.confirm.show({
-//        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
-//        confirmText: '确定',
-//        cancelText: '取消',
-//        onConfirm: function (res) {
-//          console.log(res)
-//          that.payIn()
-//        },
-//      })
+      if(this.isEnd ){
+        if(!this.isEndSock){
+          this.endHint(2)
+        }
+      }
+
+      let that = this
+      that.payIn()
+        //      let {startTime, endTime} = this.pageInfo
+        //      startTime = new Date(startTime * 1000)
+        //      endTime = new Date(endTime * 1000)
+        //      this.$vux.confirm.show({
+        //        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
+        //        confirmText: '确定',
+        //        cancelText: '取消',
+        //        onConfirm: function (res) {
+        //          console.log(res)
+        //          that.payIn()
+        //        },
+        //      })
     }
     async freeJoin () {
+
+      if(this.isEnd ){
+        if(!this.isEndSock){
+          this.endHint(3)
+        }
+      }
+
       await freePay({
         productId: this.pageInfo.communityId,
-        productType: 1,
-        userCouponId:this.UsedUserCouponId
+        productType: 1
       }).then((res) => {
-      	this.toPay = false;		//关闭支付窗口
-      	sessionStorage.removeItem("coupon");		//移除优惠券信息
         const _this = this
         this.$vux.alert.show({
           title: '加入成功',
@@ -384,11 +310,19 @@
      * 点击卡片
      */
     handleTapCard (item) {
+
+      let url = ''
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
+        // 测试
+        if(this.testCoures){
+          url = `/introduce2/${item.communityId}?reload=true`
+        }else {
+          url = `/introduce/${item.communityId}?reload=true`
+        }
       	this.completelyShow=true;
-        this.$router.push(`/introduce/${item.communityId}?reload=true`)
+        this.$router.push(url)
         //03b9200ec0d02059adc1882956104bc2
         //03b9200ec0d02059adc1882956104bc2
       }
@@ -397,8 +331,7 @@
     async payIn () {
       const params = await payApi({
         productId: this.pageInfo.communityId,
-        productType: 1,
-        userCouponId:this.UsedUserCouponId
+        productType: 1
       })
       const arr = Object.keys(params || {})
       if (arr.length !== 0) {
@@ -434,21 +367,52 @@
             const { communityId } = self.$route.params
             let number = Math.random() * 10 + 1
             console.log('communityId', communityId)
+            //
             switch (communityId) {
-              case '0125347d17e7c24d7e969783a26b922d': // 好点子塔
-                self.$store.dispatch('show_qr', {type: 3})
-                break
-//            case '95137f42811b2010a025bf28e35aeb69': // 活动塔（90天裂变塔）
-//              self.$store.dispatch('show_qr', {type: 2})
-//              break
-              case '270abb50e490783896f2396e58bfbfad': // 活动塔0628
+              case 'ca7cfa129f1d7ce4a04aebeb51e2a1aa':
                 self.$store.dispatch('show_qr', {type: 1})
                 break
-              case '953c439c79fdd336bf5864aa2d6356ac': // 活动塔271考拉塔
+              case '25c2ff088da3f757b685a318ab050b5a': // 测试
+                self.$store.dispatch('show_qr', {type: 1})
+                break
+              case '64074da38681f864082708b9be959e08':
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '67917ba04abd74c3247245576b1168b0': // 测试
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '16a2f4a61d870978f1598b466a48f12e': // 测试 詹润杰的灯塔
+                self.$store.dispatch('show_qr', {type: 3})
+                break
+              case 'a7f79b000c990dd2658b6af10a37fe3c': // 正式 詹润杰的灯塔
+                self.$store.dispatch('show_qr', {type: 3})
+                break
+              case '70036858d957ad830e89e37c5a8356d2': // 测试分销5月9号
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '6b3974ad38fa6984de73f43a7730e294': // 正式分销5月9号
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case 'b2b533754554bec1b9c344a97063891b': // 测试分销5月16号
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '2cdf75243f96bca97ae4341b6400e375': // 正式分销5月16号
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case '67917ba04abd74c3247245576b1168b0': // 分销5月22号
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case 'd71fddeba62a878aecd901198a959674': // 正式分销5月17号
+                self.$store.dispatch('show_qr', {type: 2})
+                break
+              case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
+                self.$store.dispatch('show_qr', {type: 4})
+                break
+              case 'db73998f8d1691d3ce75180266e3cba9': // 测试专用
                 self.$store.dispatch('show_qr', {type: 4})
                 break
               default:
-                self.$store.dispatch('show_qr', {type: 2})
+                location.reload()
                 break
             }
 //            self.$store.dispatch('show_qr')
@@ -462,7 +426,6 @@
       )
     }
     async created () {
-    	console.log(location,'我是页面路径')
       wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
@@ -479,7 +442,6 @@
           this.$vux.toast.text(e.message, 'bottom')
         }
       }
-      
       const self = this
       await this.pageInit().then(() => {
         const {
@@ -514,29 +476,32 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-      
+      switch (communityId) {
+        case 'aa3b415b564bd95b27da2f0e9c986e6a':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case '25c2ff088da3f757b685a318ab050b5a':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case 'b2b533754554bec1b9c344a97063891b':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case '2cdf75243f96bca97ae4341b6400e375':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        case '67917ba04abd74c3247245576b1168b0':
+          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
+          break
+        default:
+          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
+          break
+      }
 
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
-      this.qrSrc = res.sellImg
-      this.pageInfo = res
-      
-      //是否调起支付
-      let Selectcoupon=sessionStorage.getItem("coupon");
-      if(Selectcoupon){
-      	this.toPay = true;
-      	let CouponItem = sessionStorage.getItem("coupon");
-      	this.SelectCouponItem = JSON.parse(CouponItem);
-      	if(this.SelectCouponItem.userCouponId!==0){
-      		let paynum=this.pageInfo.joinPrice-this.SelectCouponItem.coupon.discount;
-      		this.SelectedPrice = this.pageInfo.joinPrice>this.SelectCouponItem.coupon.discount?paynum.toFixed(2):0;
-      	}else{
-      		this.SelectedPrice =this.pageInfo.joinPrice
-      	}
-      	
-      	console.log(this.SelectCouponItem,this.SelectedPrice,"我是当前选择的优惠券信息")
-      }
 
+      this.pageInfo = res
+      console.log(111111,res)
       // 是否已入社
       if (this.completelyShow && this.isJoinAgency) {
         this.$router.replace(`/introduce/${communityId}/community`)
@@ -559,7 +524,6 @@
       })
       console.log(temp)
       this.dynamicList = temp
-      this.relevantList = res.relevantRecommendations || []
       this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
     }
 
@@ -587,39 +551,13 @@
         }
       })
     }
-    
-    //预览富文本图片
-    readPic(e){
-    	if(e.target.tagName==='IMG'){
-    		let urls = [];
-    		urls.push(e.target.src)
-    		let img=String(e.target.src);
-    		let parma={
-    			urls,
-    			img
-    		}
-    		console.log(img,"我是图片路径信息")
-    		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
-    	}
-    }
 
     mounted () {
-//  	var aImg = document.getElementsByClassName("h5-code")[0];
-//  	console.log(aImg,"我是捕获到的富文本图片")
-//  	this.$refs['h5Code'].getElementsByTagName('img').forEach((item)=>{
-//  		item.addEventListener("click",()=>{
-//	    		alert("我是富文本里的图片")
-//	    	})
-//  	})
       // this.$refs['body'].addEventListener('touchmove', e => {
       //   e.stopPropagation()
       // })
     }
     
-    beforeRouteLeave(to,from,next){
-    	sessionStorage.removeItem("coupon");
-    	next();
-    }
   }
 </script>
 <style lang="less" scoped type="text/less">
@@ -627,17 +565,10 @@
   @import "../../styles/mixins";
 
   .big-shot-introduce {
-    /*min-height: 100%;*/
    	height: 100%;
     padding-bottom: 55px;
     box-sizing: border-box;
     overflow-y: auto;
-    /*display: flex;*/
-    /*flex-flow: column nowrap;*/
-    /*display: flex;*/
-    /*flex-flow: column nowrap;*/
-    /*overflow: hidden;*/
-
     &.no-pdb {
     	
       padding-bottom: 0;
@@ -701,7 +632,7 @@
         top: 15px;
         background: #fff;
         line-height: 1;
-        border-radius: 18px;
+        border-radius: 16px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
         font-size: 0;
         overflow: hidden;
@@ -713,17 +644,17 @@
 
         .u-btn {
           position: relative;
-          line-height: 22px;
+          line-height: 18px;
           min-height: 32px;
           font-size: 13px;
           color: @font-color-default;
 
           &:first-child {
-            padding: 7.5px 12px 6.5px 15px;
+            padding: 8px 12px 6px 15px;
           }
 
           &:last-child {
-            padding: 7px 15px 7px 12px;
+            padding: 8px 15px 6px 12px;
           }
 
           &.home,
@@ -771,33 +702,6 @@
         font-size: 18px;
         color: #929292;
         font-weight: 600;
-        
-        /*关于塔主标签*/
-        /*margin-bottom: 30px;
-        position: relative;
-        
-        .module-title-tip{
-        	padding: 0 6px;
-        	font-size: 16px;
-        	height: 22.5px;
-        	line-height: 22.5px;
-        	position: absolute;
-        	bottom: -22.5px;
-        	left: 50%;
-        	transform: translateX(-50%);
-        	color: #D7AB70;
-        	font-weight: normal;
-        	background: #fff;
-        	
-        }
-        .module-title-tip-line{
-        	position: absolute;
-        	bottom: -11.5px;
-        	width: 100%;
-        	height: 0.5px;
-        	background: #D7AB70;
-        }*/
-
         & p {
           display: block;
 					font-size:18px;
@@ -832,6 +736,46 @@
           & img {
             max-width: 100% !important;
             margin: 0 auto;
+          }
+        }
+
+        .attempt_list {
+          display: flex;
+          flex-direction: column;
+          margin: 15px 15px 15px 20px;
+        }
+        .attempt_block {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: center;
+          height:40px;
+
+          .blo_left {
+            width:70px;
+            height:39px;
+            border-radius:3px;
+
+          }
+          .blo_center {
+            flex: 1;
+            margin: 0 15px;
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            color: rgba(53,64,72,1);
+            line-height: 18px;
+          }
+          .blo_right {
+            width: 36px;
+            height: 22px;
+            background: rgba(255,255,255,1);
+            border-radius: 3px;
+            border: 1px solid rgba(188,188,188,1);
+            text-align: center;
+            font-size: 12px;
+            font-family: PingFangSC-Light;
+            color: rgba(146,146,146,1);
+            line-height: 22px;
           }
         }
       }
@@ -962,18 +906,7 @@
           & span:not(:first-of-type) {
             color: rgba(53, 64, 72, 0.8);
           }
-          span:nth-child(2){
-          	.coupon_price{
-            	display: inline-block;
-            	font-size:12px;
-            	line-height:16px;
-            	color:#FB7A37;
-            }
-          }
 					flex-grow:1;
-					& .userCoupon{
-						font-size: 12px; 
-					}
         }
         &.free-btn-disable {
           padding: 0 20px;
@@ -1038,129 +971,5 @@
         }
       }
     }
-    
-    /*支付弹窗*/
-   .pay_window{
-   	position: absolute;
-   	top: 0;
-   	left: 0;
-   	z-index: 9999;
-   	width: 100%;
-   	height: 100%;
-   	background-color: rgba(0,0,0,0.6);
-   	.pay_box{
-   		animation: 0.4s ease-in-out window-fade-in;
-   		box-sizing: border-box;
-   		width: 375px;
-   		height: 287px;
-   		background:rgba(255,255,255,1);
-			border-radius:10px 10px 0px 0px;
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			padding: 40px 25px 0;
-			/*支付灯塔名字*/
-			h3{
-				font-size:18px;
-				color:rgba(53,64,72,1);
-				line-height:22px;
-				margin-bottom: 10px;
-			}
-			/*支付副标题*/
-			.tip{
-				font-size:13px;
-				color:rgba(146,146,146,1);
-				line-height:17px;
-				margin-bottom: 36px;
-			}
-			/*支付原价格*/
-			.price{
-				display: flex;
-				justify-content: space-between;
-				margin-bottom: 31px;
-				span{
-					font-size:15px;
-					color:rgba(102,102,102,1);
-					line-height:21px;
-				}
-			}
-			/*支付优惠券处*/
-			.coupon_price{
-				display: flex;
-				justify-content: space-between;
-				>span{
-					font-size:15px;
-					color:rgba(102,102,102,1);
-					line-height:21px;
-				}
-				.coupon_price_right{
-					display: flex;
-					align-items: center;
-					>span{
-						display: inline-block;
-						font-size:15px;
-						color:rgba(250,106,48,1);
-						line-height:21px;
-					}
-					>.more_coupon{
-						display: inline-block;
-						width: 15px;
-						height: 15px;
-						background: url(../../assets/icon/btn_enter@2x.png) no-repeat 100%;
-					}
-				}
-				/*margin-bottom:39px;*/
-			}
-			/*支付最底支付按钮*/
-			.payment{
-				position: absolute;
-				bottom: 0;
-				left: 0;
-				width: 100%;
-				display: flex;
-				justify-content: flex-end;
-				align-items: center;
-				border-top:0.5px solid rgba(220,220,220,1);
-				height:49px;
-				.payment_num{
-					margin-right: 20px;
-					font-size:13px;
-					color:rgba(53,64,72,1);
-					span{
-						color:rgba(250,106,48,1);
-						&:nth-child(1){
-							font-size: 13px;
-						}
-						&:nth-child(2){
-							padding-left: 4px;
-							font-size: 18px;
-						}
-					}
-				}
-				/*支付按钮*/
-				.payment_btn{
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					width:150px;
-					height:49px;
-					background:rgba(255,226,102,1);
-					font-size:16px;
-					color:rgba(53,64,72,1);	
-				}
-			}
-			
-   	}
-   }
-  }
-  @keyframes window-fade-in{
-  	from{
-  		opacity: 0;
-  		transform: translateY(100%);
-  	}
-  	to{
-  		opacity: 1;
-  		transform: translateY(0);
-  	}
   }
 </style>
