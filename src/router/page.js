@@ -10,6 +10,13 @@ const routers = [
     component: resolve => require(['@/views/introduce/index'], resolve),
   },
   {
+    // 大咖介绍页v2
+    path: '/introduce2/:communityId',
+    name: 'introduce2',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/index_v2'], resolve),
+  },
+  {
     // 大咖详情页 (入社后查看介绍页)
     path: '/introduce/:communityId/detail',
     name: 'introduce-detail',
@@ -19,7 +26,7 @@ const routers = [
   {
     // 更多页
     path: '/introduce/:communityId/more',
-//	path: '/more/:sourceId/:type',
+    //path: '/more/:sourceId/:type',
     name: 'introduce-more',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/more'], resolve),
@@ -30,6 +37,13 @@ const routers = [
     name: 'community',
     meta: {navHide: true,keepAlive:true},
     component: resolve => require(['@/views/introduce/community'], resolve),
+  },
+  {
+    // 大咖精选页
+    path: '/introduce2/:communityId/community',
+    name: 'community2',
+    meta: {navHide: true,keepAlive:true},
+    component: resolve => require(['@/views/introduce/community_v2'], resolve),
   },
   {
     // 朋友圈、帖子、问题 详情页

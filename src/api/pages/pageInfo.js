@@ -303,6 +303,15 @@ export const couponListApi = (data) => {
   })
 }
 
+    
+// 置顶
+export const addTopApi = (data) => {
+  return request({
+    url: '/wap/post/addTop',
+    data,
+  })
+}
+
 // 优惠券兑换码兑换接口
 export const RedemptionCodeApi = (coupon_code) => {
   return request({
@@ -352,5 +361,45 @@ export const courseCardFavorApi = (data) => {
     url: `/wap/courseCard/courseCardFavor`,
     type:'post',
     data
+  })
+}
+// 取消置顶
+export const delTopApi = (data) => {
+  return request({
+    url: '/wap/post/delTop',
+    data,
+  })
+}
+
+// 删除帖子
+export const deltePostApi = (data) => {
+  return request({
+    url: '/wap/beacon/commonDel',
+    data,
+  })
+}
+
+// 置顶帖子列表
+export const topPostListApi = (data) => {
+  return request({
+    url: '/wap/post/topPostList',
+    data,
+  })
+}
+
+// 推荐
+export const getRecommendApi = (data) => {
+  return request({
+    url: '/wap/beacon/recommend',
+    data,
+  })
+}
+
+// 推荐
+export const getLessMsgApi = (data) => {
+  return request({
+    type: 'get',
+    url: `/wap/beacon/community/${data.id}/courses`,
+    data,
   })
 }

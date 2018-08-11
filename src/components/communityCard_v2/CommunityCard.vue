@@ -7,47 +7,62 @@
       <span class="header-photo">
       	<img :src="community.icon"/>
       </span>
-      <div v-if='type!==1' class="master">
+
+      <!-- <div v-if='type!==1' class="master">
         <p class="name" :class="{ round: type === 1 }">
-          <!--<span class="text" v-text="community.master && community.master.realName"></span>-->
           <span class="text" v-text="community.master && community.masterIntro"></span>
         </p>
-        <!--<span v-if="community.master && community.master.career">/</span>
-        <p class="career" v-text="community.master && community.master.career"></p>-->
-      </div>
+      </div> -->
+
       <slot name="cover-addon"></slot>
     </div>
-    <!--灯塔头部-->
+    <!--灯塔头部 v-if="isEntentr" -->
 
-    <div v-if="isEntentr" class="info" :class="{ 'type-2': type === 2 }">
+    <div class="info" :class="{ 'type-2': type === 2 }">
       <h3 class="title" v-text="community.title"></h3>
-      <p class="desc" v-text="community.simpleIntro"></p>
-      <div class="bottom">
-        <div class="left">
-          <!-- 已结束 -->
-          <p v-if="isEnd">灯塔已关闭</p>
-          <!-- 已加入 -->
-          <p class="time-range" v-else-if="community.isAuthor === 1 || community.isJoined === 1">开课时间：{{community.startTime * 1000 | date('YYYY年MM月DD日')}}-{{community.endTime * 1000 | date('YYYY年MM月DD日')}}</p>
-          <!-- 未加入且未开社 -->
-          <p class="countdown" v-else-if="duration">{{duration | duration}}后开启</p>
-          <!-- 未加入且已开社 -->
-          <p v-else>灯塔已开启</p>
+      <p class="desc" v-text="community.simpleIntro && community.masterIntro"></p>
+      <p class="timeMsg" v-if="isCommunityIntroduce">
+        <span>开塔时间：</span>
+        {{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}</p>
+      <div class="bottom" v-else>
+        
+        <div class="left" v-if="community.joinedNum>0">
+            <p class="residue">
+              <span class="number">{{community.joinedNum}}</span> 
+              人
+            </p>
+            <p class="residue">
+              和你一起学
+            </p>
         </div>
-        <div class="right">
-          <template v-if="community.isAuthor !== 1 && community.isJoined !== 1 && !isEnd">
-            <p class="residue" v-if="community.remainingJoinNum <= 0">已满员</p>
-            <p class="residue" v-else-if="community.freeJoinedNum || community.payJoinedNum"><span class="number">{{community.freeJoinedNum + community.payJoinedNum}}</span> 人已加入</p>
+
+        <div class="center"  @click.prevent.stop="toMore" v-if="community.menuPeople&&community.menuPeople.outstandingStudents.length>0">
+          <template v-for="(item, index) in community.menuPeople.outstandingStudents">
+              <img class="user_icon" :src="item.avatar" v-if="index<3" />
+              <img class="user_icon" v-if="index>3" src="../../assets/icon/firends-call-more.png"/>
+          </template>
+        </div>
+        <div class="right" >
+
+          <template v-if="lightType == 1">
+            <p class="to_description" @click.prevent.stop="goTointroduceDetail">课程介绍
+              <img class="to_img" src="../../assets/icon/bnt_arrow_int@3x.png"/>
+            </p>
+          </template>
+          <template v-else>
+            <!-- 已结束 -->
+            <p v-if="isEnd">灯塔已关闭</p>
+            <!-- 未加入且已开社 -->
+            <p v-else>灯塔已开启</p>
           </template>
         </div>
       </div>
     </div>
     
     <!--已加入灯塔标题-->
-    <div v-else class="communit-enter-title">
+    <!-- <div v-else class="communit-enter-title">
     		<h3 class="title"><span @click="toMore" v-text="community.title"></span><slot name="cover-addon-more"></slot></h3>
-    		
-    </div>
-    
+    </div> -->
   </a>
 </template>
 <script>
@@ -66,15 +81,36 @@ import Component from 'vue-class-component'
         }
       }
     },
+    //是否是社区介绍
+    isCommunityIntroduce: {
+      type: Boolean,
+      default: false
+    },
+    //灯塔类型。1 课程。 2旧课程。 3 社区
+    lightType: {
+      type: Number,
+      default: 1
+    },
 
     // 类型：1为列表页卡片，2为详情页卡片
     type: {
       type: Number,
       default: 1
     },
+
+    type2: {
+      type: Number,
+      default: 2
+    },
     
     // 类型：true是未加入页，false是加入页
     isEntentr: {
+      type: Boolean,
+      default: true
+    },
+
+    //true 课程。 false 社区
+    isCourse: {
       type: Boolean,
       default: true
     }
@@ -103,7 +139,7 @@ export default class CommunityCard extends Vue {
 	created(){
     console.log("我是触发的community",this.isEntentr);
 	}
-  // 卡片类名集合 
+  // 卡片类名集合
   cardClasses = {
     [`type-${this.type}`]: true,
     'z-joined': this.community.isAuthor === 1 || this.community.isJoined === 1,
@@ -175,9 +211,18 @@ export default class CommunityCard extends Vue {
     }
   }
 
+  goUs (userId) {
+    this.$router.push({name: 'userInfo-details', params: {userId}})
+  }
+
+  goTointroduceDetail(){
+    console.log(this.community);
+    this.$router.push({name: 'introduce-detail', params: {communityId: this.community}})
+  }
+
   /* ---- 父组件调用函数 ---- */
   /**
-   * 停止计数器 
+   * 停止计数器
    */
   stopCountdown () {
     if (this.countdown) {
@@ -192,76 +237,34 @@ export default class CommunityCard extends Vue {
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
+
 .m-community {
   display: block;
-
-  &.type-1 {
-  	& .master{
-  		display: none;
-  	}
-
-    .cover-container {
-			
-      .cover {
-        border-radius: 3px;
-      }
-
-      .master {
-        border-radius: 0 0 3px 3px;
-        
-        .name {
-          .text {
-            .setEllipsis();
-          }
-        }
-
-        .career {
-          .setEllipsis();
-          font-size: 11px;
-        }
-      }
-    }
-
-    .info {
-      .title {
-        .setEllipsis();
-      }
-
-      .desc {
-        .setEllipsis();
-      }
-    }
-  }
-
   &.type-2, &.type-1{
-
     .cover-container {
-      /*height: 171px;*/
       /*头部改变新增属性*/
       position: relative;
-    	height: 174px;
+    	height: 150px;
 			.header-photo{
 					display:block;
-					width:80px;
-					height: 80px;
-					border-radius: 50%;
+					width: 110px;
+					height: 110px;
+          box-shadow:0px 8px 38px 0px rgba(75,65,50,0.17);
+          border-radius:3px;
 					overflow:hidden;
 					position: absolute;	
-					top: 44px;
+					top: 15px;
 					left:50%;
 					transform:translateX(-50%);
 					margin-bottom:7.5px;
 					
 					>img{
-						border-radius: 50%;
 						width: 100%;
 						height: 100%;
             box-sizing: border-box;
-            border: 1px solid #ffffff;
 					}
 			}
 			/*新增*/
-
       .master {
         padding-bottom: 10px;
         overflow: hidden;
@@ -269,20 +272,15 @@ export default class CommunityCard extends Vue {
         white-space: nowrap;
       }
     }
-
     .info {
       padding: 0 20px;
     }
   }
 
   &.z-unread {
-
     .cover-container {
-
       .master {
-
         .name {
-
           &::after {
             content: " ";
           }
@@ -298,13 +296,13 @@ export default class CommunityCard extends Vue {
 
     .cover {
       width: 100%;
-     	height: 100px;
+     	height: 90px;
+      background:rgba(242,242,242,1);
     }
 
     .master {
     	display: flex;
     	justify-content: center;
-    	/*flex-wrap: nowrap;*/
     	align-items: center;
 	    width: 90%;
       margin: 0 auto;
@@ -313,16 +311,6 @@ export default class CommunityCard extends Vue {
       padding-top: 32px;
       color: #666666;
       line-height: 16px;
-      /*position: absolute;
-      top: 130px;
-      left: 50%;*/
-      /*right: 0;*/
-      /*bottom: 0;*/
-     	/*transform: translateX(-50%);*/
-      /*background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .2));*/
-      /*width: 100%;*/
-      
-
       .name {
       	white-space: nowrap;
         display: inline-block;
@@ -332,24 +320,18 @@ export default class CommunityCard extends Vue {
         font-size: 0;
         font-weight: normal;
         max-width: 100%;
-        
         padding-right:2px;
-
         .text {
           display: inline-block;
-          
-          /*font-size: 27px;*/
-         line-height: 16px;
-         font-size: 12px;
+          line-height: 16px;
+          font-size: 12px;
         }
-
         &.round {
           padding: 0 8px;
           background: #ffe266;
           border-radius: 11px;
           text-align: center;
           color: #354048;
-
           .text {
             line-height: 22px;
             font-size: 13px;
@@ -389,26 +371,29 @@ export default class CommunityCard extends Vue {
   		display: inline-block;
   		color: #354048;
   		font-size: 18px;
-  		line-height: 22px;
+  		line-height: 20px;
   		text-align: center;
   		padding: 0 12%;
-  		//font-family: PingFangSC-Medium;
       font-weight: 700;
   	}
   }
 
   .info {
-
+    .timeMsg {
+      font-size: 14px;
+      font-family: PingFangSC-Light;
+      color: rgba(146,146,146,1);
+      line-height: 18px;
+    }
     .title {
       display: block;
-      line-height: 22px;
+      line-height: 20px;
       font-weight: 600;
       font-size: 18px;
-      color: @font-color-default;
+      color: #354048;
     }
 
     .desc {
-      //font-family: PingFangSC-Light;
       font-weight: 300;
       display: block;
       margin-top: 6px;
@@ -425,8 +410,43 @@ export default class CommunityCard extends Vue {
       color: #929292;
       //font-family: PingFangSC-Light;
       font-weight: 300;
+      justify-content: space-between;
+      align-items: center;
+
       .left {
+        flex: 0 0 auto;
+        .residue {
+
+          .number {
+            color: #d7ab70;
+          }
+        }
+      }
+      .center {
         flex: 1 1 auto;
+        margin: 0 15px;
+        display: flex;
+        flex-direction: row;
+        .user_icon {
+          width:30px;
+          height:30px;
+          border:1px solid rgba(237,237,237,1);
+          box-sizing: border-box;
+          border-radius: 50%;
+          overflow: hidden;
+          display: block;
+          margin-left: -10px;
+          &:first-of-type {
+            margin-left: 0;
+          }
+        }
+
+
+      }
+      .right {
+        flex: 0 0 auto;
+        align-
+        justify-content: space-between;
 
         .countdown {
           margin-right: 5px;
@@ -436,15 +456,13 @@ export default class CommunityCard extends Vue {
         .time-range {
           color: #bcbcbc;
         }
-      }
 
-      .right {
-        flex: 0 0 auto;
-
-        .residue {
-
-          .number {
-            color: #d7ab70;
+        .to_description {
+          display: flex;
+          align-items: center;
+          .to_img {
+            width: 12px;
+            height: 12px;
           }
         }
       }

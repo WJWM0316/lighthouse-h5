@@ -1,53 +1,74 @@
 <template>
 	<div class="community-more">
-		<!-- <scroller  @pullup="handlePullup" :is-none-data="pagination.end" :refreshable="false"> -->
 			<!--灯塔介绍-->
-			<div class="block addon-text">
+			<!-- <div class="block addon-text">
 				<div @click.stop="goTointroduceDetail(id)" class="more-introduce">
 					<img class="icon_1" src="../../assets/icon/icon_list_aboutlh@3x_2.png"/>
 					<span>灯塔介绍</span>
 					<i><img src="../../assets/icon/icon_center_angle_right.png"/></i>
-		           <!--<img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
 				</div>
-			</div>
+			</div> -->
 			<!--开塔时间-->
-			<div class="block more-openTime">
+			<!-- <div class="block more-openTime">
 				<img class="icon_2" src="../../assets/icon/icon_list_time@3x.png"/>
 				<span>开塔时间</span>
-				<!--<p>2018年1月1日-2018年4月8日</p>-->
 				<p v-if="community.isAuthor === 1 || community.isJoined === 1">{{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}</p>
-				
-	           <!--<img class="icon" src="../../assets/icon/icon_angle_right_white.png" />-->
+			</div> -->
+			<div class="block more-classmate">
+				<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
+				<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
+				<ul class="classmateList">
+					<li class="classmatePerson" v-for="item,index in role" @click.prevent.stop="goUserDetail(item.userId)" v-if="index < 5 || !teachOp">
+						<div class="classmate-imgBox">
+							<img class="titleImg" :src="item.avatar"/>
+						</div>
+						<div class="classmate-master">
+							<span class="classmate-name">{{item.realName}}
+								<span class="label" v-text="item.identityAuthority.title "></span>
+							</span>
+							<span class="classmate-career" >{{item.workTimeName}}</span>
+						</div>
+					</li>
+				</ul>
+
+				<div class="open_blo" v-if="role.length>5" @click.prevent.stop="opTeach"> 
+					<template v-if="teachOp">
+						展开查看所有导师
+						<img class="open_icon" src="../../assets/icon/btn_levea_copy@hhx.png"/>
+					</template>
+					<template v-if="!teachOp">
+						收起查看所有导师
+						<img class="open_icon" src="../../assets/icon/btn_enter copy@hhx.png"/>
+					</template>
+				</div>
 			</div>
-			<!--塔主和小伙伴-->
-			<div class="block more-parner">
-					<img class="icon_3" src="../../assets/icon/icon_center_home.png" />
-					<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
-					<!--塔主和嘉宾列表-->
-					<div class="guestList">
-						<ul class="guestListBox">
-							<!--<li class="guestListPerson" @click.prevent.stop="goUserDetail(item.userId)">
-								<div class="imgBox">
-									<img :src="master.avatar"/>
-									<span class="personTitle">塔主</span>
-								</div>
-								<span class="name" v-text="master.realName">塔主</span>
-							</li>-->
-							<!--嘉宾-->
-							<li class="guestListPerson" v-for="item in role"  @click.prevent.stop="goUserDetail(item.userId)">
-								<div class="imgBox">
-									<!--<img src="../../assets/icon/img_wechat_code.png"/>-->
-									<img :src="item.avatar"/>
-									<span class="personTitle" v-text="item.identityAuthority.title "></span>
-								</div>
-								<span class="name" v-text="item.realName"></span>
-							</li>
-						</ul>
-					</div>
-					<!--塔主和嘉宾列表-->
+
+			<!--优秀成员-->
+			<div class="block more-classmate excellent">
+				<img class="icon_4" src="../../assets/icon/icon_list_gm.png" />
+				<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg2" /></p>
+				<ul class="classmateList">
+					<li class="classmatePerson" v-for="item,index in classmate" @click.prevent.stop="goUserDetail(item.userId)">
+						<div class="classmate-imgBox">
+							<img class="titleImg" :src="item.avatar"/>
+							<img class="rankImg" src="../../assets/icon/rank_1.png"/>
+							<img class="rankImg" src="../../assets/icon/rank_2.png"/>
+							<img class="rankImg" src="../../assets/icon/rank_3.png"/>
+							<div class="rankImg">4</div>
+						</div>
+						<div class="classmate-master">
+							<span class="classmate-name">{{item.realName}}</span>
+							<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
+						</div>
+
+						<div class="exce_msg">
+							<p class="msg_p"><span class="exce_num">{{item.signIn}}</span>次</p>
+							<p class="msg_p">优秀打卡</p>
+						</div>
+					</li>
+				</ul>
 			</div>
 			<!--灯塔成员-->
-			
 			<div class="block more-classmate">
 				<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
 				<p>灯塔成员 <span>({{total}}人)</span></p>
@@ -94,27 +115,13 @@
 		boyImg = ""
 		defaultImg = ""
 		community = {}
-
+		teachOp = true
 		created () {
 			this.girlImg = require('../../assets/icon/icon_girl.png') || ''
 	    this.boyImg = require('../../assets/icon/icon_boy.png') || ''
 	    this.defaultImg = require('../../assets/icon/img_head_default.png') || ''
-			
 			this.pageInt()
-
-			
-			
-			//申请塔主和嘉宾列表
-//			getAskInfoApi(id).then(res=>{
-//				console.log("请求成功总数据",res)
-//				that.master=res.master;
-//				that.role=res.role;
-//				console.log("嘉宾列表",that.role);
-//			});
-			
-			
 		}
-
 		async pageInt () {
 			let id=this.$route.query;
 			this.id=id;
@@ -130,13 +137,38 @@
 			this.pagination.end = false
 			this.getMemberList(1, 10000, this.id)
 		}
+		opTeach () {
+			this.teachOp = !this.teachOp
+		}
+		hintMsg () {
+			this.$vux.alert.show({
+			  title: '如何成为优秀学员',
+			  content: '1、积极听课，完成每节课的打 卡内容； /h 2、如果你的打卡内容写的很棒 的话，就会被导师选为“优秀打 卡”；/h  3、累计“优秀打卡”个数前三名 的，就能成为优秀学员；',
+			  buttonText: '我知道了'
+			})
+		}
+
+		hintMsg2 () {
+			this.$vux.confirm.show({
+				title: '完善信息',
+				content: '为了和塔友们更好的交流，请先完善你的个人信息～',
+				confirmText: '前往完善',
+				cancelText: '等会再说',
+			  // 组件除show外的属性
+			  onCancel () {
+			    console.log(this) // 非当前 vm
+			    console.log(_this) // 当前 vm
+			  },
+			  onConfirm () {}
+			})
+		}
 
 		goUserDetail (userId) {
       this.$router.push({name: 'userInfo-details', params: {userId}})
   	}
 	  goTointroduceDetail(userId){
 	  	console.log(userId.communityId);
-	  	this.$router.push({name: 'introduce-detail', params: {communityId:userId.communityId}})
+	  	this.$router.push({name: 'introduce-detail', params: {communityId: userId.communityId}})
 	  }
 
 		async getMemberList (page, pageSize, id) {
@@ -197,7 +229,24 @@
 </script>
 
 <style lang="less" scoped type="text/less">
-
+	.open_blo {
+		width: 335px;
+		height: 40px;
+		background: rgba(248,248,248,1);
+		border-radius: 40px;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		font-size:15px;
+		font-family:PingFangSC-Light;
+		color:rgba(102,102,102,1);
+		.open_icon {
+			width: 20px;
+			height: 20px;
+			margin-left: 8px;
+		}
+	}
 	.community-more{
 		//height: 100%;
     	box-sizing: border-box;
@@ -205,63 +254,6 @@
     	.block {
     		background: #ffffff;
     	}
-
-		& .more-introduce, & .more-openTime{
-			box-sizing: border-box;
-			width: 100%;
-			padding: 18.5px 18.5px;
-			border-bottom: 1px solid #EDEDED;
-			
-			& img{
-				width: 20px;
-				height: 20px;
-				display: inline-block;
-			}
-			
-			& span{
-				margin-left: 15px;
-				font-size: 16px;
-				color: #354048;
-				line-height: 20px;
-			}
-			
-			& i{
-				display: inline-block;
-				width: 20px;
-				height: 20px;
-				line-height: 20px;
-				float: right;
-				
-				& img{
-					margin-top: -2px;
-					width: 80%;
-					height: 80%;
-					color: #929292;
-					line-height: 18px;
-				}
-			}
-			
-			& p{
-				display: inline-block;
-				float: right;
-				font-size: 14px;
-				color: #929292;
-				line-height: 20px;
-				
-			}
-			.icon_1 {
-				margin-top: -3px;
-			}
-			.icon_2 {
-				margin-top: -4px;
-
-			}
-			
-		}
-		& .more-openTime {
-			border-bottom:none;
-			margin-bottom: 10px;
-		}
 		& .label {
           color: #d7ab70;
           font-size: 12px;
@@ -293,16 +285,21 @@
 			}
 			
 			p{
-				margin-left: 15px;
+				margin-left: 10px;
 				display: inline-block;
 				font-size: 16px;
-				color: #354048;
+				color: #929292;
 				line-height: 20px;
 				
 				span{
 					font-size: 16px;
-					color: #354048;
 					line-height: 20px;
+					margin-left: 3px;
+				}
+				.exe_ques {
+					position: relative;
+					margin-left: 6px;
+					margin-top: -3px;
 				}
 			}
 			
@@ -377,65 +374,111 @@
 		}
 		
 		& .more-classmate{
-				border-bottom: none;
+			border-bottom: none;
+			
+			& .classmateList{
 				
-				& .classmateList{
+				& .classmatePerson{
+					margin-bottom: 30px;
+					display: flex;
+					align-items: center;
 					
-					& .classmatePerson{
-						margin-bottom: 30px;
-						display: flex;
-						align-items: center;
-						
-						.classmate-imgBox{
-							display: inline-block;
-							flex-grow: 0;
-							position: relative;
-							width: 50px;
-							height: 50px;
+					.classmate-imgBox{
+						display: inline-block;
+						flex-grow: 0;
+						position: relative;
+						width: 50px;
+						height: 50px;
+						border-radius: 50%;
+						.titleImg{
 							border-radius: 50%;
-							.titleImg{
-								border-radius: 50%;
-								width: 100%;
-								height: 100%;
-							}
-							
-							.classmate-sex{
-								position: absolute;
-								bottom: 0;
-								right: 0;
-								width: 18px;
-								height: 18px;
-								border-radius: 50%;
-							}
+							width: 100%;
+							height: 100%;
 						}
 						
-						& .classmate-master{
-							width: 250px;
-							padding-left: 15px;
-							flex-grow: 0;
-							.classmate-name{
-								display: block;
-								font-size: 16px;
-								color: #354048;
-								line-height: 20px;
-							}
-							.classmate-career{
-								//font-family: PingFangSC-Light;
-								font-weight: 300;
-								display: inline-block;
-								width: 100%;
-								white-space: nowrap;
-								overflow: hidden;
-								text-overflow: ellipsis;
-								font-size: 14px;
-								color: #929292;
-								line-height: 18px;
-							}
+						.classmate-sex{
+							position: absolute;
+							bottom: 0;
+							right: 0;
+							width: 18px;
+							height: 18px;
+							border-radius: 50%;
+						}
+						.rankImg {
+							width: 21px;
+							height: 21px;
+							background:rgba(238,203,95,1);
+							position: absolute;
+							right: 0;
+							bottom: 0;
+							border-radius: 50%;
+							overflow: hidden;
+							font-size:14px;
+							font-family:Arial-BoldMT;
+							color:rgba(255,255,255,1);
+							line-height:21px;
+							text-align: center;
+						}
+					}
+					
+					& .classmate-master{
+						width: 250px;
+						padding-left: 15px;
+						flex-grow: 0;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						flex: 1;
+						.classmate-name{
+							display: block;
+							font-size: 16px;
+							color: #354048;
+							line-height: 20px;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
+						.classmate-career{
+							//font-family: PingFangSC-Light;
+							font-weight: 300;
+							display: inline-block;
+							width: 100%;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							font-size: 14px;
+							color: #929292;
+							line-height: 18px;
 						}
 					}
 				}
-				/*classmateList*/
 			}
+			/*classmateList*/
+
+			&.excellent {
+				.exce_msg {
+					display: flex;
+					flex-direction: column;
+					margin-left: 10px;
+					.msg_p {
+						width: 60px;
+						text-align: center;
+						font-size: 12px;
+						font-family:PingFangSC-Light;
+						color:rgba(146,146,146,1);
+						line-height:16px;
+						.exce_num {
+							font-size: 24px;
+							font-family:PingFangSC-Medium;
+							color:rgba(215,171,112,1);
+							line-height: 28px;
+							margin-right: 3px;
+						}
+					}
+				}
+
+			}
+		}
 		
 	}
 </style>
