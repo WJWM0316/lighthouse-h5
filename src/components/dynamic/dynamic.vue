@@ -174,7 +174,7 @@
       },
       isPlayList () {},
       isTeacherCon () {},
-      isTeacher () {}
+      isTeacher () {},
       communityId (val) {
         this.communityId = val
 
