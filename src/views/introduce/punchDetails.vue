@@ -1,10 +1,10 @@
 <template>
   <!-- 朋友圈、帖子、问题 详情 -->
-  <div class="all-details" :class="{'pdBtom' : isShow}">
+  <div class="all-details" :class="{'pdBtom' : isShow}" v-if="courseCardInfo">
     <scroll @refresh="handleRefresh" @pullup="handlePullup">  
         <div class="header">
           <lessondynamicItem
-				 :item="item"
+				 :item="courseCardInfo"
          :showDelBtn="false"
          :communityId="communityId"
          :isFold="true"
@@ -20,15 +20,15 @@
           <!-- 评论 -->
           <div class="fixed-box" ref="ceiling-box">
             <div class="ceiling-box" :class="navTabName">
-              <span @click="toggle('comment')">评论({{allTotal}})</span>
-              <span @click="toggle('praise')">点赞({{item.favorTotal}})</span>
+              <span @click="toggle('comment')">评论({{courseCardInfo.commentTotal}})</span>
+              <span @click="toggle('praise')">点赞({{courseCardInfo.favorTotal}})</span>
             </div>
           </div>
           <template v-if="navTabName === 'comment'">
-            <div v-for="item,index in discussItemList">
+            <div v-for="item,index in courseCardInfo.commentlist.hotComments">
               <!-- 热门评论 -->
-              <div class="hot-area" v-if="hotCommentTotal > 0 && index === 0">
-                <i class="hot-icon"><img src="../../assets/icon/icon_hotcomment@3x.png" alt=""></i>热门评论
+              <div class="hot-area" v-if="courseCardInfo.commentlist.hotComments.length > 0">
+                <i class="hot-icon"><img src="~ICON/icon_hotcomment@3x.png" alt=""></i>热门评论
               </div>
               <!-- 全部评论 -->
               <div class="hot-area" v-if="index === hotCommentTotal">
@@ -48,7 +48,7 @@
           <!-- 点赞 -->
           <template v-else>
           <div class="content-praise">
-            <classmate-item v-for="item, index in classmateList"
+            <classmate-item v-for="item, index in courseCardInfo.favorList"
                             :item='item'
                             :key="index"
                             @tap-one="jump">
@@ -99,7 +99,8 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi } from '@/api/pages/pageInfo.js'
+  import { getCourseCardInfoApi } from '@/api/pages/pageInfo.js'
+//import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi } from '@/api/pages/pageInfo.js'
 
   @Component({
     name: 'punch-details',
@@ -126,6 +127,7 @@
     mixins: [ListMixin]
   })
   export default class punchDetails extends Vue {
+  	courseCardInfo = "" //打卡内容
     dynamicList = []
     commentTotal = 0
     favorTotal = 0
@@ -145,16 +147,8 @@
     isFavorList = false
     isPlayList = true
     communityId = ''
-    created (option) {
-    	console.log(option,"上一个页面传递过来的数据")
-      this.modelType = this.$route.params.type
-      if (this.modelType == 1) {
-        this.isPlayList = true
-      } else {
-        this.isPlayList = false
-      }
-      this.communityId = this.$route.query.communityId
-      this.pageInit().then(() => {})
+    created () {
+    	this.pageInit()
     }
     // ------------------- 详情评论区 ----------------------
     operationDetail () {
@@ -341,12 +335,12 @@
             page: 1,
             pageCount: 1000
           }
-          if (!this.isFavorList) {
-            this.getFavorList(params).then(res => {
-              this.classmateList = res.list
-              this.isFavorList = true
-            })
-          }
+//        if (!this.isFavorList) {
+//          this.getFavorList(params).then(res => {
+//            this.classmateList = res.list
+//            this.isFavorList = true
+//          })
+//        }
         } else {
           this.isShow = true
         }
@@ -393,30 +387,10 @@
 
 
     async pageInit () {
-      const { sourceId, type } = this.$route.params
-      this.pagination.end = false // 初始化数据，必定不是最后一页
-      let res = ''
-      if (type === '1') {
-        res = await this.getCircleDetailApi(sourceId)
-      } else if (type === '2') {
-        res = await this.getPostDetailApi(sourceId)
-      } else {
-        res = await this.getProblemDetailApi(sourceId)
-      }
-
-      if (res['modelType'] === 'problem') {
-        res['answers'].forEach((answer) => {
-          answer.musicState = 0
-          answer.progress = 0
-        })
-      } else if (res['circleType'] === 1) {
-        res.musicState = 0
-        res.progress = 0
-      } else if (res['circleType'] === 2) {
-        res.videoPlay = false
-      }
-      this.dynamicList = [res]
-      await this.getList({page: 1})
+    	const { courseId, peopleId } = this.$route.query
+      const res = await getCourseCardInfoApi(courseId,peopleId)
+      this.courseCardInfo = res
+      console.log(this.courseCardInfo,"我是请求回来的数据")
     }
 
     // ------------------------------------------------
@@ -543,7 +517,8 @@
       padding-bottom: 50px;
     }
     & .header {
-      
+      padding: 0 20px;
+      box-sizing: border-box;
     }
     & .ceiling-box {
       margin: 0 15px;

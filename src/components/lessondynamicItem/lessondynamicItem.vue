@@ -64,12 +64,12 @@
           <div class="content-images">
             <!-- 图片为 1 张时 -->
             <div class="item-image one" v-if="item.cardContentFile.length === 1">
-              <img :src="item.cardContentFile[0].fileUrl || '../../assets/icon/img_head_default.png'" @click.stop="previewImage(item.cardContentFile[0].fileUrl)" />
+              <img :src="item.cardContentFile[0].fileUrl || '~ICON/img_head_default.png'" @click.stop="previewImage(item.cardContentFile[0].fileUrl)" />
             </div>
 
             <!--  图片为 多 张时  -->
             <div class="item-image" v-for="file in picList" v-else>
-              <img :src="file.fileUrl || '../../assets/icon/img_head_default.png'" v-if="!file.holder" @click.stop="previewImage(file.fileUrl)" />
+              <img :src="file.fileUrl || '~ICON/img_head_default.png'" v-if="!file.holder" @click.stop="previewImage(file.fileUrl)" />
             </div>
           </div>
         </div>
@@ -87,8 +87,8 @@
         <div class="operation">
           <!-- 点赞按钮 -->
           <button @click.stop="praise(item.courseId,item.peopleId)">
-            <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
-            <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
+            <img v-if="item.isFavor" class="icon-zan" src="~ICON/bnt_zan_pre@3x.png" />
+            <img v-else class="icon-zan" src="~ICON/bnt_zan@3x.png" />
             {{item.favorTotal > 0 ? item.favorTotal : ''}}
           </button>
           <!-- 评论按钮 -->

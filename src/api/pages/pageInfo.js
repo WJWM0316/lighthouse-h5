@@ -341,7 +341,7 @@ export const invalidCouponsApi = (data) => {
 // 课节详情内容
 export const lessonContentApi = (data) => {
   return request({
-    url: '/wap/course/1',
+    url: '/wap/course/34',
     type:'get',
     data
   })
@@ -395,11 +395,28 @@ export const getRecommendApi = (data) => {
   })
 }
 
-// 推荐
+// 获取课节信息
 export const getLessMsgApi = (data) => {
   return request({
     type: 'get',
     url: `/wap/beacon/community/${data.id}/courses`,
     data,
+  })
+}
+
+// 打卡详情
+export const getCourseCardInfoApi = (courseId,peopleId) => {
+  return request({
+    url: `/wap/courseCard/getCourseCardInfo/${courseId}/${peopleId}`,
+    type:'get'
+  })
+}
+
+// 课节详情评论
+export const courseCardCommentApi = (data) => {
+  return request({
+    url: `/wap/courseCard/courseCardComment`,
+    type:'post',
+    data
   })
 }
