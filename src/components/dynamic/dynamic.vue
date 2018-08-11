@@ -177,7 +177,6 @@
       isTeacher () {},
       communityId (val) {
         this.communityId = val
-
         console.log(val,'======')
       },
     },
