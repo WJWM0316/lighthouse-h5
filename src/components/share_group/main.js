@@ -2,87 +2,19 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import moment from 'moment'
-import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
 
 @Component({
-  name: 'dynamic-item',
+  name: 'share-group',
   props: {
     //
     isMe: {
       type: Boolean,
       default: false
     },
-    item: {
+    pageInfo: {
       type: Object,
       required: true
-    },
-    isFold: {
-      type: Boolean,
-      default: true
-    },
-    // 对象下标
-    itemIndex: {
-      type: Number
-    },
-    // 评论总数
-    allTotal: {
-      type: Number
-    },
-    isNeedHot: {
-      type: Boolean,
-      default: false
-    },
-    // 是否隐藏评论按钮
-    hideCommentBtn: {
-      type: Boolean,
-      default: false
-    },
-    // 是否隐藏点赞按钮
-    hidePraiseBtn: {
-      type: Boolean,
-      default: false
-    },
-    // 是否显示社区信息
-    showLightHouseInfo: {
-      type: Boolean,
-      default: false
-    },
-    // 是否显示标识
-    showIdentification: {
-      type: Boolean,
-      default: false
-    },
-    // 是否删除按钮
-    showDelBtn: {
-      type: Boolean,
-      default: false
-    },
-    // 是否隐藏边框
-    hideBorder: {
-      type: Boolean,
-      default: false
-    },
-    // 是否隐藏评论区域
-    hideCommentArea: {
-      type: Boolean,
-      default: false
-    },
-    // 禁止内容点击事件
-    disableContentClick: {
-      type: Boolean,
-      default: false
-    },
-    // 禁止头像名字点击
-    disableUserClick: {
-      type: Boolean,
-      default: false
-    },
-    // 临时下划线取消
-    noBorder: {
-      type: Boolean,
-      default: false
     }
-    
   },
   computed: {
     picList () {

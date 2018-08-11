@@ -6,33 +6,18 @@
     <div class="container" ref="big-shot-introduce-container" :class="{ 'no-pdb': !completelyShow }">
       <div class="header">
 
-        <community-card ref="headCard" :community="pageInfo" :type="2" :isCommunityIntroduce="completelyShow"/>
+        <community-card ref="headCard" :community="pageInfo" :type="2" />
         <div class="share-group fixed">
           <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
           <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button>
           <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">分享赚¥{{pageInfo.sellPrice}}</button>
           <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
         </div>
-
-        <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
-        <!--</div>-->
-        <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
-          <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
-        <!--</div>-->
-        <!--<div class="share-btn" v-else @click="showShare = true">-->
-          <!--<img class="share-icon" src="./../../assets/icon/icon_share.png" />-->
-          <!--<span>分享</span>-->
-        <!--</div>-->
       </div>
 
       <div class="module"  style="min-height: 70vh" >
         <div class="module-title">
-        	<!--<div class="hr"></div>-->
           <p>关于灯塔</p>
-          
-          <!--关于塔主标签-->
-          <!--<span class="module-title-tip-line"></span>
-          <div class="module-title-tip">关于塔主</div>-->
         </div>
         <div class="module-content h5-code" v-if="pageInfo.intro" v-html="pageInfo.intro" >
         </div>
@@ -63,14 +48,20 @@
         </div>
       </div>
 
-      <!-- 相关推荐 -->
-      <div class="module relevant" v-if="relevantList.length > 0">
+      <!-- 试读内容 -->
+      <div class="module relevant" v-if="pageInfo.tryCourses&&pageInfo.tryCourses.length>0">
         <div class="module-title">
-          <p>相关灯塔</p>
+          <p>试读内容</p>
           <div class="hr"></div>
         </div>
         <div class="module-content">
-          <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+          <div class="attempt_list" v-for="item,index in pageInfo.tryCourses">
+            <div class="attempt_block">
+              <img class='blo_left' :src="item.coverPicture" />
+              <div class='blo_center'>{{item.title}}</div>
+              <div class='blo_right'>试读</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -80,18 +71,17 @@
         <p>开课倒计时</p>
         <p>{{pageInfo.duration}}</p>
       </div>
-      <p v-else-if="isEnd">灯塔已关闭，停止报名</p>
-      <p v-else-if="pageInfo.communityStatus === 2">灯塔已下线，停止报名</p>
-      <p v-else-if="pageInfo.remainingJoinNum <= 0">已满员，停止报名</p>
+      <p v-else-if="pageInfo.communityStatus === 2">课程已下线，暂时不可加入</p>
+      <p v-else-if="pageInfo.remainingJoinNum <= 0">课程已满员，暂时不可加入</p>
       <div class="btn-box" v-else>
         <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
                 :disabled="!isFreeBtn" v-if="pageInfo.freeJoinNum > 0" @click="freeIn">
           <span>集Call免费加入</span>
-          <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
+          <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员'}})</span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
-          <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
+          <span>付费加入:¥{{pageInfo.joinPrice}}</span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="freeJoin" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice === 0">
@@ -210,12 +200,12 @@
     showSell = false // 显示分销弹框
     pageInfo = {}
     dynamicList = []
-    relevantList = []
     disableOperationArr = ['comment', 'praise']
     completelyShow = true
     el = ''
     qrSrc = ''
-
+    testCoures = true   //新版测试使用
+    isEndSock = false  //已结束的锁   
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
       const reg = /(\:|: )+(\d)+(px)/gi
@@ -226,6 +216,12 @@
       return newStr
     }
     freeIn () { // 跳转到一个图文消息
+      if(this.isEnd ){
+        if(!this.isEndSock){
+          this.endHint(1)
+        }
+      }
+
       if (!this.isFreeBtn) return
       if (this.pageInfo.wechatIntroUrl) {
         location.href = this.pageInfo.wechatIntroUrl
@@ -233,23 +229,62 @@
         this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
       }
     }
+
+    // 已结束提示 
+    endHint(type){
+      if(!type){
+        return
+      }
+      
+      this.$vux.confirm.show({
+        title: '加入须知',
+         content: `该课程已经全部更新完毕了！ /n 加入后你获得以下内容： /n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；/n  2、和成员们一起交流学习； /n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
+         confirmText: '马上加入',
+         cancelText: '我再想想',
+         onConfirm: function (res) {
+          this.isEndSock = true
+           if(type == 1){
+              this.freeIn()
+           }else if(type == 2) {
+              this.payOrFree()
+           }else {
+              this.freeJoin()
+           }
+         },
+       })
+    }
+
+
     payOrFree () {
+      if(this.isEnd ){
+        if(!this.isEndSock){
+          this.endHint(2)
+        }
+      }
+
       let that = this
       that.payIn()
-//      let {startTime, endTime} = this.pageInfo
-//      startTime = new Date(startTime * 1000)
-//      endTime = new Date(endTime * 1000)
-//      this.$vux.confirm.show({
-//        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
-//        confirmText: '确定',
-//        cancelText: '取消',
-//        onConfirm: function (res) {
-//          console.log(res)
-//          that.payIn()
-//        },
-//      })
+        //      let {startTime, endTime} = this.pageInfo
+        //      startTime = new Date(startTime * 1000)
+        //      endTime = new Date(endTime * 1000)
+        //      this.$vux.confirm.show({
+        //        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
+        //        confirmText: '确定',
+        //        cancelText: '取消',
+        //        onConfirm: function (res) {
+        //          console.log(res)
+        //          that.payIn()
+        //        },
+        //      })
     }
     async freeJoin () {
+
+      if(this.isEnd ){
+        if(!this.isEndSock){
+          this.endHint(3)
+        }
+      }
+
       await freePay({
         productId: this.pageInfo.communityId,
         productType: 1
@@ -275,11 +310,19 @@
      * 点击卡片
      */
     handleTapCard (item) {
+
+      let url = ''
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
+        // 测试
+        if(this.testCoures){
+          url = `/introduce2/${item.communityId}?reload=true`
+        }else {
+          url = `/introduce/${item.communityId}?reload=true`
+        }
       	this.completelyShow=true;
-        this.$router.push(`/introduce/${item.communityId}?reload=true`)
+        this.$router.push(url)
         //03b9200ec0d02059adc1882956104bc2
         //03b9200ec0d02059adc1882956104bc2
       }
@@ -458,7 +501,7 @@
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
 
       this.pageInfo = res
-
+      console.log(111111,res)
       // 是否已入社
       if (this.completelyShow && this.isJoinAgency) {
         this.$router.replace(`/introduce/${communityId}/community`)
@@ -481,7 +524,6 @@
       })
       console.log(temp)
       this.dynamicList = temp
-      this.relevantList = res.relevantRecommendations || []
       this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
     }
 
@@ -523,17 +565,10 @@
   @import "../../styles/mixins";
 
   .big-shot-introduce {
-    /*min-height: 100%;*/
    	height: 100%;
     padding-bottom: 55px;
     box-sizing: border-box;
     overflow-y: auto;
-    /*display: flex;*/
-    /*flex-flow: column nowrap;*/
-    /*display: flex;*/
-    /*flex-flow: column nowrap;*/
-    /*overflow: hidden;*/
-
     &.no-pdb {
     	
       padding-bottom: 0;
@@ -667,33 +702,6 @@
         font-size: 18px;
         color: #929292;
         font-weight: 600;
-        
-        /*关于塔主标签*/
-        /*margin-bottom: 30px;
-        position: relative;
-        
-        .module-title-tip{
-        	padding: 0 6px;
-        	font-size: 16px;
-        	height: 22.5px;
-        	line-height: 22.5px;
-        	position: absolute;
-        	bottom: -22.5px;
-        	left: 50%;
-        	transform: translateX(-50%);
-        	color: #D7AB70;
-        	font-weight: normal;
-        	background: #fff;
-        	
-        }
-        .module-title-tip-line{
-        	position: absolute;
-        	bottom: -11.5px;
-        	width: 100%;
-        	height: 0.5px;
-        	background: #D7AB70;
-        }*/
-
         & p {
           display: block;
 					font-size:18px;
@@ -728,6 +736,46 @@
           & img {
             max-width: 100% !important;
             margin: 0 auto;
+          }
+        }
+
+        .attempt_list {
+          display: flex;
+          flex-direction: column;
+          margin: 15px 15px 15px 20px;
+        }
+        .attempt_block {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: center;
+          height:40px;
+
+          .blo_left {
+            width:70px;
+            height:39px;
+            border-radius:3px;
+
+          }
+          .blo_center {
+            flex: 1;
+            margin: 0 15px;
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            color: rgba(53,64,72,1);
+            line-height: 18px;
+          }
+          .blo_right {
+            width: 36px;
+            height: 22px;
+            background: rgba(255,255,255,1);
+            border-radius: 3px;
+            border: 1px solid rgba(188,188,188,1);
+            text-align: center;
+            font-size: 12px;
+            font-family: PingFangSC-Light;
+            color: rgba(146,146,146,1);
+            line-height: 22px;
           }
         }
       }

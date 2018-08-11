@@ -162,6 +162,8 @@ export default class HomeIndex extends Vue {
     tagId: 0
   }
 
+  testCoures = false   //新版测试使用
+
   created () {
     const routeName = this.$route.name
     if (routeName === 'home') {
@@ -170,7 +172,7 @@ export default class HomeIndex extends Vue {
       this.navTabName = routeName
     }
 
-    this.init().then(() => {})
+    this.init()
   }
 
   /**
@@ -184,8 +186,7 @@ export default class HomeIndex extends Vue {
       this.navTabName = targetName
       const name = targetName === 'picked' ? 'home' : targetName
       this.$router.push({name})
-      this.init().then(() => {
-      })
+      this.init()
     }
   }
 
@@ -201,7 +202,7 @@ export default class HomeIndex extends Vue {
     this.pickedParams.tagId = communityTagList[tagIndex].id
     this.communities = []
     this.getBanners()
-    this.pickedInit().then(() => {})
+    this.pickedInit()
   }
 
   scrollTab (e) {
@@ -456,11 +457,34 @@ export default class HomeIndex extends Vue {
    * 点击卡片
    */
   handleTapCard (item) {
-    if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
-      this.$router.push(`/introduce/${item.communityId}/community`)
+    console.log(item.course)
+    let url = ''
+    if (item.isAuthor === 1 || item.isJoined === 1) { 
+      //如果已经加入并且已入社跳转到入社后页面
+
+
+      if(this.testCoures){
+        item.isCourse = 3
+      }
+
+      //1 有课。2 无课。3课节
+      if(item.isCourse == 3){
+        url = `/introduce2/${item.communityId}/community`
+      }else {
+        url = `/introduce/${item.communityId}/community`
+      }
+        
     } else { // 未入社跳到未入社页面
-      this.$router.push(`/introduce/${item.communityId}`)
+      //1 有课。2 无课。3课节
+      if(item.isCourse == 3){
+        url = `/introduce2/${item.communityId}`
+      }else {
+        url = `/introduce/${item.communityId}`
+      }
     }
+
+    this.$router.push(url)
+
   }
 
   // 点击广告列

@@ -2,16 +2,10 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import moment from 'moment'
-import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
 
 @Component({
-  name: 'dynamic-item',
+  name: 'member-content',
   props: {
-    //
-    isMe: {
-      type: Boolean,
-      default: false
-    },
     item: {
       type: Object,
       required: true
@@ -195,24 +189,20 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
   }
 })
 export default class dynamicItem extends Vue {
-  user_op = false
   video = ''
   role = this.item.releaseUser.role || {}
-
-  
   created () {
   	console.log(this.item,"******************************")
   }
   
   beforeMount(){
-    //console.log(this.item,"******************************")
+//	console.log(this.item,"******************************")
   }
 
   mounted () {
     this.video = this.$refs['video']
 //  console.log(this.item,"=================================+++")
   }
-
   
   
   isFullText (ref) {
@@ -313,7 +303,6 @@ export default class dynamicItem extends Vue {
       url
     })
   }
-
   videoClick () {
     const itemIndex = this.itemIndex
     this.$emit('videoEvent', {
@@ -321,7 +310,6 @@ export default class dynamicItem extends Vue {
       itemIndex
     })
   }
-
   videoPlay () {
     this.video.currentTime = 0
     this.video.src = this.item.files[0].fileUrl
@@ -331,60 +319,6 @@ export default class dynamicItem extends Vue {
   videoStop () {
     this.video.pause()
     this.video.src = ''
-  }
-  /**
-   * 帖子置顶 or op
-   */
-  topOp(){
-    console.log(this.item)
-    let data = {
-      communityId: 'e37bfaedef82e565f21bae9d59183763',
-      postId: this.item.circleId
-    }
-
-    if(this.item.topPostStatus==0){
-      addTopApi(data).then(res=>{
-        console.log(res)
-      })
-    }else {
-      delTopApi(data).then(res=>{
-        console.log(res)
-      })
-    }
-  }
-
-  op_member(res){
-    //this.user_op = !this.user_op
-    let menus = []
-    let itemIndex = this.itemIndex
-    let item = this.item
-
-    if(this.role == '塔主'){
-      if(this.item.topPostStatus == 0){
-        menus.push({
-          label: '置顶',
-          value: '1'
-        })
-      }else {
-        menus.push({
-          label: '取消置顶',
-          value: '2'
-        })
-      }
-    }
-
-    console.log('qweqweqweqwe',this.role,this.menus)
-
-    menus.push({
-      label: '删除',
-      value: '3'
-    })
-
-    item.itemIndex = itemIndex
-    this.$emit('opMember', {
-      item: item,
-      menus,
-    })
   }
 
   /**
@@ -406,7 +340,6 @@ export default class dynamicItem extends Vue {
     console.log('去个人详情: ', userId)
     this.$router.push(`/userInfo/${userId}/details`)
   }
-
   toDetails () { // 去朋友圈、帖子、问题详情
     if (this.disableContentClick) {
       return

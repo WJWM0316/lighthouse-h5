@@ -1,6 +1,7 @@
 <template>
   <!-- 朋友圈 -->
   <div class="dynamic-list">
+    
     <dynamic-item v-for="item,index in dynamicList"
                   :item="item"
                   :key="index"
@@ -16,25 +17,37 @@
                   :disableUserClick="disableUserClick"
                   :allTotal="allTotal"
                   :isFold="isFold"
+                  :isMe="isMe"
                   :noBorder="noBorder"
                   :isNeedHot="isNeedHot"
                   @audioEvent="audioEvent"
                   @videoEvent="videoEvent"
                   @operation="operation"
+                  @opMember="opMember"
                   ref="dynamic-item"
     ></dynamic-item>
+  
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
-  import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi} from '@/api/pages/pageInfo.js'
+  import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi } from '@/api/pages/pageInfo.js'
   import WechatMixin from '@/mixins/wechat'
 
   @Component({
     name: 'dynamic-list',
     props: {
+      isMe: {
+        type: Boolean,
+        default: true
+      },
+      //置顶操作需要
+      communityId: {
+        type: String,
+        default: ''
+      },
       allTotal: {
         type: Number
       },
@@ -111,19 +124,26 @@
       }
     },
     components: {
-      dynamicItem
+      dynamicItem,
     },
     watch: {
       allTotal (val) {
         this.allTotal = val
       },
       dynamicList (dynamicList) {
+
+        console.log('2222',dynamicList)
         const {item, itemIndex} = this.currentPlay
         if (item.modelType && item.modelType !== dynamicList[itemIndex].modelType) {
           console.log('暂停')
           this.music.pause()
         }
-      }
+      },
+      communityId (val) {
+        this.communityId = val
+
+        console.log(val,'======')
+      },
     },
     mixins: [WechatMixin]
   })
@@ -135,9 +155,7 @@
     }
     music = ''
     currentVideoIndex = -1
-
     created () {
-      console.log(11111111111111)
       console.log('allTotal', this.allTotal)
     }
 
@@ -347,6 +365,12 @@
       }
     }
 
+    
+
+    opMember(e){
+      console.log(e)
+      this.$emit('opMember', e)
+    }
     /**
      * 操作事件
      * @param e :{eventType, itemIndex} eventType: 事件名称 itemIndex: 触发对象下标
@@ -433,7 +457,6 @@
         })
         this.dynamicList[itemIndex].favors.splice(tempIndex, 1)
       }
-
     }
     /**
      * 删除
@@ -469,7 +492,7 @@
 </script>
 <style lang="less" scoped>
   .dynamic-list {
-
+    
     & .video-box {
       position: absolute;
     }

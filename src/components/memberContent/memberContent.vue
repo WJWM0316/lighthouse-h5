@@ -1,26 +1,21 @@
 <template>
   <!-- 朋友圈动态列表项 -->
   <div class="dynamic-item" :class="{testNoBorder: noBorder}" @click="toDetails">
-
-
     <!-- 头像 -->
     <div class="left">
       <img :src="item.releaseUser.avatar" class="user-image" @click.stop="toUserInfo(item.releaseUser.userId)" />
     </div>
 
-    <div class="right_op_style" :class="{right: true, border: !hideBorder}">
+    <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
       <div class="user-masage">
       	<p class="user-name" :class="role && role.title === '塔主' || role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="role && role.title === '管理员'">管理员</span></p>
       	<span class="user-intro" v-if="role && role.isShow && item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
       </div>
-
-      <div class="user_op" @click.stop="op_member" v-if="isMe || role === '塔主'">
-        <img class="op_img" src="./../../assets/icon/bnt_course_more@3x.png" />
-      </div>
       <!--头衔-->
       <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
 			<!--<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career">1231324654</span>-->
+
 		</div>
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
@@ -110,6 +105,7 @@
           <div class="content-video" @click.stop="videoClick">
             <video controls v-show="item.videoPlay" ref="video"></video>
             <div class="placeholder" v-show="!item.videoPlay">
+
               <!--背景图-->
               <!--<img />-->
             </div>
@@ -201,6 +197,7 @@
           </div>
 
         <!-- 评论信息 -->
+
         <div class="reply-block" v-if="item.commentTotal > 0 && item.comments && item.comments.length > 0">
           <template  v-if="isNeedHot">
             <div class="hot-reply">
@@ -221,23 +218,11 @@
         </div>
       </div>
     </div>
-    <div class="user_op_cont" v-if="user_op">
-      <ul>
-        <template v-if="role === '塔主'">
-          <li class="" @click.stop="topOp" v-if="item.topPostStatus==0 ">置顶</li>
-          <li class="" @click.stop="topOp" v-else>取消置顶</li>
-        </template>
-        <li class="" @click.stop="delMsg">删除</li>
-      </ul>
-    </div>
-    
-
-    
   </div>
 </template>
 
 <style lang="less">
-  @import "style.less";
+  //@import "style.less";
 </style>
 
 <script>
