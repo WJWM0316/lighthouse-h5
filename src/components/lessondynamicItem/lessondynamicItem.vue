@@ -9,8 +9,8 @@
     <div :class="{right: true, border: !hideBorder}">
       <!-- 用户名 -->
       <div class="user-masage">
-      	<p class="user-name" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="role && role.title === '管理员'">管理员</span></p>
-      	<span class="user-intro" v-if="role && role.isShow && item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
+      	<p class="user-name" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}</p>
+      	<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
       </div>
       <!--头衔-->
       <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
@@ -28,17 +28,17 @@
         <!-- 只有文字 -->
         <!--<p class="content-text" v-if="item.circleType === 0">{{item.content}}</p>-->
         <!--限制六行-->
-        <div ref="circle-content" v-if="item.circleType === 0">
-          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
+        <div ref="circle-content" v-if="item.cardType === 0">
+          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.cardContent}}</p>
           <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
         </div>
 
         <!-- 文字与视频 -->
-        <div v-if="item.circleType === 2">
+        <div v-if="item.cardType === 2">
           <!--<p class="content-text">{{item.content}}</p>-->
           <!--限制文本行数-->
           <div ref="circle-content">
-	          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
+	          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.cardContent}}</p>
 	          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
 	        </div>
 	        
@@ -53,18 +53,18 @@
         </div>
 
         <!-- 文字与图片 -->
-        <div v-if="item.circleType === 3">
+        <div v-if="item.cardType === 3">
           <!--<p class="content-text">{{item.content}}</p>-->
           <!--限制文本行数-->
           <div ref="circle-content">
-	          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.content}}</p>
+	          <p class="content-text" :class="{'ellipsis' : isFold}">{{item.cardContent}}</p>
 	          <p class="full-text-btn" v-if="isFold">{{isFullText('circle-content')}}</p>
 	        </div>
 	        
           <div class="content-images">
             <!-- 图片为 1 张时 -->
-            <div class="item-image one" v-if="item.files.length === 1">
-              <img :src="item.files[0].fileUrl || '../../assets/icon/img_head_default.png'" @click.stop="previewImage(item.files[0].fileUrl)" />
+            <div class="item-image one" v-if="item.cardContentFile.length === 1">
+              <img :src="item.cardContentFile[0].fileUrl || '../../assets/icon/img_head_default.png'" @click.stop="previewImage(item.cardContentFile[0].fileUrl)" />
             </div>
 
             <!--  图片为 多 张时  -->
@@ -86,7 +86,7 @@
 
         <div class="operation">
           <!-- 点赞按钮 -->
-          <button @click.stop="praise">
+          <button @click.stop="praise(item.courseId,item.peopleId)">
             <img v-if="item.isFavor" class="icon-zan" src="./../../assets/icon/bnt_zan_pre@3x.png" />
             <img v-else class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
             {{item.favorTotal > 0 ? item.favorTotal : ''}}
@@ -102,35 +102,27 @@
       </div>
 
       <!-- 评论区 -->
-      <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || (item.commentTotal > 0 && item.comments && item.comments.length > 0))">
+      <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || (item.commentTotal > 0 && item.commentlist && item.commentlist.hotComments.length > 0))">
         <!-- 点赞信息 -->
           <div class="praise-block" v-if="item.favorTotal > 0">
             <img class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
             <div class="praise-name">
-                <span class="favor-name" v-for="(favor, favorIndex) in item.favors" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
+                <span class="favor-name" v-for="(favor, favorIndex) in item.favorList" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
             </div>
             <span class="praise-total" v-if="item.favorTotal > 3">等{{item.favorTotal}}人觉得很赞</span>
           </div>
 
         <!-- 评论信息 -->
 
-        <div class="reply-block" v-if="item.commentTotal > 0 && item.comments && item.comments.length > 0">
-          <template  v-if="isNeedHot">
+        <div class="reply-block" v-if="item.commentTotal > 0 && item.commentlist.hotComments.length > 0">
+          <template>
             <div class="hot-reply">
               <div class="hot-reply-icon">热门评论</div> 
-              <div class="reply" v-for="(reply,index) in item.comments">
+              <div class="reply" v-for="(reply,index) in item.commentlist.hotComments">
                 <p class="favor-content ellipsis3"><span class="favor-name">{{reply.reviewer.realName}}：</span>{{reply.content}}</p>
               </div>
             </div>
           </template>
-          <tempalte v-else>
-            <div class="reply ellipsis3" v-for="reply in item.comments">
-              <span class="favor-name" @click.stop="toUserInfo(reply.userId)">{{reply.reviewer.realName}}</span>: {{reply.content}}
-            </div>
-            <div class="reply" v-if="item.commentTotal > 3">
-              <span class="favor-name">查看全部{{item.commentTotal}}条回复</span>
-            </div>
-          </tempalte>
         </div>
       </div>
     </div>

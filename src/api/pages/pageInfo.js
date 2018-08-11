@@ -329,4 +329,28 @@ export const invalidCouponsApi = (data) => {
   })
 }
 
+// 课节详情内容
+export const lessonContentApi = (data) => {
+  return request({
+    url: '/wap/course/1',
+    type:'get',
+    data
+  })
+}
 
+// 课节详情内容
+export const getCourseCardListApi = (communityId,courseId) => {
+  return request({
+    url: `/wap/courseCard/getCourseCardList/${communityId}/${courseId}`,
+    type:'get'
+  })
+}
+
+// 打卡内容点赞
+export const courseCardFavorApi = (data) => {
+  return request({
+    url: `/wap/courseCard/courseCardFavor`,
+    type:'post',
+    data
+  })
+}

@@ -1,9 +1,9 @@
 <template>
 	<!--课节页面-->
-	<div class="Lesson">
+	<div class="Lesson" v-if="communityCourse">
 		<!--头部图片标题区-->
 		<div class="Lesson-header">
-			<img class="header-photo" src="../../assets/icon/couponhead.png"/>
+			<img class="header-photo" :src="communityCourse.coverPicture"/>
 			<div class="header-title">
 				01、围绕用户价值，最大化你的运营产出
 			</div>
@@ -12,13 +12,13 @@
 		<div class="Lesson-module">
       <div class="module-header">
       	<div class="head-photobox">
-      		<img src="../../assets/icon/login-logo.png"/>
-      		<span class="name">路叔</span>
+      		<img :src="communityCourse.people.headimgurl"/>
+      		<span class="name">{{communityCourse.people.realname}}</span>
       	</div>
-      	<div class="date">{{1533139200000 | date('YYYY-MM-DD')}}</div>
+      	<div class="date">{{communityCourse.createTime*1000 | date('YYYY-MM-DD')}}</div>
       </div>
       <!--视频-->
-      <div class="Lesson-video" @click.stop="playVideo">
+      <div class="Lesson-video" @click.stop="playVideo" v-if="communityCourse.av && communityCourse.av.type==='video'">
       	<video controls ref="video"></video>
       	<div class="placeholder" v-show="videoPlay">
           <!--背景图-->
@@ -26,15 +26,14 @@
         </div>
       </div>
       <!-- 音频 -->
-      <div :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}">
+      <div :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" v-if="communityCourse.av && communityCourse.av.type==='voice'">
         <audioBox
           :source="item.files[0]" 
           :touerImg="item.files[0].avatar"
           :isDetailCon='false'
           ></audioBox>
       </div>
-      <div class="module-content h5-code">
-      	我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本我是富文本
+      <div class="module-content h5-code" @click.stop="readPic($event)" v-html="communityCourse.details">
       </div>
     </div>
     <!--本节任务-->
@@ -47,17 +46,26 @@
 				<div class="title-pic2"></div>
 			</div>
 			<!--头部标题-->
-			<div class="content-txt">
-				本节中提到的运营心法，那针对以下几个点说 说你们的想法： 
-				1、如果遇到同样的用户运营问题，你会怎么处 理？ 
-				2、你目前或以前遇到过什么类似的坎过不去 吗？显示上完课之后是否有新的方案去解决？
+			<div class="content-txt" v-html="communityCourse.punchCardTitle">
 			</div>
 			<div class="content-img">
-				
+				<!--<img v-for="item in community_course.punch_card_img_info" :src="item.picture_url" alt="" />-->
+				<div class="content-images">
+          <!-- 图片为 1 张时 -->
+          <div class="item-image one" v-if="communityCourse.punchCardImgInfo && communityCourse.punchCardImgInfo.length === 1">
+            <img :src="communityCourse.punchCardImgInfo[0].pictureUrl || '../../assets/icon/img_head_default.png'" @click.stop="previewImage(communityCourse.punchCardImgInfo[0].pictureUrl)" />
+          </div>
+
+          <!--  图片为 多 张时  -->
+          <div class="item-image" v-for="file in communityCourse.punchCardImgInfo" v-else>
+            <img :src="file.pictureUrl || '../../assets/icon/img_head_default.png'" v-if="!file.holder" @click.stop="previewImage(file.pictureUrl)" />
+          </div>
+        </div>
 			</div>
 		</div>
+		<!--本节任务结束-->
 		<!--优秀打卡区-->
-		<div class="Lesson-punch" v-if="dynamicList!=={}">
+		<div class="Lesson-punch">
 			<!--头部标题-->
 			<div class="headerBox">
 				<div class="title-pic1">
@@ -71,7 +79,9 @@
 			</div>
 			<div class="hr"></div>
 			<!--优秀打卡内容区-->
-			<lessondynamicItem :item="dynamicList"
+			<lessondynamicItem
+				 v-for="item in excellentPunchList"
+				 :item="item"
          :showDelBtn="false"
          :communityId="communityId"
          :isFold="true"
@@ -88,7 +98,9 @@
 				<div class="Excellent-punch-title">所有打卡</div>
 			</div>
 			<div class="hr"></div>
-			<lessondynamicItem :item="dynamicList"
+			<lessondynamicItem
+				 v-for="item in peopleCourseCardList"
+				 :item="item"
          :showDelBtn="false"
          :communityId="communityId"
          :isFold="true"
@@ -101,7 +113,7 @@
 		</div>
 		
 		<!--底部打卡按钮区-->
-		<div class="Lesson-footer" v-if="isPunch === 0">
+		<div class="Lesson-footer" v-if="isPunch !== 0">
 			<div class="toPunch" @click.stop="toPunch">
 				去打卡
 			</div>
@@ -118,6 +130,8 @@
   import Component from 'vue-class-component'
 	import lessondynamicItem from '@/components/lessondynamicItem/lessondynamicItem'
   import audioBox from '@/components/media/music'
+  import WechatMixin from '@/mixins/wechat'
+  import { lessonContentApi, getCourseCardListApi } from '@/api/pages/pageInfo'
   @Component({
     name: 'Lesson',
     components: {
@@ -128,8 +142,19 @@
     	
     },
     watch: {
-      
+    	communityCourse (val, old) {
+    		this.item = {
+    			files:[{
+						duration:val.av.duration,
+						fileId:String(val.av.fileId),
+						fileUrl:val.av.fileUrl,
+						avatar:val.people.avatar
+			    }]
+    		}
+    		console.log(this.item,"我是新数据")
+    	},
     },
+    mixins: [WechatMixin],
   })
   export default class Lesson extends Vue {
   	video = '' //视频
@@ -137,132 +162,62 @@
   	showIdentification = true
     disableOperationArr = ['comment']
     isPlayList = false
-    item = {
-    	files:[{
-				duration:6,
-				fileId:"5329",
-				fileName:"2JVOTrwtULW3VpcKI3whmcDNYTlTMEVQzPpxN3ZDfXOcFYKtUiv7XZwjXolTara2.amr",
-				fileUrl:"https://cdnstatic.ziwork.com/test/audio/2018-06-14/6b4856190e86d63da132708f75c8089f.mp3",
-				avatar:"http://thirdwx.qlogo.cn/mmopen/BMibibqZYibkicZ5SI1SDic7poUzQISNRsBIgxnyT8Qv2S8dYEicIuCPyibLykxqkE5nfyC5K765DIiayFo3Aj6PG1bSmw/132",
-				isPlayed:true,
-				size:56492
-	    }]
-    }
-    //打卡虚拟数据
-    dynamicList = {
-				circleId:"1297",
-				circleType:3,
-				commentTotal:4,
-				comments:[{
-					commentId:5233,
-					content:"独孤皇后",
-					isSelf:0,
-					releaseTime:1531995562,
-					reviewer:{
-						avatar:"http://thirdwx.qlogo.cn/mmopen/BMibibqZYibkicZ5SI1SDic7poUzQISNRsBIgxnyT8Qv2S8dYEicIuCPyibLykxqkE5nfyC5K765DIiayFo3Aj6PG1bSmw/132",
-						career:"职位待完善",
-						gender:1,
-						office:"前端有限责任公司",
-						realName:"Lunch06",
-						userId:"51c4778f0173405fd08e5361d793cb12",
-						workTimeName:""
-					}
-				}],
-//				content:"dfasdfjlaskdfjlsakdjflasdjlk",
-				content:"看这里，展示规则：超过6行文字打点，第七行 显示全文按钮「展开全文」，展开后可收起， 文字按钮为「收起全文」。注意间距。点进详 情页后，文字不做收起，全文展开。没有文字 按钮。这行是来撑字数的撑字数撑，最后要打 点（忽略这里的内容，撑字数用的我是嗯）…我还没超出吗爱爱 啊啊啊啊啊啊啊爱爱 ",
-				favorTotal:2,
-				favors:[{userId: "85994e9fb90e1fbe8b112230e9db3111", realName: "火姐"}],
-				files:[
-					{
-						duration:0,
-						fileId:"6035",
-						fileName:"tmp_34c42c14e479387ebbd95a632e0f974c.jpg",
-						fileUrl:"https://cdnstatic.ziwork.com/test/image/2018-08-03/e7c38af8b46a9b55f768b4928edb7453.jpg",
-						imgHeight:0,
-						imgWidth:0,
-						isPlayed:false,
-						size:218443
-					},
-					{
-						duration:0,
-						fileId:"6035",
-						fileName:"tmp_34c42c14e479387ebbd95a632e0f974c.jpg",
-						fileUrl:"https://cdnstatic.ziwork.com/test/image/2018-08-03/e7c38af8b46a9b55f768b4928edb7453.jpg",
-						imgHeight:0,
-						imgWidth:0,
-						isPlayed:false,
-						size:218443
-					},
-					{
-						duration:0,
-						fileId:"6035",
-						fileName:"tmp_34c42c14e479387ebbd95a632e0f974c.jpg",
-						fileUrl:"https://cdnstatic.ziwork.com/test/image/2018-08-03/e7c38af8b46a9b55f768b4928edb7453.jpg",
-						imgHeight:0,
-						imgWidth:0,
-						isPlayed:false,
-						size:218443
-					},
-					{
-						duration:0,
-						fileId:"6035",
-						fileName:"tmp_34c42c14e479387ebbd95a632e0f974c.jpg",
-						fileUrl:"https://cdnstatic.ziwork.com/test/image/2018-08-03/e7c38af8b46a9b55f768b4928edb7453.jpg",
-						imgHeight:0,
-						imgWidth:0,
-						isPlayed:false,
-						size:218443
-					},
-					{
-						duration:0,
-						fileId:"6035",
-						fileName:"tmp_34c42c14e479387ebbd95a632e0f974c.jpg",
-						fileUrl:"https://cdnstatic.ziwork.com/test/image/2018-08-03/e7c38af8b46a9b55f768b4928edb7453.jpg",
-						imgHeight:0,
-						imgWidth:0,
-						isPlayed:false,
-						size:218443
-					},
-					{
-						duration:0,
-						fileId:"6035",
-						fileName:"tmp_34c42c14e479387ebbd95a632e0f974c.jpg",
-						fileUrl:"https://cdnstatic.ziwork.com/test/image/2018-08-03/e7c38af8b46a9b55f768b4928edb7453.jpg",
-						imgHeight:0,
-						imgWidth:0,
-						isPlayed:false,
-						size:218443
-					}
-				],
-				isFavor:0,
-				isSelf:0,
-				modelType:"circle",
-				releaseTime:1531723628,
-				releaseUser:{
-					avatar:"http://thirdwx.qlogo.cn/mmopen/t71P7zDFia457UdHe1ibUyaheQgOicyAnptmTjJZHa5IcHAtic7rO2Cw79iaIX0XZDYgeFnXvdXEDODCwIjr6m4NahibaEhXEibRia5h/132",
-					career:"测试/背锅侠盗猎",
-					gender:2,
-					office:"排骨好吃",
-					realName:"火姐",
-					role:{title: "塔主", code: "master", isShow: 1},
-					userI:"85994e9fb90e1fbe8b112230e9db3111",
-					workTimeName:"12年"
-				},
-			}
+    //富文本虚拟数据
+    intro = '<p>社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍</p><p><img src="https://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2018-08-08/2d6e172b6cbecf6c9de11727d89d8d0f.png" alt="商业课-推广海报" style="max-width:100%;"><br></p><p><br></p>'
+
+    //音频数据
+    item = {}
+    //所有打卡数据
+    peopleCourseCardList = ""
+    
+    //优秀打卡
+    excellentPunchList = ""
+    
+    
+    //最新课节信息
+    communityCourse = ''
     
     communityId = "aa111e6adee61456f37ae317570774e2"
   	isPunch = 0	//是否已经打卡
   	
+  	//去打卡编辑页
   	toPunch(){
-//		alert("我是要跳转去打卡页面的")
-		this.$router.push({path:`/PunchEditing?courseId=${this.courseId}`})
+			this.$router.push({path:`/PunchEditing?courseId=${this.courseId}`})
   	}
-  	
+  	//去打卡内容列表页
   	toPunchList(){
   		this.$router.push(`/PunchList`);
   		return;
   	}
-  	
+  	//预览富文本图片
+    readPic(e){
+    	if(e.target.tagName==='IMG'){
+    		let urls = [];
+    		urls.push(e.target.src)
+    		let img=String(e.target.src);
+    		let parma={
+    			urls,
+    			img
+    		}
+    		console.log(img,"我是图片路径信息")
+    		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
+    	}
+    }
+    //预览普通图片
+	  previewImage (img) {
+	    const files = this.communityCourse.punchCardImgInfo
+	    let urls = []
+	    files.forEach((item) => {
+	      urls.push(item.pictureUrl)
+	    })
+	    let parma={
+	    	eventType: 'previewImage',
+				urls,
+				img
+			}
+			console.log(img,"我是图片路径信息")
+  		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
+	  }
   	//播放视频
   	playVideo(){
   		this.video.currentTime = 0
@@ -270,6 +225,17 @@
 	    console.log(this.video.currentTime,"我是视频对象")
 	    this.videoPlay = false
 	    this.video.play()
+  	}
+  	
+  	created(){
+  		Promise.all([lessonContentApi(),getCourseCardListApi()]).then((res)=>{
+  			console.log(res,"请求回来的数据")
+  			this.communityCourse = res[0].communityCourse
+  			this.peopleCourseCardList = res[1].peopleCourseCardList
+  			this.excellentPunchList = res[1].excellentPeopleCourseCardList
+  		}).catch((e)=>{
+  			console.log(e,"3333333333333333333")
+  		})
   	}
   	
   	mounted () {
@@ -311,6 +277,7 @@
 					display: flex;
 					align-items: center;
 					img{
+						border-radius: 50%;
 						width: 24px;
 						height: 24px;
 					}
@@ -350,6 +317,7 @@
 			}
 			/*音频内容*/
 			.content-audio{
+				margin-top: 28px;
 				display: flex;
 				justify-content: center;
 				align-items: center;
@@ -375,9 +343,39 @@
 				width: 100%;
 			}
 			.content-img{
-				img{
-					
-				}
+				& .content-images {
+		      margin-top: 10px;
+		      width: 335px;
+					// margin-left:7%;
+		      display: flex;
+					// justify-content:space-between;
+		      flex-flow: row wrap;
+		
+		      & > .item-image {
+		        margin-top: 5px;
+		        margin-left: 5px;
+		        width: 108px;
+		        height: 108px;
+		        text-align: center;
+						flex-grow:0;
+						
+		
+		        &:first-of-type, &:nth-of-type(3n + 1) {
+		          margin-left: 0;
+		        }
+		
+		        & img {
+		          background: #f9f9f9;
+		          width: 100%;
+		          height: 100%;
+		          vertical-align: middle;
+		        }
+		      }
+		      & > .item-image.one {
+		        width: 136px;
+		        height: 136px;
+		      }
+		    }
 			}
 		}
 		/*优秀打卡区*/
@@ -419,8 +417,8 @@
 				}
 			}
 			>.dynamic-item{
-				border-bottom: 1px solid transparent;
 				&:last-child{
+					border-bottom: 1px solid transparent;
 					margin-top: 50px;
 				}
 			}
@@ -442,6 +440,7 @@
 		}
 		/*课节底部按钮区*/
 		.Lesson-footer{
+			background-color: #FFFFFF;
 			width: 100%;
 			height: 49px;
 			position: absolute;

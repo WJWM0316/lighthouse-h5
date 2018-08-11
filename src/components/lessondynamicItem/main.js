@@ -2,6 +2,8 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import moment from 'moment'
+import WechatMixin from '@/mixins/wechat'
+import { courseCardFavorApi } from '@/api/pages/pageInfo'
 
 @Component({
   name: 'lesson-dynamic-item',
@@ -56,7 +58,7 @@ import moment from 'moment'
   computed: {
     picList () {
       let list = []
-      const files = this.item.files
+      const files = this.item.cardContentFile
       if (files.length === 4) {
         for (let i = 1; i <= files.length; i++) {
           if (i % 3 === 0) {
@@ -88,7 +90,7 @@ import moment from 'moment'
     },
     // 朋友圈发表时间展示规则
     timeStr () {
-      let releaseTime = this.item.releaseTime || 0
+      let releaseTime = this.item.punchCardTime || 0
       const now = this.serverTime ? new Date(this.serverTime * 1000) : new Date()
       let timeStr = '刚刚'
       if (releaseTime) {
@@ -137,7 +139,8 @@ import moment from 'moment'
       }
       return timeStr
     }
-  }
+  },
+  mixins: [WechatMixin],
 })
 export default class lessondynamicItem extends Vue {
   video = ''
@@ -247,31 +250,30 @@ export default class lessondynamicItem extends Vue {
   /**
    * 点赞
    */
-  praise () {
+  praise (courseId,peopleId) {
   	if(this.isLesson){
-  		this.$router.push(`/PunchList`);
+  		this.$router.push({path:'/PunchList',query:{courseId:courseId,peopleId:peopleId}});
   		return;
   	}
+  	
   }
 
   /**
    * 点击预览图片
    */
   previewImage (img) {
-  	if(this.isLesson){
-  		this.$router.push(`/PunchList`);
-  		return;
-  	}
     const files = this.item.files
     let urls = []
     files.forEach((item) => {
       urls.push(item.fileUrl)
     })
-    this.$emit('operation', {
-      eventType: 'previewImage',
-      img,
-      urls
-    })
+    let parma={
+    	eventType: 'previewImage',
+			urls,
+			img
+		}
+		console.log(parma,"我是图片路径信息")
+		this.operation(parma)
   }
   videoClick () {
     if(this.isLesson){

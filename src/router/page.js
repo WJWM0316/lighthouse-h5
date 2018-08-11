@@ -143,6 +143,13 @@ const routers = [
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/punchList'], resolve),
 	},
+	{
+    // 打卡详情页
+    path: '/PunchDetails',
+    name: 'PunchDetails',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/punchDetails'], resolve),
+	},
 ]
 
 export default routers
