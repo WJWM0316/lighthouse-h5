@@ -254,16 +254,16 @@ export default class lessondynamicItem extends Vue {
   		type:1
   	}
   	
-//	this.$emit('operation', {
-//    eventType: 'comment',
-//    itemIndex
-//  })
+		this.$emit('operation', {
+      eventType: 'comment',
+      param
+    })
   	
-	courseCardCommentApi(param).then(res=>{
-		console.log(res,"评论成功")
-	}).catch(res=>{
-		console.log(res,"评论失败")
-	})
+//	courseCardCommentApi(param).then(res=>{
+//		console.log(res,"评论成功")
+//	}).catch(res=>{
+//		console.log(res,"评论失败")
+//	})
   	
   }
   /**

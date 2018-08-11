@@ -99,7 +99,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCourseCardInfoApi } from '@/api/pages/pageInfo.js'
+  import { getCourseCardInfoApi, courseCardCommentApi } from '@/api/pages/pageInfo.js'
 //import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi } from '@/api/pages/pageInfo.js'
 
   @Component({
@@ -156,11 +156,12 @@
     }
     // ------------------- 评论区 ----------------------
     operation (e) {
-      const {eventType, itemIndex, item, commentType, isDetail} = e
+    	const {eventType, parama} = e
+//    const {eventType, itemIndex, item, commentType, isDetail} = e
       switch (eventType) {
         case 'comment':
           // :todo 评论请求
-          this.comment({item, itemIndex, commentType, isDetail}).then()
+          this.courseCardCommentApi(parama).then()
           break
         case 'praise':
           this.praise({item, itemIndex, commentType}).then()
