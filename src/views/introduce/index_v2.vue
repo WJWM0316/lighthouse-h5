@@ -55,8 +55,8 @@
           <div class="hr"></div>
         </div>
         <div class="module-content">
-          <div class="attempt_list" v-for="item,index in pageInfo.tryCourses">
-            <div class="attempt_block">
+          <div class="attempt_list" v-for="item,index in pageInfo.tryCourses" >
+            <div class="attempt_block" @click.stop="toLesson(item.id)">
               <img class='blo_left' :src="item.coverPicture" />
               <div class='blo_center'>{{item.title}}</div>
               <div class='blo_right'>试读</div>
@@ -455,7 +455,7 @@
         } = self.pageInfo
 
         const {realName, career} = master
-//        const str = realName ? realName + (career ? '|' + career : '') : ''
+        //  const str = realName ? realName + (career ? '|' + career : '') : ''
         console.log('location.href', location.href)
         // 页面分享信息
         self.wechatShare({
@@ -556,6 +556,10 @@
       // this.$refs['body'].addEventListener('touchmove', e => {
       //   e.stopPropagation()
       // })
+    }
+
+    toLesson (id) {
+      this.$router.push({path:`/Lesson?id=${id}`})
     }
     
   }
