@@ -547,7 +547,11 @@
 
       // 是否已入社
       if (this.completelyShow && this.isJoinAgency) {
-        this.$router.replace(`/introduce/${communityId}/community`)
+        if(res.isCourse === 3){
+          this.$router.replace(`/introduce2/${communityId}/community`)
+        }else {
+          this.$router.replace(`/introduce/${communityId}/community`)
+        }
         return
       }
 

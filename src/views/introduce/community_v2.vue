@@ -664,8 +664,9 @@
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
 
+      let params = {}
       if(this.showType){
-        let params = {
+        params = {
           id: this.$route.params.communityId,
           page : page,
           pageCount: pageSize,
@@ -673,7 +674,7 @@
           sortNum: '0'
         }
       }else {
-        let params = {
+        params = {
           communityId: this.$route.params.communityId,
           page: page,
           pageCount: pageSize,
@@ -844,6 +845,7 @@
         }else {
           url = `/introduce/${item.communityId}/community`
         }
+        console.log(111)
         this.$router.push(url)
     }
 
