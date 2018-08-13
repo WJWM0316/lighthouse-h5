@@ -30,8 +30,8 @@
         <div class="blo_right noneborder" v-else>
           <img class='blo_right_icon' src="./../../assets/icon/icon_position@3x.png" v-if='item.statusInfo.isCurrentStudy === 1' />
           <img class='blo_right_icon' src="./../../assets/icon/icon_complete@3x.png" v-else-if="item.statusInfo.isPunchCard === 1" />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else-if="item.statusInfo.isUnlock === 0 && item.statusInfo.isPunchCard !== 1" />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_lock@3x.png" v-else-if="item.statusInfo.isUnlock === 1" />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_lock@3x.png" v-else-if="item.statusInfo.isUnlock === 0 && item.statusInfo.isPunchCard !== 1" />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else-if="item.statusInfo.isUnlock === 1" />
         </div>
         
       </div>
