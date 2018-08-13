@@ -280,7 +280,7 @@
   	created(){
   		this.trialReading = this.$route.query.isTry
   		let parama = {
-  			communityId:this.$route.query.communityId,
+  			communityId:"37c6b1c0995c91ab7f8f4ba92a5fdf21",
   			courseId:this.$route.query.id,
   			type:0,
   			page:0,
