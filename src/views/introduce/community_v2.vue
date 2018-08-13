@@ -48,7 +48,7 @@
           <!-- <div class="module-content" v-if="dynamicList && dynamicList.length > 0"> -->
             <template v-if="showType">
               
-              <course-content :courseList="dynamicList" @lessSetSort="lessSetSort" :sort="lessSort" @getLessPage="getLessPage"></course-content>
+              <course-content :courseList="dynamicList" @lessSetSort="lessSetSort" :sort="lessSort" @getLessPage="getLessPage" :communityId=communityId></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
                 <div class="module-title">

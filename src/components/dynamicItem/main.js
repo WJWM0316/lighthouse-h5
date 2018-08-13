@@ -224,7 +224,6 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     isTeacherCon () {},
     isTeacher () {},
     isMe(val){
-      console.log(val)
       this.isMe = val
     }
   }
