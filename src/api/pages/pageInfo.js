@@ -339,11 +339,10 @@ export const invalidCouponsApi = (data) => {
 }
 
 // 课节详情内容
-export const lessonContentApi = (data) => {
+export const lessonContentApi = (id) => {
   return request({
-    url: '/wap/course/34',
+    url: `/wap/course/${id}`,
     type:'get',
-    data
   })
 }
 

@@ -158,12 +158,12 @@
     // ------------------- 评论区 ----------------------
     operation (e) {
     	console.log(e,"我是带回来的数据")
-    	const {eventType, parama} = e
+    	const {eventType, param} = e
 ////    const {eventType, itemIndex, item, commentType, isDetail} = e
       switch (eventType) {
         case 'comment':
           // :todo 评论请求
-          this.comment(parama).then()
+          this.comment(param).then()
 //        this.courseCardCommentApi(parama).then()
           break
         case 'praise':
@@ -208,7 +208,7 @@
 //      this.commentIndex = itemIndex
       } else {
         this.suspensionInputPlaceholder = '来分享你的想法吧～'
-//      this.commentIndex = -1
+        this.commentIndex = -1
       }
     }
 
