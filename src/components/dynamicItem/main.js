@@ -10,8 +10,7 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
   props: {
     //
     isMe: {
-      type: Boolean,
-      default: false
+      type: String,
     },
     item: {
       type: Object,
@@ -223,11 +222,14 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
   watch: {
     isPlayList () {},
     isTeacherCon () {},
-    isTeacher () {}
+    isTeacher () {},
+    isMe(val){
+      console.log(val)
+      this.isMe = val
+    }
   }
 })
 export default class dynamicItem extends Vue {
-  user_op = false
   video = ''
   role = this.item.releaseUser.role || {}
   type = 0
@@ -381,10 +383,11 @@ export default class dynamicItem extends Vue {
   }
 
   op_member(res){
-    //this.user_op = !this.user_op
     let menus = []
     let itemIndex = this.itemIndex
     let item = this.item
+
+    console.log('qweqweqweqwe',this.role,this.menus)
 
     if(this.role == '塔主'){
       if(this.item.topPostStatus == 0){
@@ -398,20 +401,22 @@ export default class dynamicItem extends Vue {
           value: '2'
         })
       }
+
+      menus.push({
+        label: '删除',
+        value: '3'
+      })
+
+      item.itemIndex = itemIndex
+      this.$emit('opMember', {
+        item: item,
+        menus,
+      })
+
     }
 
-    console.log('qweqweqweqwe',this.role,this.menus)
 
-    menus.push({
-      label: '删除',
-      value: '3'
-    })
-
-    item.itemIndex = itemIndex
-    this.$emit('opMember', {
-      item: item,
-      menus,
-    })
+    
   }
 
   /**

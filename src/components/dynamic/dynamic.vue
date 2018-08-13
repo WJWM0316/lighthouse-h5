@@ -39,15 +39,12 @@
   import Component from 'vue-class-component'
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
   import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi } from '@/api/pages/pageInfo.js'
+  import { getInformationApi } from '@/api/pages/center'
   import WechatMixin from '@/mixins/wechat'
 
   @Component({
     name: 'dynamic-list',
     props: {
-      isMe: {
-        type: Boolean,
-        default: true
-      },
       //置顶操作需要
       communityId: {
         type: String,
@@ -183,6 +180,7 @@
     mixins: [WechatMixin]
   })
   export default class dynamicList extends Vue {
+    isMe = ''
     currentPlay = {
       item: {},
       itemIndex: -1,
@@ -191,6 +189,15 @@
     currentVideoIndex = -1
     created () {
       console.log('allTotal', this.allTotal)
+      try {
+        this.model = getInformationApi().then(res=>{
+
+          console.log('||||||||||||',res)
+          this.isMe = res.userId
+        })
+      } catch (error) {
+        this.$vux.toast.text(error.message, 'bottom')
+      }
     }
 
     mounted () {

@@ -15,11 +15,6 @@
       	
       	<!--详情页头部组件-->
         <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false" >
-        	<!--介绍-->
-
-      		<!-- <div :starTime="starTime" @click.prevent.stop="toMore" class="addon-text" slot="cover-addon-more">
-             <img class="icon" src="../../assets/icon/bnt_more@3x.png" />
-          </div> -->
         </community-card>
         <!--详情页头部组件-->
 
@@ -32,7 +27,7 @@
             </button>
             <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
           </div>
-          <span class="money_other">
+          <span class="money_other" v-if="!pageInfo.isAudit && pageInfo.isSell === 1">
             分享赚
             <img src="../../assets/icon/bg_share.png" />
           </span>
@@ -53,7 +48,7 @@
           <!-- <div class="module-content" v-if="dynamicList && dynamicList.length > 0"> -->
             <template v-if="showType">
               
-              <course-content :courseList="courseList" @lessSetSort="lessSetSort" :sort="lessSort" @getLessPage="getLessPage"></course-content>
+              <course-content :courseList="dynamicList" @lessSetSort="lessSetSort" :sort="lessSort" @getLessPage="getLessPage"></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
                 <div class="module-title">
@@ -173,7 +168,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
 
-  import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi, topPostListApi, delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi } from '@/api/pages/pageInfo'
+  import { getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi, topPostListApi, delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi } from '@/api/pages/pageInfo'
 
   
 	Component.registerHooks([
@@ -358,11 +353,10 @@
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
         	this.roleInfo=res.role;
-        	console.log(this.roleInfo,"8888888888888888888888888888")
         }).catch(res => {
         		this.roleInfo=res.data.role;
-        		console.log(this.roleInfo,"999999999999999999999999")
 				})
+        console.log(this.pageInfo,"999999999999999999999999")
         
         //判断是否有课程，无课程则跳转
         if(this.pageInfo.isCourse!==3){
@@ -416,10 +410,8 @@
 		        //判断嘉宾身份
 		        this.getRoleInfo(communityId).then(res=>{
 		        	this.roleInfo=res.role;
-		        	console.log(this.roleInfo,"8888888888888888888888888888")
 		        }).catch(res => {
 		        		this.roleInfo=res.data.role;
-		        		console.log(this.roleInfo,"999999999999999999999999")
 						})
 		        
 		        //判断是否有课程，无课程则跳转
@@ -494,7 +486,6 @@
       let res = await this.getCommunity(communityId)
 
       console.log('=========',res)
-      console.log('=========',res.courses)
       //嘉宾身份
       if(res.isAuthor == 0){
           let res2 = await this.getRoleInfo(communityId)
@@ -512,7 +503,6 @@
 
       this.getRecommendList(communityId)
       this.getTopList(communityId)
-      this.getLessMsgList(communityId)
     }
 
     toggle (type) {
@@ -654,13 +644,7 @@
         communityId
       })
     }
-    /**
-     * 获取朋友圈列表
-     **/
-    getCirclesList (params) {
 
-					return getCirclesApi(params)
-    }
     /**
      * 获取交流社区列表
      **/
@@ -679,23 +663,38 @@
       }
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
-      const params = {
-        communityId: this.$route.params.communityId,
-        page: page,
-        pageCount: pageSize,
-        sort: this.userSort,
+
+      if(this.showType){
+        let params = {
+          id: this.$route.params.communityId,
+          page : page,
+          pageCount: pageSize,
+          sort: this.lessSort,
+          sortNum: '0'
+        }
+      }else {
+        let params = {
+          communityId: this.$route.params.communityId,
+          page: page,
+          pageCount: pageSize,
+          sort: this.userSort,
+        }
       }
 
       this.pagination.busy = true
       let res = ''
       if (this.showType) {
-        res = await this.getCirclesList(params)
+        res = await this.getLessMsgList(params)
+
+        console.log('=====',res)
       } else {
         res = await this.getCommunicationsList(params)
-      }
-      const {circles, lists, total} = res
 
-      const temp = new Array(...(this.showType ? circles : lists))
+        console.log(res)
+      }
+      const {courses, lists, total} = res
+
+      const temp = new Array(...(this.showType ? courses : lists))
       temp.forEach((item) => {
         if (item['modelType'] === 'problem') {
           item['answers'].forEach((answer) => {
@@ -748,6 +747,11 @@
      */
     async handlePullup (loaded) {
 
+
+      if(this.showType === 1){
+        loaded('ended')
+        return
+      }
 
       await this.loadNext()
       if (this.pagination.end) {
@@ -834,10 +838,8 @@
      */
     handleTapCard (item) {
         console.log(item)
-        return
         let url = ''
         if(item && item.isCourse == 3){
-          //if()
           url = `/introduce2/${item.communityId}/community`
         }else {
           url = `/introduce/${item.communityId}/community`
@@ -885,8 +887,13 @@
     /**
      * 获取相关推荐
      */
-    getLessMsgList (communityId){
-      console.log('=-=-=-==',communityId)
+    getLessMsgList (data){
+      return getLessMsgApi(data)
+    }
+
+    // 课程 列表分页操作
+    getLessPage (type) {
+      console.log('=-=-=-==',type)
       let data = {
         id: communityId,
         page : 1,
@@ -900,24 +907,6 @@
       },res=>{
         console.log('1111',res)
       })
-    }
-
-    // 课程 列表分页操作
-    getLessPage (type) {
-      console.log('=-=-=-==',type)
-      /*let data = {
-        id: communityId,
-        page : 1,
-        pageCount: 10,
-        sort: this.lessSort,
-        sortNum: '0'
-      }
-      getLessMsgApi(data).then(res=>{
-        console.log('1111',res)
-        this.courseList = res.courses
-      },res=>{
-        console.log('1111',res)
-      })*/
     }
 
     lessSetSort (){

@@ -463,7 +463,7 @@ export default class HomeIndex extends Vue {
    * 点击卡片
    */
   handleTapCard (item) {
-    console.log(item.course)
+    console.log(item.isCourse)
     let url = ''
     if (item.isAuthor === 1 || item.isJoined === 1) { 
       //如果已经加入并且已入社跳转到入社后页面

@@ -9,17 +9,14 @@
       </span>
       <div v-if='type!==1' class="master">
         <p class="name" :class="{ round: type === 1 }">
-          <!--<span class="text" v-text="community.master && community.master.realName"></span>-->
           <span class="text" v-text="community.master && community.masterIntro"></span>
         </p>
-        <!--<span v-if="community.master && community.master.career">/</span>
-        <p class="career" v-text="community.master && community.master.career"></p>-->
       </div>
       <slot name="cover-addon"></slot>
     </div>
     <!--灯塔头部-->
 
-    <div v-if="isEntentr" class="info" :class="{ 'type-2': type === 2 }">
+    <div v-if="isEntentr && isCommunty" class="info" :class="{ 'type-2': type === 2 }" >
       <h3 class="title" v-text="community.title"></h3>
       <p class="desc" v-text="community.simpleIntro"></p>
       <div class="bottom">
@@ -57,6 +54,11 @@ import Component from 'vue-class-component'
 @Component({
   name: 'community-card',
   props: {
+    // 类型：1为列表页卡片，2为详情页卡片
+    isCommunty: {
+      type: Boolean,
+      default: false
+    },
     // 大咖信息
     community: {
       type: Object,
@@ -261,7 +263,6 @@ export default class CommunityCard extends Vue {
 					}
 			}
 			/*新增*/
-
       .master {
         padding-bottom: 10px;
         overflow: hidden;
@@ -269,20 +270,15 @@ export default class CommunityCard extends Vue {
         white-space: nowrap;
       }
     }
-
     .info {
       padding: 0 20px;
     }
   }
 
   &.z-unread {
-
     .cover-container {
-
       .master {
-
         .name {
-
           &::after {
             content: " ";
           }
@@ -304,7 +300,6 @@ export default class CommunityCard extends Vue {
     .master {
     	display: flex;
     	justify-content: center;
-    	/*flex-wrap: nowrap;*/
     	align-items: center;
 	    width: 90%;
       margin: 0 auto;
@@ -313,16 +308,6 @@ export default class CommunityCard extends Vue {
       padding-top: 32px;
       color: #666666;
       line-height: 16px;
-      /*position: absolute;
-      top: 130px;
-      left: 50%;*/
-      /*right: 0;*/
-      /*bottom: 0;*/
-     	/*transform: translateX(-50%);*/
-      /*background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .2));*/
-      /*width: 100%;*/
-      
-
       .name {
       	white-space: nowrap;
         display: inline-block;
@@ -332,9 +317,7 @@ export default class CommunityCard extends Vue {
         font-size: 0;
         font-weight: normal;
         max-width: 100%;
-        
         padding-right:2px;
-
         .text {
           display: inline-block;
           

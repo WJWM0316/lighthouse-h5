@@ -2,32 +2,35 @@
 <template>
   <a href="#" class="m-community" :class="cardClasses" @click.prevent.stop="handleTap">
   	<!--灯塔头部-->
-    <div class="cover-container">
+    <div class="cover-container" :class="{ 'type-2': type === 2 }">
       <!-- <image-item v-if='type !==1' class="cover" :src="community.detailImg" mode="full" /> -->
 
-      <div class="cover"></div>
+      <div class="cover" v-if="community.isCourse == 2"></div>
+      <image-item v-else class="cover" :src="community.detailImg" mode="full" />
+
       <span class="header-photo">
       	<img :src="community.icon"/>
       </span>
 
-      <!-- <div v-if='type!==1' class="master">
+      <div  class="master" v-if="type !== 1 && community.isCourse === 2 ">
         <p class="name" :class="{ round: type === 1 }">
           <span class="text" v-text="community.master && community.masterIntro"></span>
         </p>
-      </div> -->
+      </div>
 
       <slot name="cover-addon"></slot>
     </div>
     <!--灯塔头部 v-if="isEntentr" -->
 
     <div class="info" :class="{ 'type-2': type === 2 }">
-      <h3 class="title" v-text="community.title"></h3>
-      <p class="desc" v-text="community.simpleIntro && community.masterIntro"></p>
-      <p class="timeMsg" v-if="isCommunityIntroduce">
+      <h3 class="title" v-text="community.title" :class=""></h3>
+      <p class="desc" v-text="community.simpleIntro"></p>
+
+
+      <p class="timeMsg" v-if=" community.isCourse == 2">
         <span>开塔时间：</span>
         {{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}</p>
       <div class="bottom" v-else>
-        
         <div class="left" v-if="community.joinedNum>0">
             <p class="residue">
               <span class="number">{{community.joinedNum}}</span> 
@@ -46,7 +49,7 @@
         </div>
         <div class="right" >
 
-          <template v-if="lightType == 1">
+          <template v-if="community.isCourse != 2 ">
             <p class="to_description" @click.prevent.stop="goTointroduceDetail">课程介绍
               <img class="to_img" src="../../assets/icon/bnt_arrow_int@3x.png"/>
             </p>
@@ -88,21 +91,11 @@ import Component from 'vue-class-component'
       type: Boolean,
       default: false
     },
-    //灯塔类型。1 课程。 2旧课程。 3 社区
-    lightType: {
-      type: Number,
-      default: 1
-    },
 
     // 类型：1为列表页卡片，2为详情页卡片
     type: {
       type: Number,
       default: 1
-    },
-
-    type2: {
-      type: Number,
-      default: 2
     },
     
     // 类型：true是未加入页，false是加入页
@@ -276,6 +269,18 @@ export default class CommunityCard extends Vue {
     }
     .info {
       padding: 0 20px;
+    }
+  }
+
+  .type-2 {
+    .info {
+      .title {
+        text-align: left;
+      }
+
+      .desc {
+        text-align: left;
+      }
     }
   }
 
