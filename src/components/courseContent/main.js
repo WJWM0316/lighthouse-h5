@@ -47,12 +47,13 @@ export default class dynamicItem extends Vue {
   //去课节
   toDetails (item) { //
     console.log(item)
-    const {id} = item
+    let {id} = item
+    let isTry = item.courseType == 2 ? 1: 0
     /*if (isCanSee === 0) {
       this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return
     }*/
-    this.$router.push({path:`/Lesson?id=${id}`})
+    this.$router.push({ path:`/Lesson?id=${id}&isTry=${isTry}` })
   }
 
 }
