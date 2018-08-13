@@ -422,9 +422,9 @@ export const getCourseCardInfoApi = (courseId,peopleId) => {
 }
 
 //打卡编辑页任务信息
-export const getEditCourseCardDetailApi = (id) => {
+export const getEditCourseCardDetailApi = (id,communityId) => {
   return request({
-    url: `/wap/courseCard/getEditCourseCardDetail/${id}`,
+    url: `/wap/courseCard/getEditCourseCardDetail/${id}?communityId=${communityId}`,
     type:'get'
   })
 }

@@ -36,11 +36,12 @@
                 <i class="hot-icon"><img src="../../assets/icon/tab-massage-3@3x.png" alt=""></i>全部评论
               </div>
               <discuss-item 
-                          :item="item"
-                          :key="index"
-                          :itemIndex="index"
-                          :showDelBtn="true"
-                          @operation="operation"></discuss-item>
+                  :item="item"
+                  :key="index"
+                  :itemIndex="index"
+                  :showDelBtn="true"
+                  @operation="operation">
+              </discuss-item>
             </div>
             <div v-if="allTotal === 0">
               <p class="community-empty-desc fs13">成为第一个评论的人吧~</p>
@@ -370,10 +371,11 @@
 
       const params = {
         sourceId: commentId || circleId || problemId,     // 对应评论类型id
-        sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
+//      sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
         content: value       // 评论内容
       }
       
+      await courseCardCommentApi()
       await setSubmitCommentApi(params).then(data => {
         this.commentIndex = -1
         let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
