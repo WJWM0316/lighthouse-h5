@@ -14,6 +14,9 @@ import moment from 'moment'
       type: String,
       default: 'asc'
     },
+    communityId: {
+      type: String,
+    },
   },
   computed: {
 
@@ -53,7 +56,7 @@ export default class dynamicItem extends Vue {
       this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return
     }*/
-    this.$router.push({ path:`/Lesson?id=${id}&isTry=${isTry}` })
+    this.$router.push({ path:`/Lesson?id=${id}&isTry=${isTry}&communityId=${this.communityId}` })
   }
 
 }

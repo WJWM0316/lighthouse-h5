@@ -12,57 +12,28 @@
     <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- header -->
       <div class="header">
-      	
       	<!--详情页头部组件-->
-        <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false">
-        	<!--介绍-->
-          <!--<router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon">
-            介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />
-          </router-link>-->
-          
-          <!--<router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon-more">:to="{name: 'introduce-more'}"-->
-      		<div :starTime="starTime" @click.stop="toMore()" class="addon-text" slot="cover-addon-more">
-             <img class="icon" src="../../assets/icon/bnt_more@3x.png" />
-          </div>
-        </community-card>
+        <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false"></community-card>
         <!--详情页头部组件-->
-
         <div class="share-group">
-          <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
-          <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button>
-          <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">分享赚¥{{pageInfo.sellPrice}}</button>
-          <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
+          <div class="group_wrap">
+            <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
+            <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button> 
+            <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1"  @click="showSell = true">
+              ¥{{pageInfo.sellPrice}}
+            </button>
+            <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
+          </div>
+          <span class="money_other" v-if="!pageInfo.isAudit && pageInfo.isSell === 1">
+            分享赚
+            <img src="../../assets/icon/bg_share.png" />
+          </span>
         </div>
 
-        <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
-          <!--<span>邀请函</span>-->
-        <!--</div>-->
-        <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
-          <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
-        <!--</div>-->
-        <!--<div class="share-btn" v-else @click="showShare = true">-->
-          <!--<img class="share-icon" src="./../../assets/icon/icon_share.png" />-->
-          <!--<span>分享</span>-->
-        <!--</div>-->
       </div>
 
       <!-- container -->
       <div class="container">
-
-        <!-- 同学的列表 -->
-        <!--<div class="classmate-list" v-if="pageInfo.peoples && pageInfo.peoples.length > 0" @click="toMemberList">
-          <div class="flex-1">
-            <img :src="item['avatar']" v-for="(item, index) in pageInfo['peoples']" v-if="index < 6" />
-            <img src="./../../assets/icon/firends-call-more.png" v-else-if="pageInfo.remainingJoinNum > 7" />
-            <img :src="item['avatar']" v-else />
-          </div>
-          <div class="people-count">
-            <img class="icon" src="./../../assets/icon/member.png" />
-            <span>{{pageInfo['joinedNum']}}</span>
-            <img class="icon" src="./../../assets/icon/mypage_arrow.png" />
-          </div>
-        </div>-->
-
         <!-- 主体内容块 -->
         <div class="fixed-box" ref="community-title" v-if='pageInfo.isCourse==1'>
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
@@ -72,6 +43,25 @@
         </div>
         <div class="big-shot-community-content" >
           <div class="module-content" v-if="dynamicList && dynamicList.length > 0">
+
+            <template v-if="!showType">
+              <div class="course_top" v-if="dynamicList.length>0" :class="{'one':pageInfo.isCourse == 2}">
+                <div class="top_left">共有<span class="le_sp">{{dynamicList.length}}</span>篇帖子</div>
+                <div class="top_right" @click.prevent.stop="setSort">
+                  <img class='right_icon' src="./../../assets/icon/bnt_order@3x.png"/>
+                  <span v-if="userSort == 1">倒序</span>
+                  <span v-else>正序</span>
+                </div>
+              </div>
+              <div class="recommend_list" v-if="topList.length>0" v-for="item,index in topList">
+                <div class="rem_blo" @click.stop="toDetails(index)">
+                  <img class='blo_icon' src="./../../assets/icon/icon_topping@3x.png"/>
+                  <p class="blo_tit">{{item.tit}}{{item.content}}</p>
+                </div>
+              </div>
+            </template>
+
+            
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
                      :isNeedHot="true"
@@ -82,6 +72,8 @@
                      :isTeacher="isPlayList"
                      :isTower='true'
                      @disableOperationEvents="operation"
+                     @opMember="opMember"
+
             ></dynamic>
           </div>
           <div class="blank" v-else>
@@ -133,6 +125,9 @@
 
     <actionsheet v-model="releaseActionsheet.show" :menus="pageInfo.isCourse===1?releaseActionsheet.menus:releaseActionsheet_no.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
 
+    <!-- 帖子置顶删除 -->
+    <actionsheet v-model="userOpActionsheet.show" :menus="userOpActionsheet.menus" show-cancel @on-click-menu="handleUserOpActionsheetItem" />
+
     <div class="home-mask" v-if="showSell">
       <div class="sell-container">
         <i class="u-icon-close icon-close" @click="showSell = false"></i>
@@ -155,7 +150,7 @@
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
   import wxUtil from '@/util/wx/index'
-  import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi } from '@/api/pages/pageInfo'
+  import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi ,delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi, topPostListApi} from '@/api/pages/pageInfo'
 
   import WechatMixin from '@/mixins/wechat'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
@@ -245,7 +240,17 @@
     }
     
     qrSrc = ''
-    
+
+    userOpActionsheet = {
+      show: false,
+      menus: [{
+        label: '删除',
+        value: '3'
+      }]
+    }
+    topList = []  //置顶列表
+    relevantList = [] //相关推荐
+    userSort = 1   //学员排序
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
 				let nowCommunity=sessionStorage.getItem("nowCommunity");
@@ -267,16 +272,7 @@
 			}
 			
 			//是否从列表页进来
-//  		if( from.path==="/joined" || 
-//        from.path==="/index" || 
-//        from.path==="/advertising/115" || 
-//        from.path==="/advertising/116" || 
-//        from.path==="/advertising/117" || 
-//        from.name==="userInfo-details")
-//      {
-//        to.meta.keepAlive = false;
-//        console.log(to,"我是当前路由信息")
-//      }
+
 			
 			next();
    }
@@ -298,7 +294,7 @@
     	console.log("5555555555555555",this.$route.query);
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
-//      this.type = this.$route.query.type
+
       }
       console.log('this.showType', this.showType)
       wxUtil.reloadPage()
@@ -350,14 +346,15 @@
 	        this.dynamicList = []
 
 	        this.showType = type
-//	        debugger
 	        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-//	        debugger
 	        this.showIdentification = !type
 	
 	        this.pagination.end = false // 初始化数据，必定不是最后一页
 	        this.getList({page: 1}).then(() => {})
         }
+
+        this.getRecommendList(communityId)
+        this.getTopList(communityId)
      })
        
     }
@@ -629,7 +626,6 @@
      * 获取朋友圈列表
      **/
     getCirclesList (params) {
-
 					return getCirclesApi(params)
     }
     /**
@@ -650,10 +646,15 @@
       }
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
+
       const params = {
         communityId: this.$route.params.communityId,
         page: page,
-        pageCount: pageSize
+        pageCount: pageSize,
+      }
+
+      if(!this.showType){
+        params.sort = this.userSort
       }
 
       this.pagination.busy = true
@@ -757,12 +758,214 @@
         this.isCommunityTitleFixed = scrollTop >= communityTitleTop
       }
     }
+
+
+    /**
+     * 获取相关推荐
+     */
+    getRecommendList(communityId){
+      let data = {
+        communityId: communityId,
+      }
+      getRecommendApi(data).then(res=>{
+        console.log(res)
+        this.relevantList = res
+      })
+    }
+    //置顶列表
+    getTopList(communityId){
+      if(communityId){
+        topPostListApi({communityId: communityId}).then((res)=>{
+          if(res.length>0){
+            let tit = ''
+            for(let i = 0;res.length>i;i++){
+              tit = ''
+              switch (res[i].circleType) {
+                case 1:
+                  tit = '【音频】'
+                  break
+                case 2:
+                  tit = '【视频】'
+                  break
+                case 3:
+                  tit = '【图片】'
+                  break
+                case 4:
+                  tit = '【文件】'
+                  break
+              }
+              res[i].tit = tit
+            }
+          }
+          this.topList = res
+        })
+      }
+    }
+
+    setSort(){
+      this.userSort = this.userSort == 1? 2 : 1
+      this.pagination.end = false
+      this.pagination.busy = false
+      this.getList({page: 1})
+    }
+
+    opMember(e){
+      console.log('=-=-=',e)
+      this.userOpActionsheet.show = true
+      this.userOpActionsheet.menus = e.menus
+      this.nowUserOpItem = e.item
+    }
+
+    handleUserOpActionsheetItem (key, item) {
+      switch (key) {
+        case '1':
+          this.topOp()
+          break
+        case '2':
+          this.topOp()
+          break
+        case '3':
+          this.delMsg()
+          break
+        default:
+          break
+      }
+    }
+    /**
+     * 帖子置顶 or op
+     */
+    topOp(){
+      console.log(this.nowUserOpItem)
+      let data = {
+        communityId: this.communityId,
+        postId: this.nowUserOpItem.circleId
+      }
+      let that = this
+      let nowItem = this.nowUserOpItem
+      let topPostStatus = nowItem.topPostStatus
+
+      if(topPostStatus == 0){
+        addTopApi(data).then(res=>{
+          that.opTopList(1,nowItem)
+          that.dynamicList[nowItem.itemIndex].topPostStatus = !that.dynamicList[nowItem.itemIndex].topPostStatus
+          that.nowUserOpItem = {}
+        },res=>{
+          this.$vux.toast.text('失败', res.message)
+        })
+      }else {
+        delTopApi(data).then(res=>{
+          that.opTopList(2,nowItem)
+          that.dynamicList[nowItem.itemIndex].topPostStatus = !that.dynamicList[nowItem.itemIndex].topPostStatus
+          that.nowUserOpItem = {}
+        },res=>{
+          this.$vux.toast.text('失败', res.message)
+        })
+      }
+    }
+
+    /**
+     * 点击卡片
+     */
+    handleTapCard (item) {
+        console.log(item)
+        let url = ''
+        if(item && item.isCourse == 3){
+          url = `/introduce2/${item.communityId}/community`
+        }else {
+          url = `/introduce/${item.communityId}/community`
+        }
+        this.$router.push(url)
+    }
+
+    delMsg(){
+      console.log(this.nowUserOpItem)
+      if(this.nowUserOpItem.modelType === 'post'){
+        let that = this
+        let data = {
+          id: this.nowUserOpItem.circleId,
+          modelType : 'post'
+        }
+        deltePostApi(data).then(res=>{
+
+        },res=>{
+          this.$vux.toast.text('删除失败', res.message )
+        })
+      }
+      //。删除帖子todo
+    }
   }
 </script>
 <style lang="less" scoped type="text/less">
   @import "../../styles/variables";
   @import "../../styles/mixins";
 
+  .recommend_list {
+    padding-left: 20px;
+    .rem_blo {
+      height: 50px;
+      border-bottom: 1px solid #cccccc;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      .blo_icon {
+        height: 20px;
+        width: 20px;
+        background:rgba(255,226,102,1);
+        border-radius: 50%;
+        margin-right: 8px;
+
+      }
+      .blo_tit {
+        flex: 1;
+        font-size: 16px;
+        font-family: PingFangSC-Light;
+        color: rgba(53,64,72,1);
+        line-height: 20px;
+      }
+      .blo_icon_to {
+        height: 15px;
+        width: 15px;
+        margin-left: 2px;
+        margin-right: 20px;
+      }
+    }
+  }
+  .course_top {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 14px;
+    font-family: PingFangSC-Light;
+    align-items: center;
+    margin: 0 15px 0px 20px;
+    &.one {
+      background:rgba(249,249,249,1);
+      padding: 0 15px 0px 20px;
+      margin: 0;
+    }
+    .top_left {
+      color: rgba(146,146,146,1);
+      line-height: 40px;
+      .le_sp {
+        color: #D7AB70;
+      }
+    }
+    .top_right {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      color: #D7AB70;
+      .right_icon {
+        background: rgba(255,255,255,0.01);
+        margin-right: 3px;
+        width: 15px;
+        height: 15px;
+      }
+    }
+  }
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
@@ -829,31 +1032,58 @@
       .share-group {
         position: absolute;
         right: 10px;
-        top: 15px;
-        background: #fff;
+        top: 25px;
         line-height: 1;
         font-size: 0;
-        border-radius: 18px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
-        overflow: hidden;
         z-index: 99;
+        border-radius: 16px;
+        .group_wrap {
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
+          border-radius: 16px;
+          background: #fff;
+        }
+        .money_other {
+          width: 60px;
+          height: 23px;
+          position: absolute;
+          right: 0;
+          top: -20px;
+          border-raidus: 40px;
+          font-size:12px;
+          font-family:PingFangSC-Regular;
+          color:rgba(53,64,72,1);
+          line-height:18px;
+          text-align: center;
+          z-index: 100;
 
+          img {
+            width: 60px;
+            height: 23px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: -1;
+          }
+        }
         &.fixed {
           position: fixed;
         }
 
         .u-btn {
           position: relative;
-          line-height: 22px;
+          line-height: 18px;
           font-size: 13px;
           color: @font-color-default;
 
           &:first-child {
-            padding: 7px 12px 7px 15px;
+            padding: 8px 12px 6px 15px;
           }
 
           &:last-child {
-            padding: 7px 15px 7px 12px;
+            padding: 8px 15px 6px 12px;
           }
 
           &.home,
@@ -864,13 +1094,18 @@
               background: #f1f1f1;
             }
           }
-
+          &.type_2 {
+            padding: 8px 10px 6px 12px;
+          }
+          &.type_3 {
+            padding: 6px 11px 6px 10px;
+          }
           &.share:after {
             content: " ";
             display: block;
             position: absolute;
             right: 100%;
-            top: 8.5px;
+            top: 8px;
             background: #d8d8d8;
             width: 1px; /* no */
             height: 18px;
@@ -879,6 +1114,7 @@
           &.invite,
           &.money {
             background: #ffe266;
+            
           }
         }
       }

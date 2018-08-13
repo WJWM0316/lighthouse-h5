@@ -15,10 +15,7 @@
       </div>
     </div>
 
-    <div class="opPageList">
-      <span @click.prevent.stop="getPage(1)">上一页</span>
-      <span @click.prevent.stop="getPage(2)">下一页</span>
-    </div>
+    <div class="getPage" @click.prevent.stop="getPage(1)" v-if="courseList.length>10" >点击加载前面内容</div>
     <!-- 列表 -->
     <div class="attempt_list" v-if="courseList.length>0">
       <div class="attempt_block"  @click.stop="toDetails(item)" v-for="item,index in courseList" 
@@ -27,18 +24,21 @@
         :itemIndex="index"
       >
         <img class='blo_left' :src="item.coverPicture"/>
-        <div class='blo_center'>{{index+1}}.{{item.title}}</div>
-        <div class='blo_right' v-if ='item.courseType == 2'>试读</div>
+        <div class='blo_center'>{{item.title}}</div>
+        <div class='blo_right' v-if ='item.courseType === 2'>试读</div>
 
         <div class="blo_right noneborder" v-else>
-          <img class='blo_right_icon' src="./../../assets/icon/icon_position@3x.png" v-if='item.courseType == 1' />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_complete@3x.png" v-else-if="true" />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else-if="true" />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_lock@3x.png" v-else />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_position@3x.png" v-if='item.statusInfo.isCurrentStudy === 1' />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_complete@3x.png" v-if="item.statusInfo.isPunchCard === 1" />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-if="item.statusInfo.isUnlock === 0 && item.statusInfo.isPunchCard !== 1" />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_lock@3x.png" v-if="item.statusInfo.isUnlock === 1" />
         </div>
         
       </div>
     </div>
+
+    <div class="getPage bottom" @click.prevent.stop="getPage(2)" v-if="courseList.length>10">点击加载后面内容</div>
+
   </div>
 </template>
 <script>
@@ -48,7 +48,27 @@
 
 <style lang="less">
   @import "./../../styles/mixins";
-
+  .getPage {
+    font-size:14px;
+    font-family:PingFangSC-Light;
+    color:rgba(188,188,188,1);
+    line-height:18px;
+    text-align: center;
+    margin-bottom: 25px;
+    &.bottom {
+      position:relative;
+      &::before{
+        content:'';
+        display:block;
+        position:absolute;
+        top:0px;
+        left:20px;
+        width:5px;
+        height:17px;
+        background-color:#ffe266;
+      }
+    }
+  }
   .opPageList {
     height: 40px;
     display: flex;

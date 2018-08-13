@@ -15,7 +15,7 @@
       	<span class="user-intro" v-if="role && role.isShow && item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
       </div>
 
-      <div class="user_op" @click.stop="op_member" v-if="isMe || role === '塔主'">
+      <div class="user_op" @click.stop="op_member" v-if="isMe === item.releaseUser.userId || role === '塔主'">
         <img class="op_img" src="./../../assets/icon/bnt_course_more@3x.png" />
       </div>
       <!--头衔-->
@@ -220,18 +220,6 @@
         </div>
       </div>
     </div>
-    <div class="user_op_cont" v-if="user_op">
-      <ul>
-        <template v-if="role === '塔主'">
-          <li class="" @click.stop="topOp" v-if="item.topPostStatus==0 ">置顶</li>
-          <li class="" @click.stop="topOp" v-else>取消置顶</li>
-        </template>
-        <li class="" @click.stop="delMsg">删除</li>
-      </ul>
-    </div>
-    
-
-    
   </div>
 </template>
 
