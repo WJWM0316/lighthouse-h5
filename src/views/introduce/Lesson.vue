@@ -31,7 +31,7 @@
           :source="communityCourse.av.files[0]" 
           :touerImg="communityCourse.av.avatarUrl"
           :isDetailCon='false'
-          ></audioBox>
+        ></audioBox>
       </div>
       <div class="module-content h5-code" @click.stop="readPic($event)" v-html="communityCourse.details">
       </div>
@@ -186,13 +186,13 @@
   	
   	//去打卡编辑页
   	toPunch(){
-		this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}`})
+			this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}`})
   	}
   	
   	//去个人打卡详情页
   	toMindDetail(peopleId,courseId){
   		console.log(peopleId,courseId,"我是个人信息")
-  		this.$router.push({path:'/PunchDetails',query:{courseId:courseId.courseId,peopleId:peopleId}});
+  		this.$router.push({path:'/PunchDetails',query:{courseId:courseId.courseId,peopleId:peopleId.peopleId}});
   	}
   	
   	//去打卡内容列表页
@@ -287,8 +287,7 @@
   			page:0,
   			pageCount:0
   		}
-  		Promise.all([
-  			lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{
+  		Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{//,getCourseCardListApi(parama)
 //			console.log(res,"请求回来的数据")
   			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse

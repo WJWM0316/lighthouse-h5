@@ -184,6 +184,7 @@
     isGetList = true // 检测是否需要重新请求列表
     musicList = [] // 本地记录播放列表 用来累加
     mounted () {
+    	console.log(this.$root,"000000000000000000000000000000")
       this.curCircleId = this.circleId
       this.audio = this.$root.$children[0].audio
     }
