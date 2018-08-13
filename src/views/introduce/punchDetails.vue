@@ -13,6 +13,7 @@
          :isLesson="false"
          :disableContentClick="false"
          :hideCommentArea="true"
+         @disableOperationEvents="operation"
       ></lessondynamicItem>
         </div>
     
@@ -156,12 +157,14 @@
     }
     // ------------------- 评论区 ----------------------
     operation (e) {
-    	const {eventType, parama} = e
-//    const {eventType, itemIndex, item, commentType, isDetail} = e
+    	console.log(e,"我是带回来的数据")
+    	const {eventType, param} = e
+////    const {eventType, itemIndex, item, commentType, isDetail} = e
       switch (eventType) {
         case 'comment':
           // :todo 评论请求
-          this.courseCardCommentApi(parama).then()
+          this.comment(param).then()
+//        this.courseCardCommentApi(parama).then()
           break
         case 'praise':
           this.praise({item, itemIndex, commentType}).then()
@@ -196,12 +199,13 @@
      * @param itemIndex
      * @returns {Promise.<void>}
      */
-    async comment ({item, itemIndex, commentType, isDetail}) {
+    async comment (item) {
+    	console.log(item,"55555555555")
       this.displaySuspensionInput = true
       this.$refs.input.$refs['suspension-input'].focus()
-      if (itemIndex > -1 && !isDetail) {
-        this.suspensionInputPlaceholder = '回复' + item.reviewer.realName + ':'
-        this.commentIndex = itemIndex
+      if (item.type === 2) {
+        this.suspensionInputPlaceholder = '回复' + item.releaseUser.realName + ':'
+//      this.commentIndex = itemIndex
       } else {
         this.suspensionInputPlaceholder = '来分享你的想法吧～'
         this.commentIndex = -1

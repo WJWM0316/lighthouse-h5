@@ -37,7 +37,7 @@
       </div>
     </div>
     <!--本节任务-->
-		<div class="Lesson-task">
+		<div class="Lesson-task" v-if="!trialReading">
 			<!--头部标题-->
 			<div class="headerBox">
 				<div class="title-pic1">
@@ -65,7 +65,7 @@
 		</div>
 		<!--本节任务结束-->
 		<!--优秀打卡区-->
-		<div class="Lesson-punch">
+		<div class="Lesson-punch" v-if="!trialReading">
 			<!--头部标题-->
 			<div class="headerBox">
 				<div class="title-pic1">
@@ -89,11 +89,12 @@
          :hideBorder="false"
          :isLesson="true"
          :disableContentClick="false"
+         @disableOperationEvents="operation"
       ></lessondynamicItem>
       <div class="Expand-btn" @click.stop="toPunchList('excellent')">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
 		</div>
 		<!--所有打卡区-->
-		<div class="all-punch">
+		<div class="all-punch" v-if="!trialReading">
 			<div class="Excellent-punch">
 				<div class="Excellent-punch-title">所有打卡</div>
 			</div>
@@ -108,12 +109,13 @@
          :hideBorder="false"
          :isLesson="true"
          :disableContentClick="false"
+         @disableOperationEvents="operation"
       ></lessondynamicItem>
       <div class="Expand-btn all-show" @click.stop="toPunchList('all')">查看所有打卡 <span>({{peopleCourseCardList.length}})</span></div>
 		</div>
 		
 		<!--底部打卡按钮区-->
-		<div class="Lesson-footer" v-if="isPunch !== 0">
+		<div class="Lesson-footer" v-if="isPunch === 0">
 			<div class="toPunch" @click.stop="toPunch">
 				去打卡
 			</div>
@@ -173,6 +175,8 @@
     //优秀打卡
     excellentPunchList = ""
     
+    //是否试读
+    trialReading = 0 //0是非试读， 1是试读
     
     //最新课节信息
     communityCourse = ''
@@ -234,15 +238,56 @@
 	    this.video.play()
   	}
   	
+  	/**
+     * 操作事件
+     * @param e :{eventType} eventType: 事件名称 itemIndex: 触发对象下标
+     */
+    operation (e) {
+      const {eventType} = e
+
+      if (this.disableOperationArr && this.disableOperationArr.length > 0) {
+        if (this.disableOperationArr.indexOf(eventType) > -1) {
+          this.$emit('disableOperationEvents', {
+            eventType,
+            itemIndex,
+            isDetail: true
+          })
+          return
+        }
+      }
+
+      const item = this.item
+
+      switch (eventType) {
+        case 'comment':
+          break
+        case 'praise':
+          this.praise({item, itemIndex}).then()
+          break
+        case 'del':
+          this.del({item, itemIndex}).then()
+          break
+        case 'previewImage':
+          this.wechatPreviewImage(e).then()
+          break
+        case 'fileOpen':
+          window.location.href = e.url
+          break
+      }
+    }
+
+  	
   	created(){
-  		Promise.all([lessonContentApi(),getCourseCardListApi()]).then((res)=>{
-  			console.log(res,"请求回来的数据")
+  		this.trialReading = this.$route.isTry
+  		Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi()]).then((res)=>{
+//			console.log(res,"请求回来的数据")
   			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse
   			this.peopleCourseCardList = res[1].peopleCourseCardList
   			this.excellentPunchList = res[1].excellentPeopleCourseCardList
+  			this.isPunch = res[0].peppleCardInfo.isPunchCard
   		}).catch((e)=>{
-  			console.log(e,"3333333333333333333")
+  			console.log(e,"返回报错")
   		})
   	}
   	
