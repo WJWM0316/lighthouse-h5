@@ -26,10 +26,10 @@
         </div>
       </div>
       <!-- 音频 -->
-      <div :class="{'content-audio': true, 'not-played': !item.files[0].isPlayed}" v-if="communityCourse.av && communityCourse.av.type==='voice'">
+      <div :class="{'content-audio': true, 'not-played': !communityCourse.av.files[0].isPlayed}" v-if="communityCourse.av && communityCourse.av.type==='voice'">
         <audioBox
-          :source="item.files[0]" 
-          :touerImg="item.files[0].avatar"
+          :source="communityCourse.av.files[0]" 
+          :touerImg="communityCourse.av.avatarUrl"
           :isDetailCon='false'
           ></audioBox>
       </div>
@@ -65,7 +65,7 @@
 		</div>
 		<!--本节任务结束-->
 		<!--优秀打卡区-->
-		<div class="Lesson-punch" v-if="!trialReading">
+		<div class="Lesson-punch" v-if="!trialReading && excellentPunchList.length>0">
 			<!--头部标题-->
 			<div class="headerBox">
 				<div class="title-pic1">
@@ -115,7 +115,7 @@
 		</div>
 		
 		<!--底部打卡按钮区-->
-		<div class="Lesson-footer" v-if="isPunch === 0">
+		<div class="Lesson-footer" v-if="isPunch !== 0">
 			<div class="toPunch" @click.stop="toPunch">
 				去打卡
 			</div>
@@ -186,7 +186,7 @@
   	
   	//去打卡编辑页
   	toPunch(){
-		this.$router.push({path:`/PunchEditing?courseId=${this.courseId}`})
+		this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}`})
   	}
   	
   	//去个人打卡详情页
@@ -279,7 +279,15 @@
   	
   	created(){
   		this.trialReading = this.$route.isTry
-  		Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi()]).then((res)=>{
+  		let parama = {
+  			communityId:"37c6b1c0995c91ab7f8f4ba92a5fdf21",
+  			courseId:this.$route.query.id,
+  			type:0,
+  			page:0,
+  			pageCount:0
+  		}
+  		Promise.all([
+  			lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{
 //			console.log(res,"请求回来的数据")
   			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse

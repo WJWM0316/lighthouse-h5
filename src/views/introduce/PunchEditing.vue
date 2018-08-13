@@ -25,7 +25,8 @@
 		<div class="showTask" @click.stop="showTask">本节打卡任务 <img src="../../assets/icon/btn_up_task@3x.png"/></div>
 		<div class="taskWindow" v-if="showTaskWindow">
 			<div class="taskhead" @click.stop="closeTask">本节打卡任务 <img src="../../assets/icon/btn_packup_task@3x.png"/></div>
-			<div class="taskbody">
+			<div class="taskbody" v-html="taskContent">
+				<!--<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
 				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
 				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
 				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
@@ -42,8 +43,7 @@
 				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
 				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
 				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
+				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>-->
 			</div>
 		</div>
 
@@ -59,6 +59,7 @@
 	import { Actionsheet } from 'vux'
 	import WechatCodeModal from '@/components/wechatCodeModal'
 	import { setCourseCardContentApi } from '@/api/pages/content'
+	import { getEditCourseCardDetailApi } from '@/api/pages/pageInfo.js'
 	import { wechatUploadFileApi } from '@/api/common'
 
 	@Component({
@@ -77,6 +78,9 @@
 			textMax: 1000, // 文本最大字数
 			imageMax: 9 // 图片最大张数
 		}
+		
+		//打卡任务内容
+		taskContent = ''
 
 		// 选择的图片列表，最多9张
 		images = []
@@ -139,6 +143,9 @@
 		}
 
 		created() {
+			getEditCourseCardDetailApi(this.$route.query.courseId).then(res=>{
+				this.taskContent = res
+			})
 			if(!this.$root.$children[0].audio.paused) {
 				this.$root.$children[0].audio.pause()
 			}
@@ -280,16 +287,16 @@
 
 				let fileId = []
 				console.log('准备发布images：', this.images)
-				if(this.addonType === 2) {
-					fileId = this.videos.map(item => item.fileId)
-				} else if(this.addonType === 3) {
+//				if(this.addonType === 2) {
+//					fileId = this.videos.map(item => item.fileId)
+//				} else if(this.addonType === 3) {
 					fileId = this.images.map(item => item.fileId)
-				}
+//				}
 				console.log('生成的fileId：', fileId)
 				const params = {
-					courseId: this.form.courseId,
+					courseId: this.$route.query.courseId,
 					cardContent: this.form.content,
-					type: this.addonType,
+					type: 3,
 					fileId: fileId,
 					globalLoading: false
 				}
