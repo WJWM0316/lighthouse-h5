@@ -248,13 +248,13 @@ export default class lessondynamicItem extends Vue {
   	}
   	
   	let param={
-  		peopleCourseId:this.item.courseId,
-  		id:this.item.peopleCourseId,
-  		commentContent:"我是评论内容",
+  		peopleCourseId:this.item.courseId, //课节id
+  		id:this.item.peopleCourseId,			 //打卡id
+  		releaseUser:this.item.releaseUser, //对应打卡信息的个人信息
   		type:1
   	}
   	
-		this.$emit('operation', {
+		this.$emit('disableOperationEvents', {
       eventType: 'comment',
       param
     })

@@ -89,6 +89,7 @@
          :hideBorder="false"
          :isLesson="true"
          :disableContentClick="false"
+         @disableOperationEvents="operation"
       ></lessondynamicItem>
       <div class="Expand-btn" @click.stop="toPunchList('excellent')">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
 		</div>
@@ -108,6 +109,7 @@
          :hideBorder="false"
          :isLesson="true"
          :disableContentClick="false"
+         @disableOperationEvents="operation"
       ></lessondynamicItem>
       <div class="Expand-btn all-show" @click.stop="toPunchList('all')">查看所有打卡 <span>({{peopleCourseCardList.length}})</span></div>
 		</div>
