@@ -392,6 +392,7 @@
 
 
     async pageInit () {
+    	console.log(this.$route.query,"dasfadsfasdfasdfasdfasd")
     	const { courseId, peopleId } = this.$route.query
       const res = await getCourseCardInfoApi(courseId,peopleId)
       this.courseCardInfo = res

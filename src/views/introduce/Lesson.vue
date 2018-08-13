@@ -31,13 +31,13 @@
           :source="communityCourse.av.files[0]" 
           :touerImg="communityCourse.av.avatarUrl"
           :isDetailCon='false'
-          ></audioBox>
+        ></audioBox>
       </div>
       <div class="module-content h5-code" @click.stop="readPic($event)" v-html="communityCourse.details">
       </div>
     </div>
     <!--本节任务-->
-		<div class="Lesson-task" v-if="!trialReading">
+		<div class="Lesson-task" v-if="trialReading === '0'">
 			<!--头部标题-->
 			<div class="headerBox">
 				<div class="title-pic1">
@@ -65,7 +65,7 @@
 		</div>
 		<!--本节任务结束-->
 		<!--优秀打卡区-->
-		<div class="Lesson-punch" v-if="!trialReading && excellentPunchList.length>0">
+		<div class="Lesson-punch" v-if="trialReading === '0' && excellentPunchList && excellentPunchList.length>0">
 			<!--头部标题-->
 			<div class="headerBox">
 				<div class="title-pic1">
@@ -94,7 +94,7 @@
       <div class="Expand-btn" @click.stop="toPunchList('excellent')">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
 		</div>
 		<!--所有打卡区-->
-		<div class="all-punch" v-if="!trialReading">
+		<div class="all-punch" v-if="trialReading === '0' && peopleCourseCardList && peopleCourseCardList.length>0">
 			<div class="Excellent-punch">
 				<div class="Excellent-punch-title">所有打卡</div>
 			</div>
@@ -115,7 +115,7 @@
 		</div>
 		
 		<!--底部打卡按钮区-->
-		<div class="Lesson-footer" v-if="isPunch !== 0">
+		<div class="Lesson-footer" v-if="isPunch === 0">
 			<div class="toPunch" @click.stop="toPunch">
 				去打卡
 			</div>
@@ -182,17 +182,17 @@
     communityCourse = ''
     
     communityId = ""
-  	isPunch = 0	//是否已经打卡
+  	isPunch = 0	//是否已经打卡0:是未打卡，1是打卡
   	
   	//去打卡编辑页
   	toPunch(){
-		this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}`})
+			this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}`})
   	}
   	
   	//去个人打卡详情页
   	toMindDetail(peopleId,courseId){
   		console.log(peopleId,courseId,"我是个人信息")
-  		this.$router.push({path:'/PunchDetails',query:{courseId:courseId.courseId,peopleId:peopleId}});
+  		this.$router.push({path:'/PunchDetails',query:{courseId:courseId.courseId,peopleId:peopleId.peopleId}});
   	}
   	
   	//去打卡内容列表页
@@ -279,6 +279,7 @@
   	
   	created(){
   		this.trialReading = this.$route.query.isTry
+  		console.log(this.trialReading,"是否试读。。。。。")
   		let parama = {
   			communityId:this.$route.query.communityId,
   			courseId:this.$route.query.id,
@@ -286,8 +287,7 @@
   			page:0,
   			pageCount:0
   		}
-  		Promise.all([
-  			lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{
+  		Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{//,getCourseCardListApi(parama)
 //			console.log(res,"请求回来的数据")
   			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse
