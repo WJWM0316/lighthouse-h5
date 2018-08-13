@@ -145,7 +145,7 @@
   import Component from 'vue-class-component'
   import { Actionsheet } from 'vux'
   import dynamic from '@/components/dynamic/dynamic'
-  import CommunityCard from '@/components/communityCard'
+  import CommunityCard from '@/components/communityCard_v2'
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
@@ -408,9 +408,7 @@
 		        this.dynamicList = []
 	
 		        this.showType = type
-	//	        debugger
 		        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-	//	        debugger
 		        this.showIdentification = !type
 		
 		        this.pagination.end = false // 初始化数据，必定不是最后一页
@@ -743,9 +741,6 @@
     }
 
     scroll (e) {
-//  	e.target.scrollTop=sessionStorage.getItem("scrollTop")
-//  	e.target.scrollTop=1000;
-//  	console.log(e.target,"我是scroll信息")
       if (this.displaySuspensionInput) {
         this.displaySuspensionInput = false
       }
@@ -753,8 +748,6 @@
       const {scrollTop} = e.target
       sessionStorage.setItem('scrollTop',scrollTop);
       if (communityTitleTop) {
-//      const {scrollTop} = e.target
-//      sessionStorage.setItem('scrollTop',scrollTop);
         this.isCommunityTitleFixed = scrollTop >= communityTitleTop
       }
     }
@@ -810,7 +803,6 @@
     }
 
     opMember(e){
-      console.log('=-=-=',e)
       this.userOpActionsheet.show = true
       this.userOpActionsheet.menus = e.menus
       this.nowUserOpItem = e.item
@@ -892,6 +884,20 @@
         })
       }
       //。删除帖子todo
+    }
+
+    toDetails (index) { // 去朋友圈、帖子、问题详情
+      console.log(this.disableContentClick)
+      if (this.disableContentClick) {
+        return
+      }
+      let item = this.topList[index]
+      let {circleType, circleId} = item
+      if (circleType) {
+        // 跳转详情页 sourceId type
+        console.log('跳转详情页: ', circleId, circleType)
+        this.$router.push(`/details/${circleId}/2`)
+      }
     }
   }
 </script>
