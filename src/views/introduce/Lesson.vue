@@ -37,7 +37,7 @@
       </div>
     </div>
     <!--本节任务-->
-		<div class="Lesson-task" v-if="!trialReading">
+		<div class="Lesson-task" v-if="trialReading === '0'">
 			<!--头部标题-->
 			<div class="headerBox">
 				<div class="title-pic1">
@@ -65,7 +65,7 @@
 		</div>
 		<!--本节任务结束-->
 		<!--优秀打卡区-->
-		<div class="Lesson-punch" v-if="!trialReading && excellentPunchList.length>0">
+		<div class="Lesson-punch" v-if="trialReading === '0' && excellentPunchList && excellentPunchList.length>0">
 			<!--头部标题-->
 			<div class="headerBox">
 				<div class="title-pic1">
@@ -94,7 +94,7 @@
       <div class="Expand-btn" @click.stop="toPunchList('excellent')">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
 		</div>
 		<!--所有打卡区-->
-		<div class="all-punch" v-if="!trialReading">
+		<div class="all-punch" v-if="trialReading === '0' && peopleCourseCardList && peopleCourseCardList.length>0">
 			<div class="Excellent-punch">
 				<div class="Excellent-punch-title">所有打卡</div>
 			</div>
@@ -115,7 +115,7 @@
 		</div>
 		
 		<!--底部打卡按钮区-->
-		<div class="Lesson-footer" v-if="isPunch !== 0">
+		<div class="Lesson-footer" v-if="isPunch === 0">
 			<div class="toPunch" @click.stop="toPunch">
 				去打卡
 			</div>
@@ -182,7 +182,7 @@
     communityCourse = ''
     
     communityId = ""
-  	isPunch = 0	//是否已经打卡
+  	isPunch = 0	//是否已经打卡0:是未打卡，1是打卡
   	
   	//去打卡编辑页
   	toPunch(){
@@ -279,8 +279,9 @@
   	
   	created(){
   		this.trialReading = this.$route.query.isTry
+  		console.log(this.trialReading,"是否试读。。。。。")
   		let parama = {
-  			communityId:"37c6b1c0995c91ab7f8f4ba92a5fdf21",
+  			communityId:this.$route.query.communityId,
   			courseId:this.$route.query.id,
   			type:0,
   			page:0,

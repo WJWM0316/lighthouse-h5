@@ -294,9 +294,9 @@
 //				}
 				console.log('生成的fileId：', fileId)
 				const params = {
-					courseId: this.$route.query.courseId,
+					courseId: parseInt(this.$route.query.courseId),
 					cardContent: this.form.content,
-					type: 3,
+					type: 0,
 					fileId: fileId,
 					globalLoading: false
 				}
