@@ -1,6 +1,6 @@
 <template>
   <!-- 朋友圈动态列表项 -->
-  <div class="course_content"  @click="toDetails" v-if="courseList">
+  <div class="course_content"  v-if="courseList">
     <!-- 头部操作 -->
     <div class="course_top" v-if="courseList.length>0">
       <div class="top_left">已更新<span class="le_sp">{{courseList.length}}</span>篇</div>
@@ -14,9 +14,14 @@
         <span v-else>正序</span>
       </div>
     </div>
+
+    <div class="opPageList">
+      <span @click.prevent.stop="getPage(1)">上一页</span>
+      <span @click.prevent.stop="getPage(2)">下一页</span>
+    </div>
     <!-- 列表 -->
     <div class="attempt_list" v-if="courseList.length>0">
-      <div class="attempt_block" v-for="item,index in courseList" 
+      <div class="attempt_block"  @click.stop="toDetails(item)" v-for="item,index in courseList" 
         :item="item"
         :index="index"
         :itemIndex="index"
@@ -43,6 +48,22 @@
 
 <style lang="less">
   @import "./../../styles/mixins";
+
+  .opPageList {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    span {
+      border: 1px solid #cccccc;
+      height: 30px;
+      width: 60px; 
+      text-align: center;
+      line-height: 30px;
+      color: #cccccc;
+    }
+  }
   .course_content {
     //padding: 0 15px 20px 20px;
   }
