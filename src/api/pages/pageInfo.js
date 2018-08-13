@@ -346,10 +346,10 @@ export const lessonContentApi = (id) => {
   })
 }
 
-// 课节详情内容
-export const getCourseCardListApi = (communityId,courseId) => {
+// 优秀打卡和所有打卡列表内容
+export const getCourseCardListApi = (data) => {
   return request({
-    url: `/wap/courseCard/getCourseCardList/${communityId}/${courseId}`,
+    url: `/wap/courseCard/getCourseCardList/${data.communityId}/${data.courseId}?type=${data.type}&type=${data.page}&type=${data.pageCount}`,
     type:'get'
   })
 }
@@ -362,6 +362,16 @@ export const courseCardFavorApi = (data) => {
     data
   })
 }
+
+// 打卡评论
+export const courseCardCommentApi = (data) => {
+  return request({
+    url: `/wap/courseCard/courseCardComment`,
+    type:'post',
+    data
+  })
+}
+
 // 取消置顶
 export const delTopApi = (data) => {
   return request({
@@ -411,11 +421,10 @@ export const getCourseCardInfoApi = (courseId,peopleId) => {
   })
 }
 
-// 课节详情评论
-export const courseCardCommentApi = (data) => {
+//打卡编辑页任务信息
+export const getEditCourseCardDetailApi = (id) => {
   return request({
-    url: `/wap/courseCard/courseCardComment`,
-    type:'post',
-    data
+    url: `/wap/courseCard/getEditCourseCardDetail/${id}`,
+    type:'get'
   })
 }

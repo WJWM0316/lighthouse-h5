@@ -18,7 +18,6 @@ export const publishPostApi = data => request({
 })
 
 //打卡编辑页发布内容
-
 export const setCourseCardContentApi = data => request({
   url: '/wap/courseCard/setCourseCardContent',
   isLoading: false,
