@@ -82,7 +82,7 @@
 			<lessondynamicItem
 				 v-for="item in excellentPunchList"
 				 :item="item"
-         :showDelBtn="false"
+         :showDelBtn="true"
          :communityId="communityId"
          :isFold="true"
          :isNeedHot="true"
@@ -102,7 +102,7 @@
 			<lessondynamicItem
 				 v-for="item in peopleCourseCardList"
 				 :item="item"
-         :showDelBtn="false"
+         :showDelBtn="true"
          :communityId="communityId"
          :isFold="true"
          :isNeedHot="true"
@@ -115,7 +115,7 @@
 		</div>
 		
 		<!--底部打卡按钮区-->
-		<div class="Lesson-footer" v-if="isPunch !== 0">
+		<div class="Lesson-footer" v-if="isPunch === 0">
 			<div class="toPunch" @click.stop="toPunch">
 				去打卡
 			</div>

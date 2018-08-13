@@ -332,10 +332,11 @@ export default class lessondynamicItem extends Vue {
    * 编辑
    */
   del () {
-  	if(this.isLesson){
-  		this.$router.push(`/PunchList`);
-  		return;
-  	}
+  	this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}&communityId=${this.communityCourse.community[0].idKey}`})
+//	if(this.isLesson){
+//		this.$router.push(`/PunchList`);
+//		return;
+//	}
   }
 
   // -------------------- 页面跳转 ------------------------

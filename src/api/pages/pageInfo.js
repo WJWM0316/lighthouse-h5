@@ -428,3 +428,11 @@ export const getEditCourseCardDetailApi = (id,communityId) => {
     type:'get'
   })
 }
+
+//获取打卡评论详情
+export const getCourseCardCommentInfoApi = (id,peopleCourseId) => {
+  return request({
+    url: `/wap/courseCard/getCourseCardCommentInfo/${id}?peopleCourseId=${peopleCourseId}`,
+    type:'get'
+  })
+}

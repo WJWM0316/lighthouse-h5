@@ -365,17 +365,24 @@
       const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.dynamicList[0]
       const {commentId, problemId, circleId} = item
       let sourceType = 4
+      let type =1
       if (commentIndex < 0) {
-        sourceType = this.modelType
+      	type = 1
+//      sourceType = this.modelType
+      }else{
+      	type = 2
       }
 
       const params = {
-        sourceId: commentId || circleId || problemId,     // 对应评论类型id
-//      sourceType,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
-        content: value       // 评论内容
+      	type: type,
+      	id: this.$route.query.courseId,		//对应打卡或评论的id
+        peopleCourseId: this.$route.query.courseId,     // 对应评论类型id
+        commentContent: value       // 评论内容
       }
       
-      await courseCardCommentApi()
+      courseCardCommentApi(params).then(res=>{
+      	
+      })
       await setSubmitCommentApi(params).then(data => {
         this.commentIndex = -1
         let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
