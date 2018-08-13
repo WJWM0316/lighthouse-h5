@@ -48,7 +48,14 @@
           <!-- <div class="module-content" v-if="dynamicList && dynamicList.length > 0"> -->
             <template v-if="showType">
               
-              <course-content :courseList="dynamicList" @lessSetSort="lessSetSort" :sort="lessSort" @getLessPage="getLessPage" :communityId=communityId></course-content>
+              <course-content 
+                :courseList="dynamicList" 
+                @lessSetSort="lessSetSort" 
+                :sort="lessSort" 
+                @getLessPage="getLessPage" 
+                :communityId=communityId 
+                :lastStudy = lastStudy 
+                @toLastStudy =toLastStudy></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
                 <div class="module-title">
@@ -237,9 +244,13 @@
     suspensionInputPlaceholder = '来分享你的想法吧～'
     displaySuspensionInput = false
     courseList = []  //课节信息列表
+    getCourseData = {
+      upOrDown: ''
+    }
     topList = []  //置顶列表
     //置顶item
     nowUserOpItem = {}
+    lastStudy = {} //课节上次学到
     userOpActionsheet = {
       show: false,
       menus: [{
@@ -518,8 +529,6 @@
       }
     }
 
-    
-
     setStick(){
     }
 
@@ -671,7 +680,11 @@
           page : page,
           pageCount: pageSize,
           sort: this.lessSort,
-          sortNum: '0'
+          sortNum: '0',
+        }
+
+        if(this.getCourseData.upOrDown){
+          params.upOrDown = this.getCourseData.upOrDown
         }
       }else {
         params = {
@@ -686,12 +699,11 @@
       let res = ''
       if (this.showType) {
         res = await this.getLessMsgList(params)
+        console.log(typeof res.lastStudentCourse)
+        //this.lastStudy = typeof res.lastStudentCourse == ? res.lastStudentCourse:[]
 
-        console.log('=====',res)
       } else {
         res = await this.getCommunicationsList(params)
-
-        console.log(res)
       }
       const {courses, lists, total} = res
 
@@ -747,8 +759,6 @@
      * 上拉加载
      */
     async handlePullup (loaded) {
-
-
       if(this.showType === 1){
         loaded('ended')
         return
@@ -845,7 +855,6 @@
         }else {
           url = `/introduce/${item.communityId}/community`
         }
-        console.log(111)
         this.$router.push(url)
     }
 
@@ -877,6 +886,7 @@
      * 获取相关推荐
      */
     getRecommendList(communityId){
+      console.log(111)
       let data = {
         communityId: communityId,
       }
@@ -896,24 +906,16 @@
     // 课程 列表分页操作
     getLessPage (type) {
       console.log('=-=-=-==',type)
-      let data = {
-        id: communityId,
-        page : 1,
-        pageCount: 10,
-        sort: this.lessSort,
-        sortNum: '0'
-      }
-      getLessMsgApi(data).then(res=>{
-        console.log('1111',res)
-        this.courseList = res.courses
-      },res=>{
-        console.log('1111',res)
-      })
+      this.getCourseData.upOrDown = type==1?'ip':'down'
+      const nextPage = this.pagination.page + 1
+      this.getList({ page: nextPage })
     }
 
     lessSetSort (){
       this.lessSort = this.lessSort == 'asc' ? 'desc' : 'asc'
-      this.getLessMsgList()
+      this.pagination.end = false
+      this.pagination.busy = false
+      this.getList({page: 1})
     }
 
     setSort(){
@@ -998,6 +1000,10 @@
         console.log('跳转详情页: ', circleId, circleType)
         this.$router.push(`/details/${circleId}/2`)
       }
+    }
+
+    toLastStudy (){
+      console.log('huidaoshangci')
     }
 
     scroll (e) {
