@@ -17,6 +17,9 @@ import moment from 'moment'
     communityId: {
       type: String,
     },
+    lastStudy: {
+      type: Object,
+    }
   },
   computed: {
 
@@ -27,7 +30,10 @@ import moment from 'moment'
     },
     courseList (val) {
       this.courseList = val
-    }
+    },
+    lastStudy (val) {
+      this.lastStudy = val
+    },
   }
 })
 export default class dynamicItem extends Vue {
@@ -46,6 +52,10 @@ export default class dynamicItem extends Vue {
     })
   }
 
+  toLastStudy () {
+    this.$emit('toLastStudy')
+  }
+
   // -------------------- 页面跳转 ------------------------
   //去课节
   toDetails (item) { //
@@ -58,5 +68,7 @@ export default class dynamicItem extends Vue {
     }*/
     this.$router.push({ path:`/Lesson?id=${id}&isTry=${isTry}&communityId=${this.communityId}` })
   }
+
+
 
 }

@@ -4,7 +4,7 @@
     <!-- 头部操作 -->
     <div class="course_top" v-if="courseList.length>0">
       <div class="top_left">已更新<span class="le_sp">{{courseList.length}}</span>篇</div>
-      <div class="top_center">
+      <div class="top_center" v-if="lastStudy && lastStudy.id">
         <img class='top_icon center_icon' src="./../../assets/icon/bnt_positioning@3x.png"/>
         上次学到
       </div>
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="getPage" @click.prevent.stop="getPage(1)" v-if="courseList.length>10" >点击加载前面内容</div>
+    <div class="getPage" @click.prevent.stop="getPage(1)" v-if="courseList.length<10" >点击加载前面内容</div>
     <!-- 列表 -->
     <div class="attempt_list" v-if="courseList.length>0">
       <div class="attempt_block"  @click.stop="toDetails(item)" v-for="item,index in courseList" 
@@ -29,15 +29,15 @@
 
         <div class="blo_right noneborder" v-else>
           <img class='blo_right_icon' src="./../../assets/icon/icon_position@3x.png" v-if='item.statusInfo.isCurrentStudy === 1' />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_complete@3x.png" v-if="item.statusInfo.isPunchCard === 1" />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-if="item.statusInfo.isUnlock === 0 && item.statusInfo.isPunchCard !== 1" />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_lock@3x.png" v-if="item.statusInfo.isUnlock === 1" />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_complete@3x.png" v-else-if="item.statusInfo.isPunchCard === 1" />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else-if="item.statusInfo.isUnlock === 0 && item.statusInfo.isPunchCard !== 1" />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_lock@3x.png" v-else-if="item.statusInfo.isUnlock === 1" />
         </div>
         
       </div>
     </div>
 
-    <div class="getPage bottom" @click.prevent.stop="getPage(2)" v-if="courseList.length>10">点击加载后面内容</div>
+    <div class="getPage bottom" @click.prevent.stop="getPage(2)" v-if="courseList.length<10">点击加载后面内容</div>
 
   </div>
 </template>
