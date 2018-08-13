@@ -2,17 +2,15 @@
 <template>
   <a href="#" class="m-community" :class="cardClasses" @click.prevent.stop="handleTap">
   	<!--灯塔头部-->
-    <div class="cover-container" :class="{ 'type-2': type === 2 }">
-      <!-- <image-item v-if='type !==1' class="cover" :src="community.detailImg" mode="full" /> -->
-
-      <div class="cover" v-if="community.isCourse == 2"></div>
+    <div class="cover-container">
+      <image-item v-if='community.isCourse == 2' class="cover" :src="community.detailImg" mode="full" />
       <image-item v-else class="cover" :src="community.detailImg" mode="full" />
 
       <span class="header-photo">
       	<img :src="community.icon"/>
       </span>
 
-      <div  class="master" v-if="type !== 1 && community.isCourse === 2 ">
+      <div  class="master" v-if=" community.isCourse === 2 ">
         <p class="name" :class="{ round: type === 1 }">
           <span class="text" v-text="community.master && community.masterIntro"></span>
         </p>
@@ -22,12 +20,19 @@
     </div>
     <!--灯塔头部 v-if="isEntentr" -->
 
-    <div class="info" :class="{ 'type-2': type === 2 }">
-      <h3 class="title" v-text="community.title" :class=""></h3>
-      <p class="desc" v-text="community.simpleIntro"></p>
+    <div class="info" >
+      <template v-if="community.isJoined === 1 && community.isCourse == 2">
+        <h3 class="title2" v-text="community.title" :class=""></h3>
+      </template>
+
+      <template v-else>
+        <h3 class="title" v-text="community.title" :class=""></h3>
+        <p class="desc" v-text="community.simpleIntro"></p>
+      </template>
+      
 
 
-      <p class="timeMsg" v-if=" community.isCourse == 2">
+      <p class="timeMsg" v-if="community.isCourse == 2 && type==1">
         <span>开塔时间：</span>
         {{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}</p>
       <div class="bottom" v-else>
@@ -42,14 +47,12 @@
         </div>
 
         <div class="center"  @click.prevent.stop="toMore" v-if="community.menuPeople&&community.menuPeople.outstandingStudents.length>0">
-          <template v-for="(item, index) in community.menuPeople.outstandingStudents">
-              <img class="user_icon" :src="item.avatar" v-if="index<3" />
-              <img class="user_icon" v-if="index>3" src="../../assets/icon/firends-call-more.png"/>
-          </template>
+              <img class="user_icon" v-for="(item, index) in community.menuPeople.outstandingStudents" :src="item.avatar" v-if="index<3" />
+              <img class="user_icon jkhjk" v-if="community.joinedNum>3 && community.menuPeople.outstandingStudents.length==3" src="../../assets/icon/firends-call-more.png"/>
         </div>
         <div class="right" >
 
-          <template v-if="community.isCourse != 2 ">
+          <template v-if="community.isJoined === 1 ">
             <p class="to_description" @click.prevent.stop="goTointroduceDetail">课程介绍
               <img class="to_img" src="../../assets/icon/bnt_arrow_int@3x.png"/>
             </p>
@@ -63,11 +66,6 @@
         </div>
       </div>
     </div>
-    
-    <!--已加入灯塔标题-->
-    <!-- <div v-else class="communit-enter-title">
-    		<h3 class="title"><span @click="toMore" v-text="community.title"></span><slot name="cover-addon-more"></slot></h3>
-    </div> -->
   </a>
 </template>
 <script>
@@ -239,7 +237,7 @@ export default class CommunityCard extends Vue {
     .cover-container {
       /*头部改变新增属性*/
       position: relative;
-    	height: 150px;
+    	//height: 150px;
 			.header-photo{
 					display:block;
 					width: 110px;
@@ -259,21 +257,37 @@ export default class CommunityCard extends Vue {
             box-sizing: border-box;
 					}
 			}
-			/*新增*/
-      .master {
-        padding-bottom: 10px;
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
-      }
     }
     .info {
       padding: 0 20px;
     }
   }
 
-  .type-2 {
+  &.type-2 {
+    .cover-container {
+      margin-bottom: 30px;
+
+      .header-photo{
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        top: 45px;
+        >img{
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      } 
+      .cover {
+        width: 100%;
+        height: 101px;
+        background:rgba(242,242,242,1);
+      }
+
+    }
+    
     .info {
+      margin-bottom: 30px;
       .title {
         text-align: left;
       }
@@ -369,21 +383,6 @@ export default class CommunityCard extends Vue {
       }
     }
   }
-  
-  .communit-enter-title{
-  	text-align: center;
-  	margin-top: -20px;
-  	.title{
-  		position: relative;
-  		display: inline-block;
-  		color: #354048;
-  		font-size: 18px;
-  		line-height: 20px;
-  		text-align: center;
-  		padding: 0 12%;
-      font-weight: 700;
-  	}
-  }
 
   .info {
     .timeMsg {
@@ -399,7 +398,16 @@ export default class CommunityCard extends Vue {
       font-size: 18px;
       color: #354048;
     }
-
+    .title2{
+      display: block;
+      line-height: 20px;
+      font-weight: 600;
+      font-size: 18px;
+      color: #354048;
+      text-align: center;
+      margin-top: -20px;
+      margin-bottom: 20px;
+    }
     .desc {
       font-weight: 300;
       display: block;

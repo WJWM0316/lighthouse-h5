@@ -245,7 +245,9 @@
     displaySuspensionInput = false
     courseList = []  //课节信息列表
     getCourseData = {
-      upOrDown: ''
+      upOrDown: '',
+      sortNum: 0,
+      isToStydy: false,
     }
     topList = []  //置顶列表
     //置顶item
@@ -680,7 +682,12 @@
           page : page,
           pageCount: pageSize,
           sort: this.lessSort,
-          sortNum: '0',
+          sortNum: this.getCourseData.sortNum,
+        }
+
+        if(this.getCourseData.isToStydy){
+          params.sortNum = this.lastStudy.sort
+          //delete params.sort
         }
 
         if(this.getCourseData.upOrDown){
@@ -694,14 +701,13 @@
           sort: this.userSort,
         }
       }
-
       this.pagination.busy = true
       let res = ''
       if (this.showType) {
         res = await this.getLessMsgList(params)
-        console.log(typeof res.lastStudentCourse)
-        //this.lastStudy = typeof res.lastStudentCourse == ? res.lastStudentCourse:[]
-
+        this.lastStudy = res.lastStudentCourse 
+        this.getCourseData.sortNum = 0
+        this.getCourseData.isToStydy = false
       } else {
         res = await this.getCommunicationsList(params)
       }
@@ -886,12 +892,10 @@
      * 获取相关推荐
      */
     getRecommendList(communityId){
-      console.log(111)
       let data = {
         communityId: communityId,
       }
       getRecommendApi(data).then(res=>{
-        console.log(res)
         this.relevantList = res
       })
     }
@@ -907,6 +911,8 @@
     getLessPage (type) {
       console.log('=-=-=-==',type)
       this.getCourseData.upOrDown = type==1?'ip':'down'
+
+      console.log(this.getCourseData.upOrDown)
       const nextPage = this.pagination.page + 1
       this.getList({ page: nextPage })
     }
@@ -1003,7 +1009,10 @@
     }
 
     toLastStudy (){
-      console.log('huidaoshangci')
+      this.getCourseData.isToStydy = true
+      this.pageInit()
+      loaded('done')
+      this.getList({page: 1})
     }
 
     scroll (e) {

@@ -29,9 +29,11 @@ import moment from 'moment'
       this.sort = val
     },
     courseList (val) {
+      console.log(1111,val)
       this.courseList = val
     },
     lastStudy (val) {
+      console.log(1111,val)
       this.lastStudy = val
     },
   }

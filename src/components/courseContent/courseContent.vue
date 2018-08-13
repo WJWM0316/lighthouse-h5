@@ -4,7 +4,7 @@
     <!-- 头部操作 -->
     <div class="course_top" v-if="courseList.length>0">
       <div class="top_left">已更新<span class="le_sp">{{courseList.length}}</span>篇</div>
-      <div class="top_center" v-if="lastStudy && lastStudy.id">
+      <div class="top_center" v-if="lastStudy && lastStudy.id" @click.stop="toLastStudy()">
         <img class='top_icon center_icon' src="./../../assets/icon/bnt_positioning@3x.png"/>
         上次学到
       </div>
