@@ -19,6 +19,14 @@ import moment from 'moment'
     },
     lastStudy: {
       type: Object,
+    },
+    isIp: {
+      type: Boolean,
+      default: false
+    },
+    isDown: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -29,12 +37,22 @@ import moment from 'moment'
       this.sort = val
     },
     courseList (val) {
-      console.log(1111,val)
       this.courseList = val
     },
     lastStudy (val) {
-      console.log(1111,val)
       this.lastStudy = val
+    },
+    isIp(val){
+
+      console.log(111111,val)
+      this.isIp = val
+
+    },
+    isDown(val){
+
+      console.log(111111,val)
+      this.isDown = val
+
     },
   }
 })
@@ -64,6 +82,11 @@ export default class dynamicItem extends Vue {
     console.log(item)
     let {id} = item
     let isTry = item.courseType == 2 ? 1: 0
+
+    if(item.statusInfo.isUnlock===0){
+      this.$vux.toast.text('还没有解锁', 'bottom')
+      return
+    }
     /*if (isCanSee === 0) {
       this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return

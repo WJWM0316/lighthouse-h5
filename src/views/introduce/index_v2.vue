@@ -357,9 +357,7 @@
       }
     }
     onBridgeReady (params) {
-//      this.closeEvent()
       let self = this
-      /*eslint-disable*/
       WeixinJSBridge.invoke('getBrandWCPayRequest', {
           appId: params.appId,
           timeStamp: params.timeStamp,

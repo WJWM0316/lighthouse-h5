@@ -368,7 +368,6 @@
 
 	  // 付费成功后
 	  pageInit(){
-
 	  	console.log(1111,this.isJoinAgency)
 	  	if (this.isJoinAgency) {
 	  	  if(this.lessonData.isCourse === 3){

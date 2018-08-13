@@ -2,8 +2,8 @@
 <template>
   <a href="#" class="m-community" :class="cardClasses" @click.prevent.stop="handleTap">
   	<!--灯塔头部-->
-    <div class="cover-container">
-      <image-item v-if='community.isCourse == 2' class="cover" :src="community.detailImg" mode="full" />
+    <div class="cover-container" :class="{'community3':community.isCourse === 2}">
+      <image-item v-if='community.isCourse == 2' class="cover2" :src="community.detailImg" mode="full" />
       <image-item v-else class="cover" :src="community.detailImg" mode="full" />
 
       <span class="header-photo">
@@ -19,8 +19,7 @@
       <slot name="cover-addon"></slot>
     </div>
     <!--灯塔头部 v-if="isEntentr" -->
-
-    <div class="info" >
+    <div class="info" :class="{'community3':community.isCourse === 2}">
       <template v-if="community.isJoined === 1 && community.isCourse == 2">
         <h3 class="title2" v-text="community.title" :class=""></h3>
       </template>
@@ -125,6 +124,11 @@ import Component from 'vue-class-component'
       },
       deep: true,
       immediate: true
+    },
+
+    community(val){
+      console.log("我是触发的community",val);
+      this.community = val
     }
   }
 })
@@ -237,7 +241,7 @@ export default class CommunityCard extends Vue {
     .cover-container {
       /*头部改变新增属性*/
       position: relative;
-    	//height: 150px;
+    	height: 150px;
 			.header-photo{
 					display:block;
 					width: 110px;
@@ -263,40 +267,14 @@ export default class CommunityCard extends Vue {
     }
   }
 
-  &.type-2 {
-    .cover-container {
-      margin-bottom: 30px;
-
-      .header-photo{
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        top: 45px;
-        >img{
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-        }
-      } 
-      .cover {
-        width: 100%;
-        height: 101px;
-        background:rgba(242,242,242,1);
-      }
-
-    }
-    
-    .info {
-      margin-bottom: 30px;
-      .title {
-        text-align: left;
-      }
-
-      .desc {
-        text-align: left;
-      }
-    }
+  
+  .cover2 {
+    width: 100%;
+    height: 101px;
+    background:rgba(242,242,242,1);
   }
+  
+
 
   &.z-unread {
     .cover-container {
@@ -314,7 +292,20 @@ export default class CommunityCard extends Vue {
     position: relative;
     /*margin-bottom: 10px;*/
     /*height: 226px;*/
-
+    &.community3 {
+      margin-bottom: 30px;
+      .header-photo{
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        top: 45px;
+        >img{
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      } 
+    }
     .cover {
       width: 100%;
      	height: 90px;
@@ -385,6 +376,16 @@ export default class CommunityCard extends Vue {
   }
 
   .info {
+    &.community3 {
+      margin-bottom: 30px;
+      .title {
+        text-align: left;
+      }
+
+      .desc {
+        text-align: left;
+      }
+    }
     .timeMsg {
       font-size: 14px;
       font-family: PingFangSC-Light;

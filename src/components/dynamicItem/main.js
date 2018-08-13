@@ -400,18 +400,21 @@ export default class dynamicItem extends Vue {
           value: '2'
         })
       }
+    }
 
+    if(this.role == '塔主'|| this.isMe === item.releaseUser.userId){
       menus.push({
         label: '删除',
         value: '3'
       })
+    }
 
+    if(menus.length>0){
       item.itemIndex = itemIndex
       this.$emit('opMember', {
         item: item,
         menus,
       })
-
     }
 
 
