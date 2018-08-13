@@ -53,7 +53,7 @@
           <!-- <div class="module-content" v-if="dynamicList && dynamicList.length > 0"> -->
             <template v-if="showType">
               
-              <course-content :courseList="courseList" @lessSetSort="lessSetSort" :sort="lessSort"></course-content>
+              <course-content :courseList="courseList" @lessSetSort="lessSetSort" :sort="lessSort" @getLessPage="getLessPage"></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
                 <div class="module-title">
@@ -890,6 +890,24 @@
       },res=>{
         console.log('1111',res)
       })
+    }
+
+    // 课程 列表分页操作
+    getLessPage (type) {
+      console.log('=-=-=-==',type)
+      /*let data = {
+        id: communityId,
+        page : 1,
+        pageCount: 10,
+        sort: this.lessSort,
+        sortNum: '0'
+      }
+      getLessMsgApi(data).then(res=>{
+        console.log('1111',res)
+        this.courseList = res.courses
+      },res=>{
+        console.log('1111',res)
+      })*/
     }
 
     lessSetSort (){

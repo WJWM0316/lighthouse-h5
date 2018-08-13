@@ -184,7 +184,7 @@
   	
   	//去打卡编辑页
   	toPunch(){
-			this.$router.push({path:`/PunchEditing?courseId=${this.courseId}`})
+		this.$router.push({path:`/PunchEditing?courseId=${this.courseId}`})
   	}
   	
   	//去个人打卡详情页
