@@ -26,7 +26,7 @@
         :index="index"
         :itemIndex="index"
       >
-        <img class='blo_left' src="item.coverPicture"/>
+        <img class='blo_left' :src="item.coverPicture"/>
         <div class='blo_center'>{{index+1}}.{{item.title}}</div>
         <div class='blo_right' v-if ='item.courseType == 2'>试读</div>
 

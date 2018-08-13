@@ -747,6 +747,8 @@
      * 上拉加载
      */
     async handlePullup (loaded) {
+
+
       await this.loadNext()
       if (this.pagination.end) {
         loaded('ended')
@@ -772,7 +774,6 @@
           break
       }
     }
-
     
     /**
      * 点击置顶选项item
@@ -832,7 +833,16 @@
      * 点击卡片
      */
     handleTapCard (item) {
-        this.$router.push(`/introduce/${item.communityId}/community`)
+        console.log(item)
+        return
+        let url = ''
+        if(item && item.isCourse == 3){
+          //if()
+          url = `/introduce2/${item.communityId}/community`
+        }else {
+          url = `/introduce/${item.communityId}/community`
+        }
+        this.$router.push(url)
     }
 
     delMsg(){
@@ -1193,8 +1203,8 @@
         line-height: 1;
         font-size: 0;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
-        
         z-index: 99;
+        border-radius: 16px;
         .group_wrap {
           overflow: hidden;
           width: 100%;

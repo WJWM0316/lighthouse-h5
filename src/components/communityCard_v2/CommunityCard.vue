@@ -3,7 +3,9 @@
   <a href="#" class="m-community" :class="cardClasses" @click.prevent.stop="handleTap">
   	<!--灯塔头部-->
     <div class="cover-container">
-      <image-item v-if='type !==1' class="cover" :src="community.detailImg" mode="full" />
+      <!-- <image-item v-if='type !==1' class="cover" :src="community.detailImg" mode="full" /> -->
+
+      <div class="cover"></div>
       <span class="header-photo">
       	<img :src="community.icon"/>
       </span>

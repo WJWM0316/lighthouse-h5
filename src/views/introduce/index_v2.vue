@@ -559,7 +559,8 @@
     }
 
     toLesson (id) {
-      this.$router.push({path:`/Lesson?id=${id}`})
+
+      this.$router.push({path:`/Lesson?id=${id}&isTry=1`})
     }
     
   }
