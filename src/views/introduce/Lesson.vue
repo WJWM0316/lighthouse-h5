@@ -115,7 +115,7 @@
 		</div>
 		
 		<!--底部打卡按钮区-->
-		<div class="Lesson-footer" v-if="isPunch === 0">
+		<div class="Lesson-footer" v-if="isPunch !== 0">
 			<div class="toPunch" @click.stop="toPunch">
 				去打卡
 			</div>
@@ -186,7 +186,7 @@
   	
   	//去打卡编辑页
   	toPunch(){
-			this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}`})
+			this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}&communityId=${this.communityCourse.community[0].idKey}`})
   	}
   	
   	//去个人打卡详情页

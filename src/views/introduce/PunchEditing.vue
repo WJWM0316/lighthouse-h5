@@ -25,7 +25,7 @@
 		<div class="showTask" @click.stop="showTask">本节打卡任务 <img src="../../assets/icon/btn_up_task@3x.png"/></div>
 		<div class="taskWindow" v-if="showTaskWindow">
 			<div class="taskhead" @click.stop="closeTask">本节打卡任务 <img src="../../assets/icon/btn_packup_task@3x.png"/></div>
-			<div class="taskbody" v-html="taskContent">
+			<div class="taskbody" v-html="taskContent.cardContent">
 				<!--<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
 				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
 				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
@@ -143,7 +143,7 @@
 		}
 
 		created() {
-			getEditCourseCardDetailApi(this.$route.query.courseId).then(res=>{
+			getEditCourseCardDetailApi(this.$route.query.courseId,this.$route.query.communityId).then(res=>{
 				this.taskContent = res
 			})
 			if(!this.$root.$children[0].audio.paused) {
@@ -298,7 +298,8 @@
 					cardContent: this.form.content,
 					type: 0,
 					fileId: fileId,
-					globalLoading: false
+					globalLoading: false,
+					communityId:this.$route.query.communityId
 				}
 
 				//发布内容
