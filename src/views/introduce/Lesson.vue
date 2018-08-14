@@ -230,6 +230,7 @@
     communityCourse = ''
     communityId = ""
   	isPunch = 0	//是否已经打卡0:是未打卡，1是打卡
+  	curPeopleInfo = ""
 
 
   	//试读。未加入相关
@@ -251,9 +252,10 @@
 				this.lessonData = res[0].couponInfo
   			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse
+  			this.curPeopleInfo = res[0].curPeopleInfo
   			this.peopleCourseCardList = res[1].peopleCourseCardList
   			this.excellentPunchList = res[1].excellentPeopleCourseCardList
-  			this.isPunch = res[0].peppleCardInfo.isPunchCard
+  			this.isPunch = res[0].peopleCardInfo.isPunchCard
   		}).catch((e)=>{
   			console.log(e,"返回报错")
   		})
@@ -461,7 +463,8 @@
   	//去个人打卡详情页
   	toMindDetail(peopleId,courseId){
   		console.log(peopleId,courseId,"我是个人信息")
-  		this.$router.push({path:'/PunchDetails',query:{courseId:this.communityCourse.id,peopleId:this.communityCourse.peopleId}});
+//		this.$router.push({path:'/PunchDetails',query:{courseId:this.item.courseId,peopleId:this.item.peopleId}});
+  		this.$router.push({path:'/PunchDetails',query:{courseId:this.communityCourse.id,peopleId:this.curPeopleInfo.id}});
 //		this.$router.push({path:'/PunchDetails',query:{courseId:courseId.courseId,peopleId:peopleId.peopleId}});
   	}
   	
