@@ -900,11 +900,16 @@
           id: this.nowUserOpItem.circleId,
           modelType : 'post'
         }
+          console.log("=-=-=-=-=-=")
         deltePostApi(data).then(res=>{
-          this.dynamicList.splice(this.nowUserOpItem.itemIndex,1)
-
+          console.log("=-=-=-=-=-=")
+          
+          console.log(res)
+          that.dynamicList.splice(that.nowUserOpItem.itemIndex,1)
+          console.log(that.dynamicList)
         },res=>{
-          this.$vux.toast.text('删除失败', res.message )
+
+          that.$vux.toast.text('删除失败', res.message )
         })
       }
       //。删除帖子todo

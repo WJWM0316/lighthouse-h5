@@ -105,6 +105,16 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     isDetailCon: {
       type: Boolean,
       default: false
+    },
+    //是否成员交流。1不是 0 是
+    isUserExchange: {
+      type: Number,
+      default: 0
+    },
+    //是否塔主
+    isMaster: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -225,7 +235,9 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     isTeacher () {},
     isMe(val){
       this.isMe = val
-    }
+    },
+    isUserExchange(){},
+    isMaster(){}
   }
 })
 export default class dynamicItem extends Vue {
@@ -388,7 +400,7 @@ export default class dynamicItem extends Vue {
 
     console.log('qweqweqweqwe',this.role,this.menus)
 
-    if(this.role == '塔主'){
+    if(this.isMaster){
       if(this.item.topPostStatus == 0){
         menus.push({
           label: '置顶',

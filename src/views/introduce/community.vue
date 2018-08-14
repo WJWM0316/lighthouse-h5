@@ -871,6 +871,7 @@
 
     delMsg(){
       console.log(this.nowUserOpItem)
+      let that = this
       if(this.nowUserOpItem.modelType === 'post'){
         let that = this
         let data = {
@@ -878,9 +879,10 @@
           modelType : 'post'
         }
         deltePostApi(data).then(res=>{
-
+          console.log(res)
+          that.dynamicList.splice(that.nowUserOpItem.itemIndex,1)
         },res=>{
-          this.$vux.toast.text('删除失败', res.message )
+          that.$vux.toast.text('删除失败', res.message )
         })
       }
       //。删除帖子todo

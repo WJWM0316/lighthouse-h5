@@ -27,6 +27,7 @@
                   :isDetailCon="isDetailCon"
                   :isTower='isTower'
                   :isUserExchange="isUserExchange"
+                  :isMaster = "isMaster"
                   @videoEvent="videoEvent"
                   @operation="operation"
                   @opMember="opMember"
@@ -40,6 +41,8 @@
   import Component from 'vue-class-component'
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
   import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi } from '@/api/pages/pageInfo.js'
+  import { classmatesApi } from '@/api/pages/pageInfo';
+
   import { getInformationApi } from '@/api/pages/center'
   import WechatMixin from '@/mixins/wechat'
 
@@ -195,17 +198,22 @@
       problemIndex: -1
     }
     currentVideoIndex = -1
+    isMaster = false
+
     created () {
       console.log('allTotal', this.allTotal)
       try {
         this.model = getInformationApi().then(res=>{
-
           console.log('||||||||||||',res)
           this.isMe = res.userId
+
+          this.getMaster()
+
         })
       } catch (error) {
         this.$vux.toast.text(error.message, 'bottom')
       }
+
     }
 
     mounted () {
@@ -215,7 +223,26 @@
     destroyed () {
     }
 
-
+    getMaster(){
+      let data = {
+        communityId: this.communityId,
+        page: 1,
+        pageCount: 20,
+      }
+      let that = this
+      classmatesApi(data).then(res=>{
+        if(res.role.length>0){
+          res.role.forEach((item,index)=>{
+            console.log(item.identityAuthority)
+            if(item.identityAuthority.title === '塔主'){
+              if(that.isMe == item.userId){
+                that.isMaster = true
+              }
+            }
+          })
+        }
+      })
+    }
 
     videoEvent (e) {
       const {eventType, itemIndex} = e
