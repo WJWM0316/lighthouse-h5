@@ -235,6 +235,22 @@
 
   	//试读。未加入相关
   	lessonData = {}
+  	
+  	events = {
+  		'reFresh':()=>{
+  			let parama = {
+	  			communityId:this.$route.query.communityId,
+	  			courseId:this.$route.query.id,
+	  			type:0,
+	  			page:0,
+	  			pageCount:0
+	  		}
+  			getCourseCardListApi(parama).then(res=>{
+  				this.peopleCourseCardList = res.peopleCourseCardList
+  				this.excellentPunchList = res.excellentPeopleCourseCardList
+  			})
+  		}
+  	}
 
   	created(){
   		this.trialReading = this.$route.query.isTry
