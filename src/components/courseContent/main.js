@@ -77,11 +77,11 @@ export default class dynamicItem extends Vue {
   // -------------------- 页面跳转 ------------------------
   //去课节
   toDetails (item) { //
-    console.log(item)
+    console.log(item.statusInfo.isUnlock)
     let {id} = item
     let isTry = item.courseType == 2 ? 1: 0
 
-    if(item.statusInfo.isUnlock===0){
+    if(item.statusInfo.isUnlock===0 && item.courseType !== 2){
       this.$vux.toast.text('还没有解锁', 'bottom')
       return
     }
