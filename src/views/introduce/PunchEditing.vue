@@ -292,7 +292,9 @@
 //				if(this.addonType === 2) {
 //					fileId = this.videos.map(item => item.fileId)
 //				} else if(this.addonType === 3) {
-					fileId = this.images.map(item => item.fileId)
+					if(this.images.length>0){
+						fileId = this.images.map(item => item.fileId)
+					}
 //				}
 				console.log('生成的fileId：', fileId)
 				const params = {
