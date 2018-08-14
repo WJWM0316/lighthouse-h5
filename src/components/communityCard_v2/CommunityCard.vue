@@ -213,8 +213,8 @@ export default class CommunityCard extends Vue {
   }
 
   goTointroduceDetail(){
-    console.log(this.community);
-    this.$router.push({name: 'introduce-detail', params: {communityId: this.community}})
+    console.log(this.community)
+    this.$router.push({name: 'introduce-detail', params: {communityId: this.community.communityId}})
   }
 
   /* ---- 父组件调用函数 ---- */

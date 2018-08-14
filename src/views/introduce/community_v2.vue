@@ -91,10 +91,10 @@
                        :showDelBtn="true"
                        :isNeedHot="true"
                        :communityId="communityId"
-                       :isUser="true"
                        :showIdentification="showIdentification"
                        :disableOperationArr="disableOperationArr"
                        @disableOperationEvents="operation"
+                       @isUserExchange="showType"
                        @saveAudio="controlAudio"
                        @opMember="opMember"
               ></dynamic>
