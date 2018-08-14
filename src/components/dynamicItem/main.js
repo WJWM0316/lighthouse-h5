@@ -429,9 +429,6 @@ export default class dynamicItem extends Vue {
         menus,
       })
     }
-
-
-    
   }
 
   /**

@@ -878,14 +878,15 @@
      * 点击卡片
      */
     handleTapCard (item) {
-        console.log(item)
-        let url = ''
-        if(item && item.isCourse == 3){
-          url = `/introduce2/${item.communityId}/community`
-        }else {
-          url = `/introduce/${item.communityId}/community`
-        }
-        this.$router.push(url)
+      console.log(item)
+      let url = ''
+      if(item && item.isCourse == 3){
+        url = `/introduce2/${item.communityId}/community`
+      }else {
+        url = `/introduce/${item.communityId}/community`
+      }
+      this.$router.replace(url)
+
     }
 
     delMsg(){
