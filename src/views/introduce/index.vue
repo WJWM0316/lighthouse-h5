@@ -167,7 +167,7 @@
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import CommunityCard from '@/components/communityCard'
+  import CommunityCard from '@/components/communityCard_v2'
   import dynamic from '@/components/dynamic/dynamic'
   import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
   import {getCommunityInfoApi, countCodeApi} from '@/api/pages/pageInfo'

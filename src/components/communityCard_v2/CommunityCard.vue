@@ -295,8 +295,8 @@ export default class CommunityCard extends Vue {
     &.community3 {
       margin-bottom: 30px;
       .header-photo{
-        width: 80px;
-        height: 80px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
         top: 45px;
         >img{
