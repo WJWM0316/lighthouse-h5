@@ -332,7 +332,7 @@ export default class lessondynamicItem extends Vue {
    * 编辑
    */
   del () {
-  	this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}&communityId=${this.communityCourse.community[0].idKey}`})
+  	this.$router.push({path:`/PunchEditing?courseId=${this.item.courseId}&communityId=${this.item.communityId}`})
 //	if(this.isLesson){
 //		this.$router.push(`/PunchList`);
 //		return;

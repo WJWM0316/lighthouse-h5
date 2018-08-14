@@ -145,6 +145,8 @@
 		created() {
 			getEditCourseCardDetailApi(this.$route.query.courseId,this.$route.query.communityId).then(res=>{
 				this.taskContent = res
+			}).catch(res=>{
+				console.log(res,"报错信息");
 			})
 			if(!this.$root.$children[0].audio.paused) {
 				this.$root.$children[0].audio.pause()
@@ -290,7 +292,9 @@
 //				if(this.addonType === 2) {
 //					fileId = this.videos.map(item => item.fileId)
 //				} else if(this.addonType === 3) {
-					fileId = this.images.map(item => item.fileId)
+					if(this.images.length>0){
+						fileId = this.images.map(item => item.fileId)
+					}
 //				}
 				console.log('生成的fileId：', fileId)
 				const params = {
