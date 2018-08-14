@@ -5,7 +5,7 @@
 		<div class="Lesson-header">
 			<img class="header-photo" :src="communityCourse.coverPicture"/>
 			<div class="header-title">
-				01、围绕用户价值，最大化你的运营产出
+				{{communityCourse.title}}
 			</div>
 		</div>
 		<!--富文本区-->
@@ -192,7 +192,8 @@
   	//去个人打卡详情页
   	toMindDetail(peopleId,courseId){
   		console.log(peopleId,courseId,"我是个人信息")
-  		this.$router.push({path:'/PunchDetails',query:{courseId:courseId.courseId,peopleId:peopleId.peopleId}});
+  		this.$router.push({path:'/PunchDetails',query:{courseId:this.communityCourse.id,peopleId:this.communityCourse.peopleId}});
+//		this.$router.push({path:'/PunchDetails',query:{courseId:courseId.courseId,peopleId:peopleId.peopleId}});
   	}
   	
   	//去打卡内容列表页

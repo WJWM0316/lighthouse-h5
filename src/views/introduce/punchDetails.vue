@@ -5,7 +5,7 @@
         <div class="header">
           <lessondynamicItem
 				 :item="courseCardInfo"
-         :showDelBtn="false"
+         :showDelBtn="true"
          :communityId="communityId"
          :isFold="true"
          :isNeedHot="true"

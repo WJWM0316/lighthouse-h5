@@ -145,6 +145,8 @@
 		created() {
 			getEditCourseCardDetailApi(this.$route.query.courseId,this.$route.query.communityId).then(res=>{
 				this.taskContent = res
+			}).catch(res=>{
+				console.log(res,"报错信息");
 			})
 			if(!this.$root.$children[0].audio.paused) {
 				this.$root.$children[0].audio.pause()
