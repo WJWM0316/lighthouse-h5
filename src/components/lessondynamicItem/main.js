@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import moment from 'moment'
 import WechatMixin from '@/mixins/wechat'
-import { courseCardFavorApi, courseCardCommentApi } from '@/api/pages/pageInfo'
+import { courseCardFavorApi, courseCardCommentApi, setExcellentCourseCardApi } from '@/api/pages/pageInfo'
 
 @Component({
   name: 'lesson-dynamic-item',
@@ -144,6 +144,7 @@ import { courseCardFavorApi, courseCardCommentApi } from '@/api/pages/pageInfo'
 })
 export default class lessondynamicItem extends Vue {
   video = ''
+  evaluateWindow = false
   role = this.item.releaseUser.role || {}
   type = 0
   created () {
@@ -333,10 +334,39 @@ export default class lessondynamicItem extends Vue {
    */
   del () {
   	this.$router.push({path:`/PunchEditing?courseId=${this.item.courseId}&communityId=${this.item.communityId}`})
-//	if(this.isLesson){
-//		this.$router.push(`/PunchList`);
-//		return;
-//	}
+  }
+  
+  //展开评选优秀打卡菜单
+  showEvaluate(){
+  	if(this.evaluateWindow === true){
+  		this.evaluateWindow = false
+  	}else{
+  		this.evaluateWindow = true
+  	}
+  }
+  
+  //评为优秀
+  evaluate(type){
+  	let isExcellentCard; //0:取消优秀打卡,1:选为优秀打卡
+  	if(type === 'true'){
+  		this.item.isExcellentCard = 1
+  		isExcellentCard = 1
+  		this.evaluateWindow = false
+  	}else{
+  		this.item.isExcellentCard = 0
+  		isExcellentCard = 0
+  		this.evaluateWindow = false
+  	}
+  	let parama = {
+  		communityId:this.item.communityId,
+  		peopleId:this.item.peopleId,
+  		status:isExcellentCard
+  	}
+  	setExcellentCourseCardApi(parama).then(res=>{
+  		console.log("评选成功")
+  	}).catch(res=>{
+  		console.log(res,"接口报错")
+  	})
   }
 
   // -------------------- 页面跳转 ------------------------
