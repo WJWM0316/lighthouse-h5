@@ -55,7 +55,7 @@
                 @getLessPage="getLessPage" 
                 :communityId=communityId 
                 :lastStudy = lastStudy 
-                @toLastStudy =toLastStudy 
+                @toLastStudy = toLastStudy 
                 :isIp = contentData.isIp
                 :isDown = contentData.isDown
                 ></course-content>
@@ -94,7 +94,7 @@
                        :showIdentification="showIdentification"
                        :disableOperationArr="disableOperationArr"
                        @disableOperationEvents="operation"
-                       @isUserExchange="showType"
+                       :isUserExchange="showType"
                        @saveAudio="controlAudio"
                        @opMember="opMember"
               ></dynamic>
@@ -146,7 +146,7 @@
     <actionsheet v-model="releaseActionsheet.show" :menus="pageInfo.isCourse===3?releaseActionsheet.menus:releaseActionsheet_no.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
 
 
-    <!-- 帖子置顶删除 -->
+    <!-- 交流社区帖子置顶删除 -->
     <actionsheet v-model="userOpActionsheet.show" :menus="userOpActionsheet.menus" show-cancel @on-click-menu="handleUserOpActionsheetItem" />
 
     <div class="home-mask" v-if="showSell">
@@ -683,9 +683,6 @@
       }
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
-
-
-      console.log('pageSize',this.pagination)
       let params = {}
       if(this.showType){
         params = {
@@ -729,7 +726,7 @@
           if(res.courses && res.courses.length<pageSize+1 ){
 
             console.log('this.getCourseData.upOrDown',this.getCourseData.upOrDown)
-            if(this.getCourseData.upOrDown == 'ip'){
+            if(this.getCourseData.upOrDown == 'up'){
               this.contentData.isIp = false
             }else {
               this.contentData.isDown = false
@@ -757,7 +754,6 @@
         }
       })
 
-      console.log(temp)
       if (page === 1) {
         this.dynamicList = temp
       } else {
@@ -894,16 +890,14 @@
 
     delMsg(){
       console.log(this.nowUserOpItem)
+      
       if(this.nowUserOpItem.modelType === 'post'){
         let that = this
         let data = {
           id: this.nowUserOpItem.circleId,
           modelType : 'post'
         }
-          console.log("=-=-=-=-=-=")
         deltePostApi(data).then(res=>{
-          console.log("=-=-=-=-=-=")
-          
           console.log(res)
           that.dynamicList.splice(that.nowUserOpItem.itemIndex,1)
           console.log(that.dynamicList)
@@ -944,13 +938,18 @@
     // 课程 列表分页操作
     getLessPage (type) {
       console.log('=-=-=-==',type)
-      this.getCourseData.upOrDown = type.type===1?'ip':'down'
-      const nextPage = this.pagination.page + 1
-      this.getList({ page: nextPage })
+      this.getCourseData.upOrDown = type.type===1?'up':'down'
+      this.getCourseData.sortNum = type.type===1?this.dynamicList[0].sort : this.dynamicList[this.dynamicList.length-1].sort
+      this.getList({page:2})
     }
 
     lessSetSort (){
       this.lessSort = this.lessSort == 'asc' ? 'desc' : 'asc'
+      this.contentData = {
+        isFirst: true,
+        isIp: true,
+        isDown: true
+      }
       this.pagination.end = false
       this.pagination.busy = false
       this.getList({page: 1})

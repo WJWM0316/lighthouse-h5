@@ -16,9 +16,11 @@
                    :allTotal = "allTotal"
                    :isDetailCon = 'true'
                    :isTower='true'
+                   :isUserExchange="isShowOp"
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="operation" 
                    @getUserId="getUserId"
+                   @opMember="opMember"
           ></dynamic>
         </div>
     
@@ -94,10 +96,14 @@
                       @send="sendComment"
                       ref="input"
     ></suspension-input>
+
+    <!-- 交流社区帖子置顶删除 -->
+    <actionsheet v-model="userOpActionsheet.show" :menus="userOpActionsheet.menus" show-cancel @on-click-menu="handleUserOpActionsheetItem" />
   </div>
 </template>
 <script>
   import Vue from 'vue'
+  import { Actionsheet } from 'vux'
   import Component from 'vue-class-component'
   import dynamic from '@/components/dynamic/dynamic'
   import discussItem from '@/components/discussItem/discussItem'
@@ -105,7 +111,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi } from '@/api/pages/pageInfo.js'
+  import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi,delTopApi, addTopApi,deltePostApi, } from '@/api/pages/pageInfo.js'
 
   @Component({
     name: 'all-details',
@@ -114,6 +120,7 @@
       discussItem,
       classmateItem,
       Scroll,
+      Actionsheet,
       suspensionInput
     },
     computed: {
@@ -152,6 +159,15 @@
     isFavorList = false
     isPlayList = true
     communityId = ''
+
+    isShowOp = 1
+    userOpActionsheet = {
+      show: false,
+      menus: [{
+        label: '删除',
+        value: '3'
+      }]
+    }
     created () {
       this.modelType = this.$route.params.type
       if (this.modelType == 1) {
@@ -160,7 +176,10 @@
         this.isPlayList = false
       }
       this.communityId = this.$route.query.communityId
-      this.pageInit().then(() => {})
+      if(this.$route.query.isShowOp){
+        this.isShowOp = 0
+      }
+      this.pageInit()
     }
     // ------------------- 详情评论区 ----------------------
     operationDetail () {
@@ -394,9 +413,6 @@
         this.curData = {}
       })
     } 
-      
-
-
 
     async pageInit () {
       const { sourceId, type } = this.$route.params
@@ -536,6 +552,80 @@
      */
     handlePullup (loaded) {
       this.loadNext().then(() => { loaded('done') })
+    }
+
+
+    //====== 交流社区置顶删除等操作========================
+    /**
+     * 点击置顶选项item
+     * @param {*} key
+     * @param {*} item
+     */
+    handleUserOpActionsheetItem (key, item) {
+      switch (key) {
+        case '1':
+          this.topOp()
+          break
+        case '2':
+          this.topOp()
+          break
+        case '3':
+          this.delMsg()
+          break
+        default:
+          break
+      }
+    }
+    /**
+     * 帖子置顶 or op
+     */
+    topOp(){
+      console.log(this.item)
+      let data = {
+        communityId: this.communityId,
+        postId: this.item.circleId
+      }
+      let that = this
+      let nowItem = this.item
+      let topPostStatus = nowItem.topPostStatus
+
+      if(topPostStatus == 0){
+        addTopApi(data).then(res=>{
+
+        },res=>{
+          this.$vux.toast.text('失败', res.message)
+        })
+      }else {
+        delTopApi(data).then(res=>{
+
+        },res=>{
+          this.$vux.toast.text('失败', res.message)
+        })
+      }
+    }
+
+    delMsg(){
+      
+      if(this.item.modelType === 'post'){
+        let that = this
+        let data = {
+          id: this.item.circleId,
+          modelType : 'post'
+        }
+        deltePostApi(data).then(res=>{
+          that.$router.go(-1)
+          console.log(res)
+        },res=>{
+          that.$vux.toast.text('删除失败', res.message )
+        })
+      }
+      //。删除帖子todo
+    }
+
+    opMember(e){
+      console.log('=-=-=',e)
+      this.userOpActionsheet.show = true
+      this.userOpActionsheet.menus = e.menus
     }
   }
 </script>

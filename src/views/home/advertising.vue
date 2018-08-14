@@ -147,11 +147,22 @@ export default class HomeIndex extends Vue {
    * 点击卡片
    */
   handleTapCard (item) {
-    if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
-      this.$router.push(`/introduce/${item.communityId}/community`)
+    let url = ''
+    if (item.isAuthor === 1 || item.isJoined === 1) {
+     //  如果已经加入并且已入社跳转到入社后页面
+      if(item.isCourse == 3){
+        url = `/introduce2/${item.communityId}/community`
+      }else {
+        url = `/introduce/${item.communityId}/community`
+      }
     } else { // 未入社跳到未入社页面
-      this.$router.push(`/introduce/${item.communityId}`)
+      if(item.isCourse == 3){
+        url = `/introduce2/${item.communityId}`
+      }else {
+        url = `/introduce/${item.communityId}`
+      }
     }
+    this.$router.push(url)
   }
 
 }
