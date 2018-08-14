@@ -239,6 +239,7 @@
 				const {
 					files
 				} = await wechatUploadFileApi(params)
+				alert(...files+"我是上传到微信后的服务器id")
 				// 成功后，将所有还剩下的图片对象替换
 				for(let fileIndex in files) {
 					const file = files[fileIndex]
@@ -262,6 +263,7 @@
 		 */
 		readyPublish() {
 			const localIds = this.images.map(item => item.fileUrl) || []
+			alert(...localIds+"我是要发布的图片")
 			if(localIds.length > 0) {
 				//有图片，等待图片上传完成后发布
 				this.uploadCustomImages(localIds)
