@@ -1,6 +1,6 @@
 <template>
   <!-- 朋友圈动态列表项 -->
-  <div class="course_content"  v-if="courseList">
+  <div class="course_content"  v-if="courseList && courseList.length>0">
     <!-- 头部操作 -->
     <div class="course_top" v-if="courseList.length>0">
       <div class="top_left">已更新<span class="le_sp">{{courseList.length}}</span>篇</div>
