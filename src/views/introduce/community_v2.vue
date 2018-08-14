@@ -46,6 +46,7 @@
 
         <div class="big-shot-community-content" >
           <!-- <div class="module-content" v-if="dynamicList && dynamicList.length > 0"> -->
+          <template v-if="dynamicList && dynamicList.length > 0">
             <template v-if="showType">
               
               <course-content 
@@ -69,7 +70,6 @@
                   <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
                 </div>
               </div>
-
             </template>
             <template v-else>
 
@@ -99,14 +99,13 @@
                        @opMember="opMember"
               ></dynamic>
             </template>
-            
-          <!-- </div>
+          </template>
           <div class="blank" v-else>
             <div v-if="pagination.end">
               <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
               <p>暂时没有内容～</p>
             </div>
-          </div> -->
+          </div>
         </div>
 
       </div>
@@ -878,14 +877,14 @@
      * 点击卡片
      */
     handleTapCard (item) {
-        console.log(item)
-        let url = ''
-        if(item && item.isCourse == 3){
-          url = `/introduce2/${item.communityId}/community`
-        }else {
-          url = `/introduce/${item.communityId}/community`
-        }
-        this.$router.push(url)
+      console.log(item)
+      let url = ''
+      if(item && item.isCourse == 3){
+        url = `/introduce2/${item.communityId}/community`
+      }else {
+        url = `/introduce/${item.communityId}/community`
+      }
+      this.$router.push(url)
     }
 
     delMsg(){

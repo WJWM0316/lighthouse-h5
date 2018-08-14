@@ -50,11 +50,11 @@
 				<ul class="classmateList">
 					<li class="classmatePerson" v-for="item,index in classmate" @click.prevent.stop="goUserDetail(item.userId)">
 						<div class="classmate-imgBox">
-							<img class="titleImg" :src="item.avatar"/>
-							<img class="rankImg" src="../../assets/icon/rank_1.png"/>
-							<img class="rankImg" src="../../assets/icon/rank_2.png"/>
-							<img class="rankImg" src="../../assets/icon/rank_3.png"/>
-							<div class="rankImg">4</div>
+							<img class="titleImg"  :src="item.avatar"/>
+							<img class="rankImg" v-if="index==0" src="../../assets/icon/rank_1.png"/>
+							<img class="rankImg" v-else-if="index==1" src="../../assets/icon/rank_2.png"/>
+							<img class="rankImg" v-else-if="index==2" src="../../assets/icon/rank_3.png"/>
+							<div class="rankImg" v-else>{{index+1}}</div>
 						</div>
 						<div class="classmate-master">
 							<span class="classmate-name">{{item.realName}}</span>
@@ -149,6 +149,7 @@
 		}
 
 		hintMsg2 () {
+			let that = this
 			this.$vux.confirm.show({
 				title: '完善信息',
 				content: '为了和塔友们更好的交流，请先完善你的个人信息～',
@@ -156,9 +157,10 @@
 				cancelText: '等会再说',
 			  // 组件除show外的属性
 			  onCancel () {
-			    console.log(this) // 非当前 vm
 			  },
-			  onConfirm () {}
+			  onConfirm () {
+			  	that.$router.push(`/center?come=more`)
+			  }
 			})
 		}
 
@@ -185,9 +187,16 @@
 	      }
 	      this.pagination.busy = true
 	      let res = await classmatesApi({page:page, pageCount:pageSize, communityId:id.communityId})
-	    	this.role=res.role
+	    	this.role = res.role
+
+
 	    	if (page === 1) {
 	    		this.classmate = res.peoples
+
+	    		if(res.myInformation === 0){
+	    			//资料不全
+	    			this.hintMsg2()
+	    		}
 	    	} else {
 	    		this.classmate = this.classmate.concat(res.peoples || [])
 	    	}
