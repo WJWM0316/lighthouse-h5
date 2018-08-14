@@ -15,19 +15,15 @@
       	<span class="user-intro" v-if="role && role.isShow && item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
       </div>
 
-      <div class="user_op" @click.stop="op_member" v-if="isMe === item.releaseUser.userId || role === '塔主'">
+      <div class="user_op" @click.stop="op_member" v-if="(isMe === item.releaseUser.userId || isMaster)&&!isUserExchange">
         <img class="op_img" src="./../../assets/icon/bnt_course_more@3x.png" />
       </div>
-      <!--头衔-->
-      <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
-			<!--<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career">1231324654</span>-->
 		</div>
       <!-- 内容区分 -->
       <!-- -------------------------------------------------------------- -->
 		<div :class="{right: true, border: !hideBorder}">
       <!-- 问答类型 -->
       <!-- 发表内容 -->
-      <!--<div class="publish-content problem" v-if="item.modelType == 'post'">-->
       <div class="publish-content problem" v-if="item.modelType === 'problem'">
         <div ref="circle-content">
           <p class="content-text" :class="{'ellipsis' : isFold}">问：{{item.content}}</p>

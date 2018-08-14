@@ -159,7 +159,7 @@
       //是否成员交流。1不是 0 是
       isUserExchange: {
         type: Number,
-        default: 0
+        default: 1
       }
     },
     components: {
@@ -170,11 +170,8 @@
         this.allTotal = val
       },
       dynamicList (dynamicList) {
-
-        console.log('2222',dynamicList)
         const {item, itemIndex} = this.currentPlay
         if (item.modelType && item.modelType !== dynamicList[itemIndex].modelType) {
-          console.log('暂停')
           this.music.pause()
         }
       },
@@ -185,7 +182,9 @@
         this.communityId = val
         console.log(val,'======')
       },
-      isUserExchange(){}
+      isUserExchange(val){
+        console.log(val)
+      }
 
     },
     mixins: [WechatMixin]
@@ -201,14 +200,10 @@
     isMaster = false
 
     created () {
-      console.log('allTotal', this.allTotal)
       try {
         this.model = getInformationApi().then(res=>{
-          console.log('||||||||||||',res)
           this.isMe = res.userId
-
           this.getMaster()
-
         })
       } catch (error) {
         this.$vux.toast.text(error.message, 'bottom')
@@ -217,7 +212,6 @@
     }
 
     mounted () {
-
     }
 
     destroyed () {

@@ -94,7 +94,7 @@
                        :showIdentification="showIdentification"
                        :disableOperationArr="disableOperationArr"
                        @disableOperationEvents="operation"
-                       @isUserExchange="showType"
+                       :isUserExchange="showType"
                        @saveAudio="controlAudio"
                        @opMember="opMember"
               ></dynamic>
@@ -146,7 +146,7 @@
     <actionsheet v-model="releaseActionsheet.show" :menus="pageInfo.isCourse===3?releaseActionsheet.menus:releaseActionsheet_no.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
 
 
-    <!-- 帖子置顶删除 -->
+    <!-- 交流社区帖子置顶删除 -->
     <actionsheet v-model="userOpActionsheet.show" :menus="userOpActionsheet.menus" show-cancel @on-click-menu="handleUserOpActionsheetItem" />
 
     <div class="home-mask" v-if="showSell">
@@ -894,16 +894,14 @@
 
     delMsg(){
       console.log(this.nowUserOpItem)
+      
       if(this.nowUserOpItem.modelType === 'post'){
         let that = this
         let data = {
           id: this.nowUserOpItem.circleId,
           modelType : 'post'
         }
-          console.log("=-=-=-=-=-=")
         deltePostApi(data).then(res=>{
-          console.log("=-=-=-=-=-=")
-          
           console.log(res)
           that.dynamicList.splice(that.nowUserOpItem.itemIndex,1)
           console.log(that.dynamicList)

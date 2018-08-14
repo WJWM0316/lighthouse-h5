@@ -109,7 +109,7 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     //是否成员交流。1不是 0 是
     isUserExchange: {
       type: Number,
-      default: 0
+      default: 1
     },
     //是否塔主
     isMaster: {
@@ -234,6 +234,7 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     isTeacherCon () {},
     isTeacher () {},
     isMe(val){
+      console.log(val,this.item.releaseUser)
       this.isMe = val
     },
     isUserExchange(){},
@@ -470,7 +471,15 @@ export default class dynamicItem extends Vue {
       const sourceId = circleId || problemId
       const communityId = this.communityId
       // this.$router.push({name: 'all-details', params: {sourceId, type}})
-      this.$router.push(`/details/${sourceId}/${this.type}?communityId=${communityId}`)
+
+      //成员交流详情需要显示操作栏
+      let url = ''
+      if(this.isUserExchange===0){
+        url = `/details/${sourceId}/${this.type}?communityId=${communityId}&isShowOp=${1}`
+      }else {
+        url = `/details/${sourceId}/${this.type}?communityId=${communityId}`
+      }
+      this.$router.push(url)
     }
   }
 

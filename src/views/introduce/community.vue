@@ -71,6 +71,7 @@
                      :isPlayList="isPlayList"
                      :isTeacher="isPlayList"
                      :isTower='true'
+                     :isUserExchange="showType"
                      @disableOperationEvents="operation"
                      @opMember="opMember"
 
