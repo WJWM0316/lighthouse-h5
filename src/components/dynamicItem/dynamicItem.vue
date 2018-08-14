@@ -2,7 +2,6 @@
   <!-- 朋友圈动态列表项 -->
   <div class="dynamic-item" :class="{testNoBorder: noBorder}" @click="toDetails">
 
-
     <!-- 头像 -->
     <div class="left">
       <img :src="item.releaseUser.avatar" class="user-image" @click.stop="toUserInfo(item.releaseUser.userId)" />
