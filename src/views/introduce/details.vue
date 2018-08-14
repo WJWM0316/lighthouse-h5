@@ -131,6 +131,7 @@
     },
     mixins: [ListMixin]
   })
+
   export default class introduce extends Vue {
     dynamicList = []
     commentTotal = 0
@@ -682,3 +683,5 @@
     }
   }
 </style>
+
+

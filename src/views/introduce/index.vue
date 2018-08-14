@@ -475,8 +475,10 @@
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
       }
+      
       const { code='' } = this.$route.query
       const { communityId } = this.$route.params
+
       if (code) {
         try {
           if (communityId === 'a7f79b000c990dd2658b6af10a37fe3c') { // 如果为此社区 跳转首页
@@ -522,8 +524,6 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-      
-
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
       this.qrSrc = res.sellImg

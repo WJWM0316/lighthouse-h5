@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="getPage" @click.prevent.stop="getPage(1)" v-if="courseList.length<10" >点击加载前面内容</div>
+    <div class="getPage" @click.prevent.stop="getPage(1)" v-if="isIp" >点击加载前面内容</div>
     <!-- 列表 -->
     <div class="attempt_list" v-if="courseList.length>0">
       <div class="attempt_block"  @click.stop="toDetails(item)" v-for="item,index in courseList" 
@@ -30,14 +30,14 @@
         <div class="blo_right noneborder" v-else>
           <img class='blo_right_icon' src="./../../assets/icon/icon_position@3x.png" v-if='item.statusInfo.isCurrentStudy === 1' />
           <img class='blo_right_icon' src="./../../assets/icon/icon_complete@3x.png" v-else-if="item.statusInfo.isPunchCard === 1" />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else-if="item.statusInfo.isUnlock === 0 && item.statusInfo.isPunchCard !== 1" />
-          <img class='blo_right_icon' src="./../../assets/icon/icon_lock@3x.png" v-else-if="item.statusInfo.isUnlock === 1" />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_lock@3x.png" v-else-if="item.statusInfo.isUnlock === 0 && item.statusInfo.isPunchCard !== 1" />
+          <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else-if="item.statusInfo.isUnlock === 1" />
         </div>
         
       </div>
     </div>
 
-    <div class="getPage bottom" @click.prevent.stop="getPage(2)" v-if="courseList.length<10">点击加载后面内容</div>
+    <div class="getPage bottom" @click.prevent.stop="getPage(2)" v-if="isDown">点击加载后面内容</div>
 
   </div>
 </template>
@@ -92,7 +92,7 @@
     height: 40px;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     font-size: 14px;
     font-family: PingFangSC-Light;
     align-items: center;

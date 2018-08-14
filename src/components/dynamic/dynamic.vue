@@ -26,6 +26,7 @@
                   :communityId="communityId"
                   :isDetailCon="isDetailCon"
                   :isTower='isTower'
+                  :isUserExchange="isUserExchange"
                   @videoEvent="videoEvent"
                   @operation="operation"
                   @opMember="opMember"
@@ -151,6 +152,11 @@
       isDetailCon: {
         type: Boolean,
         default: false
+      },
+      //是否成员交流。1不是 0 是
+      isUserExchange: {
+        type: Number,
+        default: 0
       }
     },
     components: {
@@ -176,6 +182,8 @@
         this.communityId = val
         console.log(val,'======')
       },
+      isUserExchange(){}
+
     },
     mixins: [WechatMixin]
   })

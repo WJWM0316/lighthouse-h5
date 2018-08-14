@@ -55,7 +55,10 @@
                 @getLessPage="getLessPage" 
                 :communityId=communityId 
                 :lastStudy = lastStudy 
-                @toLastStudy =toLastStudy></course-content>
+                @toLastStudy =toLastStudy 
+                :isIp = contentData.isIp
+                :isDown = contentData.isDown
+                ></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
                 <div class="module-title">
@@ -88,10 +91,10 @@
                        :showDelBtn="true"
                        :isNeedHot="true"
                        :communityId="communityId"
-                       :isUser="true"
                        :showIdentification="showIdentification"
                        :disableOperationArr="disableOperationArr"
                        @disableOperationEvents="operation"
+                       @isUserExchange="showType"
                        @saveAudio="controlAudio"
                        @opMember="opMember"
               ></dynamic>
@@ -244,10 +247,15 @@
     suspensionInputPlaceholder = '来分享你的想法吧～'
     displaySuspensionInput = false
     courseList = []  //课节信息列表
-    getCourseData = {
+    getCourseData = {  //朋友圈 请求参数
       upOrDown: '',
       sortNum: 0,
       isToStydy: false,
+    }
+    contentData = { //课节 请求参数
+      isFirst: true,
+      isIp: true,
+      isDown: true
     }
     topList = []  //置顶列表
     //置顶item
@@ -507,6 +515,7 @@
           }
       }
       this.pageInfo = res
+
       await this.getList({page: 1})
       this.$nextTick(() => {
       	if(this.$refs['community-title']){
@@ -675,21 +684,24 @@
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
 
+
+      console.log('pageSize',this.pagination)
       let params = {}
       if(this.showType){
         params = {
           id: this.$route.params.communityId,
-          page : page,
+          //page : page,
           pageCount: pageSize,
           sort: this.lessSort,
           sortNum: this.getCourseData.sortNum,
         }
 
+        // 当前学习需要参数
         if(this.getCourseData.isToStydy){
           params.sortNum = this.lastStudy.sort
-          //delete params.sort
         }
 
+        //那个方向翻页。不能为空。
         if(this.getCourseData.upOrDown){
           params.upOrDown = this.getCourseData.upOrDown
         }
@@ -708,6 +720,22 @@
         this.lastStudy = res.lastStudentCourse 
         this.getCourseData.sortNum = 0
         this.getCourseData.isToStydy = false
+
+        //禁止翻页
+
+        if(this.contentData.isFirst){
+          this.contentData.isFirst = false
+        }else {
+          if(res.courses && res.courses.length<pageSize+1 ){
+
+            console.log('this.getCourseData.upOrDown',this.getCourseData.upOrDown)
+            if(this.getCourseData.upOrDown == 'ip'){
+              this.contentData.isIp = false
+            }else {
+              this.contentData.isDown = false
+            }
+          }
+        }
       } else {
         res = await this.getCommunicationsList(params)
       }
@@ -873,6 +901,7 @@
           modelType : 'post'
         }
         deltePostApi(data).then(res=>{
+          this.dynamicList.splice(this.nowUserOpItem.itemIndex,1)
 
         },res=>{
           this.$vux.toast.text('删除失败', res.message )
@@ -910,9 +939,7 @@
     // 课程 列表分页操作
     getLessPage (type) {
       console.log('=-=-=-==',type)
-      this.getCourseData.upOrDown = type==1?'ip':'down'
-
-      console.log(this.getCourseData.upOrDown)
+      this.getCourseData.upOrDown = type.type===1?'ip':'down'
       const nextPage = this.pagination.page + 1
       this.getList({ page: nextPage })
     }
@@ -1010,8 +1037,14 @@
 
     toLastStudy (){
       this.getCourseData.isToStydy = true
+      this.contentData = {
+        isFirst: true,
+        isIp: true,
+        isDown: true
+      }
       this.pageInit()
-      loaded('done')
+      this.pagination.busy = false
+      this.pagination.end = false
       this.getList({page: 1})
     }
 

@@ -61,7 +61,7 @@
 							<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
 						</div>
 
-						<div class="exce_msg">
+						<div class="exce_msg" v-if="item.signIn">
 							<p class="msg_p"><span class="exce_num">{{item.signIn}}</span>次</p>
 							<p class="msg_p">优秀打卡</p>
 						</div>
@@ -157,7 +157,6 @@
 			  // 组件除show外的属性
 			  onCancel () {
 			    console.log(this) // 非当前 vm
-			    console.log(_this) // 当前 vm
 			  },
 			  onConfirm () {}
 			})
