@@ -28,7 +28,38 @@
     padding: 25px 0;
     font-size: 15px;
     padding-bottom: 0px;
+    position: relative;
     //padding-bottom: 10px;
+    .evaluate{
+      font-size: 32px;
+      color: #DBDBDB;
+      writing-mode: tb-rl;
+      position:absolute;
+      right: -14px;
+      top: 25px;
+      .evaluateWindow{
+          background-color: #FFFFFF;
+          writing-mode: lr-tb;
+          position: absolute;
+          top: 100%;
+          right: 0;
+          font-size: 16px;
+          color: #354048;
+          z-index: 9999;
+          box-shadow:0px 4px 10px 0px rgba(0,0,0,0.14);
+          border-radius:3px;
+          span{
+              display: inline-block;
+              width: 134px;
+              height: 55px;
+              text-align: center;
+              line-height: 55px;
+              &::nth-of-type(1){
+                  border-bottom: 1px solid #EDEDED;
+              }
+          }
+      }
+    }
     
     &:nth-of-type(2){
         width: 250px;

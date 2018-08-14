@@ -470,7 +470,7 @@
   	
   	//去打卡内容列表页
   	toPunchList(txt){
-  		this.$router.push(`/PunchList?toList=${txt}`);
+  		this.$router.push(`/PunchList?toList=${txt}&communityId=${this.communityCourse.community[0].idKey}&courseId=${this.communityCourse.id}`);
   		return;
   	}
   	//预览富文本图片

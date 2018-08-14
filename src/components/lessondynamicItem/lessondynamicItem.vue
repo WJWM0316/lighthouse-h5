@@ -12,6 +12,14 @@
       	<p class="user-name" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}</p>
       	<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
       </div>
+      <!--设置是否评委优秀-->
+      <div class="evaluate" v-if="item.isMaster ===1" @click.stop="showEvaluate">
+      	···
+      	<div class="evaluateWindow" v-if="evaluateWindow">
+      		<span @click.stop="evaluate('true')">选为优秀打卡</span>
+      		<span @click.stop="evaluate('false')">取消优秀打卡</span>
+      	</div>
+      </div>
       <!--头衔-->
       <!--<span class="user-career singleLine" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>-->
 			<!--<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career">1231324654</span>-->

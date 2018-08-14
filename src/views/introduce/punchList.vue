@@ -4,7 +4,7 @@
 		<lessondynamicItem
 				 v-for="item in CourseCardList"
 				 :item="item"
-         :showDelBtn="false"
+         :showDelBtn="true"
          :communityId="communityId"
          :isFold="true"
          :isNeedHot="true"
@@ -28,11 +28,19 @@
     },
 	})
 	export default class punchList extends Vue {
-		communityId = "aa111e6adee61456f37ae317570774e2"
+		communityId = ""
 		CourseCardList=""
+		page = 0 	//当前页码
 		created(){
-			
-			getCourseCardListApi().then(res=>{
+			this.communityId = this.$route.query.communityId
+			let parama = {
+  			communityId:this.$route.query.communityId,
+  			courseId:this.$route.query.courseId,
+  			type:this.$route.query.toList==="all"?2:1,
+  			page:this.page,
+  			pageCount:20
+  		}
+			getCourseCardListApi(parama).then(res=>{
 				console.log(res,this.$route.query.toList,"7777777777777777")
 				if(this.$route.query.toList === "excellent"){
 					this.CourseCardList = res.excellentPeopleCourseCardList

@@ -436,3 +436,12 @@ export const getCourseCardCommentInfoApi = (id,peopleCourseId) => {
     type:'get'
   })
 }
+
+//评选优秀或取消优秀打卡
+export const setExcellentCourseCardApi = (data) => {
+  return request({
+    url: `/wap/courseCard/setExcellentCourseCard`,
+    type:'post',
+    data
+  })
+}
