@@ -31,6 +31,11 @@ import moment from 'moment'
     total: {
       type: Number,
       default: 0,
+    },
+    //是否塔主或者嘉宾
+    isMaster: {
+      type: Boolean,
+      default: false,
     }
   },
   computed: {
@@ -43,6 +48,7 @@ import moment from 'moment'
     isIp(){},
     isDown(){},
     total(){},
+    isMaster(){},
   }
 })
 export default class dynamicItem extends Vue {

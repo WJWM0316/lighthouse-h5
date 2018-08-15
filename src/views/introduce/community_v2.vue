@@ -180,7 +180,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
 
-  import { getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi, topPostListApi, delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi } from '@/api/pages/pageInfo'
+  import { getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi, topPostListApi, delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi, classmatesApi } from '@/api/pages/pageInfo'
 
   
 	Component.registerHooks([
@@ -358,8 +358,8 @@
           startTime
         } = this.pageInfo
         const {realName, career} = master
-        this.communityId=communityId
-        this.starTime=startTime
+        this.communityId = communityId
+        this.starTime = startTime
         const str = realName ? realName + (career ? '|' + career : '') : ''
         // 页面分享信息
         this.wechatShare({
@@ -369,6 +369,9 @@
           'imgUrl': shareImg,
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
+
+        this.getMaster()
+
         
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
@@ -390,9 +393,7 @@
 	        this.pagination.end = false // 初始化数据，必定不是最后一页
 	        this.getList({page: 1})
         }
-     })
-      
-      
+      })
     }
    
    	activated(){
@@ -735,7 +736,7 @@
         if(this.getCourseData.isFirst){
           this.getCourseData.isFirst = false
         }else {
-          if(res.courses && res.courses.length<pageSize+1 ){
+          if(res.courses && res.courses.length<pageSize ){
             if(this.getCourseData.upOrDown == 'up'){
               this.getCourseData.isIp = false
             }else {
@@ -1069,6 +1070,8 @@
       }
       let that = this
       classmatesApi(data).then(res=>{
+        console.log(res)
+        return
         if(res.role.length>0){
           res.role.forEach((item,index)=>{
             if(item.identityAuthority.title === '塔主'){
