@@ -525,9 +525,17 @@ export default class App extends Vue {
 
 <style lang="less" type="text/less">
 @import "./styles/index";
+
+
 [v-cloak] {
   display: none !important;
 } 
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .home-nav {
   left: 50%;
   transform: translateX(-50%);

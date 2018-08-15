@@ -3,15 +3,15 @@
   <div class="course_content"  v-if="courseList && courseList.length>0">
     <!-- 头部操作 -->
     <div class="course_top" v-if="courseList.length>0">
-      <div class="top_left">已更新<span class="le_sp">{{courseList.length}}</span>篇</div>
+      <div class="top_left">已更新<span class="le_sp">{{total}}</span>篇</div>
       <div class="top_center" v-if="lastStudy && lastStudy.id" @click.stop="toLastStudy()">
         <img class='top_icon center_icon' src="./../../assets/icon/bnt_positioning@3x.png"/>
         上次学到
       </div>
       <div class="top_right" @click.prevent.stop="lessSort">
         <img class='top_icon right_icon' src="./../../assets/icon/bnt_order@3x.png"/>
-        <span v-if="sort == 'asc'">倒序</span>
-        <span v-else>正序</span>
+        <span v-if="sort == 'asc'">正序</span>
+        <span v-else>倒序</span>
       </div>
     </div>
 
@@ -55,19 +55,6 @@
     line-height:18px;
     text-align: center;
     margin-bottom: 25px;
-    &.bottom {
-      position:relative;
-      &::before{
-        content:'';
-        display:block;
-        position:absolute;
-        top:0px;
-        left:20px;
-        width:5px;
-        height:17px;
-        background-color:#ffe266;
-      }
-    }
   }
   .opPageList {
     height: 40px;

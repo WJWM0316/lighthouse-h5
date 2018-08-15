@@ -27,28 +27,28 @@ import moment from 'moment'
     isDown: {
       type: Boolean,
       default: false
+    },
+    total: {
+      type: Number,
+      default: 0,
+    },
+    //是否塔主或者嘉宾
+    isMaster: {
+      type: Boolean,
+      default: false,
     }
   },
   computed: {
 
   },
   watch: {
-    sort (val) {
-      this.sort = val
-    },
-    courseList (val) {
-      this.courseList = val
-    },
-    lastStudy (val) {
-      this.lastStudy = val
-    },
-    isIp(val){
-      this.isIp = val
-    },
-    isDown(val){
-      this.isDown = val
-
-    },
+    sort () {},
+    courseList () {},
+    lastStudy () {},
+    isIp(){},
+    isDown(){},
+    total(){},
+    isMaster(){},
   }
 })
 export default class dynamicItem extends Vue {

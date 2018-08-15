@@ -45,7 +45,6 @@
         </div>
 
         <div class="big-shot-community-content" >
-          <!-- <div class="module-content" v-if="dynamicList && dynamicList.length > 0"> -->
           <template v-if="dynamicList && dynamicList.length > 0">
             <template v-if="showType">
               
@@ -57,8 +56,9 @@
                 :communityId=communityId 
                 :lastStudy = lastStudy 
                 @toLastStudy = toLastStudy 
-                :isIp = contentData.isIp
-                :isDown = contentData.isDown
+                :isIp = getCourseData.isIp
+                :isDown = getCourseData.isDown
+                :total = pagination.total
                 ></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
@@ -74,17 +74,20 @@
             <template v-else>
 
               <div class="course_top" v-if="dynamicList.length>0">
-                <div class="top_left">共有<span class="le_sp">{{dynamicList.length}}</span>篇帖子</div>
+                <div class="top_left">共有<span class="le_sp">{{pagination.total}}</span>篇帖子</div>
                 <div class="top_right" @click.prevent.stop="setSort">
                   <img class='right_icon' src="./../../assets/icon/bnt_order@3x.png"/>
-                  <span v-if="userSort == 1">倒序</span>
-                  <span v-else>正序</span>
+                  <span v-if="userSort == 1">正序</span>
+                  <span v-else>倒序</span>
                 </div>
               </div>
               <div class="recommend_list" v-if="topList.length>0" v-for="item,index in topList">
-                <div class="rem_blo" @click.stop="toDetails(index)">
+                <div class="rem_blo " @click.stop="toDetails(index)">
                   <img class='blo_icon' src="./../../assets/icon/icon_topping@3x.png"/>
-                  <p class="blo_tit">{{item.tit}}{{item.content}}</p>
+                  <p class="blo_tit ellipsis" >{{item.tit}}{{item.content}}</p>
+                  <div class="blo_to_warp">
+                    <img class='blo_icon_to' src="./../../assets/icon/bnt_arrow_topping@3x.png"/>
+                  </div>
                 </div>
               </div>
               <dynamic :dynamicList="dynamicList"
@@ -177,7 +180,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
 
-  import { getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi, topPostListApi, delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi } from '@/api/pages/pageInfo'
+  import { getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi, topPostListApi, delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi, classmatesApi } from '@/api/pages/pageInfo'
 
   
 	Component.registerHooks([
@@ -246,16 +249,18 @@
     suspensionInputPlaceholder = '来分享你的想法吧～'
     displaySuspensionInput = false
     courseList = []  //课节信息列表
+
     getCourseData = {  //朋友圈 请求参数
       upOrDown: '',
       sortNum: 0,
       isToStydy: false,
-    }
-    contentData = { //课节 请求参数
+
+      //课节 请求参数
       isFirst: true,
-      isIp: true,
+      isIp: false,
       isDown: true
     }
+
     topList = []  //置顶列表
     //置顶item
     nowUserOpItem = {}
@@ -333,19 +338,14 @@
 	
     created () {
     	let titleBoxShow=true;
-    	console.log("5555555555555555",this.$route.query);
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
       }
-      console.log('this.showType', this.showType)
       wxUtil.reloadPage()
-      console.log(typeof this.$route.query.showShare)
       const showShare = this.$route.query.showShare
       if (showShare && (showShare.toString() === 'true')) {
         this.showShare = true
       }
-			
-      
     	this.pageInit().then(() => {
         const {
           title,
@@ -358,8 +358,8 @@
           startTime
         } = this.pageInfo
         const {realName, career} = master
-        this.communityId=communityId
-        this.starTime=startTime
+        this.communityId = communityId
+        this.starTime = startTime
         const str = realName ? realName + (career ? '|' + career : '') : ''
         // 页面分享信息
         this.wechatShare({
@@ -369,6 +369,9 @@
           'imgUrl': shareImg,
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
+
+        this.getMaster()
+
         
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
@@ -376,8 +379,6 @@
         }).catch(res => {
         		this.roleInfo=res.data.role;
 				})
-        console.log(this.pageInfo,"999999999999999999999999")
-        
         //判断是否有课程，无课程则跳转
         if(this.pageInfo.isCourse!==3){
         	this.type=0;
@@ -392,9 +393,7 @@
 	        this.pagination.end = false // 初始化数据，必定不是最后一页
 	        this.getList({page: 1})
         }
-     })
-      
-      
+      })
     }
    
    	activated(){
@@ -442,9 +441,7 @@
 			        this.dynamicList = []
 		
 			        this.showType = type
-		//	        debugger
 			        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-		//	        debugger
 			        this.showIdentification = !type
 			
 			        this.pagination.end = false // 初始化数据，必定不是最后一页
@@ -460,8 +457,8 @@
 
     //控制音频
     controlAudio(e){
-      this.saveAudio=e.nowaudio;
-      this.nowItem=e.nowItem;
+      this.saveAudio = e.nowaudio;
+      this.nowItem = e.nowItem;
       console.log(e,"我是传递过来的对象")
     }
     
@@ -475,7 +472,13 @@
     
     closeShare () {
       this.showShare = false
-      this.$router.replace({path: `/introduce/${this.pageInfo.communityId}/community`, query: {...this.$route.query, showShare: false}})
+      let url = ''
+      if(this.pageInfo.isCourse == 3){
+        url = `/introduce2/${this.pageInfo.communityId}/community`
+      }else {
+        url = `/introduce/${this.pageInfo.communityId}/community`
+      }
+      this.$router.replace({path: url,query: {...this.$route.query, showShare: false}})
     }
 
     async pageInit () {
@@ -504,8 +507,6 @@
       }
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = await this.getCommunity(communityId)
-
-      console.log('=========',res)
       //嘉宾身份
       if(res.isAuthor == 0){
           let res2 = await this.getRoleInfo(communityId)
@@ -535,6 +536,19 @@
         this.showIdentification = !type
 				this.pagination.busy = false
         this.pagination.end = false // 初始化数据，必定不是最后一页
+
+        if(this.showType){
+          this.getCourseData = {  //朋友圈 请求参数
+            upOrDown: '',
+            sortNum: 0,
+            isToStydy: false,
+
+            //课节 请求参数
+            isFirst: true,
+            isIp: false,
+            isDown: true
+          }
+        }
         this.getList({page: 1})
       }
     }
@@ -556,7 +570,6 @@
     }
     posted(){
     	let code=this.roleInfo.code
-    	console.log(code)
     	// :todo 发帖
         this.$router.push(`/publish/${this.$route.params.communityId}?type=0&code=${code}&codeType=${this.type}`)
     }
@@ -680,6 +693,7 @@
       if (this.pagination.end) {
         return
       }
+
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
       let params = {}
@@ -719,16 +733,14 @@
 
         //禁止翻页
 
-        if(this.contentData.isFirst){
-          this.contentData.isFirst = false
+        if(this.getCourseData.isFirst){
+          this.getCourseData.isFirst = false
         }else {
-          if(res.courses && res.courses.length<pageSize+1 ){
-
-            console.log('this.getCourseData.upOrDown',this.getCourseData.upOrDown)
+          if(res.courses && res.courses.length<pageSize ){
             if(this.getCourseData.upOrDown == 'up'){
-              this.contentData.isIp = false
+              this.getCourseData.isIp = false
             }else {
-              this.contentData.isDown = false
+              this.getCourseData.isDown = false
             }
           }
         }
@@ -748,7 +760,6 @@
           item.musicState = 0
           item.progress = 0
         } else if (item['circleType'] === 2) {
-          console.log('视频')
           item.videoPlay = false
         }
       })
@@ -756,7 +767,12 @@
       if (page === 1) {
         this.dynamicList = temp
       } else {
-        this.dynamicList = this.dynamicList.concat(temp || [])
+
+        if(this.showType && this.getCourseData.upOrDown == 'up'){
+          this.dynamicList = temp.concat(this.dynamicList || [])
+        }else {
+          this.dynamicList = this.dynamicList.concat(temp || [])
+        }
       }
 
       this.pagination.page = page
@@ -764,8 +780,6 @@
       this.pagination.total = total
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
-
-      console.log('-------',this.pagination.end)
     }
 
     /**
@@ -944,11 +958,11 @@
 
     lessSetSort (){
       this.lessSort = this.lessSort == 'asc' ? 'desc' : 'asc'
-      this.contentData = {
-        isFirst: true,
-        isIp: true,
-        isDown: true
-      }
+
+      this.getCourseData.isFirst =  true
+      this.getCourseData.isIp =  false
+      this.getCourseData.isDown =  true
+
       this.pagination.end = false
       this.pagination.busy = false
       this.getList({page: 1})
@@ -1025,30 +1039,49 @@
     }
 
     toDetails (index) { // 去朋友圈、帖子、问题详情
-      console.log(this.disableContentClick)
-      if (this.disableContentClick) {
-        return
-      }
       let item = this.topList[index]
-      let {circleType, circleId} = item
-      if (circleType) {
-        // 跳转详情页 sourceId type
-        console.log('跳转详情页: ', circleId, circleType)
-        this.$router.push(`/details/${circleId}/2`)
+      let {circleId} = item
+      //成员交流详情需要显示操作栏
+      let url = ''
+      if(!this.showType){
+        url = `/details/${circleId}/2?communityId=${this.communityId}&isShowOp=${1}`
+      }else {
+        url = `/details/${circleId}/2?communityId=${this.communityId}`
       }
+      this.$router.push(url)
     }
 
     toLastStudy (){
       this.getCourseData.isToStydy = true
-      this.contentData = {
-        isFirst: true,
-        isIp: true,
-        isDown: true
-      }
-      this.pageInit()
+      this.getCourseData.isFirst =  true
+      this.getCourseData.isIp =  true
+      this.getCourseData.isDown =  true
+
       this.pagination.busy = false
       this.pagination.end = false
       this.getList({page: 1})
+    }
+
+    getMaster(){
+      let data = {
+        communityId: this.communityId,
+        page: 1,
+        pageCount: 20,
+      }
+      let that = this
+      classmatesApi(data).then(res=>{
+        console.log(res)
+        return
+        if(res.role.length>0){
+          res.role.forEach((item,index)=>{
+            if(item.identityAuthority.title === '塔主'){
+              if(that.isMe == item.userId){
+                that.isMaster = true
+              }
+            }
+          })
+        }
+      })
     }
 
     scroll (e) {
@@ -1116,7 +1149,7 @@
     padding-left: 20px;
     .rem_blo {
       height: 50px;
-      border-bottom: 1px solid #cccccc;
+      border-bottom: 0.5px solid #cccccc;
       display: flex;
       flex-direction: row;
       justify-content: space-around;
@@ -1130,17 +1163,24 @@
 
       }
       .blo_tit {
-        flex: 1;
         font-size: 16px;
         font-family: PingFangSC-Light;
         color: rgba(53,64,72,1);
         line-height: 20px;
       }
+      .blo_to_warp {
+        flex: 1;
+        height: 15px;
+        min-width: 15px;
+        margin-left: 2px;
+        margin-right: 20px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
       .blo_icon_to {
         height: 15px;
         width: 15px;
-        margin-left: 2px;
-        margin-right: 20px;
       }
     }
   }

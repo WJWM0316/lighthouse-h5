@@ -46,11 +46,11 @@
 
             <template v-if="!showType">
               <div class="course_top" v-if="dynamicList.length>0" :class="{'one':pageInfo.isCourse == 2}">
-                <div class="top_left">共有<span class="le_sp">{{dynamicList.length}}</span>篇帖子</div>
+                <div class="top_left">共有<span class="le_sp">{{pagination.total}}</span>篇帖子</div>
                 <div class="top_right" @click.prevent.stop="setSort">
                   <img class='right_icon' src="./../../assets/icon/bnt_order@3x.png"/>
-                  <span v-if="userSort == 1">倒序</span>
-                  <span v-else>正序</span>
+                  <span v-if="userSort == 1">正序</span>
+                  <span v-else>倒序</span>
                 </div>
               </div>
               <div class="recommend_list" v-if="topList.length>0" v-for="item,index in topList">
