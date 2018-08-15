@@ -115,6 +115,11 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     isMaster: {
       type: Boolean,
       default: false
+    },
+    //是否显示置顶
+    isShowTop: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -234,11 +239,15 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     isTeacherCon () {},
     isTeacher () {},
     isMe(val){
-      console.log(val,this.item.releaseUser)
       this.isMe = val
     },
-    isUserExchange(){},
-    isMaster(){}
+    isUserExchange(val){
+      console.log(val)
+    },
+    isMaster(){},
+    isShowTop(val){
+      console.log(val)
+    }
   }
 })
 export default class dynamicItem extends Vue {
@@ -258,18 +267,13 @@ export default class dynamicItem extends Vue {
         this.type = 3
         break
     }
-    // if (circleType) {
-    //   this.type = circleType
-    // }
   }
   
   beforeMount(){
-    //console.log(this.item,"******************************")
   }
 
   mounted () {
     this.video = this.$refs['video']
-//  console.log(this.item,"=================================+++")
   }
 
   
@@ -281,8 +285,6 @@ export default class dynamicItem extends Vue {
         const contentText = el.firstChild
 
         if (contentText.scrollHeight > contentText.offsetHeight) {
-          console.log(el.firstChild)
-          console.log(contentText.scrollHeight, contentText.offsetHeight)
           const fullText = document.createElement('span')
           fullText.className = 'full-text open'
           fullText.innerText = '展开全文'
@@ -372,26 +374,6 @@ export default class dynamicItem extends Vue {
   videoStop () {
     this.video.pause()
     this.video.src = ''
-  }
-  /**
-   * 帖子置顶 or op
-   */
-  topOp(){
-    console.log(this.item)
-    let data = {
-      communityId: 'e37bfaedef82e565f21bae9d59183763',
-      postId: this.item.circleId
-    }
-
-    if(this.item.topPostStatus==0){
-      addTopApi(data).then(res=>{
-        console.log(res)
-      })
-    }else {
-      delTopApi(data).then(res=>{
-        console.log(res)
-      })
-    }
   }
 
   op_member(res){
