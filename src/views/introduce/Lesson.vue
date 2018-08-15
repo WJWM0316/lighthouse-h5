@@ -118,14 +118,16 @@
 				</div>
 				
 				<!--底部打卡按钮区-->
-				<div class="Lesson-footer" v-if="isPunch === 0">
-					<div class="toPunch" @click.stop="toPunch">
-						去打卡
+				<div>
+					<div class="Lesson-footer" v-if="isPunch === 0">
+						<div class="toPunch" @click.stop="toPunch">
+							去打卡
+						</div>
 					</div>
-				</div>
-				<div class="Lesson-footer" v-else>
-						<div class="peacock">炫耀一下</div><span class="line"></span>
-						<div class="mine" @click.stop="toMindDetail(communityCourse.peopleId,communityCourse.id)">我的打卡</div>
+					<div class="Lesson-footer" v-else>
+							<div class="peacock">炫耀一下</div><span class="line"></span>
+							<div class="mine" @click.stop="toMindDetail(communityCourse.peopleId,communityCourse.id)">我的打卡</div>
+					</div>
 				</div>
 		</template>
     <!-- 未加入 -->
@@ -897,7 +899,7 @@
 			background-color: #FFFFFF;
 			width: 100%;
 			height: 49px;
-			position: absolute;
+			position: fixed;
 			bottom: 0;
 			left: 0;
 			z-index: 9998;

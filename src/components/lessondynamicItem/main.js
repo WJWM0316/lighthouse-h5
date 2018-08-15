@@ -311,7 +311,7 @@ export default class lessondynamicItem extends Vue {
    * 点击预览图片
    */
   previewImage (img) {
-    const files = this.item.files
+    const files = this.item.cardContentFile
     let urls = []
     files.forEach((item) => {
       urls.push(item.fileUrl)

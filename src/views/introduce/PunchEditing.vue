@@ -25,25 +25,23 @@
 		<div class="showTask" @click.stop="showTask">本节打卡任务 <img src="../../assets/icon/btn_up_task@3x.png"/></div>
 		<div class="taskWindow" v-if="showTaskWindow">
 			<div class="taskhead" @click.stop="closeTask">本节打卡任务 <img src="../../assets/icon/btn_packup_task@3x.png"/></div>
-			<div class="taskbody" v-html="taskContent.cardContent">
-				<!--<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>
-				<p>fasdfasdfasdfasdfasdfasdfasdfasdf</p>-->
+			<div class="taskbody">
+				<div v-html="taskContent.cardContent"></div>
+				<!--图片-->
+				<div class="content-img">
+					<div class="content-images">
+	          <!-- 图片为 1 张时 -->
+	          <div class="item-image one" v-if="taskContent.cardContentFile && taskContent.cardContentFile.length === 1">
+	            <img :src="taskContent.cardContentFile[0].fileUrl || '../../assets/icon/img_head_default.png'" @click.stop="previewImage(taskContent.cardContentFile[0].fileUrl)" />
+	          </div>
+	
+	          <!--  图片为 多 张时  -->
+	          <div class="item-image" v-for="file in taskContent.cardContentFile" v-else>
+	            <img :src="file.fileUrl || '../../assets/icon/img_head_default.png'" v-if="!file.holder" @click.stop="previewImage(file.fileUrl)" />
+	          </div>
+	        </div>
+				</div>
+			<!--图片-->
 			</div>
 		</div>
 
@@ -560,6 +558,41 @@
 				padding: 20px;
 				height: 319px;
 				overflow-y: scroll;
+			}
+			
+			/*打卡任务图片*/
+			.content-img{
+				& .content-images {
+		      margin-top: 10px;
+		      width: 335px;
+		      display: flex;
+		      flex-flow: row wrap;
+		
+		      & > .item-image {
+		        margin-top: 5px;
+		        margin-left: 5px;
+		        width: 108px;
+		        height: 108px;
+		        text-align: center;
+						flex-grow:0;
+						
+		
+		        &:first-of-type, &:nth-of-type(3n + 1) {
+		          margin-left: 0;
+		        }
+		
+		        & img {
+		          background: #f9f9f9;
+		          width: 100%;
+		          height: 100%;
+		          vertical-align: middle;
+		        }
+		      }
+		      & > .item-image.one {
+		        width: 136px;
+		        height: 136px;
+		      }
+		    }
 			}
 			
 		}

@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import moment from 'moment'
+import { courseCardFavorApi } from '@/api/pages/pageInfo'
 
 @Component({
   name: 'discuss-item',
@@ -151,12 +152,30 @@ export default class discussItem extends Vue {
    */
   praise () {
     const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'praise',
-      itemIndex,
-      item: this.item,
-      commentType: this.commentType
-    })
+    if(this.$route.path === "/PunchDetails"){
+    	let nowFavor;
+	    if(this.item.isFavor === 1){
+	    	this.item.isFavor = 0
+	    	nowFavor = 0
+	    }else{
+	    	this.item.isFavor = 1
+	    	nowFavor = 1
+	    }
+	    let param= {
+	  		isFavor:nowFavor,
+	  		type:2,
+	  		sourceId:this.item.commentId //打卡信息id
+	  	}
+	    courseCardFavorApi(param)
+    }else{
+    	this.$emit('operation', {
+		    eventType: 'praise',
+		    itemIndex,
+		    item: this.item,
+		    commentType: this.commentType
+		  })
+    }
+    
   }
   /**
    * 删除
