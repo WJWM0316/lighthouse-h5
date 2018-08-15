@@ -13,8 +13,10 @@
       	<p class="user-name" :class="role && role.title === '塔主' || role.title === '嘉宾' ? 'master' : 'guest'" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}<span class="administrators" v-if="role && role.title === '管理员'">管理员</span></p>
       	<span class="user-intro" v-if="role && role.isShow && item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
       </div>
-
-      <img class='icon_top' v-if="isShowTop" src="./../../assets/icon/icon_topping@3x.png"/>
+      <div class='icon_top_warp' v-if="isShowTop">
+        <img class='icon_top' src="./../../assets/icon/icon_topping@3x.png"/>
+      </div>
+      
       <div class="user_op" @click.stop="op_member" v-if="(isMe === item.releaseUser.userId || isMaster)&&!isUserExchange">
         <img class="op_img" src="./../../assets/icon/bnt_course_more@3x.png" />
       </div>

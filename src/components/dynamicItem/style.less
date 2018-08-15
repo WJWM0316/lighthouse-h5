@@ -146,20 +146,30 @@
     .user_op {
       width: 30px;
       height: 30px;
-      margin-left: 30px;
+      margin-left: 8px;
       img {
         width: 30px;
         height: 30px;
       }
     }
-    //置顶图标
-    .icon_top {
-      width: 20px;
+    .icon_top_warp {
+      min-width: 20px;
       height: 20px;
-      background:rgba(255,226,102,1);
-      border-radius: 10px;
       margin-left: 8px;
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      //置顶图标
+      .icon_top {
+        width: 20px;
+        height: 20px;
+        background:rgba(255,226,102,1);
+        border-radius: 10px;
+        
+      }
     }
+    
     //名字和头衔
     
 
