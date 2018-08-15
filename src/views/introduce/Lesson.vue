@@ -18,7 +18,7 @@
       	<div class="date">{{communityCourse.createTime*1000 | date('YYYY-MM-DD')}}</div>
       </div>
       <!--视频-->
-      <div class="Lesson-video" @click.stop="playVideo" v-if="communityCourse.av && communityCourse.av.type==='video'">
+      <div class="Lesson-video" @click.stop="playVideo($event)" v-if="communityCourse.av && communityCourse.av.type==='video'">
       	<video controls ref="video"></video>
       	<div class="placeholder" v-show="videoPlay">
           <!--背景图-->
@@ -26,7 +26,7 @@
         </div>
       </div>
       <!-- 音频 -->
-      <div :class="{'content-audio': true, 'not-played': !communityCourse.av.files[0].isPlayed}" v-if="communityCourse.av && communityCourse.av.type==='voice'">
+      <div :class="{'content-audio': true, 'not-played': !communityCourse.av.files[0].isPlayed}" v-if="communityCourse.av && communityCourse.av.type==='audio'">
         <audioBox
           :source="communityCourse.av.files[0]" 
           :touerImg="communityCourse.av.avatarUrl"
@@ -195,17 +195,6 @@
     	}
     },
     watch: {
-    	communityCourse (val, old) {
-    		this.item = {
-    			files:[{
-						duration:val.av.duration,
-						fileId:String(val.av.fileId),
-						fileUrl:val.av.fileUrl,
-						avatar:val.people.avatar
-			    }]
-    		}
-    		console.log(this.item,"我是新数据")
-    	},
     },
     mixins: [WechatMixin],
   })
@@ -219,7 +208,14 @@
     intro = '<p>社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍</p><p><img src="https://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2018-08-08/2d6e172b6cbecf6c9de11727d89d8d0f.png" alt="商业课-推广海报" style="max-width:100%;"><br></p><p><br></p>'
 
     //音频数据
-    item = {}
+    item = {
+    	files:[{
+				duration:250,
+				fileId:"6237",
+				fileUrl:"https://cdnstatic.ziwork.com/test/audio/2018-08-15/4bd491cb8292450b62b387a595f15ee8.mp3",
+				avatar:"2JVOTrwtULW3VpcKI3whmcDNYTlTMEVQzPpxN3ZDfXOcFYKtUiv7XZwjXolTara2.amr"
+	    }],
+    }
     //所有打卡数据
     peopleCourseCardList = ""
     //优秀打卡
@@ -237,19 +233,7 @@
   	lessonData = {}
   	
   	events = {
-  		'reFresh':()=>{
-  			let parama = {
-	  			communityId:this.$route.query.communityId,
-	  			courseId:this.$route.query.id,
-	  			type:0,
-	  			page:0,
-	  			pageCount:0
-	  		}
-  			getCourseCardListApi(parama).then(res=>{
-  				this.peopleCourseCardList = res.peopleCourseCardList
-  				this.excellentPunchList = res.excellentPeopleCourseCardList
-  			})
-  		}
+  		
   	}
 
   	created(){
@@ -268,6 +252,7 @@
 				this.lessonData = res[0].couponInfo
   			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse
+  			this.communityCourse.av.files[0].fileId = String(this.communityCourse.av.files[0].fileId)
   			this.curPeopleInfo = res[0].curPeopleInfo
   			this.peopleCourseCardList = res[1].peopleCourseCardList
   			this.excellentPunchList = res[1].excellentPeopleCourseCardList
@@ -278,7 +263,8 @@
   	}
   	
   	mounted () {
-	    this.video = this.$refs['video']
+  		this.$nextTick(()=>{
+  		})
 	  }
 
 	  freeIn () { // 跳转到一个图文消息
@@ -319,6 +305,21 @@
 	       },
 	     })
 	  }
+	  
+	  //刷新打开列表数据
+	  reFresh(){
+			let parama = {
+  			communityId:this.$route.query.communityId,
+  			courseId:this.$route.query.id,
+  			type:0,
+  			page:0,
+  			pageCount:0
+  		}
+			getCourseCardListApi(parama).then(res=>{
+				this.peopleCourseCardList = res.peopleCourseCardList
+				this.excellentPunchList = res.excellentPeopleCourseCardList
+			})
+		}
 
 	  payOrFree () {
 	    if(this.isEnd ){
@@ -519,10 +520,10 @@
   		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
 	  }
   	//播放视频
-  	playVideo(){
-  		this.video.currentTime = 0
-	    this.video.src = "https://cdnstatic.ziwork.com/test/video/2018-05-29/68446a2ea39c53ec66ad0a1e012ada3d.mp4"//src="https://cdnstatic.ziwork.com/test/video/2018-05-29/68446a2ea39c53ec66ad0a1e012ada3d.mp4"
-	    console.log(this.video.currentTime,"我是视频对象")
+  	playVideo(e){
+  		this.video = this.$refs["video"]
+			this.video.currentTime = 0
+	    this.video.src = this.communityCourse.av.files[0].fileUrl
 	    this.videoPlay = false
 	    this.video.play()
   	}
@@ -551,7 +552,7 @@
         case 'comment':
           break
         case 'praise':
-          this.praise({item, itemIndex}).then()
+          this.reFresh()
           break
         case 'del':
           this.del({item, itemIndex}).then()

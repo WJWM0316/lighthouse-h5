@@ -290,19 +290,42 @@
 				let fileId = []
 				console.log('准备发布images：', this.images)
 					let type = 0;
+					let params;
 					if(this.images.length>0){
 						fileId = this.images.map(item => item.fileId)
 						type = 3;
+						if(this.form.content){
+							//如果上传了文字和图片
+							params = {
+								courseId: parseInt(this.$route.query.courseId),
+								cardContent: this.form.content,
+								type: type,
+								arrayFileId: fileId,
+								globalLoading: false,
+								communityId:this.$route.query.communityId
+							}
+						}else{
+							params = {
+								courseId: parseInt(this.$route.query.courseId),
+								type: type,
+								arrayFileId: fileId,
+								globalLoading: false,
+								communityId:this.$route.query.communityId
+							}
+						}
+					}else{
+						//只有文字
+						params = {
+							courseId: parseInt(this.$route.query.courseId),
+							cardContent: this.form.content,
+							type: type,
+							arrayFileId: fileId,
+							globalLoading: false,
+							communityId:this.$route.query.communityId
+						}
 					}
 				console.log('生成的fileId：', fileId)
-				const params = {
-					courseId: parseInt(this.$route.query.courseId),
-					cardContent: this.form.content,
-					type: type,
-					arrayFileId: fileId,
-					globalLoading: false,
-					communityId:this.$route.query.communityId
-				}
+				
 
 				//发布内容
 				await setCourseCardContentApi(params)
@@ -533,6 +556,7 @@
 				}
 			}
 			.taskbody{
+				background-color: #FFFFFF;
 				padding: 20px;
 				height: 319px;
 				overflow-y: scroll;

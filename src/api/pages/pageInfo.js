@@ -349,7 +349,7 @@ export const lessonContentApi = (id) => {
 // 优秀打卡和所有打卡列表内容
 export const getCourseCardListApi = (data) => {
   return request({
-    url: `/wap/courseCard/getCourseCardList/${data.communityId}/${data.courseId}?type=${data.type}&type=${data.page}&type=${data.pageCount}`,
+    url: `/wap/courseCard/getCourseCardList/${data.communityId}/${data.courseId}?type=${data.type}&page=${data.page}&pageCount=${data.pageCount}`,
     type:'get'
   })
 }
@@ -443,5 +443,21 @@ export const setExcellentCourseCardApi = (data) => {
     url: `/wap/courseCard/setExcellentCourseCard`,
     type:'post',
     data
+  })
+}
+
+//获取点赞打卡列表
+export const getCourseCardFavorListApi = (data) => {
+  return request({
+    url: `/wap/courseCard/getCourseCardFavorList/${data.peopleCourseId}?page=${data.page}&pageCount=${data.pageCount}`,
+    type:'get'
+  })
+}
+
+//获取打卡评论列表
+export const getCourseCardCommentListApi = (data) => {
+  return request({
+    url: `/wap/courseCard/getCourseCardCommentList?peopleCourseId=${data.peopleCourseId}&page=${data.page}&pageCount=${data.pageCount}`,
+    type:'get'
   })
 }

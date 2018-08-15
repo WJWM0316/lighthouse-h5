@@ -178,8 +178,8 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   // let datas = type === 'get' ? {params: data} :data
   // let globalLoading = true
   if (data.globalLoading !== undefined) {
-    globalLoading = data.globalLoading
-    delete data.globalLoading
+    delete data.globalL
+    globalLoading = data.globalLoadingoading
   }
   
 

@@ -271,10 +271,10 @@ export default class lessondynamicItem extends Vue {
    * 点赞
    */
   praise (courseId,peopleId) {
-  	if(this.isLesson){
-  		this.$router.push({path:'/PunchDetails',query:{courseId:courseId,peopleId:peopleId}});
-  		return;
-  	}
+//	if(this.isLesson){
+//		this.$router.push({path:'/PunchDetails',query:{courseId:courseId,peopleId:peopleId}});
+//		return;
+//	}
   	//点击后的点赞状态
   	let nowFavor = 1
   	if(this.item.isFavor === 0){
@@ -282,16 +282,28 @@ export default class lessondynamicItem extends Vue {
   	}else{
   		nowFavor = 0
   	}
-  	let parama= {
+  	let param= {
   		isFavor:nowFavor,
   		type:1,
   		sourceId:this.item.peopleCourseId //打卡信息id
   	}
-  	courseCardFavorApi(parama).then(res=>{
-  		console.log(res,"打卡成功")
+  	courseCardFavorApi(param).then(res=>{
+  		console.log(res,"点赞成功")
   		this.item.isFavor=nowFavor
+  		if(nowFavor===1){
+  			this.item.favorTotal +=1;
+  			this.$emit('disableOperationEvents', {
+		      eventType: 'praise'
+		    })
+  		}else{
+  			this.item.favorTotal -=1;
+  			this.$emit('disableOperationEvents', {
+		      eventType: 'praise'
+		    })
+  		}
+  		this.$emit('praise')
   	}).catch(res=>{
-  		console.log(res,"打卡失败")
+  		console.log(res,"点赞失败")
   	})
   }
 
