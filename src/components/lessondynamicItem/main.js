@@ -271,10 +271,10 @@ export default class lessondynamicItem extends Vue {
    * 点赞
    */
   praise (courseId,peopleId) {
-  	if(this.isLesson){
-  		this.$router.push({path:'/PunchDetails',query:{courseId:courseId,peopleId:peopleId}});
-  		return;
-  	}
+//	if(this.isLesson){
+//		this.$router.push({path:'/PunchDetails',query:{courseId:courseId,peopleId:peopleId}});
+//		return;
+//	}
   	//点击后的点赞状态
   	let nowFavor = 1
   	if(this.item.isFavor === 0){
@@ -292,8 +292,14 @@ export default class lessondynamicItem extends Vue {
   		this.item.isFavor=nowFavor
   		if(nowFavor===1){
   			this.item.favorTotal +=1;
+  			this.$emit('disableOperationEvents', {
+		      eventType: 'praise'
+		    })
   		}else{
   			this.item.favorTotal -=1;
+  			this.$emit('disableOperationEvents', {
+		      eventType: 'praise'
+		    })
   		}
   		this.$emit('praise')
   	}).catch(res=>{

@@ -382,8 +382,12 @@
     		pageCount:20
     	}
     	getCourseCardCommentListApi(data).then(res=>{
-    		this.hotCommentNum = res.hotComments.length
-    		this.commentList = [...res.hotComments,...res.comments]
+    		if(res.hotComments){
+    			this.commentList = [...res.hotComments,...res.comments]
+    		}else{
+    			this.commentList = [...res.comments]
+    		}
+    		
     	}).catch(res=>{
     		console.log(res,"报错信息")
     	})
@@ -443,6 +447,7 @@
       const res = await getCourseCardInfoApi(courseId,peopleId)
       this.courseCardInfo = res
       this.getCourseCardCommentList()
+      this.reFlashPraise()
       console.log(this.courseCardInfo,"我是请求回来的数据")
     }
 

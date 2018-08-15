@@ -18,7 +18,7 @@
       	<div class="date">{{communityCourse.createTime*1000 | date('YYYY-MM-DD')}}</div>
       </div>
       <!--视频-->
-      <div class="Lesson-video" @click.stop="playVideo" v-if="communityCourse.av && communityCourse.av.type==='video'">
+      <div class="Lesson-video" @click.stop="playVideo($event)" v-if="communityCourse.av && communityCourse.av.type==='video'">
       	<video controls ref="video"></video>
       	<div class="placeholder" v-show="videoPlay">
           <!--背景图-->
@@ -226,19 +226,7 @@
   	lessonData = {}
   	
   	events = {
-  		'reFresh':()=>{
-  			let parama = {
-	  			communityId:this.$route.query.communityId,
-	  			courseId:this.$route.query.id,
-	  			type:0,
-	  			page:0,
-	  			pageCount:0
-	  		}
-  			getCourseCardListApi(parama).then(res=>{
-  				this.peopleCourseCardList = res.peopleCourseCardList
-  				this.excellentPunchList = res.excellentPeopleCourseCardList
-  			})
-  		}
+  		
   	}
 
   	created(){
@@ -269,9 +257,8 @@
   	
   	mounted () {
   		this.$nextTick(()=>{
-  			this.video = document.getElementsByClassName("Lesson-video")[0]
-//			this.video = this.$refs['video']
-  			console.log(this.video,"我是捕获到的视频对象")
+  			this.video = document.getElementsByTagName("video")[0]
+  		 	console.log(this.video,"我是捕获到的视频对象")
   		})
 	  }
 
@@ -313,6 +300,21 @@
 	       },
 	     })
 	  }
+	  
+	  //刷新打开列表数据
+	  reFresh(){
+			let parama = {
+  			communityId:this.$route.query.communityId,
+  			courseId:this.$route.query.id,
+  			type:0,
+  			page:0,
+  			pageCount:0
+  		}
+			getCourseCardListApi(parama).then(res=>{
+				this.peopleCourseCardList = res.peopleCourseCardList
+				this.excellentPunchList = res.excellentPeopleCourseCardList
+			})
+		}
 
 	  payOrFree () {
 	    if(this.isEnd ){
@@ -513,12 +515,13 @@
   		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
 	  }
   	//播放视频
-  	playVideo(){
+  	playVideo(e){
+  		console.log(e)
 //		this.video.currentTime = 0
-	    this.video.src = this.communityCourse.av.files[0].fileUrl//src="https://cdnstatic.ziwork.com/test/video/2018-05-29/68446a2ea39c53ec66ad0a1e012ada3d.mp4"
-	    console.log(this.video.currentTime,"我是视频对象")
-	    this.videoPlay = false
-	    this.video.play()
+//	    this.video.src = this.communityCourse.av.files[0].fileUrl//src="https://cdnstatic.ziwork.com/test/video/2018-05-29/68446a2ea39c53ec66ad0a1e012ada3d.mp4"
+//	    console.log(this.video.currentTime,"我是视频对象")
+//	    this.videoPlay = false
+//	    this.video.play()
   	}
   	
   	/**
@@ -545,7 +548,7 @@
         case 'comment':
           break
         case 'praise':
-          this.praise({item, itemIndex}).then()
+          this.reFresh()
           break
         case 'del':
           this.del({item, itemIndex}).then()
