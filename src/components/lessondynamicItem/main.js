@@ -359,11 +359,12 @@ export default class lessondynamicItem extends Vue {
   	}
   	let parama = {
   		communityId:this.item.communityId,
-  		peopleId:this.item.peopleId,
+  		peopleCourseId:this.item.peopleCourseId,
   		status:isExcellentCard
   	}
   	setExcellentCourseCardApi(parama).then(res=>{
   		console.log("评选成功")
+  		this.$emit("reFresh")
   	}).catch(res=>{
   		console.log(res,"接口报错")
   	})
