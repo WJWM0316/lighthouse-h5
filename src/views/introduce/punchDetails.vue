@@ -102,7 +102,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCourseCardInfoApi, courseCardCommentApi, getCourseCardFavorListApi, getCourseCardCommentListApi } from '@/api/pages/pageInfo.js'
+  import { getCourseCardInfoApi, courseCardCommentApi, getCourseCardFavorListApi, getCourseCardCommentListApi, courseCardFavorApi } from '@/api/pages/pageInfo.js'
 //import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi } from '@/api/pages/pageInfo.js'
 
   @Component({
@@ -173,7 +173,7 @@
 //        this.courseCardCommentApi(parama).then()
           break
         case 'praise':
-          this.praise({item, itemIndex, commentType}).then()
+          this.praise(param)
           break
         case 'del':
           this.del({item, itemIndex, commentType}).then()
@@ -216,12 +216,13 @@
      * @param itemIndex
      * @returns {Promise.<void>}
      */
-    async comment (item) {
+    async comment (param) {
+    	console.log(param,"1111111111111111")
       this.displaySuspensionInput = true
       this.$refs.input.$refs['suspension-input'].focus()
-      if (item.type === 2) {
-        this.suspensionInputPlaceholder = '回复' + item.releaseUser.realName + ':'
-//      this.commentIndex = itemIndex
+      if (param.type === 2) {
+        this.suspensionInputPlaceholder = '回复' + param.item.reviewer.realName + ':'
+        this.commentIndex = param.itemIndex
       } else {
         this.suspensionInputPlaceholder = '来分享你的想法吧～'
         this.commentIndex = -1
@@ -245,52 +246,39 @@
      * @param itemIndex
      * @returns {Promise.<void>}
      */
-    async praise ({item, itemIndex, commentType}) {
-      let params = ''
-      let favor = 0
+    praise (param) {
+    	
+    	if(param === undefined){
+    		return;
+    	}
+    	let { item, itemIndex } = param
+      let params = '';
+      let favor;
       if (item) {
-        const {commentId, favorId, isFavor} = item
+      	let { item, itemIndex } = param
+        const {commentId, isFavor} = item
         let favorType = 6
         favor = isFavor ? 0 : 1
-        params = {
-          favorId: commentId,    // 喜爱的id
-          favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
-        }
-      } else {
-        favor = this.dynamicList[0].isFavor ? 0 : 1
-        let favorType = 0
-        switch (this.$route.params.type) {
-          case '1':
-            favorType = 7
-            break
-          case '2':
-            favorType = 5
-            break
-          case '3':
-            favorType = 4
-            break
-        }
-        params = {
-          favorId: this.$route.params.sourceId,    // 喜爱的id
-          favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
-        }
-      }
-      const res = await setFavorApi(params)
-      this.discussItemList[itemIndex].isFavor = favor
-      this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
+        let params= {
+		  		isFavor:favor,
+		  		type:2,
+		  		sourceId: item.commentId //打卡信息id
+		  	}
+     }
+      courseCardFavorApi(params)
+      this.commentList[itemIndex].isFavor = favor
+      this.commentList[itemIndex].favorTotal += favor ? 1 : -1
       if (favor) {
-        this.discussItemList[itemIndex].favors = this.discussItemList[itemIndex].favors || []
-        this.discussItemList[itemIndex].favors.splice(0, 0, res)
+        this.commentList[itemIndex].favorList = this.commentList[itemIndex].favorList || []
+        this.commentList[itemIndex].favorList.splice(0, 0, res)
       } else {
         let tempIndex = ''
-        this.discussItemList[itemIndex].favors.forEach((item, index) => {
+        this.commentList[itemIndex].favorList.forEach((item, index) => {
           if (item.userId === res.userId) {
             tempIndex = index
           }
         })
-        this.discussItemList[itemIndex].favors.splice(tempIndex, 1)
+        this.commentList[itemIndex].favorList.splice(tempIndex, 1)
       }
     }
 
@@ -400,18 +388,19 @@
     async sendComment ({value, commentIndex}) {
 //    const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.dynamicList[0]
 //    const {commentId, problemId, circleId} = item
-      let sourceType = 4
+      let sourceType;
       let type =1
       if (this.commentIndex < 0) {
       	type = 1
-//      sourceType = this.modelType
+        sourceType = this.courseCardInfo.peopleCourseId
       }else{
       	type = 2
+      	sourceType = this.commentList[this.commentIndex].commentId
       }
 
       const params = {
       	type: type,
-      	id: this.$route.query.courseId,		//对应打卡或评论的id
+      	id: sourceType,		//对应打卡或评论的id
         peopleCourseId: this.courseCardInfo.peopleCourseId,     // 对应评论类型id
         commentContent: value       // 评论内容
       }

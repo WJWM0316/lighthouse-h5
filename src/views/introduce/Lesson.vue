@@ -254,7 +254,9 @@
 				this.lessonData = res[0].couponInfo
   			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse
-  			this.communityCourse.av.files[0].fileId = String(this.communityCourse.av.files[0].fileId)
+  			if(this.communityCourse.av.files[0]){
+  				this.communityCourse.av.files[0].fileId = String(this.communityCourse.av.files[0].fileId)
+  			}
   			this.curPeopleInfo = res[0].curPeopleInfo
   			this.peopleCourseCardList = res[1].peopleCourseCardList
   			this.excellentPunchList = res[1].excellentPeopleCourseCardList
