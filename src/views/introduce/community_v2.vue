@@ -56,8 +56,8 @@
                 :communityId=communityId 
                 :lastStudy = lastStudy 
                 @toLastStudy = toLastStudy 
-                :isIp = contentData.isIp
-                :isDown = contentData.isDown
+                :isIp = getCourseData.isIp
+                :isDown = getCourseData.isDown
                 :total = pagination.total
                 ></course-content>
               <!-- 相关推荐 -->
@@ -249,16 +249,18 @@
     suspensionInputPlaceholder = '来分享你的想法吧～'
     displaySuspensionInput = false
     courseList = []  //课节信息列表
+
     getCourseData = {  //朋友圈 请求参数
       upOrDown: '',
       sortNum: 0,
       isToStydy: false,
-    }
-    contentData = { //课节 请求参数
+
+      //课节 请求参数
       isFirst: true,
       isIp: false,
       isDown: true
     }
+
     topList = []  //置顶列表
     //置顶item
     nowUserOpItem = {}
@@ -533,6 +535,19 @@
         this.showIdentification = !type
 				this.pagination.busy = false
         this.pagination.end = false // 初始化数据，必定不是最后一页
+
+        if(this.showType){
+          this.getCourseData = {  //朋友圈 请求参数
+            upOrDown: '',
+            sortNum: 0,
+            isToStydy: false,
+
+            //课节 请求参数
+            isFirst: true,
+            isIp: false,
+            isDown: true
+          }
+        }
         this.getList({page: 1})
       }
     }
@@ -677,6 +692,7 @@
       if (this.pagination.end) {
         return
       }
+
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
       let params = {}
@@ -716,14 +732,14 @@
 
         //禁止翻页
 
-        if(this.contentData.isFirst){
-          this.contentData.isFirst = false
+        if(this.getCourseData.isFirst){
+          this.getCourseData.isFirst = false
         }else {
           if(res.courses && res.courses.length<pageSize+1 ){
             if(this.getCourseData.upOrDown == 'up'){
-              this.contentData.isIp = false
+              this.getCourseData.isIp = false
             }else {
-              this.contentData.isDown = false
+              this.getCourseData.isDown = false
             }
           }
         }
@@ -751,7 +767,7 @@
         this.dynamicList = temp
       } else {
 
-        if(this.showType && this.getCourseData.upOrDown && this.getCourseData.upOrDown == 'up'){
+        if(this.showType && this.getCourseData.upOrDown == 'up'){
           this.dynamicList = temp.concat(this.dynamicList || [])
         }else {
           this.dynamicList = this.dynamicList.concat(temp || [])
@@ -941,11 +957,11 @@
 
     lessSetSort (){
       this.lessSort = this.lessSort == 'asc' ? 'desc' : 'asc'
-      this.contentData = {
-        isFirst: true,
-        isIp: true,
-        isDown: true
-      }
+
+      this.getCourseData.isFirst =  true
+      this.getCourseData.isIp =  false
+      this.getCourseData.isDown =  true
+
       this.pagination.end = false
       this.pagination.busy = false
       this.getList({page: 1})
@@ -1036,11 +1052,10 @@
 
     toLastStudy (){
       this.getCourseData.isToStydy = true
-      this.contentData = {
-        isFirst: true,
-        isIp: true,
-        isDown: true
-      }
+      this.getCourseData.isFirst =  true
+      this.getCourseData.isIp =  true
+      this.getCourseData.isDown =  true
+
       this.pagination.busy = false
       this.pagination.end = false
       this.getList({page: 1})
