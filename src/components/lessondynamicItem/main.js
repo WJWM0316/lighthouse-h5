@@ -282,16 +282,22 @@ export default class lessondynamicItem extends Vue {
   	}else{
   		nowFavor = 0
   	}
-  	let parama= {
+  	let param= {
   		isFavor:nowFavor,
   		type:1,
   		sourceId:this.item.peopleCourseId //打卡信息id
   	}
-  	courseCardFavorApi(parama).then(res=>{
-  		console.log(res,"打卡成功")
+  	courseCardFavorApi(param).then(res=>{
+  		console.log(res,"点赞成功")
   		this.item.isFavor=nowFavor
+  		if(nowFavor===1){
+  			this.item.favorTotal +=1;
+  		}else{
+  			this.item.favorTotal -=1;
+  		}
+  		this.$emit('praise')
   	}).catch(res=>{
-  		console.log(res,"打卡失败")
+  		console.log(res,"点赞失败")
   	})
   }
 

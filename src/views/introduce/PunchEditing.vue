@@ -533,6 +533,7 @@
 				}
 			}
 			.taskbody{
+				background-color: #FFFFFF;
 				padding: 20px;
 				height: 319px;
 				overflow-y: scroll;

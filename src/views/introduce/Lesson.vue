@@ -195,17 +195,6 @@
     	}
     },
     watch: {
-    	communityCourse (val, old) {
-    		this.item = {
-    			files:[{
-						duration:val.av.duration,
-						fileId:String(val.av.fileId),
-						fileUrl:val.av.fileUrl,
-						avatar:val.people.avatar
-			    }]
-    		}
-    		console.log(this.item,"我是新数据")
-    	},
     },
     mixins: [WechatMixin],
   })
@@ -268,6 +257,7 @@
 				this.lessonData = res[0].couponInfo
   			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse
+  			this.communityCourse.av.files[0].fileId = String(this.communityCourse.av.files[0].fileId)
   			this.curPeopleInfo = res[0].curPeopleInfo
   			this.peopleCourseCardList = res[1].peopleCourseCardList
   			this.excellentPunchList = res[1].excellentPeopleCourseCardList

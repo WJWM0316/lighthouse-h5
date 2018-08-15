@@ -14,6 +14,7 @@
          :disableContentClick="false"
          :hideCommentArea="true"
          @disableOperationEvents="operation"
+         @praise="reFlashPraise"
       ></lessondynamicItem>
         </div>
     
@@ -22,17 +23,17 @@
           <div class="fixed-box" ref="ceiling-box">
             <div class="ceiling-box" :class="navTabName">
               <span @click="toggle('comment')">评论({{courseCardInfo.commentTotal}})</span>
-              <span @click="toggle('praise')">点赞({{courseCardInfo.favorTotal}})</span>
+              <span @click="toggle('praise')">点赞({{classmateList.length}})</span>
             </div>
           </div>
           <template v-if="navTabName === 'comment'">
-            <div v-for="item,index in courseCardInfo.commentlist.hotComments">
+            <div v-for="item,index in commentList">
               <!-- 热门评论 -->
-              <div class="hot-area" v-if="courseCardInfo.commentlist.hotComments.length > 0">
+              <div class="hot-area" v-if="item.isHot === 1">
                 <i class="hot-icon"><img src="~ICON/icon_hotcomment@3x.png" alt=""></i>热门评论
               </div>
               <!-- 全部评论 -->
-              <div class="hot-area" v-if="index === hotCommentTotal">
+              <div class="hot-area" v-if="item.isHot === 0 && index === hotCommentNum">
                 <i class="hot-icon"><img src="../../assets/icon/tab-massage-3@3x.png" alt=""></i>全部评论
               </div>
               <discuss-item 
@@ -50,7 +51,7 @@
           <!-- 点赞 -->
           <template v-else>
           <div class="content-praise">
-            <classmate-item v-for="item, index in courseCardInfo.favorList"
+            <classmate-item v-for="item, index in classmateList"
                             :item='item'
                             :key="index"
                             @tap-one="jump">
@@ -101,7 +102,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCourseCardInfoApi, courseCardCommentApi } from '@/api/pages/pageInfo.js'
+  import { getCourseCardInfoApi, courseCardCommentApi, getCourseCardFavorListApi, getCourseCardCommentListApi } from '@/api/pages/pageInfo.js'
 //import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi } from '@/api/pages/pageInfo.js'
 
   @Component({
@@ -146,9 +147,13 @@
     curData = {} // 评论回来的数据
     modelType = '' // 评论类型
     classmateList = [] // 点赞列表
+    commentList = []	//评论列表
+    hotCommentNum = 0  //热评数量
     isFavorList = false
     isPlayList = true
     communityId = ''
+    
+    
     created () {
     	this.pageInit()
     }
@@ -176,6 +181,17 @@
         case 'comment-area':
           this.jumpCommentDetail({item, commentType}).then()
       }
+    }
+    //刷新点赞列表数据
+    reFlashPraise(){
+    	let param = {
+    		peopleCourseId: this.courseCardInfo.peopleCourseId,
+    		page:1,
+    		pageCount:20
+    	}
+    	getCourseCardFavorListApi(param).then(res=>{
+    		this.classmateList = res
+    	})
     }
 
     /**
@@ -356,17 +372,34 @@
     blur () {
       this.displaySuspensionInput = false
     }
+    
+    /**
+     *请求评论列表数据
+     */
+    getCourseCardCommentList(){
+    	let data = {
+    		peopleCourseId: this.$route.query.courseId, 
+    		page:1,
+    		pageCount:20
+    	}
+    	getCourseCardCommentListApi(data).then(res=>{
+    		this.hotCommentNum = res.hotComments.length
+    		this.commentList = [...res.hotComments,...res.comments]
+    	}).catch(res=>{
+    		console.log(res,"报错信息")
+    	})
+    }
 
     /**
      * 发送评论
      * @param data
      */
     async sendComment ({value, commentIndex}) {
-      const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.dynamicList[0]
-      const {commentId, problemId, circleId} = item
+//    const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.dynamicList[0]
+//    const {commentId, problemId, circleId} = item
       let sourceType = 4
       let type =1
-      if (commentIndex < 0) {
+      if (this.commentIndex < 0) {
       	type = 1
 //      sourceType = this.modelType
       }else{
@@ -381,20 +414,24 @@
       }
       
       courseCardCommentApi(params).then(res=>{
-      	
-      })
-      await setSubmitCommentApi(params).then(data => {
-        this.commentIndex = -1
-        let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
-        this.pagination.end = false // 初始化数据，必定不是最后一页
-        this.getList({ page: page , type: 'comment'})
-        this.curData = data
-        this.$vux.toast.text('评论成功', 'bottom')
-        this.suspensionInputPlaceholder = '来分享你的想法吧～'
+      	this.getCourseCardCommentList()
+      	this.$vux.toast.text('评论成功', 'bottom')
       }).catch(e => {
         this.$vux.toast.text('评论失败', 'bottom')
         this.curData = {}
       })
+//    await setSubmitCommentApi(params).then(data => {
+//      this.commentIndex = -1
+//      let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
+//      this.pagination.end = false // 初始化数据，必定不是最后一页
+//      this.getList({ page: page , type: 'comment'})
+//      this.curData = data
+//      this.$vux.toast.text('评论成功', 'bottom')
+//      this.suspensionInputPlaceholder = '来分享你的想法吧～'
+//    }).catch(e => {
+//      this.$vux.toast.text('评论失败', 'bottom')
+//      this.curData = {}
+//    })
     } 
       
 
@@ -405,6 +442,7 @@
     	const { courseId, peopleId } = this.$route.query
       const res = await getCourseCardInfoApi(courseId,peopleId)
       this.courseCardInfo = res
+      this.getCourseCardCommentList()
       console.log(this.courseCardInfo,"我是请求回来的数据")
     }
 

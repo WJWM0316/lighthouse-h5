@@ -445,3 +445,19 @@ export const setExcellentCourseCardApi = (data) => {
     data
   })
 }
+
+//获取点赞打卡列表
+export const getCourseCardFavorListApi = (data) => {
+  return request({
+    url: `/wap/courseCard/getCourseCardFavorList/${data.peopleCourseId}?page=${data.page}&pageCount=${data.pageCount}`,
+    type:'get'
+  })
+}
+
+//获取打卡评论列表
+export const getCourseCardCommentListApi = (data) => {
+  return request({
+    url: `/wap/courseCard/getCourseCardCommentList?peopleCourseId=${data.peopleCourseId}&page=${data.page}&pageCount=${data.pageCount}`,
+    type:'get'
+  })
+}
