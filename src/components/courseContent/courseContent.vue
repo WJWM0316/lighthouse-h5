@@ -25,7 +25,7 @@
       >
         <img class='blo_left' :src="item.coverPicture"/>
         <div class='blo_center'>{{item.title}}</div>
-        <template v-if="!isMaster">
+        <template v-if="isMaster">
           <div class='blo_right' v-if ='item.courseType === 2'>试读</div>
 
           <div class="blo_right noneborder" v-else>
@@ -35,7 +35,7 @@
             <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else-if="item.statusInfo.isUnlock === 1" />
           </div>
         </template>
-        <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else/>
+        <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else />
         
       </div>
     </div>

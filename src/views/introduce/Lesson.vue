@@ -273,6 +273,7 @@
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
 	        this.endHint(1)
+	        return
 	      }
 	    }
 
@@ -286,6 +287,8 @@
 
 	  // 已结束提示 
 	  endHint(type){
+      let that = this
+	  	
 	    if(!type){
 	      return
 	    }
@@ -296,13 +299,13 @@
 	       confirmText: '马上加入',
 	       cancelText: '我再想想',
 	       onConfirm: function (res) {
-	        this.isEndSock = true
+	        that.isEndSock = true
 	         if(type == 1){
-	            this.freeIn()
+	            that.freeIn()
 	         }else if(type == 2) {
-	            this.payOrFree()
+	            that.payOrFree()
 	         }else {
-	            this.freeJoin()
+	            that.freeJoin()
 	         }
 	       },
 	     })
@@ -327,6 +330,7 @@
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
 	        this.endHint(2)
+	        return
 	      }
 	    }
 	    let that = this
@@ -338,6 +342,7 @@
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
 	        this.endHint(3)
+	        return
 	      }
 	    }
 
@@ -351,10 +356,7 @@
 	        content: '快去灯塔里和大家一起进步吧',
 	        buttonText: '好的',
 	        onHide () {
-	          
-
 	      		this.pageInit()
-
 	        }
 	      })
 	    }).catch((e) => {

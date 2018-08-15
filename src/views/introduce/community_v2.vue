@@ -374,15 +374,10 @@
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
         	this.roleInfo=res.role;
-
-          console.log(111)
           //
           if(res.role.title =='塔主' || res.role.title =='嘉宾'){
-          console.log(111)
-
             this.isMaster = true
           }
-
         }).catch(res => {
         		this.roleInfo=res.data.role;
 				})
