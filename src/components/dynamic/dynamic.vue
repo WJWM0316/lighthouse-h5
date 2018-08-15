@@ -28,6 +28,7 @@
                   :isTower='isTower'
                   :isUserExchange="isUserExchange"
                   :isMaster = "isMaster"
+                  :isShowTop = 'isShowTop'
                   @videoEvent="videoEvent"
                   @operation="operation"
                   @opMember="opMember"
@@ -156,6 +157,11 @@
         type: Boolean,
         default: false
       },
+      //是否显示置顶
+      isShowTop: {
+        type: Boolean,
+        default: false
+      },
       //是否成员交流。1不是 0 是
       isUserExchange: {
         type: Number,
@@ -180,11 +186,10 @@
       isTeacher () {},
       communityId (val) {
         this.communityId = val
-        console.log(val,'======')
       },
       isUserExchange(val){
-        console.log(val)
-      }
+      },
+      isShowTop(){}
 
     },
     mixins: [WechatMixin]
@@ -200,6 +205,8 @@
     isMaster = false
 
     created () {
+
+      console.log(1111)
       try {
         this.model = getInformationApi().then(res=>{
           this.isMe = res.userId
@@ -208,7 +215,6 @@
       } catch (error) {
         this.$vux.toast.text(error.message, 'bottom')
       }
-
     }
 
     mounted () {
@@ -227,7 +233,6 @@
       classmatesApi(data).then(res=>{
         if(res.role.length>0){
           res.role.forEach((item,index)=>{
-            console.log(item.identityAuthority)
             if(item.identityAuthority.title === '塔主'){
               if(that.isMe == item.userId){
                 that.isMaster = true

@@ -17,6 +17,7 @@
                    :isDetailCon = 'true'
                    :isTower='true'
                    :isUserExchange="isShowOp"
+                   :isShowTop = 'isShowTop'
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="operation" 
                    @getUserId="getUserId"
@@ -160,6 +161,7 @@
     isPlayList = true
     communityId = ''
 
+    isShowTop = false
     isShowOp = 1
     userOpActionsheet = {
       show: false,
@@ -179,6 +181,8 @@
       if(this.$route.query.isShowOp){
         this.isShowOp = 0
       }
+
+      console.log(this.$route.params)
       this.pageInit()
     }
     // ------------------- 详情评论区 ----------------------
@@ -418,6 +422,8 @@
       const { sourceId, type } = this.$route.params
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = ''
+
+      console.log('type',type)
       if (type === '1') {
         res = await this.getCircleDetailApi(sourceId)
       } else if (type === '2') {
@@ -439,6 +445,12 @@
       }
       this.dynamicList = [res]
       await this.getList({page: 1})
+
+      //是否置顶
+      if (res &&res.topPostStatus && res.topPostStatus === 1){
+        this.isShowTop = true
+      }
+
     }
 
     // ------------------------------------------------
@@ -591,13 +603,13 @@
 
       if(topPostStatus == 0){
         addTopApi(data).then(res=>{
-
+          this.isShowTop = true
         },res=>{
           this.$vux.toast.text('失败', res.message)
         })
       }else {
         delTopApi(data).then(res=>{
-
+          this.isShowTop = false
         },res=>{
           this.$vux.toast.text('失败', res.message)
         })

@@ -3,7 +3,8 @@
     <div class="top">
       <div class="panel">
         <image-item class="icon" :src="require('@/assets/icon/icon_smile.png')" />
-        <p class="text">听说所有信息填写完善的用户都能得到导师的青睐~</p>
+        <p class="text" v-if="!isShow">听说所有信息填写完善的用户都能得到导师的青睐~</p>
+        <p class="text" v-else>为了和塔友们更好地交流，请先完善你的个人信息~~</p>
       </div>
       <p class="tips">* 小灯塔与自客账号共通，保存的信息会同步到自客。</p>
     </div>
@@ -168,6 +169,8 @@ export default class CenterEditinfo extends Vue {
   showGenderPopupPicker = false
   showWorkTimePopupPicker = false
 
+  isShow = false   //个人列表跳转
+
   // 工作年限选项
   get workYears () {
     const list = this.workYearsSource.map(item => {
@@ -181,6 +184,13 @@ export default class CenterEditinfo extends Vue {
 
   created () {
     this.getPageData()
+    console.log("5555555555555555",this.$route.query);
+
+    //完善资料提醒
+    if(this.$route.query.come && this.$route.query.come === 'more'){
+      //todo
+      this.isShow = true 
+    }
   }
 
   /**

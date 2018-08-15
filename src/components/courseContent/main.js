@@ -43,12 +43,9 @@ import moment from 'moment'
       this.lastStudy = val
     },
     isIp(val){
-      console.log(111111,val)
       this.isIp = val
-
     },
     isDown(val){
-      console.log(111111,val)
       this.isDown = val
 
     },

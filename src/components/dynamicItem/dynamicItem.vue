@@ -14,6 +14,7 @@
       	<span class="user-intro" v-if="role && role.isShow && item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
       </div>
 
+      <img class='icon_top' v-if="isShowTop" src="./../../assets/icon/icon_topping@3x.png"/>
       <div class="user_op" @click.stop="op_member" v-if="(isMe === item.releaseUser.userId || isMaster)&&!isUserExchange">
         <img class="op_img" src="./../../assets/icon/bnt_course_more@3x.png" />
       </div>

@@ -94,12 +94,7 @@ export default class HomeIndex extends Vue {
   isCreated = false // 是否已经成为塔主
 
   created () {
-    console.log("5555555555555555",this.$route.query);
-
-    //完善资料提醒
-    if(this.$route.query.come && this.$route.query.come === 'more'){
-      //todo
-    }
+    
     this.getModel()
   }
 
