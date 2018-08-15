@@ -290,12 +290,13 @@
 				let fileId = []
 				console.log('准备发布images：', this.images)
 					let type = 0;
+					let params;
 					if(this.images.length>0){
 						fileId = this.images.map(item => item.fileId)
 						type = 3;
 						if(this.form.content){
 							//如果上传了文字和图片
-							const params = {
+							params = {
 								courseId: parseInt(this.$route.query.courseId),
 								cardContent: this.form.content,
 								type: type,
@@ -304,7 +305,7 @@
 								communityId:this.$route.query.communityId
 							}
 						}else{
-							const params = {
+							params = {
 								courseId: parseInt(this.$route.query.courseId),
 								type: type,
 								arrayFileId: fileId,
@@ -314,7 +315,7 @@
 						}
 					}else{
 						//只有文字
-						const params = {
+						params = {
 							courseId: parseInt(this.$route.query.courseId),
 							cardContent: this.form.content,
 							type: type,
