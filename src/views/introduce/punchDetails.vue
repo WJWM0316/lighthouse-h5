@@ -217,7 +217,6 @@
      * @returns {Promise.<void>}
      */
     async comment (item) {
-    	console.log(item,"55555555555")
       this.displaySuspensionInput = true
       this.$refs.input.$refs['suspension-input'].focus()
       if (item.type === 2) {
@@ -378,7 +377,7 @@
      */
     getCourseCardCommentList(){
     	let data = {
-    		peopleCourseId: this.$route.query.courseId, 
+    		peopleCourseId: this.courseCardInfo.peopleCourseId, 
     		page:1,
     		pageCount:20
     	}
@@ -409,7 +408,7 @@
       const params = {
       	type: type,
       	id: this.$route.query.courseId,		//对应打卡或评论的id
-        peopleCourseId: this.$route.query.courseId,     // 对应评论类型id
+        peopleCourseId: this.courseCardInfo.peopleCourseId,     // 对应评论类型id
         commentContent: value       // 评论内容
       }
       
@@ -420,18 +419,19 @@
         this.$vux.toast.text('评论失败', 'bottom')
         this.curData = {}
       })
-//    await setSubmitCommentApi(params).then(data => {
-//      this.commentIndex = -1
-//      let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
-//      this.pagination.end = false // 初始化数据，必定不是最后一页
-//      this.getList({ page: page , type: 'comment'})
-//      this.curData = data
-//      this.$vux.toast.text('评论成功', 'bottom')
-//      this.suspensionInputPlaceholder = '来分享你的想法吧～'
-//    }).catch(e => {
-//      this.$vux.toast.text('评论失败', 'bottom')
-//      this.curData = {}
-//    })
+      
+     /* await setSubmitCommentApi(params).then(data => {
+        this.commentIndex = -1
+        let page = Math.ceil(commentIndex/20) // 向上取整 用于刷新当前page
+        this.pagination.end = false // 初始化数据，必定不是最后一页
+        this.getList({ page: page , type: 'comment'})
+        this.curData = data
+        this.$vux.toast.text('评论成功', 'bottom')
+        this.suspensionInputPlaceholder = '来分享你的想法吧～'
+      }).catch(e => {
+        this.$vux.toast.text('评论失败', 'bottom')
+        this.curData = {}
+      })*/
     } 
       
 

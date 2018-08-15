@@ -293,16 +293,38 @@
 					if(this.images.length>0){
 						fileId = this.images.map(item => item.fileId)
 						type = 3;
+						if(this.form.content){
+							//如果上传了文字和图片
+							const params = {
+								courseId: parseInt(this.$route.query.courseId),
+								cardContent: this.form.content,
+								type: type,
+								arrayFileId: fileId,
+								globalLoading: false,
+								communityId:this.$route.query.communityId
+							}
+						}else{
+							const params = {
+								courseId: parseInt(this.$route.query.courseId),
+								type: type,
+								arrayFileId: fileId,
+								globalLoading: false,
+								communityId:this.$route.query.communityId
+							}
+						}
+					}else{
+						//只有文字
+						const params = {
+							courseId: parseInt(this.$route.query.courseId),
+							cardContent: this.form.content,
+							type: type,
+							arrayFileId: fileId,
+							globalLoading: false,
+							communityId:this.$route.query.communityId
+						}
 					}
 				console.log('生成的fileId：', fileId)
-				const params = {
-					courseId: parseInt(this.$route.query.courseId),
-					cardContent: this.form.content,
-					type: type,
-					arrayFileId: fileId,
-					globalLoading: false,
-					communityId:this.$route.query.communityId
-				}
+				
 
 				//发布内容
 				await setCourseCardContentApi(params)

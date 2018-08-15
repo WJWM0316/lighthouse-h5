@@ -268,7 +268,11 @@
   	}
   	
   	mounted () {
-	    this.video = this.$refs['video']
+  		this.$nextTick(()=>{
+  			this.video = document.getElementsByClassName("Lesson-video")[0]
+//			this.video = this.$refs['video']
+  			console.log(this.video,"我是捕获到的视频对象")
+  		})
 	  }
 
 	  freeIn () { // 跳转到一个图文消息
@@ -510,8 +514,8 @@
 	  }
   	//播放视频
   	playVideo(){
-  		this.video.currentTime = 0
-	    this.video.src = "https://cdnstatic.ziwork.com/test/video/2018-05-29/68446a2ea39c53ec66ad0a1e012ada3d.mp4"//src="https://cdnstatic.ziwork.com/test/video/2018-05-29/68446a2ea39c53ec66ad0a1e012ada3d.mp4"
+//		this.video.currentTime = 0
+	    this.video.src = this.communityCourse.av.files[0].fileUrl//src="https://cdnstatic.ziwork.com/test/video/2018-05-29/68446a2ea39c53ec66ad0a1e012ada3d.mp4"
 	    console.log(this.video.currentTime,"我是视频对象")
 	    this.videoPlay = false
 	    this.video.play()
