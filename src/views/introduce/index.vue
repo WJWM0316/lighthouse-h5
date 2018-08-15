@@ -273,6 +273,7 @@
     SelectedPrice = ''		//选择其他优惠券后的价格
     UsedUserCouponId = 0		//支付时使用的优惠券id
 
+    sEndSock = false  //已结束的锁  
     pxToRem (_s) {
       // 匹配:20px或: 20px不区分大小写
       const reg = /(\:|: )+(\d)+(px)/gi
@@ -333,35 +334,43 @@
    	sessionStorage.removeItem("coupon");
    }
    
-   toCoupon(){
-   	if(this.SelectCouponItem.userCouponId){
-   		this.$router.push({path:'/center/coupon',query:{userCouponId:this.SelectCouponItem.userCouponId,communityId:this.pageInfo.communityId}});
-   	}else if(this.SelectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
-   		this.$router.push({path:'/center/coupon',query:{userCouponId:0,communityId:this.pageInfo.communityId}});
-   	}else{
-   		this.$router.push({path:'/center/coupon',query:{userCouponId:this.pageInfo.selectCoupon.userCoupon.userCouponId,communityId:this.pageInfo.communityId}});
-   	}
-   }
+    toCoupon(){
+     	if(this.SelectCouponItem.userCouponId){
+     		this.$router.push({path:'/center/coupon',query:{userCouponId:this.SelectCouponItem.userCouponId,communityId:this.pageInfo.communityId}});
+     	}else if(this.SelectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
+     		this.$router.push({path:'/center/coupon',query:{userCouponId:0,communityId:this.pageInfo.communityId}});
+     	}else{
+     		this.$router.push({path:'/center/coupon',query:{userCouponId:this.pageInfo.selectCoupon.userCoupon.userCouponId,communityId:this.pageInfo.communityId}});
+     	}
+    }
+
+    // 已结束提示 
+    endHint(type){
+      let that = this
+      if(!type){
+        return
+      }
+      
+      this.$vux.confirm.show({
+        title: '加入须知',
+         content: `该课程已经全部更新完毕了！ \/n 加入后你获得以下内容： \/n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；\/n  2、和成员们一起交流学习； \/n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
+         confirmText: '马上加入',
+         cancelText: '我再想想',
+         onConfirm: function (res) {
+          that.isEndSock = true
+           if(type == 1){
+              that.freeIn()
+           }else if(type == 2) {
+              that.payOrFree()
+           }else {
+              that.freeJoin()
+           }
+         },
+       })
+    }
     
     payOrFree () {
       this.toPay = true;
-//   	if(that.pageInfo.selectCoupon.couponPrice===0){
-//   		that.freeJoin()
-//   	}else{
-//   		that.payIn()
-//   	}
-//      let {startTime, endTime} = this.pageInfo
-//      startTime = new Date(startTime * 1000)
-//      endTime = new Date(endTime * 1000)
-//      this.$vux.confirm.show({
-//        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
-//        confirmText: '确定',
-//        cancelText: '取消',
-//        onConfirm: function (res) {
-//          console.log(res)
-//          that.payIn()
-//        },
-//      })
     }
     async freeJoin () {
       await freePay({
@@ -424,7 +433,6 @@
       }
     }
     onBridgeReady (params) {
-//      this.closeEvent()
       let self = this
       /*eslint-disable*/
       WeixinJSBridge.invoke('getBrandWCPayRequest', {
@@ -446,9 +454,7 @@
               case '0125347d17e7c24d7e969783a26b922d': // 好点子塔
                 self.$store.dispatch('show_qr', {type: 3})
                 break
-//            case '95137f42811b2010a025bf28e35aeb69': // 活动塔（90天裂变塔）
-//              self.$store.dispatch('show_qr', {type: 2})
-//              break
+
               case '270abb50e490783896f2396e58bfbfad': // 活动塔0628
                 self.$store.dispatch('show_qr', {type: 1})
                 break
@@ -459,8 +465,6 @@
                 self.$store.dispatch('show_qr', {type: 2})
                 break
             }
-//            self.$store.dispatch('show_qr')
-//            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
           } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
@@ -503,7 +507,6 @@
         } = self.pageInfo
 
         const {realName, career} = master
-//        const str = realName ? realName + (career ? '|' + career : '') : ''
         console.log('location.href', location.href)
         // 页面分享信息
         self.wechatShare({

@@ -59,6 +59,7 @@
                 :isIp = getCourseData.isIp
                 :isDown = getCourseData.isDown
                 :total = pagination.total
+                :isMaster = isMaster
                 ></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
@@ -180,7 +181,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
 
-  import { getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi, topPostListApi, delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi, classmatesApi } from '@/api/pages/pageInfo'
+  import { getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi, topPostListApi, delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi } from '@/api/pages/pageInfo'
 
   
 	Component.registerHooks([
@@ -256,11 +257,11 @@
       isToStydy: false,
 
       //课节 请求参数
-      isFirst: true,
       isIp: false,
       isDown: true
     }
 
+    isMaster = false
     topList = []  //置顶列表
     //置顶item
     nowUserOpItem = {}
@@ -370,15 +371,17 @@
           'link': location.origin + `/beaconweb/#/introduce/${communityId}`
         })
 
-        this.getMaster()
-
-        
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
         	this.roleInfo=res.role;
+          //
+          if(res.role.title =='塔主' || res.role.title =='嘉宾'){
+            this.isMaster = true
+          }
         }).catch(res => {
         		this.roleInfo=res.data.role;
 				})
+
         //判断是否有课程，无课程则跳转
         if(this.pageInfo.isCourse!==3){
         	this.type=0;
@@ -542,9 +545,6 @@
             upOrDown: '',
             sortNum: 0,
             isToStydy: false,
-
-            //课节 请求参数
-            isFirst: true,
             isIp: false,
             isDown: true
           }
@@ -694,6 +694,7 @@
         return
       }
 
+      console.log('getlist')
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
       let params = {}
@@ -732,16 +733,15 @@
         this.getCourseData.isToStydy = false
 
         //禁止翻页
+        if(res.courses && res.courses.length < pageSize ){
+          if(this.getCourseData.upOrDown == 'up'){
+            this.getCourseData.isIp = false
+          }else if(this.getCourseData.upOrDown == 'down'){
+            this.getCourseData.isDown = false
+          }else {
+            this.getCourseData.isIp = false
+            this.getCourseData.isDown = false
 
-        if(this.getCourseData.isFirst){
-          this.getCourseData.isFirst = false
-        }else {
-          if(res.courses && res.courses.length<pageSize ){
-            if(this.getCourseData.upOrDown == 'up'){
-              this.getCourseData.isIp = false
-            }else {
-              this.getCourseData.isDown = false
-            }
           }
         }
       } else {
@@ -839,6 +839,7 @@
      * @param {*} item
      */
     handleUserOpActionsheetItem (key, item) {
+
       switch (key) {
         case '1':
           this.topOp()
@@ -868,6 +869,22 @@
       let topPostStatus = nowItem.topPostStatus
 
       if(topPostStatus == 0){
+        if(this.topList.length==3){
+          this.$vux.confirm.show({
+            content: '置顶这条帖子将会自动取消第一条置顶的帖子，请确认哦',
+            confirmText: '确定',
+            cancelText: '取消',
+            // 组件除show外的属性
+            onCancel () {
+            },
+            onConfirm () {
+              that.topList.pop()
+              that.topOp()
+            }
+          })
+          return
+        }
+
         addTopApi(data).then(res=>{
           that.opTopList(1,nowItem)
           that.dynamicList[nowItem.itemIndex].topPostStatus = !that.dynamicList[nowItem.itemIndex].topPostStatus
@@ -950,16 +967,19 @@
 
     // 课程 列表分页操作
     getLessPage (type) {
-      console.log('=-=-=-==',type)
+
+
       this.getCourseData.upOrDown = type.type===1?'up':'down'
       this.getCourseData.sortNum = type.type===1?this.dynamicList[0].sort : this.dynamicList[this.dynamicList.length-1].sort
+      this.pagination.end = false
+      this.pagination.busy = false
+      console.log(this.getCourseData.sortNum)
       this.getList({page:2})
     }
 
     lessSetSort (){
       this.lessSort = this.lessSort == 'asc' ? 'desc' : 'asc'
 
-      this.getCourseData.isFirst =  true
       this.getCourseData.isIp =  false
       this.getCourseData.isDown =  true
 
@@ -1008,6 +1028,7 @@
     opTopList(type,item){
       if( type && item){
         if(type == 1){  
+          
           let circleType = item.circleType
           let tit = ''
 
@@ -1026,7 +1047,7 @@
               break
           }
           item.tit = tit
-          this.topList.push(item)
+          this.topList.unshift(item)
         }else if(type === 2){
           for(let i = 0;this.topList.length>i;i++){
             if(this.topList[i].circleId == item.circleId){
@@ -1053,7 +1074,6 @@
 
     toLastStudy (){
       this.getCourseData.isToStydy = true
-      this.getCourseData.isFirst =  true
       this.getCourseData.isIp =  true
       this.getCourseData.isDown =  true
 
@@ -1062,27 +1082,6 @@
       this.getList({page: 1})
     }
 
-    getMaster(){
-      let data = {
-        communityId: this.communityId,
-        page: 1,
-        pageCount: 20,
-      }
-      let that = this
-      classmatesApi(data).then(res=>{
-        console.log(res)
-        return
-        if(res.role.length>0){
-          res.role.forEach((item,index)=>{
-            if(item.identityAuthority.title === '塔主'){
-              if(that.isMe == item.userId){
-                that.isMaster = true
-              }
-            }
-          })
-        }
-      })
-    }
 
     scroll (e) {
       if (this.displaySuspensionInput) {

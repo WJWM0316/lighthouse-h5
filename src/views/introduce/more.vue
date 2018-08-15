@@ -48,7 +48,7 @@
 			<img class="icon_4" src="../../assets/icon/icon_list_gm.png" />
 			<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg2" /></p>
 			<ul class="classmateList">
-				<li class="classmatePerson" v-for="item,index in classmate" @click.prevent.stop="goUserDetail(item.userId)" v-if="index<3">
+				<li class="classmatePerson" v-for="item,index in excellent" @click.prevent.stop="goUserDetail(item.userId)" v-if="index<3">
 					<div class="classmate-imgBox" >
 						<img class="titleImg"  :src="item.avatar"/>
 						<img class="rankImg" v-if="index==0" src="../../assets/icon/rank_1.png"/>
@@ -109,6 +109,7 @@
 		master = {}
 		role = []
 		classmate = []
+		excellent = []
 		total = 0
 		girlImg = ""
 		boyImg = ""
@@ -142,7 +143,7 @@
 		hintMsg () {
 			this.$vux.alert.show({
 			  title: '如何成为优秀学员',
-			  content: '1、积极听课，完成每节课的打 卡内容； /h 2、如果你的打卡内容写的很棒 的话，就会被导师选为“优秀打 卡”；/h  3、累计“优秀打卡”个数前三名 的，就能成为优秀学员；',
+			  content: '1、积极听课，完成每节课的打 卡内容； \/n 2、如果你的打卡内容写的很棒 的话，就会被导师选为“优秀打 卡”；\/n  3、累计“优秀打卡”个数前三名 的，就能成为优秀学员；',
 			  buttonText: '我知道了'
 			})
 		}
@@ -191,7 +192,7 @@
 
 	    	if (page === 1) {
 	    		this.classmate = res.peoples
-
+	    		this.excellent = res.excellent
 	    		if(res.myInformation === 0){
 	    			//资料不全
 	    			this.hintMsg2()

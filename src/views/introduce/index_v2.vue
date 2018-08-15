@@ -227,6 +227,7 @@
       if(this.isEnd ){
         if(!this.isEndSock){
           this.endHint(1)
+          return
         }
       }
 
@@ -240,23 +241,24 @@
 
     // 已结束提示 
     endHint(type){
+      let that = this
       if(!type){
         return
       }
       
       this.$vux.confirm.show({
         title: '加入须知',
-         content: `该课程已经全部更新完毕了！ /n 加入后你获得以下内容： /n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；/n  2、和成员们一起交流学习； /n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
+         content: `该课程已经全部更新完毕了！ \/n 加入后你获得以下内容： \/n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；\/n  2、和成员们一起交流学习； \/n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
          confirmText: '马上加入',
          cancelText: '我再想想',
          onConfirm: function (res) {
-          this.isEndSock = true
+          that.isEndSock = true
            if(type == 1){
-              this.freeIn()
+              that.freeIn()
            }else if(type == 2) {
-              this.payOrFree()
+              that.payOrFree()
            }else {
-              this.freeJoin()
+              that.freeJoin()
            }
          },
        })
@@ -267,29 +269,19 @@
       if(this.isEnd ){
         if(!this.isEndSock){
           this.endHint(2)
+          return
         }
       }
 
       let that = this
       that.payIn()
-        //      let {startTime, endTime} = this.pageInfo
-        //      startTime = new Date(startTime * 1000)
-        //      endTime = new Date(endTime * 1000)
-        //      this.$vux.confirm.show({
-        //        content: `你将加入${startTime.getFullYear() + '-' + (startTime.getMonth() + 1) + '-' + startTime.getDate()}至${endTime.getFullYear() + '-' + (endTime.getMonth() + 1) + '-' + endTime.getDate()}导师的灯塔，加入后不支持退出、转让，请再次确认。`,
-        //        confirmText: '确定',
-        //        cancelText: '取消',
-        //        onConfirm: function (res) {
-        //          console.log(res)
-        //          that.payIn()
-        //        },
-        //      })
     }
     async freeJoin () {
-
+      let that = this
       if(this.isEnd ){
         if(!this.isEndSock){
           this.endHint(3)
+          return
         }
       }
 
@@ -298,7 +290,7 @@
         productType: 1
       }).then((res) => {
         const _this = this
-        this.$vux.alert.show({
+        that.$vux.alert.show({
           title: '加入成功',
           content: '快去灯塔里和大家一起进步吧',
           buttonText: '好的',
@@ -307,7 +299,7 @@
           }
         })
       }).catch((e) => {
-        this.$vux.toast.text(e.message, 'bottom')
+        that.$vux.toast.text(e.message, 'bottom')
       })
     }
     toHome () {
