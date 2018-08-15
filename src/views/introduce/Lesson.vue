@@ -26,7 +26,7 @@
         </div>
       </div>
       <!-- 音频 -->
-      <div :class="{'content-audio': true, 'not-played': !communityCourse.av.files[0].isPlayed}" v-if="communityCourse.av && communityCourse.av.type==='voice'">
+      <div :class="{'content-audio': true, 'not-played': !communityCourse.av.files[0].isPlayed}" v-if="communityCourse.av && communityCourse.av.type==='audio'">
         <audioBox
           :source="communityCourse.av.files[0]" 
           :touerImg="communityCourse.av.avatarUrl"
@@ -208,7 +208,14 @@
     intro = '<p>社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍</p><p><img src="https://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2018-08-08/2d6e172b6cbecf6c9de11727d89d8d0f.png" alt="商业课-推广海报" style="max-width:100%;"><br></p><p><br></p>'
 
     //音频数据
-    item = {}
+    item = {
+    	files:[{
+				duration:250,
+				fileId:"6237",
+				fileUrl:"https://cdnstatic.ziwork.com/test/audio/2018-08-15/4bd491cb8292450b62b387a595f15ee8.mp3",
+				avatar:"2JVOTrwtULW3VpcKI3whmcDNYTlTMEVQzPpxN3ZDfXOcFYKtUiv7XZwjXolTara2.amr"
+	    }],
+    }
     //所有打卡数据
     peopleCourseCardList = ""
     //优秀打卡
@@ -257,8 +264,6 @@
   	
   	mounted () {
   		this.$nextTick(()=>{
-  			this.video = document.getElementsByTagName("video")[0]
-  		 	console.log(this.video,"我是捕获到的视频对象")
   		})
 	  }
 
@@ -516,12 +521,11 @@
 	  }
   	//播放视频
   	playVideo(e){
-  		console.log(e)
-//		this.video.currentTime = 0
-//	    this.video.src = this.communityCourse.av.files[0].fileUrl//src="https://cdnstatic.ziwork.com/test/video/2018-05-29/68446a2ea39c53ec66ad0a1e012ada3d.mp4"
-//	    console.log(this.video.currentTime,"我是视频对象")
-//	    this.videoPlay = false
-//	    this.video.play()
+  		this.video = this.$refs["video"]
+			this.video.currentTime = 0
+	    this.video.src = this.communityCourse.av.files[0].fileUrl
+	    this.videoPlay = false
+	    this.video.play()
   	}
   	
   	/**
