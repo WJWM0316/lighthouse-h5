@@ -416,9 +416,9 @@ export default class CommunityCard extends Vue {
       font-weight: 300;
       display: block;
       margin-top: 6px;
-      margin-bottom: 23px;
+      margin-bottom: 20px;
       line-height: 18px;
-      font-size: 14px;
+      font-size: 12px;
       color: #666666;
     }
 
@@ -431,7 +431,7 @@ export default class CommunityCard extends Vue {
       font-weight: 300;
       justify-content: space-between;
       align-items: center;
-
+      margin-bottom: 2px;
       .left {
         flex: 0 0 auto;
         font-size: 11px;

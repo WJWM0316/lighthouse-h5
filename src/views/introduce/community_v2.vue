@@ -63,10 +63,12 @@
                 ></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
+
                 <div class="module-title">
                   <p>相关推荐</p>
-                  <div class="hr"></div>
                 </div>
+                  <div class="hr"></div>
+                
                 <div class="module-content">
                   <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
                 </div>
@@ -1114,7 +1116,7 @@
       }
       .module-content {
         .community-item {
-          margin-top: 25px;
+          margin-top: 15px;
         }
       }
 

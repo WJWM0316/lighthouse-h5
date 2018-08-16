@@ -130,7 +130,7 @@
   .attempt_list {
     display: flex;
     flex-direction: column;
-    margin: 15px 15px 15px 20px;
+    margin: 15px 15px 10px 20px;
   }
   .attempt_block {
     display: flex;
@@ -139,6 +139,9 @@
     align-items: center;
     height:40px;
     margin-bottom: 30px;
+    &:last-child {
+      margin-bottom: 10px;
+    }
     .blo_left {
       width:70px;
       height:39px;
