@@ -46,7 +46,10 @@ import moment from 'moment'
     courseList () {},
     lastStudy () {},
     isIp(){},
-    isDown(){},
+    isDown(val){
+      console.log(val)
+      
+    },
     total(){},
     isMaster(val){
       console.log(val)

@@ -255,10 +255,10 @@
       upOrDown: '',
       sortNum: 0,
       isToStydy: false,
-
       //课节 请求参数
       isIp: false,
-      isDown: true
+      isDown: true,
+
     }
 
     isMaster = false
@@ -379,7 +379,7 @@
         // 页面分享信息
         let url = ''
         if(this.pageInfo.isCourse === 3){
-
+          console.log(111)
           //更新课程列表请求参数
           this.lessGetBaseInit()
 
@@ -655,28 +655,27 @@
       if (this.pagination.end) {
         return
       }
+      let params = {}
+      let res = ''
+      let courseData = this.getCourseData
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
-      let params = {}
+      this.pagination.busy = true
+      
       if(this.showType){
         params = {
           id: this.$route.params.communityId,
-          //page : page,
           pageCount: pageSize,
           sort: this.lessSort,
-          sortNum: this.getCourseData.sortNum,
+          sortNum: courseData.sortNum,
         }
-
         // 当前学习需要参数
-        if(this.getCourseData.isToStydy){
+        if(courseData.isToStydy){
           params.sortNum = this.lastStudy.sort
         }
-
         //那个方向翻页。不能为空。
-        console.log('down=>',this.getCourseData.upOrDown)
-        if(this.getCourseData.upOrDown){
-        console.log('down=>',this.getCourseData.upOrDown)
-          params.upOrDown = this.getCourseData.upOrDown
+        if(courseData.upOrDown){
+          params.upOrDown = courseData.upOrDown
         }
       }else {
         params = {
@@ -686,30 +685,13 @@
           sort: this.userSort,
         }
       }
-      this.pagination.busy = true
-      let res = ''
+
       if (this.showType) {
         res = await this.getLessMsgList(params)
-        this.lastStudy = res.lastStudentCourse 
-        this.getCourseData.sortNum = 0
-        this.getCourseData.isToStydy = false
-
-        //禁止翻页
-        if(res.courses && res.courses.length < pageSize ){
-          if(this.getCourseData.upOrDown == 'up'){
-            this.getCourseData.isIp = false
-          }else if(this.getCourseData.upOrDown == 'down'){
-            this.getCourseData.isDown = false
-          }else {
-            this.getCourseData.isIp = false
-            this.getCourseData.isDown = false
-          }
-        }
       } else {
         res = await this.getCommunicationsList(params)
       }
       const {courses, lists, total} = res
-
       const temp = new Array(...(this.showType ? courses : lists))
       temp.forEach((item) => {
         if (item['modelType'] === 'problem') {
@@ -725,11 +707,34 @@
         }
       })
 
+      //课节
+      if(courses){
+        //禁止翻页
+
+        if(res.courses && res.courses.length < pageSize ){
+          if(courseData.upOrDown == 'up'){
+            courseData.isIp = false
+          }else if(courseData.upOrDown == 'down'){
+            courseData.isDown = false
+          }else {
+            courseData.isDown = false
+            //不是上次学到的情况下
+            if(!courseData.isToStydy){
+              courseData.isIp = false
+            }
+          }
+        }
+        console.log(courseData)
+
+        this.lastStudy = res.lastStudentCourse 
+        courseData.sortNum = 0
+        courseData.isToStydy = false
+      }
+
       if (page === 1) {
         this.dynamicList = temp
       } else {
-
-        if(this.showType && this.getCourseData.upOrDown == 'up'){
+        if(this.showType && courseData.upOrDown == 'up'){
           this.dynamicList = temp.concat(this.dynamicList || [])
         }else {
           this.dynamicList = this.dynamicList.concat(temp || [])
