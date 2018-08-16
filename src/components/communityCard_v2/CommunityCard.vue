@@ -21,11 +21,11 @@
     <!--灯塔头部 v-if="isEntentr" -->
     <div class="info" :class="{'community3':community.isCourse === 2}">
       <template v-if="community.isJoined === 1 && community.isCourse == 2">
-        <h3 class="title2" v-text="community.title" :class=""></h3>
+        <h3 class="title2" v-text="community.title" ></h3>
       </template>
 
       <template v-else>
-        <h3 class="title" v-text="community.title" :class=""></h3>
+        <h3 class="title" v-text="community.title" ></h3>
         <p class="desc" v-text="community.simpleIntro"></p>
       </template>
 
@@ -45,7 +45,7 @@
 
         <div class="center"  @click.prevent.stop="toMore" v-if="community.menuPeople&&community.menuPeople.outstandingStudents.length>0">
               <img class="user_icon" v-for="(item, index) in community.menuPeople.outstandingStudents" :src="item.avatar" v-if="index<3" />
-              <img class="user_icon jkhjk" v-if="community.joinedNum>3 && community.menuPeople.outstandingStudents.length==3" src="../../assets/icon/firends-call-more.png"/>
+              <img class="user_icon four" v-if="community.joinedNum>3 && community.menuPeople.outstandingStudents.length==3" src="../../assets/icon/firends-call-more.png"/>
         </div>
         <div class="right" >
           <template v-if="community.isJoined === 1 && isCommunityIntroduce">
@@ -421,7 +421,7 @@ export default class CommunityCard extends Vue {
 
     .bottom {
       display: flex;
-      font-size: 14px;
+      font-size: 12px;
       line-height: 18px;
       color: #929292;
       //font-family: PingFangSC-Light;
@@ -431,9 +431,14 @@ export default class CommunityCard extends Vue {
 
       .left {
         flex: 0 0 auto;
+        font-size: 11px;
+        font-weight: 300;
         .residue {
 
           .number {
+            font-weight: 400;
+
+            font-size: 16px;
             color: #d7ab70;
           }
         }
@@ -446,14 +451,17 @@ export default class CommunityCard extends Vue {
         .user_icon {
           width:30px;
           height:30px;
-          border:1px solid rgba(237,237,237,1);
+          border: 0.5px solid rgba(237,237,237,1);
           box-sizing: border-box;
           border-radius: 50%;
           overflow: hidden;
           display: block;
-          margin-left: -10px;
+          margin-left: -6px;
           &:first-of-type {
             margin-left: 0;
+          }
+          &:end-of-type {
+           border: none
           }
         }
 

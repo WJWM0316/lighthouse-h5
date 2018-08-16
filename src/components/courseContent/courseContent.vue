@@ -148,6 +148,7 @@
       font-family: PingFangSC-Regular;
       color: rgba(53,64,72,1);
       line-height: 18px;
+      .setEllipsisLn()
     }
     .blo_right {
       width: 36px;
