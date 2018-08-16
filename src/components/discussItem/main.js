@@ -227,13 +227,26 @@ export default class discussItem extends Vue {
    */
   commentAreaClick () {
     const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'comment-area',
-      itemIndex,
-      item: this.item,
-      type: this.commentType,
-      commentType: this.commentType
-    })
+    if(this.$route.path === "/PunchDetails"){
+    	this.$emit('operation', {
+	      eventType: 'comment-area',
+	      param:{
+	      	itemIndex,
+		      item: this.item,
+		      type: this.commentType,
+		      commentType: this.commentType
+	      }
+	    })
+    }else{
+    	this.$emit('operation', {
+      	eventType: 'comment-area',
+	      itemIndex,
+	      item: this.item,
+	      type: this.commentType,
+	      commentType: this.commentType
+	    })
+    }
+    
   }
 
   // -------------------- 页面跳转 ------------------------

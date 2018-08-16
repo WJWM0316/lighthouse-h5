@@ -204,7 +204,7 @@
           this.del({item, itemIndex, commentType}).then()
           break
         case 'comment-area':
-          this.jumpCommentDetail({item, commentType}).then()
+          this.jumpCommentDetail({item, commentType})
       }
     }
 

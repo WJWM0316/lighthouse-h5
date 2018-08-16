@@ -78,7 +78,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCommentDetailApi, setFavorApi, setSubmitCommentApi, delCommontApi } from '@/api/pages/pageInfo.js'
+  import { getCommentDetailApi, setFavorApi, setSubmitCommentApi, delCommontApi, getCourseCardCommentInfoApi, courseCardFavorApi, courseCardCommentApi  } from '@/api/pages/pageInfo.js'
 
   @Component({
     name: 'all-reply',
@@ -153,38 +153,71 @@
      * @returns {Promise.<void>}
      */
     async praise ({item, itemIndex}) {
-      let params = ''
-      let favor = 0
-      if (item) {
-        const {commentId: favorId, isFavor} = item
-        let favorType = 6
-        favor = isFavor ? 0 : 1
-        params = {
-          favorId,    // 喜爱的id
-          favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
-        }
-      } else {
-        favor = this.discussInfo.isFavor ? 0 : 1
-        params = {
-          favorId: this.$route.params.commentId,    // 喜爱的id
-          favorType: 6,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
-          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
-        }
-      }
-
-      setFavorApi(params).then(res => {
-        if (item) {
-          this.discussItemList[itemIndex].isFavor = favor
-          this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
-        } else {
-          this.discussInfo.isFavor = favor
-          this.discussInfo.favorTotal += favor ? 1 : -1
-        }
-      }).catch(e => {
-//            this.$broadcast('show-message', {content: e.message})
-        alert(e.message)
-      })
+    	console.log(item,itemIndex,"8888888888888888888")
+    	if(this.$route.query.peopleCourseId){//从打卡处进入
+    		let favor = 0
+    		let params = ""
+    		if(item){//点击的是子评论的点赞
+    			favor = this.discussInfo.isFavor ? 0 : 1
+    			params= {
+			  		isFavor: favor,
+			  		type:2,
+			  		sourceId: item.commentId //打卡信息id
+			  	}
+    		}else{
+    			favor = this.discussInfo.isFavor ? 0 : 1
+    			params= {
+			  		isFavor:favor,
+			  		type:2,
+			  		sourceId: this.$route.params.commentId //打卡信息id
+			  	}
+    		}
+    		courseCardFavorApi(params).then(res=>{
+  				if (item) {
+	          this.discussItemList[itemIndex].isFavor = favor
+	          this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
+	        } else {
+	          this.discussInfo.isFavor = favor
+	          this.discussInfo.favorTotal += favor ? 1 : -1
+	        }
+	        this.item.isFavor = favor
+  			})
+    		
+    	}else{//从非打卡处进入
+    		let params = ''
+	      let favor = 0
+	      if (item) {
+	        const {commentId: favorId, isFavor} = item
+	        let favorType = 6
+	        favor = isFavor ? 0 : 1
+	        params = {
+	          favorId,    // 喜爱的id
+	          favorType,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
+	          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
+	        }
+	      } else {
+	        favor = this.discussInfo.isFavor ? 0 : 1
+	        params = {
+	          favorId: this.$route.params.commentId,    // 喜爱的id
+	          favorType: 6,  // 喜爱类型：4问答；5帖子；6评论;7朋友圈；
+	          isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
+	        }
+	      }
+	
+	      setFavorApi(params).then(res => {
+	        if (item) {
+	          this.discussItemList[itemIndex].isFavor = favor
+	          this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
+	        } else {
+	          this.discussInfo.isFavor = favor
+	          this.discussInfo.favorTotal += favor ? 1 : -1
+	        }
+	      }).catch(e => {
+	//            this.$broadcast('show-message', {content: e.message})
+	        alert(e.message)
+	      })
+    	}
+      
     }
     /**
      * 删除
@@ -222,21 +255,45 @@
      * @param data
      */
     async sendComment ({value, commentIndex}) {
-      const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.discussInfo
-      const {commentId} = item
-
-      const params = {
-        sourceId: commentId,     // 对应评论类型id
-        sourceType: 4,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
-        content: value       // 评论内容
-      }
-
-      const res = await setSubmitCommentApi(params)
-      this.suspensionInputPlaceholder = '写评论'
-      this.commentIndex = -1
-      this.displaySuspensionInput = false
-      this.pagination.end = false // 初始化数据，必定不是最后一页
-      await this.getList({page: 1})
+    	if(this.$route.query.peopleCourseId){//从打卡处进入
+    		const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.discussInfo
+	      let type =2
+	      let sourceType = item.commentId
+    		const params = {
+	      	type: type,
+	      	id: sourceType,		//对应打卡或评论的id
+	        peopleCourseId: this.$route.query.peopleCourseId,     // 对应评论类型id
+	        commentContent: value       // 评论内容
+	      }
+    		courseCardCommentApi(params).then(res=>{
+    			this.suspensionInputPlaceholder = '写评论'
+		      this.commentIndex = -1
+		      this.displaySuspensionInput = false
+		      this.pagination.end = false // 初始化数据，必定不是最后一页
+		      this.getList({page: 1})
+	      	this.$vux.toast.text('评论成功', 'bottom')
+	      }).catch(e => {
+	        this.$vux.toast.text('评论失败', 'bottom')
+	        this.curData = {}
+	      })
+    		
+    	}else{//从非打卡处进入
+    		const item = commentIndex > -1 ? this.discussItemList[commentIndex] : this.discussInfo
+	      const {commentId} = item
+	
+	      const params = {
+	        sourceId: commentId,     // 对应评论类型id
+	        sourceType: 4,   // 评论类型：1.朋友圈；2.帖子；3.提问;4.子评论
+	        content: value       // 评论内容
+	      }
+	      const res = await setSubmitCommentApi(params)
+	      this.suspensionInputPlaceholder = '写评论'
+	      this.commentIndex = -1
+	      this.displaySuspensionInput = false
+	      this.pagination.end = false // 初始化数据，必定不是最后一页
+	      await this.getList({page: 1})
+    	}
+    	
     }
 
     async pageInit () {
@@ -263,30 +320,45 @@
       if (this.pagination.end) {
         return
       }
-      page = page || this.pagination.page || 1
-      pageSize = pageSize || this.pagination.pageSize
-      const params = {
-        commentId: this.$route.params['commentId'],
-        page: page,
-        pageCount: pageSize
+      if(this.$route.query.peopleCourseId){//从打卡评论处进入
+      	console.log(this.$route.query.peopleCourseId,this.$route.params.commentId,"我是路由带的参数0")
+				this.pagination.busy = true
+      	getCourseCardCommentInfoApi(this.$route.params.commentId,this.$route.query.peopleCourseId).then(res=>{
+      		console.log(res,"我是请求回来的数据")
+      		this.discussInfo = res	//一级评论的数据对象
+      		this.discussItemList = res.childComments	//二级和三级评论对象
+      		this.pagination.total = res.commentTotal
+      		this.pagination.busy = false
+      	}).catch(res=>{
+      		console.log(res,"报错信息")
+      	})
+      }else{//从非打卡评论处进入
+      	page = page || this.pagination.page || 1
+	      pageSize = pageSize || this.pagination.pageSize
+	      const params = {
+	        commentId: this.$route.params['commentId'],
+	        page: page,
+	        pageCount: pageSize
+	      }
+	
+	      this.pagination.busy = true
+	      const res = await this.getCommentList(params)
+	      console.log(res,"我是请求回来的数据")
+	      const {comment, comments, total} = res
+	
+	      if (page === 1) {
+	        this.discussInfo = comment
+	        this.discussItemList = comments
+	      } else {
+	        this.discussItemList = this.discussItemList.concat(comments || [])
+	      }
+	
+	      this.pagination.page = page
+	      this.pagination.pageSize = pageSize
+	      this.pagination.total = total
+	      this.pagination.end = this.isLastPage
+	      this.pagination.busy = false
       }
-
-      this.pagination.busy = true
-      const res = await this.getCommentList(params)
-      const {comment, comments, total} = res
-
-      if (page === 1) {
-        this.discussInfo = comment
-        this.discussItemList = comments
-      } else {
-        this.discussItemList = this.discussItemList.concat(comments || [])
-      }
-
-      this.pagination.page = page
-      this.pagination.pageSize = pageSize
-      this.pagination.total = total
-      this.pagination.end = this.isLastPage
-      this.pagination.busy = false
     }
 
     /**

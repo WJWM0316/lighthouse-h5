@@ -71,7 +71,7 @@
 	        
           <div class="content-images">
             <!-- 图片为 1 张时 -->
-            <div class="item-image one" v-if="item.cardContentFile.length === 1">
+            <div class="item-image one" v-if="item.cardContentFile && item.cardContentFile.length === 1">
               <img :src="item.cardContentFile[0].fileUrl || '~ICON/img_head_default.png'" @click.stop="previewImage(item.cardContentFile[0].fileUrl)" />
             </div>
 
@@ -110,7 +110,7 @@
       </div>
 
       <!-- 评论区 -->
-      <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || (item.commentTotal > 0 && item.commentlist && item.commentlist.hotComments.length > 0))">
+      <div class="comment-area" v-if="!hideCommentArea && (item.favorTotal > 0 || (item.commentTotal > 0 && item.commentlist.hotComments && item.commentlist.hotComments.length > 0))">
         <!-- 点赞信息 -->
           <div class="praise-block" v-if="item.favorTotal > 0">
             <img class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
@@ -122,7 +122,7 @@
 
         <!-- 评论信息 -->
 
-        <div class="reply-block" v-if="item.commentTotal > 0 && item.commentlist.hotComments.length > 0">
+        <div class="reply-block" v-if="item.commentTotal > 0 && item.commentlist.hotComments && item.commentlist.hotComments.length > 0">
           <template>
             <div class="hot-reply">
               <div class="hot-reply-icon">热门评论</div> 
