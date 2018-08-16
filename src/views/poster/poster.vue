@@ -1,7 +1,7 @@
 <template>
 	<div class="wrap">
 		<canvas id="poster" ref="poster" width="750" height="1300"></canvas>
-		<img id="scream" ref="scream"  :src='bgSrc'><!--  @load="nextBg" -->
+		<img id="scream" ref="scream"  src='https://cdnstatic.ziwork.com/Public/show/01.png'><!--  @load="nextBg" -->
 		<img id="ewema" ref="ewema" src="../../assets/icon/erweima.png">
 		<div class="imgBox">
 			<img class="showImg" :src="path">
@@ -98,7 +98,7 @@
 	    // 28张背景图 随机抽一张
 	    let random = Math.floor(Math.random()*28)+1
 	    if (random < 10) random = `0${random}`
-	    this.bgSrc = `https://cdnstatic.ziwork.com/Public/show/${random}.png`
+	    this.bgSrc = `https://cdnstatic.ziwork.com/Public/show/01.png`
   		this.canvas = document.getElementById('poster')
 			this.ctx = this.canvas.getContext("2d")
 		}
