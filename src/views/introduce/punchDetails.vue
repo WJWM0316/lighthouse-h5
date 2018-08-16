@@ -438,6 +438,7 @@
     	const { courseId, peopleId } = this.$route.query
       const res = await getCourseCardInfoApi(courseId,peopleId)
       this.courseCardInfo = res
+      this.allTotal = res.commentTotal
       this.getCourseCardCommentList()
       this.reFlashPraise()
       console.log(this.courseCardInfo,"我是请求回来的数据")
