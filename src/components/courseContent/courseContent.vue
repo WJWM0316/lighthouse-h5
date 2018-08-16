@@ -24,7 +24,7 @@
         :itemIndex="index"
       >
         <img class='blo_left' :src="item.coverPicture"/>
-        <div class='blo_center'>{{item.title}}</div>
+        <div class='blo_center' :class="{'read': item.statusInfo.isPunchCard === 1}">{{item.title}}</div>
         <template v-if="!isMaster">
           <div class='blo_right' v-if ='item.courseType === 2'>试读</div>
 
@@ -155,6 +155,9 @@
       font-family: PingFangSC-Regular;
       color: rgba(53,64,72,1);
       line-height: 18px;
+      &.read {
+        color:#929292;
+      }
       .setEllipsisLn()
     }
     .blo_right {
