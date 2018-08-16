@@ -302,8 +302,7 @@
     
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
-    	
-				let nowCommunity=sessionStorage.getItem("nowCommunity");
+			let nowCommunity=sessionStorage.getItem("nowCommunity");
 			if(!nowCommunity){
 				sessionStorage.setItem("nowCommunity",to.params.communityId)
 				console.log(to,"我是没有记录community的时候")
@@ -320,9 +319,8 @@
 					to.meta.keepAlive = false;
 				}
 			}
-			
 			next();
-   }
+    }
 		
 		//页面离开前
 		beforeRouteLeave(to, from, next) {
@@ -377,13 +375,19 @@
         }).catch(res => {
             this.roleInfo=res.data.role;
         })
+
         // 页面分享信息
         let url = ''
         if(this.pageInfo.isCourse === 3){
+
+          //更新课程列表请求参数
+          this.lessGetBaseInit()
+
           url = location.origin + `/beaconweb/#/introduce2/${communityId}`
         }else {
           url = location.origin + `/beaconweb/#/introduce/${communityId}`
         }
+
         this.wechatShare({
           'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
           'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
@@ -506,13 +510,7 @@
         this.pagination.end = false // 初始化数据，必定不是最后一页
 
         if(this.showType){
-          this.getCourseData = {  //朋友圈 请求参数
-            upOrDown: '',
-            sortNum: 0,
-            isToStydy: false,
-            isIp: false,
-            isDown: true
-          }
+          this.lessGetBaseInit()
         }
         this.getList({page: 1})
       }
@@ -632,7 +630,6 @@
       })
     }
 
-
     /**
      * 用户社区角色信息
      **/
@@ -658,8 +655,6 @@
       if (this.pagination.end) {
         return
       }
-
-      console.log('getlist')
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
       let params = {}
@@ -678,7 +673,9 @@
         }
 
         //那个方向翻页。不能为空。
+        console.log('down=>',this.getCourseData.upOrDown)
         if(this.getCourseData.upOrDown){
+        console.log('down=>',this.getCourseData.upOrDown)
           params.upOrDown = this.getCourseData.upOrDown
         }
       }else {
@@ -706,7 +703,6 @@
           }else {
             this.getCourseData.isIp = false
             this.getCourseData.isDown = false
-
           }
         }
       } else {
@@ -759,6 +755,9 @@
      * 下拉刷新
      */
     handleRefresh (loaded) {
+      if(this.showType){
+        this.lessGetBaseInit()
+      }
       this.pageInit()
       loaded('done')
     }
@@ -936,8 +935,6 @@
 
     // 课程 列表分页操作
     getLessPage (type) {
-
-
       this.getCourseData.upOrDown = type.type===1?'up':'down'
       this.getCourseData.sortNum = type.type===1?this.dynamicList[0].sort : this.dynamicList[this.dynamicList.length-1].sort
       this.pagination.end = false
@@ -1049,6 +1046,18 @@
       this.pagination.busy = false
       this.pagination.end = false
       this.getList({page: 1})
+    }
+
+    lessGetBaseInit (){
+      this.getCourseData = {  //朋友圈 请求参数
+        upOrDown: '',
+        sortNum: 0,
+        isToStydy: false,
+
+        //课节 请求参数
+        isIp: false,
+        isDown: true
+      }
     }
 
 
