@@ -4,7 +4,7 @@
   	<!--灯塔头部-->
     <div class="cover-container" :class="{'community3':community.isCourse === 2}">
       <image-item v-if='community.isCourse == 2' class="cover2" :src="community.detailImg" mode="full" />
-      <image-item v-else class="cover" :src="community.detailImg" mode="full" />
+      <div v-else class="cover"  />
 
       <span class="header-photo">
       	<img :src="community.icon"/>
@@ -37,7 +37,7 @@
       <div class="bottom" v-else>
         <div class="left" v-if="community.joinedNum>0">
             <p class="residue">
-              <span class="number">{{community.joinedNum}}</span> 
+              <span class="number">{{community.menuPeople.number}}</span> 
               人
             </p>
             <p class="residue">
@@ -254,8 +254,8 @@ export default class CommunityCard extends Vue {
 					left:50%;
 					transform:translateX(-50%);
 					margin-bottom:7.5px;
-					
-					>img{
+					img{
+            border-radius:3px;
 						width: 100%;
 						height: 100%;
             box-sizing: border-box;

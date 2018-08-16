@@ -216,7 +216,7 @@
     watch: {
       displaySuspensionInput (val) {
         this.isShow = val
-      }
+      },
     },
     mixins: [ListMixin, WechatMixin]
   })
@@ -347,7 +347,11 @@
       if (showShare && (showShare.toString() === 'true')) {
         this.showShare = true
       }
-    	this.pageInit().then(() => {
+      this.init_v2()
+    }
+
+    init_v2(){
+      this.pageInit().then(() => {
         const {
           title,
           simpleIntro,
@@ -362,39 +366,45 @@
         this.communityId = communityId
         this.starTime = startTime
         const str = realName ? realName + (career ? '|' + career : '') : ''
-        // 页面分享信息
-        this.wechatShare({
-          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-          'desc': sharePoint || simpleIntro,
-          'imgUrl': shareImg,
-          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
-        })
 
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
-        	this.roleInfo=res.role;
+          this.roleInfo=res.role;
           //
           if(res.role.title =='塔主' || res.role.title =='嘉宾'){
             this.isMaster = true
           }
         }).catch(res => {
-        		this.roleInfo=res.data.role;
-				})
+            this.roleInfo=res.data.role;
+        })
+        // 页面分享信息
+        let url = ''
+        if(this.pageInfo.isCourse === 3){
+          url = location.origin + `/beaconweb/#/introduce2/${communityId}`
+        }else {
+          url = location.origin + `/beaconweb/#/introduce/${communityId}`
+        }
+        this.wechatShare({
+          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'desc': sharePoint || simpleIntro,
+          'imgUrl': shareImg,
+          'link': url
+        })
 
         //判断是否有课程，无课程则跳转
         if(this.pageInfo.isCourse!==3){
-        	this.type=0;
-        	let type=0;
-        	this.displaySuspensionInput = false
-	        this.dynamicList = []
+          this.type=0;
+          let type=0;
+          this.displaySuspensionInput = false
+          this.dynamicList = []
 
-	        this.showType = type
-	        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-	        this.showIdentification = !type
-	
-	        this.pagination.end = false // 初始化数据，必定不是最后一页
-	        this.getList({page: 1})
+          this.showType = type
+          this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+          this.showIdentification = !type
+  
+          this.pagination.end = false // 初始化数据，必定不是最后一页
+          this.getList({page: 1})
         }
       })
     }
@@ -405,52 +415,7 @@
     	if(JSON.parse(sessionStorage.getItem("isNewLoad"))){
     		sessionStorage.setItem("isNewLoad",false)
     		//重试请求数据
-    			this.pageInit().then(() => {
-		        const {
-		          title,
-		          simpleIntro,
-		          master,
-		          shareImg, // 分享图片
-		          sharePoint, // 分享摘要
-		          shareIntroduction,  // 分享标题
-		          communityId,
-		          startTime
-		        } = this.pageInfo
-		        const {realName, career} = master
-		        this.communityId=communityId
-		        this.starTime=startTime
-		        const str = realName ? realName + (career ? '|' + career : '') : ''
-		        // 页面分享信息
-		        this.wechatShare({
-		          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-		          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-		          'desc': sharePoint || simpleIntro,
-		          'imgUrl': shareImg,
-		          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
-		        })
-		        
-		        //判断嘉宾身份
-		        this.getRoleInfo(communityId).then(res=>{
-		        	this.roleInfo=res.role;
-		        }).catch(res => {
-		        		this.roleInfo=res.data.role;
-						})
-		        
-		        //判断是否有课程，无课程则跳转
-		        if(this.pageInfo.isCourse !==3 ){
-		        	this.type=0;
-		        	let type=0;
-		        	this.displaySuspensionInput = false
-			        this.dynamicList = []
-		
-			        this.showType = type
-			        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-			        this.showIdentification = !type
-			
-			        this.pagination.end = false // 初始化数据，必定不是最后一页
-			        this.getList({page: 1})
-		        }
-		     })
+        this.init_v2()
     	}
    	}
    	
@@ -908,7 +873,7 @@
      * 点击卡片
      */
     handleTapCard (item) {
-      console.log(item)
+      console.log(item,this.pageInfo.isCourse)
       let url = ''
       if(item && item.isCourse == 3){
         url = `/introduce2/${item.communityId}/community`
@@ -916,6 +881,10 @@
         url = `/introduce/${item.communityId}/community`
       }
       this.$router.push(url)
+
+      if(item.isCourse===this.pageInfo.isCourse){
+        this.$router.go(0)
+      }
     }
 
     delMsg(){
