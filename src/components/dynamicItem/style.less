@@ -5,6 +5,7 @@
   flex-wrap: wrap;
   padding: 0 20px;
 	border-bottom: solid 1px #ededed;
+  box-sizing: border-box;
 	&:last-child{
 	    border-bottom: solid 1px transparent;
 	}
@@ -138,8 +139,6 @@
           font-weight: 300;
           .setEllipsis();
         }
-
-        
     }
 
     //置顶删除
@@ -182,13 +181,17 @@
       font-size: 12px;
       line-height: 17px;
       color: #929292;
+      
+      border: 1px solid #cccccc;
+      box-sizing: border-box;
 //			margin-left:-55px;
 //			margin-right: 20px;
 
       & .operation {
         display: flex;
         flex: 0 0 auto;
-
+        border: 1px solid #cccccc;
+        box-sizing: border-box;
         & > button　{
           height: 18px;
 //        width: 55px;
@@ -304,6 +307,8 @@
 		//调整内容位置 
     //margin-right: 20px;
     //margin-left:-55px;
+    border: 1px solid #cccccc;
+    box-sizing: border-box;
 
     & .content-text {
       //font-family: PingFangSC-Light;
@@ -508,7 +513,8 @@
       margin-top: 10px;
       display: flex;
       //align-items: center;
-
+      border: 1px solid #cccccc;
+      box-sizing: border-box;
       & .user-image {
         flex: 0 0 auto;
         width: 40px;
