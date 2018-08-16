@@ -164,6 +164,13 @@ const routers = [
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/punchDetails'], resolve),
 	},
+  {
+    // 海报图
+    path: '/poster',
+    name: 'poster',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/poster/poster'], resolve),
+  },
 ]
 
 export default routers

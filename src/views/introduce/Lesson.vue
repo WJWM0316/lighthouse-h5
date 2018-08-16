@@ -60,7 +60,7 @@
 		          </div>
 
 		          <!--  图片为 多 张时  -->
-		          <div class="item-image" v-for="file in communityCourse.punchCardImgInfo" v-else>
+		          <div class="item-image" v-for="(file, index) in communityCourse.punchCardImgInfo" :key="index" v-else>
 		            <img :src="file.pictureUrl || '../../assets/icon/img_head_default.png'" v-if="!file.holder" @click.stop="previewImage(file.pictureUrl)" />
 		          </div>
 		        </div>
@@ -84,7 +84,8 @@
 						<div class="hr"></div>
 						<!--优秀打卡内容区-->
 						<lessondynamicItem
-							 v-for="item in excellentPunchList"
+							 v-for="(item, index) in excellentPunchList"
+							 :key = "index"
 							 :item="item"
 			         :showDelBtn="true"
 			         :communityId="communityId"
@@ -106,7 +107,8 @@
 					</div>
 					<div class="hr"></div>
 					<lessondynamicItem
-						 v-for="item in peopleCourseCardList"
+						 v-for="(item, index) in peopleCourseCardList"
+						 :key = "index"
 						 :item="item"
 		         :showDelBtn="true"
 		         :communityId="communityId"
@@ -128,7 +130,7 @@
 						</div>
 					</div>
 					<div class="Lesson-footer" v-else>
-							<div class="peacock">炫耀一下</div><span class="line"></span>
+							<div class="peacock" @click.stop="toPoster()">炫耀一下</div><span class="line"></span>
 							<div class="mine" @click.stop="toMindDetail(communityCourse.peopleId,communityCourse.id)">我的打卡</div>
 					</div>
 				</div>
@@ -479,6 +481,11 @@
           }
         }
       )
+    }
+
+    // 生成海报图
+    toPoster () {
+    	this.$router.push({path:`/poster?name=小螺号&title=滴滴滴吹`})
     }
   	
   	//去打卡编辑页
