@@ -55,7 +55,7 @@
 						<!--<img v-for="item in community_course.punch_card_img_info" :src="item.picture_url" alt="" />-->
 						<div class="content-images">
 		          <!-- 图片为 1 张时 -->
-		          <div class="item-image one" v-if="communityCourse.punchCardImgInfo && communityCourse.punchCardImgInfo.length === 1">
+		          <div class="item-image one" v-if="communityCourse.punchCardImgInfo && communityCourse.punchCardImgInfo.length>0 && communityCourse.punchCardImgInfo.length === 1">
 		            <img :src="communityCourse.punchCardImgInfo[0].pictureUrl || '../../assets/icon/img_head_default.png'" @click.stop="previewImage(communityCourse.punchCardImgInfo[0].pictureUrl)" />
 		          </div>
 
@@ -94,7 +94,7 @@
 		         :disableContentClick="false"
 		         @disableOperationEvents="operation"
 		      ></lessondynamicItem>
-		      <div class="Expand-btn" @click.stop="toPunchList('excellent')">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
+		      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="excellentPunchList.length>5">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
 				</div>
 				<!--所有打卡区-->
 				<div class="all-punch" v-if="trialReading === '0' && peopleCourseCardList && peopleCourseCardList.length>0">
@@ -114,7 +114,7 @@
 		         :disableContentClick="false"
 		         @disableOperationEvents="operation"
 		      ></lessondynamicItem>
-		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')">查看所有打卡 <span>({{peopleCourseCardList.length}})</span></div>
+		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="peopleCourseCardList.length>5">查看所有打卡 <span>({{peopleCourseCardList.length}})</span></div>
 				</div>
 				
 				<!--底部打卡按钮区-->
@@ -258,8 +258,8 @@
   				this.communityCourse.av.files[0].fileId = String(this.communityCourse.av.files[0].fileId)
   			}
   			this.curPeopleInfo = res[0].curPeopleInfo
-  			this.peopleCourseCardList = res[1].peopleCourseCardList
-  			this.excellentPunchList = res[1].excellentPeopleCourseCardList
+  			this.peopleCourseCardList = res[1].peopleCourseCardList.length>0?res[1].peopleCourseCardList:""
+  			this.excellentPunchList = res[1].excellentPeopleCourseCardList.length>0?res[1].excellentPeopleCourseCardList:""
   			this.isPunch = res[0].peopleCardInfo.isPunchCard
   		}).catch((e)=>{
   			console.log(e,"返回报错")

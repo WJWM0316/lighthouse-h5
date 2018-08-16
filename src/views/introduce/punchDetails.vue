@@ -179,7 +179,7 @@
           this.del({item, itemIndex, commentType}).then()
           break
         case 'comment-area':
-          this.jumpCommentDetail({item, commentType}).then()
+          this.jumpCommentDetail(param)
       }
     }
     //刷新点赞列表数据
@@ -206,8 +206,10 @@
     jump (e) {
       this.$router.push('/userInfo/' + e + '/details')
     }
-    jumpCommentDetail ({item, commentType}) {
-      this.$router.push('/reply/' + item.commentId)
+    jumpCommentDetail (param) {
+    	console.log(this.courseCardInfo,"1111111111111");
+    	let {item} = param;
+      this.$router.push(`/reply/${item.commentId}?peopleCourseId=${this.courseCardInfo.peopleCourseId}`)
     }
 
     /**
@@ -217,7 +219,6 @@
      * @returns {Promise.<void>}
      */
     async comment (param) {
-    	console.log(param,"1111111111111111")
       this.displaySuspensionInput = true
       this.$refs.input.$refs['suspension-input'].focus()
       if (param.type === 2) {
@@ -371,6 +372,7 @@
     	}
     	getCourseCardCommentListApi(data).then(res=>{
     		if(res.hotComments){
+    			this.hotCommentNum = res.hotComments.length
     			this.commentList = [...res.hotComments,...res.comments]
     		}else{
     			this.commentList = [...res.comments]
