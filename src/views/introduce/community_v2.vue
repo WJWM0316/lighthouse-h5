@@ -9,7 +9,7 @@
       <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>成员交流</span></a>
     </div>
 
-    <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+    <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end" :isShowBottom="!showType">
       <!-- header -->
       <div class="header">
       	
