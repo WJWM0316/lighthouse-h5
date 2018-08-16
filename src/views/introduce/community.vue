@@ -13,7 +13,7 @@
       <!-- header -->
       <div class="header">
       	<!--详情页头部组件-->
-        <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false"></community-card>
+        <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false" :isCommunityIntroduce=true></community-card>
         <!--详情页头部组件-->
         <div class="share-group">
           <div class="group_wrap">
@@ -914,18 +914,16 @@
      * 点击卡片
      */
     handleTapCard (item) {
-        console.log(item)
         let url = ''
         if(item && item.isCourse == 3){
-          url = `/introduce2/${item.communityId}/community`
+          url = `/introduce2/${item.communityId}`
         }else {
-          url = `/introduce/${item.communityId}/community`
+          url = `/introduce/${item.communityId}`
         }
         this.$router.push(url)
     }
 
     delMsg(){
-      console.log(this.nowUserOpItem)
       let that = this
       if(this.nowUserOpItem.modelType === 'post'){
         let data = {

@@ -46,7 +46,7 @@
 		<!--优秀成员-->
 		<div class="block more-classmate excellent">
 			<img class="icon_4" src="../../assets/icon/icon_list_gm.png" />
-			<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg2" /></p>
+			<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg" /></p>
 			<ul class="classmateList">
 				<li class="classmatePerson" v-for="item,index in excellent" @click.prevent.stop="goUserDetail(item.userId)" v-if="index<3">
 					<div class="classmate-imgBox" >
@@ -437,6 +437,7 @@
 						overflow: hidden;
 						text-overflow: ellipsis;
 						flex: 1;
+						align-items: center;
 						.classmate-name{
 							display: block;
 							font-size: 16px;
