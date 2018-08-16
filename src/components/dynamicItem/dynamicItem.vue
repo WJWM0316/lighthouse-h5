@@ -17,7 +17,7 @@
         <img class='icon_top' src="./../../assets/icon/icon_topping@3x.png"/>
       </div>
       
-      <div class="user_op" @click.stop="op_member" v-if="(isMe === item.releaseUser.userId || isMaster)&&!isUserExchange">
+      <div class="user_op" @click.stop="op_member" v-if="isMaster && !isUserExchange">
         <img class="op_img" src="./../../assets/icon/bnt_course_more@3x.png" />
       </div>
 		</div>

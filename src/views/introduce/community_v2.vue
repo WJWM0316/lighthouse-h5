@@ -349,6 +349,8 @@
     }
 
     init_v2(){
+      this.lessGetBaseInit()
+      
       this.pageInit().then(() => {
         const {
           title,
@@ -379,10 +381,7 @@
         // 页面分享信息
         let url = ''
         if(this.pageInfo.isCourse === 3){
-          console.log(111)
           //更新课程列表请求参数
-          this.lessGetBaseInit()
-
           url = location.origin + `/beaconweb/#/introduce2/${communityId}`
         }else {
           url = location.origin + `/beaconweb/#/introduce/${communityId}`
@@ -893,17 +892,14 @@
 
     delMsg(){
       console.log(this.nowUserOpItem)
-      
+      let that = this
       if(this.nowUserOpItem.modelType === 'post'){
-        let that = this
         let data = {
           id: this.nowUserOpItem.circleId,
           modelType : 'post'
         }
         deltePostApi(data).then(res=>{
-          console.log(res)
           that.dynamicList.splice(that.nowUserOpItem.itemIndex,1)
-          console.log(that.dynamicList)
         },res=>{
 
           that.$vux.toast.text('删除失败', res.message )
