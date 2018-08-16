@@ -70,7 +70,7 @@
 				<!--优秀打卡区-->
 				<div class="Lesson-punch" v-if="trialReading === '0'">
 					<!--头部标题-->
-					<div class="headerBox">
+					<div class="headerBox" v-if="(excellentPunchList && excellentPunchList.length>0) || (peopleCourseCardList && peopleCourseCardList.length>0)">
 						<div class="title-pic1">
 							<span class="txt">打卡区</span>
 						</div>
