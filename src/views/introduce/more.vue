@@ -18,7 +18,7 @@
 			<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
 			<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
 			<ul class="classmateList">
-				<li class="classmatePerson" v-for="item,index in role" @click.prevent.stop="goUserDetail(item.userId)" v-if="index < 5 || !teachOp">
+				<li class="classmatePerson" v-for="item,index in role" @click.prevent.stop="goUserDetail(item.userId)" v-if="index < 2 || !teachOp">
 					<div class="classmate-imgBox">
 						<img class="titleImg" :src="item.avatar"/>
 					</div>
@@ -26,25 +26,25 @@
 						<span class="classmate-name">{{item.realName}}
 							<span class="label" v-text="item.identityAuthority.title "></span>
 						</span>
-						<span class="classmate-career" >{{item.workTimeName}}</span>
+						<span class="classmate-career" v-if="item.workTimeName">{{item.workTimeName}}</span>
 					</div>
 				</li>
 			</ul>
 
 			<div class="open_blo" v-if="role.length>5" @click.prevent.stop="opTeach"> 
 				<template v-if="teachOp">
-					展开查看所有导师
+					展开
 					<img class="open_icon" src="../../assets/icon/btn_levea_copy@hhx.png"/>
 				</template>
 				<template v-if="!teachOp">
-					收起查看所有导师
+					收起
 					<img class="open_icon" src="../../assets/icon/btn_enter copy@hhx.png"/>
 				</template>
 			</div>
 		</div>
 
 		<!--优秀成员-->
-		<div class="block more-classmate excellent">
+		<div class="block more-classmate excellent" v-if="excellent.length>0">
 			<img class="icon_4" src="../../assets/icon/icon_list_gm.png" />
 			<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg" /></p>
 			<ul class="classmateList">
@@ -265,14 +265,15 @@
 		& .label {
           color: #d7ab70;
           font-size: 12px;
-          padding: 0 10px;
+          padding: 0 6px;
           margin-left: 8px;
           line-height: 18px;
           border-radius: 50px;
-          border: 1px solid #D7AB70;
+          border: 0.5px solid #D7AB70;
           display: inline-block;
           text-align: center;
           box-sizing: border-box;
+          font-weight: 300;
         }
 		/*人物列表样式*/
 		& .more-parner, & .more-classmate{
