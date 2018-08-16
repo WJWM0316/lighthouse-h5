@@ -474,12 +474,7 @@
     async created () {
     	console.log(location,'我是页面路径')
       wxUtil.reloadPage()
-
-      console.log(1111)
       if (this.$route.name === 'introduce-detail') {
-      console.log(1111)
-
-
         this.completelyShow = false
       }
       
@@ -714,7 +709,7 @@
       }
 
       .share-group {
-        position: absolute;
+        position: fixed;
         right: 10px;
         top: 25px;
         line-height: 1;

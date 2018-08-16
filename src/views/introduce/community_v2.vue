@@ -1252,7 +1252,7 @@
       }
 
       .share-group {
-        position: absolute;
+        position: fixed;
         right: 10px;
         top: 25px;
         line-height: 1;
