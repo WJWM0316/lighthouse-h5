@@ -56,7 +56,11 @@
               <div class="recommend_list" v-if="topList.length>0" v-for="item,index in topList">
                 <div class="rem_blo" @click.stop="toDetails(index)">
                   <img class='blo_icon' src="./../../assets/icon/icon_topping@3x.png"/>
-                  <p class="blo_tit">{{item.tit}}{{item.content}}</p>
+                  <p class="blo_tit ellipsis">{{item.tit}}{{item.content}}</p>
+
+                  <div class="blo_to_warp">
+                    <img class='blo_icon_to' src="./../../assets/icon/bnt_arrow_topping@3x.png"/>
+                  </div>
                 </div>
               </div>
             </template>
@@ -838,6 +842,21 @@
       let topPostStatus = nowItem.topPostStatus
 
       if(topPostStatus == 0){
+        if(this.topList.length==3){
+          this.$vux.confirm.show({
+            content: '置顶这条帖子将会自动取消第一条置顶的帖子，请确认哦',
+            confirmText: '确定',
+            cancelText: '取消',
+            // 组件除show外的属性
+            onCancel () {
+            },
+            onConfirm () {
+              that.topList.pop()
+              that.topOp()
+            }
+          })
+          return
+        }
         addTopApi(data).then(res=>{
           that.opTopList(1,nowItem)
           that.dynamicList[nowItem.itemIndex].topPostStatus = !that.dynamicList[nowItem.itemIndex].topPostStatus
@@ -853,6 +872,41 @@
         },res=>{
           this.$vux.toast.text('失败', res.message)
         })
+      }
+    }
+
+    //1增加 2删除
+    opTopList(type,item){
+      if( type && item){
+        if(type == 1){  
+          
+          let circleType = item.circleType
+          let tit = ''
+
+          switch (circleType) {
+            case 1:
+              tit = '【音频】'
+              break
+            case 2:
+              tit = '【视频】'
+              break
+            case 3:
+              tit = '【图片】'
+              break
+            case 4:
+              tit = '【文件】'
+              break
+          }
+          item.tit = tit
+          this.topList.unshift(item)
+        }else if(type === 2){
+          for(let i = 0;this.topList.length>i;i++){
+            if(this.topList[i].circleId == item.circleId){
+              this.topList.splice(i,1)
+              return
+            }
+          }
+        }
       }
     }
 
@@ -874,13 +928,11 @@
       console.log(this.nowUserOpItem)
       let that = this
       if(this.nowUserOpItem.modelType === 'post'){
-        let that = this
         let data = {
           id: this.nowUserOpItem.circleId,
           modelType : 'post'
         }
         deltePostApi(data).then(res=>{
-          console.log(res)
           that.dynamicList.splice(that.nowUserOpItem.itemIndex,1)
         },res=>{
           that.$vux.toast.text('删除失败', res.message )
@@ -890,17 +942,16 @@
     }
 
     toDetails (index) { // 去朋友圈、帖子、问题详情
-      console.log(this.disableContentClick)
-      if (this.disableContentClick) {
-        return
-      }
       let item = this.topList[index]
       let {circleType, circleId} = item
-      if (circleType) {
-        // 跳转详情页 sourceId type
-        console.log('跳转详情页: ', circleId, circleType)
-        this.$router.push(`/details/${circleId}/2`)
+      //成员交流详情需要显示操作栏
+      let url = ''
+      if(!this.showType){
+        url = `/details/${circleId}/2?communityId=${this.communityId}&isShowOp=${1}`
+      }else {
+        url = `/details/${circleId}/2?communityId=${this.communityId}`
       }
+      this.$router.push(url)
     }
   }
 </script>
@@ -912,7 +963,7 @@
     padding-left: 20px;
     .rem_blo {
       height: 50px;
-      border-bottom: 1px solid #cccccc;
+      border-bottom: 0.5px solid #cccccc;
       display: flex;
       flex-direction: row;
       justify-content: space-around;
@@ -926,17 +977,24 @@
 
       }
       .blo_tit {
-        flex: 1;
         font-size: 16px;
         font-family: PingFangSC-Light;
         color: rgba(53,64,72,1);
         line-height: 20px;
       }
+      .blo_to_warp {
+        flex: 1;
+        height: 15px;
+        min-width: 15px;
+        margin-left: 2px;
+        margin-right: 20px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
       .blo_icon_to {
         height: 15px;
         width: 15px;
-        margin-left: 2px;
-        margin-right: 20px;
       }
     }
   }

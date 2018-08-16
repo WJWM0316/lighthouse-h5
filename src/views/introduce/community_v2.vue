@@ -216,7 +216,7 @@
     watch: {
       displaySuspensionInput (val) {
         this.isShow = val
-      }
+      },
     },
     mixins: [ListMixin, WechatMixin]
   })
@@ -255,10 +255,10 @@
       upOrDown: '',
       sortNum: 0,
       isToStydy: false,
-
       //课节 请求参数
       isIp: false,
-      isDown: true
+      isDown: true,
+
     }
 
     isMaster = false
@@ -302,8 +302,7 @@
     
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
-    	
-				let nowCommunity=sessionStorage.getItem("nowCommunity");
+			let nowCommunity=sessionStorage.getItem("nowCommunity");
 			if(!nowCommunity){
 				sessionStorage.setItem("nowCommunity",to.params.communityId)
 				console.log(to,"我是没有记录community的时候")
@@ -320,9 +319,8 @@
 					to.meta.keepAlive = false;
 				}
 			}
-			
 			next();
-   }
+    }
 		
 		//页面离开前
 		beforeRouteLeave(to, from, next) {
@@ -347,7 +345,13 @@
       if (showShare && (showShare.toString() === 'true')) {
         this.showShare = true
       }
-    	this.pageInit().then(() => {
+      this.init_v2()
+    }
+
+    init_v2(){
+      this.lessGetBaseInit()
+      
+      this.pageInit().then(() => {
         const {
           title,
           simpleIntro,
@@ -362,39 +366,48 @@
         this.communityId = communityId
         this.starTime = startTime
         const str = realName ? realName + (career ? '|' + career : '') : ''
-        // 页面分享信息
-        this.wechatShare({
-          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-          'desc': sharePoint || simpleIntro,
-          'imgUrl': shareImg,
-          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
-        })
 
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
-        	this.roleInfo=res.role;
+          this.roleInfo=res.role;
           //
           if(res.role.title =='塔主' || res.role.title =='嘉宾'){
             this.isMaster = true
           }
         }).catch(res => {
-        		this.roleInfo=res.data.role;
-				})
+            this.roleInfo=res.data.role;
+        })
+
+        // 页面分享信息
+        let url = ''
+        if(this.pageInfo.isCourse === 3){
+          //更新课程列表请求参数
+          url = location.origin + `/beaconweb/#/introduce2/${communityId}`
+        }else {
+          url = location.origin + `/beaconweb/#/introduce/${communityId}`
+        }
+
+        this.wechatShare({
+          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+          'desc': sharePoint || simpleIntro,
+          'imgUrl': shareImg,
+          'link': url
+        })
 
         //判断是否有课程，无课程则跳转
         if(this.pageInfo.isCourse!==3){
-        	this.type=0;
-        	let type=0;
-        	this.displaySuspensionInput = false
-	        this.dynamicList = []
+          this.type=0;
+          let type=0;
+          this.displaySuspensionInput = false
+          this.dynamicList = []
 
-	        this.showType = type
-	        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-	        this.showIdentification = !type
-	
-	        this.pagination.end = false // 初始化数据，必定不是最后一页
-	        this.getList({page: 1})
+          this.showType = type
+          this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+          this.showIdentification = !type
+  
+          this.pagination.end = false // 初始化数据，必定不是最后一页
+          this.getList({page: 1})
         }
       })
     }
@@ -405,52 +418,7 @@
     	if(JSON.parse(sessionStorage.getItem("isNewLoad"))){
     		sessionStorage.setItem("isNewLoad",false)
     		//重试请求数据
-    			this.pageInit().then(() => {
-		        const {
-		          title,
-		          simpleIntro,
-		          master,
-		          shareImg, // 分享图片
-		          sharePoint, // 分享摘要
-		          shareIntroduction,  // 分享标题
-		          communityId,
-		          startTime
-		        } = this.pageInfo
-		        const {realName, career} = master
-		        this.communityId=communityId
-		        this.starTime=startTime
-		        const str = realName ? realName + (career ? '|' + career : '') : ''
-		        // 页面分享信息
-		        this.wechatShare({
-		          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-		          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-		          'desc': sharePoint || simpleIntro,
-		          'imgUrl': shareImg,
-		          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
-		        })
-		        
-		        //判断嘉宾身份
-		        this.getRoleInfo(communityId).then(res=>{
-		        	this.roleInfo=res.role;
-		        }).catch(res => {
-		        		this.roleInfo=res.data.role;
-						})
-		        
-		        //判断是否有课程，无课程则跳转
-		        if(this.pageInfo.isCourse !==3 ){
-		        	this.type=0;
-		        	let type=0;
-		        	this.displaySuspensionInput = false
-			        this.dynamicList = []
-		
-			        this.showType = type
-			        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-			        this.showIdentification = !type
-			
-			        this.pagination.end = false // 初始化数据，必定不是最后一页
-			        this.getList({page: 1})
-		        }
-		     })
+        this.init_v2()
     	}
    	}
    	
@@ -541,13 +509,7 @@
         this.pagination.end = false // 初始化数据，必定不是最后一页
 
         if(this.showType){
-          this.getCourseData = {  //朋友圈 请求参数
-            upOrDown: '',
-            sortNum: 0,
-            isToStydy: false,
-            isIp: false,
-            isDown: true
-          }
+          this.lessGetBaseInit()
         }
         this.getList({page: 1})
       }
@@ -667,7 +629,6 @@
       })
     }
 
-
     /**
      * 用户社区角色信息
      **/
@@ -693,28 +654,27 @@
       if (this.pagination.end) {
         return
       }
-
-      console.log('getlist')
+      let params = {}
+      let res = ''
+      let courseData = this.getCourseData
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
-      let params = {}
+      this.pagination.busy = true
+      
       if(this.showType){
         params = {
           id: this.$route.params.communityId,
-          //page : page,
           pageCount: pageSize,
           sort: this.lessSort,
-          sortNum: this.getCourseData.sortNum,
+          sortNum: courseData.sortNum,
         }
-
         // 当前学习需要参数
-        if(this.getCourseData.isToStydy){
+        if(courseData.isToStydy){
           params.sortNum = this.lastStudy.sort
         }
-
         //那个方向翻页。不能为空。
-        if(this.getCourseData.upOrDown){
-          params.upOrDown = this.getCourseData.upOrDown
+        if(courseData.upOrDown){
+          params.upOrDown = courseData.upOrDown
         }
       }else {
         params = {
@@ -724,31 +684,13 @@
           sort: this.userSort,
         }
       }
-      this.pagination.busy = true
-      let res = ''
+
       if (this.showType) {
         res = await this.getLessMsgList(params)
-        this.lastStudy = res.lastStudentCourse 
-        this.getCourseData.sortNum = 0
-        this.getCourseData.isToStydy = false
-
-        //禁止翻页
-        if(res.courses && res.courses.length < pageSize ){
-          if(this.getCourseData.upOrDown == 'up'){
-            this.getCourseData.isIp = false
-          }else if(this.getCourseData.upOrDown == 'down'){
-            this.getCourseData.isDown = false
-          }else {
-            this.getCourseData.isIp = false
-            this.getCourseData.isDown = false
-
-          }
-        }
       } else {
         res = await this.getCommunicationsList(params)
       }
       const {courses, lists, total} = res
-
       const temp = new Array(...(this.showType ? courses : lists))
       temp.forEach((item) => {
         if (item['modelType'] === 'problem') {
@@ -764,11 +706,34 @@
         }
       })
 
+      //课节
+      if(courses){
+        //禁止翻页
+
+        if(res.courses && res.courses.length < pageSize ){
+          if(courseData.upOrDown == 'up'){
+            courseData.isIp = false
+          }else if(courseData.upOrDown == 'down'){
+            courseData.isDown = false
+          }else {
+            courseData.isDown = false
+            //不是上次学到的情况下
+            if(!courseData.isToStydy){
+              courseData.isIp = false
+            }
+          }
+        }
+        console.log(courseData)
+
+        this.lastStudy = res.lastStudentCourse 
+        courseData.sortNum = 0
+        courseData.isToStydy = false
+      }
+
       if (page === 1) {
         this.dynamicList = temp
       } else {
-
-        if(this.showType && this.getCourseData.upOrDown == 'up'){
+        if(this.showType && courseData.upOrDown == 'up'){
           this.dynamicList = temp.concat(this.dynamicList || [])
         }else {
           this.dynamicList = this.dynamicList.concat(temp || [])
@@ -794,6 +759,9 @@
      * 下拉刷新
      */
     handleRefresh (loaded) {
+      if(this.showType){
+        this.lessGetBaseInit()
+      }
       this.pageInit()
       loaded('done')
     }
@@ -908,7 +876,7 @@
      * 点击卡片
      */
     handleTapCard (item) {
-      console.log(item)
+      console.log(item,this.pageInfo.isCourse)
       let url = ''
       if(item && item.isCourse == 3){
         url = `/introduce2/${item.communityId}/community`
@@ -916,21 +884,22 @@
         url = `/introduce/${item.communityId}/community`
       }
       this.$router.push(url)
+
+      if(item.isCourse===this.pageInfo.isCourse){
+        this.$router.go(0)
+      }
     }
 
     delMsg(){
       console.log(this.nowUserOpItem)
-      
+      let that = this
       if(this.nowUserOpItem.modelType === 'post'){
-        let that = this
         let data = {
           id: this.nowUserOpItem.circleId,
           modelType : 'post'
         }
         deltePostApi(data).then(res=>{
-          console.log(res)
           that.dynamicList.splice(that.nowUserOpItem.itemIndex,1)
-          console.log(that.dynamicList)
         },res=>{
 
           that.$vux.toast.text('删除失败', res.message )
@@ -967,8 +936,6 @@
 
     // 课程 列表分页操作
     getLessPage (type) {
-
-
       this.getCourseData.upOrDown = type.type===1?'up':'down'
       this.getCourseData.sortNum = type.type===1?this.dynamicList[0].sort : this.dynamicList[this.dynamicList.length-1].sort
       this.pagination.end = false
@@ -1080,6 +1047,18 @@
       this.pagination.busy = false
       this.pagination.end = false
       this.getList({page: 1})
+    }
+
+    lessGetBaseInit (){
+      this.getCourseData = {  //朋友圈 请求参数
+        upOrDown: '',
+        sortNum: 0,
+        isToStydy: false,
+
+        //课节 请求参数
+        isIp: false,
+        isDown: true
+      }
     }
 
 
