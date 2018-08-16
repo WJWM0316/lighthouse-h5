@@ -38,7 +38,7 @@
     </div>
 
     <!-- 已加入 -->
-		<template v-if="lessonData && isJoinAgency ">
+		<template v-if="lessonData && isJoinAgency">
 		    <!--本节任务-->
 				<div class="Lesson-task" v-if="trialReading === '0'">
 					<!--头部标题-->
@@ -68,7 +68,7 @@
 				</div>
 				<!--本节任务结束-->
 				<!--优秀打卡区-->
-				<div class="Lesson-punch" v-if="trialReading === '0' && excellentPunchList && excellentPunchList.length>0">
+				<div class="Lesson-punch" v-if="trialReading === '0'">
 					<!--头部标题-->
 					<div class="headerBox">
 						<div class="title-pic1">
@@ -77,24 +77,27 @@
 						<div class="title-pic2"></div>
 					</div>
 					<!--优秀头部标题图片-->
-					<div class="Excellent-punch">
-						<div class="Excellent-punch-title">优秀打卡</div>
+					<div  v-if="excellentPunchList && excellentPunchList.length>0">
+						<div class="Excellent-punch">
+							<div class="Excellent-punch-title">优秀打卡</div>
+						</div>
+						<div class="hr"></div>
+						<!--优秀打卡内容区-->
+						<lessondynamicItem
+							 v-for="item in excellentPunchList"
+							 :item="item"
+			         :showDelBtn="true"
+			         :communityId="communityId"
+			         :isFold="true"
+			         :isNeedHot="true"
+			         :hideBorder="false"
+			         :isLesson="true"
+			         :disableContentClick="false"
+			         @disableOperationEvents="operation"
+			      ></lessondynamicItem>
+			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="excellentPunchList.length>5">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
 					</div>
-					<div class="hr"></div>
-					<!--优秀打卡内容区-->
-					<lessondynamicItem
-						 v-for="item in excellentPunchList"
-						 :item="item"
-		         :showDelBtn="true"
-		         :communityId="communityId"
-		         :isFold="true"
-		         :isNeedHot="true"
-		         :hideBorder="false"
-		         :isLesson="true"
-		         :disableContentClick="false"
-		         @disableOperationEvents="operation"
-		      ></lessondynamicItem>
-		      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="excellentPunchList.length>5">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
+					
 				</div>
 				<!--所有打卡区-->
 				<div class="all-punch" v-if="trialReading === '0' && peopleCourseCardList && peopleCourseCardList.length>0">
@@ -118,7 +121,7 @@
 				</div>
 				
 				<!--底部打卡按钮区-->
-				<div>
+				<div v-if="trialReading === '0'">
 					<div class="Lesson-footer" v-if="isPunch === 0">
 						<div class="toPunch" @click.stop="toPunch">
 							去打卡
