@@ -295,14 +295,13 @@
 	  // 已结束提示 
 	  endHint(type){
       let that = this
-	  	
 	    if(!type){
 	      return
 	    }
 	    
 	    this.$vux.confirm.show({
 	      title: '加入须知',
-	       content: `该课程已经全部更新完毕了！ /n 加入后你获得以下内容： /n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；/n  2、和成员们一起交流学习； /n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
+	       content: `该课程已经全部更新完毕了！ \n 加入后你获得以下内容： \n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；\n  2、和成员们一起交流学习； \n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
 	       confirmText: '马上加入',
 	       cancelText: '我再想想',
 	       onConfirm: function (res) {
