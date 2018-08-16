@@ -28,14 +28,12 @@
         <h3 class="title" v-text="community.title" :class=""></h3>
         <p class="desc" v-text="community.simpleIntro"></p>
       </template>
-      
-
 
       <p class="timeMsg" v-if="community.isCourse == 2 && type==1">
         <span>开塔时间：</span>
         {{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}</p>
       <div class="bottom" v-else>
-        <div class="left" v-if="community.joinedNum>0">
+        <div class="left" v-if="community&&community.menuPeople && community.menuPeople.number>0">
             <p class="residue">
               <span class="number">{{community.menuPeople.number}}</span> 
               人
@@ -50,8 +48,7 @@
               <img class="user_icon jkhjk" v-if="community.joinedNum>3 && community.menuPeople.outstandingStudents.length==3" src="../../assets/icon/firends-call-more.png"/>
         </div>
         <div class="right" >
-
-          <template v-if="community.isJoined === 1 ">
+          <template v-if="community.isJoined === 1 && isCommunityIntroduce">
             <p class="to_description" @click.prevent.stop="goTointroduceDetail">课程介绍
               <img class="to_img" src="../../assets/icon/bnt_arrow_int@3x.png"/>
             </p>
@@ -83,7 +80,7 @@ import Component from 'vue-class-component'
         }
       }
     },
-    //是否是社区介绍
+    //是否是页介绍
     isCommunityIntroduce: {
       type: Boolean,
       default: false
@@ -129,6 +126,9 @@ import Component from 'vue-class-component'
     community(val){
       console.log("我是触发的community",val);
       this.community = val
+    },
+    isCommunityIntroduce(){
+
     }
   }
 })

@@ -406,8 +406,6 @@
       } else { // 未入社跳到未入社页面
       	this.completelyShow=true;
         this.$router.push(`/introduce/${item.communityId}?reload=true`)
-        //03b9200ec0d02059adc1882956104bc2
-        //03b9200ec0d02059adc1882956104bc2
       }
     }
 
@@ -476,7 +474,12 @@
     async created () {
     	console.log(location,'我是页面路径')
       wxUtil.reloadPage()
+
+      console.log(1111)
       if (this.$route.name === 'introduce-detail') {
+      console.log(1111)
+
+
         this.completelyShow = false
       }
       
