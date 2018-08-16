@@ -42,7 +42,7 @@ const routers = [
     // 大咖精选页
     path: '/introduce2/:communityId/community',
     name: 'community2',
-    meta: {navHide: true,keepAlive:true},
+    meta: {navHide: true},
     component: resolve => require(['@/views/introduce/community_v2'], resolve),
   },
   {

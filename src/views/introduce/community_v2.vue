@@ -414,13 +414,14 @@
     }
    
    	activated(){
-   		const scrollDom=document.getElementsByClassName('scroll-container')[0];
+   		/*const scrollDom =document.getElementsByClassName('scroll-container')[0];
     	scrollDom.scrollTop=sessionStorage.getItem("scrollTop");
+      console.log(JSON.parse(sessionStorage.getItem("isNewLoad")))
     	if(JSON.parse(sessionStorage.getItem("isNewLoad"))){
-    		sessionStorage.setItem("isNewLoad",false)
+    		sessionStorage.setItem("isNewLoad",false)*/
     		//重试请求数据
         this.init_v2()
-    	}
+    	//}
    	}
    	
     mounted(){
@@ -762,6 +763,9 @@
      * 加载下一页
      */
     async loadNext() {
+      if(this.showType){
+        return
+      }
       const nextPage = this.pagination.page + 1
       await this.getList({ page: nextPage })
     }
@@ -781,11 +785,6 @@
      * 上拉加载
      */
     async handlePullup (loaded) {
-      if(this.showType === 1){
-        loaded('ended')
-        return
-      }
-
       await this.loadNext()
       if (this.pagination.end) {
         loaded('ended')
