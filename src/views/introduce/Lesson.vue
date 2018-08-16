@@ -96,7 +96,7 @@
 			         :disableContentClick="false"
 			         @disableOperationEvents="operation"
 			      ></lessondynamicItem>
-			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="excellentPunchList.length>5">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
+			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="excellentPunchList.length>=5">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
 					</div>
 					
 				</div>
@@ -119,11 +119,11 @@
 		         :disableContentClick="false"
 		         @disableOperationEvents="operation"
 		      ></lessondynamicItem>
-		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="peopleCourseCardList.length>5">查看所有打卡 <span>({{peopleCourseCardList.length}})</span></div>
+		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="peopleCourseCardList.length>=5">查看所有打卡 <span>({{peopleCourseCardList.length}})</span></div>
 				</div>
 				
 				<!--底部打卡按钮区-->
-				<div v-if="trialReading === '0' || curPeopleInfo.roleId !==1 || curPeopleInfo.roleId !==2">
+				<div v-if="trialReading === '0' && (curPeopleInfo.roleId !==1 || curPeopleInfo.roleId !==2)">
 					<div class="Lesson-footer" v-if="isPunch === 0">
 						<div class="toPunch" @click.stop="toPunch">
 							去打卡
@@ -899,13 +899,14 @@
 			>.dynamic-item{
 				&:last-child{
 					border-bottom: none;
+					margin-top: 50px;
 				}
 			}
 		}
 		.hr{
 			margin-left: -20px;
 			width: 375px;
-			height: 1px;
+			height: 0.5px;
 			background: #EDEDED;
 		}
 		
