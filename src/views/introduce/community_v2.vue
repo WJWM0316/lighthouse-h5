@@ -122,15 +122,16 @@
         <button @click="question" v-if="this.pageInfo.isCourse===3">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count _" v-if=" pageInfo['answerTotal']> 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
-        <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发帖</button>
+        <!-- release -->
+        <button @click="posted"><img src="../../assets/icon/bnt_post@3x.png"/>发布内容</button>
       </div>
       <div class="ask-warp" v-else>
         <!--4.25改版-->
         <button @click="postQuestions" v-if="this.pageInfo.isCourse===3">
-          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>提问</span>
+          <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>我要提问</span>
         </button>
-        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发帖</button>
-        <button @click="posted" class="post-tip" v-else><img src="../../assets/icon/bnt_post@3x.png"/>发帖</button>
+        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发布内容</button>
+        <button @click="posted" class="post-tip" v-else><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
     </div>
     <!--分享弹窗-->
@@ -413,13 +414,14 @@
     }
    
    	activated(){
-   		const scrollDom=document.getElementsByClassName('scroll-container')[0];
+   		/*const scrollDom =document.getElementsByClassName('scroll-container')[0];
     	scrollDom.scrollTop=sessionStorage.getItem("scrollTop");
+      console.log(JSON.parse(sessionStorage.getItem("isNewLoad")))
     	if(JSON.parse(sessionStorage.getItem("isNewLoad"))){
-    		sessionStorage.setItem("isNewLoad",false)
+    		sessionStorage.setItem("isNewLoad",false)*/
     		//重试请求数据
         this.init_v2()
-    	}
+    	//}
    	}
    	
     mounted(){
@@ -522,19 +524,26 @@
       // :todo 回答问题
       this.$router.push(`/introduce/questions/${this.$route.params.communityId}`)
     }
+
     release () {
       // :todo 发布
       this.releaseActionsheet.show = true
     }
+
     postQuestions(){
     	// :todo 提问
-        this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
+      this.$router.push(`/introduce/ask/${this.$route.params.communityId}`)
     }
+
     posted(){
     	let code=this.roleInfo.code
+
+      console.log(this.$route.params.communityId,code)
     	// :todo 发帖
-        this.$router.push(`/publish/${this.$route.params.communityId}?type=0&code=${code}&codeType=${this.type}`)
+      this.$router.push(`/publish/${this.$route.params.communityId}?type=0&code=${code}&codeType=${this.type}&pageForm=isCourse3`)
     }
+
+
     toMemberList () {
       this.$router.push({name: 'classmates', communityId: this.$route.params.communityId})
     }
@@ -754,6 +763,9 @@
      * 加载下一页
      */
     async loadNext() {
+      if(this.showType){
+        return
+      }
       const nextPage = this.pagination.page + 1
       await this.getList({ page: nextPage })
     }
@@ -773,11 +785,6 @@
      * 上拉加载
      */
     async handlePullup (loaded) {
-      if(this.showType === 1){
-        loaded('ended')
-        return
-      }
-
       await this.loadNext()
       if (this.pagination.end) {
         loaded('ended')
