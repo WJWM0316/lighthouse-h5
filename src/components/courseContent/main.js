@@ -83,7 +83,8 @@ export default class dynamicItem extends Vue {
     let {id} = item
     let isTry = item.courseType == 2 ? 1: 0
 
-    if(this.isMaster || (item.statusInfo.isUnlock===0 && item.courseType !== 2) ){
+    console.log()
+    if(!this.isMaster && (item.statusInfo.isUnlock===0 && item.courseType !== 2) ){
       this.$vux.toast.text('还没有解锁', 'bottom')
       return
     }

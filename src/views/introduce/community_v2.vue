@@ -668,13 +668,17 @@
           sort: this.lessSort,
           sortNum: courseData.sortNum,
         }
+
+        console.log(courseData.isToStydy)
+        //那个方向翻页。不能为空。
+        if(courseData.upOrDown && !courseData.isToStydy){
+          params.upOrDown = courseData.upOrDown
+        }
+
         // 当前学习需要参数
         if(courseData.isToStydy){
+          courseData.isIp = true
           params.sortNum = this.lastStudy.sort
-        }
-        //那个方向翻页。不能为空。
-        if(courseData.upOrDown){
-          params.upOrDown = courseData.upOrDown
         }
       }else {
         params = {
@@ -709,7 +713,7 @@
       //课节
       if(courses){
         //禁止翻页
-
+        console.log(courseData.isToStydy,courseData.isIp)
         if(res.courses && res.courses.length < pageSize ){
           if(courseData.upOrDown == 'up'){
             courseData.isIp = false
@@ -723,7 +727,6 @@
             }
           }
         }
-        console.log(courseData)
 
         this.lastStudy = res.lastStudentCourse 
         courseData.sortNum = 0
@@ -1038,9 +1041,12 @@
       this.getCourseData.isToStydy = true
       this.getCourseData.isIp =  true
       this.getCourseData.isDown =  true
+      this.getCourseData.upOrDown =  ''
 
       this.pagination.busy = false
       this.pagination.end = false
+
+
       this.getList({page: 1})
     }
 

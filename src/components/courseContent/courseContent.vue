@@ -35,7 +35,11 @@
             <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else-if="item.statusInfo.isUnlock === 1" />
           </div>
         </template>
-        <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png" v-else />
+
+        <div class="blo_right noneborder" v-else>
+          <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png"  />
+        </div>
+        
         
       </div>
     </div>
@@ -148,6 +152,7 @@
       font-family: PingFangSC-Regular;
       color: rgba(53,64,72,1);
       line-height: 18px;
+      .setEllipsisLn()
     }
     .blo_right {
       width: 36px;

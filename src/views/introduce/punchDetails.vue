@@ -41,6 +41,7 @@
                   :key="index"
                   :itemIndex="index"
                   :showDelBtn="true"
+                  :disableUserClick="true"
                   @operation="operation">
               </discuss-item>
             </div>

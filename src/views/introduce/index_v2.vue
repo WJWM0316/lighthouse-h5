@@ -63,16 +63,18 @@
           <div class="hr"></div>
         </div>
         <div class="module-content">
-          <div class="attempt_list" v-for="item,index in pageInfo.tryCourses" >
-            <div class="attempt_block" @click.stop="toLesson(item.id)">
+          <div class="attempt_list"  >
+            <div class="attempt_block" v-for="item,index in pageInfo.tryCourses" @click.stop="toLesson(item.id)">
               <img class='blo_left' :src="item.coverPicture" />
-              <div class='blo_center'>{{item.title}}</div>
+              <div class='blo_center'>{{item.title}}撒打算打算打算打算打算打算打算打算打算打算的撒打算打算打撒撒打算打打算打算的</div>
               <div class='blo_right'>试读</div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="joinHint">加入灯塔，即可解锁更多内容～</div>
 
     <div class="footer" v-show="completelyShow">
       <div class="time-clock" v-if="isJoinAgency">
@@ -248,7 +250,7 @@
       
       this.$vux.confirm.show({
         title: '加入须知',
-         content: `该课程已经全部更新完毕了！ \/n 加入后你获得以下内容： \/n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；\/n  2、和成员们一起交流学习； \/n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
+         content: `该课程已经全部更新完毕了！ \n 加入后你获得以下内容： \n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；\n  2、和成员们一起交流学习； \n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
          confirmText: '马上加入',
          cancelText: '我再想想',
          onConfirm: function (res) {
@@ -413,8 +415,6 @@
                 location.reload()
                 break
             }
-//            self.$store.dispatch('show_qr')
-//            location.href = location.href.split('?')[0] + '?' + new Date().getTime() // todo 假如原来有参数需要换种写法
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
           } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
@@ -571,6 +571,14 @@
   @import "../../styles/variables";
   @import "../../styles/mixins";
 
+  .joinHint {
+    font-size: 14px;
+    font-family: PingFangSC-Light;
+    color: rgba(188,188,188,1);
+    line-height: 18px;
+    margin-bottom: 34px;
+    text-align: center;
+  } 
   .big-shot-introduce {
    	height: 100%;
     padding-bottom: 55px;
@@ -634,7 +642,7 @@
       }
 
       .share-group {
-        position: absolute;
+        position: fixed;
         right: 10px;
         top: 25px;
         line-height: 1;
@@ -786,7 +794,7 @@
           justify-content: space-around;
           align-items: center;
           height:40px;
-
+          margin-bottom: 30px;
           .blo_left {
             width:70px;
             height:39px;
@@ -800,13 +808,14 @@
             font-family: PingFangSC-Regular;
             color: rgba(53,64,72,1);
             line-height: 18px;
+            .setEllipsisLn()
           }
           .blo_right {
             width: 36px;
             height: 22px;
             background: rgba(255,255,255,1);
             border-radius: 3px;
-            border: 1px solid rgba(188,188,188,1);
+            border: 0.5px solid rgba(188,188,188,1);
             text-align: center;
             font-size: 12px;
             font-family: PingFangSC-Light;
@@ -815,6 +824,7 @@
           }
         }
       }
+
 
       & .hr {
         height: 1px; /* no */
