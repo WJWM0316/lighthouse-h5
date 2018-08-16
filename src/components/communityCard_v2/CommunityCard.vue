@@ -45,7 +45,7 @@
 
         <div class="center"  @click.prevent.stop="toMore" v-if="community.menuPeople&&community.menuPeople.outstandingStudents.length>0">
               <img class="user_icon" v-for="(item, index) in community.menuPeople.outstandingStudents" :src="item.avatar" v-if="index<3" />
-              <img class="user_icon four" v-if="community.joinedNum>3 && community.menuPeople.outstandingStudents.length==3" src="../../assets/icon/firends-call-more.png"/>
+              <img class="user_icon four" v-if="community.menuPeople.number>3 && community.menuPeople.outstandingStudents.length==3" src="../../assets/icon/firends-call-more.png"/>
         </div>
         <div class="right" >
           <template v-if="community.isJoined === 1 && isCommunityIntroduce">
@@ -154,6 +154,9 @@ export default class CommunityCard extends Vue {
   
   toMore(){
   	console.log(this.community)
+    if(this.community.isJoined !== 1){
+      return
+    }
   	let that=this;
   	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.community.communityId,classmateNum:this.community.joinedNum}})
   }

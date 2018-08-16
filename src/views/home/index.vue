@@ -169,6 +169,7 @@ export default class HomeIndex extends Vue {
     if (routeName === 'home') {
       this.navTabName = 'picked'
     } else {
+      
       this.navTabName = 'joined'
     }
     this.init()
