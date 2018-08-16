@@ -47,6 +47,7 @@
 
 		<actionsheet v-model="addActionsConfig.show" :menus="addActionsConfig.menus" show-cancel @on-click-menu="handleAddActoinItem" />
 		<wechat-code-modal v-model="wechatCodeModal.show" />
+		<div class="Mask" v-if="showTaskWindow" @click.stop="closeTask"></div>
 	</div>
 </template>
 
@@ -554,6 +555,7 @@
 			box-sizing: border-box;
 			width: 100%;
 			height: 363px;
+			z-index: 9999;
 			animation: task-fade-in 300ms ease-in-out;
 			.taskhead{
 				width: 100%;
@@ -611,6 +613,15 @@
 			}
 			
 		}
-		
+		.Mask{
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #000;
+			opacity: 0.5;
+			z-index: 8888;
+		}
 	}
 </style>

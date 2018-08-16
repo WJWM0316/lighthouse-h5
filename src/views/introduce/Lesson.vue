@@ -77,7 +77,7 @@
 						<div class="title-pic2"></div>
 					</div>
 					<!--优秀头部标题图片-->
-					<div  v-if="excellentPunchList && excellentPunchList.length>0">
+					<div class="excellentPunchList"  v-if="excellentPunchList && excellentPunchList.length>0">
 						<div class="Excellent-punch">
 							<div class="Excellent-punch-title">优秀打卡</div>
 						</div>
@@ -123,7 +123,7 @@
 				</div>
 				
 				<!--底部打卡按钮区-->
-				<div v-if="trialReading === '0'">
+				<div v-if="trialReading === '0' || curPeopleInfo.roleId !==1 || curPeopleInfo.roleId !==2">
 					<div class="Lesson-footer" v-if="isPunch === 0">
 						<div class="toPunch" @click.stop="toPunch">
 							去打卡
@@ -852,6 +852,8 @@
 			.Excellent-punch{
 				width: 100%;
 				.Excellent-punch-title{
+					font-size: 18px;
+					font-weight: 700;
 					padding-left: 15px;
 					height: 22px;
 					width: 100%;
@@ -865,6 +867,14 @@
 						width: 5px;
 						height: 17px;
 						background-color: #FFE266;
+					}
+				}
+			}
+			/*优秀打卡最后一个样式*/
+			.excellentPunchList{
+				>.dynamic-item{
+					&:last-child{
+						border-bottom: none;
 					}
 				}
 			}
@@ -885,8 +895,7 @@
 			}
 			>.dynamic-item{
 				&:last-child{
-					border-bottom: 1px solid transparent;
-					margin-top: 50px;
+					border-bottom: none;
 				}
 			}
 		}
@@ -952,12 +961,12 @@
 		.headerBox{
 			width: 100%;
 			height: 54px;
-			background-color: #C9C9C9;
+			/*background-color: #C9C9C9;*/
 			margin-bottom: 30px;
 			position: relative;
 			.title-pic1{
 				width: 330px;
-				height: 49px;
+				height: 46px;
 				border: 1.5px solid #354048;
 				position: absolute;
 				left: 0;
@@ -968,7 +977,7 @@
 				.txt{
 					display: inline-block;
 					text-align: center;
-					line-height: 50px;
+					line-height: 46px;
 					font-size: 18px;
 					font-weight: 700;
 					color: #354048;
@@ -996,7 +1005,7 @@
 			}
 			.title-pic2{
 				width: 330px;
-				height: 49px;
+				height: 46px;
 				border: 1.5px solid #354048;
 				background-color: #FFE266;
 				position: absolute;
