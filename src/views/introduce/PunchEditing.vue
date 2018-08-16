@@ -26,17 +26,17 @@
 		<div class="taskWindow" v-if="showTaskWindow">
 			<div class="taskhead" @click.stop="closeTask">本节打卡任务 <img src="../../assets/icon/btn_packup_task@3x.png"/></div>
 			<div class="taskbody">
-				<div v-html="taskContent.cardContent"></div>
+				<div v-html="taskContent.courseCardTitle"></div>
 				<!--图片-->
 				<div class="content-img">
 					<div class="content-images">
 	          <!-- 图片为 1 张时 -->
-	          <div class="item-image one" v-if="taskContent.cardContentFile && taskContent.cardContentFile.length === 1">
-	            <img :src="taskContent.cardContentFile[0].fileUrl || '../../assets/icon/img_head_default.png'" @click.stop="previewImage(taskContent.cardContentFile[0].fileUrl)" />
+	          <div class="item-image one" v-if="taskContent.courseCardFile && taskContent.courseCardFile.length === 1">
+	            <img :src="taskContent.courseCardFile[0].fileUrl || '../../assets/icon/img_head_default.png'" @click.stop="previewImage(taskContent.courseCardFile[0].fileUrl)" />
 	          </div>
 	
 	          <!--  图片为 多 张时  -->
-	          <div class="item-image" v-for="file in taskContent.cardContentFile" v-else>
+	          <div class="item-image" v-for="file in taskContent.courseCardFile" v-else>
 	            <img :src="file.fileUrl || '../../assets/icon/img_head_default.png'" v-if="!file.holder" @click.stop="previewImage(file.fileUrl)" />
 	          </div>
 	        </div>
@@ -478,9 +478,9 @@
 				font-size: 0;
 				&>.image {
 					background: #f1f1f1;
-					width: 111px;
-					height: 111px;
-					line-height: 109px;
+					width: 108px;
+					height: 108px;
+					line-height: 108px;
 				}
 				.close {
 					position: absolute;
