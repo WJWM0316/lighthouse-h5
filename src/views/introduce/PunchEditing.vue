@@ -143,6 +143,9 @@
 		created() {
 			getEditCourseCardDetailApi(this.$route.query.courseId,this.$route.query.communityId).then(res=>{
 				this.taskContent = res
+				this.form.content = res.peopleCourseCardInfo.cardContent
+//				this.images = [...res.peopleCourseCardInfo.cardContentFile]
+				console.log(this.images,"我是图片的路劲、。。。。。")
 			}).catch(res=>{
 				console.log(res,"报错信息");
 			})
@@ -259,7 +262,19 @@
 		 * 准备发布
 		 */
 		readyPublish() {
-			const localIds = this.images.map(item => item.fileUrl) || []
+			let New_images = this.images;
+//			if(this.taskContent.peopleCourseCardInfo.cardContent){
+//				console.log(New_images,"图片数组")
+//				for(let i=0;i<this.taskContent.peopleCourseCardInfo.cardContent.length;i++){
+//					for(let j=0;j<New_images.length;j++){
+//						if(New_images[j].fileUrl === this.taskContent.peopleCourseCardInfo.cardContent[i].fileUrl){
+//							New_images.splice(j,1);
+//						}
+//					}
+//				}
+//			}
+			const localIds = New_images.map(item => item.fileUrl) || []
+			console.log(localIds,"555555555555555555555555555555")
 			if(localIds.length > 0) {
 				//有图片，等待图片上传完成后发布
 				this.uploadCustomImages(localIds)
@@ -478,9 +493,9 @@
 				font-size: 0;
 				&>.image {
 					background: #f1f1f1;
-					width: 108px;
-					height: 108px;
-					line-height: 108px;
+					width: 102px;
+					height: 102px;
+					line-height: 100px;
 				}
 				.close {
 					position: absolute;
@@ -490,9 +505,9 @@
 					height: 26px;
 				}
 				&.add {
-					width: 111px;
-					height: 111px;
-					line-height: 109px;
+					width: 102px;
+					height: 102px;
+					line-height: 100px;
 					text-align: center;
 					border: solid 1px #ededed;
 					/* no */
