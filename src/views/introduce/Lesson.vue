@@ -123,7 +123,8 @@
 				</div>
 				
 				<!--底部打卡按钮区-->
-				<div v-if="trialReading === '0' || curPeopleInfo.roleId">
+				<!--<div v-if="trialReading === '0' || (curPeopleInfo.roleId!==1 && curPeopleInfo.roleId!==2) || curPeopleInfo.roleId">-->
+				<div v-if="curPeopleInfo.roleId!==1 && curPeopleInfo.roleId!==2 && trialReading === '0'">
 					<div class="Lesson-footer" v-if="isPunch === 0">
 						<div class="toPunch" @click.stop="toPunch">
 							去打卡
