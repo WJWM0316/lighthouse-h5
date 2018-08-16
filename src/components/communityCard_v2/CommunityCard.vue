@@ -154,6 +154,9 @@ export default class CommunityCard extends Vue {
   
   toMore(){
   	console.log(this.community)
+    if(this.community.isJoined !== 1){
+      return
+    }
   	let that=this;
   	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.community.communityId,classmateNum:this.community.joinedNum}})
   }

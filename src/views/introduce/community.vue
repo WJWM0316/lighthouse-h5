@@ -99,19 +99,14 @@
         <button @click="question" v-if="this.pageInfo.isCourse===1">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count _" v-if=" pageInfo['answerTotal']> 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
-        <!--<button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>-->
-        <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布内容</button>
+        <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
       <div class="ask-warp" v-else>
-      <!--<div class="ask-btn" @click="askBtnClick" v-else>-->
-        <!--<img src="./../../assets/icon/icon_question.png" v-if="showType" />
-        <img src="./../../assets/icon/icon_writing.png" v-else />
-        <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>-->
         <!--4.25改版-->
         <button @click="postQuestions" v-if="this.pageInfo.isCourse===1">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>我要提问</span>
         </button>
-        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发布内容</button>
+        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
         <button @click="posted" class="post-tip" v-else><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
     </div>
