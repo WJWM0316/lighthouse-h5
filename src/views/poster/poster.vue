@@ -1,7 +1,18 @@
 <template>
 	<div class="wrap">
 		<canvas id="poster" ref="poster" width="750" height="1300"></canvas>
-		<img id="scream" ref="scream"  src='https://cdnstatic.ziwork.com/Public/show/01.png'><!--  @load="nextBg" -->
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/01.png' crossOrigin="Anonymous" v-if="random == '01'">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/02.png' crossOrigin="Anonymous" v-if="random == '02'">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/03.png' crossOrigin="Anonymous" v-if="random == '03'">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/04.png' crossOrigin="Anonymous" v-if="random == '04'">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/05.png' crossOrigin="Anonymous" v-if="random == '05'">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/06.png' crossOrigin="Anonymous" v-if="random == '06'">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/07.png' crossOrigin="Anonymous" v-if="random == '07'">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/08.png' crossOrigin="Anonymous" v-if="random == '08'">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/09.png' crossOrigin="Anonymous" v-if="random == '09'">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/10.png' crossOrigin="Anonymous" v-if="random == 10">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/11.png' crossOrigin="Anonymous" v-if="random == 11">
+		<img id="scream"  @load="nextBg" ref="scream"  src='../../assets/poster/12.png' crossOrigin="Anonymous" v-if="random == 12">
 		<img id="ewema" ref="ewema" src="../../assets/icon/erweima.png">
 		<div class="imgBox">
 			<img class="showImg" :src="path">
@@ -13,19 +24,12 @@
 	import Vue from 'vue'
   import Component from 'vue-class-component'
   @Component({
-  	watch: {
-  		bgSrc () {
-  			let that = this
-  			this.$refs.scream.onload = function () {
-  				that.nextBg()
-  			}
-  		}
-  	}
   })
   export default class notFound extends Vue {
   	ctx = ''
   	path = '' // 最终导出的图片链接
   	bgSrc = ''
+  	random = 0
   	nextBg () {
   		let ctx = this.ctx
 			ctx.fillStyle="#000000"
@@ -85,20 +89,27 @@
 	    	ctx.fillText(title.slice(0, lineNum2), 74, y)
 	    }
 	    ctx.drawImage(this.$refs.ewema,584,1144,116,116)
-	    this.path = this.canvas.toDataURL("image/png")
+	    try {
+				this.path = this.canvas.toDataURL("image/png")
+			}
+			catch(err) {
+				alert(err)
+			}
+	    
 	    if (this.path) {
 	    	Vue.$vux.loading.hide()
 	    }
   	}
 
   	mounted () {
+  		let that = this
   		Vue.$vux.loading.show({
 	      text: '图片正在生成中'
 	    })
 	    // 28张背景图 随机抽一张
-	    let random = Math.floor(Math.random()*28)+1
-	    if (random < 10) random = `0${random}`
-	    this.bgSrc = `https://cdnstatic.ziwork.com/Public/show/01.png`
+	    this.random = Math.floor(Math.random()*6)+1
+	    if (this.random < 10) this.random = `0${this.random}`
+	    console.log(this.random, 11)
   		this.canvas = document.getElementById('poster')
 			this.ctx = this.canvas.getContext("2d")
 		}
