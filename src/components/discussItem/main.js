@@ -140,12 +140,23 @@ export default class discussItem extends Vue {
    */
   comment () {
     const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'comment',
-      itemIndex,
-      item: this.item,
-      commentType: this.commentType
-    })
+    if(this.$route.path === "/PunchDetails"){
+    	this.$emit('operation', {
+	      eventType: 'comment',
+	      param:{
+	      	itemIndex,
+		      item: this.item,
+		      type: 2
+	      }
+	    })
+    }else{
+    	this.$emit('operation', {
+	      eventType: 'comment',
+	      itemIndex,
+	      item: this.item,
+	      commentType: this.commentType
+	    })
+    }
   }
   /**
    * 点赞
@@ -166,7 +177,29 @@ export default class discussItem extends Vue {
 	  		type:2,
 	  		sourceId:this.item.commentId //打卡信息id
 	  	}
-	    courseCardFavorApi(param)
+	    //发送点赞请求
+	    courseCardFavorApi(param).then(res=>{
+	    	if(nowFavor === 1){
+	    		this.item.favorTotal+=1;
+	    		this.item.favorList.push(this.item.currentUser)
+	    	}else{
+	    		this.item.favorTotal-=1;
+	    		this.item.favorList.forEach((item, index) => {
+	          if (item.userId === this.item.currentUser.userId) {
+	            this.item.favorList.splice(index, 1)
+	          }
+	        })
+	    	}
+	    })
+
+//			this.$emit('operation', {
+//		    eventType: 'praise',
+//		    param:{
+//		    	itemIndex,
+//			    item: this.item
+//		    }
+//		  })
+			
     }else{
     	this.$emit('operation', {
 		    eventType: 'praise',

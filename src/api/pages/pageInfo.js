@@ -457,7 +457,7 @@ export const getCourseCardFavorListApi = (data) => {
 //获取打卡评论列表
 export const getCourseCardCommentListApi = (data) => {
   return request({
-    url: `/wap/courseCard/getCourseCardCommentList?peopleCourseId=${data.peopleCourseId}&page=${data.page}&pageCount=${data.pageCount}`,
+    url: `/wap/courseCard/getCourseCardCommentList/${data.peopleCourseId}?&page=${data.page}&pageCount=${data.pageCount}`,
     type:'get'
   })
 }
