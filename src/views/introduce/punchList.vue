@@ -2,8 +2,9 @@
 	<!--打卡列表页-->
 	<div class="PunchList">
 		<lessondynamicItem
-				 v-for="item in CourseCardList"
-				 :item="item"
+		 v-for="(item, index) in CourseCardList"
+		 :key = "index"
+		 :item="item"
          :showDelBtn="true"
          :communityId="communityId"
          :isFold="true"
