@@ -28,7 +28,7 @@
 			<div class="taskbody">
 				<div v-html="taskContent.courseCardTitle"></div>
 				<!--图片-->
-				<div class="content-img">
+				<div class="content-img" v-if="taskContent.courseCardFile && taskContent.courseCardFile.length>0">
 					<div class="content-images">
 	          <!-- 图片为 1 张时 -->
 	          <div class="item-image one" v-if="taskContent.courseCardFile && taskContent.courseCardFile.length === 1">
@@ -144,9 +144,9 @@
 		created() {
 			getEditCourseCardDetailApi(this.$route.query.courseId,this.$route.query.communityId).then(res=>{
 				this.taskContent = res
-				this.form.content = res.peopleCourseCardInfo.cardContent
+				this.form.content = res.peopleCourseCardInfo.cardContent?res.peopleCourseCardInfo.cardContent:''
 //				this.images = [...res.peopleCourseCardInfo.cardContentFile]
-				console.log(this.images,"我是图片的路劲、。。。。。")
+//				console.log(this.taskContent,"我是图片的路劲、。。。。。")
 			}).catch(res=>{
 				console.log(res,"报错信息");
 			})
@@ -263,7 +263,7 @@
 		 * 准备发布
 		 */
 		readyPublish() {
-			let New_images = this.images;
+//			let New_images = this.images;
 //			if(this.taskContent.peopleCourseCardInfo.cardContent){
 //				console.log(New_images,"图片数组")
 //				for(let i=0;i<this.taskContent.peopleCourseCardInfo.cardContent.length;i++){
@@ -274,7 +274,7 @@
 //					}
 //				}
 //			}
-			const localIds = New_images.map(item => item.fileUrl) || []
+			const localIds = this.images.map(item => item.fileUrl) || []
 			console.log(localIds,"555555555555555555555555555555")
 			if(localIds.length > 0) {
 				//有图片，等待图片上传完成后发布
