@@ -95,6 +95,7 @@
 			         :isLesson="true"
 			         :disableContentClick="false"
 			         @disableOperationEvents="operation"
+			         @reFresh="reFresh"
 			      ></lessondynamicItem>
 			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="countCardInfo.totalExcellentCardCount>5">查看所有优秀打卡 <span>({{countCardInfo.totalExcellentCardCount}})</span></div>
 					</div>
@@ -118,6 +119,7 @@
 		         :isLesson="true"
 		         :disableContentClick="false"
 		         @disableOperationEvents="operation"
+		         @reFresh="reFresh"
 		      ></lessondynamicItem>
 		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="countCardInfo.totalCardCount>5">查看所有打卡 <span>({{countCardInfo.totalCardCount}})</span></div>
 				</div>
