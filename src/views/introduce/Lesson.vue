@@ -96,7 +96,7 @@
 			         :disableContentClick="false"
 			         @disableOperationEvents="operation"
 			      ></lessondynamicItem>
-			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="excellentPunchList.length>=5">查看所有优秀打卡 <span>({{excellentPunchList.length}})</span></div>
+			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="countCardInfo.totalExcellentCardCount>5">查看所有优秀打卡 <span>({{countCardInfo.totalExcellentCardCount}})</span></div>
 					</div>
 					
 				</div>
@@ -119,7 +119,7 @@
 		         :disableContentClick="false"
 		         @disableOperationEvents="operation"
 		      ></lessondynamicItem>
-		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="peopleCourseCardList.length>=5">查看所有打卡 <span>({{peopleCourseCardList.length}})</span></div>
+		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="countCardInfo.totalCardCount>5">查看所有打卡 <span>({{countCardInfo.totalCardCount}})</span></div>
 				</div>
 				
 				<!--底部打卡按钮区-->
@@ -234,6 +234,7 @@
     communityId = ""
   	isPunch = 0	//是否已经打卡0:是未打卡，1是打卡
   	curPeopleInfo = ""
+  	countCardInfo = ""
 
 
   	//试读。未加入相关
@@ -259,6 +260,7 @@
 				this.lessonData = res[0].couponInfo
   			this.communityId = res[0].communityId
   			this.communityCourse = res[0].communityCourse
+  			this.countCardInfo = res[0].countCardInfo
   			if(this.communityCourse.av.files[0]){
   				this.communityCourse.av.files[0].fileId = String(this.communityCourse.av.files[0].fileId)
   			}
