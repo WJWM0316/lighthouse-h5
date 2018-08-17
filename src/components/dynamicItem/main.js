@@ -284,7 +284,6 @@ export default class dynamicItem extends Vue {
       if (el && el.firstChild) {
         const contentText = el.firstChild
         if (contentText.scrollHeight > contentText.offsetHeight) {
-          console.log(el)
           const fullText = document.createElement('span')
           fullText.className = 'full-text open'
           fullText.innerText = '展开全文'

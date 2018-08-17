@@ -104,7 +104,6 @@
                        :masterInfo="masterInfo"
                        :isUserExchange="showType"
                        @disableOperationEvents="operation"
-                       @saveAudio="controlAudio"
                        @opMember="opMember"
               ></dynamic>
             </template>
@@ -307,42 +306,7 @@
     }
     
     qrSrc = ''
-    
-    //路由刚进入的时候
-    beforeRouteEnter(to,from,next){
-			let nowCommunity=sessionStorage.getItem("nowCommunity");
-			if(!nowCommunity){
-				sessionStorage.setItem("nowCommunity",to.params.communityId)
-				console.log(to,"我是没有记录community的时候")
-				sessionStorage.setItem("isNewLoad",false)
-			}else{
-				if(nowCommunity===to.params.communityId){
-					to.meta.keepAlive = true;
-					console.log(to,"community相同时候打印我")
-				}else{
-					sessionStorage.setItem('scrollTop',0);
-					sessionStorage.setItem("nowCommunity",to.params.communityId)
-					console.log(to,"我是当前页面的路由信息")
-					// sessionStorage.setItem("isNewLoad",true)
-					to.meta.keepAlive = false;
-				}
-			}
-			next();
-    }
 		
-		//页面离开前
-		beforeRouteLeave(to, from, next) {
-		  if((this.nowItem.answer && this.nowItem.answer[0].type===2) || this.nowItem.circleType===1){
-        this.saveAudio.pause();
-        if(this.nowItem.modelType && this.nowItem.modelType==="problem"){
-          this.nowItem.answers[0].musicState=0;
-        }else{
-          this.nowItem.musicState=0;
-        }
-      }
-		 	next();
-		 }
-	
     created () {
     	let titleBoxShow=true;
       if (this.$route.query.type !== undefined) {
@@ -358,7 +322,6 @@
 
     init_v2(){
       this.lessGetBaseInit()
-
       this.pageInit().then(() => {
         const {
           title,
@@ -419,33 +382,13 @@
         }
       })
     }
-   
-   	activated(){
-   		/*const scrollDom =document.getElementsByClassName('scroll-container')[0];
-    	scrollDom.scrollTop=sessionStorage.getItem("scrollTop");
-      console.log(JSON.parse(sessionStorage.getItem("isNewLoad")))
-    	if(JSON.parse(sessionStorage.getItem("isNewLoad"))){
-    		sessionStorage.setItem("isNewLoad",false)*/
-    		//重试请求数据
-        this.init_v2()
-    	//}
-   	}
    	
     mounted(){
-    	console.log("修改成功了")
     }
 
-    //控制音频
-    controlAudio(e){
-      this.saveAudio = e.nowaudio;
-      this.nowItem = e.nowItem;
-      console.log(e,"我是传递过来的对象")
-    }
     
     //路由跳转more
     toMore(){
-    	
-    	console.log(this.communityId);
     	let that=this;
     	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId,classmateNum:this.pageInfo.joinedNum}})
     }

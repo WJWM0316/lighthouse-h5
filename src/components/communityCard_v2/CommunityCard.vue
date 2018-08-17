@@ -26,7 +26,7 @@
 
       <template v-else>
         <h3 class="title" v-text="community.title" ></h3>
-        <p class="desc" v-text="community.simpleIntro"></p>
+        <p class="desc" v-text="community.masterIntro"></p>
       </template>
 
       <p class="timeMsg" v-if="community.isCourse == 2 && type==1">
@@ -55,7 +55,7 @@
           </template>
           <template v-else>
             <!-- 已结束 -->
-            <p v-if="isEnd">灯塔已关闭</p>
+            <p v-if="isEnd">灯塔已结束</p>
             <!-- 未加入且已开社 -->
             <p v-else>灯塔已开启</p>
           </template>
