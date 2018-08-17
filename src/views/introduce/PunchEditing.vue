@@ -308,6 +308,7 @@
 					if(this.images.length>0){
 						fileId = this.images.map(item => item.fileId)
 						type = 3;
+						alert(this.form.content+"：我是输入的文字内容。")
 						if(this.form.content){
 							//如果上传了文字和图片
 							params = {
@@ -389,13 +390,15 @@
 		 * 点击添加
 		 */
 		handleAdd() {
-			if(this.images && this.images.length <= 0) {
+			this.chooseCustomImages()
+			//解除注释部分会开启底部弹窗
+			/*if(this.images && this.images.length <= 0) {
 				this.addActionsConfig.show = true
 			} else {
 				if(this.images.length < this.lengths.imageMax) {
 					this.chooseCustomImages()
 				}
-			}
+			}*/
 		}
 
 		/**
@@ -501,7 +504,7 @@
 				.close {
 					position: absolute;
 					right: 0;
-					top: 0;
+					top: 2.5px;
 					width: 26px;
 					height: 26px;
 				}

@@ -16,8 +16,8 @@
       <div class="evaluate" v-if="item.isMaster ===1" @click.stop="showEvaluate">
       	···
       	<div class="evaluateWindow" v-if="evaluateWindow">
-      		<span @click.stop="evaluate('true')">选为优秀打卡</span>
-      		<span @click.stop="evaluate('false')">取消优秀打卡</span>
+      		<!--<span @click.stop="evaluate('true')">选为优秀打卡</span>
+      		<span @click.stop="evaluate('false')">取消优秀打卡</span>-->
       	</div>
       </div>
       <!--头衔-->

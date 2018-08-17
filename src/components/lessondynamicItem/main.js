@@ -346,11 +346,7 @@ export default class lessondynamicItem extends Vue {
   
   //展开评选优秀打卡菜单
   showEvaluate(){
-  	if(this.evaluateWindow === true){
-  		this.evaluateWindow = false
-  	}else{
-  		this.evaluateWindow = true
-  	}
+  	this.$emit("showEvaluate",this.item);
   }
   
   //评为优秀
