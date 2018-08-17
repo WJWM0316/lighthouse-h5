@@ -1098,10 +1098,11 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
         z-index: 99;
         border-radius: 16px;
+        height: 32px;
         .group_wrap {
           overflow: hidden;
           width: 100%;
-          height: 100%;
+          height: 32px;
           border-radius: 16px;
           background: #fff;
         }
@@ -1135,15 +1136,15 @@
         .u-btn {
           position: relative;
           line-height: 18px;
-          font-size: 13px;
+          font-size: 12px;
           color: @font-color-default;
 
           &:first-child {
-            padding: 8px 12px 6px 15px;
+            padding: 8px 10px 6px 12px;
           }
 
           &:last-child {
-            padding: 8px 15px 6px 12px;
+            padding: 8px 13px 6px 10px;
           }
 
           &.home,
@@ -1173,8 +1174,9 @@
 
           &.invite,
           &.money {
+            height: 32px;
+            padding: 0px 15px 0px 12px;
             background: #ffe266;
-            
           }
         }
       }

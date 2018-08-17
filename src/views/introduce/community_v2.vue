@@ -50,16 +50,17 @@
               
               <course-content 
                 :courseList="dynamicList" 
-                @lessSetSort="lessSetSort" 
                 :sort="lessSort" 
-                @getLessPage="getLessPage" 
                 :communityId=communityId 
                 :lastStudy = lastStudy 
-                @toLastStudy = toLastStudy 
                 :isIp = getCourseData.isIp
                 :isDown = getCourseData.isDown
                 :total = pagination.total
                 :isMaster = isMaster
+                @toLastStudy = toLastStudy 
+                @getLessPage="getLessPage" 
+                @lessSetSort="lessSetSort" 
+                
                 ></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
@@ -67,8 +68,8 @@
                 <div class="module-title">
                   <p>相关推荐</p>
                 </div>
-                  <div class="hr"></div>
-                
+                <div class="hr"></div>
+
                 <div class="module-content">
                   <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
                 </div>
@@ -99,8 +100,9 @@
                        :communityId="communityId"
                        :showIdentification="showIdentification"
                        :disableOperationArr="disableOperationArr"
-                       @disableOperationEvents="operation"
+                       :masterInfo="masterInfo"
                        :isUserExchange="showType"
+                       @disableOperationEvents="operation"
                        @saveAudio="controlAudio"
                        @opMember="opMember"
               ></dynamic>
@@ -263,7 +265,9 @@
       isDown: true,
 
     }
-
+    masterInfo = {
+      userId : ''
+    }
     isMaster = false
     topList = []  //置顶列表
     //置顶item
@@ -482,6 +486,7 @@
       }
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = await this.getCommunity(communityId)
+      console.log(res)
       //嘉宾身份
       if(res.isAuthor == 0){
           let res2 = await this.getRoleInfo(communityId)
@@ -490,7 +495,7 @@
           }
       }
       this.pageInfo = res
-
+      this.masterInfo = res.master
       await this.getList({page: 1})
       this.$nextTick(() => {
       	if(this.$refs['community-title']){
@@ -776,6 +781,8 @@
      * 下拉刷新
      */
     handleRefresh (loaded) {
+      console.log(44444)
+
       if(this.showType){
         this.lessGetBaseInit()
       }
@@ -1071,7 +1078,6 @@
       }
     }
 
-
     scroll (e) {
       if (this.displaySuspensionInput) {
         this.displaySuspensionInput = false
@@ -1275,10 +1281,11 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
         z-index: 99;
         border-radius: 16px;
+        height: 32px;
         .group_wrap {
           overflow: hidden;
           width: 100%;
-          height: 100%;
+          height: 32px;
           border-radius: 16px;
           background: #fff;
         }
@@ -1312,15 +1319,15 @@
         .u-btn {
           position: relative;
           line-height: 18px;
-          font-size: 13px;
+          font-size: 12px;
           color: @font-color-default;
 
           &:first-child {
-            padding: 8px 12px 6px 15px;
+            padding: 8px 10px 6px 12px;
           }
 
           &:last-child {
-            padding: 8px 15px 6px 12px;
+            padding: 8px 13px 6px 10px;
           }
 
           &.home,
@@ -1350,8 +1357,9 @@
 
           &.invite,
           &.money {
+            height: 32px;
+            padding: 0px 15px 0px 12px;
             background: #ffe266;
-            
           }
         }
       }
