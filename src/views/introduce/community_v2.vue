@@ -50,16 +50,17 @@
               
               <course-content 
                 :courseList="dynamicList" 
-                @lessSetSort="lessSetSort" 
                 :sort="lessSort" 
-                @getLessPage="getLessPage" 
                 :communityId=communityId 
                 :lastStudy = lastStudy 
-                @toLastStudy = toLastStudy 
                 :isIp = getCourseData.isIp
                 :isDown = getCourseData.isDown
                 :total = pagination.total
                 :isMaster = isMaster
+                @toLastStudy = toLastStudy 
+                @getLessPage="getLessPage" 
+                @lessSetSort="lessSetSort" 
+                
                 ></course-content>
               <!-- 相关推荐 -->
               <div class="module relevant" v-if="relevantList.length > 0">
@@ -99,8 +100,9 @@
                        :communityId="communityId"
                        :showIdentification="showIdentification"
                        :disableOperationArr="disableOperationArr"
-                       @disableOperationEvents="operation"
+                       :masterInfo="masterInfo"
                        :isUserExchange="showType"
+                       @disableOperationEvents="operation"
                        @saveAudio="controlAudio"
                        @opMember="opMember"
               ></dynamic>
@@ -263,7 +265,9 @@
       isDown: true,
 
     }
-
+    masterInfo = {
+      userId : ''
+    }
     isMaster = false
     topList = []  //置顶列表
     //置顶item
@@ -482,6 +486,7 @@
       }
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = await this.getCommunity(communityId)
+      console.log(res)
       //嘉宾身份
       if(res.isAuthor == 0){
           let res2 = await this.getRoleInfo(communityId)
@@ -490,7 +495,7 @@
           }
       }
       this.pageInfo = res
-
+      this.masterInfo = res.master
       await this.getList({page: 1})
       this.$nextTick(() => {
       	if(this.$refs['community-title']){
@@ -776,6 +781,8 @@
      * 下拉刷新
      */
     handleRefresh (loaded) {
+      console.log(44444)
+
       if(this.showType){
         this.lessGetBaseInit()
       }
@@ -1070,7 +1077,6 @@
         isDown: true
       }
     }
-
 
     scroll (e) {
       if (this.displaySuspensionInput) {
