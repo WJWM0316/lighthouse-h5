@@ -456,6 +456,7 @@
 	  }
 	}
 	.p-publish-content {
+		/*padding-bottom: 20px;*/
 		position: relative;
 		padding: 25px;
 		.form-group {
@@ -551,7 +552,7 @@
 		}
 		/*打卡任务窗口*/
 		.taskWindow{
-			position: absolute;
+			position: fixed;
 			bottom:0;
 			left: 0;
 			box-sizing: border-box;
