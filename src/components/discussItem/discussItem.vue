@@ -77,7 +77,7 @@
         <div class="praise-block" v-if="item.favorTotal > 0">
           <img class="icon-zan" src="./../../assets/icon/bnt_zan@3x.png" />
           <div class="praise-name">
-            <span class="favor-name" v-for="(favor, favorIndex) in item.favorList" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
+            <span class="favor-name" v-for="(favor, favorIndex) in favorList" @click.stop="toUserInfo(favor.userId)">{{favorIndex < 1 ? favor.realName : ',' + favor.realName}}</span>
           </div>
           <span class="praise-total" v-if="item.favorTotal > 3">等{{item.favorTotal}}人觉得很赞</span>
         </div>
