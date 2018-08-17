@@ -1,6 +1,6 @@
 <template>
 	<div class="community-more">
-		<scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end" >
+		<scroll  @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
 					<div class="block more-classmate" v-if="role&&role.length>0">
 						<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
 						<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
@@ -81,14 +81,14 @@
 	import Vue from 'vue'
 	import Component from 'vue-class-component'
 	import { getAskInfoApi, getCommunityApi,classmatesApi } from '@/api/pages/pageInfo';
-	import scroll from '@/components/scroller'
+	import Scroll from '@/components/scroller'
 	import ClassmateItem from '@/components/classmateItem/classmateItem';
 	import ListMixin from '@/mixins/list'
 	@Component({
 	  name: 'home-index',
 	  components: {
 	    ClassmateItem,
-	    scroll
+	    Scroll
 	  },
 	  mixins: [ListMixin]
 	})
@@ -125,7 +125,7 @@
 			// 初始化 请求学院列表
 			this.pagination.busy = false
 			this.pagination.end = false
-			this.getMemberList(this.pagination.page, this.pagination.pageSize, this.id)
+			this.getMemberList(1, this.pagination.pageSize, this.id)
 		}
 		opTeach () {
 			this.teachOp = !this.teachOp
@@ -163,12 +163,12 @@
 	  }
 
 		async getMemberList (page, pageSize, id) {
-
 			try {	
 		  	if (this.pagination.end || this.pagination.busy) {
 	        // 防止多次加载
 	        return
 	      }
+
 	      page = page || this.pagination.page || 1
 	      pageSize = pageSize || this.pagination.pageSize
 
@@ -191,7 +191,6 @@
 	    		this.classmate = this.classmate.concat(res.peoples || [])
 	    	}
 
-	    	console.log(this.pagination)
 	    	this.total = res.total
 				this.pagination.page = page
 	      this.pagination.pageSize = pageSize
@@ -203,58 +202,38 @@
 	      this.$vux.toast.text(error.message, 'bottom')
 	    }
 	  }
-		/**
-     * 下拉刷新
-     */
-    handleRefresh (loaded) {
-    	console.log(222)
-
-      this.pageInit().then(res => {
-        loaded('done')
-      })
-  	}
+		
 
   	loadNext () {
+
       const nextPage = this.pagination.page + 1
-       this.getMemberList(nextPage, 8, this.id)
+      //this.pagination.end = false
+      this.getMemberList(nextPage, this.pagination.pageSize, this.id)
     }
-    
-    /**
+
+	  handleRefresh (loaded) {
+	    setTimeout(() => {
+	      this.pageInit()
+	      loaded('done')
+	    }, 500)
+	  }
+
+	  /**
 	   * 上拉加载
 	   */
-    handlePullup (loaded) {
-    	console.log(111)
-	    this.loadNext()
-	    if (this.pagination.end) {
-	       loaded('ended')
-	    } else {
-	       loaded('done')
-	    }
-   	}
-
-	  /*handlePullup (loaded) {
+	  handlePullup (loaded) {
 	    setTimeout(() => {
 	      this.loadNext()
-	      // loaded('done')
+	      loaded('done')
 	    }, 500)
-	  }*/
-
-	  scroll (e) {
-	    if (this.displaySuspensionInput) {
-	      this.displaySuspensionInput = false
-	    }
-	    const communityTitleTop = this.communityTitleTop
-	    const {scrollTop} = e.target
-	    sessionStorage.setItem('scrollTop',scrollTop);
-	    if (communityTitleTop) {
-	      this.isCommunityTitleFixed = scrollTop >= communityTitleTop
-	    }
 	  }
+
 	}
 
 </script>
 
 <style lang="less" scoped type="text/less">
+	 @import "../../styles/mixins";
 	.open_blo {
 		width: 335px;
 		height: 40px;
@@ -274,7 +253,7 @@
 		}
 	}
 	.community-more{
-		//height: 100%;
+			height: 100%;
     	box-sizing: border-box;
     	background: #f8f8f8;
     	.block {
