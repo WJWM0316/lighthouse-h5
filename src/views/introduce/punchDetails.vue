@@ -15,6 +15,7 @@
          :hideCommentArea="true"
          @disableOperationEvents="operation"
          @praise="reFlashPraise"
+         @showEvaluate='showEvaluate'
       ></lessondynamicItem>
         </div>
     
@@ -92,6 +93,7 @@
                       @send="sendComment"
                       ref="input"
     ></suspension-input>
+    <actionsheet v-model="addActionsConfig.show" :menus="this.courseCardInfo.isExcellentCard?addActionsConfig.menus2:addActionsConfig.menus" show-cancel @on-click-menu="handleAddActoinItem" />
   </div>
 </template>
 <script>
@@ -103,7 +105,8 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCourseCardInfoApi, courseCardCommentApi, getCourseCardFavorListApi, getCourseCardCommentListApi, courseCardFavorApi } from '@/api/pages/pageInfo.js'
+  import { Actionsheet } from 'vux'
+  import { getCourseCardInfoApi, courseCardCommentApi, getCourseCardFavorListApi, getCourseCardCommentListApi, courseCardFavorApi, setExcellentCourseCardApi } from '@/api/pages/pageInfo.js'
 //import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi } from '@/api/pages/pageInfo.js'
 
   @Component({
@@ -113,7 +116,8 @@
       discussItem,
       classmateItem,
       Scroll,
-      suspensionInput
+      suspensionInput,
+      Actionsheet
     },
     computed: {
       item () {
@@ -154,10 +158,65 @@
     isPlayList = true
     communityId = ''
     
+    // 选为优秀打卡或取消优秀打卡
+		addActionsConfig = {
+			show: false,
+			menus: [{
+					label: '选为优秀打卡',
+					value: 'selected'
+				}
+			],
+			menus2:[{
+					label: '取消优秀打卡',
+					value: 'disSelect'
+				}
+			]
+		}
+    
     
     created () {
     	this.pageInit()
     }
+    //----------------评选和取消评选优秀打卡---------------------------
+    //调起底部点赞弹窗
+  	showEvaluate(item){
+  		console.log(item,"我是点击的信息详情")
+  		this.addActionsConfig.show = true
+  	}
+    /**
+		 * 点击添加选项item
+		 * @param {*} key
+		 * @param {*} item
+		 */
+		async handleAddActoinItem(key, item) {
+			let isExcellentCard;
+			switch(key) {
+				case 'selected':
+					isExcellentCard = 1
+					break
+				case 'disSelect':
+					isExcellentCard = 0
+					break
+				default:
+					break
+			}
+			
+			let parama = {
+	  		communityId:this.courseCardInfo.communityId,
+	  		peopleCourseId:this.courseCardInfo.peopleCourseId,
+	  		status:isExcellentCard
+	  	}
+			console.log(parama,"我是参数。。。。。")
+			
+			setExcellentCourseCardApi(parama).then(res=>{
+	  		console.log("评选成功")
+	  		this.$vux.toast.text('评选成功', 'bottom')
+	  	}).catch(res=>{
+	  		console.log(res,"接口报错")
+	  		this.$vux.toast.text('评选失败，请重试', 'bottom')
+	  	})
+		}
+    
     // ------------------- 详情评论区 ----------------------
     operationDetail () {
 

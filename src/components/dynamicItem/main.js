@@ -283,7 +283,6 @@ export default class dynamicItem extends Vue {
       const el = this.$refs[ref]
       if (el && el.firstChild) {
         const contentText = el.firstChild
-
         if (contentText.scrollHeight > contentText.offsetHeight) {
           const fullText = document.createElement('span')
           fullText.className = 'full-text open'
@@ -291,7 +290,6 @@ export default class dynamicItem extends Vue {
           fullText.onclick = (e) => {
             e.preventDefault()
             e.stopPropagation()
-
             if (fullText.innerText === '展开全文') {
               contentText.classList.remove('ellipsis')
               fullText.innerText = '收起全文'
@@ -304,10 +302,13 @@ export default class dynamicItem extends Vue {
           }
           el.lastChild.innerHTML = ''
           el.lastChild.appendChild(fullText)
+        } else {
+          // 删除倒叙后不符合条件的展开全文标识
+          if (el.lastChild.firstChild) {
+            el.lastChild.removeChild(el.lastChild.firstChild)
+          }
         }
       }
-
-      
     })
   }
 

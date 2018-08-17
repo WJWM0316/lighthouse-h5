@@ -221,7 +221,7 @@
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
   @import "style.less";
 </style>
 
