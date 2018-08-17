@@ -138,8 +138,6 @@
 				that.community=res;
 				num=res.joinedNum;
 			})
-			this.pagination.pageSize = 2
-
 			// 初始化 请求学院列表
 			this.pagination.busy = false
 			this.getMemberList(1, this.pagination.pageSize, this.id)
@@ -282,8 +280,6 @@
     	.block {
     		background: #ffffff;
     	}
-    	border: 1px solid #cccccc;
-    	box-sizing: border-box;
 		& .label {
           color: #d7ab70;
           font-size: 12px;
@@ -302,7 +298,6 @@
 			box-sizing: border-box;
 			width: 100%;
 			padding: 20px;
-			background: #ffffff;
 			.icon_3 {
 				margin-top: -7px;
 			}
