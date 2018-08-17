@@ -96,6 +96,7 @@
               <dynamic :dynamicList="dynamicList"
                        :showDelBtn="true"
                        :isNeedHot="true"
+                       :isFold="true"
                        :communityId="communityId"
                        :showIdentification="showIdentification"
                        :disableOperationArr="disableOperationArr"
