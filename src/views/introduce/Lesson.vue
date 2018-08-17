@@ -295,6 +295,7 @@
   			this.excellentPunchList = res[1].excellentPeopleCourseCardList.length>0?res[1].excellentPeopleCourseCardList:""
   			this.isPunch = res[0].peopleCardInfo.isPunchCard
   		}).catch((e)=>{
+  			this.$vux.toast.text('课节已经下线，请移步首页', 'bottom')
   			console.log(e,"返回报错")
   		})
   	}

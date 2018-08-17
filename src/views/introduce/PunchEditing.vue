@@ -308,7 +308,6 @@
 					if(this.images.length>0){
 						fileId = this.images.map(item => item.fileId)
 						type = 3;
-						alert(this.form.content+"：我是输入的文字内容。")
 						if(this.form.content){
 							//如果上传了文字和图片
 							params = {
