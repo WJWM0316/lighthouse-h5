@@ -1,91 +1,79 @@
 <template>
 	<div class="community-more">
-		<!--灯塔介绍-->
-		<!-- <div class="block addon-text">
-			<div @click.stop="goTointroduceDetail(id)" class="more-introduce">
-				<img class="icon_1" src="../../assets/icon/icon_list_aboutlh@3x_2.png"/>
-				<span>灯塔介绍</span>
-				<i><img src="../../assets/icon/icon_center_angle_right.png"/></i>
-			</div>
-		</div> -->
-		<!--开塔时间-->
-		<!-- <div class="block more-openTime">
-			<img class="icon_2" src="../../assets/icon/icon_list_time@3x.png"/>
-			<span>开塔时间</span>
-			<p v-if="community.isAuthor === 1 || community.isJoined === 1">{{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}</p>
-		</div> -->
-		<div class="block more-classmate">
-			<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
-			<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
-			<ul class="classmateList">
-				<li class="classmatePerson" v-for="item,index in role" @click.prevent.stop="goUserDetail(item.userId)" v-if="index < 2 || !teachOp">
-					<div class="classmate-imgBox">
-						<img class="titleImg" :src="item.avatar"/>
-					</div>
-					<div class="classmate-master">
-						<span class="classmate-name">{{item.realName}}
-							<span class="label" v-text="item.identityAuthority.title "></span>
-						</span>
-						<span class="classmate-career" v-if="item.workTimeName">{{item.workTimeName}}</span>
-					</div>
-				</li>
-			</ul>
+		<scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end" >
+					<div class="block more-classmate" v-if="role&&role.length>0">
+						<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
+						<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
+						<ul class="classmateList">
+							<li class="classmatePerson" v-for="item,index in role" @click.prevent.stop="goUserDetail(item.userId)" v-if="index < 2 || !teachOp">
+								<div class="classmate-imgBox">
+									<img class="titleImg" :src="item.avatar"/>
+								</div>
+								<div class="classmate-master">
+									<span class="classmate-name">{{item.realName}}
+										<span class="label" v-text="item.identityAuthority.title "></span>
+									</span>
+									<span class="classmate-career" v-if="item.workTimeName">{{item.workTimeName}}</span>
+								</div>
+							</li>
+						</ul>
 
-			<div class="open_blo" v-if="role.length>5" @click.prevent.stop="opTeach"> 
-				<template v-if="teachOp">
-					展开
-					<img class="open_icon" src="../../assets/icon/btn_levea_copy@hhx.png"/>
-				</template>
-				<template v-if="!teachOp">
-					收起
-					<img class="open_icon" src="../../assets/icon/btn_enter copy@hhx.png"/>
-				</template>
-			</div>
-		</div>
-
-		<!--优秀成员-->
-		<div class="block more-classmate excellent" v-if="excellent.length>0">
-			<img class="icon_4" src="../../assets/icon/icon_list_gm.png" />
-			<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg" /></p>
-			<ul class="classmateList">
-				<li class="classmatePerson" v-for="item,index in excellent" @click.prevent.stop="goUserDetail(item.userId)" v-if="index<3">
-					<div class="classmate-imgBox" >
-						<img class="titleImg"  :src="item.avatar"/>
-						<img class="rankImg" v-if="index==0" src="../../assets/icon/rank_1.png"/>
-						<img class="rankImg" v-else-if="index==1" src="../../assets/icon/rank_2.png"/>
-						<img class="rankImg" v-else-if="index==2" src="../../assets/icon/rank_3.png"/>
-					</div>
-					<div class="classmate-master">
-						<span class="classmate-name">{{item.realName}}</span>
-						<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
+						<div class="open_blo" v-if="role.length>5" @click.prevent.stop="opTeach"> 
+							<template v-if="teachOp">
+								展开
+								<img class="open_icon" src="../../assets/icon/btn_levea_copy@hhx.png"/>
+							</template>
+							<template v-if="!teachOp">
+								收起
+								<img class="open_icon" src="../../assets/icon/btn_enter copy@hhx.png"/>
+							</template>
+						</div>
 					</div>
 
-					<div class="exce_msg" v-if="item.signIn">
-						<p class="msg_p"><span class="exce_num">{{item.signIn}}</span>次</p>
-						<p class="msg_p">优秀打卡</p>
+					<!--优秀成员-->
+					<div class="block more-classmate excellent" v-if="excellent&&excellent.length>0">
+						<img class="icon_4" src="../../assets/icon/icon_list_gm.png" />
+						<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg" /></p>
+						<ul class="classmateList">
+							<li class="classmatePerson" v-for="item,index in excellent" @click.prevent.stop="goUserDetail(item.userId)" v-if="index<3">
+								<div class="classmate-imgBox" >
+									<img class="titleImg"  :src="item.avatar"/>
+									<img class="rankImg" v-if="index==0" src="../../assets/icon/rank_1.png"/>
+									<img class="rankImg" v-else-if="index==1" src="../../assets/icon/rank_2.png"/>
+									<img class="rankImg" v-else-if="index==2" src="../../assets/icon/rank_3.png"/>
+								</div>
+								<div class="classmate-master">
+									<span class="classmate-name">{{item.realName}}</span>
+									<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
+								</div>
+
+								<div class="exce_msg" v-if="item.signIn">
+									<p class="msg_p"><span class="exce_num">{{item.signIn}}</span>次</p>
+									<p class="msg_p">优秀打卡</p>
+								</div>
+							</li>
+						</ul>
 					</div>
-				</li>
-			</ul>
-		</div>
-		<!--灯塔成员-->
-		<div class="block more-classmate">
-			<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
-			<p>灯塔成员 <span>({{total}}人)</span></p>
-			<ul class="classmateList">
-				<li class="classmatePerson" v-for="item in classmate" @click.prevent.stop="goUserDetail(item.userId)">
-					<div class="classmate-imgBox">
-						<img class="titleImg" :src="item.avatar"/>
-						<!-- <img class="classmate-sex" v-if="item.gender"
-             				:src="item.gender === 1 ? boyImg : girlImg"/> -->
+					<!--灯塔成员-->
+					<div class="block more-classmate" v-if="classmate&&classmate.length>0">
+						<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
+						<p>灯塔成员 <span>({{total}}人)</span></p>
+						<ul class="classmateList">
+							<li class="classmatePerson" v-for="item in classmate" @click.prevent.stop="goUserDetail(item.userId)">
+								<div class="classmate-imgBox">
+									<img class="titleImg" :src="item.avatar"/>
+									<!-- <img class="classmate-sex" v-if="item.gender"
+			             				:src="item.gender === 1 ? boyImg : girlImg"/> -->
+								</div>
+								<div class="classmate-master">
+									<span class="classmate-name">{{item.realName}}<span class="label" v-if="item.identityAuthority.title==='管理员'">管理员</span></span>
+									<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
+								</div>
+							</li>
+						</ul>
 					</div>
-					<div class="classmate-master">
-						<span class="classmate-name">{{item.realName}}<span class="label" v-if="item.identityAuthority.title==='管理员'">管理员</span></span>
-						<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<!-- </scroller> -->
+					<!-- </scroller> -->
+		</scroll>
 	</div>
 </template>
 
@@ -93,14 +81,14 @@
 	import Vue from 'vue'
 	import Component from 'vue-class-component'
 	import { getAskInfoApi, getCommunityApi,classmatesApi } from '@/api/pages/pageInfo';
-	import Scroller from '@/components/scroller'
+	import scroll from '@/components/scroller'
 	import ClassmateItem from '@/components/classmateItem/classmateItem';
 	import ListMixin from '@/mixins/list'
 	@Component({
 	  name: 'home-index',
 	  components: {
 	    ClassmateItem,
-	    Scroller
+	    scroll
 	  },
 	  mixins: [ListMixin]
 	})
@@ -117,12 +105,13 @@
 		community = {}
 		teachOp = true
 		created () {
+
 			this.girlImg = require('../../assets/icon/icon_girl.png') || ''
 	    this.boyImg = require('../../assets/icon/icon_boy.png') || ''
 	    this.defaultImg = require('../../assets/icon/img_head_default.png') || ''
-			this.pageInt()
+			this.pageInit()
 		}
-		async pageInt () {
+		async pageInit () {
 			let id=this.$route.query;
 			this.id=id;
 			let that=this;
@@ -132,10 +121,11 @@
 				that.community=res;
 				num=res.joinedNum;
 			})
+
 			// 初始化 请求学院列表
 			this.pagination.busy = false
 			this.pagination.end = false
-			this.getMemberList(1, 10000, this.id)
+			this.getMemberList(this.pagination.page, this.pagination.pageSize, this.id)
 		}
 		opTeach () {
 			this.teachOp = !this.teachOp
@@ -173,6 +163,7 @@
 	  }
 
 		async getMemberList (page, pageSize, id) {
+
 			try {	
 		  	if (this.pagination.end || this.pagination.busy) {
 	        // 防止多次加载
@@ -189,7 +180,6 @@
 	      let res = await classmatesApi({page:page, pageCount:pageSize, communityId:id.communityId})
 	    	this.role = res.role
 
-
 	    	if (page === 1) {
 	    		this.classmate = res.peoples
 	    		this.excellent = res.excellent
@@ -200,6 +190,8 @@
 	    	} else {
 	    		this.classmate = this.classmate.concat(res.peoples || [])
 	    	}
+
+	    	console.log(this.pagination)
 	    	this.total = res.total
 				this.pagination.page = page
 	      this.pagination.pageSize = pageSize
@@ -215,22 +207,48 @@
      * 下拉刷新
      */
     handleRefresh (loaded) {
+    	console.log(222)
+
       this.pageInit().then(res => {
         loaded('done')
       })
   	}
+
   	loadNext () {
       const nextPage = this.pagination.page + 1
-      this.getMemberList(nextPage, 8, this.id)
+       this.getMemberList(nextPage, 8, this.id)
     }
-	    /**
+    
+    /**
 	   * 上拉加载
 	   */
-	  handlePullup (loaded) {
+    handlePullup (loaded) {
+    	console.log(111)
+	    this.loadNext()
+	    if (this.pagination.end) {
+	       loaded('ended')
+	    } else {
+	       loaded('done')
+	    }
+   	}
+
+	  /*handlePullup (loaded) {
 	    setTimeout(() => {
 	      this.loadNext()
 	      // loaded('done')
 	    }, 500)
+	  }*/
+
+	  scroll (e) {
+	    if (this.displaySuspensionInput) {
+	      this.displaySuspensionInput = false
+	    }
+	    const communityTitleTop = this.communityTitleTop
+	    const {scrollTop} = e.target
+	    sessionStorage.setItem('scrollTop',scrollTop);
+	    if (communityTitleTop) {
+	      this.isCommunityTitleFixed = scrollTop >= communityTitleTop
+	    }
 	  }
 	}
 

@@ -42,8 +42,6 @@
   import Component from 'vue-class-component'
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
   import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi } from '@/api/pages/pageInfo.js'
-  import { classmatesApi } from '@/api/pages/pageInfo';
-
   import { getInformationApi } from '@/api/pages/center'
   import WechatMixin from '@/mixins/wechat'
 
@@ -166,6 +164,9 @@
       isUserExchange: {
         type: Number,
         default: 1
+      },
+      masterInfo: {
+        type: Object,
       }
     },
     components: {
@@ -189,6 +190,12 @@
       },
       isUserExchange(val){
       },
+      masterInfo(val){
+        console.log('======',val)
+        if(val.userId && this.isMe == val.userId){
+          this.isMaster = true
+        }
+      },
       isShowTop(){}
 
     },
@@ -205,8 +212,6 @@
     isMaster = false
 
     created () {
-
-      console.log(1111)
       try {
         this.model = getInformationApi().then(res=>{
           this.isMe = res.userId
@@ -230,17 +235,11 @@
         pageCount: 20,
       }
       let that = this
-      classmatesApi(data).then(res=>{
-        if(res.role.length>0){
-          res.role.forEach((item,index)=>{
-            if(item.identityAuthority.title === '塔主'){
-              if(that.isMe == item.userId){
-                that.isMaster = true
-              }
-            }
-          })
-        }
-      })
+
+      console.log(that.isMe,)
+      if(this.masterInfo && that.isMe == this.masterInfo.userId){
+        this.isMaster = true
+      }
     }
 
     videoEvent (e) {

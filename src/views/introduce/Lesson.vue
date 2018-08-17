@@ -19,7 +19,7 @@
       </div>
       <!--视频-->
       <div class="Lesson-video" @click.stop="playVideo($event)" v-if="communityCourse.av && communityCourse.av.type==='video'">
-      	<video controls ref="video"></video>
+      	<video controls ref="video" v-show="!videoPlay"></video>
       	<div class="placeholder" v-show="videoPlay">
           <!--背景图-->
           <!--<img />-->
@@ -97,6 +97,7 @@
 			         :disableContentClick="false"
 			         @disableOperationEvents="operation"
 			         @reFresh="reFresh"
+			         @showEvaluate='showEvaluate'
 			      ></lessondynamicItem>
 			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="countCardInfo.totalExcellentCardCount>5">查看所有优秀打卡 <span>({{countCardInfo.totalExcellentCardCount}})</span></div>
 					</div>
@@ -121,6 +122,7 @@
 		         :disableContentClick="false"
 		         @disableOperationEvents="operation"
 		         @reFresh="reFresh"
+		         @showEvaluate='showEvaluate'
 		      ></lessondynamicItem>
 		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="countCardInfo.totalCardCount>5">查看所有打卡 <span>({{countCardInfo.totalCardCount}})</span></div>
 				</div>
@@ -161,6 +163,7 @@
 			  </div>
 			</div>
 		</template>
+		<actionsheet v-model="addActionsConfig.show" :menus="isExcellentCard?addActionsConfig.menus2:addActionsConfig.menus" show-cancel @on-click-menu="handleAddActoinItem" />
 	</div>
 </template>
 
@@ -170,13 +173,15 @@
 	import lessondynamicItem from '@/components/lessondynamicItem/lessondynamicItem'
   import audioBox from '@/components/media/music'
   import WechatMixin from '@/mixins/wechat'
-  import { lessonContentApi, getCourseCardListApi } from '@/api/pages/pageInfo'
+  import { Actionsheet } from 'vux'
+  import { lessonContentApi, getCourseCardListApi, setExcellentCourseCardApi } from '@/api/pages/pageInfo'
   import {payApi, freePay} from '@/api/pages/pay'
   @Component({
     name: 'Lesson',
     components: {
       lessondynamicItem,
-      audioBox
+      audioBox,
+      Actionsheet
     },
     computed: {
     	// 剩余免费名额
@@ -239,6 +244,23 @@
   	isPunch = 0	//是否已经打卡0:是未打卡，1是打卡
   	curPeopleInfo = ""
   	countCardInfo = ""
+  	isExcellentCard = 0 //是否优秀打卡，0：不是，1是优秀
+  	
+  	optPunch = '' //当前要评选的打卡信息
+	  // 选为优秀打卡或取消优秀打卡
+		addActionsConfig = {
+			show: false,
+			menus: [{
+					label: '选为优秀打卡',
+					value: 'selected'
+				}
+			],
+			menus2:[{
+					label: '取消优秀打卡',
+					value: 'disSelect'
+				}
+			]
+		}
 
 
   	//试读。未加入相关
@@ -281,6 +303,50 @@
   		this.$nextTick(()=>{
   		})
 	  }
+  	
+  	//调起底部点赞弹窗
+  	showEvaluate(item){
+  		console.log(item,"我是点击的信息详情")
+  		this.optPunch = item
+  		this.isExcellentCard = item.isExcellentCard;
+  		this.addActionsConfig.show = true
+  	}
+  	
+  	/**
+		 * 点击添加选项item
+		 * @param {*} key
+		 * @param {*} item
+		 */
+		async handleAddActoinItem(key, item) {
+			let isExcellentCard;
+			switch(key) {
+				case 'selected':
+					isExcellentCard = 1
+					break
+				case 'disSelect':
+					isExcellentCard = 0
+					break
+				default:
+					break
+			}
+			
+			let parama = {
+	  		communityId:this.optPunch.communityId,
+	  		peopleCourseId:this.optPunch.peopleCourseId,
+	  		status:isExcellentCard
+	  	}
+			console.log(parama,"我是参数。。。。。")
+			
+			setExcellentCourseCardApi(parama).then(res=>{
+	  		console.log("评选成功")
+	  		this.reFresh();
+	  		this.$vux.toast.text('评选成功', 'bottom')
+//	  		this.$emit("reFresh")
+	  	}).catch(res=>{
+	  		this.$vux.toast.text('评选失败，请重试', 'bottom')
+	  		console.log(res,"接口报错")
+	  	})
+		}
 
 	  freeIn () { // 跳转到一个图文消息
 	    if(this.isEnd ){
@@ -297,6 +363,7 @@
 	      this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
 	    }
 	  }
+	  
 
 	  // 已结束提示 
 	  endHint(type){
@@ -759,12 +826,17 @@
 						color: #666666;
 					}
 				}
-				
+				.date{
+					font-weight: 300;
+					color: #666666;
+					font-size: 14px;
+				}
 			}
 			/*课节视频*/
 			.Lesson-video{
 				margin-top: 28px;
 				padding: 0 20px;
+				height: 187px;
 				position: relative;
 
       & .placeholder {
