@@ -1,8 +1,13 @@
 <template>
-	<div class="audio-wrapper"  @click.stop="oper()" ref="musicWrap">
-    <div class="audio-left">
+	<div class="audio-wrapper" :class="{'lesson' : isLesson}"  @click.stop="oper()" ref="musicWrap">
+    <div class="audio-left" v-if="!isLesson">
       <img src="./../../assets/icon/music_play.png" v-if="playStatus === 1"></img>
       <img src="./../../assets/icon/stop@3x.png" v-else-if="playStatus === 2"></img>
+      <img class="rotateZ" src="./../../assets/icon/music_loading.png" v-else-if="playStatus === 3">
+    </div>
+    <div class="audio-left" v-if="isLesson">
+      <img src="./../../assets/icon/playing.png" v-if="playStatus === 1"></img>
+      <img src="./../../assets/icon/playing.gif" v-else-if="playStatus === 2"></img>
       <img class="rotateZ" src="./../../assets/icon/music_loading.png" v-else-if="playStatus === 3">
     </div>
     <div class="audio-right" :class="{'big' : isShowLabel}">
@@ -13,7 +18,7 @@
         v-model="progress"
         minHTML=" " 
         maxHTML=" "
-        :rangeBarHeight='2' 
+        :rangeBarHeight='barHeight' 
         :disabled="disabled" 
         :max="durationData"
         @touchstart.native="touchStart" 
@@ -133,9 +138,6 @@
         }
       },
       prevMusic (val) {
-        // if (this.playStatus === 4) {
-        //   this.playStatus = 2
-        // }
         if (val.currentTime > 0 && val.fileId === this.source.fileId) {
           this.audio.currentTime = val.currentTime
           this.currentTime = val.currentTime
@@ -183,8 +185,9 @@
     isShowLabel = false // 是否显示游标
     isGetList = true // 检测是否需要重新请求列表
     musicList = [] // 本地记录播放列表 用来累加
+    barHeight = 2 // 进度条高度
     mounted () {
-    	console.log(this.$root,"000000000000000000000000000000")
+    	this.isLesson ? this.barHeight = 8 : this.barHeight = 2
       this.curCircleId = this.circleId
       this.audio = this.$root.$children[0].audio
     }
@@ -649,4 +652,42 @@
       transform: rotateZ(-360deg)
     }
   }
+.audio-wrapper.lesson {
+  width: 335px;
+  height: 60px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  border-radius: 30px !important;
+  background:rgba(255,226,102,0.12);
+}
+.audio-wrapper.lesson .audio-left {
+  width: 73px;
+}
+.audio-wrapper.lesson .audio-left img {
+  width: 44px;
+  height: 44px;
+}
+.audio-wrapper.lesson .audio-left img.rotateZ {
+  width: 22px;
+  height: 22px;
+}
+.audio-wrapper.lesson .audio-right .progressBar .range-handle {
+  width: 12px !important;
+  height: 12px !important;
+  background : #fff !important;
+  box-shadow:0px 2px 8px 0px rgba(255,226,102,1) !important;
+}
+.audio-wrapper.lesson .audio-right .progressBar .range-handle::after {
+  content: none;
+}
+.audio-wrapper.lesson .audio-right {
+  width: 262px;
+}
+.audio-wrapper.lesson .audio-right .audio-time {
+  padding-right: 25px;
+}
+.audio-wrapper.lesson .audio-right .range-bar {
+  background:#EDEDED !important;
+  border-radius:5px;
+}
 </style>
