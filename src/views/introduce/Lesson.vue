@@ -31,6 +31,7 @@
           :source="communityCourse.av.files[0]" 
           :touerImg="communityCourse.av.avatarUrl"
           :isDetailCon='false'
+          :isLesson = 'true'
         ></audioBox>
       </div>
       <div class="module-content h5-code" @click.stop="readPic($event)" v-html="communityCourse.details">
@@ -792,12 +793,6 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				.audio-wrapper{
-					width: 335px;
-					height: 60px;
-					border-radius: 30px !important;
-					background-color: RGBA(255, 226, 102, 0.38);
-				}
 			}
 			/*课节富文本*/
 			.module-content{
