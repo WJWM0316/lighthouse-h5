@@ -34,7 +34,7 @@
           :isLesson = 'true'
         ></audioBox>
       </div>
-      <div class="module-content h5-code" @click.stop="readPic($event)" v-html="communityCourse.details">
+      <div class="module-content h5-code" @click.stop="readPic($event)" v-html="communityCourse.details" ref="H5">
       </div>
     </div>
 
@@ -280,14 +280,14 @@
 
   		Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{
 				//console.log(res,"请求回来的数据")
-				this.lessonData = res[0].couponInfo
-  			this.communityId = res[0].communityId
-  			this.communityCourse = res[0].communityCourse
-  			this.countCardInfo = res[0].countCardInfo
-  			if(this.communityCourse.av.files[0]){
+				this.lessonData = res[0].couponInfo	//优惠券信息
+  			this.communityId = res[0].communityId	//灯塔id
+  			this.communityCourse = res[0].communityCourse //课节详情信息
+  			this.countCardInfo = res[0].countCardInfo	//课节个人打卡信息
+  			if(this.communityCourse.av.files[0]){		//课节媒体信息
   				this.communityCourse.av.files[0].fileId = String(this.communityCourse.av.files[0].fileId)
   			}
-  			this.curPeopleInfo = res[0].curPeopleInfo
+  			this.curPeopleInfo = res[0].curPeopleInfo	//课节个人信息
   			this.peopleCourseCardList = res[1].peopleCourseCardList.length>0?res[1].peopleCourseCardList:""
   			this.excellentPunchList = res[1].excellentPeopleCourseCardList.length>0?res[1].excellentPeopleCourseCardList:""
   			this.isPunch = res[0].peopleCardInfo.isPunchCard
@@ -299,6 +299,9 @@
   	
   	mounted () {
   		this.$nextTick(()=>{
+  			setTimeout(()=>{
+  				console.log(this.$refs,"我是捕获到的")
+  			},500)
   		})
 	  }
   	

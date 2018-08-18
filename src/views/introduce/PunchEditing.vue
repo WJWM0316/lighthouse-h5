@@ -268,7 +268,7 @@
 //				console.log(New_images,this.taskContent.peopleCourseCardInfo.cardContent,"555555555555555555555555555555")
 //				for(let i=0;i<this.taskContent.peopleCourseCardInfo.cardContent.length;i++){
 //					for(let j=0;j<New_images.length;j++){
-//						if(New_images[j].fileUrl === this.taskContent.peopleCourseCardInfo.cardContent[i].fileUrl){
+//						if(New_images[j].fileUrl == this.taskContent.peopleCourseCardInfo.cardContent[i].fileUrl){
 //							console.log('111111111111111111111111')
 //							New_images.splice(j,1);
 //							break;
@@ -393,13 +393,13 @@
 		handleAdd() {
 			this.chooseCustomImages()
 			//解除注释部分会开启底部弹窗
-			if(this.images && this.images.length <= 0) {
+			/*if(this.images && this.images.length <= 0) {
 				this.addActionsConfig.show = true
 			} else {
 				if(this.images.length < this.lengths.imageMax) {
 					this.chooseCustomImages()
 				}
-			}
+			}*/
 		}
 
 		/**
