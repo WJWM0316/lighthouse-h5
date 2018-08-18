@@ -145,7 +145,7 @@
 			getEditCourseCardDetailApi(this.$route.query.courseId,this.$route.query.communityId).then(res=>{
 				this.taskContent = res
 				this.form.content = res.peopleCourseCardInfo.cardContent?res.peopleCourseCardInfo.cardContent:''
-//				this.images = [...res.peopleCourseCardInfo.cardContentFile]
+				this.images = [...res.peopleCourseCardInfo.cardContentFile]
 //				console.log(this.taskContent,"我是图片的路劲、。。。。。")
 			}).catch(res=>{
 				console.log(res,"报错信息");
@@ -263,18 +263,20 @@
 		 * 准备发布
 		 */
 		readyPublish() {
-//			let New_images = this.images;
-//			if(this.taskContent.peopleCourseCardInfo.cardContent){
-//				console.log(New_images,"图片数组")
-//				for(let i=0;i<this.taskContent.peopleCourseCardInfo.cardContent.length;i++){
-//					for(let j=0;j<New_images.length;j++){
-//						if(New_images[j].fileUrl === this.taskContent.peopleCourseCardInfo.cardContent[i].fileUrl){
-//							New_images.splice(j,1);
-//						}
-//					}
-//				}
-//			}
-			const localIds = this.images.map(item => item.fileUrl) || []
+			let New_images = this.images;
+			if(this.taskContent.peopleCourseCardInfo.cardContent){
+				console.log(New_images,this.taskContent.peopleCourseCardInfo.cardContent,"555555555555555555555555555555")
+				for(let i=0;i<this.taskContent.peopleCourseCardInfo.cardContent.length;i++){
+					for(let j=0;j<New_images.length;j++){
+						if(New_images[j].fileUrl === this.taskContent.peopleCourseCardInfo.cardContent[i].fileUrl){
+							console.log('111111111111111111111111')
+							New_images.splice(j,1);
+							break;
+						}
+					}
+				}
+			}
+			const localIds = New_images.map(item => item.fileUrl) || []
 			console.log(localIds,"555555555555555555555555555555")
 			if(localIds.length > 0) {
 				//有图片，等待图片上传完成后发布
@@ -391,13 +393,13 @@
 		handleAdd() {
 			this.chooseCustomImages()
 			//解除注释部分会开启底部弹窗
-			/*if(this.images && this.images.length <= 0) {
+			if(this.images && this.images.length <= 0) {
 				this.addActionsConfig.show = true
 			} else {
 				if(this.images.length < this.lengths.imageMax) {
 					this.chooseCustomImages()
 				}
-			}*/
+			}
 		}
 
 		/**
