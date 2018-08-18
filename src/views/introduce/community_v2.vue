@@ -71,7 +71,7 @@
                 <div class="hr"></div>
 
                 <div class="module-content">
-                  <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+                  <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" cardType="picked"/>
                 </div>
               </div>
             </template>
@@ -1087,7 +1087,7 @@
     padding-left: 20px;
     .rem_blo {
       height: 50px;
-      border-bottom: 0.5px solid #cccccc;
+      border-bottom: 0.5px solid #ededed;
       display: flex;
       flex-direction: row;
       justify-content: space-around;
