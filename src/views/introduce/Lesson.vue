@@ -12,7 +12,7 @@
 		<div class="Lesson-module">
       <div class="module-header">
       	<div class="head-photobox">
-      		<img :src="communityCourse.people.headimgurl"/>
+      		<img :src="communityCourse.people.avatar"/>
       		<span class="name">{{communityCourse.people.realname}}</span>
       	</div>
       	<div class="date">{{communityCourse.createTime*1000 | date('YYYY-MM-DD')}}</div>
@@ -220,18 +220,15 @@
   	showIdentification = true
     disableOperationArr = ['comment']
     isPlayList = false
-    //富文本虚拟数据
-    intro = '<p>社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍社区介绍</p><p><img src="https://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2018-08-08/2d6e172b6cbecf6c9de11727d89d8d0f.png" alt="商业课-推广海报" style="max-width:100%;"><br></p><p><br></p>'
-
-    //音频数据
-    item = {
+    //假音频数据
+    /*item = {
     	files:[{
 				duration:250,
 				fileId:"6237",
 				fileUrl:"https://cdnstatic.ziwork.com/test/audio/2018-08-15/4bd491cb8292450b62b387a595f15ee8.mp3",
 				avatar:"2JVOTrwtULW3VpcKI3whmcDNYTlTMEVQzPpxN3ZDfXOcFYKtUiv7XZwjXolTara2.amr"
 	    }],
-    }
+    }*/
     //所有打卡数据
     peopleCourseCardList = ""
     //优秀打卡
@@ -651,9 +648,6 @@
           break
       }
     }
-
-  	
-
   }
 </script>
 
@@ -873,6 +867,9 @@
 				padding: 0 20px;
 				margin-top: 30px;
 				width: 100%;
+				>section{
+					font-size: 16px !important;
+				}
 			}
 		}
 		/*本节打卡任务*/
@@ -924,6 +921,7 @@
 			.Excellent-punch{
 				width: 100%;
 				.Excellent-punch-title{
+					color:#929292;
 					font-size: 18px;
 					font-weight: 700;
 					padding-left: 15px;
