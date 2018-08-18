@@ -33,7 +33,7 @@
         <span>开塔时间：</span>
         {{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}</p>
       <div class="bottom" v-else>
-        <div class="left" v-if="community&&community.menuPeople && community.menuPeople.number>0">
+        <div class="left" v-if="community&&community.menuPeople && community.menuPeople.number>0" @click.prevent.stop="toMore">
             <p class="residue">
               <span class="number">{{community.menuPeople.number}}</span> 
               人
