@@ -47,7 +47,6 @@
         <div class="big-shot-community-content" >
           <template v-if="dynamicList && dynamicList.length > 0">
             <template v-if="showType">
-              
               <course-content 
                 :courseList="dynamicList" 
                 :sort="lessSort" 
@@ -71,7 +70,7 @@
                 <div class="hr"></div>
 
                 <div class="module-content">
-                  <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" cardType="picked"/>
+                  <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" cardType="picked" />
                 </div>
               </div>
             </template>
@@ -342,7 +341,7 @@
         this.getRoleInfo(communityId).then(res=>{
           this.roleInfo=res.role;
           //
-          if(res.role.title =='塔主' || res.role.title =='嘉宾'){
+          if(res.role.title =='塔主'){
             this.isMaster = true
           }
         }).catch(res => {

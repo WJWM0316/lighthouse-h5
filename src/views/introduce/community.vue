@@ -76,6 +76,7 @@
                      :isTeacher="isPlayList"
                      :isTower='true'
                      :isUserExchange="showType"
+                     :isMaster = isMaster
                      @disableOperationEvents="operation"
                      @opMember="opMember"
 
@@ -251,6 +252,8 @@
     topList = []  //置顶列表
     relevantList = [] //相关推荐
     userSort = 1   //学员排序
+    isMaster = false
+
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
 				let nowCommunity=sessionStorage.getItem("nowCommunity");
@@ -394,10 +397,11 @@
 	        //判断嘉宾身份
 	        this.getRoleInfo(communityId).then(res=>{
 	        	this.roleInfo=res.role;
-	        	console.log(this.roleInfo,"8888888888888888888888888888")
+            if(res.role.title =='塔主'){
+              this.isMaster = true
+            }
 	        }).catch(res => {
 	        		this.roleInfo=res.data.role;
-	        		console.log(this.roleInfo,"999999999999999999999999")
 					})
 	        
 	        //判断是否有课程，无课程则跳转
