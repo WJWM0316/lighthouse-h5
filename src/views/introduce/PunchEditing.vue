@@ -395,7 +395,9 @@
 		 * 点击添加
 		 */
 		handleAdd() {
-			this.chooseCustomImages()
+			setTimeout(() => {
+				this.chooseCustomImages()
+			}, 0)
 			//解除注释部分会开启底部弹窗
 			/*if(this.images && this.images.length <= 0) {
 				this.addActionsConfig.show = true
