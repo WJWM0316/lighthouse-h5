@@ -22,7 +22,7 @@
 			<button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
 		</div>
 		
-		<div class="showTask" @click.stop="showTask">本节打卡任务 <img src="../../assets/icon/btn_up_task@3x.png"/></div>
+		<div class="showTask" @click.stop="showTask" v-if="taskContent.isShowRandomCardContent === 0">本节打卡任务 <img src="../../assets/icon/btn_up_task@3x.png"/></div>
 		<div class="taskWindow" v-if="showTaskWindow">
 			<div class="taskhead" @click.stop="closeTask">本节打卡任务 <img src="../../assets/icon/btn_packup_task@3x.png"/></div>
 			<div class="taskbody">
@@ -144,7 +144,11 @@
 		created() {
 			getEditCourseCardDetailApi(this.$route.query.courseId,this.$route.query.communityId).then(res=>{
 				this.taskContent = res
-				this.form.content = res.peopleCourseCardInfo.cardContent?res.peopleCourseCardInfo.cardContent:''
+				if(res.isShowRandomCardContent === 1){
+					this.form.content = res.randomCardContent
+				}else{
+					this.form.content = res.peopleCourseCardInfo.cardContent?res.peopleCourseCardInfo.cardContent:''
+				}
 //				this.images = [...res.peopleCourseCardInfo.cardContentFile]
 //				console.log(this.taskContent,"我是图片的路劲、。。。。。")
 			}).catch(res=>{
