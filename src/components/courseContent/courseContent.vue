@@ -97,6 +97,7 @@
       line-height: 40px;
       .le_sp {
         color: #D7AB70;
+        margin: 0 2px;
       }
     }
     .top_center {

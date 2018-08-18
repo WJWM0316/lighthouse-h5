@@ -431,13 +431,15 @@ export default class CommunityCard extends Vue {
       font-weight: 300;
       justify-content: space-between;
       align-items: center;
+      height: 30px;
       margin-bottom: 2px;
       .left {
         flex: 0 0 auto;
         font-size: 11px;
         font-weight: 300;
         .residue {
-
+          height: 15px;
+          line-height: 15px;
           .number {
             font-weight: 400;
 
