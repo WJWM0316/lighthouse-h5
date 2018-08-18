@@ -1,79 +1,90 @@
 <template>
 	<div class="community-more">
-		<scroll  @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="pagination.end">
-					<div class="block more-classmate" v-if="role&&role.length>0">
-						<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
-						<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
-						<ul class="classmateList">
-							<li class="classmatePerson" v-for="item,index in role" @click.prevent.stop="goUserDetail(item.userId)" v-if="index < 2 || !teachOp">
-								<div class="classmate-imgBox">
-									<img class="titleImg" :src="item.avatar"/>
-								</div>
-								<div class="classmate-master">
-									<span class="classmate-name">{{item.realName}}
-										<span class="label" v-text="item.identityAuthority.title "></span>
-									</span>
-									<span class="classmate-career" v-if="item.workTimeName">{{item.workTimeName}}</span>
-								</div>
-							</li>
-						</ul>
+		
+		<!-- <scroll  @refresh="undefined" @pullup="handlePullup" :is-none-data="pagination.end">
+		</scroll> -->
 
-						<div class="open_blo" v-if="role.length>5" @click.prevent.stop="opTeach"> 
-							<template v-if="teachOp">
-								展开
-								<img class="open_icon" src="../../assets/icon/btn_levea_copy@hhx.png"/>
-							</template>
-							<template v-if="!teachOp">
-								收起
-								<img class="open_icon" src="../../assets/icon/btn_enter copy@hhx.png"/>
-							</template>
-						</div>
-					</div>
+    <scroller lock-x height="100%" @on-scroll-bottom="onScrollBottom" ref="scrollerBottom"  :scroll-bottom-offst="200">
 
-					<!--优秀成员-->
-					<div class="block more-classmate excellent" v-if="excellent&&excellent.length>0">
-						<img class="icon_4" src="../../assets/icon/icon_list_gm.png" />
-						<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg" /></p>
-						<ul class="classmateList">
-							<li class="classmatePerson" v-for="item,index in excellent" @click.prevent.stop="goUserDetail(item.userId)" v-if="index<3">
-								<div class="classmate-imgBox" >
-									<img class="titleImg"  :src="item.avatar"/>
-									<img class="rankImg" v-if="index==0" src="../../assets/icon/rank_1.png"/>
-									<img class="rankImg" v-else-if="index==1" src="../../assets/icon/rank_2.png"/>
-									<img class="rankImg" v-else-if="index==2" src="../../assets/icon/rank_3.png"/>
-								</div>
-								<div class="classmate-master">
-									<span class="classmate-name">{{item.realName}}</span>
-									<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
-								</div>
 
-								<div class="exce_msg" v-if="item.signIn">
-									<p class="msg_p"><span class="exce_num">{{item.signIn}}</span>次</p>
-									<p class="msg_p">优秀打卡</p>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<!--灯塔成员-->
-					<div class="block more-classmate" v-if="classmate&&classmate.length>0">
-						<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
-						<p>灯塔成员 <span>({{total}}人)</span></p>
-						<ul class="classmateList">
-							<li class="classmatePerson" v-for="item in classmate" @click.prevent.stop="goUserDetail(item.userId)">
-								<div class="classmate-imgBox">
-									<img class="titleImg" :src="item.avatar"/>
-									<!-- <img class="classmate-sex" v-if="item.gender"
-			             				:src="item.gender === 1 ? boyImg : girlImg"/> -->
-								</div>
-								<div class="classmate-master">
-									<span class="classmate-name">{{item.realName}}<span class="label" v-if="item.identityAuthority.title==='管理员'">管理员</span></span>
-									<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<!-- </scroller> -->
-		</scroll>
+      <div class="box2">
+  			<div class="block more-classmate" v-if="role&&role.length>0">
+  				<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
+  				<p>塔主和Ta的小伙伴们 <span>({{role.length}}人)</span></p>
+  				<ul class="classmateList">
+  					<li class="classmatePerson" v-for="item,index in role" @click.prevent.stop="goUserDetail(item.userId)" v-if="index < 2 || !teachOp">
+  						<div class="classmate-imgBox">
+  							<img class="titleImg" :src="item.avatar"/>
+  						</div>
+  						<div class="classmate-master">
+  							<span class="classmate-name">{{item.realName}}
+  								<span class="label" v-text="item.identityAuthority.title "></span>
+  							</span>
+  							<span class="classmate-career" v-if="item.career">{{item.career}}</span>
+  						</div>
+  					</li>
+  				</ul>
+
+  				<div class="open_blo" v-if="role.length>5" @click.prevent.stop="opTeach"> 
+  					<template v-if="teachOp">
+  						展开
+  						<img class="open_icon" src="../../assets/icon/btn_levea_copy@hhx.png"/>
+  					</template>
+  					<template v-if="!teachOp">
+  						收起
+  						<img class="open_icon" src="../../assets/icon/btn_enter copy@hhx.png"/>
+  					</template>
+  				</div>
+  			</div>
+
+  			<!--优秀成员-->
+  			<div class="block more-classmate excellent" v-if="excellent&&excellent.length>0">
+  				<img class="icon_4" src="../../assets/icon/icon_list_gm.png" />
+  				<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg" /></p>
+  				<ul class="classmateList">
+  					<li class="classmatePerson" v-for="item,index in excellent" @click.prevent.stop="goUserDetail(item.userId)" v-if="index<3">
+  						<div class="classmate-imgBox" >
+  							<img class="titleImg"  :src="item.avatar"/>
+  							<img class="rankImg" v-if="index==0" src="../../assets/icon/rank_1.png"/>
+  							<img class="rankImg" v-else-if="index==1" src="../../assets/icon/rank_2.png"/>
+  							<img class="rankImg" v-else-if="index==2" src="../../assets/icon/rank_3.png"/>
+  						</div>
+  						<div class="classmate-master">
+  							<span class="classmate-name">{{item.realName}}</span>
+  							<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
+  						</div>
+
+  						<div class="exce_msg" v-if="item.signIn">
+  							<p class="msg_p"><span class="exce_num">{{item.signIn}}</span>次</p>
+  							<p class="msg_p">优秀打卡</p>
+  						</div>
+  					</li>
+  				</ul>
+  			</div>
+  			<!--灯塔成员-->
+  			<div class="block more-classmate" v-if="classmate&&classmate.length>0">
+  				<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
+  				<p>灯塔成员 <span>({{total}}人)</span></p>
+  				<ul class="classmateList">
+  					<li class="classmatePerson" v-for="item in classmate" @click.prevent.stop="goUserDetail(item.userId)">
+  						<div class="classmate-imgBox">
+  							<img class="titleImg" :src="item.avatar"/>
+  							<!-- <img class="classmate-sex" v-if="item.gender"
+  	             				:src="item.gender === 1 ? boyImg : girlImg"/> -->
+  						</div>
+  						<div class="classmate-master">
+  							<span class="classmate-name">{{item.realName}}<span class="label" v-if="item.identityAuthority.title==='管理员'">管理员</span></span>
+  							<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
+  						</div>
+  					</li>
+  				</ul>
+  			</div>
+
+  			<div class="listLoad" v-if="onFetching && pagination.busy">
+  				<load-more tip="loading"></load-more>
+  			</div>
+      </div>
+    </scroller>
 	</div>
 </template>
 
@@ -84,11 +95,14 @@
 	import Scroll from '@/components/scroller'
 	import ClassmateItem from '@/components/classmateItem/classmateItem';
 	import ListMixin from '@/mixins/list'
+	import { Scroller,LoadMore } from 'vux'
+
 	@Component({
 	  name: 'home-index',
 	  components: {
 	    ClassmateItem,
-	    Scroll
+	    Scroller,
+	    LoadMore
 	  },
 	  mixins: [ListMixin]
 	})
@@ -104,6 +118,9 @@
 		defaultImg = ""
 		community = {}
 		teachOp = true
+
+		onFetching = false
+		isLoad = false
 		created () {
 
 			this.girlImg = require('../../assets/icon/icon_girl.png') || ''
@@ -121,10 +138,8 @@
 				that.community=res;
 				num=res.joinedNum;
 			})
-
 			// 初始化 请求学院列表
 			this.pagination.busy = false
-			this.pagination.end = false
 			this.getMemberList(1, this.pagination.pageSize, this.id)
 		}
 		opTeach () {
@@ -164,10 +179,6 @@
 
 		async getMemberList (page, pageSize, id) {
 			try {	
-		  	if (this.pagination.end || this.pagination.busy) {
-	        // 防止多次加载
-	        return
-	      }
 
 	      page = page || this.pagination.page || 1
 	      pageSize = pageSize || this.pagination.pageSize
@@ -176,7 +187,6 @@
 	        page: page,
 	        pageCount: pageSize
 	      }
-	      this.pagination.busy = true
 	      let res = await classmatesApi({page:page, pageCount:pageSize, communityId:id.communityId})
 	    	this.role = res.role
 
@@ -191,12 +201,12 @@
 	    		this.classmate = this.classmate.concat(res.peoples || [])
 	    	}
 
+	    	if(res.peoples.length >= this.pagination.pageSize ){
+	    		this.pagination.busy = false
+	    	}
+
 	    	this.total = res.total
 				this.pagination.page = page
-	      this.pagination.pageSize = pageSize
-	      this.pagination.total = res.total
-	      this.pagination.end = this.isLastPage
-	      this.pagination.busy = false
 			} catch (error) {
 	      console.log(error)
 	      this.$vux.toast.text(error.message, 'bottom')
@@ -221,11 +231,22 @@
 	  /**
 	   * 上拉加载
 	   */
-	  handlePullup (loaded) {
-	    setTimeout(() => {
-	      this.loadNext()
-	      loaded('done')
-	    }, 500)
+	  onScrollBottom (loaded) {
+
+      if (!this.onFetching && this.isLoad) {
+        // do nothing
+      } else {
+	      this.isLoad = true
+      	if(!this.pagination.busy){
+      			this.pagination.busy = true
+      		  this.onFetching = true
+      		  setTimeout(() => {
+      				this.loadNext()
+      		    this.onFetching = false
+      		    this.isLoad = false
+      		  }, 2000)
+      	}
+      }
 	  }
 
 	}
@@ -277,7 +298,6 @@
 			box-sizing: border-box;
 			width: 100%;
 			padding: 20px;
-			border-bottom: 1px solid #EDEDED;
 			.icon_3 {
 				margin-top: -7px;
 			}

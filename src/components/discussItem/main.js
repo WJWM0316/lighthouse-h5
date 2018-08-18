@@ -73,7 +73,7 @@ import { courseCardFavorApi } from '@/api/pages/pageInfo'
   watch: {
     item (val) {
       this.role = val.reviewer.role || {}
-      console.log(1111, this.role)
+      console.log(1111, this.role);
     }
   },
   computed: {
@@ -132,7 +132,13 @@ import { courseCardFavorApi } from '@/api/pages/pageInfo'
 })
 export default class discussItem extends Vue {
   role = {}
+  favorList = "" //点赞列表数据
   created () {
+  	if(this.$route.path !== "/PunchDetails"){
+	  		this.favorList = this.item.favors
+	  	}else{
+	  		this.favorList = this.item.favorList
+	  	}
   }
 
   /**
@@ -182,6 +188,7 @@ export default class discussItem extends Vue {
 	    	if(nowFavor === 1){
 	    		this.item.favorTotal+=1;
 	    		this.item.favorList.push(this.item.currentUser)
+	    		this.favorList = this.item.favorList
 	    	}else{
 	    		this.item.favorTotal-=1;
 	    		this.item.favorList.forEach((item, index) => {
@@ -189,6 +196,7 @@ export default class discussItem extends Vue {
 	            this.item.favorList.splice(index, 1)
 	          }
 	        })
+	    		this.favorList = this.item.favorList
 	    	}
 	    })
 
@@ -207,6 +215,9 @@ export default class discussItem extends Vue {
 		    item: this.item,
 		    commentType: this.commentType
 		  })
+    	if(this.$route.path !== "/PunchDetails"){
+	  		this.favorList = this.item.favors
+	  	}
     }
     
   }
@@ -251,7 +262,7 @@ export default class discussItem extends Vue {
 
   // -------------------- 页面跳转 ------------------------
   toUserInfo (userId) { // 去个人详情
-    if (this.disableUserClick) {
+    if (this.disableUserClick || this.$route.path === "/PunchDetails") {
       return
     }
     // userId

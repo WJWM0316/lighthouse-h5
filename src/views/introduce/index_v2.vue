@@ -66,7 +66,7 @@
           <div class="attempt_list"  >
             <div class="attempt_block" v-for="item,index in pageInfo.tryCourses" @click.stop="toLesson(item.id)">
               <img class='blo_left' :src="item.coverPicture" />
-              <div class='blo_center'>{{item.title}}撒打算打算打算打算打算打算打算打算打算打算的撒打算打算打撒撒打算打打算打算的</div>
+              <div class='blo_center'>{{item.title}}</div>
               <div class='blo_right'>试读</div>
             </div>
           </div>
