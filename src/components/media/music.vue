@@ -690,4 +690,7 @@
   background:#EDEDED !important;
   border-radius:5px;
 }
+.audio-wrapper.lesson .audio-right .audio-time {
+  width: auto !important;
+}
 </style>

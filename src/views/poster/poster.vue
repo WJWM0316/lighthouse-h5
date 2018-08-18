@@ -1,8 +1,8 @@
 <template>
 	<div class="wrap">
 		<canvas id="poster" ref="poster" width="750" height="1300"></canvas>
-		<img id="scream"  @load="nextBg" ref="scream" src='https://cdnstatic.ziwork.com/Public/show/01.png' crossOrigin="Anonymous">
-<!-- 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/02.png' crossOrigin="Anonymous" v-if="random == '02'">
+		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/01.png' crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/02.png' crossOrigin="Anonymous" v-if="random == '02'">
 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/03.png' crossOrigin="Anonymous" v-if="random == '03'">
 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/04.png' crossOrigin="Anonymous" v-if="random == '04'">
 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/05.png' crossOrigin="Anonymous" v-if="random == '05'">
@@ -12,7 +12,7 @@
 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/09.png' crossOrigin="Anonymous" v-if="random == '09'">
 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/10.png' crossOrigin="Anonymous" v-if="random == 10">
 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/11.png' crossOrigin="Anonymous" v-if="random == 11">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/12.png' crossOrigin="Anonymous" v-if="random == 12"> -->
+		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/12.png' crossOrigin="Anonymous" v-if="random == 12">
 		<img id="ewema" ref="ewema" src="../../assets/icon/erweima.png">
 		<div class="imgBox">
 			<img class="showImg" :src="path">
@@ -94,7 +94,8 @@
 				this.path = this.canvas.toDataURL("data:image/png;")
 			}
 			catch(err) {
-				alert(err)
+				// alert(err)
+				console.log(err)
 			}
 	    
 	    if (this.path) {
