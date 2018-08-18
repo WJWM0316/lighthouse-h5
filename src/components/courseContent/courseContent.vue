@@ -142,6 +142,12 @@
     margin-bottom: 30px;
     &:last-child {
       margin-bottom: 10px;
+      .blo_right {
+        &:after {
+          content: " ";
+          display: none;
+        }
+      }
     }
     .blo_left {
       width:70px;
@@ -176,6 +182,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
       .blo_right_icon {
         width: 21px;
         height: 21px;
@@ -183,6 +190,19 @@
       &.noneborder {
         border: none;
       }
+      &:after {
+        content: " ";
+        display: block;
+        position: absolute;
+        right: 50%;
+        bottom: -50px;
+        margin-left: -.7px;
+        width: 0.5px; /* no */
+        border-right: 1px dotted rgba(248,248,248,1);
+        height: 50px;
+      }
+
+        
     }
   }
 </style>

@@ -20,7 +20,7 @@
   							<span class="classmate-name">{{item.realName}}
   								<span class="label" v-text="item.identityAuthority.title "></span>
   							</span>
-  							<span class="classmate-career" v-if="item.career">{{item.career}}</span>
+  							<span class="classmate-career" v-if="item.career||item.office">{{item.career}}{{item.office}}</span>
   						</div>
   					</li>
   				</ul>

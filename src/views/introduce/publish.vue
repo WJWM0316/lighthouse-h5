@@ -282,11 +282,11 @@ export default class PublishContent extends Vue {
       }
 
       this.pageForm = this.$route.query.pageForm
-
+      
       if(this.pageForm === 'isCourse3'){
           await publishPostApi(params)
-          //this.sendOK=true
-          //sessionStorage.setItem("loadType",0)
+          this.sendOK=true
+          sessionStorage.setItem("loadType",0)
       }
 			//判断身份发帖还是发布
 			else if(this.$route.query.code==='student' || this.$route.query.code==='manager'){
