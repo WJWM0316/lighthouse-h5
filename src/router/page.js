@@ -168,7 +168,7 @@ const routers = [
     // 海报图
     path: '/poster',
     name: 'poster',
-    meta: {navHide: true},
+    meta: {navHide: true, hideController:true},
     component: resolve => require(['@/views/poster/poster'], resolve),
   },
 ]
