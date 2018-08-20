@@ -661,7 +661,7 @@
   background:rgba(255,226,102,0.12);
 }
 .audio-wrapper.lesson .audio-left {
-  width: 73px;
+  width: 21%;
 }
 .audio-wrapper.lesson .audio-left img {
   width: 44px;
@@ -681,16 +681,15 @@
   content: none;
 }
 .audio-wrapper.lesson .audio-right {
-  width: 262px;
+  width: 79%;
 }
 .audio-wrapper.lesson .audio-right .audio-time {
   padding-right: 25px;
+  width: auto !important;
+  box-sizing: border-box;
 }
 .audio-wrapper.lesson .audio-right .range-bar {
   background:#EDEDED !important;
   border-radius:5px;
-}
-.audio-wrapper.lesson .audio-right .audio-time {
-  width: auto !important;
 }
 </style>

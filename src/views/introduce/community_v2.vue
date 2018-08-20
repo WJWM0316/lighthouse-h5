@@ -307,7 +307,7 @@
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
       }
-      wxUtil.reloadPage()
+      // wxUtil.reloadPage()
       const showShare = this.$route.query.showShare
       if (showShare && (showShare.toString() === 'true')) {
         this.showShare = true
@@ -336,8 +336,7 @@
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
           this.roleInfo=res.role;
-          //
-          if(res.role.title =='塔主'){
+          if(res.role.title =='塔主' || res.role.title =='嘉宾'){
             this.isMaster = true
           }
         }).catch(res => {
