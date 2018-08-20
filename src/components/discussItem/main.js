@@ -9,7 +9,8 @@ import { courseCardFavorApi, delCourseCardCommentApi } from '@/api/pages/pageInf
   props: {
     item: {
       type: Object,
-      required: true
+      required: true,
+      
     },
     commentType: {
       type: String,
@@ -228,7 +229,6 @@ export default class discussItem extends Vue {
     const itemIndex = this.itemIndex
     if(this.$route.path === "/PunchDetails"){
     	delCourseCardCommentApi(this.item.commentId).then(res=>{
-//  		console.log(res,"1111111111111111111")
     		this.item = ""
     	})
     }else{
