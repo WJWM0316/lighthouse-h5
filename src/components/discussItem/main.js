@@ -228,8 +228,8 @@ export default class discussItem extends Vue {
     const itemIndex = this.itemIndex
     if(this.$route.path === "/PunchDetails"){
     	delCourseCardCommentApi(this.item.commentId).then(res=>{
-    		console.log(res,"1111111111111111111")
-//  		debugger
+//  		console.log(res,"1111111111111111111")
+    		this.item = ""
     	})
     }else{
     	this.$emit('operation', {
