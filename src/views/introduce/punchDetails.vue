@@ -469,6 +469,7 @@
       
       courseCardCommentApi(params).then(res=>{
       	this.getCourseCardCommentList()
+      	this.allTotal +=1;
       	this.$vux.toast.text('评论成功', 'bottom')
       }).catch(e => {
         this.$vux.toast.text('评论失败', 'bottom')
