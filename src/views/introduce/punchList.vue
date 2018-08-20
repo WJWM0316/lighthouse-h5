@@ -112,7 +112,9 @@
 
 <style lang="less" scoped>
 	.PunchList{
-		padding: 0 20px;
-		box-sizing: border-box;
+		.dynamic-item{
+			box-sizing: border-box;
+			padding: 0 20px;
+		}
 	}
 </style>
