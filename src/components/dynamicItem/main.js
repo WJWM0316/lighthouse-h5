@@ -8,10 +8,6 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
 @Component({
   name: 'dynamic-item',
   props: {
-    //
-    isMe: {
-      type: String,
-    },
     item: {
       type: Object,
       required: true
@@ -238,13 +234,12 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     isPlayList () {},
     isTeacherCon () {},
     isTeacher () {},
-    isMe(val){
-      this.isMe = val
-    },
     isUserExchange(val){
+    },
+    isMaster(val){
+      this.isMaster = val
       console.log(val)
     },
-    isMaster(){},
     isShowTop(val){
       console.log(val)
     }
@@ -381,9 +376,6 @@ export default class dynamicItem extends Vue {
     let menus = []
     let itemIndex = this.itemIndex
     let item = this.item
-
-    console.log('qweqweqweqwe',this.role,this.menus)
-
     if(this.isMaster){
       if(this.item.topPostStatus == 0){
         menus.push({
