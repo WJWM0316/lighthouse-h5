@@ -17,7 +17,6 @@
                   :disableUserClick="disableUserClick"
                   :allTotal="allTotal"
                   :isFold="isFold"
-                  :isMe="isMe"
                   :noBorder="noBorder"
                   :isNeedHot="isNeedHot"
                   :isPlayList='isPlayList'
@@ -41,7 +40,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
-  import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi } from '@/api/pages/pageInfo.js'
+  import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi, getRoleInfoApi } from '@/api/pages/pageInfo.js'
   import { getInformationApi } from '@/api/pages/center'
   import WechatMixin from '@/mixins/wechat'
 
@@ -164,9 +163,6 @@
       isUserExchange: {
         type: Number,
         default: 1
-      },
-      masterInfo: {
-        type: Object,
       }
     },
     components: {
@@ -190,19 +186,12 @@
       },
       isUserExchange(val){
       },
-      masterInfo(val){
-        console.log('======',val)
-        if(val.userId && this.isMe == val.userId){
-          this.isMaster = true
-        }
-      },
       isShowTop(){}
 
     },
     mixins: [WechatMixin]
   })
   export default class dynamicList extends Vue {
-    isMe = ''
     currentPlay = {
       item: {},
       itemIndex: -1,
@@ -212,14 +201,13 @@
     isMaster = false
 
     created () {
-      try {
+      this.getMaster()
+      /*try {
         this.model = getInformationApi().then(res=>{
-          this.isMe = res.userId
-          this.getMaster()
         })
       } catch (error) {
         this.$vux.toast.text(error.message, 'bottom')
-      }
+      }*/
     }
 
     mounted () {
@@ -229,17 +217,15 @@
     }
 
     getMaster(){
-      let data = {
-        communityId: this.communityId,
-        page: 1,
-        pageCount: 20,
-      }
       let that = this
+      getRoleInfoApi({communityId: this.communityId}).then(res=>{
+        console.log('=====getRoleInfoApi',res)
+        if(res.role.title === '塔主'){
+          that.isMaster = true
+          console.log('=====isMaster',that.isMaster)
 
-      console.log(that.isMe,)
-      if(this.masterInfo && that.isMe == this.masterInfo.userId){
-        this.isMaster = true
-      }
+        }
+      })
     }
 
     videoEvent (e) {

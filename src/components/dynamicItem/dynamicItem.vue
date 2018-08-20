@@ -16,7 +16,6 @@
       <div class='icon_top_warp' v-if="isShowTop">
         <img class='icon_top' src="./../../assets/icon/icon_topping@3x.png"/>
       </div>
-      
       <div class="user_op" @click.stop="op_member" v-if="isMaster && !isUserExchange && item.modelType != 'problem'">
         <img class="op_img" src="./../../assets/icon/bnt_course_more@3x.png" />
       </div>
