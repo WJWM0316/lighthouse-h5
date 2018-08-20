@@ -319,7 +319,7 @@
       } else { // 未入社跳到未入社页面
         // 测试
         if(this.testCoures){
-          url = `/introduce2/${item.communityId}?reload=true`
+          url = `/introduce2/${item.communityId}`
         }else {
           url = `/introduce/${item.communityId}?reload=true`
         }
@@ -422,7 +422,7 @@
       )
     }
     async created () {
-      wxUtil.reloadPage()
+      // wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
       }

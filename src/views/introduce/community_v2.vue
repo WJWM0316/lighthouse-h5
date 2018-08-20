@@ -311,7 +311,7 @@
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
       }
-      wxUtil.reloadPage()
+      // wxUtil.reloadPage()
       const showShare = this.$route.query.showShare
       if (showShare && (showShare.toString() === 'true')) {
         this.showShare = true
