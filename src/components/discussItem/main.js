@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import moment from 'moment'
-import { courseCardFavorApi } from '@/api/pages/pageInfo'
+import { courseCardFavorApi, delCourseCardCommentApi } from '@/api/pages/pageInfo'
 
 @Component({
   name: 'discuss-item',
@@ -226,12 +226,20 @@ export default class discussItem extends Vue {
    */
   del () {
     const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'del',
-      itemIndex,
-      item: this.item,
-      commentType: this.commentType
-    })
+    if(this.$route.path === "/PunchDetails"){
+    	delCourseCardCommentApi(this.item.commentId).then(res=>{
+    		console.log(res,"1111111111111111111")
+//  		debugger
+    	})
+    }else{
+    	this.$emit('operation', {
+	      eventType: 'del',
+	      itemIndex,
+	      item: this.item,
+	      commentType: this.commentType
+	    })
+    }
+    
   }
   /**
    * 评论区点击
@@ -262,7 +270,7 @@ export default class discussItem extends Vue {
 
   // -------------------- 页面跳转 ------------------------
   toUserInfo (userId) { // 去个人详情
-    if (this.disableUserClick || this.$route.path === "/PunchDetails") {
+    if (this.disableUserClick) {
       return
     }
     // userId

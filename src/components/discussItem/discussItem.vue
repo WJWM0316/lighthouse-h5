@@ -46,9 +46,9 @@
       <div class="info-area">
         <div>
           <span>{{timeStr}}</span>
-          <!--<span v-if="showIdentification && item.modelType === 'problem'"> · 问答</span>
+          <span v-if="showIdentification && item.modelType === 'problem'"> · 问答</span>
           <span v-else-if="showIdentification && item.modelType === 'post'"> · 帖子</span>
-          <span v-if="showDelBtn && item['isSelf'] && item.modelType  !== 'problem'" class="del-btn" @click.stop="del">删除</span>-->
+          <span v-if="showDelBtn && item['isSelf'] && item.modelType  !== 'problem'" class="del-btn" @click.stop="del">删除</span>
         </div>
 
         <div class="operation">
