@@ -1,18 +1,7 @@
 <template>
 	<div class="wrap">
 		<canvas id="poster" ref="poster" width="750" height="1300"></canvas>
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/02.png' crossOrigin="Anonymous" v-if="random == '01'">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/02.png' crossOrigin="Anonymous" v-if="random == '02'">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/03.png' crossOrigin="Anonymous" v-if="random == '03'">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/04.png' crossOrigin="Anonymous" v-if="random == '04'">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/05.png' crossOrigin="Anonymous" v-if="random == '05'">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/06.png' crossOrigin="Anonymous" v-if="random == '06'">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/07.png' crossOrigin="Anonymous" v-if="random == '07'">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/08.png' crossOrigin="Anonymous" v-if="random == '08'">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/09.png' crossOrigin="Anonymous" v-if="random == '09'">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/10.png' crossOrigin="Anonymous" v-if="random == 10">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/11.png' crossOrigin="Anonymous" v-if="random == 11">
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/12.png' crossOrigin="Anonymous" v-if="random == 12">
+		<img id="scream"  @load="nextBg" ref="scream" :src="'../../static/poster/' + random + '.png'" crossOrigin="Anonymous">
 		<img id="ewema" ref="ewema" src="../../assets/icon/erweima.png">
 		<div class="imgBox">
 			<img class="showImg" :src="path">
@@ -107,10 +96,9 @@
   		Vue.$vux.loading.show({
 	      text: '图片正在生成中'
 	    })
-	    // 28张背景图 随机抽一张
-	    this.random = Math.floor(Math.random()*6)+1
+	    // 29张背景图 随机抽一张
+	    this.random = Math.floor(Math.random()*29)+1
 	    if (this.random < 10) this.random = `0${this.random}`
-	    console.log(this.random, 11)
   		this.canvas = document.getElementById('poster')
 			this.ctx = this.canvas.getContext("2d")
 		}
@@ -121,6 +109,7 @@
 		width: 100%;
 		height: 100%;
 		padding-bottom: 44px;
+		background: #F2F2F2;
 		#poster {
 			width: 0;
 			height: 0;
