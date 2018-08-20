@@ -229,6 +229,7 @@ export default class App extends Vue {
       document.addEventListener("WeixinJSBridgeReady", function () {
         if (_this.audio.src === 'https://cdnstatic.ziwork.com/test/audio/2018-06-14/73e5119b2e475c94f38d8e44e2b9dbdf.mp3') {
            _this.audio.play()
+           _this.audio.pause()
         }
       }, false)
     }

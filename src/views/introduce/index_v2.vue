@@ -319,14 +319,12 @@
       } else { // 未入社跳到未入社页面
         // 测试
         if(this.testCoures){
-          url = `/introduce2/${item.communityId}?reload=true`
+          url = `/introduce2/${item.communityId}`
         }else {
           url = `/introduce/${item.communityId}?reload=true`
         }
       	this.completelyShow=true;
         this.$router.push(url)
-        //03b9200ec0d02059adc1882956104bc2
-        //03b9200ec0d02059adc1882956104bc2
       }
     }
 
@@ -424,7 +422,7 @@
       )
     }
     async created () {
-      wxUtil.reloadPage()
+      // wxUtil.reloadPage()
       if (this.$route.name === 'introduce-detail') {
         this.completelyShow = false
       }

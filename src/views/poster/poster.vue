@@ -1,7 +1,7 @@
 <template>
 	<div class="wrap">
 		<canvas id="poster" ref="poster" width="750" height="1300"></canvas>
-		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/01.png' crossOrigin="Anonymous" v-if="random == '01'">
+		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/02.png' crossOrigin="Anonymous" v-if="random == '01'">
 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/02.png' crossOrigin="Anonymous" v-if="random == '02'">
 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/03.png' crossOrigin="Anonymous" v-if="random == '03'">
 		<img id="scream"  @load="nextBg" ref="scream" src='../../assets/poster/04.png' crossOrigin="Anonymous" v-if="random == '04'">
@@ -94,8 +94,7 @@
 				this.path = this.canvas.toDataURL("data:image/png;")
 			}
 			catch(err) {
-				// alert(err)
-				console.log(err)
+				alert(err)
 			}
 	    
 	    if (this.path) {
