@@ -34,14 +34,14 @@
           :isLesson = 'true'
         ></audioBox>
       </div>
-      <div class="module-content h5-code" @click.stop="readPic($event)" v-html="communityCourse.details">
+      <div class="module-content h5-code" @click.stop="readPic($event)" v-html="communityCourse.details" ref="H5">
       </div>
     </div>
 
     <!-- 已加入 -->
 		<template v-if="lessonData && isJoinAgency">
 		    <!--本节任务-->
-				<div class="Lesson-task" v-if="trialReading === '0'">
+				<div class="Lesson-task" v-if="trialReading === '0' && (communityCourse.punchCardTitle || communityCourse.punchCardImgInfo.length>0)">
 					<!--头部标题-->
 					<div class="headerBox">
 						<div class="title-pic1">
@@ -99,7 +99,11 @@
 			         @reFresh="reFresh"
 			         @showEvaluate='showEvaluate'
 			      ></lessondynamicItem>
-			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="countCardInfo.totalExcellentCardCount>5">查看所有优秀打卡 <span>({{countCardInfo.totalExcellentCardCount}})</span></div>
+			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="countCardInfo.totalExcellentCardCount>5">
+			      	<div>
+			      		查看所有优秀打卡 <span>({{countCardInfo.totalExcellentCardCount}})</span>
+			      	</div>
+			      </div>
 					</div>
 					
 				</div>
@@ -124,7 +128,11 @@
 		         @reFresh="reFresh"
 		         @showEvaluate='showEvaluate'
 		      ></lessondynamicItem>
-		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="countCardInfo.totalCardCount>5">查看所有打卡 <span>({{countCardInfo.totalCardCount}})</span></div>
+		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="countCardInfo.totalCardCount>5">
+		      	<div>
+		      		查看所有打卡 <span>({{countCardInfo.totalCardCount}})</span>
+		      	</div>
+		      </div>
 				</div>
 				
 				<!--底部打卡按钮区-->
@@ -280,14 +288,14 @@
 
   		Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{
 				//console.log(res,"请求回来的数据")
-				this.lessonData = res[0].couponInfo
-  			this.communityId = res[0].communityId
-  			this.communityCourse = res[0].communityCourse
-  			this.countCardInfo = res[0].countCardInfo
-  			if(this.communityCourse.av.files[0]){
+				this.lessonData = res[0].couponInfo	//优惠券信息
+  			this.communityId = res[0].communityId	//灯塔id
+  			this.communityCourse = res[0].communityCourse //课节详情信息
+  			this.countCardInfo = res[0].countCardInfo	//课节个人打卡信息
+  			if(this.communityCourse.av.files[0]){		//课节媒体信息
   				this.communityCourse.av.files[0].fileId = String(this.communityCourse.av.files[0].fileId)
   			}
-  			this.curPeopleInfo = res[0].curPeopleInfo
+  			this.curPeopleInfo = res[0].curPeopleInfo	//课节个人信息
   			this.peopleCourseCardList = res[1].peopleCourseCardList.length>0?res[1].peopleCourseCardList:""
   			this.excellentPunchList = res[1].excellentPeopleCourseCardList.length>0?res[1].excellentPeopleCourseCardList:""
   			this.isPunch = res[0].peopleCardInfo.isPunchCard
@@ -299,6 +307,9 @@
   	
   	mounted () {
   		this.$nextTick(()=>{
+  			setTimeout(()=>{
+  				console.log(this.$refs,"我是捕获到的")
+  			},500)
   		})
 	  }
   	
@@ -874,7 +885,7 @@
 		}
 		/*本节打卡任务*/
 		.Lesson-task{
-			
+			padding: 0 20px;
 			.content-txt{
 				width: 100%;
 			}
@@ -914,11 +925,18 @@
 		    }
 			}
 		}
-		/*优秀打卡区*/
-		.Lesson-punch,.all-punch{
-			
+		/*优秀打卡和全部打卡的样式区*/
+		.Lesson-punch{
+			.headerBox{
+				margin-left: 20px;
+			}
+		}
+		.Lesson-punch,
+		.all-punch{
 			/*优秀打卡标签*/
 			.Excellent-punch{
+				padding: 0 20px;
+				box-sizing: border-box;
 				width: 100%;
 				.Excellent-punch-title{
 					color:#929292;
@@ -940,38 +958,67 @@
 					}
 				}
 			}
-			/*优秀打卡最后一个样式*/
+			/*优秀打卡与所有打卡的间距*/
 			.excellentPunchList{
+				margin-bottom: 50px;
 				>.dynamic-item{
+					box-sizing: border-box;
+					padding: 0 20px;
 					&:last-child{
 						border-bottom: none;
 					}
 				}
 			}
+			/*.all-punch{
+				>.dynamic-item{
+					background: #000;
+					&:last-child{
+						border-bottom: none;
+					}
+				}
+			}*/
 			/*底部展开按钮*/
 			.Expand-btn{
-				width: 100%;
-				height: 40px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				font-size: 14px;
-				color: #354048;
-				background-color: rgba(255, 226, 102, 0.16);
-				border-radius: 20px;
-				&>span{
-					padding-left: 7px;
+				position: relative;
+				/*border-top: 2px solid #FFFFFF;
+				margin-top: -5px;*/
+				padding: 0 20px;
+				box-sizing: border-box;
+				&::before{
+					content: "";
+					position: absolute;
+					top: -1px;
+					left: 0;
+					background: #FFFFFF;
+					height: 2px;
+					width: 100%;
+					z-index: 8888;
+				}
+				>div{
+					width: 100%;
+					height: 40px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 14px;
+					color: #354048;
+					background-color: rgba(255, 226, 102, 0.16);
+					border-radius: 20px;
+					&>span{
+						padding-left: 7px;
+					}
 				}
 			}
 			>.dynamic-item{
-				&:last-child{
+				box-sizing: border-box;
+				padding: 0 20px;
+				/*&:nth-of-type(6){
 					border-bottom: none;
-					/*margin-top: 50px;*/
-				}
+				}*/
 			}
 		}
 		.hr{
-			margin-left: -20px;
+			/*margin-left: -20px;*/
 			width: 375px;
 			height: 0.5px;
 			background: #EDEDED;
@@ -979,10 +1026,14 @@
 		
 		/*所有打卡*/
 		.all-punch{
-			padding: 0 20px;
-			margin-top: 50px;
+			/*padding: 0 20px;*/
 			.all-show{
 				margin-bottom: 50px;
+			}
+			>.dynamic-item{
+				&:last-child{
+					border-bottom: none;
+				}
 			}
 		}
 		/*课节底部按钮区*/
@@ -1025,7 +1076,6 @@
 		/*公共部分*/
 		.Lesson-punch,.Lesson-task{
 			margin-top: 60px;
-			padding: 0 20px;
 			box-sizing: border-box;
 		}
 		/*头部标题样式*/

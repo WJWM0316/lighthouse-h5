@@ -325,8 +325,6 @@
         }
       	this.completelyShow=true;
         this.$router.push(url)
-        //03b9200ec0d02059adc1882956104bc2
-        //03b9200ec0d02059adc1882956104bc2
       }
     }
 

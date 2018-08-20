@@ -76,6 +76,8 @@
                      :isTeacher="isPlayList"
                      :isTower='true'
                      :isUserExchange="showType"
+                     :masterInfo="masterInfo"
+                     :isMaster = isMaster
                      @disableOperationEvents="operation"
                      @opMember="opMember"
 
@@ -251,6 +253,10 @@
     topList = []  //置顶列表
     relevantList = [] //相关推荐
     userSort = 1   //学员排序
+    isMaster = false
+    masterInfo = {
+      userId : ''
+    }
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
 				let nowCommunity=sessionStorage.getItem("nowCommunity");
@@ -332,10 +338,11 @@
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
         	this.roleInfo=res.role;
-        	console.log(this.roleInfo,"8888888888888888888888888888")
+          if(res.role.title =='塔主'){
+            this.isMaster = true
+          }
         }).catch(res => {
         		this.roleInfo=res.data.role;
-        		console.log(this.roleInfo,"999999999999999999999999")
 				})
         
         //判断是否有课程，无课程则跳转
@@ -394,10 +401,13 @@
 	        //判断嘉宾身份
 	        this.getRoleInfo(communityId).then(res=>{
 	        	this.roleInfo=res.role;
-	        	console.log(this.roleInfo,"8888888888888888888888888888")
+
+            console.log(res.role.title)
+            if(res.role.title =='塔主'){
+              this.isMaster = true
+            }
 	        }).catch(res => {
 	        		this.roleInfo=res.data.role;
-	        		console.log(this.roleInfo,"999999999999999999999999")
 					})
 	        
 	        //判断是否有课程，无课程则跳转
@@ -446,15 +456,7 @@
           }
       }
       this.pageInfo = res
-      
-//    let role= await this.getRoleInfo(communityId)
-//    this.roleInfo=role
-//    console.log(role)
-
-//			this.getRoleInfo(communityId).then(res=>{
-////				console.log("77777777777777",res)
-//			})
-      
+      this.masterInfo = res.master
       await this.getList({page: 1})
 
       this.$nextTick(() => {
@@ -473,7 +475,6 @@
         this.displaySuspensionInput = false
         this.dynamicList = []
         this.showType = type
-//      this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
         this.showIdentification = !type
         if (type === 1) {
           this.isPlayList = true
