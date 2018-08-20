@@ -228,9 +228,21 @@ export default class discussItem extends Vue {
   del () {
     const itemIndex = this.itemIndex
     if(this.$route.path === "/PunchDetails"){
-    	delCourseCardCommentApi(this.item.commentId).then(res=>{
-    		this.item = ""
-    	})
+    	let _this = this;
+    	this.$vux.confirm.show({
+        content: '确定要删除吗？',
+        confirmText: '确定',
+        cancelText: '取消',
+        onCancel () {
+        },
+        onConfirm () {
+          delCourseCardCommentApi(_this.item.commentId).then(res=>{
+		    		_this.item = ""
+		    	}).catch(e => {
+            _this.$vux.toast.text('删除失败', 'bottom')
+          })
+        }
+      })
     }else{
     	this.$emit('operation', {
 	      eventType: 'del',
