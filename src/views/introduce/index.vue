@@ -297,10 +297,13 @@
         '3、提问导师或嘉宾，但不一定 能100%得到回答'
       ]
     }
+    endPayType = null //已结束 加入时候的状态
 
     /*提示----*/
     hintSucFuc (){
       let that = this
+      let type = this.endPayType
+
       that.isEndSock = true
        if(type == 1){
           that.freeIn()
@@ -309,6 +312,8 @@
        }else {
           that.freeJoin()
        }
+       this.cloHint()
+
     }
 
     cloHint (){
@@ -330,6 +335,13 @@
       return newStr
     }
     freeIn () { // 跳转到一个图文消息
+      if(this.isEnd ){
+        if(!this.isEndSock){
+          this.endHint(1)
+          return
+        }
+      }
+
       if (!this.isFreeBtn) return
       if (this.pageInfo.wechatIntroUrl) {
         location.href = this.pageInfo.wechatIntroUrl
@@ -396,32 +408,49 @@
       if(!type){
         return
       }
+      this.endPayType = type 
       that.openHint()
     }
     
     payOrFree () {
-      this.toPay = true;
+      let that = this
+
+      if(this.isEnd ){
+        if(!this.isEndSock){
+          this.endHint(2)
+          return
+        }
+      }
+      
+      that.payIn()
     }
 
     async freeJoin () {
+      let that = this
+      if(this.isEnd ){
+        if(!this.isEndSock){
+          this.endHint(3)
+          return
+        }
+      }
+
       await freePay({
         productId: this.pageInfo.communityId,
         productType: 1,
         userCouponId:this.usedUserCouponId
       }).then((res) => {
-      	this.toPay = false;		//关闭支付窗口
+      	that.toPay = false;		//关闭支付窗口
       	sessionStorage.removeItem("coupon");		//移除优惠券信息
-        const _this = this
-        this.$vux.alert.show({
+        that.$vux.alert.show({
           title: '加入成功',
           content: '快去灯塔里和大家一起进步吧',
           buttonText: '好的',
           onHide () {
-            _this.pageInit().then(() => {})
+            that.pageInit()
           }
         })
       }).catch((e) => {
-        this.$vux.toast.text(e.message, 'bottom')
+        that.$vux.toast.text(e.message, 'bottom')
       })
     }
     toHome () {
@@ -435,12 +464,13 @@
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
-      	this.completelyShow=true;
+      	this.completelyShow = true;
         this.$router.push(`/introduce/${item.communityId}?reload=true`)
       }
     }
 
     async payIn () {
+
       const params = await payApi({
         productId: this.pageInfo.communityId,
         productType: 1,
@@ -503,7 +533,7 @@
         }
       )
     }
-    
+
     async created () {
     	console.log(location,'我是页面路径')
       wxUtil.reloadPage()

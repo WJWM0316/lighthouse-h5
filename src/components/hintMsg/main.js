@@ -36,6 +36,7 @@ export default class hintMsg extends Vue {
 
   //成功
   hintSucFuc (){
+    console.log(this.type)
     this.$emit('hintSucFuc')
   }
 }

@@ -112,8 +112,8 @@
         <div class="coupon_price" @click.stop="toCoupon">
           <span>优惠券</span>
           <div class="coupon_price_right">
-            <span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">-¥ {{SelectCouponItem.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:SelectCouponItem.coupon.discount}}</span>
-            <span v-else-if=" pageInfo.selectCoupon!==null && SelectCouponItem.userCouponId===0 ">不使用优惠券</span>
+            <span v-if="selectCouponItem.userCouponId && selectCouponItem.userCouponId!==0">-¥ {{selectCouponItem.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:selectCouponItem.coupon.discount}}</span>
+            <span v-else-if=" pageInfo.selectCoupon!==null && selectCouponItem.userCouponId===0 ">不使用优惠券</span>
             <span v-else-if=" pageInfo.selectCoupon===null ">无可用优惠券</span>
             <span v-else>-¥ {{pageInfo.selectCoupon.userCoupon.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
             <div class="more_coupon"></div>
@@ -123,9 +123,9 @@
           <div class="payment_num">
             实付：<span>¥</span>
             <!--选择其他优惠券-->
-            <span v-if="SelectCouponItem.userCouponId && SelectCouponItem.userCouponId!==0">{{SelectedPrice}}</span>
+            <span v-if="selectCouponItem.userCouponId && selectCouponItem.userCouponId!==0">{{selectedPrice}}</span>
             <!--不使用优惠券和无优惠券-->
-            <span v-else-if=" pageInfo.selectCoupon===null || SelectCouponItem.userCouponId===0 ">{{pageInfo.joinPrice}}</span>
+            <span v-else-if=" pageInfo.selectCoupon===null || selectCouponItem.userCouponId===0 ">{{pageInfo.joinPrice}}</span>
             <!--使用默认优惠券-->
             <span v-else>{{pageInfo.selectCoupon.couponPrice}}</span>
           </div>
@@ -258,13 +258,13 @@
     completelyShow = true
     el = ''
     qrSrc = ''
-    testCoures = true   //新版测试使用
     isEndSock = false  //已结束的锁   
     usedUserCouponId = 0    //支付时使用的优惠券id
     selectCouponItem = {}   //当前选择的优惠券信息
     selectedPrice = ''    //选择其他优惠券后的价格
     toPay = false     //是否调起支付窗口
 
+    endPayType = null //已结束 加入时候的状态
     isHintShow = false   //弹窗
     hintData = {
       title: '加入须知',
@@ -281,6 +281,7 @@
 
     hintSucFuc (){
       let that = this
+      let type = this.endPayType
       that.isEndSock = true
        if(type == 1){
           that.freeIn()
@@ -289,6 +290,7 @@
        }else {
           that.freeJoin()
        }
+       this.cloHint()
     }
 
     cloHint (){
@@ -317,39 +319,39 @@
 
 
     isPay(){
-        if(this.selectCouponItem.userCouponId && this.selectCouponItem.userCouponId!==0){
-          //选择其他优惠券
-          if(this.selectedPrice>0){
-            console.log("我是付费")
-            this.usedUserCouponId = this.selectCouponItem.userCouponId;
-            this.payIn()
-          }else{
-            console.log("我是免费免费")
-            //选择的优惠券金额够大，可以免费加入
-            this.usedUserCouponId = this.selectCouponItem.userCouponId;
-            this.freeJoin()
-          }
-          
-        }else if(this.selectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
-          //选择不使用优惠券 和 无可用优惠券
-          console.log("我是没有优惠券和不用优惠券")
-          this.usedUserCouponId = 0;
+      if(this.selectCouponItem.userCouponId && this.selectCouponItem.userCouponId!==0){
+        //选择其他优惠券
+        if(this.selectedPrice>0){
+          console.log("我是付费")
+          this.usedUserCouponId = this.selectCouponItem.userCouponId;
           this.payIn()
         }else{
-          //默认优惠券
-          if(this.pageInfo.selectCoupon.couponPrice>0){
-            console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
-            //有默认优惠券
-            this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
-            this.payIn()
-          }else{
-            console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
-            this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
-            this.freeJoin()
-          }
+          console.log("我是免费免费")
+          //选择的优惠券金额够大，可以免费加入
+          this.usedUserCouponId = this.selectCouponItem.userCouponId;
+          this.freeJoin()
         }
-        this.toPay = false;
-        sessionStorage.removeItem("coupon");
+        
+      }else if(this.selectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
+        //选择不使用优惠券 和 无可用优惠券
+        console.log("我是没有优惠券和不用优惠券")
+        this.usedUserCouponId = 0;
+        this.payIn()
+      }else{
+        //默认优惠券
+        if(this.pageInfo.selectCoupon.couponPrice>0){
+          console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
+          //有默认优惠券
+          this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+          this.payIn()
+        }else{
+          console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
+          this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+          this.freeJoin()
+        }
+      }
+      this.toPay = false;
+      sessionStorage.removeItem("coupon");
     }
 
     toCoupon(){
@@ -384,11 +386,13 @@
       if(!type){
         return
       }
+      this.endPayType = type 
       that.openHint()
     }
 
 
     payOrFree () {
+      let that = this
       if(this.isEnd ){
         if(!this.isEndSock){
           this.endHint(2)
@@ -396,7 +400,6 @@
         }
       }
 
-      let that = this
       that.payIn()
     }
 
@@ -408,19 +411,19 @@
           return
         }
       }
-
       await freePay({
         productId: this.pageInfo.communityId,
         userCouponId:this.usedUserCouponId,
         productType: 1
       }).then((res) => {
-        const _this = this
+        that.toPay = false;   //关闭支付窗口
+        sessionStorage.removeItem("coupon");
         that.$vux.alert.show({
           title: '加入成功',
           content: '快去灯塔里和大家一起进步吧',
           buttonText: '好的',
           onHide () {
-            _this.pageInit()
+            that.pageInit()
           }
         })
       }).catch((e) => {
@@ -441,11 +444,7 @@
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
         // 测试
-        if(this.testCoures){
-          url = `/introduce2/${item.communityId}`
-        }else {
-          url = `/introduce/${item.communityId}?reload=true`
-        }
+        url = `/introduce2/${item.communityId}`
       	this.completelyShow=true;
         this.$router.push(url)
       }
@@ -474,6 +473,7 @@
     }
     onBridgeReady (params) {
       let self = this
+      /*eslint-disable*/
       WeixinJSBridge.invoke('getBrandWCPayRequest', {
           appId: params.appId,
           timeStamp: params.timeStamp,
@@ -489,52 +489,19 @@
             const { communityId } = self.$route.params
             let number = Math.random() * 10 + 1
             console.log('communityId', communityId)
-            //
             switch (communityId) {
-              case 'ca7cfa129f1d7ce4a04aebeb51e2a1aa':
-                self.$store.dispatch('show_qr', {type: 1})
-                break
-              case '25c2ff088da3f757b685a318ab050b5a': // 测试
-                self.$store.dispatch('show_qr', {type: 1})
-                break
-              case '64074da38681f864082708b9be959e08':
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '67917ba04abd74c3247245576b1168b0': // 测试
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '16a2f4a61d870978f1598b466a48f12e': // 测试 詹润杰的灯塔
+              case '0125347d17e7c24d7e969783a26b922d': // 好点子塔
                 self.$store.dispatch('show_qr', {type: 3})
                 break
-              case 'a7f79b000c990dd2658b6af10a37fe3c': // 正式 詹润杰的灯塔
-                self.$store.dispatch('show_qr', {type: 3})
+
+              case '270abb50e490783896f2396e58bfbfad': // 活动塔0628
+                self.$store.dispatch('show_qr', {type: 1})
                 break
-              case '70036858d957ad830e89e37c5a8356d2': // 测试分销5月9号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '6b3974ad38fa6984de73f43a7730e294': // 正式分销5月9号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case 'b2b533754554bec1b9c344a97063891b': // 测试分销5月16号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '2cdf75243f96bca97ae4341b6400e375': // 正式分销5月16号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case '67917ba04abd74c3247245576b1168b0': // 分销5月22号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case 'd71fddeba62a878aecd901198a959674': // 正式分销5月17号
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-              case 'cfaf4bc3648d04a809419d52a78d8d20': // 秋叶塔
-                self.$store.dispatch('show_qr', {type: 4})
-                break
-              case 'db73998f8d1691d3ce75180266e3cba9': // 测试专用
+              case '953c439c79fdd336bf5864aa2d6356ac': // 活动塔271考拉塔
                 self.$store.dispatch('show_qr', {type: 4})
                 break
               default:
-                location.reload()
+                self.$store.dispatch('show_qr', {type: 2})
                 break
             }
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
@@ -664,7 +631,7 @@
             _this.payOrFree()
           }
           else {
-            _this.freeJoin().then(() => {})
+            _this.freeJoin()
           }
         }
       })
