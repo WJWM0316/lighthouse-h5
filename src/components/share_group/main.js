@@ -137,12 +137,10 @@ export default class dynamicItem extends Vue {
   }
   
   beforeMount(){
-    //console.log(this.item,"******************************")
   }
 
   mounted () {
     this.video = this.$refs['video']
-//  console.log(this.item,"=================================+++")
   }
 
   

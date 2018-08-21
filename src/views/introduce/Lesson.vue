@@ -277,6 +277,7 @@
 
   	created(){
   		this.trialReading = this.$route.query.isTry
+  		let that = this
   		console.log(this.trialReading,"是否试读。。。。。")
   		let parama = {
   			communityId:this.$route.query.communityId,
@@ -286,10 +287,10 @@
   			pageCount:0
   		}
 
+		this.communityId = this.$route.query.communityId
   		Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{
 				//console.log(res,"请求回来的数据")
 				this.lessonData = res[0].couponInfo	//优惠券信息
-  			this.communityId = res[0].communityId	//灯塔id
   			this.communityCourse = res[0].communityCourse //课节详情信息
   			this.countCardInfo = res[0].countCardInfo	//课节个人打卡信息
   			if(this.communityCourse.av.files[0]){		//课节媒体信息
@@ -350,7 +351,6 @@
 	  		console.log("评选成功")
 	  		this.reFresh();
 	  		this.$vux.toast.text('评选成功', 'bottom')
-//	  		this.$emit("reFresh")
 	  	}).catch(res=>{
 	  		this.$vux.toast.text('评选失败，请重试', 'bottom')
 	  		console.log(res,"接口报错")
@@ -426,7 +426,6 @@
 	  }
 
 	  async freeJoin () {
-
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
 	        this.endHint(3)
@@ -444,11 +443,11 @@
 	        content: '快去灯塔里和大家一起进步吧',
 	        buttonText: '好的',
 	        onHide () {
-	      		this.pageInit()
+	      		that.$router.go(0)
 	        }
 	      })
 	    }).catch((e) => {
-	      this.$vux.toast.text(e.message, 'bottom')
+	      that.$vux.toast.text(e.message, 'bottom')
 	    })
 	  }
 
