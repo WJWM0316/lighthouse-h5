@@ -1099,19 +1099,9 @@
 					}
 				}
 			}
-			/*.all-punch{
-				>.dynamic-item{
-					background: #000;
-					&:last-child{
-						border-bottom: none;
-					}
-				}
-			}*/
 			/*底部展开按钮*/
 			.Expand-btn{
 				position: relative;
-				/*border-top: 2px solid #FFFFFF;
-				margin-top: -5px;*/
 				padding: 0 20px;
 				box-sizing: border-box;
 				&::before{
@@ -1142,9 +1132,6 @@
 			>.dynamic-item{
 				box-sizing: border-box;
 				padding: 0 20px;
-				/*&:nth-of-type(6){
-					border-bottom: none;
-				}*/
 			}
 		}
 		.hr{
@@ -1156,7 +1143,6 @@
 		
 		/*所有打卡*/
 		.all-punch{
-			/*padding: 0 20px;*/
 			.all-show{
 				margin-bottom: 50px;
 			}
