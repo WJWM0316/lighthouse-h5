@@ -158,11 +158,15 @@
 			    <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
 			            :disabled="!isFreeBtn" v-if="lessonData.freeJoinNum > 0" @click="freeIn">
 			      <span>集Call免费加入</span>
-			      <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员'}})</span>
+			      <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
 			    </div>
 			    <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
 			            :disabled="!isPayBtn" @click="payOrFree" v-if="lessonData.payJoinNum > 0 && lessonData.joinPrice > 0">
-			      <span>付费加入:¥{{lessonData.joinPrice}}</span>
+			      <span>付费加入:¥{{lessonData.joinPrice}}/{{lessonData.cycle}}</span>
+			      <span v-if="lessonData.selectCoupon">用券省 
+			      	<span class="coupon_price" v-if="lessonData.selectCoupon.userCoupon.coupon.discount<lessonData.joinPrice">{{lessonData.selectCoupon.userCoupon.coupon.discount}}</span> 
+			      	<span class="coupon_price" v-else>{{lessonData.joinPrice}}</span> 元
+			      </span>
 			    </div>
 			    <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
 			            :disabled="!isPayBtn" @click="freeJoin" v-if="lessonData.payJoinNum > 0 && lessonData.joinPrice === 0">
@@ -337,6 +341,7 @@
   	    '3、提问导师或嘉宾，但不一定 能100%得到回答'
   	  ]
   	}
+    endPayType = null //已结束 加入时候的状态
 
   	created(){
   		this.trialReading = this.$route.query.isTry
@@ -456,7 +461,9 @@
 
 		hintSucFuc (){
 		  let that = this
+      let type = this.endPayType
 		  that.isEndSock = true
+
 		   if(type == 1){
 		      that.freeIn()
 		   }else if(type == 2) {
@@ -464,6 +471,7 @@
 		   }else {
 		      that.freeJoin()
 		   }
+       this.cloHint()
 		}
 
 		cloHint (){
@@ -497,6 +505,7 @@
 	    if(!type){
 	      return
 	    }
+      this.endPayType = type 
   		that.openHint()
 
 	  }
@@ -507,11 +516,12 @@
 	        return
 	      }
 	    }
-	    let that = this
-	    that.payIn()
+			this.toPay = true;
 	  }
 
 	  async freeJoin () {
+      let that = this
+
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
 	        this.endHint(3)
@@ -524,8 +534,7 @@
         userCouponId:this.usedUserCouponId,
 	      productType: 1
 	    }).then((res) => {
-	      const that = this
-	      this.$vux.alert.show({
+	      that.$vux.alert.show({
 	        title: '加入成功',
 	        content: '快去灯塔里和大家一起进步吧',
 	        buttonText: '好的',
@@ -574,39 +583,39 @@
 	  }
 
 	  isPay(){
-	      if(this.selectCouponItem.userCouponId && this.selectCouponItem.userCouponId!==0){
-	        //选择其他优惠券
-	        if(this.selectedPrice>0){
-	          console.log("我是付费")
-	          this.usedUserCouponId = this.selectCouponItem.userCouponId;
-	          this.payIn()
-	        }else{
-	          console.log("我是免费免费")
-	          //选择的优惠券金额够大，可以免费加入
-	          this.usedUserCouponId = this.selectCouponItem.userCouponId;
-	          this.freeJoin()
-	        }
-	        
-	      }else if(this.selectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
-	        //选择不使用优惠券 和 无可用优惠券
-	        console.log("我是没有优惠券和不用优惠券")
-	        this.usedUserCouponId = 0;
-	        this.payIn()
-	      }else{
-	        //默认优惠券
-	        if(this.pageInfo.selectCoupon.couponPrice>0){
-	          console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
-	          //有默认优惠券
-	          this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
-	          this.payIn()
-	        }else{
-	          console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
-	          this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
-	          this.freeJoin()
-	        }
-	      }
-	      this.toPay = false;
-	      sessionStorage.removeItem("coupon");
+      if(this.selectCouponItem.userCouponId && this.selectCouponItem.userCouponId!==0){
+        //选择其他优惠券
+        if(this.selectedPrice>0){
+          console.log("我是付费")
+          this.usedUserCouponId = this.selectCouponItem.userCouponId;
+          this.payIn()
+        }else{
+          console.log("我是免费免费")
+          //选择的优惠券金额够大，可以免费加入
+          this.usedUserCouponId = this.selectCouponItem.userCouponId;
+          this.freeJoin()
+        }
+        
+      }else if(this.selectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
+        //选择不使用优惠券 和 无可用优惠券
+        console.log("我是没有优惠券和不用优惠券")
+        this.usedUserCouponId = 0;
+        this.payIn()
+      }else{
+        //默认优惠券
+        if(this.pageInfo.selectCoupon.couponPrice>0){
+          console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
+          //有默认优惠券
+          this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+          this.payIn()
+        }else{
+          console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
+          this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+          this.freeJoin()
+        }
+      }
+      this.toPay = false;
+      sessionStorage.removeItem("coupon");
 	  }
 
 	  toCoupon(){

@@ -313,7 +313,6 @@
           that.freeJoin()
        }
        this.cloHint()
-
     }
 
     cloHint (){
