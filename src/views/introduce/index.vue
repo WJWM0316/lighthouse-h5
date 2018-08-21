@@ -85,6 +85,7 @@
       </div>
     </div>
 
+		<!--第一级支付按钮-->
     <div class="footer" v-show="completelyShow">
       <div class="time-clock" v-if="isJoinAgency">
         <p>开课倒计时</p>
@@ -413,16 +414,13 @@
     }
     
     payOrFree () {
-      let that = this
-
       if(this.isEnd ){
         if(!this.isEndSock){
           this.endHint(2)
           return
         }
       }
-      
-      that.payIn()
+      this.toPay = true;
     }
 
     async freeJoin () {
