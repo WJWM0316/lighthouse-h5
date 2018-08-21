@@ -150,7 +150,9 @@
 				}else{
 					this.form.content = res.peopleCourseCardInfo.cardContent?res.peopleCourseCardInfo.cardContent:''
 				}
-				this.images = [...res.peopleCourseCardInfo.cardContentFile]
+				if(res.peopleCourseCardInfo){
+					this.images = [...res.peopleCourseCardInfo.cardContentFile]
+				}
 //				console.log(this.taskContent,"我是图片的路劲、。。。。。")
 			}).catch(res=>{
 				console.log(res,"报错信息");
@@ -269,7 +271,7 @@
 		 */
 		readyPublish() {
 			let New_images = this.images;
-			if(this.taskContent.peopleCourseCardInfo.cardContentFile){
+			if(this.taskContent.peopleCourseCardInfo && this.taskContent.peopleCourseCardInfo.cardContentFile){
 				for(let i=0;i<this.taskContent.peopleCourseCardInfo.cardContentFile.length;i++){
 					for(let j=0;j<New_images.length;j++){
 						if(New_images[j].fileUrl == this.taskContent.peopleCourseCardInfo.cardContentFile[i].fileUrl){
@@ -316,7 +318,9 @@
 					if(this.images.length>0){
 						fileId = this.images.map(item => item.fileId)
 						type = 3;
-						if(this.form.content){
+//						console.log(this.form.content,this.form.content.length,"我是输入的文字。")
+						this.form.content = this.form.content.trim();
+						if(this.form.content.length > 0){
 							//如果上传了文字和图片
 							params = {
 								courseId: parseInt(this.$route.query.courseId),
