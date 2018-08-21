@@ -461,3 +461,11 @@ export const getCourseCardCommentListApi = (data) => {
     type:'get'
   })
 }
+
+//删除评论接口
+export const delCourseCardCommentApi = (data) => {
+  return request({
+    url: `/wap/courseCard/delCourseCardComment/${data}`,
+    type:'delete'
+  })
+}
