@@ -543,6 +543,7 @@
 	        content: '快去灯塔里和大家一起进步吧',
 	        buttonText: '好的',
 	        onHide () {
+	        	console.log(111)
 	      		that.pageInit()
 	        }
 	      })
@@ -570,20 +571,13 @@
 	      } else {
 	        this.onBridgeReady(params)
 	      }
-	      this.pageInit()
+	      //this.pageInit()
 	    }
 	  }
 
 	  // 付费成功后
 	  pageInit(){
-	  	if (this.isJoinAgency) {
-	  	  if(this.lessonData.isCourse === 3){
-	  	    this.$router.replace(`/introduce2/${this.communityId}/community`)
-	  	  }else {
-	  	    this.$router.replace(`/introduce/${this.communityId}/community`)
-	  	  }
-	  	  return
-	  	}
+	  	this.$router.go(0)
 	  }
 
 	  isPay(){
