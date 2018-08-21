@@ -385,22 +385,6 @@
         return
       }
       that.openHint()
-      /*this.$vux.confirm.show({
-        title: '加入须知',
-         content: `该课程已经全部更新完毕了！ \n 加入后你获得以下内容： \n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；\n  2、和成员们一起交流学习； \n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
-         confirmText: '马上加入',
-         cancelText: '我再想想',
-         onConfirm: function (res) {
-          that.isEndSock = true
-           if(type == 1){
-              that.freeIn()
-           }else if(type == 2) {
-              that.payOrFree()
-           }else {
-              that.freeJoin()
-           }
-         },
-      })*/
     }
 
 
@@ -415,6 +399,7 @@
       let that = this
       that.payIn()
     }
+
     async freeJoin () {
       let that = this
       if(this.isEnd ){
@@ -435,7 +420,7 @@
           content: '快去灯塔里和大家一起进步吧',
           buttonText: '好的',
           onHide () {
-            _this.pageInit().then(() => {})
+            _this.pageInit()
           }
         })
       }).catch((e) => {
@@ -613,7 +598,7 @@
       const { communityId } = this.$route.params
       const { saleId: applyId } = this.$route.query
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
-      let Selectcoupon=sessionStorage.getItem("coupon");
+      let Selectcoupon = sessionStorage.getItem("coupon");
 
       this.qrSrc = res.sellImg
       this.pageInfo = res

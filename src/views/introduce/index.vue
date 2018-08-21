@@ -461,6 +461,7 @@
         this.pageInit()
       }
     }
+
     onBridgeReady (params) {
       let self = this
       /*eslint-disable*/
@@ -502,6 +503,7 @@
         }
       )
     }
+    
     async created () {
     	console.log(location,'我是页面路径')
       wxUtil.reloadPage()
@@ -509,7 +511,7 @@
         this.completelyShow = false
       }
       
-      const { code='' } = this.$route.query
+      const { code = '' } = this.$route.query
       const { communityId } = this.$route.params
 
       if (code) {
