@@ -91,7 +91,6 @@
         <p>开课倒计时</p>
         <p>{{pageInfo.duration}}</p>
       </div>
-      <p v-else-if="isEnd">灯塔已关闭，停止报名</p>
       <p v-else-if="pageInfo.communityStatus === 2">灯塔已下线，停止报名</p>
       <p v-else-if="pageInfo.remainingJoinNum <= 0">已满员，停止报名</p>
       <div class="btn-box" v-else>
@@ -459,16 +458,17 @@
      * 点击卡片
      */
     handleTapCard (item) {
+      let url = ''
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
+        url = `/introduce/${item.communityId}?reload=true`
       	this.completelyShow = true;
-        this.$router.push(`/introduce/${item.communityId}?reload=true`)
+        this.$router.push(url)
       }
     }
 
     async payIn () {
-
       const params = await payApi({
         productId: this.pageInfo.communityId,
         productType: 1,
@@ -678,16 +678,6 @@
     }
 
     mounted () {
-//  	var aImg = document.getElementsByClassName("h5-code")[0];
-//  	console.log(aImg,"我是捕获到的富文本图片")
-//  	this.$refs['h5Code'].getElementsByTagName('img').forEach((item)=>{
-//  		item.addEventListener("click",()=>{
-//	    		alert("我是富文本里的图片")
-//	    	})
-//  	})
-      // this.$refs['body'].addEventListener('touchmove', e => {
-      //   e.stopPropagation()
-      // })
     }
     
     beforeRouteLeave(to,from,next){

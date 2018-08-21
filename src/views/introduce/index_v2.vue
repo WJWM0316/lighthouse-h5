@@ -446,13 +446,11 @@
      * 点击卡片
      */
     handleTapCard (item) {
-
       let url = ''
       if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
         this.$router.push(`/introduce/${item.communityId}/community`)
       } else { // 未入社跳到未入社页面
-        // 测试
-        url = `/introduce2/${item.communityId}`
+        url = `/introduce2/${item.communityId}?reload=true`
       	this.completelyShow=true;
         this.$router.push(url)
       }
@@ -646,9 +644,6 @@
     }
 
     mounted () {
-      // this.$refs['body'].addEventListener('touchmove', e => {
-      //   e.stopPropagation()
-      // })
     }
 
     toLesson (id) {
