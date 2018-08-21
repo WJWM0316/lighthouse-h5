@@ -172,6 +172,48 @@
 			</div>
 		</template>
 		<actionsheet v-model="addActionsConfig.show" :menus="isExcellentCard?addActionsConfig.menus2:addActionsConfig.menus" show-cancel @on-click-menu="handleAddActoinItem" />
+
+		<hint-msg 
+		  :isHintShow = isHintShow 
+		  :msg = hintData
+		  :type = 2
+		  @cloHint = cloHint
+		  @hintSucFuc = hintSucFuc
+		></hint-msg>
+
+		<!--支付弹窗-->
+		<div class="pay_window" v-if="toPay" @click="closePya">
+			<div class="pay_box" @click.stop="showPayWindow">
+				<h3>{{pageInfo.title}}</h3>
+				<div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
+				<div class="price">
+					<span>社区价格</span>
+					<span>¥ {{pageInfo.joinPrice}}</span>
+				</div>
+				<div class="coupon_price" @click.stop="toCoupon">
+					<span>优惠券</span>
+					<div class="coupon_price_right">
+						<span v-if="selectCouponItem.userCouponId && selectCouponItem.userCouponId!==0">-¥ {{selectCouponItem.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:selectCouponItem.coupon.discount}}</span>
+						<span v-else-if=" pageInfo.selectCoupon!==null && selectCouponItem.userCouponId===0 ">不使用优惠券</span>
+						<span v-else-if=" pageInfo.selectCoupon===null ">无可用优惠券</span>
+						<span v-else>-¥ {{pageInfo.selectCoupon.userCoupon.coupon.discount>pageInfo.joinPrice?pageInfo.joinPrice:pageInfo.selectCoupon.userCoupon.coupon.discount}} </span>
+						<div class="more_coupon"></div>
+					</div>
+				</div>
+				<div class="payment">
+					<div class="payment_num">
+						实付：<span>¥</span>
+						<!--选择其他优惠券-->
+						<span v-if="selectCouponItem.userCouponId && selectCouponItem.userCouponId!==0">{{selectedPrice}}</span>
+						<!--不使用优惠券和无优惠券-->
+						<span v-else-if=" pageInfo.selectCoupon===null || selectCouponItem.userCouponId===0 ">{{pageInfo.joinPrice}}</span>
+						<!--使用默认优惠券-->
+						<span v-else>{{pageInfo.selectCoupon.couponPrice}}</span>
+					</div>
+					<div class="payment_btn" @click.stop="isPay">立即支付</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -179,6 +221,7 @@
 	import Vue from 'vue'
   import Component from 'vue-class-component'
 	import lessondynamicItem from '@/components/lessondynamicItem/lessondynamicItem'
+  import hintMsg from '@/components/hintMsg/hintMsg'
   import audioBox from '@/components/media/music'
   import WechatMixin from '@/mixins/wechat'
   import { Actionsheet } from 'vux'
@@ -188,6 +231,7 @@
     name: 'Lesson',
     components: {
       lessondynamicItem,
+      hintMsg,
       audioBox,
       Actionsheet
     },
@@ -275,8 +319,28 @@
   		
   	}
 
+  	usedUserCouponId = 0    //支付时使用的优惠券id
+  	selectCouponItem = {}   //当前选择的优惠券信息
+  	selectedPrice = ''    //选择其他优惠券后的价格
+  	toPay = false     //是否调起支付窗口
+
+  	isHintShow = false   //弹窗
+  	hintData = {
+  	  title: '加入须知',
+  	  buttonText: '马上加入',
+  	  cancelText: '我再想想',
+  	  content: [
+  	    '该课程已经全部更新完毕了！',
+  	    '加入后你获得以下内容：',
+  	    '1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；',
+  	    '2、和成员们一起交流学习；',
+  	    '3、提问导师或嘉宾，但不一定 能100%得到回答'
+  	  ]
+  	}
+
   	created(){
   		this.trialReading = this.$route.query.isTry
+  		let that = this
   		console.log(this.trialReading,"是否试读。。。。。")
   		let parama = {
   			communityId:this.$route.query.communityId,
@@ -286,10 +350,26 @@
   			pageCount:0
   		}
 
+  		//是否调起支付
+  		let Selectcoupon=sessionStorage.getItem("coupon");
+  		if(Selectcoupon){
+  			this.toPay = true;
+  			let CouponItem = sessionStorage.getItem("coupon");
+  			this.selectCouponItem = JSON.parse(CouponItem);
+  			if(this.selectCouponItem.userCouponId!==0){
+  				let paynum=this.pageInfo.joinPrice-this.selectCouponItem.coupon.discount;
+  				this.selectedPrice = this.pageInfo.joinPrice>this.selectCouponItem.coupon.discount?paynum.toFixed(2):0;
+  			}else{
+  				this.selectedPrice =this.pageInfo.joinPrice
+  			}
+  			console.log(this.selectCouponItem,this.selectedPrice,"我是当前选择的优惠券信息")
+  		}
+
+
+			this.communityId = this.$route.query.communityId
   		Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{
 				//console.log(res,"请求回来的数据")
 				this.lessonData = res[0].couponInfo	//优惠券信息
-  			this.communityId = res[0].communityId	//灯塔id
   			this.communityCourse = res[0].communityCourse //课节详情信息
   			this.countCardInfo = res[0].countCardInfo	//课节个人打卡信息
   			if(this.communityCourse.av.files[0]){		//课节媒体信息
@@ -350,54 +430,13 @@
 	  		console.log("评选成功")
 	  		this.reFresh();
 	  		this.$vux.toast.text('评选成功', 'bottom')
-//	  		this.$emit("reFresh")
 	  	}).catch(res=>{
 	  		this.$vux.toast.text('评选失败，请重试', 'bottom')
 	  		console.log(res,"接口报错")
 	  	})
 		}
 
-	  freeIn () { // 跳转到一个图文消息
-	    if(this.isEnd ){
-	      if(!this.isEndSock){
-	        this.endHint(1)
-	        return
-	      }
-	    }
-
-	    if (!this.isFreeBtn) return
-	    if (this.lessonData.wechatIntroUrl) {
-	      location.href = this.lessonData.wechatIntroUrl
-	    } else {
-	      this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
-	    }
-	  }
 	  
-
-	  // 已结束提示 
-	  endHint(type){
-      let that = this
-	    if(!type){
-	      return
-	    }
-	    
-	    this.$vux.confirm.show({
-	      title: '加入须知',
-	       content: `该课程已经全部更新完毕了！ \n 加入后你获得以下内容： \n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；\n  2、和成员们一起交流学习； \n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
-	       confirmText: '马上加入',
-	       cancelText: '我再想想',
-	       onConfirm: function (res) {
-	        that.isEndSock = true
-	         if(type == 1){
-	            that.freeIn()
-	         }else if(type == 2) {
-	            that.payOrFree()
-	         }else {
-	            that.freeJoin()
-	         }
-	       },
-	     })
-	  }
 	  
 	  //刷新打开列表数据
 	  reFresh(){
@@ -414,6 +453,53 @@
 			})
 		}
 
+
+		hintSucFuc (){
+		  let that = this
+		  that.isEndSock = true
+		   if(type == 1){
+		      that.freeIn()
+		   }else if(type == 2) {
+		      that.payOrFree()
+		   }else {
+		      that.freeJoin()
+		   }
+		}
+
+		cloHint (){
+		  this.isHintShow = false
+		}
+
+		openHint (){
+		  this.isHintShow = true
+		}
+
+	  /*支付。优惠券*/
+	  freeIn () { // 跳转到一个图文消息
+	    if(this.isEnd ){
+	      if(!this.isEndSock){
+	        this.endHint(1)
+	        return
+	      }
+	    }
+
+	    if (!this.isFreeBtn) return
+	    if (this.lessonData.wechatIntroUrl) {
+	      location.href = this.lessonData.wechatIntroUrl
+	    } else {
+	      this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
+	    }
+	  }
+
+	  // 已结束提示 
+	  endHint(type){
+      let that = this
+	    if(!type){
+	      return
+	    }
+  		that.openHint()
+
+	  }
 	  payOrFree () {
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
@@ -426,7 +512,6 @@
 	  }
 
 	  async freeJoin () {
-
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
 	        this.endHint(3)
@@ -436,6 +521,7 @@
 
 	    await freePay({
 	      productId: this.communityId,
+        userCouponId:this.usedUserCouponId,
 	      productType: 1
 	    }).then((res) => {
 	      const that = this
@@ -444,24 +530,22 @@
 	        content: '快去灯塔里和大家一起进步吧',
 	        buttonText: '好的',
 	        onHide () {
-	      		this.pageInit()
+	      		that.pageInit()
 	        }
 	      })
 	    }).catch((e) => {
-	      this.$vux.toast.text(e.message, 'bottom')
+	      that.$vux.toast.text(e.message, 'bottom')
 	    })
 	  }
 
 	  async payIn () {
 	    const params = await payApi({
 	      productId: this.lessonData.communityId,
+        userCouponId: this.usedUserCouponId,
 	      productType: 1
 	    })
 
-	    console.log(params)
 	    const arr = Object.keys(params || {})
-
-
 	    if (arr.length !== 0) {
 	      if (typeof WeixinJSBridge === 'undefined') {
 	        if (document.addEventListener) {
@@ -479,7 +563,6 @@
 
 	  // 付费成功后
 	  pageInit(){
-	  	console.log(1111,this.isJoinAgency)
 	  	if (this.isJoinAgency) {
 	  	  if(this.lessonData.isCourse === 3){
 	  	    this.$router.replace(`/introduce2/${this.communityId}/community`)
@@ -489,6 +572,54 @@
 	  	  return
 	  	}
 	  }
+
+	  isPay(){
+	      if(this.selectCouponItem.userCouponId && this.selectCouponItem.userCouponId!==0){
+	        //选择其他优惠券
+	        if(this.selectedPrice>0){
+	          console.log("我是付费")
+	          this.usedUserCouponId = this.selectCouponItem.userCouponId;
+	          this.payIn()
+	        }else{
+	          console.log("我是免费免费")
+	          //选择的优惠券金额够大，可以免费加入
+	          this.usedUserCouponId = this.selectCouponItem.userCouponId;
+	          this.freeJoin()
+	        }
+	        
+	      }else if(this.selectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
+	        //选择不使用优惠券 和 无可用优惠券
+	        console.log("我是没有优惠券和不用优惠券")
+	        this.usedUserCouponId = 0;
+	        this.payIn()
+	      }else{
+	        //默认优惠券
+	        if(this.pageInfo.selectCoupon.couponPrice>0){
+	          console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
+	          //有默认优惠券
+	          this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+	          this.payIn()
+	        }else{
+	          console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
+	          this.usedUserCouponId = this.pageInfo.selectCoupon.userCoupon.userCouponId;
+	          this.freeJoin()
+	        }
+	      }
+	      this.toPay = false;
+	      sessionStorage.removeItem("coupon");
+	  }
+
+	  toCoupon(){
+	    if(this.selectCouponItem.userCouponId){
+	      this.$router.push({path:'/center/coupon',query:{userCouponId:this.selectCouponItem.userCouponId,communityId:this.pageInfo.communityId}});
+	    }else if(this.selectCouponItem.userCouponId===0 || this.pageInfo.selectCoupon===null){
+	      this.$router.push({path:'/center/coupon',query:{userCouponId:0,communityId:this.pageInfo.communityId}});
+	    }else{
+	      this.$router.push({path:'/center/coupon',query:{userCouponId:this.pageInfo.selectCoupon.userCoupon.userCouponId,communityId:this.pageInfo.communityId}});
+	    }
+	  }
+
+	  /*支付。优惠券*/
 
     onBridgeReady (params) {
       let self = this
@@ -621,7 +752,6 @@
 	    this.videoPlay = false
 	    this.video.play()
   	}
-  	
   	/**
      * 操作事件
      * @param e :{eventType} eventType: 事件名称 itemIndex: 触发对象下标

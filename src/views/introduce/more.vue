@@ -5,8 +5,6 @@
 		</scroll> -->
 
     <scroller lock-x height="100%" @on-scroll-bottom="onScrollBottom" ref="scrollerBottom"  :scroll-bottom-offst="200">
-
-
       <div class="box2">
   			<div class="block more-classmate" v-if="role&&role.length>0">
   				<img class="icon_4" src="../../assets/icon/icon_list_number@3x.png" />
@@ -40,7 +38,7 @@
   			<!--优秀成员-->
   			<div class="block more-classmate excellent" v-if="excellent&&excellent.length>0">
   				<img class="icon_4" src="../../assets/icon/icon_list_gm.png" />
-  				<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="hintMsg" /></p>
+  				<p>优秀成员<img class="exe_ques" src="../../assets/icon/btn_inf_outstanding@3x.png" @click.prevent.stop="openHint" /></p>
   				<ul class="classmateList">
   					<li class="classmatePerson" v-for="item,index in excellent" @click.prevent.stop="goUserDetail(item.userId)" v-if="index<3">
   						<div class="classmate-imgBox" >
@@ -85,7 +83,15 @@
   			</div>
       </div>
     </scroller>
+
+    <hint-msg 
+    	:isHintShow = isHintShow 
+    	:msg = hintData
+    	@cloHint = cloHint
+    ></hint-msg>
 	</div>
+
+	
 </template>
 
 <script>
@@ -93,6 +99,7 @@
 	import Component from 'vue-class-component'
 	import { getAskInfoApi, getCommunityApi,classmatesApi } from '@/api/pages/pageInfo';
 	import Scroll from '@/components/scroller'
+	import hintMsg from '@/components/hintMsg/hintMsg'
 	import ClassmateItem from '@/components/classmateItem/classmateItem';
 	import ListMixin from '@/mixins/list'
 	import { Scroller,LoadMore } from 'vux'
@@ -102,7 +109,8 @@
 	  components: {
 	    ClassmateItem,
 	    Scroller,
-	    LoadMore
+	    LoadMore,
+	    hintMsg
 	  },
 	  mixins: [ListMixin]
 	})
@@ -121,8 +129,18 @@
 
 		onFetching = false
 		isLoad = false
-		created () {
 
+		isHintShow = false
+		hintData = {
+			title: '如何成为优秀学员',
+			buttonText: '我知道了',
+			content: [
+				'1、积极听课，完成每节课的打 卡内容；',
+				'2、如果你的打卡内容写的很棒 的话，就会被导师选为“优秀打卡”；',
+				'3、累计“优秀打卡”个数前三名 的，就能成为优秀学员；']
+		}
+
+		created () {
 			this.girlImg = require('../../assets/icon/icon_girl.png') || ''
 	    this.boyImg = require('../../assets/icon/icon_boy.png') || ''
 	    this.defaultImg = require('../../assets/icon/img_head_default.png') || ''
@@ -146,14 +164,6 @@
 			this.teachOp = !this.teachOp
 		}
 		hintMsg () {
-			this.$vux.alert.show({
-			  title: '如何成为优秀学员',
-			  content: '1、积极听课，完成每节课的打 卡内容； \n 2、如果你的打卡内容写的很棒 的话，就会被导师选为“优秀打 卡”；\n  3、累计“优秀打卡”个数前三名 的，就能成为优秀学员；',
-			  buttonText: '我知道了'
-			})
-		}
-
-		hintMsg2 () {
 			let that = this
 			this.$vux.confirm.show({
 				title: '完善信息',
@@ -195,7 +205,7 @@
 	    		this.excellent = res.excellent
 	    		if(res.myInformation === 0){
 	    			//资料不全
-	    			this.hintMsg2()
+	    			this.hintMsg()
 	    		}
 	    	} else {
 	    		this.classmate = this.classmate.concat(res.peoples || [])
@@ -212,10 +222,8 @@
 	      this.$vux.toast.text(error.message, 'bottom')
 	    }
 	  }
-		
 
   	loadNext () {
-
       const nextPage = this.pagination.page + 1
       //this.pagination.end = false
       this.getMemberList(nextPage, this.pagination.pageSize, this.id)
@@ -249,12 +257,53 @@
       }
 	  }
 
-	}
+	  cloHint (){
+	  	this.isHintShow = false
+	  }
 
+	  openHint (){
+	  	this.isHintShow = true
+	  }
+	}
 </script>
 
 <style lang="less" scoped type="text/less">
 	 @import "../../styles/mixins";
+
+	.hint {
+		width:280px;
+		background:rgba(255,255,255,1);
+		border-radius:8px;
+		padding: 0 25px;
+		box-sizing: border-box;
+		position: absolute;
+		left: 50%;
+		margin-left: -140px;
+		top: 20%;
+		border: 1px solid #cccccc;
+		.hint_title {
+			margin: 33px 0 14px 0;
+			text-align: center;
+		}
+		.content {
+			.cont_blo {
+				font-size: 16px;
+				font-family:PingFangSC-Light;
+				color:rgba(53,64,72,1);
+				line-height: 20px;
+				text-align: left
+			}
+		}
+		.btn {
+			margin-top: 20px;
+			height: 60px;
+			line-height: 60px;
+			text-align: center;
+			font-size: 17px;
+			font-family:PingFangSC-Regular;
+			color:rgba(215,171,112,1);
+		}
+	}
 	.open_blo {
 		width: 335px;
 		height: 40px;
@@ -274,25 +323,25 @@
 		}
 	}
 	.community-more{
-			height: 100%;
-    	box-sizing: border-box;
-    	background: #f8f8f8;
-    	.block {
-    		background: #ffffff;
-    	}
+		height: 100%;
+  	box-sizing: border-box;
+  	background: #f8f8f8;
+  	.block {
+  		background: #ffffff;
+  	}
 		& .label {
-          color: #d7ab70;
-          font-size: 12px;
-          padding: 0 6px;
-          margin-left: 8px;
-          line-height: 18px;
-          border-radius: 50px;
-          border: 0.5px solid #D7AB70;
-          display: inline-block;
-          text-align: center;
-          box-sizing: border-box;
-          font-weight: 300;
-        }
+      color: #d7ab70;
+      font-size: 12px;
+      padding: 0 6px;
+      margin-left: 8px;
+      line-height: 18px;
+      border-radius: 50px;
+      border: 0.5px solid #D7AB70;
+      display: inline-block;
+      text-align: center;
+      box-sizing: border-box;
+      font-weight: 300;
+    }
 		/*人物列表样式*/
 		& .more-parner, & .more-classmate{
 			box-sizing: border-box;
@@ -506,6 +555,5 @@
 
 			}
 		}
-		
 	}
 </style>
