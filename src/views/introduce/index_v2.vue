@@ -401,7 +401,6 @@
       }
 
       that.payIn()
-      this.toPay = true;
     }
 
     async freeJoin () {

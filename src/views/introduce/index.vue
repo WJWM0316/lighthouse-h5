@@ -341,7 +341,7 @@
           return
         }
       }
-      
+
       if (!this.isFreeBtn) return
       if (this.pageInfo.wechatIntroUrl) {
         location.href = this.pageInfo.wechatIntroUrl
@@ -421,8 +421,8 @@
           return
         }
       }
+      
       that.payIn()
-      this.toPay = true;
     }
 
     async freeJoin () {
