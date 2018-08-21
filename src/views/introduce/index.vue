@@ -614,11 +614,10 @@
         }
         return
       }else {
-
         console.log('res.isCourse',res.isCourse)
         //优惠卷进入。判断是否旧的
         if(res.isCourse === 3){
-          this.$router.replace(`/introduce2/${communityId}/community`)
+          this.$router.replace(`/introduce2/${communityId}`)
           return
         }
       }
