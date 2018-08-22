@@ -555,7 +555,7 @@
 	        buttonText: '好的',
 	        onHide () {
 	        	console.log(111)
-	      		that.pageInit()
+	      		that.init()
 	        }
 	      })
 	    }).catch((e) => {
@@ -582,7 +582,7 @@
 	      } else {
 	        this.onBridgeReady(params)
 	      }
-	      //this.pageInit()
+	      this.init()
 	    }
 	  }
 
