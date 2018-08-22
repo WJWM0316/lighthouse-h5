@@ -304,11 +304,15 @@
 		
     created () {
     	let titleBoxShow=true;
+      
+
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
       }
       // wxUtil.reloadPage()
       const showShare = this.$route.query.showShare
+
+
       if (showShare && (showShare.toString() === 'true')) {
         this.showShare = true
       }
@@ -374,6 +378,19 @@
           this.pagination.end = false // 初始化数据，必定不是最后一页
           this.getList({page: 1})
         }
+
+        let isFirst = sessionStorage.getItem("isFirst");
+        if(!isFirst){
+          this.$vux.alert.show({
+            title: '欢迎加入新版课程',
+            content: '课程玩法：完成打卡任务，通关解锁下一节课，快来试试吧~',
+            buttonText: '开始学习',
+            onHide () {
+              sessionStorage.setItem('isFirst',1);
+            }
+          })
+        }
+
       })
     }
    	
