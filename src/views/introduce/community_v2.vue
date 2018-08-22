@@ -379,14 +379,14 @@
           this.getList({page: 1})
         }
 
-        let isFirst = sessionStorage.getItem("isFirst");
+        let isFirst = localStorage.getItem("isFirst");
         if(!isFirst){
           this.$vux.alert.show({
             title: '欢迎加入新版课程',
             content: '课程玩法：完成打卡任务，通关解锁下一节课，快来试试吧~',
             buttonText: '开始学习',
             onHide () {
-              sessionStorage.setItem('isFirst',1);
+              localStorage.setItem('isFirst',1);
             }
           })
         }
