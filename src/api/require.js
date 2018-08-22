@@ -183,7 +183,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   }
   
   if (window.location.host !== 'demo2016.thetiger.com.cn' && window.location.host !== 'www.ziwork.com') {
-    data.TestUid = 3
+//  data.TestUid = 5
   }
   
 
