@@ -231,6 +231,11 @@
   import { Actionsheet } from 'vux'
   import { lessonContentApi, getCourseCardListApi, setExcellentCourseCardApi } from '@/api/pages/pageInfo'
   import {payApi, freePay} from '@/api/pages/pay'
+  Component.registerHooks([
+	  'beforeRouteEnter',
+	  'beforeRouteLeave',
+	  'beforeRouteUpdate' // for vue-router 2.2+
+	])
   @Component({
     name: 'Lesson',
     components: {
@@ -360,6 +365,12 @@
 			this.init(parama)
   	}
   	
+  	//路由进入
+  	beforeRouteEnter(to,from,next){
+//		console.log("111111111111111111111")
+  		next();
+  	}
+  	
   	//初始化函数
   	/*
 		 *lessonContentRes:课节详情接口返回
@@ -386,7 +397,6 @@
 	  			let CouponItem = sessionStorage.getItem("coupon");
 	  			this.selectCouponItem = JSON.parse(CouponItem);
 	  			if(this.selectCouponItem.userCouponId!==0){
-	  				console.log("11111111111111111111111111")
 	  				let paynum=this.lessonData.joinPrice-this.selectCouponItem.coupon.discount;
 	  				this.selectedPrice = this.lessonData.joinPrice>this.selectCouponItem.coupon.discount?paynum.toFixed(2):0;
 	  			}else{
