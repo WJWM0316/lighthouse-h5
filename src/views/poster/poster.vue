@@ -1,7 +1,8 @@
 <template>
 	<div class="wrap">
 		<canvas id="poster" ref="poster" width="750" height="1300"></canvas>
-		<img id="scream"  @load="nextBg" ref="scream" :src="'../../static/poster/' + random + '.png'" crossOrigin="Anonymous">
+		<img id="scream" v-if="window.location.host !== 'demo2016.thetiger.com.cn' || window.location.host !== 'www.ziwork.com'"  @load="nextBg" ref="scream" :src="'../../static/poster/' + random + '.png'" crossOrigin="Anonymous">
+		<img id="scream" v-else  @load="nextBg" ref="scream" :src="'../../beaconweb/static/poster/' + random + '.png'" crossOrigin="Anonymous">
 		<img id="ewema" ref="ewema" src="../../assets/icon/erweima.png">
 		<div class="imgBox">
 			<img class="showImg" :src="path">
