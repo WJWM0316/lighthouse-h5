@@ -1,8 +1,35 @@
 <template>
 	<div class="wrap">
 		<canvas id="poster" ref="poster" width="750" height="1300"></canvas>
-		<img id="scream" v-if="window.location.host !== 'demo2016.thetiger.com.cn' || window.location.host !== 'www.ziwork.com'"  @load="nextBg" ref="scream" :src="'../../static/poster/' + random + '.png'" crossOrigin="Anonymous">
-		<img id="scream" v-else  @load="nextBg" ref="scream" :src="'../../beaconweb/static/poster/' + random + '.png'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/01.png" v-if="random === '01'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/02.png" v-if="random === '02'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/03.png" v-if="random === '03'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/04.png" v-if="random === '04'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/05.png" v-if="random === '05'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/06.png" v-if="random === '06'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/07.png" v-if="random === '07'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/08.png" v-if="random === '08'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/09.png" v-if="random === '09'" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/10.png" v-if="random === 10" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/11.png" v-if="random === 11" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/12.png" v-if="random === 12" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/13.png" v-if="random === 13" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/14.png" v-if="random === 14" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/15.png" v-if="random === 15" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/16.png" v-if="random === 16" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/17.png" v-if="random === 17" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/18.png" v-if="random === 18" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/20.png" v-if="random === 19" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/20.png" v-if="random === 20" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/21.png" v-if="random === 21" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/22.png" v-if="random === 22" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/23.png" v-if="random === 23" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/24.png" v-if="random === 24" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/25.png" v-if="random === 25" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/26.png" v-if="random === 26" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/27.png" v-if="random === 27" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/28.png" v-if="random === 28" crossOrigin="Anonymous">
+		<img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/28.png" v-if="random === 29" crossOrigin="Anonymous">
 		<img id="ewema" ref="ewema" src="../../assets/icon/erweima.png">
 		<div class="imgBox">
 			<img class="showImg" :src="path">
