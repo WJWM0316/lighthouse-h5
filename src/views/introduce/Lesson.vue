@@ -140,7 +140,7 @@
 				<div v-if="curPeopleInfo.roleId!==1 && curPeopleInfo.roleId!==2 && trialReading === '0'">
 					<div class="Lesson-footer" v-if="isPunch === 0">
 						<div class="toPunch" @click.stop="toPunch">
-							去打卡
+							打卡做任务，解锁下一节课
 						</div>
 					</div>
 					<div class="Lesson-footer" v-else>
@@ -819,6 +819,16 @@
           break
       }
     }
+    
+    beforeRouteEnter(to,from,next){
+//  	to.meta.keepAlive = false;
+    	next();
+    }
+    
+    beforeRouteLeave(to,from,next){
+    	next()
+    }
+    
   }
 </script>
 

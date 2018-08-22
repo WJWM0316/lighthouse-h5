@@ -76,6 +76,7 @@
 
 	export default class PunchEditing extends Vue {
 		showTaskWindow = false
+		publishSuccess = false //是否发布成功
 		// 文本长度
 		lengths = {
 			textMax: 1000, // 文本最大字数
@@ -379,12 +380,12 @@
 				this.$vux.toast.text('发布成功', 'bottom')
 
 				if(this.sendOK) {
-					// let path=`/introduce/${sessionStorage.getItem("nowCommunity")}/community`;
-					// this.$router.replace(path);
 					sessionStorage.setItem("isNewLoad", true);
-					sessionStorage.setItem("scrollTop", 0);
+//					sessionStorage.setItem("scrollTop", 0);
+					this.publishSuccess = true
 					this.$router.go(-1)
 				} else {
+					this.publishSuccess = true
 					this.$router.go(-1)
 				}
 				// this.$router.go(-1)
@@ -477,12 +478,16 @@
 		
 		//页面返回确认弹窗
 		beforeRouteLeave(to,from,next){
-			this.$vux.confirm.show({
-				content: '确认离开打卡编辑？',
-				onConfirm() {
-					next();
-				}
-			})
+			if(this.publishSuccess){
+				next();
+			}else{
+				this.$vux.confirm.show({
+					content: '确认离开打卡编辑？',
+					onConfirm() {
+						next();
+					}
+				})
+			}
 		}
 	}
 </script>
