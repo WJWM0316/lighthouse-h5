@@ -366,7 +366,7 @@
 		 *lessonContentRes:课节详情接口返回
 		 * CourseCardListRes:打卡列表接口返回
 		 */
-  	async init(parama){
+  	async init(){
 
 			let that = this
   		let parama = {
