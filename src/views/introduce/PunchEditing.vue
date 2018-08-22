@@ -60,6 +60,10 @@
 	import { setCourseCardContentApi } from '@/api/pages/content'
 	import { getEditCourseCardDetailApi } from '@/api/pages/pageInfo.js'
 	import { wechatUploadFileApi } from '@/api/common'
+	Component.registerHooks([
+	  'beforeRouteEnter',
+	  'beforeRouteLeave'
+	])
 
 	@Component({
 		name: 'publish-content',
@@ -128,7 +132,23 @@
 
 			return type
 		}
-
+		
+		//预览普通图片
+	  previewImage (img) {
+	    const files = this.taskContent.courseCardFile
+	    let urls = []
+	    files.forEach((item) => {
+	      urls.push(item.pictureUrl)
+	    })
+	    let parma={
+	    	eventType: 'previewImage',
+				urls,
+				img
+			}
+			console.log(img,"我是图片路径信息")
+  		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
+	  }
+		
 		/**
 		 * 是否可点击发布按钮
 		 */
@@ -453,6 +473,16 @@
 		}
 		closeTask(){
 			this.showTaskWindow = false;
+		}
+		
+		//页面返回确认弹窗
+		beforeRouteLeave(to,from,next){
+			this.$vux.confirm.show({
+				content: '确认离开打卡编辑？',
+				onConfirm() {
+					next();
+				}
+			})
 		}
 	}
 </script>

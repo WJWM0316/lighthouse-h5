@@ -231,6 +231,11 @@
   import { Actionsheet } from 'vux'
   import { lessonContentApi, getCourseCardListApi, setExcellentCourseCardApi } from '@/api/pages/pageInfo'
   import {payApi, freePay} from '@/api/pages/pay'
+  Component.registerHooks([
+	  'beforeRouteEnter',
+	  'beforeRouteLeave',
+	  'beforeRouteUpdate' // for vue-router 2.2+
+	])
   @Component({
     name: 'Lesson',
     components: {
@@ -346,9 +351,14 @@
   	created(){
   		this.trialReading = this.$route.query.isTry
   		console.log(this.trialReading,"是否试读。。。。。")
-  		
 			//初始化
 			this.init()
+  	}
+
+  	
+  	//路由进入
+  	beforeRouteEnter(to,from,next){
+  		next();
   	}
   	
   	//初始化函数
@@ -356,9 +366,9 @@
 		 *lessonContentRes:课节详情接口返回
 		 * CourseCardListRes:打卡列表接口返回
 		 */
-		 
-  	async init(){
-  		let that = this
+  	async init(parama){
+
+			let that = this
   		let parama = {
   			communityId:this.$route.query.communityId,
   			courseId:this.$route.query.id,
@@ -368,7 +378,6 @@
   		}
 
 			this.communityId = this.$route.query.communityId
-  		console.log(parama)
   		try{
   			const [lessonContentRes,CourseCardListRes] = await Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)])
   			this.lessonData = lessonContentRes.couponInfo	//优惠券信息
