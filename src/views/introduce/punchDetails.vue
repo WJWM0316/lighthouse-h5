@@ -433,10 +433,12 @@
     	getCourseCardCommentListApi(data).then(res=>{
     		if(res.hotComments){
     			this.hotCommentNum = res.hotComments.length
-    			this.commentList = [...res.hotComments,...res.comments]
-    		}else{
-    			this.commentList = [...res.comments]
+    			this.commentList = [...res.hotComments]
     		}
+    		if(res.comments){
+    			this.commentList.push(...res.comments)
+    		}
+    		
     		
     	}).catch(res=>{
     		console.log(res,"报错信息")
