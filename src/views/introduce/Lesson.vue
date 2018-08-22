@@ -345,8 +345,20 @@
 
   	created(){
   		this.trialReading = this.$route.query.isTry
-  		let that = this
   		console.log(this.trialReading,"是否试读。。。。。")
+  		
+			//初始化
+			this.init()
+  	}
+  	
+  	//初始化函数
+  	/*
+		 *lessonContentRes:课节详情接口返回
+		 * CourseCardListRes:打卡列表接口返回
+		 */
+		 
+  	async init(){
+  		let that = this
   		let parama = {
   			communityId:this.$route.query.communityId,
   			courseId:this.$route.query.id,
@@ -356,16 +368,7 @@
   		}
 
 			this.communityId = this.$route.query.communityId
-			//初始化
-			this.init(parama)
-  	}
-  	
-  	//初始化函数
-  	/*
-		 *lessonContentRes:课节详情接口返回
-		 * CourseCardListRes:打卡列表接口返回
-		 */
-  	async init(parama){
+  		console.log(parama)
   		try{
   			const [lessonContentRes,CourseCardListRes] = await Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)])
   			this.lessonData = lessonContentRes.couponInfo	//优惠券信息
@@ -386,7 +389,6 @@
 	  			let CouponItem = sessionStorage.getItem("coupon");
 	  			this.selectCouponItem = JSON.parse(CouponItem);
 	  			if(this.selectCouponItem.userCouponId!==0){
-	  				console.log("11111111111111111111111111")
 	  				let paynum=this.lessonData.joinPrice-this.selectCouponItem.coupon.discount;
 	  				this.selectedPrice = this.lessonData.joinPrice>this.selectCouponItem.coupon.discount?paynum.toFixed(2):0;
 	  			}else{
@@ -456,8 +458,9 @@
 	  
 	  //刷新打开列表数据
 	  reFresh(){
+	  	console.log(this.communityId,this.$route.query.communityId)
 			let parama = {
-  			communityId:this.$route.query.communityId,
+  			communityId: this.communityId,
   			courseId:this.$route.query.id,
   			type:0,
   			page:0,
