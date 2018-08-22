@@ -182,10 +182,10 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
     globalLoading = data.globalLoadingoading
   }
   
-
-//data.TestUid = 5
-
-
+  if (window.location.host !== 'demo2016.thetiger.com.cn' && window.location.host !== 'www.ziwork.com') {
+    data.TestUid = 3
+  }
+  
 
   // showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data}} : {...data}

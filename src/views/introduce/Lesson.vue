@@ -350,8 +350,25 @@
 
   	created(){
   		this.trialReading = this.$route.query.isTry
-  		let that = this
   		console.log(this.trialReading,"是否试读。。。。。")
+			//初始化
+			this.init()
+  	}
+
+  	
+  	//路由进入
+  	beforeRouteEnter(to,from,next){
+  		next();
+  	}
+  	
+  	//初始化函数
+  	/*
+		 *lessonContentRes:课节详情接口返回
+		 * CourseCardListRes:打卡列表接口返回
+		 */
+  	async init(){
+
+			let that = this
   		let parama = {
   			communityId:this.$route.query.communityId,
   			courseId:this.$route.query.id,
@@ -361,22 +378,6 @@
   		}
 
 			this.communityId = this.$route.query.communityId
-			//初始化
-			this.init(parama)
-  	}
-  	
-  	//路由进入
-  	beforeRouteEnter(to,from,next){
-//		console.log("111111111111111111111")
-  		next();
-  	}
-  	
-  	//初始化函数
-  	/*
-		 *lessonContentRes:课节详情接口返回
-		 * CourseCardListRes:打卡列表接口返回
-		 */
-  	async init(parama){
   		try{
   			const [lessonContentRes,CourseCardListRes] = await Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)])
   			this.lessonData = lessonContentRes.couponInfo	//优惠券信息
@@ -466,8 +467,9 @@
 	  
 	  //刷新打开列表数据
 	  reFresh(){
+	  	console.log(this.communityId,this.$route.query.communityId)
 			let parama = {
-  			communityId:this.$route.query.communityId,
+  			communityId: this.communityId,
   			courseId:this.$route.query.id,
   			type:0,
   			page:0,
@@ -565,7 +567,7 @@
 	        buttonText: '好的',
 	        onHide () {
 	        	console.log(111)
-	      		that.pageInit()
+	      		that.init()
 	        }
 	      })
 	    }).catch((e) => {
@@ -592,7 +594,7 @@
 	      } else {
 	        this.onBridgeReady(params)
 	      }
-	      //this.pageInit()
+	      this.init()
 	    }
 	  }
 
