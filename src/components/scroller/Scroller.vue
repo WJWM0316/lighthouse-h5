@@ -56,7 +56,7 @@ import PullTo from 'vue-pull-to'
     // 是否开启无限加载
     infiniteScroll: {
       type: Boolean,
-      default: false
+      default: true
     },
 
     // 开启无限加载的时候是否显示底部loading
@@ -116,9 +116,9 @@ export default class Scroller extends Vue {
         // case 'loading':
         //   this.loadingStatus = 'loading'
         //   break
-        // case 'ended':
-        //   this.loadingStatus = 'ended'
-        //   break
+//       case 'ended':
+//         this.loadingStatus = 'ended'
+//         break
         default:
           this.loadingStatus = status
       }
@@ -145,6 +145,7 @@ export default class Scroller extends Vue {
    * 滚动到底部
    */
   handleInfiniteScroll () {
+//	console.log(this.loadingStatus,"55555555555")
     if (this.infiniteScroll && this.loadingStatus === 'default') {
       this.switchLoadingStatus('loading')
       this.$emit('infinite-scroll', this.switchLoadingStatus)
@@ -155,6 +156,7 @@ export default class Scroller extends Vue {
    * 滚动监听
    */
   handleScroll (e) {
+//	alert()handlePullup
     e.preventDefault()
     this.$emit('scroll', e)
   }

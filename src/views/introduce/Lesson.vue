@@ -161,9 +161,13 @@
 			      <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员'}})</span>
 			    </div>
 			    <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
-			            :disabled="!isPayBtn" @click="payOrFree" v-if="lessonData.payJoinNum > 0 && lessonData.joinPrice > 0">
-			      <span>付费加入:¥{{lessonData.joinPrice}}</span>
-			    </div>
+                :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
+          <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
+          <span v-if="pageInfo.selectCoupon">用券省 
+          	<span class="coupon_price" v-if="pageInfo.selectCoupon.userCoupon.coupon.discount<pageInfo.joinPrice">{{pageInfo.selectCoupon.userCoupon.coupon.discount}}</span> 
+          	<span class="coupon_price" v-else>{{pageInfo.joinPrice}}</span> 元
+          </span>
+        </div>
 			    <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
 			            :disabled="!isPayBtn" @click="freeJoin" v-if="lessonData.payJoinNum > 0 && lessonData.joinPrice === 0">
 			      <span>免费加入</span>

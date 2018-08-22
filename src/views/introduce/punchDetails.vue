@@ -1,7 +1,7 @@
 <template>
   <!-- 朋友圈、帖子、问题 详情 -->
   <div class="all-details" :class="{'pdBtom' : isShow}" v-if="courseCardInfo">
-    <scroll @refresh="handleRefresh" @pullup="handlePullup">  
+    <scroll @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="navTabName==='comment'?commentList.length === allTotal:courseCardInfo.favorTotal">  
         <div class="header">
           <lessondynamicItem
 				 :item="courseCardInfo"
@@ -30,7 +30,7 @@
           <template v-if="navTabName === 'comment'">
             <div v-for="item,index in commentList">
               <!-- 热门评论 -->
-              <div class="hot-area" v-if="item.isHot === 1">
+              <div class="hot-area" v-if="item.isHot === 1 && index === 0">
                 <i class="hot-icon"><img src="~ICON/icon_hotcomment@3x.png" alt=""></i>热门评论
               </div>
               <!-- 全部评论 -->
@@ -614,7 +614,10 @@
      * 上拉加载
      */
     handlePullup (loaded) {
-      this.loadNext().then(() => { loaded('done') })
+    	if(this.navTabName==="comment"){
+//  		this.commentList.length === 
+    	}
+//    this.loadNext().then(() => { loaded('done') })
     }
   }
 </script>

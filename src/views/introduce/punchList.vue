@@ -1,23 +1,21 @@
 <template>
 	<!--打卡列表页-->
 	<div class="PunchList">
-		<scroll  :pullupable="false" :refreshable="false" :infinite-scroll="true" @infinite-scroll="handlePullup" :is-none-data="CourseCardList.length===listLength" :show-bottom-loading='true'>
-			<div>
-				<lessondynamicItem
+		<scroll  :pullupable="false" :refreshable="false" @infinite-scroll="handlePullup" :is-none-data="CourseCardList.length===listLength">
+			<lessondynamicItem
 				 v-for="(item, index) in CourseCardList"
 				 :key = "index"
 				 :item="item"
-		         :showDelBtn="true"
-		         :communityId="communityId"
-		         :isFold="true"
-		         :isNeedHot="true"
-		         :hideBorder="false"
-		         :isLesson="true"
-		         :disableContentClick="false"
-		         @disableOperationEvents="operation"
-		      ></lessondynamicItem>
-				</div>
-	    </scroll>
+         :showDelBtn="true"
+         :communityId="communityId"
+         :isFold="true"
+         :isNeedHot="true"
+         :hideBorder="false"
+         :isLesson="true"
+         :disableContentClick="false"
+         @disableOperationEvents="operation"
+      ></lessondynamicItem>
+    </scroll>
 	</div>
 </template>
 
@@ -119,7 +117,9 @@
 		}
 	  
 	  //上拉事件
-	  async handlePullup (loaded) {
+	  handlePullup (loaded) {
+//	  	alert()
+	  	console.log("111111111111111")
 			if(this.CourseCardList.length===this.listLength){
 				loaded('ended')
 				return
@@ -153,6 +153,7 @@
 
 <style lang="less" scoped>
 	.PunchList{
+		height: 100%;
 		.dynamic-item{
 			box-sizing: border-box;
 			padding: 0 20px;

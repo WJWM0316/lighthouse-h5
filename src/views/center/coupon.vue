@@ -24,7 +24,6 @@
 		</div>
 		</scroll>
 
-		<!--<CouponItem></CouponItem>-->
 		<!--没有优惠券-->
 		<div class="empty-part" v-if="couponList.length<=0">
 	      <img :src="emptyImg" class="empty-img"/>
