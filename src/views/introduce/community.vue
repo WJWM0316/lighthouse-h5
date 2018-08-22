@@ -76,7 +76,6 @@
                      :isTeacher="isPlayList"
                      :isTower='true'
                      :isUserExchange="showType"
-                     :masterInfo="masterInfo"
                      :isMaster = isMaster
                      @disableOperationEvents="operation"
                      @opMember="opMember"
@@ -254,9 +253,6 @@
     relevantList = [] //相关推荐
     userSort = 1   //学员排序
     isMaster = false
-    masterInfo = {
-      userId : ''
-    }
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
 				let nowCommunity=sessionStorage.getItem("nowCommunity");
@@ -278,8 +274,6 @@
 			}
 			
 			//是否从列表页进来
-
-			
 			next();
    }
 		
@@ -456,7 +450,6 @@
           }
       }
       this.pageInfo = res
-      this.masterInfo = res.master
       await this.getList({page: 1})
 
       this.$nextTick(() => {

@@ -10,7 +10,7 @@
         <image-item class="image" mode="auto" :src="item.base64Url || item.fileUrl" />
         <button type="button" class="close u-btn" @click="handleDeleteImage(index, item)"><i class="u-icon-delete-image"></i></button>
       </div>
-      <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
+      <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd2"><i class="u-icon-plus"></i></a>
     </div>
 
     <!-- {{serverIds}}<br>
@@ -368,6 +368,15 @@ export default class PublishContent extends Vue {
         this.chooseCustomImages()
       }
     }
+  }
+
+  /**
+   * 点击添加不需要 视频
+   */
+  handleAdd2 () {
+    setTimeout(() => {
+      this.chooseCustomImages()
+    }, 0)
   }
 
   /**

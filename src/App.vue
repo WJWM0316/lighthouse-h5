@@ -208,9 +208,16 @@ export default class App extends Vue {
   goSomeWhere (index) {
     this.$router.push(this.tabList[index].src)
   }
+
   isSelected (src) {
-    return this.$route.path === src
+    let path = this.$route.path
+    //已加入页面
+    if(this.$route.path === '/joined'){
+      path = '/index'
+    }
+    return path === src
   }
+
   closeQrCode (type) {
     this.$store.dispatch('hide_qr', {type})
     location.reload()
@@ -415,7 +422,6 @@ export default class App extends Vue {
 
 
     // 
-    
   }
 
   // 消除红点

@@ -100,7 +100,6 @@
                        :communityId="communityId"
                        :showIdentification="showIdentification"
                        :disableOperationArr="disableOperationArr"
-                       :masterInfo="masterInfo"
                        :isUserExchange="showType"
                        @disableOperationEvents="operation"
                        @opMember="opMember"
@@ -263,9 +262,6 @@
       isIp: false,
       isDown: true,
 
-    }
-    masterInfo = {
-      userId : ''
     }
     isMaster = false
     topList = []  //置顶列表
@@ -437,7 +433,6 @@
           }
       }
       this.pageInfo = res
-      this.masterInfo = res.master
       await this.getList({page: 1})
       this.$nextTick(() => {
       	if(this.$refs['community-title']){

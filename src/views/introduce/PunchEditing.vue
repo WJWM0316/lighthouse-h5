@@ -60,6 +60,10 @@
 	import { setCourseCardContentApi } from '@/api/pages/content'
 	import { getEditCourseCardDetailApi } from '@/api/pages/pageInfo.js'
 	import { wechatUploadFileApi } from '@/api/common'
+	Component.registerHooks([
+	  'beforeRouteEnter',
+	  'beforeRouteLeave'
+	])
 
 	@Component({
 		name: 'publish-content',
@@ -105,6 +109,7 @@
 
 		serverIds = [] // 上传到微信服务器的serverId数组
 		uploadSuccess = true
+		lastImages = []  //上次打卡发布的图片
 
 		// 小程序码弹窗
 		wechatCodeModal = {
@@ -127,7 +132,23 @@
 
 			return type
 		}
-
+		
+		//预览普通图片
+	  previewImage (img) {
+	    const files = this.taskContent.courseCardFile
+	    let urls = []
+	    files.forEach((item) => {
+	      urls.push(item.pictureUrl)
+	    })
+	    let parma={
+	    	eventType: 'previewImage',
+				urls,
+				img
+			}
+			console.log(img,"我是图片路径信息")
+  		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
+	  }
+		
 		/**
 		 * 是否可点击发布按钮
 		 */
@@ -149,7 +170,9 @@
 				}else{
 					this.form.content = res.peopleCourseCardInfo.cardContent?res.peopleCourseCardInfo.cardContent:''
 				}
-//				this.images = [...res.peopleCourseCardInfo.cardContentFile]
+				if(res.peopleCourseCardInfo){
+					this.images = [...res.peopleCourseCardInfo.cardContentFile]
+				}
 //				console.log(this.taskContent,"我是图片的路劲、。。。。。")
 			}).catch(res=>{
 				console.log(res,"报错信息");
@@ -267,21 +290,20 @@
 		 * 准备发布
 		 */
 		readyPublish() {
-//			let New_images = this.images;
-//			if(this.taskContent.peopleCourseCardInfo.cardContent){
-//				console.log(New_images,this.taskContent.peopleCourseCardInfo.cardContent,"555555555555555555555555555555")
-//				for(let i=0;i<this.taskContent.peopleCourseCardInfo.cardContent.length;i++){
-//					for(let j=0;j<New_images.length;j++){
-//						if(New_images[j].fileUrl == this.taskContent.peopleCourseCardInfo.cardContent[i].fileUrl){
-//							console.log('111111111111111111111111')
-//							New_images.splice(j,1);
-//							break;
-//						}
-//					}
-//				}
-//			}
-			const localIds = this.images.map(item => item.fileUrl) || []
-			console.log(localIds,"555555555555555555555555555555")
+			let New_images = this.images;
+			if(this.taskContent.peopleCourseCardInfo && this.taskContent.peopleCourseCardInfo.cardContentFile){
+				for(let i=0;i<this.taskContent.peopleCourseCardInfo.cardContentFile.length;i++){
+					for(let j=0;j<New_images.length;j++){
+						if(New_images[j].fileUrl == this.taskContent.peopleCourseCardInfo.cardContentFile[i].fileUrl){
+							this.lastImages.push(New_images[j]); //上传前，将目前剩余的之前的图片保存
+							New_images.splice(j,1);
+							break;
+						}
+					}
+				}
+			}
+			const localIds = New_images.map(item => item.fileUrl) || []
+//			console.log(localIds,this.lastImages,"555555555555555555555555555555")
 			if(localIds.length > 0) {
 				//有图片，等待图片上传完成后发布
 				this.uploadCustomImages(localIds)
@@ -308,13 +330,17 @@
 				})
 
 				let fileId = []
+				this.images = [...this.lastImages,...this.images]
+//				console.log(this.images,"777777777777777")
 				console.log('准备发布images：', this.images)
 					let type = 0;
 					let params;
 					if(this.images.length>0){
 						fileId = this.images.map(item => item.fileId)
 						type = 3;
-						if(this.form.content){
+//						console.log(this.form.content,this.form.content.length,"我是输入的文字。")
+						this.form.content = this.form.content.trim();
+						if(this.form.content.length > 0){
 							//如果上传了文字和图片
 							params = {
 								courseId: parseInt(this.$route.query.courseId),
@@ -447,6 +473,16 @@
 		}
 		closeTask(){
 			this.showTaskWindow = false;
+		}
+		
+		//页面返回确认弹窗
+		beforeRouteLeave(to,from,next){
+			this.$vux.confirm.show({
+				content: '确认离开打卡编辑？',
+				onConfirm() {
+					next();
+				}
+			})
 		}
 	}
 </script>

@@ -158,11 +158,15 @@
 			    <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
 			            :disabled="!isFreeBtn" v-if="lessonData.freeJoinNum > 0" @click="freeIn">
 			      <span>集Call免费加入</span>
-			      <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员'}})</span>
+			      <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
 			    </div>
 			    <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
 			            :disabled="!isPayBtn" @click="payOrFree" v-if="lessonData.payJoinNum > 0 && lessonData.joinPrice > 0">
-			      <span>付费加入:¥{{lessonData.joinPrice}}</span>
+			      <span>付费加入:¥{{lessonData.joinPrice}}/{{lessonData.cycle}}</span>
+			      <span v-if="lessonData.selectCoupon">用券省 
+			      	<span class="coupon_price" v-if="lessonData.selectCoupon.userCoupon.coupon.discount<lessonData.joinPrice">{{lessonData.selectCoupon.userCoupon.coupon.discount}}</span> 
+			      	<span class="coupon_price" v-else>{{lessonData.joinPrice}}</span> 元
+			      </span>
 			    </div>
 			    <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
 			            :disabled="!isPayBtn" @click="freeJoin" v-if="lessonData.payJoinNum > 0 && lessonData.joinPrice === 0">
@@ -172,6 +176,48 @@
 			</div>
 		</template>
 		<actionsheet v-model="addActionsConfig.show" :menus="isExcellentCard?addActionsConfig.menus2:addActionsConfig.menus" show-cancel @on-click-menu="handleAddActoinItem" />
+
+		<hint-msg 
+		  :isHintShow = isHintShow 
+		  :msg = hintData
+		  :type = 2
+		  @cloHint = cloHint
+		  @hintSucFuc = hintSucFuc
+		></hint-msg>
+
+		<!--支付弹窗-->
+		<div class="pay_window" v-if="toPay" @click="closePya">
+			<div class="pay_box" @click.stop="showPayWindow">
+				<h3>{{lessonData.title}}</h3>
+				<div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
+				<div class="price">
+					<span>社区价格</span>
+					<span>¥ {{lessonData.joinPrice}}</span>
+				</div>
+				<div class="coupon_price" @click.stop="toCoupon">
+					<span>优惠券</span>
+					<div class="coupon_price_right">
+						<span v-if="selectCouponItem.userCouponId && selectCouponItem.userCouponId!==0">-¥ {{selectCouponItem.coupon.discount>lessonData.joinPrice?lessonData.joinPrice:selectCouponItem.coupon.discount}}</span>
+						<span v-else-if=" lessonData.selectCoupon!==null && selectCouponItem.userCouponId===0 ">不使用优惠券</span>
+						<span v-else-if=" lessonData.selectCoupon===null ">无可用优惠券</span>
+						<span v-else>-¥ {{lessonData.selectCoupon.userCoupon.coupon.discount>lessonData.joinPrice?lessonData.joinPrice:lessonData.selectCoupon.userCoupon.coupon.discount}} </span>
+						<div class="more_coupon"></div>
+					</div>
+				</div>
+				<div class="payment">
+					<div class="payment_num">
+						实付：<span>¥</span>
+						<!--选择其他优惠券-->
+						<span v-if="selectCouponItem.userCouponId && selectCouponItem.userCouponId!==0">{{selectedPrice}}</span>
+						<!--不使用优惠券和无优惠券-->
+						<span v-else-if=" lessonData.selectCoupon===null || selectCouponItem.userCouponId===0 ">{{lessonData.joinPrice}}</span>
+						<!--使用默认优惠券-->
+						<span v-else>{{lessonData.selectCoupon.couponPrice}}</span>
+					</div>
+					<div class="payment_btn" @click.stop="isPay">立即支付</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -179,15 +225,22 @@
 	import Vue from 'vue'
   import Component from 'vue-class-component'
 	import lessondynamicItem from '@/components/lessondynamicItem/lessondynamicItem'
+  import hintMsg from '@/components/hintMsg/hintMsg'
   import audioBox from '@/components/media/music'
   import WechatMixin from '@/mixins/wechat'
   import { Actionsheet } from 'vux'
   import { lessonContentApi, getCourseCardListApi, setExcellentCourseCardApi } from '@/api/pages/pageInfo'
   import {payApi, freePay} from '@/api/pages/pay'
+  Component.registerHooks([
+	  'beforeRouteEnter',
+	  'beforeRouteLeave',
+	  'beforeRouteUpdate' // for vue-router 2.2+
+	])
   @Component({
     name: 'Lesson',
     components: {
       lessondynamicItem,
+      hintMsg,
       audioBox,
       Actionsheet
     },
@@ -275,9 +328,47 @@
   		
   	}
 
+  	usedUserCouponId = 0    //支付时使用的优惠券id
+  	selectCouponItem = {}   //当前选择的优惠券信息
+  	selectedPrice = ''    //选择其他优惠券后的价格
+  	toPay = false     //是否调起支付窗口
+
+  	isHintShow = false   //弹窗
+  	hintData = {
+  	  title: '加入须知',
+  	  buttonText: '马上加入',
+  	  cancelText: '我再想想',
+  	  content: [
+  	    '该课程已经全部更新完毕了！',
+  	    '加入后你获得以下内容：',
+  	    '1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；',
+  	    '2、和成员们一起交流学习；',
+  	    '3、提问导师或嘉宾，但不一定 能100%得到回答'
+  	  ]
+  	}
+    endPayType = null //已结束 加入时候的状态
+
   	created(){
   		this.trialReading = this.$route.query.isTry
   		console.log(this.trialReading,"是否试读。。。。。")
+			//初始化
+			this.init()
+  	}
+
+  	
+  	//路由进入
+  	beforeRouteEnter(to,from,next){
+  		next();
+  	}
+  	
+  	//初始化函数
+  	/*
+		 *lessonContentRes:课节详情接口返回
+		 * CourseCardListRes:打卡列表接口返回
+		 */
+  	async init(){
+
+			let that = this
   		let parama = {
   			communityId:this.$route.query.communityId,
   			courseId:this.$route.query.id,
@@ -286,23 +377,39 @@
   			pageCount:0
   		}
 
-  		Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)]).then((res)=>{
-				//console.log(res,"请求回来的数据")
-				this.lessonData = res[0].couponInfo	//优惠券信息
-  			this.communityId = res[0].communityId	//灯塔id
-  			this.communityCourse = res[0].communityCourse //课节详情信息
-  			this.countCardInfo = res[0].countCardInfo	//课节个人打卡信息
-  			if(this.communityCourse.av.files[0]){		//课节媒体信息
-  				this.communityCourse.av.files[0].fileId = String(this.communityCourse.av.files[0].fileId)
+			this.communityId = this.$route.query.communityId
+  		try{
+  			const [lessonContentRes,CourseCardListRes] = await Promise.all([lessonContentApi(this.$route.query.id),getCourseCardListApi(parama)])
+  			this.lessonData = lessonContentRes.couponInfo	//优惠券信息
+  			this.communityCourse = lessonContentRes.communityCourse //课节详情信息
+  			this.countCardInfo = lessonContentRes.countCardInfo	//课节个人打卡信息
+  			if(lessonContentRes.communityCourse.av.files[0]){		//课节媒体信息
+  				this.communityCourse.av.files[0].fileId = String(lessonContentRes.communityCourse.av.files[0].fileId)
   			}
-  			this.curPeopleInfo = res[0].curPeopleInfo	//课节个人信息
-  			this.peopleCourseCardList = res[1].peopleCourseCardList.length>0?res[1].peopleCourseCardList:""
-  			this.excellentPunchList = res[1].excellentPeopleCourseCardList.length>0?res[1].excellentPeopleCourseCardList:""
-  			this.isPunch = res[0].peopleCardInfo.isPunchCard
-  		}).catch((e)=>{
+  			this.isPunch = lessonContentRes.peopleCardInfo.isPunchCard
+  			this.curPeopleInfo = lessonContentRes.curPeopleInfo	//课节个人信息
+  			this.peopleCourseCardList = CourseCardListRes.peopleCourseCardList.length>0?CourseCardListRes.peopleCourseCardList:""//打卡列表
+  			this.excellentPunchList = CourseCardListRes.excellentPeopleCourseCardList.length>0?CourseCardListRes.excellentPeopleCourseCardList:""//优秀打卡列表
+  			
+  			//是否调起支付
+	  		let Selectcoupon=sessionStorage.getItem("coupon");
+	  		if(Selectcoupon){
+	  			this.toPay = true;
+	  			let CouponItem = sessionStorage.getItem("coupon");
+	  			this.selectCouponItem = JSON.parse(CouponItem);
+	  			if(this.selectCouponItem.userCouponId!==0){
+	  				let paynum=this.lessonData.joinPrice-this.selectCouponItem.coupon.discount;
+	  				this.selectedPrice = this.lessonData.joinPrice>this.selectCouponItem.coupon.discount?paynum.toFixed(2):0;
+	  			}else{
+	  				this.selectedPrice =this.lessonData.joinPrice
+	  			}
+	  			console.log(this.selectCouponItem,this.selectedPrice,"我是当前选择的优惠券信息")
+	  		}
+  			
+  		}catch (e){
   			this.$vux.toast.text('课节已经下线，请移步首页', 'bottom')
   			console.log(e,"返回报错")
-  		})
+  		}
   	}
   	
   	mounted () {
@@ -350,13 +457,55 @@
 	  		console.log("评选成功")
 	  		this.reFresh();
 	  		this.$vux.toast.text('评选成功', 'bottom')
-//	  		this.$emit("reFresh")
 	  	}).catch(res=>{
 	  		this.$vux.toast.text('评选失败，请重试', 'bottom')
 	  		console.log(res,"接口报错")
 	  	})
 		}
 
+	  
+	  
+	  //刷新打开列表数据
+	  reFresh(){
+	  	console.log(this.communityId,this.$route.query.communityId)
+			let parama = {
+  			communityId: this.communityId,
+  			courseId:this.$route.query.id,
+  			type:0,
+  			page:0,
+  			pageCount:0
+  		}
+			getCourseCardListApi(parama).then(res=>{
+				this.peopleCourseCardList = res.peopleCourseCardList
+				this.excellentPunchList = res.excellentPeopleCourseCardList
+			})
+		}
+
+
+		hintSucFuc (){
+		  let that = this
+      let type = this.endPayType
+		  that.isEndSock = true
+
+		   if(type == 1){
+		      that.freeIn()
+		   }else if(type == 2) {
+		      that.payOrFree()
+		   }else {
+		      that.freeJoin()
+		   }
+       this.cloHint()
+		}
+
+		cloHint (){
+		  this.isHintShow = false
+		}
+
+		openHint (){
+		  this.isHintShow = true
+		}
+
+	  /*支付。优惠券*/
 	  freeIn () { // 跳转到一个图文消息
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
@@ -372,7 +521,10 @@
 	      this.$vux.toast.text('网络延时，等下再来试试吧~', 'bottom')
 	    }
 	  }
-	  
+
+	  closePya(){
+	  	this.toPay = false
+	  }
 
 	  // 已结束提示 
 	  endHint(type){
@@ -380,40 +532,10 @@
 	    if(!type){
 	      return
 	    }
-	    
-	    this.$vux.confirm.show({
-	      title: '加入须知',
-	       content: `该课程已经全部更新完毕了！ \n 加入后你获得以下内容： \n 1、塔主课程以及小伙伴们沉淀 下来的宝贵内容；\n  2、和成员们一起交流学习； \n 3、提问导师或嘉宾，但不一定 能100%得到回答`,
-	       confirmText: '马上加入',
-	       cancelText: '我再想想',
-	       onConfirm: function (res) {
-	        that.isEndSock = true
-	         if(type == 1){
-	            that.freeIn()
-	         }else if(type == 2) {
-	            that.payOrFree()
-	         }else {
-	            that.freeJoin()
-	         }
-	       },
-	     })
-	  }
-	  
-	  //刷新打开列表数据
-	  reFresh(){
-			let parama = {
-  			communityId:this.$route.query.communityId,
-  			courseId:this.$route.query.id,
-  			type:0,
-  			page:0,
-  			pageCount:0
-  		}
-			getCourseCardListApi(parama).then(res=>{
-				this.peopleCourseCardList = res.peopleCourseCardList
-				this.excellentPunchList = res.excellentPeopleCourseCardList
-			})
-		}
+      this.endPayType = type 
+  		that.openHint()
 
+	  }
 	  payOrFree () {
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
@@ -421,11 +543,11 @@
 	        return
 	      }
 	    }
-	    let that = this
-	    that.payIn()
+			this.toPay = true;
 	  }
 
 	  async freeJoin () {
+      let that = this
 
 	    if(this.isEnd ){
 	      if(!this.isEndSock){
@@ -436,32 +558,31 @@
 
 	    await freePay({
 	      productId: this.communityId,
+        userCouponId:this.usedUserCouponId,
 	      productType: 1
 	    }).then((res) => {
-	      const that = this
-	      this.$vux.alert.show({
+	      that.$vux.alert.show({
 	        title: '加入成功',
 	        content: '快去灯塔里和大家一起进步吧',
 	        buttonText: '好的',
 	        onHide () {
-	      		this.pageInit()
+	        	console.log(111)
+	      		that.init()
 	        }
 	      })
 	    }).catch((e) => {
-	      this.$vux.toast.text(e.message, 'bottom')
+	      that.$vux.toast.text(e.message, 'bottom')
 	    })
 	  }
 
 	  async payIn () {
 	    const params = await payApi({
 	      productId: this.lessonData.communityId,
+        userCouponId: this.usedUserCouponId,
 	      productType: 1
 	    })
 
-	    console.log(params)
 	    const arr = Object.keys(params || {})
-
-
 	    if (arr.length !== 0) {
 	      if (typeof WeixinJSBridge === 'undefined') {
 	        if (document.addEventListener) {
@@ -473,22 +594,62 @@
 	      } else {
 	        this.onBridgeReady(params)
 	      }
-	      this.pageInit()
+	      this.init()
 	    }
 	  }
 
 	  // 付费成功后
 	  pageInit(){
-	  	console.log(1111,this.isJoinAgency)
-	  	if (this.isJoinAgency) {
-	  	  if(this.lessonData.isCourse === 3){
-	  	    this.$router.replace(`/introduce2/${this.communityId}/community`)
-	  	  }else {
-	  	    this.$router.replace(`/introduce/${this.communityId}/community`)
-	  	  }
-	  	  return
-	  	}
+	  	this.$router.go(0)
 	  }
+
+	  isPay(){
+      if(this.selectCouponItem.userCouponId && this.selectCouponItem.userCouponId!==0){
+        //选择其他优惠券
+        if(this.selectedPrice>0){
+          console.log("我是付费")
+          this.usedUserCouponId = this.selectCouponItem.userCouponId;
+          this.payIn()
+        }else{
+          console.log("我是免费免费")
+          //选择的优惠券金额够大，可以免费加入
+          this.usedUserCouponId = this.selectCouponItem.userCouponId;
+          this.freeJoin()
+        }
+        
+      }else if(this.selectCouponItem.userCouponId===0 || this.lessonData.selectCoupon===null){
+        //选择不使用优惠券 和 无可用优惠券
+        console.log("我是没有优惠券和不用优惠券")
+        this.usedUserCouponId = 0;
+        this.payIn()
+      }else{
+        //默认优惠券
+        if(this.lessonData.selectCoupon.couponPrice>0){
+          console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
+          //有默认优惠券
+          this.usedUserCouponId = this.lessonData.selectCoupon.userCoupon.userCouponId;
+          this.payIn()
+        }else{
+          console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
+          this.usedUserCouponId = this.lessonData.selectCoupon.userCoupon.userCouponId;
+          this.freeJoin()
+        }
+      }
+      this.toPay = false;
+      sessionStorage.removeItem("coupon");
+	  }
+
+	  toCoupon(){
+	    if(this.selectCouponItem.userCouponId){
+	      this.$router.push({path:'/center/coupon',query:{userCouponId:this.selectCouponItem.userCouponId,communityId:this.lessonData.communityId}});
+	    }else if(this.selectCouponItem.userCouponId===0 || this.lessonData.selectCoupon===null){
+	      this.$router.push({path:'/center/coupon',query:{userCouponId:0,communityId:this.lessonData.communityId}});
+	    }else{
+	      this.$router.push({path:'/center/coupon',query:{userCouponId:this.lessonData.selectCoupon.userCoupon.userCouponId,communityId:this.lessonData.communityId}});
+	    }
+	  }
+
+	  /*支付。优惠券*/
 
     onBridgeReady (params) {
       let self = this
@@ -621,7 +782,6 @@
 	    this.videoPlay = false
 	    this.video.play()
   	}
-  	
   	/**
      * 操作事件
      * @param e :{eventType} eventType: 事件名称 itemIndex: 触发对象下标
@@ -663,132 +823,256 @@
 </script>
 
 <style lang="less" scoped>
-  .footer {
-    /*flex: 0 0 auto;*/
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 49px;
-    /*position: relative;*/
-    background: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #bcbcbc;
-    z-index: 999;
-    font-size: 15px;
-
-    & p {
-      flex-grow: 1;
-      text-align: center;
-    }
-
-    & .btn-box {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: center;
-      align-items: center;
-      flex-grow: 1;
-      height: 100%;
-    }
-
-    & .to-home {
-      flex: 0 0 auto;
-      width: 52px;
-      height: 100%;
-      border-top: solid 1px #dcdcdc;  /* no */
-      border-right: solid 1px #ededed;  /* no */
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: center;
-      align-items: center;
-      color: #929292;
-      background-color: #ffffff;
-      & > span {
-        font-size: 11px !important;
-      }
-    }
-
-    & .time-clock {
-      position: absolute;
-      right: 0;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      background-color: #ffffff;
-      box-shadow: 0 -1px 0 0 #dcdcdc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #666666;
-      & p:last-of-type {
-        margin-left: 15px;
-        color: #d7ab70;
-      }
-    }
-
-    & div {
-      flex-grow: 1;
-      height: 100%;
-      font-size: 13px;
-      display: flex;
-      flex-flow: column nowrap;
-      align-items: center;
-      justify-content: center;
-      border-style: none;
-      border-radius: 0;
-      border-top: solid 1px #dcdcdc;  /* no */
-      &:after {
-        border-style: none;
-      }
-
-      & span {
-      	/*color: #354048;*/
-        display: block;
-        margin-top: 1px;
-      }
-      & span:first-of-type {
-        margin-top: 0;
-        font-size: 16px;
-				line-height:20px;
-      }
-
-      &.free-btn {
-        color: #d7ab70;
-        background-color: #ffffff;
-				/*bing-增加*/
-				flex-grow:1;
-				//width:150px;
-        padding: 0 20px;
-				& span:nth-of-type(2){
-					font-size:12px;
-					line-height:16px;
+  /*支付弹窗*/
+  .pay_window{
+   	position: absolute;
+   	top: 0;
+   	left: 0;
+   	z-index: 9999;
+   	width: 100%;
+   	height: 100%;
+   	background-color: rgba(0,0,0,0.6);
+   	.pay_box{
+   		animation: 0.4s ease-in-out window-fade-in;
+   		box-sizing: border-box;
+   		width: 375px;
+   		height: 287px;
+   		background:rgba(255,255,255,1);
+			border-radius:10px 10px 0px 0px;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			padding: 40px 25px 0;
+			/*支付灯塔名字*/
+			h3{
+				font-size:18px;
+				color:rgba(53,64,72,1);
+				line-height:22px;
+				margin-bottom: 10px;
+			}
+			/*支付副标题*/
+			.tip{
+				font-size:13px;
+				color:rgba(146,146,146,1);
+				line-height:17px;
+				margin-bottom: 36px;
+			}
+			/*支付原价格*/
+			.price{
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 31px;
+				span{
+					font-size:15px;
+					color:rgba(102,102,102,1);
+					line-height:21px;
 				}
-        & span:nth-of-type(1){
+			}
+			/*支付优惠券处*/
+			.coupon_price{
+				display: flex;
+				justify-content: space-between;
+				>span{
+					font-size:15px;
+					color:rgba(102,102,102,1);
+					line-height:21px;
+				}
+				.coupon_price_right{
+					display: flex;
+					align-items: center;
+					>span{
+						display: inline-block;
+						font-size:15px;
+						color:rgba(250,106,48,1);
+						line-height:21px;
+					}
+					>.more_coupon{
+						display: inline-block;
+						width: 15px;
+						height: 15px;
+						background: url(../../assets/icon/btn_enter@2x.png) no-repeat 100%;
+					}
+				}
+				/*margin-bottom:39px;*/
+			}
+			/*支付最底支付按钮*/
+			.payment{
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				display: flex;
+				justify-content: flex-end;
+				align-items: center;
+				border-top:0.5px solid rgba(220,220,220,1);
+				height:49px;
+				.payment_num{
+					margin-right: 20px;
+					font-size:13px;
+					color:rgba(53,64,72,1);
+					span{
+						color:rgba(250,106,48,1);
+						&:nth-child(1){
+							font-size: 13px;
+						}
+						&:nth-child(2){
+							padding-left: 4px;
+							font-size: 18px;
+						}
+					}
+				}
+				/*支付按钮*/
+				.payment_btn{
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					width:150px;
+					height:49px;
+					background:rgba(255,226,102,1);
+					font-size:16px;
+					color:rgba(53,64,72,1);	
+				}
+			}
+			
+   	}
+  }
+  .footer {
+      /*flex: 0 0 auto;*/
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 49px;
+      /*position: relative;*/
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #bcbcbc;
+      z-index: 999;
+      font-size: 15px;
+
+      & p {
+        flex-grow: 1;
+        text-align: center;
+      }
+
+      & .btn-box {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        height: 100%;
+      }
+
+      & .to-home {
+        flex: 0 0 auto;
+        width: 52px;
+        height: 100%;
+        border-top: solid 1px #dcdcdc;  /* no */
+        border-right: solid 1px #ededed;  /* no */
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        color: #929292;
+        background-color: #ffffff;
+        & > span {
+          font-size: 11px !important;
         }
-				/*bing-增加*/
       }
-      &.pay-btn {
-				width:225px;
-        color: #354048;
-        background-color: #ffe266;
-        & span:not(:first-of-type) {
-          color: rgba(53, 64, 72, 0.8);
-        }
-				flex-grow:1;
-      }
-      &.free-btn-disable {
-        padding: 0 20px;
-      }
-      &.free-btn-disable, &.pay-btn-disable {
-        color: #bcbcbc;
-        & span:nth-of-type(2){
-          font-size:12px;
-          line-height:16px;
+
+      & .time-clock {
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background-color: #ffffff;
+        box-shadow: 0 -1px 0 0 #dcdcdc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666666;
+        & p:last-of-type {
+          margin-left: 15px;
+          color: #d7ab70;
         }
       }
-    }
+
+      & div {
+        flex-grow: 1;
+        height: 100%;
+        font-size: 13px;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+        border-style: none;
+        border-radius: 0;
+        border-top: solid 1px #dcdcdc;  /* no */
+        &:after {
+          border-style: none;
+        }
+
+        & span {
+        	/*color: #354048;*/
+          display: block;
+          margin-top: 1px;
+        }
+        & span:first-of-type {
+          margin-top: 0;
+          font-size: 16px;
+					line-height:20px;
+        }
+
+        &.free-btn {
+          color: #d7ab70;
+          background-color: #ffffff;
+					/*bing-增加*/
+					flex-grow:1;
+					//width:150px;
+          padding: 0 20px;
+					& span:nth-of-type(2){
+						font-size:12px;
+						line-height:16px;
+					}
+          & span:nth-of-type(1){
+          }
+					/*bing-增加*/
+        }
+        &.pay-btn {
+					width:225px;
+          color: #354048;
+          background-color: #ffe266;
+          & span:not(:first-of-type) {
+            color: rgba(53, 64, 72, 0.8);
+          }
+          span:nth-child(2){
+          	.coupon_price{
+            	display: inline-block;
+            	font-size:12px;
+            	line-height:16px;
+            	color:#FB7A37;
+            }
+          }
+					flex-grow:1;
+					& .userCoupon{
+						font-size: 12px; 
+					}
+        }
+        &.free-btn-disable {
+          padding: 0 20px;
+        }
+        &.free-btn-disable, &.pay-btn-disable {
+          color: #bcbcbc;
+          & span:nth-of-type(2){
+            font-size:12px;
+            line-height:16px;
+          }
+        }
+      }
   }
 	.Lesson{
 		padding-bottom: 49px;
@@ -969,19 +1253,9 @@
 					}
 				}
 			}
-			/*.all-punch{
-				>.dynamic-item{
-					background: #000;
-					&:last-child{
-						border-bottom: none;
-					}
-				}
-			}*/
 			/*底部展开按钮*/
 			.Expand-btn{
 				position: relative;
-				/*border-top: 2px solid #FFFFFF;
-				margin-top: -5px;*/
 				padding: 0 20px;
 				box-sizing: border-box;
 				&::before{
@@ -1012,9 +1286,6 @@
 			>.dynamic-item{
 				box-sizing: border-box;
 				padding: 0 20px;
-				/*&:nth-of-type(6){
-					border-bottom: none;
-				}*/
 			}
 		}
 		.hr{
@@ -1026,7 +1297,6 @@
 		
 		/*所有打卡*/
 		.all-punch{
-			/*padding: 0 20px;*/
 			.all-show{
 				margin-bottom: 50px;
 			}
@@ -1135,6 +1405,15 @@
 				z-index: 0;
 			}
 		}
-		
+		@keyframes window-fade-in{
+  	from{
+  		opacity: 0;
+  		transform: translateY(100%);
+  	}
+  	to{
+  		opacity: 1;
+  		transform: translateY(0);
+  	}
+  }
 	}
 </style>

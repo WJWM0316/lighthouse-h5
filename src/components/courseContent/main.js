@@ -93,7 +93,4 @@ export default class dynamicItem extends Vue {
     }*/
     this.$router.push({ path:`/Lesson?id=${id}&isTry=${isTry}&communityId=${this.communityId}` })
   }
-
-
-
 }
