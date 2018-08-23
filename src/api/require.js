@@ -79,6 +79,7 @@ async function process(response) {
     const hashParams = location.hash.substring(1)
     const hostname = location.href.split('?')[0]
     window.location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}&time=${new Date().getTime()}`
+    console.log(data.data)
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 426) { // 没有登录权限,跳去手机号登录
