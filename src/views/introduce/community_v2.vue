@@ -5,7 +5,7 @@
 
     <!-- tab -->
     <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed2': true}" v-if="isCommunityTitleFixed">
-      <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>塔主内容</span></a>
+      <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>课程内容</span></a>
       <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>成员交流</span></a>
     </div>
 
