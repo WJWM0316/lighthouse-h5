@@ -869,7 +869,6 @@
 
         &.h5-code {
           padding: 0 20px;
-          font-size: 20px;
           word-wrap: break-word;
           width: 100%;
           box-sizing: border-box;

@@ -50,10 +50,12 @@
 			getCourseCardListApi(parama).then(res=>{
 				if(this.$route.query.toList === "excellent"){
 					this.CourseCardList = res.excellentPeopleCourseCardList
+					this.listLength = res.excellTotalCount
 				}else{
 					this.CourseCardList =res.peopleCourseCardList
+					this.listLength = res.totalCount
 				}
-				this.listLength = res.totalCount
+				
 			}).catch(res=>{
 				console.log(res,"报错信息。")
 				this.$vux.toast.text('加载失败，请重试', 'bottom')
