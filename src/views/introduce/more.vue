@@ -130,7 +130,7 @@
 		onFetching = false
 		isLoad = false
 
-		isHintShow = false
+		isHintShow = false //弹窗
 		hintData = {
 			title: '如何成为优秀学员',
 			buttonText: '我知道了',
