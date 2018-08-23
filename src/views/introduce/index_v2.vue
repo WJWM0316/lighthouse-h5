@@ -74,8 +74,6 @@
       </div>
     </div>
 
-    <div class="joinHint">加入灯塔，即可解锁更多内容～</div>
-
     <div class="footer" v-show="completelyShow">
       <div class="time-clock" v-if="isJoinAgency">
         <p>开课倒计时</p>
@@ -520,7 +518,7 @@
     }
     async created () {
       // wxUtil.reloadPage()
-      if (this.$route.name === 'introduce-detail') {
+      if (this.$route.name === 'introduce-detail2') {
         this.completelyShow = false
       }
       const { code='' } = this.$route.query
