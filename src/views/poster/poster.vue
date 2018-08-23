@@ -124,8 +124,7 @@
   		Vue.$vux.loading.show({
 	      text: '图片正在生成中'
 	    })
-	    // 29张背景图 随机抽一张
-	    this.random = Math.floor(Math.random()*29)+1
+	    // 29张背景图 随机抽一张   	    this.random = Math.floor(Math.rand om()*29)+1
 	    if (this.random < 10) this.random = `0${this.random}`
   		this.canvas = document.getElementById('poster')
 			this.ctx = this.canvas.getContext("2d")
