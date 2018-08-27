@@ -19,7 +19,7 @@
     </template>
 
     <slot></slot>
-    <bottom-loading :status="loadingStatus" v-if="showBottomLoading && infiniteScroll" />
+    <bottom-loading :status="loadingStatus" v-if="showBottomLoading && infiniteScroll && isShowBottom" />
 
     <template slot="bottom-block" slot-scope="props">
       <div class="bottom-block">
@@ -69,6 +69,12 @@ import PullTo from 'vue-pull-to'
     isNoneData: {
       type: Boolean,
       default: false
+    },
+
+    //是否显示地步数据加载提示
+    isShowBottom: {
+      type: Boolean,
+      default: true
     }
   },
 
