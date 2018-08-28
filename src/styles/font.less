@@ -50,3 +50,15 @@
   font-size: 15px;
   line-height: 15px;
 }
+
+.fontSize (@fontSize: 16) {
+  [data-dpr = "1"] & {
+    font-size: @fontSize * 1 * 1PX;
+  }
+  [data-dpr = "2"] & {
+    font-size: @fontSize * 2 * 1PX;
+  }
+  [data-dpr = "3"] & {
+    font-size: @fontSize * 3 * 1PX;
+  }
+}

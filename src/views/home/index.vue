@@ -506,7 +506,7 @@ export default class HomeIndex extends Vue {
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
-
+@import "../../styles/font";
 
 .p-home-index {
   //padding: 50px 0;
@@ -546,7 +546,7 @@ export default class HomeIndex extends Vue {
   & .nav-bar {
     box-sizing: border-box;
     color: #929292;
-    font-size: 18px;
+    .fontSize(18);
     line-height: 1.22;
     padding: 12px 15px 10px ;
     background-color: #ffffff;
@@ -570,14 +570,14 @@ export default class HomeIndex extends Vue {
       position: relative;
       margin-right: 22px;
       vertical-align: top;
-      font-size: 18px;
+      .fontSize(18);
       color: #929292;
       letter-spacing: 0;
       line-height: 22px;
       &:nth-of-type(3) {
         margin-right: 0;
         float: right;
-        font-size: 15px;
+        .fontSize(15);
         color: #354048;
         //font-family: 'PingFangSC-Light';
         font-weight: 300;
@@ -589,7 +589,7 @@ export default class HomeIndex extends Vue {
     &.picked span:nth-of-type(1) {
       //font-family: PingFangSC-Medium;
       font-weight: 700;
-      font-size: 24px;
+      .fontSize(24);
       position: relative;
       color: #354048;
       letter-spacing: -0.26px;
@@ -621,7 +621,7 @@ export default class HomeIndex extends Vue {
       }
       text {
         //font-family: 'PingFangSC-Regular';
-        font-size: 14px;
+        .fontSize(14);
         color: #354048;
         letter-spacing: 0;
         margin-left: 12px;
@@ -703,7 +703,7 @@ export default class HomeIndex extends Vue {
           white-space: normal;
           width: 132px;
           height: 36px;
-          font-size: 14px;
+          .fontSize(14);
           line-height: 1.29;
           margin: 10px 10px 11px 0; 
           padding-left: 9px;
@@ -729,26 +729,7 @@ export default class HomeIndex extends Vue {
       }
     }
   }
-  /* .banners {
-    margin: 13px 15px 0px;
-    border-radius: 3px;
-    font-size: 0;
-    line-height: 1;
-    overflow: hidden;
 
-    .m-banner-swiper {
-      height: 100%;
-      border-radius: 3px;
-      overflow: hidden;
-
-      .image-item {
-        width: 100%;
-        height: 100%;
-        border-radius: 3px;
-        overflow: hidden;
-      }
-    }
-  } */
 
   .joined-list {
     margin-top: 2px;
@@ -762,7 +743,7 @@ export default class HomeIndex extends Vue {
       margin-bottom: 10px;
       line-height: 30px;
       font-weight: bold;
-      font-size: 20px;
+      .fontSize(20);
     }
 
     .community-item:not(:last-child) {
@@ -776,7 +757,7 @@ export default class HomeIndex extends Vue {
 
   & .module-home {
     & .module-home-title {
-      font-size: 21px;
+      .fontSize(21);
       font-weight: 500;
       color: #bcbcbc;
       padding: 0 15px 15px;
