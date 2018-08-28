@@ -142,14 +142,14 @@
 	    const files = this.taskContent.courseCardFile
 	    let urls = []
 	    files.forEach((item) => {
-	      urls.push(item.pictureUrl)
+	      urls.push(item.fileUrl)
 	    })
 	    let parma={
 	    	eventType: 'previewImage',
 				urls,
 				img
 			}
-			console.log(img,files,"我是图片路径信息")
+//			console.log(img,urls,"我是图片路径信息")
   		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
 	  }
 		
