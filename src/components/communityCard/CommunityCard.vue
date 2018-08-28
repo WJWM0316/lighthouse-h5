@@ -193,7 +193,7 @@ export default class CommunityCard extends Vue {
 <style lang="less" type="text/less" scoped="scoped">
 @import "../../styles/variables";
 @import "../../styles/mixins";
-
+@import "../../styles/font";
 .m-community {
   display: block;
 
@@ -210,16 +210,14 @@ export default class CommunityCard extends Vue {
 
       .master {
         border-radius: 0 0 3px 3px;
-        
         .name {
           .text {
             .setEllipsis();
           }
         }
-
         .career {
           .setEllipsis();
-          font-size: 11px;
+          .fontSize(11);
         }
       }
     }
@@ -319,11 +317,9 @@ export default class CommunityCard extends Vue {
         max-width: 100%;
         padding-right:2px;
         .text {
-          display: inline-block;
-          
-          /*font-size: 27px;*/
-         line-height: 16px;
-         font-size: 12px;
+          display: inline-block; 
+          line-height: 16px;
+          .fontSize(12);
         }
 
         &.round {
@@ -335,7 +331,7 @@ export default class CommunityCard extends Vue {
 
           .text {
             line-height: 22px;
-            font-size: 13px;
+            .fontSize(13);
           }
         }
 
@@ -359,7 +355,7 @@ export default class CommunityCard extends Vue {
       	white-space: nowrap;
         /*margin-bottom: -7px;*/
         line-height: 16px;
-        font-size: 12px;
+        .fontSize(12);
       }
     }
   }
@@ -371,7 +367,7 @@ export default class CommunityCard extends Vue {
   		position: relative;
   		display: inline-block;
   		color: #354048;
-  		font-size: 18px;
+  		.fontSize(18);
   		line-height: 22px;
   		text-align: center;
   		padding: 0 12%;
@@ -386,7 +382,7 @@ export default class CommunityCard extends Vue {
       display: block;
       line-height: 22px;
       font-weight: 600;
-      font-size: 18px;
+      .fontSize(18);
       color: @font-color-default;
     }
 
@@ -397,13 +393,13 @@ export default class CommunityCard extends Vue {
       margin-top: 6px;
       margin-bottom: 23px;
       line-height: 18px;
-      font-size: 14px;
+      .fontSize(14);
       color: #666666;
     }
 
     .bottom {
       display: flex;
-      font-size: 14px;
+      .fontSize(14);
       line-height: 18px;
       color: #929292;
       //font-family: PingFangSC-Light;

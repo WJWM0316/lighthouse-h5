@@ -24,6 +24,13 @@ const routers = [
     component: resolve => require(['@/views/introduce/index'], resolve),
   },
   {
+    // 大咖详情页v2 (入社后查看介绍页)
+    path: '/introduce2/:communityId/detail',
+    name: 'introduce-detail2',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/index_v2'], resolve),
+  },
+  {
     // 更多页
     path: '/introduce/:communityId/more',
     //path: '/more/:sourceId/:type',

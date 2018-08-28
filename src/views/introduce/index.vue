@@ -21,28 +21,13 @@
             <img src="../../assets/icon/bg_share.png" />
           </span>
         </div>
-
-        <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
-        <!--</div>-->
-        <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
-          <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
-        <!--</div>-->
-        <!--<div class="share-btn" v-else @click="showShare = true">-->
-          <!--<img class="share-icon" src="./../../assets/icon/icon_share.png" />-->
-          <!--<span>分享</span>-->
-        <!--</div>-->
       </div>
 
       <div class="module"  style="min-height: 70vh" >
         <div class="module-title">
-        	<!--<div class="hr"></div>-->
           <p>关于灯塔</p>
-          
-          <!--关于塔主标签-->
-          <!--<span class="module-title-tip-line"></span>
-          <div class="module-title-tip">关于塔主</div>-->
         </div>
-        <div ref="h5Code" v-if="pageInfo.intro" class="module-content h5-code" v-html="pageInfo.intro" @click.stop="readPic($event)">
+        <div ref="h5Code" class="module-content h5-code" v-html="pageInfo.intro" @click.stop="readPic($event)">
         </div>
       </div>
       <div class="how-to-play">
@@ -588,7 +573,6 @@
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
       this.qrSrc = res.sellImg
       this.pageInfo = res
-      
       //是否调起支付
       let Selectcoupon=sessionStorage.getItem("coupon");
       if(Selectcoupon){
@@ -924,7 +908,6 @@
 
         &.h5-code {
           padding: 0 20px;
-          /*font-size: 15px;*/
           word-wrap: break-word;
           width: 100%;
           box-sizing: border-box;

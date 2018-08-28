@@ -5,11 +5,12 @@
 
     <!-- tab -->
     <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType, 'fixed2': true}" v-if="isCommunityTitleFixed">
-      <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>塔主内容</span></a>
+      <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>课程内容</span></a>
       <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>成员交流</span></a>
     </div>
 
-    <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end" :isShowBottom="!showType">
+
+    <scroll :pullupable="showType == 1 ? false: true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end" :isShowBottom="showType == 1 ? false: true">
       <!-- header -->
       <div class="header">
       	
@@ -417,31 +418,10 @@
 
     async pageInit () {
       const { communityId } = this.$route.params
-      switch (communityId) {
-        case '64074da38681f864082708b9be959e08':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-          //新增
-      	case 'aa3b415b564bd95b27da2f0e9c986e6a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '25c2ff088da3f757b685a318ab050b5a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-      	case '8fd72f707af6071a2a7d7bc6693a8ace':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '67917ba04abd74c3247245576b1168b0':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-          //新增
-        default:
-          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
-          break
-      }
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = await this.getCommunity(communityId)
-      console.log(res)
+      this.qrSrc = res.sellImg
+      
       //嘉宾身份
       if(res.isAuthor == 0){
           let res2 = await this.getRoleInfo(communityId)

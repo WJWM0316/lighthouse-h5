@@ -18,7 +18,7 @@
   							<span class="classmate-name">{{item.realName}}
   								<span class="label" v-text="item.identityAuthority.title "></span>
   							</span>
-  							<span class="classmate-career" v-if="item.career||item.office">{{item.career}}{{item.office}}</span>
+  							<span class="classmate-career" v-if="item.career">{{item.career}}</span>
   						</div>
   					</li>
   				</ul>
@@ -49,7 +49,7 @@
   						</div>
   						<div class="classmate-master">
   							<span class="classmate-name">{{item.realName}}</span>
-  							<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
+  							<span class="classmate-career" v-if="item.career">{{item.career}} | {{item.office}} </span>
   						</div>
 
   						<div class="exce_msg" v-if="item.signIn">
@@ -72,7 +72,7 @@
   						</div>
   						<div class="classmate-master">
   							<span class="classmate-name">{{item.realName}}<span class="label" v-if="item.identityAuthority.title==='管理员'">管理员</span></span>
-  							<span class="classmate-career" v-if="item.career">{{item.workTimeName}} | {{item.career}} | {{item.office}} </span>
+  							<span class="classmate-career" v-if="item.career">{{item.career}} | {{item.office}} </span>
   						</div>
   					</li>
   				</ul>
@@ -130,7 +130,7 @@
 		onFetching = false
 		isLoad = false
 
-		isHintShow = false
+		isHintShow = false //弹窗
 		hintData = {
 			title: '如何成为优秀学员',
 			buttonText: '我知道了',

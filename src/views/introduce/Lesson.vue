@@ -412,7 +412,7 @@
 	  		}
   			
   		}catch (e){
-  			this.$vux.toast.text('课节已经下线，请移步首页', 'bottom')
+  			this.$vux.toast.text(e.message, 'bottom')
   			console.log(e,"返回报错")
   		}
   	}
