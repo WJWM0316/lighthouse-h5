@@ -138,6 +138,7 @@
 		
 		//预览普通图片
 	  previewImage (img) {
+	  	console.log(img)
 	    const files = this.taskContent.courseCardFile
 	    let urls = []
 	    files.forEach((item) => {
@@ -515,7 +516,7 @@
 				this.$vux.confirm.show({
 					content: '确认离开打卡编辑？',
 					onConfirm() {
-						if(JSON.stringify(that.images) === JSON.stringify(that.lastPunchImg) && that.form.content == that.taskContent.peopleCourseCardInfo.cardContent){
+						if(JSON.stringify(that.images) === JSON.stringify(that.lastPunchImg) && that.form.content === (that.taskContent.peopleCourseCardInfo?that.taskContent.peopleCourseCardInfo.cardContent:"")){
 							console.log("没有修改内容，不保存草稿")
 							localStorage.setItem("sketchImg","")
 							localStorage.setItem("sketchContent","")
