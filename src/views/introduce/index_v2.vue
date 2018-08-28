@@ -89,7 +89,7 @@
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
                 :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
-          <span>付费加入:¥{{pageInfo.joinPrice}}/{{pageInfo.cycle}}</span>
+          <span>付费加入:¥{{pageInfo.joinPrice}}</span>
           <span v-if="pageInfo.selectCoupon">用券省 
           	<span class="coupon_price" v-if="pageInfo.selectCoupon.userCoupon.coupon.discount<pageInfo.joinPrice">{{pageInfo.selectCoupon.userCoupon.coupon.discount}}</span> 
           	<span class="coupon_price" v-else>{{pageInfo.joinPrice}}</span> 元

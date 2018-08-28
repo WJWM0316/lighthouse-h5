@@ -37,7 +37,7 @@
 		communityId = ""
 		CourseCardList=""
 		listLength = ""
-		page = 0 	//当前页码
+		page = 1 	//当前页码
 		created(){
 			this.communityId = this.$route.query.communityId
 			let parama = {
@@ -68,17 +68,6 @@
      */
     operation (e) {
       const {eventType} = e
-
-//    if (this.disableOperationArr && this.disableOperationArr.length > 0) {
-//      if (this.disableOperationArr.indexOf(eventType) > -1) {
-//        this.$emit('disableOperationEvents', {
-//          eventType,
-//          itemIndex,
-//          isDetail: true
-//        })
-//        return
-//      }
-//    }
 
       const item = this.item
 
@@ -135,7 +124,7 @@
 	  			type:this.$route.query.toList==="all"?2:1,
 				}
 				
-				this.getCourseCardListApi(param).then(res=>{
+				getCourseCardListApi(param).then(res=>{
 					if(this.$route.query.toList === "excellent"){
 						this.CourseCardList = [...this.CourseCardList,...res.excellentPeopleCourseCardList]
 					}else{

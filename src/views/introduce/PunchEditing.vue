@@ -93,6 +93,8 @@
 			courseId: '', // 课节id
 			content: '', // 文本内容
 		}
+		
+		lastPunchImg = [] // 暂存上次打卡图片
 
 		// 添加操作
 		addActionsConfig = {
@@ -169,12 +171,14 @@
 				if(res.isShowRandomCardContent === 1){
 					this.form.content = res.randomCardContent
 				}else{
-					this.form.content = res.peopleCourseCardInfo.cardContent?res.peopleCourseCardInfo.cardContent:''
+					this.form.content = (res.peopleCourseCardInfo && res.peopleCourseCardInfo.cardContent)?res.peopleCourseCardInfo.cardContent:''
 				}
-				if(res.peopleCourseCardInfo){
+				if(res.peopleCourseCardInfo && res.peopleCourseCardInfo.cardContentFile){
+					this.lastPunchImg = [...res.peopleCourseCardInfo.cardContentFile]	//	暂存上次打卡图片
 					this.images = [...res.peopleCourseCardInfo.cardContentFile]
 				}
-//				console.log(this.taskContent,"我是图片的路劲、。。。。。")
+//				console.log(this.images,"11",this.taskContent.peopleCourseCardInfo.cardContentFile,this.taskContent.peopleCourseCardInfo.cardContentFile === this.images)
+				this.LoadSketch();
 			}).catch(res=>{
 				console.log(res,"报错信息");
 			})
@@ -182,6 +186,26 @@
 				this.$root.$children[0].audio.pause()
 			}
 			this.form.courseId = this.$route.params.courseId
+		}
+		
+		//读取草稿
+		LoadSketch(){
+			let sketchContent = localStorage.getItem("sketchContent")
+			let sketchImg = localStorage.getItem("sketchImg")
+//			console.log(this.taskContent.peopleCourseCardInfo.cardContentFile,"22222222222",[...JSON.parse(sketchImg)]===[...this.taskContent.peopleCourseCardInfo.cardContentFile],"111111111111111111",[...JSON.parse(sketchImg)])
+			if(sketchContent || sketchImg){
+				//有草稿，请求加载
+				const self = this
+				this.$vux.confirm.show({
+					content: '发现草稿，是否加载？',
+					onConfirm() {
+						self.form.content = sketchContent
+						self.images = JSON.parse(sketchImg)
+					}
+				})
+			}else{
+				console.log("没有草稿")
+			}
 		}
 
 		/**
@@ -291,7 +315,7 @@
 		 * 准备发布
 		 */
 		readyPublish() {
-			let New_images = this.images;
+			let New_images = [...this.images];
 			if(this.taskContent.peopleCourseCardInfo && this.taskContent.peopleCourseCardInfo.cardContentFile){
 				for(let i=0;i<this.taskContent.peopleCourseCardInfo.cardContentFile.length;i++){
 					for(let j=0;j<New_images.length;j++){
@@ -331,13 +355,14 @@
 				})
 
 				let fileId = []
-				this.images = [...this.lastImages,...this.images]
+				const finallyImg = [...this.images]
+//				this.images = [...this.images]
 //				console.log(this.images,"777777777777777")
-				console.log('准备发布images：', this.images)
+				console.log('准备发布images：', finallyImg)
 					let type = 0;
 					let params;
-					if(this.images.length>0){
-						fileId = this.images.map(item => item.fileId)
+					if(finallyImg.length>0){
+						fileId = finallyImg.map(item => item.fileId)
 						type = 3;
 //						console.log(this.form.content,this.form.content.length,"我是输入的文字。")
 						this.form.content = this.form.content.trim();
@@ -411,6 +436,7 @@
 		 */
 		handleDeleteImage(index, image) {
 			this.images.splice(index, 1)
+			console.log(this.images)
 			this.serverIds.splice(index, 1)
 			if(this.images && this.images.length <= 0) {
 				// 如果图片全部删除了，则上传状态变成完成
@@ -478,12 +504,27 @@
 		
 		//页面返回确认弹窗
 		beforeRouteLeave(to,from,next){
+//			console.log(this.form.content === this.taskContent.peopleCourseCardInfo.cardContent,"文字对比",JSON.stringify(this.images) === JSON.stringify(this.lastPunchImg),"图片对比")
+//			console.log(JSON.stringify(this.images),'图片对比',JSON.stringify(this.lastPunchImg))
+			let that = this
 			if(this.publishSuccess){
+				localStorage.setItem("sketchImg","")
+				localStorage.setItem("sketchContent","")
 				next();
 			}else{
 				this.$vux.confirm.show({
 					content: '确认离开打卡编辑？',
 					onConfirm() {
+						if(JSON.stringify(that.images) === JSON.stringify(that.lastPunchImg) && that.form.content == that.taskContent.peopleCourseCardInfo.cardContent){
+							console.log("没有修改内容，不保存草稿")
+							localStorage.setItem("sketchImg","")
+							localStorage.setItem("sketchContent","")
+						}else{
+							//有编辑，保存草稿
+							console.log("有草稿，保存")
+							localStorage.setItem("sketchImg",JSON.stringify(that.images))
+							localStorage.setItem("sketchContent",that.form.content)
+						}
 						next();
 					}
 				})

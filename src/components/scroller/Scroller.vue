@@ -19,7 +19,7 @@
     </template>
 
     <slot></slot>
-    <bottom-loading :status="loadingStatus" v-if="showBottomLoading && infiniteScroll && isShowBottom" />
+    <bottom-loading :status="loadingStatus" v-if="showBottomLoading || infiniteScroll || isShowBottom" />
 
     <template slot="bottom-block" slot-scope="props">
       <div class="bottom-block">

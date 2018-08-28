@@ -162,7 +162,7 @@
 			    </div>
 			    <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
 			            :disabled="!isPayBtn" @click="payOrFree" v-if="lessonData.payJoinNum > 0 && lessonData.joinPrice > 0">
-			      <span>付费加入:¥{{lessonData.joinPrice}}/{{lessonData.cycle}}</span>
+			      <span>付费加入:¥{{lessonData.joinPrice}}</span>
 			      <span v-if="lessonData.selectCoupon">用券省 
 			      	<span class="coupon_price" v-if="lessonData.selectCoupon.userCoupon.coupon.discount<lessonData.joinPrice">{{lessonData.selectCoupon.userCoupon.coupon.discount}}</span> 
 			      	<span class="coupon_price" v-else>{{lessonData.joinPrice}}</span> 元
@@ -383,13 +383,18 @@
   			this.lessonData = lessonContentRes.couponInfo	//优惠券信息
   			this.communityCourse = lessonContentRes.communityCourse //课节详情信息
   			this.countCardInfo = lessonContentRes.countCardInfo	//课节个人打卡信息
-  			if(lessonContentRes.communityCourse.av.files[0]){		//课节媒体信息
+  			if(lessonContentRes.communityCourse.avId){	//课节媒体信息
   				this.communityCourse.av.files[0].fileId = String(lessonContentRes.communityCourse.av.files[0].fileId)
   			}
   			this.isPunch = lessonContentRes.peopleCardInfo.isPunchCard
   			this.curPeopleInfo = lessonContentRes.curPeopleInfo	//课节个人信息
   			this.peopleCourseCardList = CourseCardListRes.peopleCourseCardList.length>0?CourseCardListRes.peopleCourseCardList:""//打卡列表
   			this.excellentPunchList = CourseCardListRes.excellentPeopleCourseCardList.length>0?CourseCardListRes.excellentPeopleCourseCardList:""//优秀打卡列表
+  			
+  			
+  			setTimeout(()=>{
+  				console.log(this.$refs['H5'],"555555555555555555555555555","我是捕获到的")
+  			})
   			
   			//是否调起支付
 	  		let Selectcoupon=sessionStorage.getItem("coupon");
@@ -415,7 +420,7 @@
   	mounted () {
   		this.$nextTick(()=>{
   			setTimeout(()=>{
-  				console.log(this.$refs,"我是捕获到的")
+  				console.log(this.communityCourse,this.$refs['H5'],"我是捕获到的")
   			},500)
   		})
 	  }
