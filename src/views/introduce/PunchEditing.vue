@@ -22,7 +22,7 @@
 			<button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
 		</div>
 		
-		<div class="showTask" @click.stop="showTask" v-if="taskContent.isShowRandomCardContent === 0">本节打卡任务 <img src="../../assets/icon/btn_up_task@3x.png"/></div>
+		<div class="showTask" @click.stop="showTask" v-if="taskContent.isShowRandomCardContent === 0 && taskContent.courseCardTitle && taskContent.courseCardFile">本节打卡任务 <img src="../../assets/icon/btn_up_task@3x.png"/></div>
 		<div class="taskWindow" v-if="showTaskWindow">
 			<div class="taskhead" @click.stop="closeTask">本节打卡任务 <img src="../../assets/icon/btn_packup_task@3x.png"/></div>
 			<div class="taskbody">
@@ -138,17 +138,18 @@
 		
 		//预览普通图片
 	  previewImage (img) {
+	  	console.log(img)
 	    const files = this.taskContent.courseCardFile
 	    let urls = []
 	    files.forEach((item) => {
-	      urls.push(item.pictureUrl)
+	      urls.push(item.fileUrl)
 	    })
 	    let parma={
 	    	eventType: 'previewImage',
 				urls,
 				img
 			}
-			console.log(img,"我是图片路径信息")
+//			console.log(img,urls,"我是图片路径信息")
   		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
 	  }
 		
@@ -515,7 +516,7 @@
 				this.$vux.confirm.show({
 					content: '确认离开打卡编辑？',
 					onConfirm() {
-						if(JSON.stringify(that.images) === JSON.stringify(that.lastPunchImg) && that.form.content == that.taskContent.peopleCourseCardInfo.cardContent){
+						if(JSON.stringify(that.images) === JSON.stringify(that.lastPunchImg) && that.form.content === (that.taskContent.peopleCourseCardInfo?that.taskContent.peopleCourseCardInfo.cardContent:"")){
 							console.log("没有修改内容，不保存草稿")
 							localStorage.setItem("sketchImg","")
 							localStorage.setItem("sketchContent","")
