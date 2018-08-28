@@ -1,7 +1,7 @@
 <template>
   <!-- 朋友圈、帖子、问题 详情 -->
   <div class="all-details" :class="{'pdBtom' : isShow}" v-if="courseCardInfo">
-    <scroll @refresh="handleRefresh" @pullup="handlePullup" :is-none-data="navTabName==='comment'?commentList.length === allTotal:courseCardInfo.favorTotal">  
+    <scroll @refresh="handleRefresh" @pullup="handlePullup" :infinite-scroll="false" :is-none-data="navTabName==='comment'?commentList.length === allTotal:classmateList.length === courseCardInfo.favorTotal" :showBottomLoading="navTabName==='comment'?allTotal !== 0 : classmateList.length !== 0">  
         <div class="header">
           <lessondynamicItem
 				 :item="courseCardInfo"
@@ -14,7 +14,7 @@
          :disableContentClick="false"
          :hideCommentArea="true"
          @disableOperationEvents="operation"
-         @praise="reFlashPraise"
+         @praise="getPraise"
          @showEvaluate='showEvaluate'
       ></lessondynamicItem>
         </div>
@@ -24,7 +24,7 @@
           <div class="fixed-box" ref="ceiling-box">
             <div class="ceiling-box" :class="navTabName">
               <span @click="toggle('comment')">评论({{courseCardInfo.commentTotal}})</span>
-              <span @click="toggle('praise')">点赞({{classmateList.length}})</span>
+              <span @click="toggle('praise')">点赞({{classmateList.length || courseCardInfo.favorTotal}})</span>
             </div>
           </div>
           <template v-if="navTabName === 'comment'">
@@ -157,6 +157,7 @@
     isFavorList = false
     isPlayList = true
     communityId = ''
+    page = 1
     
     // 选为优秀打卡或取消优秀打卡
 		addActionsConfig = {
@@ -242,15 +243,20 @@
           this.jumpCommentDetail(param)
       }
     }
-    //刷新点赞列表数据
-    reFlashPraise(){
+    //获取点赞列表数据
+    getPraise(){
     	let param = {
     		peopleCourseId: this.courseCardInfo.peopleCourseId,
-    		page:1,
+    		page:this.page,
     		pageCount:20
     	}
     	getCourseCardFavorListApi(param).then(res=>{
-    		this.classmateList = res
+    		if(this.page === 1){
+    			this.classmateList = [...res]
+    		}else{
+    			this.classmateList = [...this.classmateList,...res]
+    		}
+//  		loaded('done')
     	})
     }
 
@@ -383,10 +389,14 @@
      **/
     toggle (targetName) {
       if (this.navTabName !== targetName) {
+      	this.page = 1
         this.navTabName = targetName
         if (targetName === 'praise') {
           let modelType = ''
           this.isShow = false
+          if(this.classmateList.length === 0 && this.classmateList.length !== this.courseCardInfo.favorTotal){
+          	this.getPraise()
+          }
           modelType = 'circle'
           switch (this.$route.params.type * 1) {
             case 1:
@@ -427,7 +437,7 @@
     getCourseCardCommentList(){
     	let data = {
     		peopleCourseId: this.courseCardInfo.peopleCourseId, 
-    		page:1,
+    		page:this.page,
     		pageCount:20
     	}
     	getCourseCardCommentListApi(data).then(res=>{
@@ -472,6 +482,7 @@
       courseCardCommentApi(params).then(res=>{
       	this.getCourseCardCommentList()
       	this.allTotal +=1;
+      	this.courseCardInfo.commentTotal +=1
       	this.$vux.toast.text('评论成功', 'bottom')
       }).catch(e => {
         this.$vux.toast.text('评论失败', 'bottom')
@@ -499,44 +510,15 @@
     	console.log(this.$route.query,"dasfadsfasdfasdfasdfasd")
     	const { courseId, peopleId } = this.$route.query
       const res = await getCourseCardInfoApi(courseId,peopleId)
+      
       this.courseCardInfo = res
       this.allTotal = res.commentTotal
       this.getCourseCardCommentList()
-      this.reFlashPraise()
+      
       console.log(this.courseCardInfo,"我是请求回来的数据")
     }
 
     // ------------------------------------------------
-    /**
-     * 朋友圈详情
-     **/
-    getCircleDetailApi (circleId) {
-      return getCircleDetailApi({
-        circleId
-      })
-    }
-    /**
-     * 帖子详情
-     **/
-    getPostDetailApi (circleId) {
-      return getPostDetailApi({
-        circleId
-      })
-    }
-    /**
-     * 问题详情
-     **/
-    getProblemDetailApi (problemId) {
-      return getProblemDetailApi({
-        problemId
-      })
-    }
-    /**
-     * 获取评论列表
-     */
-    getCommentList (params) {
-      return getCommentListApi(params)
-    }
     /**
      * 获取点赞列表
      */
@@ -616,10 +598,24 @@
      * 上拉加载
      */
     handlePullup (loaded) {
+    	this.page += 1
     	if(this.navTabName==="comment"){
-//  		this.commentList.length === 
+    		if(this.commentList.length === this.allTotal){
+    			loaded('done')
+    			return
+    		}
+    		this.page = Math.ceil(this.commentList.length/20) +1 // 向上取整 用于刷新当前page
+    		this.getCourseCardCommentList();
+    		loaded('done')
+    	}else{
+    		if(this.classmateList.length === this.courseCardInfo.favorTotal){
+    			loaded('done')
+    			return
+    		}
+    		this.page = Math.ceil(this.classmateList.length/20) +1 // 向上取整 用于刷新当前page
+    		this.getPraise();
+    		loaded('done')
     	}
-//    this.loadNext().then(() => { loaded('done') })
     }
   }
 </script>
