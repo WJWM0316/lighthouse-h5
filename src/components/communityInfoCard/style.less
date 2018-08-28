@@ -1,5 +1,5 @@
 @import "../../styles/mixins";
-@import "../../styles/font";
+@import "../../styles/dprPx";
 .community-info-card {
   padding: 0 15px 15px;
   border-bottom: solid 1px #ededed; /* no */
@@ -96,8 +96,7 @@
       }
     }
     .right {
-      width: 74px;
-      height: 74px;
+      .imgSize(74, 74);
       flex: 0 0 auto;
       position: relative;
 

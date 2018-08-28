@@ -1,0 +1,33 @@
+.fontSize (@fontSize: 16) {
+  [data-dpr = "1"] & {
+    font-size: @fontSize * 1 * 1PX;
+  }
+  [data-dpr = "2"] & {
+    font-size: @fontSize * 2 * 1PX;
+  }
+  [data-dpr = "3"] & {
+    font-size: @fontSize * 3 * 1PX;
+  }
+  [data-dpr = "4"] & {
+    font-size: @fontSize * 4 * 1PX;
+  }
+}
+
+.imgSize (@width: auto, @height: auto) {
+	[data-dpr = "1"] & {
+    width: @width * 1 * 1PX;
+    height: @height * 1 * 1PX;
+  }
+  [data-dpr = "2"] & {
+    width: @width * 2 * 2PX;
+    height: @height * 2 * 2PX;
+  }
+  [data-dpr = "3"] & {
+    width: @width * 3 * 1PX;
+    height: @height * 3 * 1PX;
+  }
+  [data-dpr = "4"] & {
+    width: @width * 4 * 1PX;
+    height: @height * 4 * 1PX;
+  }
+}

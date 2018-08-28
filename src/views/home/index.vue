@@ -506,7 +506,7 @@ export default class HomeIndex extends Vue {
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
-@import "../../styles/font";
+@import "../../styles/dprPx";
 
 .p-home-index {
   //padding: 50px 0;
