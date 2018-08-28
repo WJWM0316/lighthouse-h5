@@ -210,13 +210,11 @@ export default class CommunityCard extends Vue {
 
       .master {
         border-radius: 0 0 3px 3px;
-        
         .name {
           .text {
             .setEllipsis();
           }
         }
-
         .career {
           .setEllipsis();
           .fontSize(11);
