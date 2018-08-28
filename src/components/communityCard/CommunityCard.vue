@@ -193,7 +193,7 @@ export default class CommunityCard extends Vue {
 <style lang="less" type="text/less" scoped="scoped">
 @import "../../styles/variables";
 @import "../../styles/mixins";
-@import "../../styles/font";
+@import "../../styles/dprPx";
 .m-community {
   display: block;
 

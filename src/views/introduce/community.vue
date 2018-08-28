@@ -945,6 +945,7 @@
 <style lang="less" scoped type="text/less">
   @import "../../styles/variables";
   @import "../../styles/mixins";
+  @import "../../styles/dprPx";
 
   .recommend_list {
     padding-left: 20px;
@@ -964,7 +965,7 @@
 
       }
       .blo_tit {
-        font-size: 16px;
+        .fontSize(16);
         font-family: PingFangSC-Light;
         color: rgba(53,64,72,1);
         line-height: 20px;
@@ -990,7 +991,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    font-size: 14px;
+    .fontSize(14);
     font-family: PingFangSC-Light;
     align-items: center;
     margin: 0 15px 0px 20px;
@@ -1043,7 +1044,7 @@
         height: 32px;
         border-radius: 50px 0 0 50px;
         background-color: rgba(255, 255, 255, .8);
-        font-size: 15px;
+        .fontSize(15);
         line-height: 32px;
         color: #d7ab70;
         display: flex;
@@ -1067,7 +1068,7 @@
         padding-left: 10px;
         min-width: 85px;
         background-color: #ffe266;
-        font-size: 13px;
+        .fontSize(13);
         color: #354048;
         z-index: 99;
       }
@@ -1078,7 +1079,7 @@
         padding-right: 7px;
         background-color: #ffe266;
         width: inherit;
-        font-size: 13px;
+        .fontSize(13);
         color: #354048;
         z-index: 99;
       }
@@ -1107,7 +1108,7 @@
           right: 0;
           top: -20px;
           border-raidus: 40px;
-          font-size:12px;
+          .fontSize(12);
           font-family:PingFangSC-Regular;
           color:rgba(53,64,72,1);
           line-height:18px;
@@ -1130,7 +1131,7 @@
         .u-btn {
           position: relative;
           line-height: 18px;
-          font-size: 12px;
+          .fontSize(12);
           color: @font-color-default;
 
           &:first-child {
@@ -1192,7 +1193,7 @@
           /*padding: 0 10px;*/
           /*background: none;*/
           line-height: 28px;
-          font-size: 13px;
+          .fontSize(13);
           /*color: rgba(255, 255, 255, .8);*/
          	color:#000;
          	background: #FFE266;
@@ -1228,7 +1229,7 @@
         display: block;
         flex: 1 1 auto;
         text-align: center;
-        font-size: 16px;
+        .fontSize(16);
         //font-family: PingFangSC-Medium;
         font-weight: 300;
         &:active {
@@ -1274,7 +1275,7 @@
     }
 
     & .container {
-      font-size: 15px;
+      .fontSize(15);
 
       & .classmate-list {
         margin: 20px 15px 0 15px;
@@ -1287,7 +1288,7 @@
         align-content: center;
         height: 30px;
         color: #929292;
-        font-size: 12px;
+        .fontSize(12);
 
         & .people-count {
           display: flex;
@@ -1296,7 +1297,7 @@
 
           & span {
             padding: 0 14px;
-            font-size: 15px;
+            .fontSize(15);
           }
           & .icon {
             width: 16px;
@@ -1333,7 +1334,7 @@
           justify-content: center;
           align-items: center;
 
-          font-size: 13px;
+          .fontSize(13);
           color: #bcbcbc;
 
           & img {
@@ -1361,7 +1362,7 @@
       flex-flow: column nowrap;
       justify-content: center;
       align-items: center;
-      font-size: 11px;
+      .fontSize(12);
       color: #d7ab70;
 
       & img {
@@ -1386,7 +1387,7 @@
         border-radius: 0;
         height: 50px;
         line-height: 50px;
-        font-size: 16px;
+        .fontSize(16);
         border-style: none;
         //font-family: PingFangSC-Regular;
         color: #354048;
@@ -1404,7 +1405,7 @@
           position: absolute;
           right:  -2px;
           top: 3px;
-          font-size: 11px;
+          .fontSize(12);
           /*background-color: #ff4949;*/
           /*border-radius: 50%;*/
           /*line-height: 1;*/
@@ -1437,7 +1438,7 @@
         height: 50px;
         line-height: 50px;
         color: #666666;
-        font-size: 16px;
+        .fontSize(16);
         border-style: none;
         color: #354048;
         & .desc {
@@ -1453,7 +1454,7 @@
           position: absolute;
           right: -2px;
           top: 3px;
-          font-size: 10px;
+          .fontSize(12);
           /*background-color: #ff4949;*/
           /*border-radius: 50%;*/
           /*line-height: 1;*/
@@ -1509,7 +1510,7 @@
         justify-content: center;
         align-items: center;
         padding: 45px 0;
-        font-size: 15px;
+        .fontSize(15);
         color: #666666;
 
         & .Qr {

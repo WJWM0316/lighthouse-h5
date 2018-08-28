@@ -242,7 +242,7 @@ export default class CommunityCard extends Vue {
 <style lang="less" type="text/less" scoped="scoped">
 @import "../../styles/variables";
 @import "../../styles/mixins";
-
+@import "../../styles/dprPx";
 
 .m-community {
   display: block;
@@ -345,7 +345,7 @@ export default class CommunityCard extends Vue {
         .text {
           display: inline-block;
           line-height: 16px;
-          font-size: 12px;
+          .fontSize(12);
         }
         &.round {
           padding: 0 8px;
@@ -355,7 +355,7 @@ export default class CommunityCard extends Vue {
           color: #354048;
           .text {
             line-height: 22px;
-            font-size: 13px;
+            .fontSize(13);
           }
         }
 
@@ -379,7 +379,7 @@ export default class CommunityCard extends Vue {
       	white-space: nowrap;
         /*margin-bottom: -7px;*/
         line-height: 16px;
-        font-size: 12px;
+        .fontSize(12);
       }
     }
   }
@@ -396,7 +396,7 @@ export default class CommunityCard extends Vue {
       }
     }
     .timeMsg {
-      font-size: 14px;
+      .fontSize(14);
       font-family: PingFangSC-Light;
       color: rgba(146,146,146,1);
       line-height: 18px;
@@ -405,14 +405,14 @@ export default class CommunityCard extends Vue {
       display: block;
       line-height: 20px;
       font-weight: 600;
-      font-size: 18px;
+      .fontSize(18);
       color: #354048;
     }
     .title2{
       display: block;
       line-height: 20px;
       font-weight: 600;
-      font-size: 18px;
+      .fontSize(18);
       color: #354048;
       text-align: center;
       margin-top: -20px;
@@ -424,13 +424,13 @@ export default class CommunityCard extends Vue {
       margin-top: 6px;
       margin-bottom: 20px;
       line-height: 18px;
-      font-size: 12px;
+      .fontSize(12);
       color: #666666;
     }
 
     .bottom {
       display: flex;
-      font-size: 12px;
+      .fontSize(12);
       line-height: 18px;
       color: #929292;
       //font-family: PingFangSC-Light;
@@ -441,15 +441,14 @@ export default class CommunityCard extends Vue {
       margin-bottom: 2px;
       .left {
         flex: 0 0 auto;
-        font-size: 11px;
+        .fontSize(12);
         font-weight: 300;
         .residue {
           height: 15px;
           line-height: 15px;
           .number {
             font-weight: 400;
-
-            font-size: 16px;
+            .fontSize(16);
             color: #d7ab70;
           }
         }

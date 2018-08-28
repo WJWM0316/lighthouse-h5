@@ -678,7 +678,7 @@
 <style lang="less" scoped type="text/less">
   @import "../../styles/variables";
   @import "../../styles/mixins";
-
+  @import "../../styles/dprPx";
   .big-shot-introduce {
     /*min-height: 100%;*/
    	height: 100%;
@@ -708,7 +708,7 @@
         height: 32px;
         border-radius: 50px 0 0 50px;
         background-color: rgba(255, 255, 255, .8);
-        font-size: 15px;
+        .fontSize(15);
         line-height: 32px;
         color: #d7ab70;
         display: flex;
@@ -732,7 +732,7 @@
         padding-left: 10px;
         min-width: 85px;
         background-color: #ffe266;
-        font-size: 13px;
+        .fontSize(13);
         color: #354048;
         z-index: 99;
       }
@@ -743,7 +743,7 @@
         padding-right: 7px;
         background-color: #ffe266;
         width: inherit;
-        font-size: 13px;
+        .fontSize(13);
         color: #354048;
         z-index: 99;
       }
@@ -772,7 +772,7 @@
           right: 0;
           top: -20px;
           border-raidus: 40px;
-          font-size:12px;
+          .fontSize(12);
           font-family:PingFangSC-Regular;
           color:rgba(53,64,72,1);
           line-height:18px;
@@ -795,7 +795,7 @@
         .u-btn {
           position: relative;
           line-height: 18px;
-          font-size: 12px;
+          .fontSize(12);
           color: @font-color-default;
 
           &:first-child {
@@ -852,7 +852,7 @@
 
       .module-title {
         margin: 0 15px;
-        font-size: 18px;
+        .fontSize(18);
         color: #929292;
         font-weight: 600;
         
@@ -862,7 +862,7 @@
         
         .module-title-tip{
         	padding: 0 6px;
-        	font-size: 16px;
+        	.fontSize(16);
         	height: 22.5px;
         	line-height: 22.5px;
         	position: absolute;
@@ -884,7 +884,7 @@
 
         & p {
           display: block;
-					font-size:18px;
+					.fontSize(18);
           padding: 30px 0 15px 20px;
 					line-height:22px;
 					position:relative;
@@ -926,7 +926,7 @@
 
       & .desc {
         color: #bcbcbc;
-        font-size: 13px;
+        .fontSize(13);
         padding: 20px 0;
         text-align: center;
       }
@@ -946,7 +946,7 @@
       align-items: center;
       color: #bcbcbc;
       z-index: 999;
-      font-size: 15px;
+      .fontSize(15);
 
       & p {
         flex-grow: 1;
@@ -1000,7 +1000,7 @@
       & div {
         flex-grow: 1;
         height: 100%;
-        font-size: 13px;
+        .fontSize(13);
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
@@ -1019,7 +1019,7 @@
         }
         & span:first-of-type {
           margin-top: 0;
-          font-size: 16px;
+          .fontSize(16);
 					line-height:20px;
         }
 
@@ -1031,7 +1031,7 @@
 					//width:150px;
           padding: 0 20px;
 					& span:nth-of-type(2){
-						font-size:12px;
+						.fontSize(12);
 						line-height:16px;
 					}
           & span:nth-of-type(1){
@@ -1048,14 +1048,14 @@
           span:nth-child(2){
           	.coupon_price{
             	display: inline-block;
-            	font-size:12px;
+            	.fontSize(12);
             	line-height:16px;
             	color:#FB7A37;
             }
           }
 					flex-grow:1;
 					& .userCoupon{
-						font-size: 12px; 
+						.fontSize(12);
 					}
         }
         &.free-btn-disable {
@@ -1064,7 +1064,7 @@
         &.free-btn-disable, &.pay-btn-disable {
           color: #bcbcbc;
           & span:nth-of-type(2){
-            font-size:12px;
+            .fontSize(12);
             line-height:16px;
           }
         }
@@ -1104,7 +1104,7 @@
         justify-content: center;
         align-items: center;
         padding: 45px 0;
-        font-size: 15px;
+        .fontSize(15);
         color: #666666;
 
         & .Qr {
@@ -1144,14 +1144,14 @@
   			padding: 40px 25px 0;
   			/*支付灯塔名字*/
   			h3{
-  				font-size:18px;
+  				.fontSize(18);
   				color:rgba(53,64,72,1);
   				line-height:22px;
   				margin-bottom: 10px;
   			}
   			/*支付副标题*/
   			.tip{
-  				font-size:13px;
+  				.fontSize(13);
   				color:rgba(146,146,146,1);
   				line-height:17px;
   				margin-bottom: 36px;
@@ -1162,7 +1162,7 @@
   				justify-content: space-between;
   				margin-bottom: 31px;
   				span{
-  					font-size:15px;
+  					.fontSize(15);
   					color:rgba(102,102,102,1);
   					line-height:21px;
   				}
@@ -1172,7 +1172,7 @@
   				display: flex;
   				justify-content: space-between;
   				>span{
-  					font-size:15px;
+  					.fontSize(15);
   					color:rgba(102,102,102,1);
   					line-height:21px;
   				}
@@ -1181,7 +1181,7 @@
   					align-items: center;
   					>span{
   						display: inline-block;
-  						font-size:15px;
+  						.fontSize(15);
   						color:rgba(250,106,48,1);
   						line-height:21px;
   					}
@@ -1207,16 +1207,16 @@
   				height:49px;
   				.payment_num{
   					margin-right: 20px;
-  					font-size:13px;
+  					.fontSize(13);
   					color:rgba(53,64,72,1);
   					span{
   						color:rgba(250,106,48,1);
   						&:nth-child(1){
-  							font-size: 13px;
+  							.fontSize(13);
   						}
   						&:nth-child(2){
   							padding-left: 4px;
-  							font-size: 18px;
+  							.fontSize(18);
   						}
   					}
   				}
@@ -1228,7 +1228,7 @@
   					width:150px;
   					height:49px;
   					background:rgba(255,226,102,1);
-  					font-size:16px;
+  					.fontSize(16);
   					color:rgba(53,64,72,1);	
   				}
   			}
