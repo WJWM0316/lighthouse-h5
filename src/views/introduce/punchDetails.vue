@@ -600,7 +600,7 @@
     handlePullup (loaded) {
     	this.page += 1
     	if(this.navTabName==="comment"){
-    		if(this.commentList.length === this.allTotal){
+    		if(this.commentList.length === this.courseCardInfo.commentTotal){
     			loaded('done')
     			return
     		}
