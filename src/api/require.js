@@ -80,7 +80,7 @@ async function process(response) {
     const hostname = location.href.split('?')[0]
     try {
       console.log(`${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}&time=${new Date().getTime()}`)
-      window.location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}&time=${new Date().getTime()}`
+      window.location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${location.href}`
     }
     catch (err) {
       alert(err, '微信登陆失败')
