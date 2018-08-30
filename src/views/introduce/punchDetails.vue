@@ -177,6 +177,7 @@
     
     
     created () {
+    	
     	this.pageInit()
     }
     //----------------评选和取消评选优秀打卡---------------------------
@@ -489,7 +490,9 @@
       courseCardCommentApi(params).then(res=>{
       	this.getCourseCardCommentList()
       	this.allTotal +=1;
-      	this.courseCardInfo.commentTotal +=1
+      	if(this.courseCardInfo.peopleCourseId === sourceType){
+      		this.courseCardInfo.commentTotal +=1
+      	}
       	this.$vux.toast.text('评论成功', 'bottom')
       }).catch(e => {
         this.$vux.toast.text('评论失败', 'bottom')

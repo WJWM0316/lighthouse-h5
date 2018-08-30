@@ -74,7 +74,6 @@ import { courseCardFavorApi, delCourseCardCommentApi } from '@/api/pages/pageInf
   watch: {
     item (val) {
       this.role = val.reviewer.role || {}
-      console.log(1111, this.role);
     }
   },
   computed: {
