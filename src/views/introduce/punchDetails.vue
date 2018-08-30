@@ -1,7 +1,7 @@
 <template>
   <!-- 朋友圈、帖子、问题 详情 -->
   <div class="all-details" :class="{'pdBtom' : isShow}" v-if="courseCardInfo">
-    <scroll @refresh="handleRefresh" :pullupable="false" @pullupable="handlePullup" :infinite-scroll="false" :is-none-data="navTabName==='comment'?commentList.length === allTotal:classmateList.length === courseCardInfo.favorTotal" :showBottomLoading="navTabName==='comment'?(courseCardInfo.commentTotal !== 0) : (classmateList.length !== 0)">  
+    <scroll @refresh="handleRefresh" :pullupable="false" @infinite-scroll="handlePullup" :infinite-scroll="true" :is-none-data="navTabName==='comment'?commentList.length === allTotal:classmateList.length === courseCardInfo.favorTotal" :showBottomLoading="navTabName==='comment'?(courseCardInfo.commentTotal !== 0) : (classmateList.length !== 0)">  
         <div class="header">
           <lessondynamicItem
 				 :item="courseCardInfo"
@@ -43,7 +43,8 @@
                   :itemIndex="index"
                   :showDelBtn="true"
                   :disableUserClick="false"
-                  @operation="operation">
+                  @operation="operation"
+                  @delItem="delItem">
               </discuss-item>
             </div>
             <div v-if="allTotal === 0">
@@ -257,6 +258,12 @@
     			this.classmateList = [...this.classmateList,...res]
     		}
     	})
+    }
+    
+    //删除评论
+    delItem(e){
+    	let {itemIndex} = e;
+    	this.commentList.splice(itemIndex,1)
     }
 
     /**
