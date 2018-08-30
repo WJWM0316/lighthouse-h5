@@ -263,6 +263,7 @@
     //删除评论
     delItem(e){
     	let {itemIndex} = e;
+    	this.courseCardInfo.commentTotal -=1
     	this.commentList.splice(itemIndex,1)
     }
 
@@ -609,9 +610,8 @@
     			loaded('done')
     			return
     		}
-    		this.page += 1
-    		console.log(this.page,"我是请求第几页")
-//  		this.page = Math.ceil(this.commentList.length-this.hotCommentNum/20) // 向上取整 用于刷新当前page
+    		console.log(Math.ceil((this.commentList.length-this.hotCommentNum)/20)+1,"我是请求第几页")
+    		this.page = Math.ceil((this.commentList.length-this.hotCommentNum)/20)+1 // 向上取整 用于刷新当前page
     		this.getCourseCardCommentList();
     		loaded('done')
     	}else{
