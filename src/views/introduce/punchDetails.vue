@@ -43,7 +43,8 @@
                   :itemIndex="index"
                   :showDelBtn="true"
                   :disableUserClick="false"
-                  @operation="operation">
+                  @operation="operation"
+                  @delItem="delItem">
               </discuss-item>
             </div>
             <div v-if="allTotal === 0">
@@ -258,6 +259,13 @@
     		}
 //  		loaded('done')
     	})
+    }
+    
+    //删除评论
+    delItem(e){
+    	let {itemIndex} = e;
+//  	console.log(itemIndex,"5555555555555555")
+    	this.commentList.splice(commentList,1)
     }
 
     /**
