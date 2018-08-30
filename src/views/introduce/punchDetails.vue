@@ -43,8 +43,7 @@
                   :itemIndex="index"
                   :showDelBtn="true"
                   :disableUserClick="false"
-                  @operation="operation"
-                  @delItem="delItem">
+                  @operation="operation">
               </discuss-item>
             </div>
             <div v-if="allTotal === 0">
@@ -262,11 +261,10 @@
     }
     
     //删除评论
-    delItem(e){
-    	let {itemIndex} = e;
-//  	console.log(itemIndex,"5555555555555555")
-    	this.commentList.splice(commentList,1)
-    }
+//  delItem(e){
+//  	let {itemIndex} = e;
+//  	this.commentList.splice(commentList,1)
+//  }
 
     /**
      * 获取点赞列表
@@ -609,7 +607,7 @@
     	this.page += 1
     	if(this.navTabName==="comment"){
     		if(this.commentList.length === this.courseCardInfo.commentTotal){
-    			loaded('done')
+    			loaded('fail')
     			return
     		}
     		this.page = Math.ceil(this.commentList.length/20) +1 // 向上取整 用于刷新当前page
@@ -617,7 +615,7 @@
     		loaded('done')
     	}else{
     		if(this.classmateList.length === this.courseCardInfo.favorTotal){
-    			loaded('done')
+    			loaded('fail')
     			return
     		}
     		this.page = Math.ceil(this.classmateList.length/20) +1 // 向上取整 用于刷新当前page
