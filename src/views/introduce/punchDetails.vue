@@ -1,7 +1,7 @@
 <template>
   <!-- 朋友圈、帖子、问题 详情 -->
   <div class="all-details" :class="{'pdBtom' : isShow}" v-if="courseCardInfo">
-    <scroll @refresh="handleRefresh" @pullup="handlePullup" :infinite-scroll="false" :is-none-data="navTabName==='comment'?commentList.length === allTotal:classmateList.length === courseCardInfo.favorTotal" :showBottomLoading="navTabName==='comment'?(courseCardInfo.commentTotal !== 0) : (classmateList.length !== 0)">  
+    <scroll @refresh="handleRefresh" :pullupable="false" @infinite-scroll="handlePullup" :infinite-scroll="true" :is-none-data="navTabName==='comment'?commentList.length === allTotal:classmateList.length === courseCardInfo.favorTotal" :showBottomLoading="navTabName==='comment'?(courseCardInfo.commentTotal !== 0) : (classmateList.length !== 0)">  
         <div class="header">
           <lessondynamicItem
 				 :item="courseCardInfo"
@@ -516,7 +516,7 @@
     	console.log(this.$route.query,"dasfadsfasdfasdfasdfasd")
     	const { courseId, peopleId } = this.$route.query
       const res = await getCourseCardInfoApi(courseId,peopleId)
-      
+      this.page = 1
       this.courseCardInfo = res
       this.allTotal = res.commentTotal
       this.getCourseCardCommentList()
@@ -604,18 +604,19 @@
      * 上拉加载
      */
     handlePullup (loaded) {
-    	this.page += 1
     	if(this.navTabName==="comment"){
     		if(this.commentList.length === this.courseCardInfo.commentTotal){
-    			loaded('fail')
+    			loaded('done')
     			return
     		}
-    		this.page = Math.ceil(this.commentList.length/20) +1 // 向上取整 用于刷新当前page
+    		this.page += 1
+    		console.log(this.page,"我是请求第几页")
+//  		this.page = Math.ceil(this.commentList.length-this.hotCommentNum/20) // 向上取整 用于刷新当前page
     		this.getCourseCardCommentList();
     		loaded('done')
     	}else{
     		if(this.classmateList.length === this.courseCardInfo.favorTotal){
-    			loaded('fail')
+    			loaded('done')
     			return
     		}
     		this.page = Math.ceil(this.classmateList.length/20) +1 // 向上取整 用于刷新当前page
