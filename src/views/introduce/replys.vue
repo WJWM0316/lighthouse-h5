@@ -11,7 +11,7 @@
                       :hideBorder="true"
                       :hideCommentArea="true"
                       :disableContentClick="true"
-                      :showDelBtn="true"
+                      :showDelBtn="false"
                       :disableComment="true"></discuss-item>
       </div>
 
