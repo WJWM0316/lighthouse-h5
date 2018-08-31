@@ -79,7 +79,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCommentDetailApi, setFavorApi, setSubmitCommentApi, delCommontApi, getCourseCardCommentInfoApi, courseCardFavorApi, courseCardCommentApi  } from '@/api/pages/pageInfo.js'
+  import { getCommentDetailApi, setFavorApi, setSubmitCommentApi, delCommontApi, getCourseCardCommentInfoApi, courseCardFavorApi, courseCardCommentApi, delCourseCardCommentApi  } from '@/api/pages/pageInfo.js'
 
   @Component({
     name: 'all-reply',
@@ -241,6 +241,11 @@
         onCancel () {
         },
         onConfirm () {
+        	delCourseCardCommentApi(commentId).then(res=>{
+        		_this.discussItemList.splice(itemIndex, 1)
+            _this.pagination.total -= 1
+        		_this.$vux.toast.text('删除成功', 'bottom')
+        	})
           delCommontApi(params).then(res => {
             _this.discussItemList.splice(itemIndex, 1)
             _this.pagination.total -= 1

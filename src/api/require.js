@@ -191,7 +191,7 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   
   // 开发环境才要绑定测试账号
   if (window.location.host !== 'demo2016.thetiger.com.cn' && window.location.host !== 'www.ziwork.com') {
-//  data.TestUid = 5
+    data.TestUid = 5
   }
   
 
