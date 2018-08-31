@@ -2,7 +2,7 @@
 
   <!-- 回复列表 -->
   <div class="all-reply">
-    <scroll @refresh="handleRefresh" @pullup="handlePullup">
+    <scroll @refresh="handleRefresh" @pullup="handlePullup" :infinite-scroll="false" :is-none-data="discussItemList.length === discussInfo.commentTotal">
       <!-- header -->
       <div class="header">
         <discuss-item :item="discussInfo"
@@ -154,12 +154,13 @@
      * @returns {Promise.<void>}
      */
     async praise ({item, itemIndex}) {
-    	console.log(item,itemIndex,"8888888888888888888")
+//  	console.log(item,itemIndex,"8888888888888888888")
     	if(this.$route.query.peopleCourseId){//从打卡处进入
     		let favor = 0
     		let params = ""
     		if(item){//点击的是子评论的点赞
-    			favor = this.discussInfo.isFavor ? 0 : 1
+//  			console.log(item.isFavor)
+    			favor = item.isFavor ? 0 : 1
     			params= {
 			  		isFavor: favor,
 			  		type:2,
@@ -175,13 +176,11 @@
     		}
     		courseCardFavorApi(params).then(res=>{
   				if (item) {
-	          this.discussItemList[itemIndex].isFavor = favor
-	          this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
+	          item.isFavor = favor
 	        } else {
 	          this.discussInfo.isFavor = favor
 	          this.discussInfo.favorTotal += favor ? 1 : -1
 	        }
-	        this.item.isFavor = favor
   			})
     		
     	}else{//从非打卡处进入
