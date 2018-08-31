@@ -10,7 +10,7 @@
       <!-- 用户名 -->
       <div class="user-masage">
       	<p class="user-name" @click.stop="toUserInfo(item.releaseUser.userId)">{{item.releaseUser.realName}}</p>
-      	<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career" v-text="item.releaseUser.career"></span>
+      	<span class="user-intro" v-if="item.releaseUser && item.releaseUser.career">{{item.releaseUser.career}} | {{item.releaseUser.office}}</span>
       </div>
       <!--设置是否评委优秀-->
       <div class="evaluate" v-if="item.isMaster ===1" @click.stop="showEvaluate">

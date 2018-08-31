@@ -74,7 +74,6 @@ import { courseCardFavorApi, delCourseCardCommentApi } from '@/api/pages/pageInf
   watch: {
     item (val) {
       this.role = val.reviewer.role || {}
-      console.log(1111, this.role);
     }
   },
   computed: {
@@ -238,6 +237,8 @@ export default class discussItem extends Vue {
         onConfirm () {
           delCourseCardCommentApi(_this.item.commentId).then(res=>{
 		    		_this.item = ""
+		    		_this.$emit('delItem',{itemIndex})
+		    		_this.$vux.toast.text('删除成功', 'bottom')
 		    	}).catch(e => {
             _this.$vux.toast.text('删除失败', 'bottom')
           })
