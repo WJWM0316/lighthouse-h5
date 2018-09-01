@@ -1047,7 +1047,6 @@
           background-color: #ffffff;
 					/*bing-增加*/
 					flex-grow:1;
-					//width:150px;
           padding: 0 20px;
 					& span:nth-of-type(2){
 						font-size:12px;
