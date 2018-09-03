@@ -2,12 +2,12 @@
  * 主页模块
  */
 const homeRoutes = [
-  {
-    path: '/',
-    redirect: to => {
-      return '/index'
-    }
-  },
+  // {
+  //   path: '/',
+  //   redirect: to => {
+  //     return '/index'
+  //   }
+  // },
   {
     path: '/index',
     name: 'home',
