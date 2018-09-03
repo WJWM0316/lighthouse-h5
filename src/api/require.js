@@ -84,7 +84,6 @@ async function process(response) {
       hashParams = `${hashParams}?time=${new Date().getTime()}`
     }
     try {
-      alert(hashParams)
       location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
     }
     catch (err) {
