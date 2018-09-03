@@ -78,9 +78,11 @@ async function process(response) {
     // hideLoading(globalLoading)
     const hashParams = location.hash.substring(1)
     const hostname = location.href.split('?')[0]
+
     try {
       // console.log(`${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}&time=${new Date().getTime()}`)
-      window.location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${location.href}`
+      console.log(location.href, '登录')
+      window.location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${encodeURI(location.href)}`
     }
     catch (err) {
       alert(err, '微信登陆失败')
