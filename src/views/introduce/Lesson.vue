@@ -1176,7 +1176,7 @@
 				padding: 0 20px;
 				margin-top: 30px;
 				width: 100%;
-				min-height: 800px;
+				min-height: 400px;
 				>section{
 					font-size: 16px !important;
 				}
