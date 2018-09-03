@@ -1047,7 +1047,6 @@
           background-color: #ffffff;
 					/*bing-增加*/
 					flex-grow:1;
-					//width:150px;
           padding: 0 20px;
 					& span:nth-of-type(2){
 						font-size:12px;
@@ -1177,6 +1176,7 @@
 				padding: 0 20px;
 				margin-top: 30px;
 				width: 100%;
+				min-height: 400px;
 				>section{
 					font-size: 16px !important;
 				}
