@@ -78,23 +78,13 @@ async function process(response) {
     // hideLoading(globalLoading)
     const hashParams = location.hash.substring(1)
     const hostname = location.href.split('?')[0]
-    let {redirectUrl} = await request({
-      url: '/wap/wechat',
-      data: {
-        zike_from: hostname,
-        key: hashParams
-      }
-    })
-    if (redirectUrl) location.href = redirectUrl
-    // try {
-    //   // console.log(`${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}&time=${new Date().getTime()}`)
-    //   console.log(location.href, '登录')
-    //   window.location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${encodeURI(location.href)}`
-    // }
-    // catch (err) {
-    //   alert(err, '微信登陆失败')
-    // }
-    // console.log(data.data)
+    try {
+      location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
+    }
+    catch (err) {
+      alert(err, '微信登陆失败')
+    }
+    console.log(data.data)
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 426) { // 没有登录权限,跳去手机号登录
