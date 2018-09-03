@@ -76,8 +76,8 @@ async function process(response) {
   if (data && data.statusCode === 255) { // 登录时openId cookie失效
     store.dispatch('remove_userinfo')
     // hideLoading(globalLoading)
-    const hashParams = location.hash.substring(1)
-    const hostname = `${location.href.split('?')[0]}&time=${new Date().getTime()}`
+    const hashParams = `${location.hash.substring(1)}&time=${new Date().getTime()}`
+    const hostname = location.href.split('?')[0]
     try {
       location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
     }
