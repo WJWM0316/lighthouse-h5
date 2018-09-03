@@ -76,10 +76,15 @@ async function process(response) {
   if (data && data.statusCode === 255) { // 登录时openId cookie失效
     store.dispatch('remove_userinfo')
     // hideLoading(globalLoading)
-    const hashParams = `${location.hash.substring(1)}&time=${new Date().getTime()}`
-    const hostname = location.href.split('?')[0]
+    let hashParams = `${location.hash.substring(1)}`
+    let hostname = location.href.split('?')[0]
+    if (hashParams.indexOf("?") != -1) {
+      hashParams = `${hashParams}&time=${new Date().getTime()}`
+    } else {
+      hashParams = `${hashParams}?time=${new Date().getTime()}`
+    }
     try {
-      // location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
+      location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
     }
     catch (err) {
       alert(err, '微信登陆失败')

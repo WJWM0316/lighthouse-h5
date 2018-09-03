@@ -170,7 +170,6 @@
   import {getCommunityInfoApi, countCodeApi} from '@/api/pages/pageInfo'
   import WechatMixin from '@/mixins/wechat'
   import {payApi, freePay} from '@/api/pages/pay'
-  import wxUtil from '@/util/wx/index'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
   Component.registerHooks([
 	  'beforeRouteEnter',
@@ -558,7 +557,6 @@
         })
       })
       const { autoPay=''} = this.$route.query
-      console.log('autoPay', autoPay)
       if (autoPay) {
         let that = this
         that.payIn()
