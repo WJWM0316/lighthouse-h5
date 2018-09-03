@@ -77,7 +77,7 @@ async function process(response) {
     store.dispatch('remove_userinfo')
     // hideLoading(globalLoading)
     const hashParams = location.hash.substring(1)
-    const hostname = location.href.split('?')[0]
+    const hostname = `${location.href.split('?')[0]}&time=${new Date().getTime()}`
     try {
       location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
     }
