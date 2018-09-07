@@ -267,7 +267,9 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
     // ------------------------------------------------
     async payIn () {
-      console.log(this.allBuyCommunityId,this.selectItem)
+      console.log(this.allBuyCommunityId,this.selectItem , this.allBuyCommunityId == this.selectItem.communityId)
+
+
       const params = await payApi({
         productId: this.selectItem.communityId,
         productType: 1,
@@ -303,17 +305,17 @@ import { getBeaconsApi } from '@/api/pages/home'
         function (res) {
           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
-            self.$vux.toast.text(`成功-${self.selectItem.communityId}=${this.allBuyCommunityId}`, 'bottom')
-            if(self.selectItem.communityId == this.allBuyCommunityId){
+            self.$vux.toast.text(`成功-${self.selectItem.communityId}=${self.allBuyCommunityId}`, 'bottom')
+            if(self.selectItem.communityId == self.allBuyCommunityId){
               self.$vux.toast.text(`allby`, 'bottom')
-              this.toPay = true
+              self.toPay = true
             }else {
               self.$vux.toast.text(`base${self.selectItem.communityId}`, 'bottom')
 
               if(self.selectItem.isCourse === 3){
-                this.$router.push(`/introduce2/${self.selectItem.communityId}/community`)
+                self.$router.push(`/introduce2/${self.selectItem.communityId}/community`)
               }else {
-                this.$router.push(`/introduce/${self.selectItem.communityId}/community`)
+                self.$router.push(`/introduce/${self.selectItem.communityId}/community`)
               }
             }
             
