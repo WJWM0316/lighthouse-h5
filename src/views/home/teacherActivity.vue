@@ -473,8 +473,8 @@ import { getBeaconsApi } from '@/api/pages/home'
   //bottom: 0;
   z-index: 9999;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.6);
+  height: 100vh;
+  background-color: rgba(0,0,0,1);
   .pay_box{
     animation: 0.4s ease-in-out window-fade-in;
     box-sizing: border-box;
