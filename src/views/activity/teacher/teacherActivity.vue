@@ -94,7 +94,7 @@
 
 
       <!--支付弹窗-->
-      <div class="pay_window" v-if="toPay" @click.stop="closePya">
+      <div class="pay_window" v-if="toPay">
         <div class="pay_cont">
           <img class="close" @click.stop="closePya" src="./../../../assets/activity/teacher/clo.png" />
           <img class="code" src="./../../../assets/activity/teacher/code.png" />
@@ -132,7 +132,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     pickedParams = { // 页面所需参数
       tagId: 0
     }
-    toPay = false
+    toPay = true
 
     payListMsg = [
       {
