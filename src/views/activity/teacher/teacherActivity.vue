@@ -267,7 +267,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
     // ------------------------------------------------
     async payIn () {
-      console.log(this.allBuyCommunityId)
+      console.log(this.allBuyCommunityId,this.selectItem)
       const params = await payApi({
         productId: this.selectItem.communityId,
         productType: 1,
