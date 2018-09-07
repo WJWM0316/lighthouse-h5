@@ -19,8 +19,14 @@
 
         <div class="blo_tobuy_cont">
           <p class="tit">- 第一眼就用自信的气场吸引Ta -</p>
-          <img class="cont_img " @click.stop="buy(1)" src="./../../../assets/activity/teacher/te_req_1_1.png" />
-          <img class="cont_img two" @click.stop="buy(2)" src="./../../../assets/activity/teacher/te_req_1_2.png" />
+          <div class="cont_img ">
+            <img   src="./../../../assets/activity/teacher/te_req_1_1.png" />
+            <div class="blo_btn" @click.stop="buy(1)"></div>
+          </div>
+          <div class="cont_img two">
+            <img  src="./../../../assets/activity/teacher/te_req_1_2.png" />
+            <div class="blo_btn" @click.stop="buy(2)"></div>
+          </div>
         </div>
       </div>
       <div class="buyBlo two">
@@ -29,9 +35,14 @@
 
         <div class="blo_tobuy_cont">
           <p class="tit">- 快速找准自己的发展道路 -</p>
-
-          <img class="cont_img three" @click.stop="buy(3)" src="./../../../assets/activity/teacher/te_req_2_1.png" />
-          <img class="cont_img four" @click.stop="buy(4)" src="./../../../assets/activity/teacher/te_req_2_2.png" />
+          <div class="cont_img three">
+            <img  src="./../../../assets/activity/teacher/te_req_2_1.png" />
+            <div class="blo_btn" @click.stop="buy(3)"></div>
+          </div>
+          <div class="cont_img four">
+            <img  src="./../../../assets/activity/teacher/te_req_2_2.png" />
+            <div class="blo_btn" @click.stop="buy(4)"></div>
+          </div>
         </div>
       </div>
       <div class="buyBlo three">
@@ -40,24 +51,33 @@
 
         <div class="blo_tobuy_cont">
           <p class="tit">- 提高工作效率，告别加班 -</p>
-
-          <img class="cont_img five" @click.stop="buy(5)" src="./../../../assets/activity/teacher/te_req_3_1.png" />
-          <img class="cont_img six" @click.stop="buy(6)" src="./../../../assets/activity/teacher/te_req_3_2.png" />
+          <div class="cont_img five">
+            <img  src="./../../../assets/activity/teacher/te_req_3_1.png" />
+            <div class="blo_btn" @click.stop="buy(5)"></div>
+          </div>
+          <div class="cont_img six">
+            <img  src="./../../../assets/activity/teacher/te_req_3_2.png" />
+            <div class="blo_btn" @click.stop="buy(6)"></div>
+          </div>
         </div>
       </div>
       <div class="buyBlo four">
-
         <img class="blo_warp" src="./../../../assets/activity/teacher/teach_ requ4.png" />
-
         <div class="blo_tobuy_cont">
           <p class="tit">- 掌握高管思考方式 -</p>
-          <img class="cont_img seven" @click.stop="buy(7)" src="./../../../assets/activity/teacher/te_req_4_1.png" />
-          <img class="cont_img eight" @click.stop="buy(8)" src="./../../../assets/activity/teacher/te_req_4_2.png" />
+          <div class="cont_img seven">
+            <img  src="./../../../assets/activity/teacher/te_req_4_1.png" />
+            <div class="blo_btn" @click.stop="buy(7)"></div>
+          </div>
+          <div class="cont_img eight">
+            <img  src="./../../../assets/activity/teacher/te_req_4_2.png" />
+            <div class="blo_btn"  @click.stop="buy(8)"></div>
+          </div>
         </div>
       </div>
       <!-- 学员评价 -->
       <img class="tea_tit4" src="./../../../assets/activity/teacher/teach_tit_5.png" />
-        <img class="tea_evaluate" src="./../../../assets/activity/teacher/teach_evaluate.png" />
+      <img class="tea_evaluate" src="./../../../assets/activity/teacher/teach_evaluate.png" />
       <!-- 适合人群 -->
       <img class="tea_tit5" src="./../../../assets/activity/teacher/teach_tit_5.png" />
       <img class="tea_fit" src="./../../../assets/activity/teacher/teach_fit.png" />
@@ -200,6 +220,7 @@ import { getBeaconsApi } from '@/api/pages/home'
 
     allBuy () {
       console.log('allBuy')
+      this.selectItem = this.allBuyItem
       this.payIn()
     }
 
@@ -251,24 +272,15 @@ import { getBeaconsApi } from '@/api/pages/home'
 
     async init () {
     }
-
-    isPay(){
-      console.log('=-=isPay-=')
-      this.payIn()
-      this.toPay = false;
-    }
-
     // ------------------------------------------------
     async payIn () {
 
-      console.log(this.selectItem.testId)
       const params = await payApi({
         productId: this.selectItem.communityId,
         productType: 1,
         userCouponId: 0
       })
       const arr = Object.keys(params || {})
-      console.log(arr,typeof WeixinJSBridge)
       if (arr.length !== 0) {
         if (typeof WeixinJSBridge === 'undefined') {
           if (document.addEventListener) {
@@ -359,34 +371,45 @@ import { getBeaconsApi } from '@/api/pages/home'
         .cont_img {
           width: 323px;
           height: 330px;
+          margin: 0 auto;
+          position: relative;
           &.two {
-            width: 323px;
             height: 316px;
+            margin-top: 11px;
           }
           &.three {
-            width: 341px;
-            height: 294px;
+            height: 293px;
           }
           &.four {
-            width: 323px;
+            margin-top: -20px;
             height: 361.5px;
           }
           &.five {
-            width: 323px;
             //height: 310px;
             height: auto;
           }
           &.six {
-            width: 323px;
             height: 331px;
+            margin-top: 15px;
           }
           &.seven {
-            width: 349px;
-            height: 335px;
+            height: 328px;
           }
           &.eight {
-            width: 323px;
             height: 293.5px;
+            margin-top: 15px;
+
+          }
+          img {
+            width: 100%;
+            height: 100%;
+          }
+          .blo_btn {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 130px;
+            height: 60px;
           }
         }
       }
