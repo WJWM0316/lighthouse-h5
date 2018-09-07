@@ -216,6 +216,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
 
     toDetail (index) {
+      console.log(this.payListMsg[index-1].testId)
       this.$router.push(`/introduce/${this.payListMsg[index-1].testId}`)
     }
 
@@ -233,6 +234,7 @@ import { getBeaconsApi } from '@/api/pages/home'
           this.selectItem.communityId = res.communityId
           this.payIn()
         }else {
+          console.log(this.payListMsg)
           if(res.isCourse === 3){
             this.$router.replace(`/introduce2/${item.communityId}/community`)
           }else {
@@ -307,6 +309,7 @@ import { getBeaconsApi } from '@/api/pages/home'
               this.toPay = true
             }else {
               self.$vux.toast.text(`base`, 'bottom')
+
               if(self.selectItem.isCourse === 3){
                 this.$router.replace(`/introduce2/${self.selectItem.communityId}/community`)
               }else {
