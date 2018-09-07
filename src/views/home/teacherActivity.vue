@@ -74,13 +74,13 @@
           <div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
           <div class="price">
             <span>社区价格</span>
-            <span>¥ {{selectItem.nowMoney}}</span>
+            <span>¥ {{selectItem.joinPrice}}</span>
           </div>
           <div class="payment">
             <div class="payment_num">
               实付：<span>¥</span>
               <!--不使用优惠券和无优惠券-->
-              <span>{{selectItem.nowMoney}}</span>
+              <span>{{selectItem.joinPrice}}</span>
               <!--使用默认优惠券-->
             </div>
             <div class="payment_btn" @click.stop="isPay">立即支付</div>
@@ -121,7 +121,7 @@ import { getBeaconsApi } from '@/api/pages/home'
       {
         tit: '做好体态管理，开启高端自己',
         oldMoney: 69,
-        nowMoney: 39,
+        joinPrice: 39,
         id: 250,
         testId: '72454f7c3667b878cee45c82ddcbfa0b',
         teacherName:'阿珂'
@@ -129,62 +129,62 @@ import { getBeaconsApi } from '@/api/pages/home'
       {
         tit: '小白到表达高手的二十堂课',
         oldMoney: 99,
-        nowMoney: 49,
+        joinPrice: 49,
         id: 402,
-        testId: '72454f7c3667b878cee45c82ddcbfa0b',
+        testId: '44bbd91394eda5390e94fc36da196250',
         teacherName:'龙兄'
       },
       {
         tit: '职场选择力：如何让每一步抉择都不走弯路',
         oldMoney: 199,
-        nowMoney: 99,
+        joinPrice: 99,
         id: 93,
-        testId: '72454f7c3667b878cee45c82ddcbfa0b',
+        testId: '523b01c2f78c69e1d2817570d395e510',
         teacherName:'七芊'
       },
       {
         tit: '掌控人生的20堂职场课',
         oldMoney: 99,
-        nowMoney: 49,
+        joinPrice: 49,
         id: 239,
-        testId: '72454f7c3667b878cee45c82ddcbfa0b',
+        testId: 'c7bc966d746c223b0f00325b6b2f1de4',
         teacherName:''
       },
       {
         tit: 'PPT小白成长训练营',
         oldMoney: 99,
-        nowMoney: 49,
+        joinPrice: 49,
         id: 258,
-        testId: '72454f7c3667b878cee45c82ddcbfa0b',
+        testId: 'add6b630bcefc6a49c46fcc60c2b7e03',
         teacherName:'三顿'
       },
       {
         tit: '小白如何逆袭成为月入10w的全能写手',
         oldMoney: 69,
-        nowMoney: 39,
+        joinPrice: 39,
         id: 260,
-        testId: '72454f7c3667b878cee45c82ddcbfa0b',
+        testId: '74779b9a2d749cf0567a9ac2afd4ec70',
         teacherName: 'aida'
       },
       {
         tit: '公众号裂变涨粉实训营',
         oldMoney: 99,
-        nowMoney: 49,
+        joinPrice: 49,
         id: 254,
-        testId: '72454f7c3667b878cee45c82ddcbfa0b',
+        testId: '591d4be8b097f00593c20fc169f87aea',
         teacherName: '书记'
       },
       {
         tit: '用得上的商学课',
         oldMoney: 99,
-        nowMoney: 49,
+        joinPrice: 49,
         id: 312,
-        testId: '72454f7c3667b878cee45c82ddcbfa0b',
+        testId: '274a53987412b68fd95c3add3eaa45d4',
         teacherName: '路聘'
       },{
         tit: '用得上的商学课',
         oldMoney: 99,
-        nowMoney: 49,
+        joinPrice: 49,
         id: 312,
         testId: '72454f7c3667b878cee45c82ddcbfa0b',
         teacherName: '路聘'
@@ -200,14 +200,14 @@ import { getBeaconsApi } from '@/api/pages/home'
     buy (index) {
       console.log(index)
       this.selectItem = this.payListMsg[index-1]
-
-      let test = '274a53987412b68fd95c3add3eaa45d4'
-      //let res =  getCommunityInfoApi({communityId: this.selectItem.id})
-      let res =  getCommunityInfoApi({communityId: test})
-      console.log(res)
-      if(res.isJoined!==1){
-        this.toPay = true
-      }
+      getCommunityInfoApi({communityId: this.selectItem.testId}).then(res=>{
+        console.log(res)
+        if(res.isJoined!==1){
+          this.toPay = true
+          this.selectItem.joinPrice = res.joinPrice
+        }
+      })
+      
     }
 
     closePya(){
@@ -474,7 +474,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     animation: 0.4s ease-in-out window-fade-in;
     box-sizing: border-box;
     width: 375px;
-    height: 287px;
+    height: 207px;
     background:rgba(255,255,255,1);
     border-radius:10px 10px 0px 0px;
     position: absolute;
@@ -505,33 +505,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         color:rgba(102,102,102,1);
         line-height:21px;
       }
-    }
-    /*支付优惠券处*/
-    .coupon_price{
-      display: flex;
-      justify-content: space-between;
-      >span{
-        .fontSize(15);
-        color:rgba(102,102,102,1);
-        line-height:21px;
-      }
-      .coupon_price_right{
-        display: flex;
-        align-items: center;
-        >span{
-          display: inline-block;
-          .fontSize(15);
-          color:rgba(250,106,48,1);
-          line-height:21px;
-        }
-        >.more_coupon{
-          display: inline-block;
-          width: 15px;
-          height: 15px;
-          background: url(../../assets/icon/btn_enter@2x.png) no-repeat 100%;
-        }
-      }
-      /*margin-bottom:39px;*/
     }
     /*支付最底支付按钮*/
     .payment{
