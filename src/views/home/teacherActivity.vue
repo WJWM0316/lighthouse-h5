@@ -238,8 +238,10 @@ import { getBeaconsApi } from '@/api/pages/home'
 
     // ------------------------------------------------
     async payIn () {
+
+      console.log(this.selectItem.testId)
       const params = await payApi({
-        productId: this.selectItem.id.toString(),
+        productId: this.selectItem.testId,
         productType: 1,
         userCouponId: 0
       })
@@ -309,6 +311,7 @@ import { getBeaconsApi } from '@/api/pages/home'
 @import "../../styles/dprPx";
 .teacher {
   background: #FFE107;
+  height: 100vh;
   .buyBlo {
     width: 356px;
     height: 752px;
@@ -463,9 +466,11 @@ import { getBeaconsApi } from '@/api/pages/home'
 }
 
 .pay_window{
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
+  //right: 0;
+  //bottom: 0;
   z-index: 9999;
   width: 100%;
   height: 100%;
