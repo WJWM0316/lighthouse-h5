@@ -19,8 +19,8 @@
 
         <div class="blo_tobuy_cont">
           <p class="tit">- 第一眼就用自信的气场吸引Ta -</p>
-          <img class="cont_img " @click="buy(1)" src="./../../../assets/activity/teacher/te_req_1_1.png" />
-          <img class="cont_img two" @click="buy(2)" src="./../../../assets/activity/teacher/te_req_1_2.png" />
+          <img class="cont_img " @click.stop="buy(1)" src="./../../../assets/activity/teacher/te_req_1_1.png" />
+          <img class="cont_img two" @click.stop="buy(2)" src="./../../../assets/activity/teacher/te_req_1_2.png" />
         </div>
       </div>
       <div class="buyBlo two">
@@ -30,8 +30,8 @@
         <div class="blo_tobuy_cont">
           <p class="tit">- 快速找准自己的发展道路 -</p>
 
-          <img class="cont_img three" @click="buy(3)" src="./../../../assets/activity/teacher/te_req_2_1.png" />
-          <img class="cont_img four" @click="buy(4)" src="./../../../assets/activity/teacher/te_req_2_2.png" />
+          <img class="cont_img three" @click.stop="buy(3)" src="./../../../assets/activity/teacher/te_req_2_1.png" />
+          <img class="cont_img four" @click.stop="buy(4)" src="./../../../assets/activity/teacher/te_req_2_2.png" />
         </div>
       </div>
       <div class="buyBlo three">
@@ -41,8 +41,8 @@
         <div class="blo_tobuy_cont">
           <p class="tit">- 提高工作效率，告别加班 -</p>
 
-          <img class="cont_img five" @click="buy(5)" src="./../../../assets/activity/teacher/te_req_3_1.png" />
-          <img class="cont_img six" @click="buy(6)" src="./../../../assets/activity/teacher/te_req_3_2.png" />
+          <img class="cont_img five" @click.stop="buy(5)" src="./../../../assets/activity/teacher/te_req_3_1.png" />
+          <img class="cont_img six" @click.stop="buy(6)" src="./../../../assets/activity/teacher/te_req_3_2.png" />
         </div>
       </div>
       <div class="buyBlo four">
@@ -51,8 +51,8 @@
 
         <div class="blo_tobuy_cont">
           <p class="tit">- 掌握高管思考方式 -</p>
-          <img class="cont_img seven" @click="buy(7)" src="./../../../assets/activity/teacher/te_req_4_1.png" />
-          <img class="cont_img eight" @click="buy(8)" src="./../../../assets/activity/teacher/te_req_4_2.png" />
+          <img class="cont_img seven" @click.stop="buy(7)" src="./../../../assets/activity/teacher/te_req_4_1.png" />
+          <img class="cont_img eight" @click.stop="buy(8)" src="./../../../assets/activity/teacher/te_req_4_2.png" />
         </div>
       </div>
       <!-- 学员评价 -->
@@ -64,11 +64,15 @@
       <!-- 购买须知 -->
       <img class="tea_tit6" src="./../../../assets/activity/teacher/teach_tit_6.png" />
       <img class="tea_buy_txt" src="./../../../assets/activity/teacher/teach_buy_txt.png" />
-      <img class="btn" @click="allBuy" src="./../../../assets/activity/teacher/teach_btn.png" />
+
+      <div class="btns">
+        <div class="joinde" v-if="allBuyItem && allBuyItem.isJoined===1">已经购买</div>
+        <img class="btn" @click.stop="allBuy" src="./../../../assets/activity/teacher/teach_btn.png" v-else />
+      </div>
 
 
       <!--支付弹窗-->
-      <div class="pay_window" v-if="toPay && selectItem" @click="closePya">
+      <div class="pay_window" v-if="toPay && selectItem" @click.stop="closePya">
         <div class="pay_box" @click.stop="showPayWindow">
           <h3>{{selectItem.title}}</h3>
           <div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
@@ -192,10 +196,11 @@ import { getBeaconsApi } from '@/api/pages/home'
     ]
 
     selectItem = {}
+    allBuyItem = {}
 
     allBuy () {
       console.log('allBuy')
-      this.buy(9)
+      this.payIn()
     }
 
     buy (index) {
@@ -227,7 +232,12 @@ import { getBeaconsApi } from '@/api/pages/home'
       this.toPay = false
     }
 
-    created () {}
+    created () {
+      getCommunityInfoApi({communityId: this.payListMsg[8].testId}).then(res=>{
+        console.log(res)
+        this.allBuyItem = res
+      })
+    }
 
     // ------------------------------------------------
     /**
@@ -253,7 +263,7 @@ import { getBeaconsApi } from '@/api/pages/home'
 
       console.log(this.selectItem.testId)
       const params = await payApi({
-        productId: this.selectItem.testId,
+        productId: this.selectItem.communityId,
         productType: 1,
         userCouponId: 0
       })
@@ -289,30 +299,11 @@ import { getBeaconsApi } from '@/api/pages/home'
           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text('已购买成功', 'bottom')
-            const { communityId } = self.$route.params
-            let number = Math.random() * 10 + 1
-            switch (communityId) {
-              case '0125347d17e7c24d7e969783a26b922d': // 好点子塔
-                self.$store.dispatch('show_qr', {type: 3})
-                break
-
-              case '270abb50e490783896f2396e58bfbfad': // 活动塔0628
-                self.$store.dispatch('show_qr', {type: 1})
-                break
-              case '953c439c79fdd336bf5864aa2d6356ac': // 活动塔271考拉塔
-                self.$store.dispatch('show_qr', {type: 4})
-                break
-              default:
-                self.$store.dispatch('show_qr', {type: 2})
-                break
-            }
-
             if(self.selectItem.isCourse === 3){
               this.$router.replace(`/introduce2/${self.selectItem.communityId}/community`)
             }else {
               this.$router.replace(`/introduce/${self.selectItem.communityId}/community`)
             }
-
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
           } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
@@ -331,6 +322,7 @@ import { getBeaconsApi } from '@/api/pages/home'
   .teacher {
     background: #FFE107;
     height: 100vh;
+    padding-bottom: 100px;
     .buyBlo {
       width: 356px;
       height: 752px;
@@ -412,14 +404,33 @@ import { getBeaconsApi } from '@/api/pages/home'
 
       }
     }
-    .btn {
-      width: 264px;
-      height: 67.5px;
-      margin: 0 auto;
-      display: block;
-      margin-top: 29px;
-      margin-bottom: 22px;
+    .btns {
+      width: 100%;
+      height: 100px;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      bottom: 0;
+      //background: #FFE107;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .btn {
+        width: 264px;
+        height: 67.5px;
+        margin: 0 auto;
+        display: block;
+        /*margin-top: 29px;
+        margin-bottom: 22px;*/
+      }
+      .joinde {
+        font-size:40px;
+        font-family:SourceHanSansCN-Bold;
+        font-weight:bold;
+        color:rgba(255,254,254,1);
+      }
     }
+    
     .tea_tit6 {
       width: 175px;
       height: 55.5px;
