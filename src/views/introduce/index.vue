@@ -341,6 +341,8 @@
     showPayWindow(){}
     
     isPay(){
+
+      console.log('=-=-=isPay')
      	if(this.selectCouponItem.userCouponId && this.selectCouponItem.userCouponId!==0){
      		//选择其他优惠券
      		if(this.selectedPrice>0){
@@ -459,6 +461,8 @@
         userCouponId: this.usedUserCouponId
       })
       const arr = Object.keys(params || {})
+
+      console.log(arr,typeof WeixinJSBridge)
       if (arr.length !== 0) {
         if (typeof WeixinJSBridge === 'undefined') {
           if (document.addEventListener) {

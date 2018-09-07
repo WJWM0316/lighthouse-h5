@@ -20,6 +20,12 @@ const homeRoutes = [
     component: resolve => require(['@/views/home/advertising'], resolve),
   },
   {
+    path: '/teacherActivity',
+    name: 'teacherActivity',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/home/teacherActivity'], resolve),
+  },
+  {
     path: '/index/details/:sourceId',
     name: 'find-detail',
     meta: {navHide: true},

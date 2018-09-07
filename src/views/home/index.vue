@@ -17,6 +17,9 @@
               @click="tagSelected(indexTag)"></span>
       </div>
     </div>
+
+
+    <div class="test" @click="toTeacher">教师节</div>
     <scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- 选项卡 -->
       <div  ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
@@ -501,13 +504,22 @@ export default class HomeIndex extends Vue {
       this.$router.push(`/advertising/${type}`)
     }
   }
+
+  toTeacher (){
+    this.$router.push(`/teacherActivity`)
+  }
 }
 </script>
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
 @import "../../styles/dprPx";
-
+.test {
+  width: 100px;
+  height: 100px;
+  font-size: 20px;
+  border: 1px solid #cccccc;
+}
 .p-home-index {
   //padding: 50px 0;
   padding: 44px 0 50px;

@@ -325,6 +325,7 @@
 
 
     isPay(){
+      console.log('=-=isPay-=')
       if(this.selectCouponItem.userCouponId && this.selectCouponItem.userCouponId!==0){
         //选择其他优惠券
         if(this.selectedPrice>0){
@@ -460,6 +461,8 @@
         userCouponId: this.usedUserCouponId
       })
       const arr = Object.keys(params || {})
+
+      console.log(arr,typeof WeixinJSBridge)
       if (arr.length !== 0) {
         if (typeof WeixinJSBridge === 'undefined') {
           if (document.addEventListener) {
@@ -566,6 +569,9 @@
     async pageInit () {
       const { communityId } = this.$route.params
       const { saleId: applyId } = this.$route.query
+
+
+      console.log(this.$route)
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
       let Selectcoupon = sessionStorage.getItem("coupon");
 
