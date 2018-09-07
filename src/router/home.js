@@ -23,7 +23,7 @@ const homeRoutes = [
     path: '/teacherActivity',
     name: 'teacherActivity',
     meta: {navHide: true},
-    component: resolve => require(['@/views/home/teacherActivity'], resolve),
+    component: resolve => require(['@/views/activity/teacher/teacherActivity'], resolve),
   },
   {
     path: '/index/details/:sourceId',
