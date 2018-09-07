@@ -303,8 +303,10 @@ import { getBeaconsApi } from '@/api/pages/home'
             self.$vux.toast.text(`已购买成功${self.selectItem.isCourse}${self.selectItem.communityId}`, 'bottom')
 
             if(self.selectItem.community == this.allBuyCommity){
+              self.$vux.toast.text(`allby`, 'bottom')
               this.toPay = true
             }else {
+              self.$vux.toast.text(`base`, 'bottom')
               if(self.selectItem.isCourse === 3){
                 this.$router.replace(`/introduce2/${self.selectItem.communityId}/community`)
               }else {
