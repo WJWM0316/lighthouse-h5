@@ -19,12 +19,12 @@
 
         <div class="blo_tobuy_cont">
           <p class="tit">- 第一眼就用自信的气场吸引Ta -</p>
-          <div class="cont_img ">
-            <img   src="./../../../assets/activity/teacher/te_req_1_1.png" />
+          <div class="cont_img " @click.stop="toDetail(1)">
+            <img  src="./../../../assets/activity/teacher/te_req_1_1.png" />
             <div class="blo_btn" @click.stop="buy(1)"></div>
           </div>
-          <div class="cont_img two">
-            <img  src="./../../../assets/activity/teacher/te_req_1_2.png" />
+          <div class="cont_img two" @click.stop="toDetail(2)">
+            <img src="./../../../assets/activity/teacher/te_req_1_2.png" />
             <div class="blo_btn" @click.stop="buy(2)"></div>
           </div>
         </div>
@@ -35,11 +35,11 @@
 
         <div class="blo_tobuy_cont">
           <p class="tit">- 快速找准自己的发展道路 -</p>
-          <div class="cont_img three">
+          <div class="cont_img three"  @click.stop="toDetail(3)">
             <img  src="./../../../assets/activity/teacher/te_req_2_1.png" />
             <div class="blo_btn" @click.stop="buy(3)"></div>
           </div>
-          <div class="cont_img four">
+          <div class="cont_img four"  @click.stop="toDetail(4)">
             <img  src="./../../../assets/activity/teacher/te_req_2_2.png" />
             <div class="blo_btn" @click.stop="buy(4)"></div>
           </div>
@@ -51,11 +51,11 @@
 
         <div class="blo_tobuy_cont">
           <p class="tit">- 提高工作效率，告别加班 -</p>
-          <div class="cont_img five">
+          <div class="cont_img five"  @click.stop="toDetail(5)">
             <img  src="./../../../assets/activity/teacher/te_req_3_1.png" />
             <div class="blo_btn" @click.stop="buy(5)"></div>
           </div>
-          <div class="cont_img six">
+          <div class="cont_img six"  @click.stop="toDetail(6)">
             <img  src="./../../../assets/activity/teacher/te_req_3_2.png" />
             <div class="blo_btn" @click.stop="buy(6)"></div>
           </div>
@@ -65,11 +65,11 @@
         <img class="blo_warp" src="./../../../assets/activity/teacher/teach_ requ4.png" />
         <div class="blo_tobuy_cont">
           <p class="tit">- 掌握高管思考方式 -</p>
-          <div class="cont_img seven">
+          <div class="cont_img seven"  @click.stop="toDetail(7)">
             <img  src="./../../../assets/activity/teacher/te_req_4_1.png" />
             <div class="blo_btn" @click.stop="buy(7)"></div>
           </div>
-          <div class="cont_img eight">
+          <div class="cont_img eight"  @click.stop="toDetail(8)">
             <img  src="./../../../assets/activity/teacher/te_req_4_2.png" />
             <div class="blo_btn"  @click.stop="buy(8)"></div>
           </div>
@@ -92,25 +92,16 @@
 
 
       <!--支付弹窗-->
-      <div class="pay_window" v-if="toPay && selectItem" @click.stop="closePya">
-        <div class="pay_box" @click.stop="showPayWindow">
-          <h3>{{selectItem.title}}</h3>
-          <div class="tip">成功付款后，就可以开始你的职场提升之路了~</div>
-          <div class="price">
-            <span>社区价格</span>
-            <span>¥ {{selectItem.joinPrice}}</span>
-          </div>
-          <div class="payment">
-            <div class="payment_num">
-              实付：<span>¥</span>
-              <!--不使用优惠券和无优惠券-->
-              <span>{{selectItem.joinPrice}}</span>
-              <!--使用默认优惠券-->
-            </div>
-            <div class="payment_btn" @click.stop="isPay">立即支付</div>
-          </div>
+      <div class="pay_window" v-if="toPay" @click.stop="closePya">
+        <div class="pay_cont">
+          <img class="close" @click.stop="closePya" src="./../../../assets/activity/teacher/clo.png" />
+          <img class="code" src="./../../../assets/activity/teacher/code.png" />
+          <p>扫描二维码或者搜索zike04，</p>
+          <p>添加好友，备注<span>【礼包】</span>领取福利</p>
         </div>
       </div>
+
+
   </div>
 </template>
 <script>
@@ -217,11 +208,15 @@ import { getBeaconsApi } from '@/api/pages/home'
 
     selectItem = {}
     allBuyItem = {}
-
+    allBuyCommity = '02b81714611b454f2daa2ea5fa53b5be'
     allBuy () {
       console.log('allBuy')
       this.selectItem = this.allBuyItem
       this.payIn()
+    }
+
+    toDetail (index) {
+      this.$router.push(`/introduce/${this.payListMsg[index-1].testId}`)
     }
 
     buy (index) {
@@ -233,7 +228,6 @@ import { getBeaconsApi } from '@/api/pages/home'
       getCommunityInfoApi({communityId: item.testId}).then(res=>{
         console.log(res)
         if(res.isJoined!==1){
-          //this.toPay = true
           this.selectItem.joinPrice = res.joinPrice
           this.selectItem.isCourse = res.isCourse
           this.selectItem.communityId = res.communityId
@@ -251,6 +245,7 @@ import { getBeaconsApi } from '@/api/pages/home'
 
     closePya(){
       this.toPay = false
+      this.$router.go(0)
     }
 
     created () {
@@ -264,11 +259,6 @@ import { getBeaconsApi } from '@/api/pages/home'
     /**
      * 页面入口初始
      */
-
-    payOrFree () {
-      let that = this
-      this.toPay = true;
-    }
 
     async init () {
     }
@@ -311,11 +301,17 @@ import { getBeaconsApi } from '@/api/pages/home'
           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text(`已购买成功${self.selectItem.isCourse}${self.selectItem.communityId}`, 'bottom')
-            if(self.selectItem.isCourse === 3){
-              this.$router.replace(`/introduce2/${self.selectItem.communityId}/community`)
+
+            if(self.selectItem.community == this.allBuyCommity){
+              this.toPay = true
             }else {
-              this.$router.replace(`/introduce/${self.selectItem.communityId}/community`)
+              if(self.selectItem.isCourse === 3){
+                this.$router.replace(`/introduce2/${self.selectItem.communityId}/community`)
+              }else {
+                this.$router.replace(`/introduce/${self.selectItem.communityId}/community`)
+              }
             }
+            
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
           } else if (res.err_msg === 'get_brand_wcpay_request:fail') {
@@ -522,85 +518,49 @@ import { getBeaconsApi } from '@/api/pages/home'
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 9999;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0,0,0,1);
-    .pay_box{
-      animation: 0.4s ease-in-out window-fade-in;
-      box-sizing: border-box;
-      width: 375px;
-      height: 207px;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .pay_cont {
+      width:305px;
+      height:305px;
       background:rgba(255,255,255,1);
-      border-radius:10px 10px 0px 0px;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      padding: 40px 25px 0;
-      /*支付灯塔名字*/
-      h3{
-        .fontSize(18);
-        color:rgba(53,64,72,1);
-        line-height:22px;
-        margin-bottom: 10px;
-      }
-      /*支付副标题*/
-      .tip{
-        .fontSize(13);
-        color:rgba(146,146,146,1);
-        line-height:17px;
-        margin-bottom: 36px;
-      }
-      /*支付原价格*/
-      .price{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 31px;
-        span{
-          .fontSize(15);
-          color:rgba(102,102,102,1);
-          line-height:21px;
-        }
-      }
-      /*支付最底支付按钮*/
-      .payment{
+      border-radius: 5px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      .close {
+        width: 15px;
+        height: 15px;
+        display: block;
         position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        border-top:0.5px solid rgba(220,220,220,1);
-        height:49px;
-        .payment_num{
-          margin-right: 20px;
-          .fontSize(13);
-          color:rgba(53,64,72,1);
-          span{
-            color:rgba(250,106,48,1);
-            &:nth-child(1){
-              .fontSize(13);
-            }
-            &:nth-child(2){
-              padding-left: 4px;
-              .fontSize(18);
-            }
-          }
-        }
-        /*支付按钮*/
-        .payment_btn{
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width:150px;
-          height:49px;
-          background:rgba(255,226,102,1);
-          .fontSize(16);
-          color:rgba(53,64,72,1); 
+        right: 0;
+        top: -50px;
+      }
+      .code {
+        width: 150px;
+        height: 150px;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 15px;
+      }
+      p {
+        font-size: 16px;
+        font-family: SourceHanSansCN-Bold;
+        font-weight: bold;
+        color: rgba(5,0,0,1);
+        line-height: 18px;
+        text-align: center;
+        span {
+          color: red;
         }
       }
-      
     }
   }
 </style>
