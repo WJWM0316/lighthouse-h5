@@ -236,9 +236,9 @@ import { getBeaconsApi } from '@/api/pages/home'
         }else {
           console.log(this.payListMsg)
           if(res.isCourse === 3){
-            this.$router.replace(`/introduce2/${this.selectItem.communityId}/community`)
+            this.$router.push(`/introduce2/${this.selectItem.communityId}/community`)
           }else {
-            this.$router.replace(`/introduce/${this.selectItem.communityId}/community`)
+            this.$router.push(`/introduce/${this.selectItem.communityId}/community`)
           }
         }
       })
@@ -304,16 +304,16 @@ import { getBeaconsApi } from '@/api/pages/home'
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.$vux.toast.text(`已购买成功${self.selectItem.isCourse}-${self.selectItem.communityId}`, 'bottom')
 
-            if(self.selectItem.communityId == this.allBuyCommity){
+            if(self.selectItem.communityId == this.allBuyCommity.communityId){
               self.$vux.toast.text(`allby`, 'bottom')
               this.toPay = true
             }else {
               self.$vux.toast.text(`base`, 'bottom')
 
               if(self.selectItem.isCourse === 3){
-                this.$router.replace(`/introduce2/${self.selectItem.communityId}/community`)
+                this.$router.push(`/introduce2/${self.selectItem.communityId}/community`)
               }else {
-                this.$router.replace(`/introduce/${self.selectItem.communityId}/community`)
+                this.$router.push(`/introduce/${self.selectItem.communityId}/community`)
               }
             }
             
@@ -448,7 +448,8 @@ import { getBeaconsApi } from '@/api/pages/home'
         margin-bottom: 22px;*/
       }
       .joinde {
-        font-size:20px;
+        height: 60px;
+        font-size:18px;
         font-family:SourceHanSansCN-Bold;
         font-weight:bold;
         color:rgba(255,254,254,1);
