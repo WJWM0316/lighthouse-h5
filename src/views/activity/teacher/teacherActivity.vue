@@ -78,7 +78,7 @@
         </div>
       </div>
       <!-- 学员评价 -->
-      <img class="tea_tit4" src="./../../../assets/activity/teacher/teach_tit_5.png" />
+      <img class="tea_tit4" src="./../../../assets/activity/teacher/teach_tit_4.png" />
       <img class="tea_evaluate" src="./../../../assets/activity/teacher/teach_evaluate.png" />
       <!-- 适合人群 -->
       <img class="tea_tit5" src="./../../../assets/activity/teacher/teach_tit_5.png" />
@@ -132,7 +132,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     pickedParams = { // 页面所需参数
       tagId: 0
     }
-    toPay = true
+    toPay = false
 
     payListMsg = [
       {
@@ -211,7 +211,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     selectItem = {}
     allBuyItem = {}
     allBuyCommunityId = '02b81714611b454f2daa2ea5fa53b5be'
-
+    statistics = {}
     allBuy () {
       console.log('allBuy')
       this.selectItem = this.allBuyItem
@@ -250,10 +250,14 @@ import { getBeaconsApi } from '@/api/pages/home'
 
     closePya(){
       this.toPay = false
-      this.$router.go(0)
+      this.allBuyItem.isJoined = 1
     }
 
     created () {
+      console.log('====',this.$route)
+      if(this.$route.query){
+        this.statistics = this.$route.query
+      }
       getCommunityInfoApi({communityId: this.payListMsg[8].testId}).then(res=>{
         console.log(res)
         this.allBuyItem = res
@@ -269,14 +273,15 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
     // ------------------------------------------------
     async payIn () {
-      console.log(this.allBuyCommunityId,this.selectItem , this.allBuyCommunityId == this.selectItem.communityId)
-
 
       const params = await payApi({
         productId: this.selectItem.communityId,
         productType: 1,
-        userCouponId: 0
+        userCouponId: 0,
+        specialTopic : this.statistics && this.statistics.specialTopic?this.statistics.specialTopic:'',
+        messageId: this.statistics && this.statistics.messageId?this.statistics.messageId:'',
       })
+
       const arr = Object.keys(params || {})
       if (arr.length !== 0) {
         if (typeof WeixinJSBridge === 'undefined') {
