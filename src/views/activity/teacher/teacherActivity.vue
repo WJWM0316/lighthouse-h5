@@ -228,17 +228,17 @@ import { getBeaconsApi } from '@/api/pages/home'
 
       getCommunityInfoApi({communityId: item.testId}).then(res=>{
         console.log(res)
+        this.selectItem.joinPrice = res.joinPrice
+        this.selectItem.isCourse = res.isCourse
+        this.selectItem.communityId = res.communityId
         if(res.isJoined!==1){
-          this.selectItem.joinPrice = res.joinPrice
-          this.selectItem.isCourse = res.isCourse
-          this.selectItem.communityId = res.communityId
           this.payIn()
         }else {
           console.log(this.payListMsg)
           if(res.isCourse === 3){
-            this.$router.replace(`/introduce2/${item.communityId}/community`)
+            this.$router.replace(`/introduce2/${this.selectItem.communityId}/community`)
           }else {
-            this.$router.replace(`/introduce/${item.communityId}/community`)
+            this.$router.replace(`/introduce/${this.selectItem.communityId}/community`)
           }
         }
       })
