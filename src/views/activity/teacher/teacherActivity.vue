@@ -234,7 +234,7 @@ import { getBeaconsApi } from '@/api/pages/home'
         this.selectItem.joinPrice = res.joinPrice
         this.selectItem.isCourse = res.isCourse
         this.selectItem.communityId = res.communityId
-        if(res.isJoined!==1){
+        if(res.isJoined!==1 && res.isAuthor !== 1){
           this.payIn()
         }else {
           console.log(this.payListMsg)
