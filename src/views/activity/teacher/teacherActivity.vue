@@ -229,6 +229,14 @@ import { getBeaconsApi } from '@/api/pages/home'
       getCommunityInfoApi({communityId: this.allBuyCommunityId}).then(res=>{
         console.log(res)
         this.allBuyItem = res
+
+        this.wechatShare({
+          'titles': '月薪5万的人都在学的职场必修课',
+          'title': '月薪5万的人都在学的职场必修课',
+          'desc': '如何快速找准自己的职业发展道路？如何提高工作效率告别加班？这一堂，全给你！',
+          'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
+          'link': location.origin + `/beaconweb/#/teacherActivity`
+        })
       })
     }
 
