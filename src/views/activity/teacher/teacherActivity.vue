@@ -86,7 +86,7 @@
       <img class="tea_buy_txt" src="./../../../assets/activity/teacher/teach_buy_txt.png" />
 
       <div class="btns">
-        <div class="joinde" v-if="allBuyItem && allBuyItem.isJoined===1">已购买，请到“已加入”中参与学习哦</div>
+        <div class="joinde" v-if="allBuyItem && allBuyItem.isJoined===1">已购买，返回首页到“已加入”中参与学习吧</div>
         <img class="btn" @click.stop="allBuy" src="./../../../assets/activity/teacher/teach_btn.png" v-else />
       </div>
 
@@ -439,7 +439,7 @@ import { getBeaconsApi } from '@/api/pages/home'
         width: 100%;
         position: absolute;
         bottom: 0;
-        background: #e1e1e1;
+        background: #D35D4A;
         text-align: center;
       }
     }
