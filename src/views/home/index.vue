@@ -18,8 +18,6 @@
       </div>
     </div>
 
-
-    <div class="test" @click="toTeacher">教师节</div>
     <scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- 选项卡 -->
       <div  ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
@@ -164,8 +162,6 @@ export default class HomeIndex extends Vue {
   pickedParams = { // 页面所需参数
     tagId: 0
   }
-
-  testCoures = false   //新版测试使用
 
   created () {
     const routeName = this.$route.name
@@ -471,12 +467,6 @@ export default class HomeIndex extends Vue {
     let url = ''
     if (item.isAuthor === 1 || item.isJoined === 1) { 
       //如果已经加入并且已入社跳转到入社后页面
-
-
-      if(this.testCoures){
-        item.isCourse = 3
-      }
-
       //1 有课。2 无课。3课节
       if(item.isCourse == 3){
         url = `/introduce2/${item.communityId}/community`
@@ -514,12 +504,6 @@ export default class HomeIndex extends Vue {
 @import "../../styles/variables";
 @import "../../styles/mixins";
 @import "../../styles/dprPx";
-.test {
-  width: 100px;
-  height: 100px;
-  font-size: 20px;
-  border: 1px solid #cccccc;
-}
 .p-home-index {
   //padding: 50px 0;
   padding: 44px 0 50px;

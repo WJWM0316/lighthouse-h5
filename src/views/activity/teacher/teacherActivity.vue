@@ -135,80 +135,53 @@ import { getBeaconsApi } from '@/api/pages/home'
     payListMsg = [
       {
         tit: '做好体态管理，开启高端自己',
-        oldMoney: 69,
-        joinPrice: 39,
-        id: 250,
-        testId: '72454f7c3667b878cee45c82ddcbfa0b',
+        communityId: 250,
         teacherName:'阿珂'
       },
       {
         tit: '小白到表达高手的二十堂课',
-        oldMoney: 99,
-        joinPrice: 49,
-        id: 402,
-        testId: '44bbd91394eda5390e94fc36da196250',
+        communityId: 402,
         teacherName:'龙兄'
       },
       {
         tit: '职场选择力：如何让每一步抉择都不走弯路',
-        oldMoney: 199,
-        joinPrice: 99,
-        id: 93,
-        testId: '523b01c2f78c69e1d2817570d395e510',
+        communityId: 93,
         teacherName:'七芊'
       },
       {
         tit: '掌控人生的20堂职场课',
-        oldMoney: 99,
-        joinPrice: 49,
-        id: 239,
-        testId: 'c7bc966d746c223b0f00325b6b2f1de4',
+        communityId: 239,
         teacherName:''
       },
       {
         tit: 'PPT小白成长训练营',
-        oldMoney: 99,
-        joinPrice: 49,
-        id: 258,
-        testId: 'add6b630bcefc6a49c46fcc60c2b7e03',
+        communityId: 258,
         teacherName:'三顿'
       },
       {
         tit: '小白如何逆袭成为月入10w的全能写手',
-        oldMoney: 69,
-        joinPrice: 39,
-        id: 260,
-        testId: '74779b9a2d749cf0567a9ac2afd4ec70',
+        communityId: 260,
         teacherName: 'aida'
       },
       {
         tit: '公众号裂变涨粉实训营',
-        oldMoney: 99,
-        joinPrice: 49,
-        id: 254,
-        testId: '591d4be8b097f00593c20fc169f87aea',
+        communityId: 254,
         teacherName: '书记'
       },
       {
         tit: '用得上的商学课',
-        oldMoney: 99,
-        joinPrice: 49,
-        id: 312,
-        testId: '274a53987412b68fd95c3add3eaa45d4',
+        communityId: 312,
         teacherName: '路聘'
       },{
-        tit: '一键购买198',
-        oldMoney: 99,
-        joinPrice: 49,
-        id: 312,
-        testId: '02b81714611b454f2daa2ea5fa53b5be',
-        teacherName: '一键购买198'
+        tit: '月薪5万的人都在学的职场必修课',
+        communityId: 456,
+        teacherName: '月薪5万的人都在学的职场必修课'
       }
     ]
 
     selectItem = {}
     allBuyItem = {}
-    allBuyCommunityId = '02b81714611b454f2daa2ea5fa53b5be'
+    allBuyCommunityId = '456'
     statistics = {}
     allBuy () {
       console.log('allBuy')
@@ -217,8 +190,8 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
 
     toDetail (index) {
-      console.log(this.payListMsg[index-1].testId)
-      this.$router.push(`/introduce/${this.payListMsg[index-1].testId}`)
+      console.log(this.payListMsg[index-1].communityId)
+      this.$router.push(`/introduce/${this.payListMsg[index-1].communityId}`)
     }
 
     buy (index) {
@@ -227,7 +200,7 @@ import { getBeaconsApi } from '@/api/pages/home'
       let item = this.payListMsg[index-1]
       this.selectItem = item
 
-      getCommunityInfoApi({communityId: item.testId}).then(res=>{
+      getCommunityInfoApi({communityId: item.communityId}).then(res=>{
         console.log(res)
         this.selectItem.joinPrice = res.joinPrice
         this.selectItem.isCourse = res.isCourse
@@ -235,7 +208,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         if(res.isJoined!==1 && res.isAuthor !== 1){
           this.payIn()
         }else {
-          console.log(this.payListMsg)
           if(res.isCourse === 3){
             this.$router.push(`/introduce2/${this.selectItem.communityId}/community`)
           }else {
@@ -257,7 +229,7 @@ import { getBeaconsApi } from '@/api/pages/home'
       if(this.$route.query){
         this.statistics = this.$route.query
       }
-      getCommunityInfoApi({communityId: this.payListMsg[8].testId}).then(res=>{
+      getCommunityInfoApi({communityId: this.allBuyCommunityId}).then(res=>{
         console.log(res)
         this.allBuyItem = res
       })
