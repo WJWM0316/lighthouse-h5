@@ -223,6 +223,7 @@ import { getBeaconsApi } from '@/api/pages/home'
 
     created () {
       console.log('====',this.$route)
+      let that = this
       if(this.$route.query){
         this.statistics = this.$route.query
       }
@@ -230,7 +231,7 @@ import { getBeaconsApi } from '@/api/pages/home'
         console.log(res)
         this.allBuyItem = res
 
-        this.wechatShare({
+        that.wechatShare({
           'titles': '月薪5万的人都在学的职场必修课',
           'title': '月薪5万的人都在学的职场必修课',
           'desc': '如何快速找准自己的职业发展道路？如何提高工作效率告别加班？这一堂，全给你！',
