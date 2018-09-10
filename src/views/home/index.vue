@@ -71,7 +71,7 @@
           <div class="module-home communities" :showFreeIdentification="false" v-if="joins && joins.length > 0">
             <!--<p class="module-home-title">已加入</p>-->
             <div class="list">
-              <community-info-card class="community-item" :type="3" :cardType="'joined'" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+              <community-info-card class="community-item" :type="3" :cardType="'joined'" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" v-if="item.communityId != teacherId" />
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@
       <div v-show="navTabName === 'picked'">
         <div class="communities" v-if="communities && communities.length > 0">
           <div class="list">
-            <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" />
+            <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" v-if="item.communityId != teacherId"/>
           </div>
         </div>
 
@@ -163,6 +163,8 @@ export default class HomeIndex extends Vue {
     tagId: 0
   }
 
+
+  teacherId="3c65e00919e87564156cd90c27404df7" // 活动结束记得要删掉
   created () {
     const routeName = this.$route.name
     if (routeName === 'home') {

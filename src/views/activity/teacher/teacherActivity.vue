@@ -135,42 +135,42 @@ import { getBeaconsApi } from '@/api/pages/home'
     payListMsg = [
       {
         tit: '做好体态管理，开启高端自己',
-        communityId: 250,
+        communityId: '15528745be37f7f9b09d8ad4035bb2fa',
         teacherName:'阿珂'
       },
       {
         tit: '小白到表达高手的二十堂课',
-        communityId: 402,
+        communityId: 'ccc55bf043828408ec461feddb2c7aa5',
         teacherName:'龙兄'
       },
       {
         tit: '职场选择力：如何让每一步抉择都不走弯路',
-        communityId: 93,
+        communityId: 'ff9732862e074978b71f17301b385103',
         teacherName:'七芊'
       },
       {
         tit: '掌控人生的20堂职场课',
-        communityId: 239,
+        communityId: '681a5f0ca92e5fe660d0b34429f28315',
         teacherName:''
       },
       {
         tit: 'PPT小白成长训练营',
-        communityId: 258,
+        communityId: '990bc2d569673aaa1d9642a1c15c6e64',
         teacherName:'三顿'
       },
       {
         tit: '小白如何逆袭成为月入10w的全能写手',
-        communityId: 260,
+        communityId: '03b9200ec0d02059adc1882956104bc2',
         teacherName: 'aida'
       },
       {
         tit: '公众号裂变涨粉实训营',
-        communityId: 254,
+        communityId: 'c1cc895532314b39db4863961a5e9a4a',
         teacherName: '书记'
       },
       {
         tit: '用得上的商学课',
-        communityId: 312,
+        communityId: '9d39fe7163f531fc5670a346715519d9',
         teacherName: '路聘'
       },{
         tit: '月薪5万的人都在学的职场必修课',
@@ -195,13 +195,10 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
 
     buy (index) {
-      console.log(index)
-
       let item = this.payListMsg[index-1]
       this.selectItem = item
 
       getCommunityInfoApi({communityId: item.communityId}).then(res=>{
-        console.log(res)
         this.selectItem.joinPrice = res.joinPrice
         this.selectItem.isCourse = res.isCourse
         this.selectItem.communityId = res.communityId
