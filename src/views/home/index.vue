@@ -1,5 +1,6 @@
 <template>
   <div class="p-body p-home-index" :class="[{'hasBanner' : (isFlex || !bannerList && bannerList.length === 0)  && navTabName === 'picked'}, navTabName]">
+    <div class="test_blo" @click="toTeacher">asdikahjsdauhksdj</div>
     <div class="fixed">
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
@@ -509,6 +510,7 @@ export default class HomeIndex extends Vue {
 .test_blo {
   width: 100px;
   height: 100px;
+  
 }
 .p-home-index {
   //padding: 50px 0;
