@@ -174,14 +174,14 @@ import { getBeaconsApi } from '@/api/pages/home'
         teacherName: '路聘'
       },{
         tit: '月薪5万的人都在学的职场必修课',
-        communityId: 456,
+        communityId: '38ecff5824a5436f604d4b0362b7c6be',
         teacherName: '月薪5万的人都在学的职场必修课'
       }
     ]
 
     selectItem = {}
     allBuyItem = {}
-    allBuyCommunityId = '456'
+    allBuyCommunityId = '38ecff5824a5436f604d4b0362b7c6be' //一件购买id
     statistics = {}
     allBuy () {
       console.log('allBuy')
