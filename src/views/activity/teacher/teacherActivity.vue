@@ -114,6 +114,8 @@ import Scroller from '@/components/scroller'
 import ListMixin from '@/mixins/list'
 import {payApi, freePay} from '@/api/pages/pay'
 import {getCommunityInfoApi} from '@/api/pages/pageInfo'
+import wxUtil from '@/util/wx/index'
+import WechatMixin from '@/mixins/wechat'
 
 import { getBeaconsApi } from '@/api/pages/home'
 
@@ -122,7 +124,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     components: {
       Scroller
     },
-    mixins: [ListMixin]
+    mixins: [ListMixin,WechatMixin]
   })
   export default class HomeIndex extends Vue {
     communities = []
@@ -433,7 +435,7 @@ import { getBeaconsApi } from '@/api/pages/home'
       .joinde {
         height: 60px;
         line-height: 60px;
-        font-size:18px;
+        font-size:16px;
         font-family:SourceHanSansCN-Bold;
         font-weight:bold;
         color:rgba(255,254,254,1);
