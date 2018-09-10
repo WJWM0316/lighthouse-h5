@@ -86,7 +86,7 @@
       <img class="tea_buy_txt" src="./../../../assets/activity/teacher/teach_buy_txt.png" />
 
       <div class="btns">
-        <div class="joinde" v-if="allBuyItem && allBuyItem.isJoined===1">已购买，返回首页到“已加入”中参与学习吧</div>
+        <div class="joinde" @click.stop="toIndex" v-if="allBuyItem && allBuyItem.isJoined===1">已购买，返回首页到“已加入”中参与学习吧</div>
         <img class="btn" @click.stop="allBuy" src="./../../../assets/activity/teacher/teach_btn.png" v-else />
       </div>
 
@@ -220,6 +220,10 @@ import { getBeaconsApi } from '@/api/pages/home'
     closePya(){
       this.toPay = false
       this.allBuyItem.isJoined = 1
+      this.$router.push(`/index`)
+    }
+
+    toIndex(){
       this.$router.push(`/index`)
     }
 
