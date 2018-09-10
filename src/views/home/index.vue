@@ -164,7 +164,7 @@ export default class HomeIndex extends Vue {
   }
 
 
-  teacherId="3c65e00919e87564156cd90c27404df7" // 活动结束记得要删掉
+  teacherId="38ecff5824a5436f604d4b0362b7c6be" // 活动结束记得要删掉
   created () {
     const routeName = this.$route.name
     if (routeName === 'home') {
