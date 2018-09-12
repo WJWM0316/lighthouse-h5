@@ -4,6 +4,7 @@
 
 const path = require('path')
 const address = location.href.split('/')[3]
+console.log(address, '地址啊')
 module.exports = {
   dev: {
 
@@ -63,7 +64,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: `/${address}`,
+    assetsPublicPath: `/${address}/`,
 
     /**
      * Source Maps
