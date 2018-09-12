@@ -3,8 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-const address = window.location.href.split('/')[3]
-console.log(address, '地址啊')
+
 module.exports = {
   dev: {
 
@@ -64,7 +63,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: `/${address}/`,
+    assetsPublicPath: '/beaconweb/',
 
     /**
      * Source Maps
