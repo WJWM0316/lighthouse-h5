@@ -285,14 +285,18 @@ export default class HomeIndex extends Vue {
 
   //获取广告
   getAdvertises () {
-    this.getBanners()
-    this.getAdvertising()
     this.getInsert()
+    this.getBanners()
+
+    setTimeout(()=>{
+      this.getAdvertising()
+    },300)
   }
   /**
    * 获取banner列表
    */
   getBanners () {
+    console.log('getBanners')
     if (this.bannerList.length > 0) {
       return
     }
@@ -301,13 +305,7 @@ export default class HomeIndex extends Vue {
       adType: test
     }).then(res => {
       this.bannerList = res.ads
-      if (res.ads.length > 0) {
-        this.$nextTick(() => {
-          if (this.$refs.tabBanner && this.$refs.advertising && this.$refs.insert) { 
-            this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)+parseInt(this.$refs.insert.clientHeight)
-          }
-        })
-      }
+      
     })
   }
 
@@ -323,6 +321,19 @@ export default class HomeIndex extends Vue {
       adType: id
     }).then((res) => {
       this.advertisingList = res.ads
+      if (res.ads.length > 0) {
+        this.$nextTick(() => {
+          if (this.$refs.tabBanner && this.$refs.advertising && this.$refs.insert) { 
+            this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)+parseInt(this.$refs.insert.clientHeight)
+          }else if(this.$refs.tabBanner && this.$refs.advertising){
+            this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)
+          }else if(this.$refs.advertising){
+            this.scrollHeight = parseInt(this.$refs.advertising.clientHeight)
+          }else if(this.$refs.tabBanner){
+            this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)
+          }
+        })
+      }
     })
   }
 
