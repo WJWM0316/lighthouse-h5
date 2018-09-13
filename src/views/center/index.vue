@@ -18,6 +18,15 @@
     </div>
 
     <div class="navs">
+      <router-link to="/joined" class="item">
+        <div class="left">
+          <i class="icon u-icon-center-light" />
+          <span class="title">我加入的灯塔</span>
+        </div>
+        <div class="addon">
+          <i class="addon-icon u-icon-center-angle-right" />
+        </div>
+      </router-link>
       <router-link :to="model.isCommunity === 1 ? '/center/liteCenter' : '/center/createLite'" class="item">
         <div class="left">
           <i class="icon u-icon-center-create" />
@@ -58,25 +67,17 @@
           <i class="addon-icon u-icon-center-angle-right" />
         </div>
       </router-link>
-      <router-link :to="`/center/help`" class="item">
-        <div class="left">
-          <i class="icon u-icon-center-help" />
-          <span class="title">使用帮助</span>
-        </div>
-        <div class="addon">
-          <i class="addon-icon u-icon-center-angle-right" />
-        </div>
-      </router-link>
-      <router-link :to="`/center/protocol`" class="item">
-        <div class="left">
-          <i class="icon u-icon-center-protocol" />
-          <span class="title">用户协议</span>
-        </div>
-        <div class="addon">
-          <i class="addon-icon u-icon-center-angle-right" />
-        </div>
-      </router-link>
+
+      <div class="navs_blo">
+        <router-link :to="`/center/help`" class="blo_item">
+            <span class="title">使用帮助</span>
+        </router-link>
+        <router-link :to="`/center/protocol`" class="blo_item">
+            <span class="title">用户协议</span>
+        </router-link>
+      </div>
     </div>
+
   </div>
 </template>
 <script>
@@ -123,6 +124,42 @@ export default class HomeIndex extends Vue {
 <style lang="less" type="text/less">
 @import "../../styles/variables";
 @import "../../styles/mixins";
+
+
+.u-icon-center-light {
+  background-image: url("../../assets/icon/icon_list_aboutlh@3x.png");
+  width: 20px;
+  height: 20px;
+}
+.navs_blo {
+  height:20px;
+  text-align: center;
+  margin: 80px 0 30px 0;
+  display: flex;
+  justify-content: center;
+  .blo_item {
+    font-family: PingFangSC-Light;
+    font-weight: 300;
+    color: rgba(188,188,188,1);
+    line-height:20px;
+    font-size:13px;
+    position: relative;
+    &:first-of-type {
+      margin-right: 40px;
+
+      &::before {
+        content: '';
+        width: 1px;
+        height: 20px;
+        border-radius: 22px;
+        background: rgba(220,220,220,1);
+        position: absolute;
+        right: -20px;
+        top: 0;
+      }
+    } 
+  }
+}
 .p-body{
 	padding-bottom: 53px;
 }

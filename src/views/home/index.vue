@@ -29,11 +29,15 @@
         </ul>
       </div>
 
+
       <div class="advertising_list" v-if="navTabName === 'picked'&&advertisingList&&advertisingList.length>0">
           <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
               <img class="opt_pic" :src="item.imgUrl"></img>
           </div>
       </div>
+
+      <img class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0" @click.prevent.stop="handleTapBanner(insert)"></img>
+
       <!-- 轮播图 -->
       <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
           <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
@@ -149,7 +153,6 @@ export default class HomeIndex extends Vue {
   isFlex = false
   scrollTabLeft = 0 // tab
   scrollHeight = 0 // 计算banner 跟 tab 的高度
-  advertisingList = []
   // ******************* 已加入 **********************
   creations = []
   joins = []
@@ -162,6 +165,10 @@ export default class HomeIndex extends Vue {
   pickedParams = { // 页面所需参数
     tagId: 0
   }
+  insert = '' //广告插页
+  advertisingList = [] //广告推荐
+
+
 
 
   teacherId="38ecff5824a5436f604d4b0362b7c6be" // 活动结束记得要删掉
@@ -206,7 +213,7 @@ export default class HomeIndex extends Vue {
 
     this.pickedParams.tagId = communityTagList[tagIndex].id
     this.communities = []
-    this.getBanners()
+
     this.pickedInit()
   }
 
@@ -233,7 +240,6 @@ export default class HomeIndex extends Vue {
         await this.joinedInit()
         break
       default:
-        await this.getBanners()
         await this.pickedInit()
         break
     }
@@ -246,7 +252,6 @@ export default class HomeIndex extends Vue {
   async joinedInit () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
     console.log('加入 Tab 初始')
-
     await this.getList({ page: 1 })
   }
 
@@ -256,9 +261,8 @@ export default class HomeIndex extends Vue {
   async pickedInit () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
     console.log('精选 Tab 初始')
-
-    await this.getTagsList()
-    await this.getAdvertising()
+    this.getAdvertises()
+    this.getTagsList()
     await this.getList({ page: 1 })
   }
 
@@ -275,6 +279,13 @@ export default class HomeIndex extends Vue {
    **/
   getPickedApi (params) {
     return getBeaconsApi(params)
+  }
+
+  //获取广告
+  getAdvertises () {
+    this.getBanners()
+    this.getAdvertising()
+    this.getInsert()
   }
   /**
    * 获取banner列表
@@ -295,23 +306,35 @@ export default class HomeIndex extends Vue {
       }
     })
   }
+
   /**
    * 获取三个广告位
    */
   getAdvertising () {
-    let test = 42
+    let id = 42
     if (this.advertisingList.length > 0) {
       return
     }
     return getAdvertisingApi({
-      adType: test
+      adType: id
     }).then((res) => {
-      console.log('=========',res)
       this.advertisingList = res.ads
-    }).catch(e => {
-      console.log('=========',e)
     })
   }
+
+  /**
+   * 获取广告插页
+   */
+  getInsert () {
+    let id = 101
+
+    return getAdvertisingApi({
+      adType: id
+    }).then((res) => {
+      this.insert = res.ads[0]
+    })
+  }
+
   /**
    * 获取tab列表
    */
@@ -491,7 +514,6 @@ export default class HomeIndex extends Vue {
 
   // 点击广告列
   toAdvertising (type) {
-    console.log(type)
     if (type) {
       this.$router.push(`/advertising/${type}`)
     }
@@ -577,6 +599,8 @@ export default class HomeIndex extends Vue {
       color: #929292;
       letter-spacing: 0;
       line-height: 22px;
+      z-index: 2;
+
       &:nth-of-type(3) {
         margin-right: 0;
         float: right;
@@ -596,9 +620,27 @@ export default class HomeIndex extends Vue {
       position: relative;
       color: #354048;
       letter-spacing: -0.26px;
+      &::before {
+        content: '';
+        width: 100%;
+        height: 4px;
+        border-radius: 22px;
+        background: #ffe266;
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        opacity: .8;
+        z-index: 1;
+      }
     }
   }
+  .insert {
+    width: 351px;
+    height: 104px;
+    margin: 0 auto 15px auto;
+    display: block;
 
+  }
   .advertising_list {
     margin: 0 12px;
     display: flex;
