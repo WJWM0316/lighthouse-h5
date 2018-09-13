@@ -5,6 +5,7 @@
       <div class="nav-bar fs15" :class="navTabName">
         <span @click="toggle('picked')">精选</span>
         <span class="join" :class="{'message': isMessage}" @click="toggle('joined')">已加入</span>
+
         <span class="create" @click="toggleCreate()">创建灯塔</span>
        <!--  <span @click="toggle('find')">发现</span> -->
       </div>
@@ -20,7 +21,7 @@
 
     <scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- 选项卡 -->
-      <div  ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
+      <div ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
         <ul>
           <li v-for="(item, index) in bannerList" :key="`banner_${index}`" @click.prevent.stop="handleTapBanner(item)">
               <image-item class="chose-tab-img" :src="item.imgUrl" />
@@ -29,14 +30,13 @@
         </ul>
       </div>
 
-
-      <div class="advertising_list" v-if="navTabName === 'picked'&&advertisingList&&advertisingList.length>0">
+      <div ref="advertising" class="advertising_list" v-if="navTabName === 'picked'&&advertisingList&&advertisingList.length>0">
           <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
               <img class="opt_pic" :src="item.imgUrl"></img>
           </div>
       </div>
 
-      <img class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0" @click.prevent.stop="handleTapBanner(insert)"></img>
+      <img ref="insert" class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0" @click.prevent.stop="handleTapBanner(insert)"></img>
 
       <!-- 轮播图 -->
       <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
@@ -56,9 +56,6 @@
               @click="tagSelected(indexTag)"></span>
       </div>
    
-
-    
-
       <!-- 已加入 -->
       <div v-show="navTabName === 'joined'">
 
@@ -103,8 +100,6 @@
         </div>
       </div>
 
-      
-
       <!-- 精选 -->
       <div v-show="navTabName === 'picked'">
         <div class="communities" v-if="communities && communities.length > 0">
@@ -112,10 +107,8 @@
             <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" v-if="item.communityId != teacherId"/>
           </div>
         </div>
-
       </div>
     </scroller>
-
   </div>
 </template>
 <script>
@@ -301,7 +294,11 @@ export default class HomeIndex extends Vue {
       this.bannerList = res.ads
       if (res.ads.length > 0) {
         this.$nextTick(() => {
-          if (this.$refs.tabBanner) { this.scrollHeight = this.$refs.tabBanner.clientHeight }
+          console.log('======',this.$refs.tabBanner.clientHeight,this.$refs.advertising.clientHeight,this.$refs.insert.clientHeight)
+          if (this.$refs.tabBanner) { 
+            this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)+parseInt(this.$refs.insert.clientHeight)
+            console.log('======',this.scrollHeight)
+          }
         })
       }
     })
@@ -327,7 +324,9 @@ export default class HomeIndex extends Vue {
    */
   getInsert () {
     let id = 101
-
+    if (this.insert) {
+      return
+    }
     return getAdvertisingApi({
       adType: id
     }).then((res) => {
@@ -600,7 +599,6 @@ export default class HomeIndex extends Vue {
       letter-spacing: 0;
       line-height: 22px;
       z-index: 2;
-
       &:nth-of-type(3) {
         margin-right: 0;
         float: right;
