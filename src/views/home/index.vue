@@ -3,8 +3,17 @@
     <div class="fixed">
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
-        <span @click="toggle('picked')">精选</span>
-        <span class="join" :class="{'message': isMessage}" @click="toggle('joined')">已加入</span>
+        <span class="tit" @click="toggle('picked')">
+          精选
+          <i class="txt">精选</i>
+          <i class="pick_border" v-if="navTabName === 'picked'"></i>
+        </span>
+        <span class="tit join" :class="{'message': isMessage}" @click="toggle('joined')">
+          已加入
+          <i class="txt">已加入</i>
+          <i class="pick_border" v-if="navTabName !== 'picked'"></i>
+        </span>
+
 
         <span class="create" @click="toggleCreate()">创建灯塔</span>
        <!--  <span @click="toggle('find')">发现</span> -->
@@ -294,7 +303,7 @@ export default class HomeIndex extends Vue {
       this.bannerList = res.ads
       if (res.ads.length > 0) {
         this.$nextTick(() => {
-          if (this.$refs.tabBanner) { 
+          if (this.$refs.tabBanner && this.$refs.advertising && this.$refs.insert) { 
             this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)+parseInt(this.$refs.insert.clientHeight)
           }
         })
@@ -597,6 +606,10 @@ export default class HomeIndex extends Vue {
       letter-spacing: 0;
       line-height: 22px;
       z-index: 2;
+      &.tit {
+        text-align: center;
+        color: rgba(0,0,0,0);
+      }
       &:nth-of-type(3) {
         margin-right: 0;
         float: right;
@@ -607,17 +620,7 @@ export default class HomeIndex extends Vue {
         letter-spacing: 0;
         //line-height: 40px;
       }
-    }
-    &.joined span:nth-of-type(2),
-    &.picked span:nth-of-type(1) {
-      //font-family: PingFangSC-Medium;
-      font-weight: 700;
-      .fontSize(24);
-      position: relative;
-      color: #354048;
-      letter-spacing: -0.26px;
-      &::before {
-        content: '';
+      .pick_border {
         width: 100%;
         height: 4px;
         border-radius: 22px;
@@ -628,6 +631,37 @@ export default class HomeIndex extends Vue {
         opacity: .8;
         z-index: 1;
       }
+      .txt {
+        position: absolute;
+        left: 0;
+        z-index: 2;
+        font-style: initial;
+        color: #929292;
+      }
+    }
+    &.joined span:nth-of-type(2),
+    &.picked span:nth-of-type(1) {
+      //font-family: PingFangSC-Medium;
+      font-weight: 700;
+      .fontSize(24);
+      position: relative;
+      color: #354048;
+      letter-spacing: -0.26px;
+      .txt {
+        color: #354048;
+      }
+      /*&::after {
+        content: '';
+        width: 100%;
+        height: 4px;
+        border-radius: 22px;
+        background: #ffe266;
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        opacity: .8;
+        z-index: 1;
+      }*/
     }
   }
   .insert {
