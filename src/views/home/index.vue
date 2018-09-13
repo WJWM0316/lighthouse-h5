@@ -36,7 +36,7 @@
           </div>
       </div>
 
-      <img ref="insert" class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0" @click.prevent.stop="handleTapBanner(insert)"></img>
+      <img ref="insert" class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0&& navTabName === 'picked'" @click.prevent.stop="handleTapBanner(insert)"></img>
 
       <!-- 轮播图 -->
       <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
@@ -294,10 +294,8 @@ export default class HomeIndex extends Vue {
       this.bannerList = res.ads
       if (res.ads.length > 0) {
         this.$nextTick(() => {
-          console.log('======',this.$refs.tabBanner.clientHeight,this.$refs.advertising.clientHeight,this.$refs.insert.clientHeight)
           if (this.$refs.tabBanner) { 
             this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)+parseInt(this.$refs.insert.clientHeight)
-            console.log('======',this.scrollHeight)
           }
         })
       }
