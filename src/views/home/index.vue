@@ -4,8 +4,8 @@
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
         <span class="tit" @click="toggle('picked')">
-          精选.
-          <i class="txt">精选.</i>
+          精选
+          <i class="txt">精选</i>
           <i class="pick_border" v-if="navTabName === 'picked'"></i>
         </span>
         <span class="tit join" :class="{'message': isMessage}" @click="toggle('joined')">
