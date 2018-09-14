@@ -134,7 +134,7 @@ export default class HomeIndex extends Vue {
 .navs_blo {
   height:20px;
   text-align: center;
-  margin: 80px 0 30px 0;
+  margin: 60px 0 0px 0;
   display: flex;
   justify-content: center;
   .blo_item {
@@ -150,12 +150,12 @@ export default class HomeIndex extends Vue {
       &::before {
         content: '';
         width: 1px;
-        height: 20px;
+        height: 18px;
         border-radius: 22px;
         background: rgba(220,220,220,1);
         position: absolute;
         right: -20px;
-        top: 0;
+        top: 1px;
       }
     } 
   }
@@ -167,8 +167,7 @@ export default class HomeIndex extends Vue {
 .p-center-index {
   .header {
       .setFlex();
-      margin-bottom: 20px;
-      padding: 30px;
+      padding: 30px 30px 20px 30px;
       line-height: 23px;
       font-size: 13px;
 
@@ -186,6 +185,7 @@ export default class HomeIndex extends Vue {
           display: block;
           margin-bottom: 9px;
           color: #929292;
+          .setEllipsisLn(1);
         }
 
         .edit-btn {
@@ -210,7 +210,7 @@ export default class HomeIndex extends Vue {
     }
 
     .navs {
-
+      padding-bottom: 30px;
       .item {
         .setFlex();
         padding: 20px 30px;

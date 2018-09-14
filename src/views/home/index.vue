@@ -567,12 +567,11 @@ export default class HomeIndex extends Vue {
 }
 .p-home-index {
   //padding: 50px 0;
-  padding: 44px 0 50px;
+  padding: 50px 0 50px;
   box-sizing: border-box;
-
   &.picked {
     // padding: 113px 0 50px;
-    padding: 44px 0 50px;
+    padding: 50px 0 50px;
   }
   &.hasBanner {
      padding: 89px 0 50px;
@@ -605,7 +604,7 @@ export default class HomeIndex extends Vue {
     color: #929292;
     .fontSize(18);
     line-height: 1.22;
-    padding: 12px 15px 10px ;
+    padding: 12px 15px 15px ;
     background-color: #ffffff;
     /* box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);  */
 
@@ -648,8 +647,7 @@ export default class HomeIndex extends Vue {
       }
       .pick_border {
         width: 100%;
-        height: 4px;
-        border-radius: 22px;
+        height: 6px;
         background: #ffe266;
         position: absolute;
         left: 0;
@@ -695,7 +693,7 @@ export default class HomeIndex extends Vue {
     height: 104px;
     margin: 0 auto 15px auto;
     display: block;
-
+    border-radius: 6px;
   }
   .advertising_list {
     margin: 0 12px;
@@ -703,11 +701,11 @@ export default class HomeIndex extends Vue {
     flex-direction: row;
     justify-content: space-between;
     padding-bottom: 15px;
-    padding-top: 8px;
+    padding-top: 6px;
     .opt_blo {
       width: 111px;
       height: 48px;
-      border-radius: 5px;
+      border-radius: 6px;
       position: relative;
       line-height: 48px;
       text-align: left;
