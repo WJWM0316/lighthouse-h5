@@ -1,6 +1,7 @@
 <template>
   <div class="p-body p-home-index" :class="[{'hasBanner' : (isFlex || !bannerList && bannerList.length === 0)  && navTabName === 'picked'}, navTabName]">
     <div class="fixed">
+      {{scrollHeight}}
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
         <span class="tit" @click="toggle('picked')">
@@ -185,6 +186,16 @@ export default class HomeIndex extends Vue {
     this.init()
   }
 
+  beforeMount(){
+  }
+
+  mounted(){
+    this.getAdvertising()
+  }
+
+  updated(){
+  }
+
   /**
    * 切换nav
    **/
@@ -197,6 +208,13 @@ export default class HomeIndex extends Vue {
       const name = targetName === 'picked' ? 'home' : 'joined'
       this.$router.push({name})
       this.init()
+
+      console.log('-0-0-')
+      if(this.navTabName !== 'joined'){
+        this.getAdvertising()
+      }
+
+
     }
   }
 
@@ -287,16 +305,12 @@ export default class HomeIndex extends Vue {
   getAdvertises () {
     this.getInsert()
     this.getBanners()
-
-    setTimeout(()=>{
-      this.getAdvertising()
-    },300)
+    //this.getAdvertising()
   }
   /**
    * 获取banner列表
    */
   getBanners () {
-    console.log('getBanners')
     if (this.bannerList.length > 0) {
       return
     }
@@ -314,25 +328,27 @@ export default class HomeIndex extends Vue {
    */
   getAdvertising () {
     let id = 42
-    if (this.advertisingList.length > 0) {
+    /*if (this.advertisingList.length > 0 && this.scrollHeight !=0 ) {
       return
-    }
+    }*/
     return getAdvertisingApi({
       adType: id
     }).then((res) => {
       this.advertisingList = res.ads
       if (res.ads.length > 0) {
-        this.$nextTick(() => {
-          if (this.$refs.tabBanner && this.$refs.advertising && this.$refs.insert) { 
-            this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)+parseInt(this.$refs.insert.clientHeight)
-          }else if(this.$refs.tabBanner && this.$refs.advertising){
-            this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)
-          }else if(this.$refs.advertising){
-            this.scrollHeight = parseInt(this.$refs.advertising.clientHeight)
-          }else if(this.$refs.tabBanner){
-            this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)
-          }
-        })
+        setTimeout(()=>{
+          this.$nextTick(() => {
+            if (this.$refs.tabBanner && this.$refs.advertising && this.$refs.insert) { 
+              this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)+parseInt(this.$refs.insert.clientHeight)
+            }else if(this.$refs.tabBanner && this.$refs.advertising){
+              this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)
+            }else if(this.$refs.advertising){
+              this.scrollHeight = parseInt(this.$refs.advertising.clientHeight)
+            }else if(this.$refs.tabBanner){
+              this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)
+            }
+          })
+        },100)
       }
     })
   }
