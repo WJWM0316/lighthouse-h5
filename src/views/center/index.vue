@@ -167,7 +167,7 @@ export default class HomeIndex extends Vue {
 .p-center-index {
   .header {
       .setFlex();
-      padding: 30px 30px 20px 30px;
+      padding: 30px;
       line-height: 23px;
       font-size: 13px;
 

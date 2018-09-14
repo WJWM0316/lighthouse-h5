@@ -693,7 +693,7 @@ export default class HomeIndex extends Vue {
     height: 104px;
     margin: 0 auto 15px auto;
     display: block;
-    border-radius: 6px;
+    border-radius: 3px;
   }
   .advertising_list {
     margin: 0 12px;
@@ -705,7 +705,7 @@ export default class HomeIndex extends Vue {
     .opt_blo {
       width: 111px;
       height: 48px;
-      border-radius: 6px;
+      border-radius: 3px;
       position: relative;
       line-height: 48px;
       text-align: left;
@@ -788,7 +788,7 @@ export default class HomeIndex extends Vue {
         margin-left: 10px;
         box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.08);
         margin-bottom: 10px;
-        border-radius: 6px;
+        border-radius: 3px;
         vertical-align: top;
         &:last-child {
           margin-right: 15px;
