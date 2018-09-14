@@ -1,7 +1,6 @@
 <template>
   <div class="p-body p-home-index" :class="[{'hasBanner' : (isFlex || !bannerList && bannerList.length === 0)  && navTabName === 'picked'}, navTabName]">
     <div class="fixed">
-      {{scrollHeight}}
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
         <span class="tit" @click="toggle('picked')">
