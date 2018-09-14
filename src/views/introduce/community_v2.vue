@@ -112,6 +112,19 @@
               <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
               <p>暂时没有内容～</p>
             </div>
+
+            <!-- 相关推荐 -->
+            <div class="module relevant" v-if="relevantList.length > 0 && showType">
+
+              <div class="module-title">
+                <p>相关推荐</p>
+              </div>
+              <div class="hr"></div>
+
+              <div class="module-content">
+                <community-info-card class="community-item" v-for="item in relevantList" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" cardType="picked" />
+              </div>
+            </div>
           </div>
         </div>
 

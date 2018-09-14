@@ -3,8 +3,18 @@
     <div class="fixed">
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
-        <span @click="toggle('picked')">精选</span>
-        <span class="join" :class="{'message': isMessage}" @click="toggle('joined')">已加入</span>
+        <span class="tit" @click="toggle('picked')">
+          精选
+          <i class="txt">精选</i>
+          <i class="pick_border" v-if="navTabName === 'picked'"></i>
+        </span>
+        <span class="tit join" :class="{'message': isMessage}" @click="toggle('joined')">
+          已加入
+          <i class="txt">已加入</i>
+          <i class="pick_border" v-if="navTabName !== 'picked'"></i>
+        </span>
+
+
         <span class="create" @click="toggleCreate()">创建灯塔</span>
        <!--  <span @click="toggle('find')">发现</span> -->
       </div>
@@ -20,7 +30,7 @@
 
     <scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- 选项卡 -->
-      <div  ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
+      <div ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
         <ul>
           <li v-for="(item, index) in bannerList" :key="`banner_${index}`" @click.prevent.stop="handleTapBanner(item)">
               <image-item class="chose-tab-img" :src="item.imgUrl" />
@@ -29,11 +39,14 @@
         </ul>
       </div>
 
-      <div class="advertising_list" v-if="navTabName === 'picked'&&advertisingList&&advertisingList.length>0">
+      <div ref="advertising" class="advertising_list" v-if="navTabName === 'picked'&&advertisingList&&advertisingList.length>0">
           <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
               <img class="opt_pic" :src="item.imgUrl"></img>
           </div>
       </div>
+
+      <img ref="insert" class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0&& navTabName === 'picked'" @click.prevent.stop="handleTapBanner(insert)"></img>
+
       <!-- 轮播图 -->
       <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
           <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
@@ -52,9 +65,6 @@
               @click="tagSelected(indexTag)"></span>
       </div>
    
-
-    
-
       <!-- 已加入 -->
       <div v-show="navTabName === 'joined'">
 
@@ -99,8 +109,6 @@
         </div>
       </div>
 
-      
-
       <!-- 精选 -->
       <div v-show="navTabName === 'picked'">
         <div class="communities" v-if="communities && communities.length > 0">
@@ -108,10 +116,8 @@
             <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" v-if="item.communityId != teacherId"/>
           </div>
         </div>
-
       </div>
     </scroller>
-
   </div>
 </template>
 <script>
@@ -149,7 +155,6 @@ export default class HomeIndex extends Vue {
   isFlex = false
   scrollTabLeft = 0 // tab
   scrollHeight = 0 // 计算banner 跟 tab 的高度
-  advertisingList = []
   // ******************* 已加入 **********************
   creations = []
   joins = []
@@ -162,6 +167,10 @@ export default class HomeIndex extends Vue {
   pickedParams = { // 页面所需参数
     tagId: 0
   }
+  insert = '' //广告插页
+  advertisingList = [] //广告推荐
+
+
 
 
   teacherId="38ecff5824a5436f604d4b0362b7c6be" // 活动结束记得要删掉
@@ -176,6 +185,16 @@ export default class HomeIndex extends Vue {
     this.init()
   }
 
+  beforeMount(){
+  }
+
+  mounted(){
+    this.getAdvertising()
+  }
+
+  updated(){
+  }
+
   /**
    * 切换nav
    **/
@@ -188,6 +207,13 @@ export default class HomeIndex extends Vue {
       const name = targetName === 'picked' ? 'home' : 'joined'
       this.$router.push({name})
       this.init()
+
+      console.log('-0-0-')
+      if(this.navTabName !== 'joined'){
+        this.getAdvertising()
+      }
+
+
     }
   }
 
@@ -206,7 +232,7 @@ export default class HomeIndex extends Vue {
 
     this.pickedParams.tagId = communityTagList[tagIndex].id
     this.communities = []
-    this.getBanners()
+
     this.pickedInit()
   }
 
@@ -233,7 +259,6 @@ export default class HomeIndex extends Vue {
         await this.joinedInit()
         break
       default:
-        await this.getBanners()
         await this.pickedInit()
         break
     }
@@ -246,7 +271,6 @@ export default class HomeIndex extends Vue {
   async joinedInit () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
     console.log('加入 Tab 初始')
-
     await this.getList({ page: 1 })
   }
 
@@ -256,9 +280,8 @@ export default class HomeIndex extends Vue {
   async pickedInit () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
     console.log('精选 Tab 初始')
-
-    await this.getTagsList()
-    await this.getAdvertising()
+    this.getAdvertises()
+    this.getTagsList()
     await this.getList({ page: 1 })
   }
 
@@ -276,6 +299,13 @@ export default class HomeIndex extends Vue {
   getPickedApi (params) {
     return getBeaconsApi(params)
   }
+
+  //获取广告
+  getAdvertises () {
+    this.getInsert()
+    this.getBanners()
+    //this.getAdvertising()
+  }
   /**
    * 获取banner列表
    */
@@ -288,30 +318,55 @@ export default class HomeIndex extends Vue {
       adType: test
     }).then(res => {
       this.bannerList = res.ads
-      if (res.ads.length > 0) {
-        this.$nextTick(() => {
-          if (this.$refs.tabBanner) { this.scrollHeight = this.$refs.tabBanner.clientHeight }
-        })
-      }
+      
     })
   }
+
   /**
    * 获取三个广告位
    */
   getAdvertising () {
-    let test = 42
-    if (this.advertisingList.length > 0) {
+    let id = 42
+    /*if (this.advertisingList.length > 0 && this.scrollHeight !=0 ) {
+      return
+    }*/
+    return getAdvertisingApi({
+      adType: id
+    }).then((res) => {
+      this.advertisingList = res.ads
+      if (res.ads.length > 0) {
+        setTimeout(()=>{
+          this.$nextTick(() => {
+            if (this.$refs.tabBanner && this.$refs.advertising && this.$refs.insert) { 
+              this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)+parseInt(this.$refs.insert.clientHeight)
+            }else if(this.$refs.tabBanner && this.$refs.advertising){
+              this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)
+            }else if(this.$refs.advertising){
+              this.scrollHeight = parseInt(this.$refs.advertising.clientHeight)
+            }else if(this.$refs.tabBanner){
+              this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)
+            }
+          })
+        },100)
+      }
+    })
+  }
+
+  /**
+   * 获取广告插页
+   */
+  getInsert () {
+    let id = 101
+    if (this.insert) {
       return
     }
     return getAdvertisingApi({
-      adType: test
+      adType: id
     }).then((res) => {
-      console.log('=========',res)
-      this.advertisingList = res.ads
-    }).catch(e => {
-      console.log('=========',e)
+      this.insert = res.ads[0]
     })
   }
+
   /**
    * 获取tab列表
    */
@@ -491,7 +546,6 @@ export default class HomeIndex extends Vue {
 
   // 点击广告列
   toAdvertising (type) {
-    console.log(type)
     if (type) {
       this.$router.push(`/advertising/${type}`)
     }
@@ -513,12 +567,11 @@ export default class HomeIndex extends Vue {
 }
 .p-home-index {
   //padding: 50px 0;
-  padding: 44px 0 50px;
+  padding: 50px 0 50px;
   box-sizing: border-box;
-
   &.picked {
     // padding: 113px 0 50px;
-    padding: 44px 0 50px;
+    padding: 50px 0 50px;
   }
   &.hasBanner {
      padding: 89px 0 50px;
@@ -551,7 +604,7 @@ export default class HomeIndex extends Vue {
     color: #929292;
     .fontSize(18);
     line-height: 1.22;
-    padding: 12px 15px 10px ;
+    padding: 12px 15px 15px ;
     background-color: #ffffff;
     /* box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);  */
 
@@ -577,6 +630,11 @@ export default class HomeIndex extends Vue {
       color: #929292;
       letter-spacing: 0;
       line-height: 22px;
+      z-index: 2;
+      &.tit {
+        text-align: center;
+        color: rgba(0,0,0,0);
+      }
       &:nth-of-type(3) {
         margin-right: 0;
         float: right;
@@ -587,6 +645,23 @@ export default class HomeIndex extends Vue {
         letter-spacing: 0;
         //line-height: 40px;
       }
+      .pick_border {
+        width: 100%;
+        height: 6px;
+        background: #ffe266;
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        opacity: .8;
+        z-index: 1;
+      }
+      .txt {
+        position: absolute;
+        left: 0;
+        z-index: 2;
+        font-style: initial;
+        color: #929292;
+      }
     }
     &.joined span:nth-of-type(2),
     &.picked span:nth-of-type(1) {
@@ -594,22 +669,43 @@ export default class HomeIndex extends Vue {
       font-weight: 700;
       .fontSize(24);
       position: relative;
-      color: #354048;
+      //color: #354048;
       letter-spacing: -0.26px;
+      .txt {
+        color: #354048;
+      }
+      /*&::after {
+        content: '';
+        width: 100%;
+        height: 4px;
+        border-radius: 22px;
+        background: #ffe266;
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        opacity: .8;
+        z-index: 1;
+      }*/
     }
   }
-
+  .insert {
+    width: 351px;
+    height: 104px;
+    margin: 0 auto 15px auto;
+    display: block;
+    border-radius: 3px;
+  }
   .advertising_list {
     margin: 0 12px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding-bottom: 15px;
-    padding-top: 8px;
+    padding-top: 6px;
     .opt_blo {
       width: 111px;
       height: 48px;
-      border-radius: 5px;
+      border-radius: 3px;
       position: relative;
       line-height: 48px;
       text-align: left;
@@ -692,7 +788,7 @@ export default class HomeIndex extends Vue {
         margin-left: 10px;
         box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.08);
         margin-bottom: 10px;
-        border-radius: 6px;
+        border-radius: 3px;
         vertical-align: top;
         &:last-child {
           margin-right: 15px;
