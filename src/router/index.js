@@ -41,7 +41,7 @@ router.beforeEach(async (to, from, next) => {
   }
   
   // 介绍页面需要做百度统计
-  if (to.name === 'introduce') {
+  if (to.name === 'introduce' || to.name === 'introduce2' ) {
     setTimeout(()=>{
      var _hmt = _hmt || [];
      (function() {
@@ -54,7 +54,10 @@ router.beforeEach(async (to, from, next) => {
       s.parentNode.insertBefore(hm, s);
      })();
    },0)
-  } else if (to.query.fromSource) {
+  } else {
+    document.getElementById('baidu_tj') && document.getElementById('baidu_tj').remove();
+  }
+  if (to.query.fromSource) {
     setTimeout(()=>{
      var _hmt = _hmt || [];
      (function() {
@@ -66,9 +69,8 @@ router.beforeEach(async (to, from, next) => {
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
      })();
-   },0)
+    },0)
   } else {
-    document.getElementById('baidu_tj') && document.getElementById('baidu_tj').remove();
     document.getElementById('baidu_tj_xx') && document.getElementById('baidu_tj_xx').remove();
   }
   next() // 确保一定要调用 next()
