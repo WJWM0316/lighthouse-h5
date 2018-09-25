@@ -28,6 +28,7 @@
 
       <div class="btn_cont">
         <div class="btn_main">
+          <a href="https://www.wjx.top/m/28346944.aspx"></a>
           <img class="btn" src="./../../../assets/activity/train/btn.png" />
           <p class="txt">我要报名</p>
           <p class="num" v-if="peopleNum>0">(已有{{peopleNum}}人报名)</p>
@@ -94,6 +95,14 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        a {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+        }
         .txt {
           font-size: 17px;
           font-family:SourceHanSansCN-Bold;
