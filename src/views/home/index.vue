@@ -1,8 +1,5 @@
 <template>
   <div class="p-body p-home-index" :class="[{'hasBanner' : (isFlex || !bannerList && bannerList.length === 0)  && navTabName === 'picked'}, navTabName]">
-
-
-    <div class="test_blo" @click="toTest"></div>
     <div class="fixed">
       <!-- tab -->
       <div class="nav-bar fs15" :class="navTabName">
