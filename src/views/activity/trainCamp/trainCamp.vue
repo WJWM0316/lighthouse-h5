@@ -176,11 +176,11 @@ import { planetYouth } from '@/api/pages/activity'
         this.peopleNum = res
 
         that.wechatShare({
-          'titles': '月薪5万的人都在学的职场必修课',
-          'title': '月薪5万的人都在学的职场必修课',
-          'desc': '如何快速找准自己的职业发展道路？如何提高工作效率告别加班？这一堂，全给你！',
-          'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
-          'link': location.origin + `/beaconweb/#/teacherActivity`
+          'titles': '行星青年·互联网训练营广东班第一期开班啦',
+          'title': '行星青年·互联网训练营广东班第一期开班啦',
+          'desc': '4天线下培训+60天社群陪伴，撩动爱学习的你~',
+          'imgUrl': 'https://www.zike.com/zikeappstatic/lighthousestatic/youngCamp/image/share.png',
+          'link': location.href
         })
       })
     }
