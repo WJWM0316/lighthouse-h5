@@ -48,8 +48,9 @@
       <div class="qr-container">
         <i class="u-icon-close icon-close" @click="closeQrCode(3)"></i>
         <div class="title">支付成功</div>
-        <div class="content">长按识别二维码，来撩客服小姐姐~</div>
+        <div class="content">长按识别二维码，关注公众号上课</div>
         <img class="qrcode" src="./assets/page/qr_kf_3.jpg">
+        <div class="content">如有疑问，来撩客服小姐姐（zike003）</div>
       </div>
     </div>
     <div class="home-mask" v-if="isShowQrcodes4">

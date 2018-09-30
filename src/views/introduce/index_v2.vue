@@ -496,18 +496,8 @@
             let number = Math.random() * 10 + 1
             console.log('communityId', communityId)
             switch (communityId) {
-              case '0125347d17e7c24d7e969783a26b922d': // 好点子塔
-                self.$store.dispatch('show_qr', {type: 3})
-                break
-
-              case '270abb50e490783896f2396e58bfbfad': // 活动塔0628
-                self.$store.dispatch('show_qr', {type: 1})
-                break
-              case '953c439c79fdd336bf5864aa2d6356ac': // 活动塔271考拉塔
-                self.$store.dispatch('show_qr', {type: 4})
-                break
               default:
-                self.$store.dispatch('show_qr', {type: 2})
+                self.$store.dispatch('show_qr', {type: 3})
                 break
             }
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
