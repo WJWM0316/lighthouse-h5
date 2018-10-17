@@ -8,6 +8,8 @@
     <router-view v-if="!$route.meta.keepAlive">
       <!-- 这里是不被缓存的视图组件！ -->
     </router-view>
+    
+
     <tabbar slot="bottom" id="homeNav" class="home-nav" v-show="isNavShow"
             @on-index-change="goSomeWhere">
       <tabbar-item :selected="isSelected(tab.src)"
@@ -532,7 +534,10 @@ export default class App extends Vue {
 <style lang="less" type="text/less">
 @import "./styles/index";
 
-
+.ceshi {
+  font-size: 24PX;
+  line-height: 24PX;
+}
 [v-cloak] {
   display: none !important;
 } 
