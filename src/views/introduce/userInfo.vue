@@ -166,6 +166,7 @@
      * 点击卡片
      */
     handleTap (item) {
+      let url = ''
       if (item.isJoined || item.isAuthor) { // 如果已经加入跳转到入社后页面
         //1 有课。2 无课。3课节
         if(item.isCourse == 3){

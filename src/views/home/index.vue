@@ -45,7 +45,11 @@
           </div>
       </div>
 
-      <img ref="insert" class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0&& navTabName === 'picked'" @click.prevent.stop="handleTapBanner(insert)"></img>
+      <div ref="insert" class="insert"  v-if="navTabName === 'picked'">
+        <img  class="insert_block" v-for="item, index in insertList" :src="item.imgUrl" @click.prevent.stop="handleTapBanner(item)"></img>
+      </div>
+
+      <!-- <img ref="insert" class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0&& navTabName === 'picked'" @click.prevent.stop="handleTapBanner(insert)"></img> -->
 
       <!-- 轮播图 -->
       <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
@@ -167,7 +171,7 @@ export default class HomeIndex extends Vue {
   pickedParams = { // 页面所需参数
     tagId: 0
   }
-  insert = '' //广告插页
+  insertList = '' //广告插页
   advertisingList = [] //广告推荐
 
 
@@ -357,13 +361,13 @@ export default class HomeIndex extends Vue {
    */
   getInsert () {
     let id = 101
-    if (this.insert) {
+    if (this.insertList) {
       return
     }
     return getAdvertisingApi({
       adType: id
     }).then((res) => {
-      this.insert = res.ads[0]
+      this.insertList = res.ads
     })
   }
 
@@ -551,8 +555,8 @@ export default class HomeIndex extends Vue {
     }
   }
 
-  toTeacher (){
-    this.$router.push(`/teacherActivity`)
+  toTest (){
+    this.$router.push(`/trainCamp`)
   }
 }
 </script>
@@ -688,7 +692,7 @@ export default class HomeIndex extends Vue {
       }*/
     }
   }
-  .insert {
+  .insert_block {
     width: 351px;
     height: 104px;
     margin: 0 auto 15px auto;

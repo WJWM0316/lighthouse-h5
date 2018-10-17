@@ -122,7 +122,25 @@ export default class CenterLiteCenter extends Vue {
    * 点击社区项
    */
   handleTapItem ({ item, event } = {}) {
-    this.$router.push(`/introduce/${item.communityId}/community`)
+
+    let url = ''
+    console.log(item)
+    if (item.isJoined || item.isAuthor) { // 如果已经加入跳转到入社后页面
+      //1 有课。2 无课。3课节
+      if(item.isCourse == 3){
+        url = `/introduce2/${item.communityId}/community`
+      }else {
+        url = `/introduce/${item.communityId}/community`
+      }
+    } else { // 未入社跳到未入社页面
+      //1 有课。2 无课。3课节
+      if(item.isCourse == 3){
+        url = `/introduce2/${item.communityId}`
+      }else {
+        url = `/introduce/${item.communityId}`
+      }
+    }
+    this.$router.push(url)
   }
 }
 </script>
