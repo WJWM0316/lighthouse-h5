@@ -104,7 +104,7 @@
 						//已授权请求成功
 						this.item=res.coupon;
 						this.isReceive = res.isReceive;
-						location.href=`${this.testUrl}?#/couponResult?status=receive${this.prama}`;
+						location.href=`${this.realUrl}?#/couponResult?status=receive${this.prama}`;
 					})
 				}).catch((res)=>{
 					this.$vux.toast.text('网络错误，请刷新重试', 'bottom')
@@ -113,7 +113,7 @@
 			},
 			//已经领取，去使用
 			toUse(){
-			  location.href=`${this.testUrl}?#/couponResult?status=issued${this.prama}`;
+			  location.href=`${this.realUrl}?#/couponResult?status=issued${this.prama}`;
 			},
 			//领取完了
 			toLate(){
@@ -128,7 +128,7 @@
 			let status = str.match(pattern);
 			console.log(status,"...............")
 			this.status = status[0];
-			if (this.status === 'yqY') {
+			if (this.status === 'a2a') {
 			  this.prama = '&isNeed'
 			} else if (this.status === 'oXG') {
 			  this.prama = '&isBoss'
