@@ -8,20 +8,22 @@
 		</div>
 		<div class="title" v-show="status===2">
 			<span>你已经领过该优惠券</span>
-			<span>请到小灯塔公众号体验</span>
+			<span>请到小灯塔体验</span>
 		</div>
 		<div class="title" v-show="status===1">
 			<span>领取成功</span>
-			<span>请到小灯塔公众号体验</span>
+			<span>请到小灯塔体验</span>
 		</div>
 		<!--二维码-->
 		<div class="QRcode">
 			<div class="tip">长按识别二维码</div>
-			<img class="QR" src="../../../assets/icon/wx-qrcode2.png" alt="" />
+			<img class="QR" v-if="isNeed === 'isNeed'" src="../../../assets/icon/wx-qrcode3.png" alt="" />
+			<img class="QR" v-if="isNeed === 'isBoss'" src="../../../assets/icon/wx-qrcode4.png" alt="" />
+			<img class="QR" v-else src="../../../assets/icon/wx-qrcode2.png" alt="" />
 			<div class="txt">
 				<span>非微信打开，怎么办？</span>
 				<span>请先保存图片，再用微信扫一扫或者</span>
-				<span>打开微信搜索公众号“小灯塔”进行关注</span>
+				<span>打开微信搜索公众号“小灯塔职场”进行使用</span>
 			</div>
 		</div>
 		<!--按钮-->
@@ -37,12 +39,15 @@
 		data(){
 			return{
 				status:'',
+				isNeed: ''
 			}
 		},
 		created(){
 			let pattern = /(\w+)=(\w+)/ig;
+			let isNeed = /([^&]+)$/ig;
 			let str = window.location.hash;
 			let status = str.match(pattern);
+			this.isNeed = str.match(isNeed)[0];
 //			this.status=1;
 			switch(status[0]){
 				case "status=receive":

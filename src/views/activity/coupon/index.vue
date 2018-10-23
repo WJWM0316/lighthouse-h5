@@ -90,6 +90,7 @@
 //				},
 				isReceive:'',		//是否领取
 				status:'',			//路劲带过来的id
+				prama: ''  // 要带的参数
 			}
 		},
 		methods:{
@@ -98,14 +99,11 @@
 //				alert("我是正常领取调用")
 				couponReceiveApi(this.status).then((res)=>{
 					couponsApi(this.status).then((res)=>{
-						
 						//已授权请求成功
 						this.item=res.coupon;
 						this.isReceive = res.isReceive;
-						location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=receive";
+						location.href=`https://www.ziwork.com/beaconweb/?#/couponResult?status=receive${prama}`;
 					})
-					
-					
 				}).catch((res)=>{
 					this.$vux.toast.text('网络错误，请刷新重试', 'bottom')
 					console.log("领取出错信息：",res)
@@ -113,16 +111,11 @@
 			},
 			//已经领取，去使用
 			toUse(){
-//				alert("已领取调用")
-				location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=issued";
+			  location.href=`https://www.ziwork.com/beaconweb/?#/couponResult?status=issued${prama}`;
 			},
 			//领取完了
 			toLate(){
-//				alert("无法领取调用")
-//				couponReceiveApi(this.item.couponId).then((res)=>{
-//					window.location.href="https://demo2016.thetiger.com.cn/beaconweb/?#/couponResult?status=1";
-//				})
-				location.href="https://www.ziwork.com/beaconweb/?#/couponResult?status=end";
+			  location.href=`https://www.ziwork.com/beaconweb/?#/couponResult?status=end${prama}`;
 			}
 		},
 		created(){
@@ -133,6 +126,11 @@
 			let status = str.match(pattern);
 			console.log(status,"...............")
 			this.status = status[0];
+			if (this.status === 'yqY') {
+			  this.prama = '&isNeed'
+			} else if (this.status === 'oXG') {
+			  this.prama = '&isBoss'
+			}
 			
 			document.querySelector('title').innerHTML = "小灯塔"
 			couponsApi(this.status).then((res)=>{
