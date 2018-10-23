@@ -75,7 +75,6 @@
 						status:'',		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
 						useEndTime:'',		//优惠券结束时间
 						useStartTime:'',		//优惠券开始时间
-						testUrl: 'https://demo2016.thetiger.com.cn/beaconweb/',
 						realUrl: 'https://www.ziwork.com/beaconweb/'
 					},
 //				item:{
