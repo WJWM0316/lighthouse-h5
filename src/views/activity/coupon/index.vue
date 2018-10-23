@@ -113,11 +113,11 @@
 			},
 			//已经领取，去使用
 			toUse(){
-			  location.href=`${this.testUrl}?#/couponResult?status=issued${prama}`;
+			  location.href=`${this.testUrl}?#/couponResult?status=issued${this.prama}`;
 			},
 			//领取完了
 			toLate(){
-			  location.href=`https://www.ziwork.com/beaconweb/?#/couponResult?status=end${prama}`;
+			  location.href=`https://www.ziwork.com/beaconweb/?#/couponResult?status=end${this.prama}`;
 			}
 		},
 		created(){
