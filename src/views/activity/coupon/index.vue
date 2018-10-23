@@ -116,7 +116,7 @@
 			},
 			//领取完了
 			toLate(){
-			  location.href=`https://www.ziwork.com/beaconweb/?#/couponResult?status=end${this.prama}`;
+			  location.href=`${this.realUrl}?#/couponResult?status=end${this.prama}`;
 			}
 		},
 		created(){
