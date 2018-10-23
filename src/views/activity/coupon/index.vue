@@ -75,6 +75,8 @@
 						status:'',		//是否为可领取状态：1.正常;2.不可领取;3.不可使用
 						useEndTime:'',		//优惠券结束时间
 						useStartTime:'',		//优惠券开始时间
+						testUrl: 'https://demo2016.thetiger.com.cn/beaconweb/',
+						realUrl: 'https://www.ziwork.com/beaconweb/'
 					},
 //				item:{
 //					couponId:11,		//优惠券的id
@@ -102,7 +104,7 @@
 						//已授权请求成功
 						this.item=res.coupon;
 						this.isReceive = res.isReceive;
-						location.href=`https://www.ziwork.com/beaconweb/?#/couponResult?status=receive${prama}`;
+						location.href=`${this.testUrl}?#/couponResult?status=receive${this.prama}`;
 					})
 				}).catch((res)=>{
 					this.$vux.toast.text('网络错误，请刷新重试', 'bottom')
@@ -111,7 +113,7 @@
 			},
 			//已经领取，去使用
 			toUse(){
-			  location.href=`https://www.ziwork.com/beaconweb/?#/couponResult?status=issued${prama}`;
+			  location.href=`${testUrl}?#/couponResult?status=issued${prama}`;
 			},
 			//领取完了
 			toLate(){
