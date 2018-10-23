@@ -18,7 +18,7 @@
 		<div class="QRcode">
 			<div class="tip">长按识别二维码</div>
 			<img class="QR" v-if="isNeed === 'isNeed'" src="../../../assets/icon/wx-qrcode3.png" alt="" />
-			<img class="QR" v-if="isNeed === 'isBoss'" src="../../../assets/icon/wx-qrcode4.png" alt="" />
+			<img class="QR" v-else-if="isNeed === 'isBoss'" src="../../../assets/icon/wx-qrcode4.png" alt="" />
 			<img class="QR" v-else src="../../../assets/icon/wx-qrcode2.png" alt="" />
 			<div class="txt">
 				<span>非微信打开，怎么办？</span>
