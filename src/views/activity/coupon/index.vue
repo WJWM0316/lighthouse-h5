@@ -113,7 +113,7 @@
 			},
 			//已经领取，去使用
 			toUse(){
-			  location.href=`${testUrl}?#/couponResult?status=issued${prama}`;
+			  location.href=`${this.testUrl}?#/couponResult?status=issued${prama}`;
 			},
 			//领取完了
 			toLate(){
