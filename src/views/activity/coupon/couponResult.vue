@@ -23,7 +23,7 @@
 			<div class="txt">
 				<span>非微信打开，怎么办？</span>
 				<span>请先保存图片，再用微信扫一扫</span>
-				<!--<span>打开微信搜索公众号“小灯塔职场”进行使用</span>-->
+				<span v-if="isNeed !== 'isNeed">或者打开微信搜索公众号“小灯塔职场”进行使用</span>
 			</div>
 		</div>
 		<!--按钮-->
