@@ -19,6 +19,10 @@ import { smsApi } from '@/api/pages/login'
     disabled: {
       type: Boolean,
       default: false
+    },
+    isAppCoupon: {
+      type: Boolean,
+      default: false
     }
   }
 })
@@ -30,8 +34,10 @@ export default class TimeBtn extends Vue {
     if (this.time > 0) return
     if (!this.loginInfo.mobile) {
       this.$vux.toast.text('请输入手机号码', 'bottom')
+      Vue.$vux.loading.hide()
     } else if (this.loginInfo.mobile.length !== 11) {
       this.$vux.toast.text('手机号码格式不对', 'bottom')
+      Vue.$vux.loading.hide()
     } else {
       try {
         const params = {...this.loginInfo, from: this.type}
@@ -55,10 +61,14 @@ export default class TimeBtn extends Vue {
   }
 
   get text () {
-    if (this.timeFlag === false) {
-      return '获取验证码'
-    } else {
+    if (this.isAppCoupon) {
       return this.time > 0 ? this.time + 's' : '重新获取'
+    } else {
+      if (this.timeFlag === false) {
+        return '获取验证码'
+      } else {
+        return this.time > 0 ? this.time + 's' : '重新获取'
+      }
     }
   }
 

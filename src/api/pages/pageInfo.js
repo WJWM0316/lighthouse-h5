@@ -278,6 +278,14 @@ export const gaokaoApi = (data) => {
   })
 }
 
+//app优惠券信息接口
+export const couponAppApi = (couponid) => {
+  return request({
+    url: '/wap/couponApp/'+couponid,
+    type:'get',
+  })
+}
+
 // 优惠信息接口
 export const couponsApi = (couponid) => {
   return request({
@@ -290,7 +298,7 @@ export const couponsApi = (couponid) => {
 export const couponReceiveApi = (couponid) => {
   return request({
     url: '/wap/coupon/receive/'+couponid,
-    type:'post',
+    type:'post'
   })
 }
 
