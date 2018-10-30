@@ -182,7 +182,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       // 调起app
       toApp (res, appUrl) {
         let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
-        isInapp = userAgent.indexOf("ttBeacon")>=0;
+        isInapp = userAgent.indexOf("ttbeacon")>=0;
         if (isInapp) {
           this.send(res)
 //        alert('app内部')
@@ -238,7 +238,11 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       },
       // 跳转app
       send (str) {
-        window.WebViewJavascriptBridge.send(str);
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
+          window.WebViewJavascriptBridge.callHandler(str)
+        } else {
+          window.WebViewJavascriptBridge.send(str);
+        }
       }
     },
     created(){
