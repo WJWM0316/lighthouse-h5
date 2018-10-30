@@ -239,7 +239,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       // 跳转app
       send (str) {
         if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
-          window.WebViewJavascriptBridge.callHandler(str)
+          window.WebViewJavascriptBridge.callHandler.send(str)
         } else {
           window.WebViewJavascriptBridge.send(str);
         }
