@@ -36,13 +36,13 @@
           if (isInapp) {
             let res = JSON.stringify({type:118})
             this.send(res)
-//          alert('app内')
+            alert('app内')
           }else{
-//          alert('外部浏览器')
+            alert('外部浏览器')
             console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
             let appUrl = "ttbeacon://app:8080/launcher?t=3"
             if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
-//            alert("ios")
+              alert("ios")
               window.location.href = appUrl
               let iframe = document.createElement('iframe');
               let body = document.body;
@@ -54,7 +54,7 @@
               }, 2000)
             }
             if(navigator.userAgent.match(/android/i)){
-//            alert("安卓")
+              alert("安卓")
               let iframe = document.createElement('iframe');
               let body = document.body;
               iframe.style.cssText='display:none;width=0;height=0'
@@ -71,13 +71,25 @@
       // 跳转app
       send (str) {
         if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
-          window.WebViewJavascriptBridge.callHandler('send', str, function(response) {
-            console.log('JS got response', response)
+          this.setupWebViewJavascriptBridge(function(bridge) {
+            bridge.registerHandler('testJSFunction', function(data, responseCallback) {})
           })
+          window.WebViewJavascriptBridge.callHandler('send', str)
         } else {
           window.WebViewJavascriptBridge.send(str);
         }
       },
+      /* 注册 */
+      setupWebViewJavascriptBridge (callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+      }
     },
     created () {
       this.amount = this.$route.query.amount
