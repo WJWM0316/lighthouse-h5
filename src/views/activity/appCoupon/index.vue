@@ -97,7 +97,7 @@ import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
 import wxUtil from '@/util/wx/index'
 import WechatMixin from '@/mixins/wechat'
 import { appCouponReceiveApi,couponAppApi } from '@/api/pages/pageInfo'
-import { loginApi, getCodeImg } from '@/api/pages/login'
+import { loginApi, getAppCodeImg } from '@/api/pages/login'
   export default {
     components: {
       XInput,
@@ -129,7 +129,8 @@ import { loginApi, getCodeImg } from '@/api/pages/login'
           sms: '',
           verifyCode: '',
           from: '16', // 1 注册 2 登录
-          coupon_id_code: ""
+          coupon_id_code: "",
+          app: 1
         },
         phoneNum: '', // 手机号码
         isSendMessage: false,
@@ -214,7 +215,7 @@ import { loginApi, getCodeImg } from '@/api/pages/login'
       },
       async refreshCode () {
         try {
-          const resp = await getCodeImg()
+          const resp = await getAppCodeImg()
           if (resp.imgcodeUrl) {
             this.codeImgUrl = resp.imgcodeUrl
             this.needImgCode = true

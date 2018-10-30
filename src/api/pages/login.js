@@ -63,6 +63,14 @@ export const getCodeImg = (data) => {
   })
 }
 
+// 获取验证码图片
+export const getAppCodeImg = (data) => {
+  return request({
+    url: '/wap/h5/captchas',
+    data
+  })
+}
+
 // 是否需要跳转手动授权
 export const isNeedGrantApi = (data) => {
   return request({

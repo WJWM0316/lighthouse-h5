@@ -47,7 +47,7 @@
           }else{
             alert(11111111)
             console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
-            let appUrl = " ttbeacon://app:8080/launcher?t=3\ "
+            let appUrl = "ttbeacon://app:8080/launcher?t=3"
             if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
               alert("ios")
               window.location.href = appUrl
@@ -84,16 +84,17 @@
 
 <style lang="less" scoped="scoped">
   .CouponResult{
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
     background: #FFEB4F;
+    padding-top: 30px;
+    padding-left: 20px;
     position: relative;
     .contentBox{
       text-align: center;
       padding-top: 34px;
-      position: absolute;
-      top: 30px;
-      left: 20px;
+      position: relative;
       background: #FFFFFF;
       width: 335px;
       height: 495px;
@@ -185,10 +186,8 @@
       font-size: 12px;
       color: #A37A43;
       font-weight: 300;
-      position: absolute;
-      bottom: 42px;
-      left: 50%;
-      transform: translateX(-50%);
+      text-align: center;
+      margin-top: 20px;
     }
   }
 </style>
