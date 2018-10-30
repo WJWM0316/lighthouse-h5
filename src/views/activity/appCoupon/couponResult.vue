@@ -70,8 +70,14 @@
       },
       // 跳转app
       send (str) {
-        window.WebViewJavascriptBridge.send(str);
-      }
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
+          window.WebViewJavascriptBridge.callHandler('send', str, function(response) {
+            console.log('JS got response', response)
+          })
+        } else {
+          window.WebViewJavascriptBridge.send(str);
+        }
+      },
     },
     created () {
       this.amount = this.$route.query.amount
