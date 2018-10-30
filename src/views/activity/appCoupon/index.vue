@@ -240,7 +240,9 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       // 跳转app
       send (str) {
         if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
+          alert('我是ios')
           window.WebViewJavascriptBridge.callHandler('send', str, function(response) {
+            alert(response)
             console.log('JS got response', response)
           })
         } else {
