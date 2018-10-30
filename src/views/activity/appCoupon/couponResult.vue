@@ -29,15 +29,6 @@
     },
     methods: {
       toApp () {
-//      let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
-//      isInapp = userAgent.indexOf("sunyuki")>=0;
-//      if (isInapp) {
-//        let str = JSON.stringify({type:102,extraParams:{communityId:'f66d1a5c49e578085f976097e0bdb2f6'}})
-//        WebViewJavascriptBridge.callHandler('send',str,function(response) {
-//          alert(response);
-//          document.getElementById("returnValue").value = response;
-//        });
-//      }
         
           let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
           isInapp = userAgent.indexOf("TTBeacon")>=0;
@@ -74,6 +65,10 @@
             }
           }
         
+      },
+      // 跳转app
+      send (str) {
+        window.WebViewJavascriptBridge.send(str);
       }
     },
     created () {
@@ -187,7 +182,7 @@
       color: #A37A43;
       font-weight: 300;
       text-align: center;
-      margin-top: 20px;
+      padding-top: 20px;
     }
   }
 </style>
