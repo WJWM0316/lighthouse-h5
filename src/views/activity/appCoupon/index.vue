@@ -73,6 +73,7 @@
     </div>
     <div class="mask" v-if="needImgCode">
       <div class="codeImgBox">
+        <div class="close" @click.stop="close">X</div>
         <div class="title">重新获取短信验证码</div>
         <x-input 
           v-model="info.verifyCode"
@@ -239,10 +240,15 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       // 跳转app
       send (str) {
         if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
-          window.WebViewJavascriptBridge.callHandler.send(str)
+          WebViewJavascriptBridge.callHandler('send', str, function(response) {
+            console.log('JS got response', response)
+          })
         } else {
           window.WebViewJavascriptBridge.send(str);
         }
+      },
+      close () {
+        this.needImgCode = false
       }
     },
     created(){
@@ -390,7 +396,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       /*分界线*/
       .line{
         position: relative;
-        border-bottom: 3px dotted #FFE266;
+        border-bottom: 2px dotted #FFE266;
         &::before{
           content: '';
           width: 13px;
@@ -430,7 +436,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
           justify-content: center;
         }
         .inpPhone::-webkit-input-placeholder{
-          color: #929292;
+          color: #BCBCBC;
         }
         .verificationCode::-webkit-input-placeholder{
           color: #929292;
@@ -601,6 +607,16 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
           color: #354048;
           font-size: 16px;
           margin-top: 25px;
+        }
+        .close{
+          text-align: center;
+          color: #BCBCBC;
+          line-height: 30px;
+          position: absolute;
+          right: 5px;
+          top: 5px;
+          width: 30px;
+          height: 30px;
         }
       }
     }
