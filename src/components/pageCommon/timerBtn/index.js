@@ -41,10 +41,11 @@ export default class TimeBtn extends Vue {
     } else {
       try {
         const params = {...this.loginInfo, from: this.type}
+        let res
         if (this.$route.path === "/appCoupon") {
-          await appSmsApi(params)
+          res = await appSmsApi(params)
         } else {
-          await smsApi(params)
+          res = await smsApi(params)
         }
         this.$vux.toast.text('验证码发送成功，<br>请留意短信', 'bottom')
         this.time = this.second
@@ -52,7 +53,8 @@ export default class TimeBtn extends Vue {
         this.timer()
       } catch (e) {
         this.$vux.toast.text(e.message, 'bottom')
-        if (e.data && e.data.imgcodeUrl) this.$emit('send', e.data.imgcodeUrl)
+        console.log(e)
+        if (e && e.imgcodeUrl) this.$emit('send', e.imgcodeUrl)
       }
     }
   }

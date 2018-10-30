@@ -179,12 +179,6 @@ async function process(response) {
     }
     return {}
   }
-  if (data && data.statusCode === 400) { // 未入社进入社后请求报的错 跳转到入社介绍页 需要一个社区id
-    // hideLoading(globalLoading)
-    alert(data.statusCode)
-    return {}
-  }
-
   // hideLoading(globalLoading)
   return Promise.reject(data)
 }

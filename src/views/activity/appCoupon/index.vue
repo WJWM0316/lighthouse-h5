@@ -177,7 +177,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
         }else{
           alert(1111111111)
           console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
-          let appUrl = " ttbeacon://app:8080/launcher?t=3\ "
+          let appUrl = "ttbeacon://app:8080/launcher?t=3"
           if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
             alert("ios")
             window.location.href = appUrl
@@ -211,7 +211,8 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       },
       onSend (imgcodeUrl) { // 显示图片验证码
         this.needImgCode = true
-        this.refreshCode()
+        this.codeImgUrl = imgcodeUrl
+//      this.refreshCode()
       },
       async refreshCode () {
         try {
