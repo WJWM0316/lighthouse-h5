@@ -36,13 +36,13 @@
           if (isInapp) {
             let res = JSON.stringify({type:118})
             this.send(res)
-            alert('app内')
+//          alert('app内')
           }else{
-            alert('外部浏览器')
+//          alert('外部浏览器')
             console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
             let appUrl = "ttbeacon://app:8080/launcher?t=3"
             if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
-              alert("ios")
+//            alert("ios")
               window.location.href = appUrl
               let iframe = document.createElement('iframe');
               let body = document.body;
@@ -54,7 +54,7 @@
               }, 2000)
             }
             if(navigator.userAgent.match(/android/i)){
-              alert("安卓")
+//            alert("安卓")
               let iframe = document.createElement('iframe');
               let body = document.body;
               iframe.style.cssText='display:none;width=0;height=0'

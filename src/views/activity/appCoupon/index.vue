@@ -187,12 +187,12 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
         alert(isInapp)
         if (isInapp) {
           this.send(res)
-          alert('app内部')
+//        alert('app内部')
         }else{
-          alert('app外部浏览器')
+//        alert('app外部浏览器')
           //console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
           if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
-            alert("ios")
+//          alert("ios")
             let iframe = document.createElement('iframe');
             let body = document.body;
             iframe.style.cssText='display:none;width=0;height=0'
@@ -204,7 +204,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
             }, 2000)
           }
           if(navigator.userAgent.match(/android/i)){
-            alert("安卓")
+//          alert("安卓")
             let iframe = document.createElement('iframe');
             let body = document.body;
             iframe.style.cssText='display:none;width=0;height=0'
