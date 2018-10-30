@@ -35,8 +35,9 @@
           if (isInapp) {
             let res = JSON.stringify({type:118})
             this.send(res)
+            alert('app内')
           }else{
-            alert(11111111)
+            alert('外部浏览器')
             console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
             let appUrl = "ttbeacon://app:8080/launcher?t=3"
             if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){

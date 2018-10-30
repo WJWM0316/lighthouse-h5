@@ -170,12 +170,14 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       toUse(){
         
         let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
-        isInapp = userAgent.indexOf("TTBeacon")>=0;
+        isInapp = userAgent.indexOf("ttBeacon")>=0;
+        console.log(userAgent, 222222222)
         if (isInapp) {
           let res = JSON.stringify({type:118})
           this.send(res)
+          alert('app内部')
         }else{
-          alert(1111111111)
+          alert('app外部浏览器')
           console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
           let appUrl = "ttbeacon://app:8080/launcher?t=3"
           if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
