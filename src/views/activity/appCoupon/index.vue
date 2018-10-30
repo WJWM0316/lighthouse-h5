@@ -182,12 +182,12 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
           let appUrl = "ttbeacon://app:8080/launcher?t=3"
           if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
             alert("ios")
-            window.location.href = appUrl
             let iframe = document.createElement('iframe');
             let body = document.body;
             iframe.style.cssText='display:none;width=0;height=0'
             body.appendChild(iframe);
             iframe.src = appUrl;
+            window.location.href = appUrl
             setTimeout(function() {
               window.location.href = "https://a.app.qq.com/o/simple.jsp?pkgname=com.thetiger.beacon.android";
             }, 2000)
