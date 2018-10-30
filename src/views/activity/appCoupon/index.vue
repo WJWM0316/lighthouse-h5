@@ -292,7 +292,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       width: 345px;
       /*height: 428px;*/
       background-color: #FFFFFF;
-      border-radius: 10px;
+      border-radius: 8px;
       
       .top{
         width: 100%;
@@ -357,6 +357,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
           padding-left: 13px;
           padding-right: 20px;
           span{
+            font-weight: 300;
             display: block;
             width: 100%;
             &:nth-child(1){
@@ -415,7 +416,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
         .verificationCode,
         .unReceive>div{
           width: 285px;
-          height: 49px;
+          height: 44px;
           border-radius: 24.5px;
           background-color: #FA6A30;
           color: #FFFFFF;
@@ -438,7 +439,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
           border: 1px solid #E7E7E7;
           padding: 0 25px;
           box-sizing: border-box;
-          margin-bottom: 20px;
+          margin-bottom: 15px;
         }
         .unReceive{
           display: flex;
@@ -514,9 +515,9 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
         /*验证码*/
         .section {
           width: 285px;
-          height: 49px;
+          height: 44px;
           background-color: #FFFFFF;
-          margin: 25px auto 20px;
+          margin: 15px auto 20px;
           .login-input{
             padding-left: 25px;
             padding-right: 25px;
@@ -575,7 +576,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
           padding-right: 0;
           margin-left: 10px;
           margin-right: 10px;
-          border-bottom: 1px solid #DCDCDC;
+          border-bottom: 0.5px solid #DCDCDC;
           .send-code{
             img{
               width: 90px;
@@ -594,7 +595,6 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
           height: 44px;
           border-radius: 30px;
           color: #354048;
-          font-weight: 500;
           font-size: 16px;
           margin-top: 25px;
         }

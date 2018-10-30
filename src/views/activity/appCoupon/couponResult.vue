@@ -7,7 +7,8 @@
         <div class="description">优惠券金额</div>
       </div>
       <div class="txt">
-      	点击下方按钮 前往小灯塔App使用吧～
+      	<p>点击下方按钮</p> 
+      	<p>前往小灯塔App使用吧～</p>
       </div>
       <div class="btn" @click.stop="toApp">立即使用</div>
       <div class="bg">
@@ -129,7 +130,9 @@
         width: 240px;
         height: 90px;
         text-align: center;
-        background-color: #F8F8F8;
+        background-image: url(../../../assets/icon/appconponbg.png);
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
         .amount{
           line-height: 36px;
           margin-top: 18px;
@@ -138,6 +141,7 @@
           font-weight: 500;
           span{
             font-size: 17.5px;
+            margin-right: 3px;
           }
         }
       }
@@ -151,7 +155,7 @@
         color: #354048;
         margin-top: 33.5px;
         display: inline-block;
-        width: 162px;
+        width: 200px;
         height: 42px;
         line-height: 21px;
       }
