@@ -302,6 +302,15 @@ export const couponReceiveApi = (couponid) => {
   })
 }
 
+// app优惠券领取
+export const appCouponReceiveApi = (data) => {
+  return request({
+    url: '/wap/couponApp/couponReceive',
+    data,
+    type:'post'
+  })
+}
+
 // 个人中心展示列表优惠券列表
 export const couponListApi = (data) => {
   return request({

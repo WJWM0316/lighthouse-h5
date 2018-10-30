@@ -29,19 +29,55 @@
     },
     methods: {
       toApp () {
-        let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
-        isInapp = userAgent.indexOf("sunyuki")>=0;
-        if (isInapp) {
-          let str = JSON.stringify({type:102,extraParams:{communityId:'f66d1a5c49e578085f976097e0bdb2f6'}})
-          WebViewJavascriptBridge.callHandler('send',str,function(response) {
-            alert(response);
-            document.getElementById("returnValue").value = response;
-          });
-        }
+//      let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
+//      isInapp = userAgent.indexOf("sunyuki")>=0;
+//      if (isInapp) {
+//        let str = JSON.stringify({type:102,extraParams:{communityId:'f66d1a5c49e578085f976097e0bdb2f6'}})
+//        WebViewJavascriptBridge.callHandler('send',str,function(response) {
+//          alert(response);
+//          document.getElementById("returnValue").value = response;
+//        });
+//      }
+        
+          let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
+          isInapp = userAgent.indexOf("TTBeacon")>=0;
+          if (isInapp) {
+            let res = JSON.stringify({type:118})
+            this.send(res)
+          }else{
+            alert(11111111)
+            console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
+            let appUrl = " ttbeacon://app:8080/launcher?t=3\ "
+            if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
+              alert("ios")
+              window.location.href = appUrl
+              let iframe = document.createElement('iframe');
+              let body = document.body;
+              iframe.style.cssText='display:none;width=0;height=0'
+              body.appendChild(iframe);
+              iframe.src = appUrl;
+              setTimeout(function() {
+                window.location.href = "https://a.app.qq.com/o/simple.jsp?pkgname=com.thetiger.beacon.android";
+              }, 2000)
+            }
+            if(navigator.userAgent.match(/android/i)){
+              alert("安卓")
+              let iframe = document.createElement('iframe');
+              let body = document.body;
+              iframe.style.cssText='display:none;width=0;height=0'
+              body.appendChild(iframe);
+              iframe.src = appUrl;
+              window.location.href = appUrl
+              setTimeout(function() {
+                window.location.href = "https://a.app.qq.com/o/simple.jsp?pkgname=com.thetiger.beacon.android";//android 下载地址
+              }, 2000) 
+            }
+          }
+        
       }
     },
     created () {
-//    this.amount = this.$router.query.amount
+      this.amount = this.$route.query.amount
     }
   }
 </script>
@@ -131,12 +167,15 @@
         width: 270px;
         height: 49px;
         background-color: #FA6A30;
+        position: relative;
+        z-index: 1;
       }
       .bg{
         width: 100%;
         position: absolute;
         bottom: 0;
         left: 0;
+        z-index: 0;
         img{
           width: 100%;
         }

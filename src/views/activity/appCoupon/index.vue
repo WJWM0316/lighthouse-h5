@@ -22,10 +22,10 @@
       </div>
       <div class="line"></div>
       <div class="bottom">
-        <input  v-if="!isLogin || item.status!==5 && !isReceive && !item.isFullCodeNumber && item.status!==2" class="inpPhone" maxlength="11" type="number" placeholder="请输入手机号码" v-model="info.mobile"/>
+        <input  v-if="!isLogin" class="inpPhone" maxlength="11" type="number" placeholder="请输入手机号码" v-model="info.mobile"/>
         <div class="section" style="position: relative" v-if="this.isSendMessage">
           <x-input placeholder="短信验证码"
-                   v-model="code"
+                   v-model="info.sms"
                    :show-clear="showClear"
                    type="tel"
                    :max="6"
@@ -41,12 +41,12 @@
             </span>
           </x-input>
         </div>
-        <div class="receive" v-if="!isLogin || item.status!==5 && !isReceive && !item.isFullCodeNumber && item.status!==2" @click.stop="receive">免费领取优惠券</div>
+        <div class="receive" v-if="!isLogin" @click.stop="receive">免费领取优惠券</div>
         <div class="unReceive" v-else>
-          <span class="littleTitle" v-show="isReceive">你已经领取过该优惠券啦，快去使用吧！</span>
-          <span class="littleTitle" v-show="!isReceive && item.isFullCodeNumber && item.status!==5">来晚啦～优惠券已经被领完了！</span>
-          <span class="littleTitle" v-show="!isReceive && item.status===5">来晚啦～优惠券已经过期！</span>
-          <div v-if="isReceive" @click.stop="toUse">
+          <span class="littleTitle" v-show="isReceive === 2">你已经领取过该优惠券啦，快去使用吧！</span>
+          <span class="littleTitle" v-show="isReceive === 4">来晚啦～优惠券已经被领完了！</span>
+          <span class="littleTitle" v-show="isReceive === 3">来晚啦～优惠券已经过期！</span>
+          <div v-if="isReceive === 2" @click.stop="toUse">
             立即使用
           </div>
           <div v-else @click.stop="toLate">
@@ -69,7 +69,7 @@
     </div>
     <!--底部-->
     <div class="footer">
-      - 小灯塔·职场学习平台 -
+      - 小灯塔·职场分享平台 -
     </div>
     <div class="mask" v-if="needImgCode">
       <div class="codeImgBox">
@@ -78,7 +78,6 @@
           v-model="info.verifyCode"
           placeholder="请输入右侧验证码"
           :show-clear="showClear"
-          type="tel"
           :max="6"
           class="codeImg">
           <span slot="right" class="send-code">
@@ -97,7 +96,7 @@ import { XInput } from 'vux'
 import TimeBtn from '@/components/pageCommon/timerBtn/TimeBtn.vue'
 import wxUtil from '@/util/wx/index'
 import WechatMixin from '@/mixins/wechat'
-import { couponReceiveApi,couponAppApi } from '@/api/pages/pageInfo'
+import { appCouponReceiveApi,couponAppApi } from '@/api/pages/pageInfo'
 import { loginApi, getCodeImg } from '@/api/pages/login'
   export default {
     components: {
@@ -124,19 +123,19 @@ import { loginApi, getCodeImg } from '@/api/pages/login'
         status:'',      //路劲带过来的id
         prama: '',  // 要带的参数
         showClear: false, // 输入框是否显示清空的按钮
-        sendSmsType: 9, // 6.小程序登录,9微信浏览器小灯塔登录
+        sendSmsType: 16, // 6.小程序登录,9微信浏览器小灯塔登录
         info: {
           mobile: '',
           sms: '',
           verifyCode: '',
-          from: '' // 1 注册 2 登录
+          from: '16', // 1 注册 2 登录
+          coupon_id_code: ""
         },
         phoneNum: '', // 手机号码
         isSendMessage: false,
         needImgCode: false, // 是否展示输入验证码
         codeImgUrl: '', // 验证码图片路径
-        isLogin: false, // 是否输入手机号码
-        code: ''
+        isLogin: false // 是否输入手机号码
       }
     },
     methods: {
@@ -144,17 +143,17 @@ import { loginApi, getCodeImg } from '@/api/pages/login'
       receive(){
         console.log(this.isSendMessage)
         if (this.isSendMessage) {
-//        couponReceiveApi(this.status).then(res => {
-//          this.isLogin = true
-//        }).catch(res => {
-//          console.log(this.code)
-//        })
-          let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
-          isInapp = userAgent.indexOf("TTBeacon")>=0;
-          if (isInapp) {
-            let res = JSON.stringify({type:118})
-            this.send(res)
-          }
+          appCouponReceiveApi(this.info).then(res => {
+            this.isSendMessage = false
+            this.isLogin = true
+            if (res.status === 1) {
+              this.$router.push({path: "/appCouponResult",query: {amount: this.item.discount}})
+            } else {
+              this.isReceive = res.status
+            }
+          }).catch(res => {
+            console.log(res, 1111111)
+          })
           return
         }
         this.isSendMessage = true
@@ -163,19 +162,54 @@ import { loginApi, getCodeImg } from '@/api/pages/login'
           text: '加载中...'
         })
         setTimeout(function(){
-          console.log(11111111111)
           that.$refs['timerBtn'].runs()
         },500)
       },
       //已经领取，去使用
       toUse(){
         
+        let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
+        isInapp = userAgent.indexOf("TTBeacon")>=0;
+        if (isInapp) {
+          let res = JSON.stringify({type:118})
+          this.send(res)
+        }else{
+          alert(1111111111)
+          console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
+          let appUrl = " ttbeacon://app:8080/launcher?t=3\ "
+          if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
+            alert("ios")
+            window.location.href = appUrl
+            let iframe = document.createElement('iframe');
+            let body = document.body;
+            iframe.style.cssText='display:none;width=0;height=0'
+            body.appendChild(iframe);
+            iframe.src = appUrl;
+            setTimeout(function() {
+              window.location.href = "https://a.app.qq.com/o/simple.jsp?pkgname=com.thetiger.beacon.android";
+            }, 2000)
+          }
+          if(navigator.userAgent.match(/android/i)){
+            alert("安卓")
+            let iframe = document.createElement('iframe');
+            let body = document.body;
+            iframe.style.cssText='display:none;width=0;height=0'
+            body.appendChild(iframe);
+            iframe.src = appUrl;
+            window.location.href = appUrl
+            setTimeout(function() {
+              window.location.href = "https://a.app.qq.com/o/simple.jsp?pkgname=com.thetiger.beacon.android";//android 下载地址
+            }, 2000) 
+          }
+        }
+        
       },
       //领取完了
       toLate(){
-        location.href=`https://www.ziwork.com/beaconweb/?#/couponResult?status=end${this.prama}`;
+        
       },
       onSend (imgcodeUrl) { // 显示图片验证码
+        this.needImgCode = true
         this.refreshCode()
       },
       async refreshCode () {
@@ -192,9 +226,7 @@ import { loginApi, getCodeImg } from '@/api/pages/login'
       sendCodeImg () {
         this.$refs['timerBtn'].runs()
         let that = this
-        setTimeout(function(){
-          that.needImgCode = false
-        }, 2000)
+        that.needImgCode = false
       },
       // 跳转app
       send (str) {
@@ -209,6 +241,7 @@ import { loginApi, getCodeImg } from '@/api/pages/login'
       let status = str.match(pattern);
       console.log(status,"...............")
       this.status = status[0];
+      this.info.coupon_id_code = status[0]
       if (this.status === 'a2a') {
         this.prama = '&isNeed'
       } else if (this.status === 'oXG') {
