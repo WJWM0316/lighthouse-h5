@@ -153,7 +153,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
               this.isReceive = res.status
             }
           }).catch(res => {
-            console.log(res, 1111111)
+            this.$vux.toast.text(res.data.message, 'bottom')
           })
           return
         }
@@ -168,20 +168,29 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
       },
       //已经领取，去使用
       toUse(){
+        let res = JSON.stringify({type:118}) // 119 app内部学习tab
+        let appUrl = "ttbeacon://app:8080/launcher?t=3" // 4 app内部学习tab
+        this.toApp(res, appUrl)
         
+      },
+      //领取完了
+      toLate(){
+        let res = JSON.stringify({type:119}) // 118 app内部优惠券列表
+        let appUrl = "ttbeacon://app:8080/launcher?t=4" // 3 app内部优惠券列表
+        this.toApp(res, appUrl)
+      },
+      // 调起app
+      toApp (res, appUrl) {
         let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
         isInapp = userAgent.indexOf("ttBeacon")>=0;
-        console.log(userAgent, 222222222)
         if (isInapp) {
-          let res = JSON.stringify({type:118})
           this.send(res)
-          alert('app内部')
+//        alert('app内部')
         }else{
-          alert('app外部浏览器')
-          console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
-          let appUrl = "ttbeacon://app:8080/launcher?t=3"
+//        alert('app外部浏览器')
+          //console.log(navigator.userAgent.match(/android/i), navigator.userAgent, 111, navigator.userAgent.match(/(iPhone|iPod|iPad)/i))
           if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
-            alert("ios")
+//          alert("ios")
             let iframe = document.createElement('iframe');
             let body = document.body;
             iframe.style.cssText='display:none;width=0;height=0'
@@ -193,7 +202,7 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
             }, 2000)
           }
           if(navigator.userAgent.match(/android/i)){
-            alert("安卓")
+//          alert("安卓")
             let iframe = document.createElement('iframe');
             let body = document.body;
             iframe.style.cssText='display:none;width=0;height=0'
@@ -205,11 +214,6 @@ import { loginApi, getAppCodeImg } from '@/api/pages/login'
             }, 2000) 
           }
         }
-        
-      },
-      //领取完了
-      toLate(){
-        
       },
       onSend (imgcodeUrl) { // 显示图片验证码
         this.needImgCode = true
