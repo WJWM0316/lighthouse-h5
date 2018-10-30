@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { smsApi } from '@/api/pages/login'
+import { smsApi, appSmsApi } from '@/api/pages/login'
 
 @Component({
   name: 'timerBtn',
@@ -41,7 +41,11 @@ export default class TimeBtn extends Vue {
     } else {
       try {
         const params = {...this.loginInfo, from: this.type}
-        await smsApi(params)
+        if (this.$route.path === "/appCoupon") {
+          await appSmsApi(params)
+        } else {
+          await smsApi(params)
+        }
         this.$vux.toast.text('验证码发送成功，<br>请留意短信', 'bottom')
         this.time = this.second
         this.timeFlag = true
