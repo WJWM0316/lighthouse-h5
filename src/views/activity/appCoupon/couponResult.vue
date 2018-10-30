@@ -31,7 +31,7 @@
       toApp () {
         
           let userAgent = navigator.userAgent.toLowerCase(), //获取userAgent
-          isInapp = userAgent.indexOf("TTBeacon")>=0;
+          isInapp = userAgent.indexOf("ttbeacon")>=0;
           if (isInapp) {
             let res = JSON.stringify({type:118})
             this.send(res)
