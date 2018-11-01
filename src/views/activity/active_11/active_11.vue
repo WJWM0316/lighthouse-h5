@@ -360,7 +360,7 @@ import { getBeaconsApi } from '@/api/pages/home'
         display: block;
       }
       .first_top {
-        width: 280px;
+        width: 270px;
         height: auto;
         display: block;
       }
@@ -375,14 +375,18 @@ import { getBeaconsApi } from '@/api/pages/home'
         font-weight:bold;
         color:rgba(255,225,7,1);
         text-align: center;
-        margin: 15px auto 20px auto;
+        margin: 10px auto 13px auto;
       }
 
       .down {
         width: 20px;
         height: auto;
-        margin-top: 16px;
-        margin-bottom: 16px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        margin-left: -10px;
       }
 
       .first_hint {
@@ -392,14 +396,17 @@ import { getBeaconsApi } from '@/api/pages/home'
         text-align: center;
         color:rgba(53,46,43,1);
       }
+      .first_cont {
+        
+      }
       .first_cont_icon {
         width: 338px;
         height: 88px;
       }
       .first_btn {
-        width: 125px;
-        height: 42px;
-        margin: 10px auto 10px auto;
+        width: 115px;
+        height: auto;
+        margin: 10px auto 8px auto;
         // position: absolute;
         // left: 50%;
         // margin-left: -62.5px;
@@ -407,6 +414,7 @@ import { getBeaconsApi } from '@/api/pages/home'
       }
     }
     .second {
+      width: 100%;
       height: 100vh;
       position: absolute;
       left: 0;
