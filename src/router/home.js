@@ -32,6 +32,12 @@ const homeRoutes = [
     component: resolve => require(['@/views/activity/trainCamp/trainCamp'], resolve),
   },
   {
+    path: '/active_11',
+    name: 'active_11',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/activity/active_11/active_11'], resolve),
+  },
+  {
     path: '/index/details/:sourceId',
     name: 'find-detail',
     meta: {navHide: true},
