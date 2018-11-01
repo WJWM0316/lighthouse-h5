@@ -251,7 +251,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         userKey: this.statistics && this.statistics.userKey?this.statistics.userKey:'',
         messageId: this.statistics && this.statistics.messageId?this.statistics.messageId:'',
         bundingId: this.statistics && this.statistics.bundingId?this.statistics.bundingId:'',
-        //messageId: this.statistics && this.statistics.messageId?this.statistics.messageId:'',
       })
 
       const arr = Object.keys(params || {})
@@ -288,10 +287,10 @@ import { getBeaconsApi } from '@/api/pages/home'
             self.isShow = true
             self.$vux.toast.text(`已购买成功`, 'bottom')
 
-            if(this.nowPayStatus === '1'){
-              this.buy_state = 'success_1'
+            if(self.nowPayStatus === '1'){
+              self.buy_state = 'success_1'
             }else {
-              this.buy_state = 'success_465'
+              self.buy_state = 'success_465'
             }
 
             if(self.selectItem.communityId != self.allBuyCommunityId){
