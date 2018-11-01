@@ -1,10 +1,16 @@
 <template>
   <div class="p-body p-home-index teacher" >
     <div class="first" v-if="nowPage==='first'"  @touchend="touch_end" @touchstart="touch_start">
-      <img class="first_bg" src="./../../../assets/activity/active_11/first_bg.png" />
-      <img class="first_btn" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/first_btn.png" />
+      <!-- <img class="first_bg" src="./../../../assets/activity/active_11/first_bg.png" /> -->
+      <img class="first_top" src="./../../../assets/activity/active_11/first_top.png" />
+      <div class="text">1元解锁5门职场精品课程</div>
 
-      <span class="toNext" @click="toNext('second')">xxxxx</span>
+      <div class="first_cont">
+        <img class="first_cont_icon" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/first_cont.png" />
+        <img class="first_btn" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/first_btn.png" />
+        <div class="first_hint">*本活动为小灯塔福利活动，报名完成，概不退款</div>
+        <img class="down" @click.stop="toNext('second')" src="./../../../assets/activity/active_11/down.png" />
+      </div>
     </div>
 
     <div class="second" v-else  @touchend="touch_end" @touchstart="touch_start">
@@ -242,9 +248,9 @@ import { getBeaconsApi } from '@/api/pages/home'
         productId: communityId,
         productType: 1,
         userCouponId: 0,
-        userKey: '',
-        messageId: '',
-        bundingId: '',
+        userKey: this.statistics && this.statistics.userKey?this.statistics.userKey:'',
+        messageId: this.statistics && this.statistics.messageId?this.statistics.messageId:'',
+        bundingId: this.statistics && this.statistics.bundingId?this.statistics.bundingId:'',
         //messageId: this.statistics && this.statistics.messageId?this.statistics.messageId:'',
       })
 
@@ -329,20 +335,54 @@ import { getBeaconsApi } from '@/api/pages/home'
       position: relative;
       .first_bg {
         width: 375px;
-        // height: 667px;
         height: auto;
         display: block;
+      }
+      .first_top {
+        width: 343.5px;
+        height: auto;
+        display: block;
+      }
+      .text {
+        height:27.5px;
+        line-height:27.5px;
+        background:rgba(53,46,43,1);
+        width: 100%;
+        display: block;
+        font-size:16px;
+        font-family:SourceHanSansCN-Bold;
+        font-weight:bold;
+        color:rgba(255,225,7,1);
+        text-align: center;
+      }
+
+      .down {
+        width: 20px;
+        height: auto;
+      }
+
+      .first_hint {
+        font-size:13px;
+        font-family:SourceHanSansCN-ExtraLight;
+        font-weight:200;
+        text-align: center;
+        color:rgba(53,46,43,1);
+      }
+      .first_cont_icon {
+        width: 338px;
+        height: 88px;
       }
       .first_btn {
         width: 125px;
         height: 42px;
-        position: absolute;
-        left: 50%;
-        margin-left: -62.5px;
-        bottom: 0px;
+        // position: absolute;
+        // left: 50%;
+        // margin-left: -62.5px;
+        // bottom: 0px;
       }
     }
     .second {
+      height: 100vh;
       padding-bottom: 100px;
     }
     .btns {
