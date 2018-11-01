@@ -1,13 +1,13 @@
 <template>
-  <div class="p-body p-home-index teacher">
-    <div class="first" v-if="nowPage==='first'">
+  <div class="p-body p-home-index teacher" >
+    <div class="first" v-if="nowPage==='first'"  @touchend="touch_end" @touchstart="touch_start">
       <img class="first_bg" src="./../../../assets/activity/active_11/first_bg.png" />
       <img class="first_btn" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/first_btn.png" />
 
       <span class="toNext" @click="toNext('second')">xxxxx</span>
     </div>
 
-    <div class="second" v-else>
+    <div class="second" v-else  @touchend="touch_end" @touchstart="touch_start">
       <img class="second_1" src="./../../../assets/activity/active_11/second_cont_1.png" />
       <img class="second_2" src="./../../../assets/activity/active_11/second_cont_2.png" />
       <img class="second_3" src="./../../../assets/activity/active_11/second_cont_3.png" />
@@ -36,7 +36,7 @@
       </div>
 
       <div class="buy_success" v-if="buy_state==='success_465'">
-        <img class="success_1" src="./../../../assets/activity/active_11/success_465.png"  />
+        <img class="success_465" src="./../../../assets/activity/active_11/success_465.png"  />
       </div>
     </div>
 
@@ -88,47 +88,71 @@ import { getBeaconsApi } from '@/api/pages/home'
     statistics = {}
 
     communityId = '02b81714611b454f2daa2ea5fa53b5be'
+    communityId2 = ''
     communityMsg = {}
+    communityMsg2 = {}
+    startX = null
+    startY = null
+    nowPayStatus = ''
+
+    touch_start(e){
+      this.startX = e.touches[0].pageX;
+      this.startY = e.touches[0].pageY;
+    }
+
+    touch_end(e){
+      let endX, endY;
+      endX = e.changedTouches[0].pageX;
+      endY = e.changedTouches[0].pageY;
+      let msg = this.getSlideDirection(this.startX, this.startY, endX, endY);
+      console.log(msg)
+      switch(msg.result) {
+          case 0:
+                  console.log("无操作");
+              break;
+          case 1:
+              // 向上
+              console.log("up");
+              console.log(this.nowPage)
+              if(this.nowPage ==='first'){
+                if(msg.dy>150){
+                  this.toNext('second')
+                }
+              }
+              break;
+          case 2:
+              // 向下
+              console.log("down");
+              console.log('123123',document)
+              if(this.nowPage ==='nowPage'){
+                if(msg.dy>150){
+
+                  this.toNext('second')
+                }
+              }
+              break;
+          default:
+      }
+    }
 
     getSlideDirection(startX, startY, endX, endY) {
-      var dy = startY - endY;
+      let dy = startY - endY;
+      console.log('=====',dy)
       //var dx = endX - startX;
-      var result = 0;
+      let msg = {
+        result : 0,
+        dy: dy
+      }
       if(dy>0) {//向上滑动
-          result=1;
+          msg.result=1;
       }else if(dy<0){//向下滑动
-          result=2;
+          msg.result=2;
       }
       else
       {
-          result=0;
+          msg.result=0;
       }
-      return result;
-    }
-    //手指离开屏幕
-    touchEnd(e) {
-        var endx, endy;
-        endx = e.changedTouches[0].pageX;
-        endy = e.changedTouches[0].pageY;
-        var direction = getDirection(startx, starty, endx, endy);
-        switch (direction) {
-            case 0:
-                alert("未滑动！");
-                break;
-            case 1:
-                alert("向上！")
-                break;
-            case 2:
-                alert("向下！")
-                break;
-            case 3:
-                alert("向左！")
-                break;
-            case 4:
-                alert("向右！")
-                break;
-            default:
-        }
+      return msg;
     }
 
     created () {
@@ -136,9 +160,12 @@ import { getBeaconsApi } from '@/api/pages/home'
       if(that.$route.query){
         that.statistics = that.$route.query
       }
+
+      that.$vux.toast.text(`11111`, 'bottom')
       getCommunityInfoApi({communityId: that.communityId}).then(res=>{
         console.log(res)
         that.communityMsg = res
+        that.communityId2 = res.equivalenceCommunityId || ''
         that.wechatShare({
           'titles': '月薪5万的人都在学的职场必修课',
           'title': '月薪5万的人都在学的职场必修课',
@@ -146,14 +173,22 @@ import { getBeaconsApi } from '@/api/pages/home'
           'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
           'link': location.origin + `/beaconweb/#/teacherActivity`
         })
+
+        getCommunityInfoApi({communityId: that.communityId2}).then(res=>{
+          that.communityMsg2 = res
+          console.log('communityId2',res)
+        })
       })
     }
 
     toBuy (type) {
-      let communityMsg = this.communityMsg
+      let communityMsg = type===1?this.communityMsg : this.communityMsg2
+      let id = type===1?this.communityId:this.communityId2
+      this.nowPayStatus = type
       if(communityMsg.isJoined!==1 && communityMsg.isAuthor !== 1){
-        this.payIn()
+        this.payIn(id)
       }else {
+        this.$vux.toast.text(`已购买`, 'bottom')
         if(communityMsg.isCourse === 3){
           this.$router.push(`/introduce2/${this.selectItem.communityId}/community`)
         }else {
@@ -174,7 +209,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         this.buy_state = 'left'
       }else {
         this.buy_state = 'right'
-        //this.buy_state = 'success_1'
       }
     }
 
@@ -203,9 +237,9 @@ import { getBeaconsApi } from '@/api/pages/home'
       this.isShow = false
     }
 
-    async payIn () {
+    async payIn (communityId) {
       const params = await payApi({
-        productId: this.communityId,
+        productId: communityId,
         productType: 1,
         userCouponId: 0,
         userKey: '',
@@ -244,7 +278,16 @@ import { getBeaconsApi } from '@/api/pages/home'
         function (res) {
           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
+
+            self.isShow = true
             self.$vux.toast.text(`已购买成功`, 'bottom')
+
+            if(this.nowPayStatus === '1'){
+              this.buy_state = 'success_1'
+            }else {
+              this.buy_state = 'success_465'
+            }
+
             if(self.selectItem.communityId != self.allBuyCommunityId){
               if(self.selectItem.isCourse === 3){
                 self.$router.push(`/introduce2/${self.selectItem.communityId}/community`)
@@ -263,7 +306,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         }
       )
     }
-
   }
 </script>
 <style lang="less" scoped>
@@ -409,6 +451,10 @@ import { getBeaconsApi } from '@/api/pages/home'
       .success_1 {
         width: 325px;
         height: 425px;
+      }
+      .success_465 {
+        width: 326px;
+        height: 281.5px;
       }
     }
   }
