@@ -3,7 +3,7 @@
     <div class="first" v-if="nowPage==='first'"  @touchend="touch_end" @touchstart="touch_start">
       <!-- <img class="first_bg" src="./../../../assets/activity/active_11/first_bg.png" /> -->
       <img class="first_top" src="./../../../assets/activity/active_11/first_top.png" />
-      <div class="text">1元解锁5门职场精品课程</div>
+      <div class="text">1元解锁5门职场精品课程  {{statistics.length}}</div>
 
       <div class="first_cont">
         <img class="first_cont_icon" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/first_cont.png" />
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div class="second" v-else  @touchend="touch_end" @touchstart="touch_start">
+    <div class="second" v-else  @touchend="touch_end" @touchstart="touch_start" :style="{'bottom':abBottom+'px'}">
       <img class="second_1" src="./../../../assets/activity/active_11/second_cont_1.png" />
       <img class="second_2" src="./../../../assets/activity/active_11/second_cont_2.png" />
       <img class="second_3" src="./../../../assets/activity/active_11/second_cont_3.png" />
@@ -100,7 +100,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     startX = null
     startY = null
     nowPayStatus = ''
-
+    abBottom = 0
     touch_start(e){
       this.startX = e.touches[0].pageX;
       this.startY = e.touches[0].pageY;
@@ -167,7 +167,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         that.statistics = that.$route.query
       }
 
-      that.$vux.toast.text(`11111`, 'bottom')
       getCommunityInfoApi({
         communityId: that.communityId,
         data:{
@@ -216,6 +215,15 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
 
     toNext (type) {
+      console.log(document.body.clientHeight)
+      //this.abBottom = '-'+document.body.clientHeight
+      this.abBottom = 0-document.body.clientHeight
+      setInterval(()=>{
+        if(this.abBottom>-50){
+          return
+        }
+        this.abBottom +=30
+      },10)
       if(type==='second'){
         this.nowPage = type
       }
@@ -331,6 +339,7 @@ import { getBeaconsApi } from '@/api/pages/home'
   .teacher {
     background: #FFE107;
     height: 100vh;
+    position: relative;
     .toNext {
       width: 100px;
       height: 50px;
@@ -399,9 +408,10 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
     .second {
       height: 100vh;
+      position: absolute;
+      left: 0;
       .second_3 {
       margin-bottom: 100px;
-
       }
     }
     .btns {
