@@ -343,13 +343,15 @@ import { getBeaconsApi } from '@/api/pages/home'
     .first {
       height: 100vh;
       position: relative;
+      padding-top: 15px;
+      box-sizing: border-box;
       .first_bg {
-        width: 375px;
+        width: 370px;
         height: auto;
         display: block;
       }
       .first_top {
-        width: 343.5px;
+        width: 280px;
         height: auto;
         display: block;
       }
@@ -364,11 +366,14 @@ import { getBeaconsApi } from '@/api/pages/home'
         font-weight:bold;
         color:rgba(255,225,7,1);
         text-align: center;
+        margin: 15px auto 20px auto;
       }
 
       .down {
         width: 20px;
         height: auto;
+        margin-top: 16px;
+        margin-bottom: 16px;
       }
 
       .first_hint {
@@ -385,6 +390,7 @@ import { getBeaconsApi } from '@/api/pages/home'
       .first_btn {
         width: 125px;
         height: 42px;
+        margin: 10px auto 10px auto;
         // position: absolute;
         // left: 50%;
         // margin-left: -62.5px;
@@ -393,7 +399,10 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
     .second {
       height: 100vh;
-      padding-bottom: 100px;
+      .second_3 {
+      margin-bottom: 100px;
+
+      }
     }
     .btns {
       width: 100%;

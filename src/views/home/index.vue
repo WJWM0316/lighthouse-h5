@@ -1,6 +1,6 @@
 <template>
   <div class="p-body p-home-index" :class="[{'hasBanner' : (isFlex || !bannerList && bannerList.length === 0)  && navTabName === 'picked'}, navTabName]">
-    <div class="toTest" @click="toTest" style="width: 100px;height: 100px;">双十一活动</div>
+    <div class="toTest" @click="toTest" style="width: 100%;height: 200px;">双十一活动</div>
     
     <div class="fixed">
       <!-- tab -->
@@ -558,6 +558,7 @@ export default class HomeIndex extends Vue {
   }
 
   toTest (){
+    console.log(1)
     this.$router.push(`/active_11`)
   }
 }
