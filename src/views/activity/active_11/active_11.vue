@@ -168,7 +168,13 @@ import { getBeaconsApi } from '@/api/pages/home'
       }
 
       that.$vux.toast.text(`11111`, 'bottom')
-      getCommunityInfoApi({communityId: that.communityId}).then(res=>{
+      getCommunityInfoApi({
+        communityId: that.communityId,
+        data:{
+          userKey: this.statistics && this.statistics.userKey?this.statistics.userKey:'',
+          bundingId: this.statistics && this.statistics.bundingId?this.statistics.bundingId:'',
+        }
+      }).then(res=>{
         console.log(res)
         that.communityMsg = res
         that.communityId2 = res.equivalenceCommunityId || ''
@@ -180,7 +186,13 @@ import { getBeaconsApi } from '@/api/pages/home'
           'link': location.origin + `/beaconweb/#/teacherActivity`
         })
 
-        getCommunityInfoApi({communityId: that.communityId2}).then(res=>{
+        getCommunityInfoApi({
+          communityId: that.communityId2,
+          data:{
+            userKey: this.statistics && this.statistics.userKey?this.statistics.userKey:'',
+            bundingId: this.statistics && this.statistics.bundingId?this.statistics.bundingId:'',
+          }
+        }).then(res=>{
           that.communityMsg2 = res
           console.log('communityId2',res)
         })
@@ -248,9 +260,8 @@ import { getBeaconsApi } from '@/api/pages/home'
         productId: communityId,
         productType: 1,
         userCouponId: 0,
-        userKey: this.statistics && this.statistics.userKey?this.statistics.userKey:'',
+        
         messageId: this.statistics && this.statistics.messageId?this.statistics.messageId:'',
-        bundingId: this.statistics && this.statistics.bundingId?this.statistics.bundingId:'',
       })
 
       const arr = Object.keys(params || {})
