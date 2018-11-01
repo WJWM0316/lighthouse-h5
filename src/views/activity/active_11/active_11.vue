@@ -174,7 +174,7 @@ import { getBeaconsApi } from '@/api/pages/home'
         this.buy_state = 'left'
       }else {
         this.buy_state = 'right'
-        this.buy_state = 'success'
+        //this.buy_state = 'success_1'
       }
     }
 
