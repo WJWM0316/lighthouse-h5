@@ -428,7 +428,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         position: absolute;
         right: 4px;
         top: 4px;
-        border: 1px solid #cccccc;
       }
       .buy {
         width: 140px;
@@ -437,7 +436,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         bottom: 20px;
         left: 50%;
         margin-left: -70px;
-        border: 1px solid #cccccc;
       }
     }
     .buy_success {
