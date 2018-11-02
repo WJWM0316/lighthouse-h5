@@ -210,7 +210,7 @@ import { getBeaconsApi } from '@/api/pages/home'
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.isShow = true
             self.$vux.toast.text(`已购买成功`, 'bottom')
-            if(self.nowPayStatus === '2'){
+            if(self.nowPayStatus == 2){
               self.buy_state = 'success_1'
             }else {
               self.buy_state = 'success_465'
