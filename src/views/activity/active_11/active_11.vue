@@ -1,32 +1,32 @@
 <template>
   <div class="p-body p-home-index teacher" >
-    <div class="first" v-if="nowPage==='first'"  @touchend="touch_end" @touchstart="touch_start">
+    <div class="first"  @touchend="touch_end" @touchstart="touch_start">
       <!-- <img class="first_bg" src="./../../../assets/activity/active_11/first_bg.png" /> -->
       <img class="first_top" src="./../../../assets/activity/active_11/first_top.png" />
       <div class="text">1元解锁5门职场精品课程  {{statistics.length}}</div>
 
       <div class="first_cont">
-        <img class="first_cont_icon" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/first_cont.png" />
-        <img class="first_btn" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/first_btn.png" />
+        <img class="first_cont_icon"  src="./../../../assets/activity/active_11/first_cont.png" />
+        <img class="first_btn" @click.stop="openPop(1)" src="./../../../assets/activity/active_11/first_btn.png" />
         <div class="first_hint">*本活动为小灯塔福利活动，报名完成，概不退款</div>
         <img class="down" @click.stop="toNext('second')" src="./../../../assets/activity/active_11/down.png" />
       </div>
     </div>
 
-    <div class="second" v-else  @touchend="touch_end" @touchstart="touch_start" :style="{'bottom':abBottom+'px'}">
+    <div class="second"  @scroll=handleScroll  @touchend="touch_end" @touchstart="touch_start" :style="{'bottom':abBottom+'px'}">
       <img class="second_1" src="./../../../assets/activity/active_11/second_cont_1.png" />
       <img class="second_2" src="./../../../assets/activity/active_11/second_cont_2.png" />
       <img class="second_3" src="./../../../assets/activity/active_11/second_cont_3.png" />
 
-      <div class="btns">
+      <div class="btns" v-if="showBtn">
         <img class="btn_bg" src="./../../../assets/activity/active_11/btn_bg.png"  />
         <img class="left" @click.stop="openPop(1)" src="./../../../assets/activity/active_11/btn_left.png"  />
         <img class="right" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/btn_right.png"  />
       </div>
     </div>
 
-
-    <div class="pop" v-if="isShow">
+  <!-- v-if="isShow" -->
+    <div class="pop" >
       <div class=" buy_block buy_left" v-if="buy_state==='left'">
         <img class="right" src="./../../../assets/activity/active_11/pop_465.png"  />
         <div class="clo" @click="closePop"></div>
@@ -45,18 +45,6 @@
         <img class="success_465" src="./../../../assets/activity/active_11/success_465.png"  />
       </div>
     </div>
-
-
-
-      <!--支付弹窗-->
-      <div class="pay_window" v-if="false">
-        <div class="pay_cont">
-          <!-- <img class="close" @click.stop="closePya" src="./../../../assets/activity/active_11/clo.png" /> -->
-          <!-- <img class="code" src="./../../../assets/activity/active_11/code.png" /> -->
-          <p>扫描二维码或者搜索zike04，</p>
-          <p>添加好友，备注<span>【礼包】</span>领取福利</p>
-        </div>
-      </div>
 
 
   </div>
@@ -101,6 +89,10 @@ import { getBeaconsApi } from '@/api/pages/home'
     startY = null
     nowPayStatus = ''
     abBottom = 0
+    showBtn = false
+    handleScroll(e){
+      console.log('scroll--->',e)
+    }
     touch_start(e){
       this.startX = e.touches[0].pageX;
       this.startY = e.touches[0].pageY;
@@ -111,7 +103,6 @@ import { getBeaconsApi } from '@/api/pages/home'
       endX = e.changedTouches[0].pageX;
       endY = e.changedTouches[0].pageY;
       let msg = this.getSlideDirection(this.startX, this.startY, endX, endY);
-      console.log(msg)
       switch(msg.result) {
           case 0:
                   console.log("无操作");
@@ -202,6 +193,8 @@ import { getBeaconsApi } from '@/api/pages/home'
       let communityMsg = type===1?this.communityMsg : this.communityMsg2
       let id = type===1?this.communityId:this.communityId2
       this.nowPayStatus = type
+
+      console.log('type',type)
       if(communityMsg.isJoined!==1 && communityMsg.isAuthor !== 1){
         this.payIn(id)
       }else {
@@ -238,37 +231,17 @@ import { getBeaconsApi } from '@/api/pages/home'
       }
     }
 
-    buy (index) {
-      let item = this.payListMsg[index-1]
-      this.selectItem = item
-
-      getCommunityInfoApi({communityId: item.communityId}).then(res=>{
-        this.selectItem.joinPrice = res.joinPrice
-        this.selectItem.isCourse = res.isCourse
-        this.selectItem.communityId = res.communityId
-        if(res.isJoined!==1 && res.isAuthor !== 1){
-          this.payIn()
-        }else {
-          if(res.isCourse === 3){
-            this.$router.push(`/introduce2/${this.selectItem.communityId}/community`)
-          }else {
-            this.$router.push(`/introduce/${this.selectItem.communityId}/community`)
-          }
-        }
-      })
-      
-    }
-
     closePop(){
       this.isShow = false
     }
 
     async payIn (communityId) {
+
+      console.log(communityId)
       const params = await payApi({
         productId: communityId,
         productType: 1,
         userCouponId: 0,
-        
         messageId: this.statistics && this.statistics.messageId?this.statistics.messageId:'',
       })
 
@@ -302,10 +275,8 @@ import { getBeaconsApi } from '@/api/pages/home'
         function (res) {
           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
-
             self.isShow = true
             self.$vux.toast.text(`已购买成功`, 'bottom')
-
             if(self.nowPayStatus === '1'){
               self.buy_state = 'success_1'
             }else {
@@ -350,7 +321,6 @@ import { getBeaconsApi } from '@/api/pages/home'
       border: 1px solid #cccccc;
     }
     .first {
-      height: 100vh;
       position: relative;
       padding-top: 15px;
       box-sizing: border-box;
@@ -360,7 +330,7 @@ import { getBeaconsApi } from '@/api/pages/home'
         display: block;
       }
       .first_top {
-        width: 270px;
+        width: 343.5px;
         height: auto;
         display: block;
       }
@@ -375,7 +345,7 @@ import { getBeaconsApi } from '@/api/pages/home'
         font-weight:bold;
         color:rgba(255,225,7,1);
         text-align: center;
-        margin: 10px auto 13px auto;
+        margin: 15px auto 20px auto;
       }
 
       .down {
@@ -383,10 +353,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         height: auto;
         margin-top: 8px;
         margin-bottom: 8px;
-        position: absolute;
-        bottom: 5px;
-        left: 50%;
-        margin-left: -10px;
       }
 
       .first_hint {
@@ -404,22 +370,15 @@ import { getBeaconsApi } from '@/api/pages/home'
         height: 88px;
       }
       .first_btn {
-        width: 115px;
+        width: 124.5px;
         height: auto;
-        margin: 10px auto 8px auto;
-        // position: absolute;
-        // left: 50%;
-        // margin-left: -62.5px;
-        // bottom: 0px;
+        margin: 15px auto 10px auto;
       }
     }
     .second {
       width: 100%;
-      height: 100vh;
-      position: absolute;
-      left: 0;
       .second_3 {
-      margin-bottom: 100px;
+        margin-bottom: 100px;
       }
     }
     .btns {
