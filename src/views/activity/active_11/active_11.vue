@@ -1,6 +1,6 @@
 <template>
-  <div class="p-body p-home-index teacher" >
-    <div class="first"  @touchend="touch_end" @touchstart="touch_start">
+  <div class="p-body p-home-index teacher"  >
+    <div class="first" >
       <!-- <img class="first_bg" src="./../../../assets/activity/active_11/first_bg.png" /> -->
       <img class="first_top" src="./../../../assets/activity/active_11/first_top.png" />
       <div class="text">1元解锁5门职场精品课程  {{statistics.length}}</div>
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div class="second"  @scroll=handleScroll  @touchend="touch_end" @touchstart="touch_start" :style="{'bottom':abBottom+'px'}">
+    <div class="second" :style="{'bottom':abBottom+'px'}">
       <img class="second_1" src="./../../../assets/activity/active_11/second_cont_1.png" />
       <img class="second_2" src="./../../../assets/activity/active_11/second_cont_2.png" />
       <img class="second_3" src="./../../../assets/activity/active_11/second_cont_3.png" />
@@ -91,7 +91,10 @@ import { getBeaconsApi } from '@/api/pages/home'
     abBottom = 0
     showBtn = false
     handleScroll(e){
-      console.log('scroll--->',e)
+      // let scrollTop = document.documentElement.scrollTop ||
+      //     document.body.scrollTop ||
+      //     document.querySelector('.element').scrollTop;
+      //     console.log(scrollTop);
     }
     touch_start(e){
       this.startX = e.touches[0].pageX;
@@ -157,6 +160,8 @@ import { getBeaconsApi } from '@/api/pages/home'
       if(that.$route.query){
         that.statistics = that.$route.query
       }
+
+      window.addEventListener('scroll', this.handleScroll, true);
 
       getCommunityInfoApi({
         communityId: that.communityId,
