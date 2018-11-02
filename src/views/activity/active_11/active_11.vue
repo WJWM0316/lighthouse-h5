@@ -18,15 +18,15 @@
       <img class="second_2" src="./../../../assets/activity/active_11/second_cont_2.png" />
       <img class="second_3" src="./../../../assets/activity/active_11/second_cont_3.png" />
 
-      <div class="btns" v-if="showBtn">
+      <div class="btns" >
         <img class="btn_bg" src="./../../../assets/activity/active_11/btn_bg.png"  />
         <img class="left" @click.stop="openPop(1)" src="./../../../assets/activity/active_11/btn_left.png"  />
         <img class="right" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/btn_right.png"  />
       </div>
     </div>
 
-  <!-- v-if="isShow" -->
-    <div class="pop" >
+  <!-- v-if="showBtn" -->
+    <div class="pop"  v-if="isShow">
       <div class=" buy_block buy_left" v-if="buy_state==='left'">
         <img class="right" src="./../../../assets/activity/active_11/pop_465.png"  />
         <div class="clo" @click="closePop"></div>
@@ -232,6 +232,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
 
     closePop(){
+      console.log('closePop')
       this.isShow = false
     }
 
