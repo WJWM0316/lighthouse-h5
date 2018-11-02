@@ -92,13 +92,12 @@ import { getBeaconsApi } from '@/api/pages/home'
     showBtn = false
     handleScroll(e){
       let scroll = e.target.scrollTop || 0
-      let firstPageHeight = 500
+      let firstPageHeight = document.body.clientHeight-50
       if(scroll>firstPageHeight){
         this.showBtn = true
       }else {
         this.showBtn = false
       }
-      //console.log('scroll',e.target.scrollTop,e)
     }
     touch_start(e){
       this.startX = e.touches[0].pageX;
@@ -160,6 +159,8 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
 
     created () {
+      console.log('=====',document.body.clientHeight)
+
       let that = this
       if(that.$route.query){
         that.statistics = that.$route.query
@@ -217,7 +218,6 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
 
     toNext (type) {
-      console.log(document.body.clientHeight)
       //this.abBottom = '-'+document.body.clientHeight
       this.abBottom = 0-document.body.clientHeight
       setInterval(()=>{
