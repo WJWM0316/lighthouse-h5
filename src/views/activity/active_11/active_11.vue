@@ -8,7 +8,7 @@
       <div class="first_cont">
         <img class="first_cont_icon"  src="./../../../assets/activity/active_11/first_cont.png" />
         <img class="first_btn" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/first_btn.png" />
-        <div class="first_hint">*本活动为小灯塔福利活动，报名完成，概不退款</div>
+        <div class="first_hint">*本活动为小灯塔福利活动，报名完成，概不退款.</div>
         <img class="down" @click.stop="toNext('second')" src="./../../../assets/activity/active_11/down.png" />
       </div>
     </div>
