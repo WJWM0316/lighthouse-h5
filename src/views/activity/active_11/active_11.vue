@@ -85,8 +85,6 @@ import { getBeaconsApi } from '@/api/pages/home'
     communityId2 = ''
     communityMsg = {}
     communityMsg2 = {}
-    startX = null
-    startY = null
     nowPayStatus = ''
     abBottom = 0
     showBtn = false
@@ -99,73 +97,12 @@ import { getBeaconsApi } from '@/api/pages/home'
         this.showBtn = false
       }
     }
-    touch_start(e){
-      this.startX = e.touches[0].pageX;
-      this.startY = e.touches[0].pageY;
-    }
-
-    touch_end(e){
-      let endX, endY;
-      endX = e.changedTouches[0].pageX;
-      endY = e.changedTouches[0].pageY;
-      let msg = this.getSlideDirection(this.startX, this.startY, endX, endY);
-      switch(msg.result) {
-          case 0:
-                  console.log("无操作");
-              break;
-          case 1:
-              // 向上
-              console.log("up");
-              console.log(this.nowPage)
-              if(this.nowPage ==='first'){
-                if(msg.dy>150){
-                  this.toNext('second')
-                }
-              }
-              break;
-          case 2:
-              // 向下
-              console.log("down");
-              console.log('123123',document)
-              if(this.nowPage ==='nowPage'){
-                if(msg.dy>150){
-
-                  this.toNext('second')
-                }
-              }
-              break;
-          default:
-      }
-    }
-
-    getSlideDirection(startX, startY, endX, endY) {
-      let dy = startY - endY;
-      console.log('=====',dy)
-      //var dx = endX - startX;
-      let msg = {
-        result : 0,
-        dy: dy
-      }
-      if(dy>0) {//向上滑动
-          msg.result=1;
-      }else if(dy<0){//向下滑动
-          msg.result=2;
-      }
-      else
-      {
-          msg.result=0;
-      }
-      return msg;
-    }
 
     created () {
-      console.log('=====',document.body.clientHeight)
-
       let that = this
       if(that.$route.query){
         that.statistics = that.$route.query
       }
-
       window.addEventListener('scroll', this.handleScroll, true);
 
       getCommunityInfoApi({
@@ -214,20 +151,6 @@ import { getBeaconsApi } from '@/api/pages/home'
         }else {
           this.$router.push(`/introduce/${this.selectItem.communityId}/community`)
         }
-      }
-    }
-
-    toNext (type) {
-      //this.abBottom = '-'+document.body.clientHeight
-      this.abBottom = 0-document.body.clientHeight
-      setInterval(()=>{
-        if(this.abBottom>-50){
-          return
-        }
-        this.abBottom +=30
-      },10)
-      if(type==='second'){
-        this.nowPage = type
       }
     }
 
@@ -287,7 +210,7 @@ import { getBeaconsApi } from '@/api/pages/home'
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.isShow = true
             self.$vux.toast.text(`已购买成功`, 'bottom')
-            if(self.nowPayStatus === '1'){
+            if(self.nowPayStatus === '2'){
               self.buy_state = 'success_1'
             }else {
               self.buy_state = 'success_465'
