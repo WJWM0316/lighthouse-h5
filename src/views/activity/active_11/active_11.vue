@@ -13,19 +13,19 @@
       </div>
     </div>
 
-    <div class="second" :style="{'bottom':abBottom+'px'}">
+    <div class="second" >
       <img class="second_1" src="./../../../assets/activity/active_11/second_cont_1.png" />
       <img class="second_2" src="./../../../assets/activity/active_11/second_cont_2.png" />
       <img class="second_3" src="./../../../assets/activity/active_11/second_cont_3.png" />
 
-      <div class="btns" >
+      <div class="btns"  v-if="showBtn">
         <img class="btn_bg" src="./../../../assets/activity/active_11/btn_bg.png"  />
         <img class="left" @click.stop="openPop(1)" src="./../../../assets/activity/active_11/btn_left.png"  />
         <img class="right" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/btn_right.png"  />
       </div>
     </div>
 
-  <!-- v-if="showBtn" -->
+  <!--  -->
     <div class="pop"  v-if="isShow">
       <div class=" buy_block buy_left" v-if="buy_state==='left'">
         <img class="right" src="./../../../assets/activity/active_11/pop_465.png"  />
@@ -91,10 +91,14 @@ import { getBeaconsApi } from '@/api/pages/home'
     abBottom = 0
     showBtn = false
     handleScroll(e){
-      // let scrollTop = document.documentElement.scrollTop ||
-      //     document.body.scrollTop ||
-      //     document.querySelector('.element').scrollTop;
-      //     console.log(scrollTop);
+      let scroll = e.target.scrollTop || 0
+      let firstPageHeight = 500
+      if(scroll>firstPageHeight){
+        this.showBtn = true
+      }else {
+        this.showBtn = false
+      }
+      //console.log('scroll',e.target.scrollTop,e)
     }
     touch_start(e){
       this.startX = e.touches[0].pageX;
