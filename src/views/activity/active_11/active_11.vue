@@ -7,7 +7,7 @@
 
       <div class="first_cont">
         <img class="first_cont_icon"  src="./../../../assets/activity/active_11/first_cont.png" />
-        <img class="first_btn" @click.stop="openPop(1)" src="./../../../assets/activity/active_11/first_btn.png" />
+        <img class="first_btn" @click.stop="openPop(2)" src="./../../../assets/activity/active_11/first_btn.png" />
         <div class="first_hint">*本活动为小灯塔福利活动，报名完成，概不退款</div>
         <img class="down" @click.stop="toNext('second')" src="./../../../assets/activity/active_11/down.png" />
       </div>
@@ -195,8 +195,8 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
 
     toBuy (type) {
-      let communityMsg = type===1?this.communityMsg : this.communityMsg2
-      let id = type===1?this.communityId:this.communityId2
+      let communityMsg = type===2?this.communityMsg : this.communityMsg2
+      let id = type===2?this.communityId:this.communityId2
       this.nowPayStatus = type
 
       console.log('type',type)
