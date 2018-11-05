@@ -100,8 +100,6 @@ import { getBeaconsApi } from '@/api/pages/home'
 
     created () {
 
-      this.isShow = true
-      this.buy_state = 'left'
       let that = this
       if(that.$route.query){
         that.statistics = that.$route.query
@@ -314,7 +312,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     .second {
       width: 100%;
       .second_3 {
-        margin-bottom: 100px;
+        margin-bottom: 80px;
       }
     }
     .btns {
@@ -323,7 +321,7 @@ import { getBeaconsApi } from '@/api/pages/home'
       position: fixed;
       z-index: 100;
       left: 0;
-      bottom: 20px;
+      bottom: 0px;
       //background: #FFE107;
       display: flex;
       justify-content: center;
