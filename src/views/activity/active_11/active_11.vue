@@ -71,7 +71,6 @@ import { getBeaconsApi } from '@/api/pages/home'
   export default class HomeIndex extends Vue {
     buy_state = 'left'
     isShow = false
-    // ******************* 已加入 **********************
     pickedParams = { // 页面所需参数
       tagId: 0
     }
@@ -81,7 +80,9 @@ import { getBeaconsApi } from '@/api/pages/home'
     demo01_index = 0
     statistics = {}
 
-    communityId = 'c18c80c6c47c3047356b5b733f0bf784'
+
+    //正式c18c80c6c47c3047356b5b733f0bf784
+    communityId = '02b81714611b454f2daa2ea5fa53b5be'
     communityId2 = ''
     communityMsg = {}
     communityMsg2 = {}
