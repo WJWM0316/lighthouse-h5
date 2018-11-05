@@ -80,20 +80,15 @@ async function process(response) {
     let hashParams = `${location.hash.substring(1)}`
     let hostname = location.href.split('?')[0]
 
-
-      console.log('=====>22222',hashParams)
-
+    /*  console.log('=====>22222',hashParams)
     if (hashParams.indexOf("?") != -1) {
       hashParams = `${hashParams}&time=${new Date().getTime()}`
     } else {
       hashParams = `${hashParams}?time=${new Date().getTime()}`
-    }
+    }*/
 
     try {
-      hashParams.replace('bundingId', "sssbundingIdsss");
       hashParams = encodeURIComponent(hashParams)
-
-      console.log('=====>',hashParams)
       location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
     }
     catch (err) {
@@ -136,6 +131,8 @@ async function process(response) {
     // hideLoading(globalLoading)
     const hashParams = location.hash.substring(1)
     const hostname = location.href.split('?')[0]
+    
+    encodeURIComponent(hashParams)
     // location.href = encodeURI(`${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`)
     let {redirectUrl} = await request({
       url: '/wap/wechat/snsapiUserinfo',
@@ -157,6 +154,8 @@ async function process(response) {
       hashParams = hashParams + '?autoPay=true'
     }
     const hostname = location.href.split('?')[0]
+
+    encodeURIComponent(hashParams)
     // location.href = encodeURI(`${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`)
     let {redirectUrl} = await request({
       url: '/wap/wechat/snsapiUserinfo',
