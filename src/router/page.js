@@ -144,6 +144,20 @@ const routers = [
     component: resolve => require(['@/views/activity/coupon/couponResult'], resolve),
 	},
 	{
+    // app领取优惠券
+    path: '/appCoupon',
+    name: 'appCoupon',
+    meta: {navHide: true, hideController:true},
+    component: resolve => require(['@/views/activity/appCoupon'], resolve),
+  },
+  {
+    // app领取结果页
+    path: '/appCouponResult',
+    name: 'appCouponResult',
+    meta: {navHide: true, hideController:true},
+    component: resolve => require(['@/views/activity/appCoupon/couponResult'], resolve),
+  },
+	{
     // 课节页面
     path: '/Lesson',
     name: 'Lesson',
