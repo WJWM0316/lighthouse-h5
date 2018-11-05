@@ -316,11 +316,11 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
     .btns {
       width: 100%;
-      height: 100px;
+      height:64px;
       position: fixed;
       z-index: 100;
       left: 0;
-      bottom: 0;
+      bottom: 20px;
       //background: #FFE107;
       display: flex;
       justify-content: center;
@@ -333,18 +333,18 @@ import { getBeaconsApi } from '@/api/pages/home'
       }
       .left {
         width: 150px;
-        height: auto;
+        height: 41.5px;
         position: absolute;
         left: 18.75px;
-        top: 30px;
+        top: 11px;
         z-index: 10;
       }
        .right {
         width: 125px;
-        height: auto;
+        height: 41.5px;
         position: absolute;
         right: 31.25px;
-        top: 30px;
+        top: 11px;
         z-index: 10;
       }
 
