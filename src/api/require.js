@@ -83,6 +83,7 @@ async function process(response) {
     } else {
       hashParams = `${hashParams}?time=${new Date().getTime()}`
     }
+    console.log('=======')
     try {
       console.log(hashParams,hostname)
       //location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
