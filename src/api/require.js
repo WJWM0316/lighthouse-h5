@@ -80,15 +80,20 @@ async function process(response) {
     let hashParams = `${location.hash.substring(1)}`
     let hostname = location.href.split('?')[0]
 
+
+      console.log('=====>22222',hashParams)
+
     if (hashParams.indexOf("?") != -1) {
       hashParams = `${hashParams}&time=${new Date().getTime()}`
     } else {
       hashParams = `${hashParams}?time=${new Date().getTime()}`
     }
 
-
     try {
+      hashParams.replace('bundingId', "sssbundingIdsss");
       hashParams = encodeURIComponent(hashParams)
+
+      console.log('=====>',hashParams)
       location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
     }
     catch (err) {
