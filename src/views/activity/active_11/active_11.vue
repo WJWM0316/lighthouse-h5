@@ -38,7 +38,7 @@
         <div class="buy" @click="toBuy(2)"></div>
       </div>
       <div class="buy_success" v-if="buy_state==='success_1'">
-        <img class="success_1" src="./../../../assets/activity/active_11/success_1.png"  />
+        <img class="success_1" src="./../../../assets/activity/active_11/success_1_2.png"  />
       </div>
 
       <div class="buy_success" v-if="buy_state==='success_465'">
@@ -81,8 +81,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     statistics = {}
 
 
-    //正式c18c80c6c47c3047356b5b733f0bf784
-    communityId = '02b81714611b454f2daa2ea5fa53b5be'
+    communityId = 'c18c80c6c47c3047356b5b733f0bf784'
     communityId2 = ''
     communityMsg = {}
     communityMsg2 = {}
