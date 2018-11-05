@@ -81,7 +81,7 @@ import { getBeaconsApi } from '@/api/pages/home'
     demo01_index = 0
     statistics = {}
 
-    communityId = '02b81714611b454f2daa2ea5fa53b5be'
+    communityId = 'c18c80c6c47c3047356b5b733f0bf784'
     communityId2 = ''
     communityMsg = {}
     communityMsg2 = {}
