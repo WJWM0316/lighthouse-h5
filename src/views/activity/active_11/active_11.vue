@@ -113,7 +113,6 @@ import { getBeaconsApi } from '@/api/pages/home'
           bundingId: this.statistics && this.statistics.bundingId?this.statistics.bundingId:'',
         }
       }).then(res=>{
-        console.log(res)
         that.communityMsg = res
         that.communityId2 = res.equivalenceCommunityId || ''
         that.wechatShare({
@@ -132,7 +131,6 @@ import { getBeaconsApi } from '@/api/pages/home'
           }
         }).then(res=>{
           that.communityMsg2 = res
-          console.log('communityId2',res)
         })
       })
     }
@@ -142,7 +140,6 @@ import { getBeaconsApi } from '@/api/pages/home'
       let id = type===2?this.communityId:this.communityId2
       this.nowPayStatus = type
 
-      console.log('type',type)
       if(communityMsg.isJoined!==1 && communityMsg.isAuthor !== 1){
         this.payIn(id)
       }else {

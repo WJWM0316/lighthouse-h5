@@ -84,7 +84,8 @@ async function process(response) {
       hashParams = `${hashParams}?time=${new Date().getTime()}`
     }
     try {
-      location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
+      console.log(hashParams,hostname)
+      //location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
     }
     catch (err) {
       alert(err, '微信登陆失败')
@@ -93,7 +94,7 @@ async function process(response) {
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 426) { // 没有登录权限,跳去手机号登录
-//	alert("你没有绑定手机。。。。")
+    //alert("你没有绑定手机。。。。")
     store.dispatch('remove_userinfo')
     // hideLoading(globalLoading)
     router.replace({
