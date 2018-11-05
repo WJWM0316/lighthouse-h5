@@ -63,6 +63,8 @@ async function process(response) {
   // console.log('请求接口路径', url)
   // console.log('接口请求参数', datas)
   // console.log('接口返回数据', data)
+  console.log('1111111')
+  
   if (typeof data === 'string') { // 转换返回json
     data = JSON.parse(data)
   }
@@ -78,14 +80,15 @@ async function process(response) {
     // hideLoading(globalLoading)
     let hashParams = `${location.hash.substring(1)}`
     let hostname = location.href.split('?')[0]
+
     if (hashParams.indexOf("?") != -1) {
       hashParams = `${hashParams}&time=${new Date().getTime()}`
     } else {
       hashParams = `${hashParams}?time=${new Date().getTime()}`
     }
-    console.log('=======')
+  console.log('1111111')
     try {
-      console.log(hashParams,hostname)
+      console.log('====>>>>>',`${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`)
       //location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
     }
     catch (err) {
