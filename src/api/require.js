@@ -63,7 +63,6 @@ async function process(response) {
   // console.log('请求接口路径', url)
   // console.log('接口请求参数', datas)
   // console.log('接口返回数据', data)
-  console.log('1111111')
   
   if (typeof data === 'string') { // 转换返回json
     data = JSON.parse(data)
@@ -86,10 +85,8 @@ async function process(response) {
     } else {
       hashParams = `${hashParams}?time=${new Date().getTime()}`
     }
-  console.log('1111111')
     try {
-      console.log('====>>>>>',`${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`)
-      //location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
+      location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
     }
     catch (err) {
       alert(err, '微信登陆失败')
