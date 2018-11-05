@@ -117,11 +117,11 @@ import { getBeaconsApi } from '@/api/pages/home'
         that.communityMsg = res
         that.communityId2 = res.equivalenceCommunityId || ''
         that.wechatShare({
-          'titles': '月薪5万的人都在学的职场必修课',
-          'title': '月薪5万的人都在学的职场必修课',
-          'desc': '如何快速找准自己的职业发展道路？如何提高工作效率告别加班？这一堂，全给你！',
+          'titles': '1元解锁5门职场精品课程',
+          'title': '1元解锁5门职场精品课程',
+          'desc': '升职加薪也可以加入购物车，小灯塔双十一1元帮你清空！',
           'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
-          'link': location.origin + `/beaconweb/#/teacherActivity`
+          'link': location.origin + `/beaconweb/#/active_11`
         })
 
         getCommunityInfoApi({
