@@ -99,6 +99,9 @@ import { getBeaconsApi } from '@/api/pages/home'
     }
 
     created () {
+
+      this.isShow = true
+      this.buy_state = 'left'
       let that = this
       if(that.$route.query){
         that.statistics = that.$route.query
@@ -386,9 +389,8 @@ import { getBeaconsApi } from '@/api/pages/home'
       
     }
     .buy_block {
-
-      width: 235px;
-      height: 249px;
+      width: 305px;
+      height: 300px;
       background: #cccccc;
       position: relative;
       .clo {
@@ -399,12 +401,12 @@ import { getBeaconsApi } from '@/api/pages/home'
         top: 4px;
       }
       .buy {
-        width: 140px;
-        height: 30px;
+        width: 150px;
+        height: 38px;
         position: absolute;
         bottom: 20px;
         left: 50%;
-        margin-left: -70px;
+        margin-left: -75px;
       }
     }
     .buy_success {
