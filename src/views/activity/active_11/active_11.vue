@@ -38,7 +38,7 @@
         <div class="buy" @click="toBuy(2)"></div>
       </div>
       <div class="buy_success" v-if="buy_state==='success_1'">
-        <img class="success_1" src="./../../../assets/activity/active_11/test_success_1.png"  />
+        <img class="success_1" src="./../../../assets/activity/active_11/success_1_2.png"  />
       </div>
 
       <div class="buy_success" v-if="buy_state==='success_465'">
@@ -80,8 +80,8 @@ import { getBeaconsApi } from '@/api/pages/home'
     demo01_index = 0
     statistics = {}
 
-    //正式c18c80c6c47c3047356b5b733f0bf784
-    communityId = '02b81714611b454f2daa2ea5fa53b5be'
+
+    communityId = 'c18c80c6c47c3047356b5b733f0bf784'
     communityId2 = ''
     communityMsg = {}
     communityMsg2 = {}
@@ -123,9 +123,7 @@ import { getBeaconsApi } from '@/api/pages/home'
             'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
             'link': location.origin + `/beaconweb/#/active_11`
           })
-          console.log(res.isJoined)
           if(res.isJoined===1){
-            console.log(111)
             this.isShow = true
             this.buy_state = 'success_1'
           }
@@ -428,8 +426,7 @@ import { getBeaconsApi } from '@/api/pages/home'
       align-items: center;
       .success_1 {
         width: 325px;
-        //height: 425px;
-        height: 325px;
+        height: 425px;
       }
       .success_465 {
         width: 326px;
