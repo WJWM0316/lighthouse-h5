@@ -112,27 +112,41 @@ import { getBeaconsApi } from '@/api/pages/home'
           userKey: this.statistics && this.statistics.userKey?this.statistics.userKey:'',
           bundingId: this.statistics && this.statistics.bundingId?this.statistics.bundingId:'',
         }
-      }).then(res=>{
-        that.communityMsg = res
-        that.communityId2 = res.equivalenceCommunityId || ''
-        that.wechatShare({
-          'titles': '1元解锁5门职场精品课程',
-          'title': '1元解锁5门职场精品课程',
-          'desc': '升职加薪也可以加入购物车，小灯塔双十一1元帮你清空！',
-          'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
-          'link': location.origin + `/beaconweb/#/active_11`
-        })
-
-        getCommunityInfoApi({
-          communityId: that.communityId2,
-          data:{
-            userKey: this.statistics && this.statistics.userKey?this.statistics.userKey:'',
-            bundingId: this.statistics && this.statistics.bundingId?this.statistics.bundingId:'',
-          }
-        }).then(res=>{
-          that.communityMsg2 = res
-        })
       })
+        .then(res=>{
+          that.communityMsg = res
+          that.communityId2 = res.equivalenceCommunityId || ''
+          that.wechatShare({
+            'titles': '1元解锁5门职场精品课程',
+            'title': '1元解锁5门职场精品课程',
+            'desc': '升职加薪也可以加入购物车，小灯塔双十一1元帮你清空！',
+            'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
+            'link': location.origin + `/beaconweb/#/active_11`
+          })
+          console.log(res.isJoined)
+          if(res.isJoined===1){
+            console.log(111)
+            this.isShow = true
+            this.buy_state = 'success_1'
+          }
+        })
+        .then(()=>{
+          return getCommunityInfoApi({
+            communityId: that.communityId2,
+            data:{
+              userKey: this.statistics && this.statistics.userKey?this.statistics.userKey:'',
+              bundingId: this.statistics && this.statistics.bundingId?this.statistics.bundingId:'',
+            }
+          })
+        })
+        .then(res=>{
+            that.communityMsg2 = res
+            // if(res.isJoined===0){
+            //   console.log(111)
+            //   this.isShow = true
+            //   this.buy_state = 'success_465'
+            // }
+        })
     }
 
     toBuy (type) {
