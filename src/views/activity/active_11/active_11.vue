@@ -428,7 +428,8 @@ import { getBeaconsApi } from '@/api/pages/home'
       align-items: center;
       .success_1 {
         width: 325px;
-        height: 425px;
+        //height: 425px;
+        height: 325px;
       }
       .success_465 {
         width: 326px;
