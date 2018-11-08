@@ -38,7 +38,7 @@
         <div class="buy" @click="toBuy(2)"></div>
       </div>
       <div class="buy_success" v-if="buy_state==='success_1'">
-        <img class="success_1" src="./../../../assets/activity/active_11/success_1.png"  />
+        <img class="success_1" src="./../../../assets/activity/active_11/test_success_1.png"  />
       </div>
 
       <div class="buy_success" v-if="buy_state==='success_465'">
