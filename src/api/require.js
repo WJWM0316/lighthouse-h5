@@ -64,8 +64,6 @@ async function process(response) {
   // console.log('接口请求参数', datas)
   // console.log('接口返回数据', data)
   
-  let a = 'active_11?userKey=d3641eb4a448170321859b4ae6acd6dd&bundingId=3&autoPay=true'
-  console.log('====1111',location.href.endsWith('reload=true'))
   if (typeof data === 'string') { // 转换返回json
     data = JSON.parse(data)
   }
