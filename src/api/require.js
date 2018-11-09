@@ -64,6 +64,8 @@ async function process(response) {
   // console.log('接口请求参数', datas)
   // console.log('接口返回数据', data)
   
+  let a = 'active_11?userKey=d3641eb4a448170321859b4ae6acd6dd&bundingId=3&autoPay=true'
+  console.log('====1111',location.href.endsWith('reload=true'))
   if (typeof data === 'string') { // 转换返回json
     data = JSON.parse(data)
   }
@@ -79,13 +81,6 @@ async function process(response) {
     // hideLoading(globalLoading)
     let hashParams = `${location.hash.substring(1)}`
     let hostname = location.href.split('?')[0]
-
-    /*  console.log('=====>22222',hashParams)
-    if (hashParams.indexOf("?") != -1) {
-      hashParams = `${hashParams}&time=${new Date().getTime()}`
-    } else {
-      hashParams = `${hashParams}?time=${new Date().getTime()}`
-    }*/
 
     try {
       hashParams = encodeURIComponent(hashParams)
@@ -109,17 +104,10 @@ async function process(response) {
   if (data && data.statusCode === 433) { // 支付接口没有登录权限,跳去手机号登录
     store.dispatch('remove_userinfo')
     // hideLoading(globalLoading)
-    if (location.href.endsWith('reload=true') || location.href.indexOf('saleId=') > -1) {
-      router.replace({
-        name: 'login',
-        query: {redirect: encodeURI(location.href + '&autoPay=true')}
-      })
-    } else {
-      router.replace({
-        name: 'login',
-        query: {redirect: encodeURI(location.href + '?autoPay=true')}
-      })
-    }
+    router.replace({
+      name: 'login',
+      query: {redirect: encodeURI(location.href)}
+    })
   }
   if (data && data.statusCode === 430) {
     router.replace({
