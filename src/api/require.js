@@ -133,12 +133,12 @@ async function process(response) {
   if (data && data.statusCode === 432) { // 需要授权
     // hideLoading(globalLoading)
     var hashParams = location.hash.substring(1)
-    console.log('xxxx', hashParams, hashParams.endsWith('reload=true'))
-    if (hashParams.endsWith('reload=true')) {
-      hashParams = hashParams + '&autoPay=true'
-    } else {
-      hashParams = hashParams + '?autoPay=true'
-    }
+    // console.log('xxxx', hashParams, hashParams.endsWith('reload=true'))
+    // if (hashParams.endsWith('reload=true')) {
+    //   hashParams = hashParams + '&autoPay=true'
+    // } else {
+    //   hashParams = hashParams + '?autoPay=true'
+    // }
     const hostname = location.href.split('?')[0]
 
     encodeURIComponent(hashParams)
