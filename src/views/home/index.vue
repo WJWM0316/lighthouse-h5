@@ -309,7 +309,6 @@ export default class HomeIndex extends Vue {
   getAdvertises () {
     this.getInsert()
     this.getBanners()
-    //this.getAdvertising()
   }
   /**
    * 获取banner列表
@@ -332,27 +331,44 @@ export default class HomeIndex extends Vue {
    */
   getAdvertising () {
     let id = 42
-    /*if (this.advertisingList.length > 0 && this.scrollHeight !=0 ) {
-      return
-    }*/
     return getAdvertisingApi({
       adType: id
     }).then((res) => {
       this.advertisingList = res.ads
-      if (res.ads.length > 0) {
-        setTimeout(()=>{
-          this.$nextTick(() => {
-            if (this.$refs.tabBanner && this.$refs.advertising && this.$refs.insert) { 
-              this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)+parseInt(this.$refs.insert.clientHeight)
-            }else if(this.$refs.tabBanner && this.$refs.advertising){
-              this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)+parseInt(this.$refs.advertising.clientHeight)
-            }else if(this.$refs.advertising){
-              this.scrollHeight = parseInt(this.$refs.advertising.clientHeight)
-            }else if(this.$refs.tabBanner){
-              this.scrollHeight = parseInt(this.$refs.tabBanner.clientHeight)
-            }
-          })
-        },100)
+      setTimeout(()=>{
+        this.setStick()
+      },100)
+    })
+  }
+
+  // 置顶
+  setStick () {
+    this.$nextTick(() => {
+      let tabBanner = this.$refs.tabBanner ? parseInt(this.$refs.tabBanner.clientHeight) : 0
+      let advertising = this.$refs.advertising ? parseInt(this.$refs.advertising.clientHeight) : 0
+      let insert = this.$refs.insert ? parseInt(this.$refs.insert.clientHeight) : 0
+
+      console.log('===>',tabBanner,advertising,insert)
+      if (tabBanner>0 && advertising>0 && insert>0) { 
+        this.scrollHeight = tabBanner+advertising+insert
+
+      }else if(tabBanner>0 && advertising>0){
+        this.scrollHeight = tabBanner+advertising
+
+      }else if(tabBanner>0 && insert>0){
+        this.scrollHeight = tabBanner+insert
+        
+      }else if(advertising>0 && insert>0){
+        this.scrollHeight = advertising+insert
+
+      }else if(advertising>0){
+        this.scrollHeight = advertising
+
+      }else if(insert>0){
+        this.scrollHeight = insert
+        
+      }else if(tabBanner>0){
+        this.scrollHeight = tabBanner
       }
     })
   }
