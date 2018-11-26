@@ -169,12 +169,12 @@ export default class App extends Vue {
       src: '/index',
       label: '灯塔'
     },
-    {
+    /*{
       icon: require('./assets/icon/tab_discover@3x.png'),
       selectIcon: require('./assets/icon/tab_discover_pre@3x.png'),
       src: '/find',
       label: '发现'
-    },
+    },*/
     {
       icon: require('./assets/icon/tab-massage-2@3x.png'),
       selectIcon: require('./assets/icon/tab-massage-1@3x.png'),
