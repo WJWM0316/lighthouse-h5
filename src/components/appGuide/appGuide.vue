@@ -12,7 +12,7 @@
       打开
     </div>
     <div class="appBtn guide" @click.stop="isToApp" v-else>
-      打开App<img src="@/assets/icon/btn.png" />
+      打开App<img src="../../assets/icon/btn.png" />
     </div>
   </div>
 </template>
