@@ -33,6 +33,7 @@
             <img src="../../assets/icon/bg_share.png" />
           </span>
         </div>
+        <app-guide class="guide"></app-guide>
       </div>
 
       <!-- container -->
@@ -189,7 +190,7 @@
   import ShareDialog from '@/components/shareDialog/ShareDialog'
   import ListMixin from '@/mixins/list'
   import wxUtil from '@/util/wx/index'
-
+  import appGuide from '@/components/appGuide/appGuide'
   import dynamic from '@/components/dynamic/dynamic'
   import memberContent from '@/components/memberContent/memberContent'
   import courseContent from '@/components/courseContent/courseContent'
@@ -218,7 +219,8 @@
       Scroll,
       Actionsheet,
       communityInfoCard,
-      ShareDialog
+      ShareDialog,
+      appGuide
     },
     
     computed: {
@@ -1166,6 +1168,11 @@
 
     & .header {
       position: relative;
+      
+      .guide{
+        margin: 0 15px;
+        margin-top: 18px;
+      }
 
       & button {
         padding-right: 0;

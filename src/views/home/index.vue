@@ -3,7 +3,7 @@
     <!-- <div class="test_blo" @click="toTest">活动测试跳转</div> -->
     <div class="fixed">
       <!-- tab -->
-      <div class="nav-bar fs15" :class="navTabName">
+      <div class="nav-bar fs15" :class="navTabName" v-show="!isShowAppBtn">
         <span class="tit" @click="toggle('picked')">
           精选
           <i class="txt">精选</i>
@@ -30,6 +30,29 @@
     </div>
 
     <scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+      <!--头部引导打开app-->
+      <div class="appBtn">
+        <app-guide :isToGuide="true"></app-guide>
+      </div>
+      <div class="tab" ref="tab">
+        <!-- tab -->
+        <div class="nav-bar fs15" :class="navTabName" v-show="isShowAppBtn">
+          <span class="tit" @click="toggle('picked')">
+            精选
+            <i class="txt">精选</i>
+            <i class="pick_border" v-if="navTabName === 'picked'"></i>
+          </span>
+          <span class="tit join" :class="{'message': isMessage}" @click="toggle('joined')">
+            已加入
+            <i class="txt">已加入</i>
+            <i class="pick_border" v-if="navTabName !== 'picked'"></i>
+          </span>
+  
+  
+          <span class="create" @click="toggleCreate()">创建灯塔</span>
+         <!--  <span @click="toggle('find')">发现</span> -->
+        </div>
+      </div>
       <!-- 选项卡 -->
       <div ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
         <ul>
@@ -128,7 +151,7 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
+import appGuide from '@/components/appGuide/appGuide'
 import { Swiper, SwiperItem } from 'vux'
 import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
 import explore from '@/components/explore/explore'
@@ -145,7 +168,8 @@ import { getBeaconsApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdve
     SwiperItem,
     communityInfoCard,
     explore,
-    Scroller
+    Scroller,
+    appGuide
   },
   mixins: [ListMixin]
 })
@@ -174,6 +198,7 @@ export default class HomeIndex extends Vue {
   }
   insertList = '' //广告插页
   advertisingList = [] //广告推荐
+  isShowAppBtn = true
 
 
 
@@ -470,9 +495,9 @@ export default class HomeIndex extends Vue {
 
           // todo
           if(this.joins.length == 0 && this,creations.length == 0){
-              this.joinLd = true;
+            this.joinLd = true;
           }else {
-              this.joinLd = false;
+            this.joinLd = false;
           }
 
 
@@ -518,6 +543,14 @@ export default class HomeIndex extends Vue {
    */
   scroll (e) {
     const {scrollTop} = e.target
+    const tab = this.$refs.tab
+    console.log(scrollTop, 333333333)
+    if (scrollTop >= tab.clientHeight) {
+      this.isShowAppBtn = false
+    } else {
+      this.isShowAppBtn = true
+    }
+    
     if (this.navTabName === 'picked') {
       if (scrollTop >= this.scrollHeight) {
         this.isFlex = true
@@ -592,16 +625,13 @@ export default class HomeIndex extends Vue {
 
 }
 .p-home-index {
-  //padding: 50px 0;
-  padding: 50px 0 50px;
+  /*padding: 50px 0 50px;*/
   box-sizing: border-box;
   &.picked {
-    // padding: 113px 0 50px;
-    padding: 50px 0 50px;
+    /*padding: 50px 0 50px;*/
   }
   &.hasBanner {
      padding: 89px 0 50px;
-    // padding: 259px 0 50px;
   }
 
   & .fixed {
@@ -624,13 +654,19 @@ export default class HomeIndex extends Vue {
     margin-top: 0;
     z-index: 99;
   }
+  
+  .tab{
+    width: 100%;
+    min-height: 57px;
+  }
 
   & .nav-bar {
+    min-height: 57px;
     box-sizing: border-box;
     color: #929292;
     .fontSize(18);
     line-height: 1.22;
-    padding: 12px 15px 15px ;
+    padding: 18px 15px 15px ;
     background-color: #ffffff;
     /* box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);  */
 

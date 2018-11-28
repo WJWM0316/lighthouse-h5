@@ -1,5 +1,6 @@
 <template>
   <div class="p-body p-center-index">
+    <app-guide class="guide" :isToGuide="true"></app-guide>
     <div class="header">
       <div class="left">
         <p class="username">{{model.realName}}</p>
@@ -83,11 +84,14 @@
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
+import appGuide from '@/components/appGuide/appGuide'
 import { getInformationApi } from '@/api/pages/center'
 
 @Component({
-  name: 'center-index'
+  name: 'center-index',
+  components: {
+    appGuide
+  }
 })
 export default class HomeIndex extends Vue {
   model = {

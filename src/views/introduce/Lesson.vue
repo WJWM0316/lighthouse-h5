@@ -100,8 +100,8 @@
 			         @showEvaluate='showEvaluate'
 			      ></lessondynamicItem>
 			      <div class="Expand-btn" @click.stop="toPunchList('excellent')" v-if="countCardInfo.totalExcellentCardCount>5">
-			      	<div>
-			      		查看所有优秀打卡 <span>({{countCardInfo.totalExcellentCardCount}})</span>
+			      	<div @click.stop="toApp">
+			      		打开App，查看所有优秀打卡 <!--<span>({{countCardInfo.totalExcellentCardCount}})</span>-->
 			      	</div>
 			      </div>
 					</div>
@@ -129,8 +129,8 @@
 		         @showEvaluate='showEvaluate'
 		      ></lessondynamicItem>
 		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="countCardInfo.totalCardCount>5">
-		      	<div>
-		      		查看所有打卡 <span>({{countCardInfo.totalCardCount}})</span>
+		      	<div @click.stop="toApp">
+		      		打开App，查看所有优秀打卡 <!--<span>({{countCardInfo.totalCardCount}})</span>-->
 		      	</div>
 		      </div>
 				</div>
@@ -218,6 +218,9 @@
 				</div>
 			</div>
 		</div>
+		<div class="posterBox" v-if="showPost">
+		  <poster :name="curPeopleInfo.userInfo.realname" :title="communityCourse.title" @close="close"></poster>
+		</div>
 	</div>
 </template>
 
@@ -228,6 +231,8 @@
   import hintMsg from '@/components/hintMsg/hintMsg'
   import audioBox from '@/components/media/music'
   import WechatMixin from '@/mixins/wechat'
+  import appGuide from '@/util/appGuide'
+  import poster from '@/components/poster/poster'
   import { Actionsheet } from 'vux'
   import { lessonContentApi, getCourseCardListApi, setExcellentCourseCardApi } from '@/api/pages/pageInfo'
   import {payApi, freePay} from '@/api/pages/pay'
@@ -242,7 +247,8 @@
       lessondynamicItem,
       hintMsg,
       audioBox,
-      Actionsheet
+      Actionsheet,
+      poster
     },
     computed: {
     	// 剩余免费名额
@@ -320,7 +326,6 @@
 			]
 		}
 
-
   	//试读。未加入相关
   	lessonData = {}
   	
@@ -347,10 +352,10 @@
   	  ]
   	}
     endPayType = null //已结束 加入时候的状态
+    showPost = false
 
   	created(){
   		this.trialReading = this.$route.query.isTry
-  		console.log(this.trialReading,"是否试读。。。。。")
 			//初始化
 			this.init()
   	}
@@ -359,6 +364,10 @@
   	//路由进入
   	beforeRouteEnter(to,from,next){
   		next();
+  	}
+  	
+  	toApp () {
+  	  appGuide.isToApp(false)
   	}
   	
   	//初始化函数
@@ -391,11 +400,6 @@
   			this.peopleCourseCardList = CourseCardListRes.peopleCourseCardList.length>0?CourseCardListRes.peopleCourseCardList:""//打卡列表
   			this.excellentPunchList = CourseCardListRes.excellentPeopleCourseCardList.length>0?CourseCardListRes.excellentPeopleCourseCardList:""//优秀打卡列表
   			
-  			
-  			setTimeout(()=>{
-  				console.log(this.$refs['H5'],"555555555555555555555555555","我是捕获到的")
-  			})
-  			
   			//是否调起支付
 	  		let Selectcoupon=sessionStorage.getItem("coupon");
 	  		if(Selectcoupon){
@@ -408,26 +412,19 @@
 	  			}else{
 	  				this.selectedPrice =this.lessonData.joinPrice
 	  			}
-	  			console.log(this.selectCouponItem,this.selectedPrice,"我是当前选择的优惠券信息")
 	  		}
   			
   		}catch (e){
   			this.$vux.toast.text(e.message, 'bottom')
-  			console.log(e,"返回报错")
   		}
   	}
   	
-  	mounted () {
-  		this.$nextTick(()=>{
-  			setTimeout(()=>{
-  				console.log(this.communityCourse,this.$refs['H5'],"我是捕获到的")
-  			},500)
-  		})
-	  }
+  	close () {
+  	  this.showPost = false
+  	}
   	
   	//调起底部点赞弹窗
   	showEvaluate(item){
-  		console.log(item,"我是点击的信息详情")
   		this.optPunch = item
   		this.isExcellentCard = item.isExcellentCard;
   		this.addActionsConfig.show = true
@@ -456,7 +453,6 @@
 	  		peopleCourseId:this.optPunch.peopleCourseId,
 	  		status:isExcellentCard
 	  	}
-			console.log(parama,"我是参数。。。。。")
 			
 			setExcellentCourseCardApi(parama).then(res=>{
 	  		console.log("评选成功")
@@ -464,7 +460,6 @@
 	  		this.$vux.toast.text('评选成功', 'bottom')
 	  	}).catch(res=>{
 	  		this.$vux.toast.text('评选失败，请重试', 'bottom')
-	  		console.log(res,"接口报错")
 	  	})
 		}
 
@@ -472,7 +467,6 @@
 	  
 	  //刷新打开列表数据
 	  reFresh(){
-	  	console.log(this.communityId,this.$route.query.communityId)
 			let parama = {
   			communityId: this.communityId,
   			courseId:this.$route.query.id,
@@ -571,7 +565,6 @@
 	        content: '快去灯塔里和大家一起进步吧',
 	        buttonText: '好的',
 	        onHide () {
-	        	console.log(111)
 	      		that.init()
 	        }
 	      })
@@ -672,7 +665,6 @@
             self.$vux.toast.text('已购买成功', 'bottom')
             const { communityId } = self.$route.params
             let number = Math.random() * 10 + 1
-            console.log('communityId', communityId)
             //
             switch (communityId) {
               case 'ca7cfa129f1d7ce4a04aebeb51e2a1aa':
@@ -737,7 +729,7 @@
   	
   	//去打卡编辑页
   	toPunch(){
-			this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}&communityId=${this.communityCourse.community[0].idKey}`})
+			this.$router.push({path:`/PunchEditing?courseId=${this.communityCourse.id}&communityId=${this.communityCourse.community[0].idKey}&firstPunch=true`})
   	}
   	
   	//去个人打卡详情页
@@ -760,7 +752,6 @@
     			urls,
     			img
     		}
-    		console.log(img,"我是图片路径信息")
     		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
     	}
     }
@@ -776,7 +767,6 @@
 				urls,
 				img
 			}
-			console.log(img,"我是图片路径信息")
   		this.wechatPreviewImage(parma).then().catch(e=>{console.log(e)})
 	  }
   	//播放视频
@@ -826,8 +816,13 @@
     }
     
     beforeRouteEnter(to,from,next){
-//  	to.meta.keepAlive = false;
-    	next();
+      if (from.query.firstPunch) {
+        next(vm => {
+          vm.showPost = true
+        })
+      } else {
+        next()
+      }
     }
     
     beforeRouteLeave(to,from,next){
@@ -838,6 +833,18 @@
 </script>
 
 <style lang="less" scoped>
+  .posterBox{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 9999;
+  }
   /*支付弹窗*/
   .pay_window{
    	position: absolute;
@@ -964,7 +971,7 @@
       justify-content: center;
       align-items: center;
       color: #bcbcbc;
-      z-index: 999;
+      z-index: 9998;
       font-size: 15px;
 
       & p {
@@ -1329,7 +1336,7 @@
 			position: fixed;
 			bottom: 0;
 			left: 0;
-			z-index: 9998;
+			z-index: 100;
 			display: flex;
 			flex-wrap: nowrap;
 			align-items: center;

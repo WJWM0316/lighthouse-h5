@@ -407,14 +407,12 @@
 
 				if(this.sendOK) {
 					sessionStorage.setItem("isNewLoad", true);
-//					sessionStorage.setItem("scrollTop", 0);
 					this.publishSuccess = true
 					this.$router.go(-1)
 				} else {
 					this.publishSuccess = true
 					this.$router.go(-1)
 				}
-				// this.$router.go(-1)
 			} catch(error) {
 				this.$vux.toast.text(error.message, 'bottom')
 			} finally {

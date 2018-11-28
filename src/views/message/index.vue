@@ -1,6 +1,7 @@
 <template>
   <div class="p-body p-message-outer">
     <scroller @refresh="handleRefresh" @pullup="handlePullup">
+      <app-guide :isToGuide="true"></app-guide>
       <div class="exchange-wx" @click="goexChangeList">
         <span class="fs15">交换微信申请</span>
         <div class="red-dot" v-if="!isRead"></div>
@@ -35,6 +36,7 @@
   import ListMixin from '@/mixins/list'
   import Scroller from '@/components/scroller'
   import messageItem from '@/components/messageItem/messageItem'
+  import appGuide from '@/components/appGuide/appGuide'
   import { XInput, XButton } from 'vux'
   import { messageListApi } from '@/api/pages/message'
 
@@ -44,7 +46,8 @@
       Scroller,
       XInput,
       XButton,
-      messageItem
+      messageItem,
+      appGuide
     },
     mixins: [ListMixin],
     methods: {
