@@ -118,6 +118,7 @@
       ctx.drawImage(this.$refs.ewema,584,1144,116,116)
       // this.path = this.canvas.toDataURL("image/png")
       try {
+        console.log(this.canvas)
         this.path = this.canvas.toDataURL("data:image/png;")
       }
       catch(err) {
