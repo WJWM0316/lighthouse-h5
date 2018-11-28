@@ -1,13 +1,13 @@
 class appGuide {
   /* 调起app或跳转引导页 */
-  isToApp (isToGuide) {
+  isToApp (isToGuide,id) {
     let url = "ttbeacon://app:8080/launcher"
     /* 是否微信环境 */
     if (this.isWeiXin()) {
       if (isToGuide) {
         window.location.href = "https://a.app.qq.com/o/simple.jsp?pkgname=com.thetiger.beacon.android"
       } else {
-        window.location.href = 'https://www.ziwork.com/beaconstatic/?from=singlemessage#/Guide?id=ttbeacon://app:8080/launcher'
+        window.location.href = `https://www.ziwork.com/beaconstatic/#/Guide?id=${id}&redirect=true`
       }
     } else {
       this.toApp()

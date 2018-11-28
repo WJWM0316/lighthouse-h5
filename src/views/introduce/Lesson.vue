@@ -367,7 +367,8 @@
   	}
   	
   	toApp () {
-  	  appGuide.isToApp(false)
+  	  let path = `ttbeacon://app:8080/launcher%3Ft%3D2%26id%3D${this.$route.query.communityId}`
+  	  appGuide.isToApp(false, path)
   	}
   	
   	//初始化函数

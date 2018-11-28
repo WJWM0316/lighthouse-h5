@@ -31,7 +31,9 @@
   })
   export default class appBtn extends Vue{
     isToApp () {
-      appGuide.isToApp(this.isToGuide)
+      let path = `ttbeacon://app:8080/launcher%3Ft%3D2%26id%3D${this.$route.params.communityId}`
+      appGuide.isToApp(this.isToGuide, path)
+      
     }
   }
 </script>
