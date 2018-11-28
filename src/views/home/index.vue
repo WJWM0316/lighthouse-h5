@@ -544,7 +544,6 @@ export default class HomeIndex extends Vue {
   scroll (e) {
     const {scrollTop} = e.target
     const tab = this.$refs.tab
-    console.log(scrollTop, 333333333)
     if (scrollTop >= tab.clientHeight) {
       this.isShowAppBtn = false
     } else {
