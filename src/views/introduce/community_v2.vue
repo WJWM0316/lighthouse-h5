@@ -10,7 +10,7 @@
     </div>
 
 
-    <scroll :pullupable="showType == 1 ? false: true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end" :isShowBottom="showType == 1 ? false: true">
+    <scroll :pullupable="showType == 1 ? false: true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end && dynamicList.length >0" :isShowBottom="showType == 1 ? false: true">
       <!-- header -->
       <div class="header">
       	
@@ -111,7 +111,7 @@
           <div class="blank" v-else>
             <div v-if="pagination.end">
               <img src="http://zike-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/picture/2017-12-14/20171214171938.png" />
-              <p>暂时没有内容～</p>
+              <!--<p>暂时没有内容～</p>-->
             </div>
 
             <!-- 相关推荐 -->
@@ -411,56 +411,7 @@
       })
     }
     
-    //计算时间差
-    GetDateDiff(startDate,endDate)  {
-      let dates = Math.floor((startDate - endDate))/(1000*60*60*24)
-      return  dates
-    }
-    /* 是否展示app引导弹窗 */
-    showAppguide (time) {
-      let current_time = new Date().getTime();  //当前时间戳 
-      let old_time = time
-      //计算时间差
-      let days = this.GetDateDiff(current_time ,old_time )
-      if (days >= 5) {
-        let that = this
-        this.$vux.confirm.show({
-          title: '课节学习',
-          content: '打开App，学习更流程，还能体 验更完整的学习功能哟～',
-          confirmText: '打开App',
-          cancelText: '继续学习',
-          // 组件除show外的属性
-          onCancel () {
-          },
-          onConfirm () {
-          }
-        })
-        localstorage.set('oldTime', current_time)
-      } else {
-        console.log(days, 5555555555555555)
-      }
-    }
-    
-    mounted(){
-      let time = localstorage.get('oldTime')
-      if (time) {
-        this.showAppguide(time)
-      } else {
-        this.$vux.confirm.show({
-          title: '课节学习',
-          content: '打开App，学习更流程，还能体 验更完整的学习功能哟～',
-          confirmText: '打开App',
-          cancelText: '继续学习',
-          // 组件除show外的属性
-          onCancel () {
-          },
-          onConfirm () {
-          }
-        })
-        let current_time = new Date().getTime();  //当前时间戳 
-        localstorage.set('oldTime', current_time)
-      }
-    }
+    mounted(){}
 
     
     //路由跳转more
@@ -1101,12 +1052,13 @@
         .fontSize(18);
         color: #929292;
         font-weight: 600;
-        & p {
+        p {
           display: block;
           .fontSize(18);
           padding: 30px 0 15px 20px;
           line-height:22px;
           position:relative;
+          text-align: left !important;
           
           &::before{
             content:'';
@@ -1118,6 +1070,7 @@
             height:17px;
             background-color:#ffe266;
           }
+          text-align: left;
         }
       }
       .module-content {
@@ -1523,7 +1476,7 @@
       & .big-shot-community-content {
 
         & .blank {
-          padding: 50px 0;
+          padding: 50px 0 0px;
           display: flex;
           flex-flow: column nowrap;
           justify-content: center;
