@@ -156,7 +156,6 @@
     position: relative;
     width: 279px;
     height: 483px;
-    margin: 0 30px;
     padding-bottom: 44px;
     background: #F2F2F2;
     border-radius: 8px;
