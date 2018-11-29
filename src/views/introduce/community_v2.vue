@@ -413,7 +413,6 @@
     
     mounted(){}
 
-    
     //路由跳转more
     toMore(){
     	let that=this;

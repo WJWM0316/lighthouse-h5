@@ -90,7 +90,7 @@ export default class dynamicItem extends Vue {
     //计算时间差
     let days = this.GetDateDiff(current_time ,old_time )
     let that = this
-    if (days >= 5) {
+    if (days >= 0.0007) {
       this.$vux.confirm.show({
         title: '课节学习',
         content: '打开App，学习更流程，还能体 验更完整的学习功能哟～',
