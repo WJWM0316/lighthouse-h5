@@ -130,7 +130,7 @@
 		      ></lessondynamicItem>
 		      <div class="Expand-btn all-show" @click.stop="toPunchList('all')" v-if="countCardInfo.totalCardCount>5">
 		      	<div @click.stop="toApp">
-		      		打开App，查看所有优秀打卡 <!--<span>({{countCardInfo.totalCardCount}})</span>-->
+		      		打开App，查看所有打卡 <!--<span>({{countCardInfo.totalCardCount}})</span>-->
 		      	</div>
 		      </div>
 				</div>
