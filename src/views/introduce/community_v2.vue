@@ -190,6 +190,7 @@
   import ShareDialog from '@/components/shareDialog/ShareDialog'
   import ListMixin from '@/mixins/list'
   import wxUtil from '@/util/wx/index'
+  import localstorage from '@/util/localstorage/index'
   import appGuide from '@/components/appGuide/appGuide'
   import dynamic from '@/components/dynamic/dynamic'
   import memberContent from '@/components/memberContent/memberContent'
@@ -409,8 +410,56 @@
 
       })
     }
-   	
+    
+    //计算时间差
+    GetDateDiff(startDate,endDate)  {
+      let dates = Math.floor((startDate - endDate))/(1000*60*60*24)
+      return  dates
+    }
+    /* 是否展示app引导弹窗 */
+    showAppguide (time) {
+      let current_time = new Date().getTime();  //当前时间戳 
+      let old_time = time
+      //计算时间差
+      let days = this.GetDateDiff(current_time ,old_time )
+      if (days >= 5) {
+        let that = this
+        this.$vux.confirm.show({
+          title: '课节学习',
+          content: '打开App，学习更流程，还能体 验更完整的学习功能哟～',
+          confirmText: '打开App',
+          cancelText: '继续学习',
+          // 组件除show外的属性
+          onCancel () {
+          },
+          onConfirm () {
+          }
+        })
+        localstorage.set('oldTime', current_time)
+      } else {
+        console.log(days, 5555555555555555)
+      }
+    }
+    
     mounted(){
+      let time = localstorage.get('oldTime')
+      if (time) {
+        this.showAppguide(time)
+      } else {
+        this.$vux.confirm.show({
+          title: '课节学习',
+          content: '打开App，学习更流程，还能体 验更完整的学习功能哟～',
+          confirmText: '打开App',
+          cancelText: '继续学习',
+          // 组件除show外的属性
+          onCancel () {
+          },
+          onConfirm () {
+          }
+        })
+        let current_time = new Date().getTime();  //当前时间戳 
+        localstorage.set('oldTime', current_time)
+      }
     }
 
     
@@ -1045,7 +1094,8 @@
   @import "../../styles/mixins";
   @import "../../styles/dprPx";
     & .module {
-      border-top: 10px solid rgba(248,248,248,1);
+      width: 100%;
+      /*border-top: 10px solid rgba(248,248,248,1);*/
       .module-title {
         margin: 0 15px;
         .fontSize(18);
@@ -1172,6 +1222,8 @@
       .guide{
         margin: 0 15px;
         margin-top: 18px;
+        border-radius: 4px;
+        background-color: #FFFDF7;
       }
 
       & button {

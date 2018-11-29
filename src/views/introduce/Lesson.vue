@@ -218,7 +218,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="posterBox" v-if="showPost">
+		<div class="posterBox" v-if="showPost" @click.stop="close">
 		  <poster :name="curPeopleInfo.userInfo.realname" :title="communityCourse.title" @close="close"></poster>
 		</div>
 	</div>
@@ -725,7 +725,8 @@
 
     // 生成海报图
     toPoster () {
-    	this.$router.push({path:`/poster?name=${this.curPeopleInfo.userInfo.realname}&title=${this.communityCourse.title}`})
+      this.showPost = true
+//  	this.$router.push({path:`/poster?name=${this.curPeopleInfo.userInfo.realname}&title=${this.communityCourse.title}`})
     }
   	
   	//去打卡编辑页

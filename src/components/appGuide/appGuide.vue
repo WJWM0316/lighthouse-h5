@@ -93,6 +93,7 @@
       justify-content: center;
       border-radius: 15px;
       flex-shrink: 0;
+      margin-right: -8px;
     }
     .guide{
       width: 80px;

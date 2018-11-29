@@ -33,7 +33,7 @@
     <img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/28.png" v-if="random === 28" crossOrigin="Anonymous">
     <img id="scream"  @load="nextBg" ref="scream" src="../../assets/poster/28.png" v-if="random === 29" crossOrigin="Anonymous">
     <img id="ewema" ref="ewema" src="../../assets/icon/erweima.png">
-    <div class="imgBox">
+    <div class="imgBox" @click.stop="">
       <img class="showImg" :src="path">
     </div>
     <div class="msg">长按图片保存，分享你的学习成果</div>
@@ -118,11 +118,10 @@
       ctx.drawImage(this.$refs.ewema,584,1144,116,116)
       // this.path = this.canvas.toDataURL("image/png")
       try {
-        console.log(this.canvas)
         this.path = this.canvas.toDataURL("data:image/png;")
       }
       catch(err) {
-        alert(err)
+        console.log(err)
       }
       
       if (this.path) {
@@ -157,6 +156,7 @@
     position: relative;
     width: 279px;
     height: 483px;
+    margin: 0 30px;
     padding-bottom: 44px;
     background: #F2F2F2;
     border-radius: 8px;
