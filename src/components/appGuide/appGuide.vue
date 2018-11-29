@@ -41,7 +41,7 @@
 <style lang="less" scoped>
   .fiexHeader{
     box-sizing: border-box;
-    padding: 0 13px 0 7px;
+    padding: 0 15px 0 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;

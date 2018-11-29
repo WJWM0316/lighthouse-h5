@@ -105,6 +105,11 @@ export default class dynamicItem extends Vue {
           that.toApp()
         }
       })
+      this.$nextTick(() => {
+        let confirm = window.document.getElementsByClassName('weui-dialog')[1].childNodes
+        confirm[2].style.paddingBottom = '60px'
+        confirm[4].firstChild.style.color = '#BCBCBC'
+      })
       localstorage.set('oldTime', current_time)
     } else {
       this.$router.push({ path:`/Lesson?id=${id}&isTry=0&communityId=${that.communityId}` })
