@@ -224,6 +224,7 @@
       background-color: #FFFFFF;
       border-radius: 50px 0 0 50px;
       img{
+        margin-right: -3px;
         width: 24px;
         height: 24px;
       }

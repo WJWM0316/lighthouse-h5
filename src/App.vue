@@ -612,7 +612,7 @@ export default class App extends Vue {
   display: flex;
   align-items: center;
   box-shadow: 0 1.5px 6px 0 rgba(0, 0, 0, 0.18);
-  z-index: 9999;
+  z-index: 8888;
   .fileImg {
     width: 38px;
     height:38px;

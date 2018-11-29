@@ -234,6 +234,7 @@
         }
       }
       .desc-bottom{
+        font-weight: 300;
         font-size: 13px;
         color: #929292;
         margin-top: 7px;
