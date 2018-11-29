@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import moment from 'moment'
 import localstorage from '@/util/localstorage/index'
+import appGuide from '@/util/appGuide'
 
 @Component({
   name: 'course-content',
@@ -101,12 +102,18 @@ export default class dynamicItem extends Vue {
           that.$router.push({ path:`/Lesson?id=${id}&isTry=0&communityId=${that.communityId}` })
         },
         onConfirm () {
+          that.toApp()
         }
       })
       localstorage.set('oldTime', current_time)
     } else {
       this.$router.push({ path:`/Lesson?id=${id}&isTry=0&communityId=${that.communityId}` })
     }
+  }
+  
+  toApp () {
+    let path = `ttbeacon://app:8080/launcher%3Ft%3D2%26id%3D${this.communityId}`
+    appGuide.isToApp(false, path)
   }
 
   // -------------------- 页面跳转 ------------------------
@@ -139,6 +146,7 @@ export default class dynamicItem extends Vue {
             that.$router.push({ path:`/Lesson?id=${id}&isTry=${isTry}&communityId=${that.communityId}` })
           },
           onConfirm () {
+            that.toApp()
           }
         })
         let current_time = new Date().getTime();  //当前时间戳 
