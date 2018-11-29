@@ -1470,7 +1470,7 @@
 
       & .fixed-box {
         height: 40px;
-        margin-top: 25px;
+        margin-top: 18px;
       }
 
       & .big-shot-community-content {
