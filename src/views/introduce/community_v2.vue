@@ -1163,7 +1163,7 @@
 
   .big-shot-community {
     box-sizing: border-box;
-    height: 100%;
+    height: 100vh;
     &.author {
       padding-bottom: 50px;
     }
