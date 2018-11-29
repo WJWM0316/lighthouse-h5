@@ -124,6 +124,8 @@
       line-height: 32px;
       border-radius: 16px;
       background: #ffe266;
+      position: absolute;
+      right: 15px;
     }
     .not-btn {
       font-size: 15px;

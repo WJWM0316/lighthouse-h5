@@ -138,7 +138,7 @@ export default class HomeIndex extends Vue {
 .navs_blo {
   height:20px;
   text-align: center;
-  margin: 60px 0 0px 0;
+  margin: 45px 0 0px 0;
   display: flex;
   justify-content: center;
   .blo_item {

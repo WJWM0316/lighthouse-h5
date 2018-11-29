@@ -10,7 +10,7 @@
     </div>
 
 
-    <scroll :pullupable="showType == 1 ? false: true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end && dynamicList.length >0" :isShowBottom="showType == 1 ? false: true">
+    <scroll :pullupable="showType == 1 ? false: true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :isShowBottom="showType == 1 ? false: true">
       <!-- header -->
       <div class="header">
       	
@@ -1172,6 +1172,7 @@
       position: relative;
       
       .guide{
+        padding: 0 13px 0 7px;
         margin: 0 15px;
         margin-top: 18px;
         border-radius: 4px;

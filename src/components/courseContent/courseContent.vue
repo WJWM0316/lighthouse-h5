@@ -172,7 +172,7 @@
       height: 22px;
       background: rgba(255,255,255,1);
       border-radius: 3px;
-      border: 1px solid rgba(188,188,188,1);
+      border: 0.5px solid rgba(188,188,188,1);
       text-align: center;
       font-size: 12px;
       font-family: PingFangSC-Light;
@@ -199,7 +199,7 @@
         margin-left: -.7px;
         width: 0.5px; /* no */
         border-right: 1px dotted rgba(248,248,248,1);
-        height: 50px;
+        height: 49px;
       }
 
         

@@ -93,7 +93,6 @@
       justify-content: center;
       border-radius: 15px;
       flex-shrink: 0;
-      margin-right: -8px;
     }
     .guide{
       width: 80px;
@@ -101,6 +100,7 @@
       background: transparent;
       color: #D7AB70;
       font-size: 13px;
+      margin-right: -8px;
       img{
         width: 10px;
         height: 11px;
