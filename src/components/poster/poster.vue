@@ -172,6 +172,7 @@
       width: 310px;
       margin: 0 auto;
       display: block;
+      border-radius: 8px 8px 0 0;
     }
     .msg {
       width: 100%;
@@ -188,6 +189,7 @@
       color: #354048;
       font-size: 13px;
       font-weight: 400;
+      border-radius: 0 0 8px 8px;
       .line {
         width:28px;
         height:1px;
