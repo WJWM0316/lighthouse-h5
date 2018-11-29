@@ -149,6 +149,11 @@ export default class dynamicItem extends Vue {
             that.toApp()
           }
         })
+        this.$nextTick(() => {
+          let confirm = window.document.getElementsByClassName('weui-dialog')[1].childNodes
+          confirm[2].style.paddingBottom = '60px'
+          confirm[4].firstChild.style.color = '#BCBCBC'
+        })
         let current_time = new Date().getTime();  //当前时间戳 
         localstorage.set('oldTime', current_time)
       }
