@@ -552,8 +552,8 @@ export default class HomeIndex extends Vue {
     }
     
     if (this.navTabName === 'picked') {
-      console.log(this.$refs.tab2.offsetTop,33333333333333)
-      if (scrollTop >= this.scrollHeight) {
+      //if (scrollTop >= this.scrollHeight) {
+      if (scrollTop >= this.$refs.tab2.offsetTop) {
         this.isFlex = true
         this.$refs.tab1.scrollLeft = this.scrollTabLeft
       } else {
