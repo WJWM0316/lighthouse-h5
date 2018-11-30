@@ -122,7 +122,7 @@
             item.progress = 0
           }
         })
-        this.dataList = page === 1 ? (list || []) : this.dataList.concat(list || [])
+        this.dataList = this.dataList.concat(list || [])
         this.pagination.page = page
         this.pagination.pageSize = pageSize
         this.pagination.total = total
