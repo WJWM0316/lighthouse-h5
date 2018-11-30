@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+    <scroller @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!--头部引导打开app-->
       <div class="appBtn">
         <app-guide :isToGuide="true"></app-guide>
@@ -85,12 +85,13 @@
       </div> -->
       
        <!-- 分类 -->
-      <div ref="tab2" class="classification fs14" v-if="navTabName === 'picked'" v-show="!isFlex" @scroll.stop="scrollTab">
+      <div ref="tab2" class="classification fs14" v-if="navTabName === 'picked'" @scroll.stop="scrollTab">
         <span v-for="itemTag, indexTag in communityTagList"
               :key="indexTag"
               :class="{selected: itemTag.selected}"
               v-text="itemTag.tagName"
-              @click="tagSelected(indexTag)"></span>
+              @click="tagSelected(indexTag)"
+              v-show="!isFlex"></span>
       </div>
    
       <!-- 已加入 -->
@@ -374,7 +375,7 @@ export default class HomeIndex extends Vue {
       let insert = this.$refs.insert ? parseInt(this.$refs.insert.clientHeight) : 0
 
       console.log('===>',tabBanner,advertising,insert)
-      if (tabBanner>0 && advertising>0 && insert>0) { 
+      if (tabBanner>0 && advertising>0 && insert>0) {
         this.scrollHeight = tabBanner+advertising+insert
 
       }else if(tabBanner>0 && advertising>0){
@@ -551,6 +552,7 @@ export default class HomeIndex extends Vue {
     }
     
     if (this.navTabName === 'picked') {
+      console.log(this.$refs.tab2.offsetTop,33333333333333)
       if (scrollTop >= this.scrollHeight) {
         this.isFlex = true
         this.$refs.tab1.scrollLeft = this.scrollTabLeft
@@ -630,7 +632,7 @@ export default class HomeIndex extends Vue {
     /*padding: 50px 0 50px;*/
   }
   &.hasBanner {
-     padding: 89px 0 50px;
+     /*padding: 89px 0 50px;*/
   }
 
   & .fixed {

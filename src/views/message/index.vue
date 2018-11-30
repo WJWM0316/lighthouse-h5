@@ -99,7 +99,6 @@
     }
 
     async getList ({page, pageSize} = {}) {// 请求列表
-      console.log(this.pagination.end, 11111, this.pagination.total)
       if (this.pagination.end || this.pagination.busy) {
         // 防止多次加载
         return

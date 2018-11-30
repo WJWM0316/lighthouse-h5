@@ -5,7 +5,9 @@
       <div class="logoInfo">
         <h3 v-if="isToGuide">小灯塔</h3>
         <p v-show="isToGuide">职场人都在用的职场攻略进步神器</p>
-        <p class="text" v-show="!isToGuide">到小灯塔App学习体验更流畅哦， 还有有趣最新的职场话题！</p>
+        <p class="text" v-show="!isToGuide">
+          使用小灯塔App，获取最佳学习体验,还有更多职场话题等你发现~
+        </p>
       </div>
     </div>
     <div class="appBtn" @click.stop="isToApp" v-if="isToGuide">
@@ -78,6 +80,9 @@
           color: #929292;
           font-size: 13px;
           font-weight: 300;
+          span{
+            white-space: nowrap;
+          }
         }
       }
     }
