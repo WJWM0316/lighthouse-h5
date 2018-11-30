@@ -10,7 +10,7 @@
     </div>
 
 
-    <scroll :pullupable="showType == 1 ? false: true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :isShowBottom="showType == 1 ? false: true">
+    <scroll :pullupable="showType == 1 ? false: true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end" @scroll="scroll" :isShowBottom="showType == 1 ? false: true">
       <!-- header -->
       <div class="header">
       	
