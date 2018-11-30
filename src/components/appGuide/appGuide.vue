@@ -62,7 +62,7 @@
       }
       h3{
         font-size: 16px;
-        font-weight: 600;
+        font-weight: 700;
         text-align: left;
         line-height: 20px;
         margin: 0;
@@ -92,6 +92,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 15px;
+      line-height: 30px;
       flex-shrink: 0;
     }
     .guide{
