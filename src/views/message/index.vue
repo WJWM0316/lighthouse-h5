@@ -1,6 +1,6 @@
 <template>
   <div class="p-body p-message-outer">
-    <scroller @refresh="handleRefresh" @pullup="handlePullup">
+    <scroller @refresh="handleRefresh" @infinite-scroll="handlePullup" :is-none-data="pagination.end">
       <app-guide :isToGuide="true"></app-guide>
       <div class="exchange-wx" @click="goexChangeList">
         <span class="fs15">交换微信申请</span>
@@ -98,7 +98,8 @@
       this.$router.push({name: 'userInfo-details', params: {userId}})
     }
 
-    async getList ({page, pageSize} = {}) { // 请求列表
+    async getList ({page, pageSize} = {}) {// 请求列表
+      console.log(this.pagination.end, 11111, this.pagination.total)
       if (this.pagination.end || this.pagination.busy) {
         // 防止多次加载
         return

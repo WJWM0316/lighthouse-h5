@@ -151,7 +151,6 @@ export default class Scroller extends Vue {
    * 滚动到底部
    */
   handleInfiniteScroll () {
-//	console.log(this.loadingStatus,"55555555555")
     if (this.infiniteScroll && this.loadingStatus === 'default') {
       this.switchLoadingStatus('loading')
       this.$emit('infinite-scroll', this.switchLoadingStatus)

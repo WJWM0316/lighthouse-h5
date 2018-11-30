@@ -1164,6 +1164,7 @@
   .big-shot-community {
     box-sizing: border-box;
     min-height: 100vh;
+    height: 100%;
     &.author {
       padding-bottom: 50px;
     }
