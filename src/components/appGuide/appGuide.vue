@@ -6,7 +6,7 @@
         <h3 v-if="isToGuide">小灯塔</h3>
         <p v-show="isToGuide">职场人都在用的职场攻略进步神器</p>
         <p class="text" v-show="!isToGuide">
-          使用小灯塔App，获取最佳学习体验,还有更多职场话题等你发现~
+          在APP上获取最佳学习体验，更有海量职场话题等你发现~
         </p>
       </div>
     </div>
