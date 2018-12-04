@@ -50,8 +50,8 @@
 						<div class="title-pic2"></div>
 					</div>
 					<!--头部标题-->
-					<div class="content-txt" v-html="communityCourse.punchCardTitle">
-					</div>
+					<pre class="content-txt" v-html="communityCourse.punchCardTitle">
+					</pre>
 					<div class="content-img">
 						<!--<img v-for="item in community_course.punch_card_img_info" :src="item.picture_url" alt="" />-->
 						<div class="content-images">
