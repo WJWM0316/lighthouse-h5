@@ -36,7 +36,7 @@
       <p v-else-if="pageInfo.remainingJoinNum <= 0 && !pageInfo.nextCommunityId">已满员</p>
       <div class="btn-box" v-else>
         <div class="free-btn advisory" v-if="pageInfo.consultantLink" @click="toAdvisory(pageInfo.consultantLink)">
-          <img src="@/assets/icon/icon_advisory@3x.png" />
+          <img src="../../assets/icon/icon_advisory@3x.png" />
           <span>咨询</span>
         </div>
         <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
