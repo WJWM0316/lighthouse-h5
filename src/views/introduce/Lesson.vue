@@ -552,7 +552,7 @@
         userCouponId:this.usedUserCouponId,
 	      productType: 1
 	    }).then((res) => {
-	      if (that.lessonData.iscourse === 4) { // 训练营
+	      if (that.lessonData.isCourse === 4) { // 训练营
           that.trainingCampAlert = true
           that.init()
         } else {
@@ -591,9 +591,6 @@
 	      }
 	      /* 训练营调起客服弹窗 */
 	      if (this.lessonData.isCourse === 4) {
-	        
-	      }
-	      if (this.lessonData.iscourse === 4) {
 	        this.trainingCampAlert = true
 	      }
 	      this.init()

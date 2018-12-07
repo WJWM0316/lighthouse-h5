@@ -710,7 +710,8 @@
   top: 35px;
 }
 .audio-wrapper.lesson .audio-right .nowTime {
-  right: 98%;
+  white-space: nowrap;
+  right: 90%;
 }
 .audio-wrapper.lesson .audio-right .range-bar {
   background:#EDEDED !important;
