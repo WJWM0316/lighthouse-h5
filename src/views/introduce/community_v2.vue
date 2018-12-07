@@ -143,6 +143,8 @@
         <button @click="posted"><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
       <div class="ask-warp" v-else>
+        <img class="guideMap askImg" v-if="showAskImg" @click.stop="disableAskImg" src="../../assets/icon/askImg.png" alt="" />
+        <img class="guideMap communicateImg" v-if="showCommunicateImg" @click.stop="disableCommunicateImg" src="../../assets/icon/communicateImg.png" alt="" />
         <!--4.25改版-->
         <button @click="postQuestions" v-if="this.pageInfo.isCourse===3 || this.pageInfo.isCourse===4">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>我要提问</span>
@@ -318,6 +320,8 @@
     }
     
     qrSrc = ''
+    showAskImg = false // 是否展示提问引导图 
+    showCommunicateImg = false // 是否展示交流引导图
 		
     created () {
     	let titleBoxShow=true;
@@ -383,6 +387,7 @@
 
         let isFirst = localStorage.getItem("isFirst");
         if(!isFirst){
+          this.showAskImg = true
           this.$vux.alert.show({
             title: '欢迎加入新版课程',
             content: '课程玩法：完成打卡任务，通关解锁下一节课，快来试试吧~',
@@ -438,6 +443,15 @@
 
       this.getRecommendList(communityId)
       this.getTopList(communityId)
+    }
+    
+    disableAskImg () {
+      this.showAskImg = false
+      this.showCommunicateImg = true
+    }
+    
+    disableCommunicateImg () {
+      this.showCommunicateImg = false
     }
 
     toggle (type) {
@@ -1627,6 +1641,20 @@
     		padding-right: 12px;
     		width: 20px;
     		height: 20px;
+    	}
+    	.guideMap{
+    	  width: 184px;
+    	  height: 102px;
+    	  position: absolute;
+    	  top: -102px;
+    	}
+    	.askImg{
+    	  width: 226px;
+    	  height: 97px;
+    	  left: 15px;
+    	}
+    	.communicateImg{
+    	  right: 15px;
     	}
     }
 

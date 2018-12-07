@@ -43,8 +43,9 @@ export default class camp extends Vue {
   padding: 0 15px;
   width: 100%;
   height: 100px;
-  padding-bottom: 12px;
+  margin-bottom: 12px;
   .warp{
+    border-radius: 3px;
     position: relative;
     width: 100%;
     height: 100%;

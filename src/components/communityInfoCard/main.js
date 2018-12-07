@@ -78,11 +78,13 @@ import Component from 'vue-class-component'
             return '已结束'
           } else {
             if (!this.isStart) {
-              return `未开始哦`
+              return `${this.starDate} 开启课程`
             } else if (this.community.courseTotalCount > 0) {
-              return `已学 ${this.community.patchCardCount} 个课节／课程更新至 ${this.community.courseTotalCount} 节`
+              return `<span style="color:#BCBCBC;">已学 <span style="color:#D7AB70;">${this.community.patchCardCount}</span> 个课节／课程更新至 <span style="color:#D7AB70;">${this.community.courseTotalCount}</span> 节</span>`
             } else if (this.community.courseTotalCount = 0) {
               return '未更新课节'
+            } else {
+              return '已结束'
             }
           }
         }
@@ -100,6 +102,10 @@ import Component from 'vue-class-component'
     },
     newMessage () {
       return this.community.newMessage
+    },
+    starDate () {
+      let data = new Date(this.community.startTime * 1000)
+      return `${data.getMonth()+1}月${data.getDate()}日`
     }
   }
 })

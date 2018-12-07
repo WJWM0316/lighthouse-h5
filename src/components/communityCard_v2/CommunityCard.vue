@@ -63,7 +63,7 @@
               <!-- 已结束 -->
               <p v-if="isEnd">灯塔已结束</p>
               <!-- 未加入且已开社 -->
-              <p v-else>灯塔已开启</p>
+              <p v-else v-show="community.isCourse !== 4">灯塔已开启</p>
             </template>
           </div>
         </div>
@@ -486,7 +486,6 @@ export default class CommunityCard extends Vue {
       }
       .right {
         flex: 0 0 auto;
-        align-
         justify-content: space-between;
 
         .countdown {

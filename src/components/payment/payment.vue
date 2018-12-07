@@ -68,7 +68,6 @@ import localstorage from '@/util/localstorage/index'
   watch: {
     pageInfo: {
       handler (newdate, oldData) {
-        console.log(this.pageInfo, 99999999999)
         this.isJoinAgency = this.pageInfo.isAuthor || this.pageInfo.isJoined
         // 剩余免费名额
         this.freeSurplusPeople = parseInt(this.pageInfo.freeJoinNum) - parseInt(this.pageInfo.freeJoinedNum)
@@ -118,15 +117,15 @@ export default class payment extends Vue {
   }
   disableJoin () {
     this.join = false
-    this.advisory = true
   }
   disableAdvisory () {
     this.advisory = false
+    this.join = true
   }
   created () {
     let isNewUser = localStorage.getItem("isNewUser");
     if (!isNewUser) {
-      this.join = true
+      this.advisory = true
       localStorage.setItem("isNewUser", true)
     }
   }
