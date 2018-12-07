@@ -5,7 +5,6 @@
 
     <div class="container" ref="big-shot-introduce-container" :class="{ 'no-pdb': !completelyShow }">
       <div class="header">
-
         <community-card ref="headCard" :community="pageInfo" :type="2" />
         <div class="share-group fixed">
           <div class="group_wrap">
@@ -22,15 +21,21 @@
           </span>
         </div>
       </div>
-
-      <div class="module"  style="min-height: 70vh" >
-        <div class="module-title">
+      
+      <!-- 介绍和试读tab -->
+      <div class="tabTitle" v-if="pageInfo.isCourse === 4">
+        <a href="#" :class="{'item': showType === 'about'}" @click.prevent.stop="toggle(1)"><span>关于课程</span></a>
+        <a href="#" :class="{'item': showType === 'tryCourse'}" @click.prevent.stop="toggle(0)"><span>试读</span></a>
+      </div>
+      
+      <div class="module"  style="min-height: 70vh" v-if="pageInfo.isCourse === 3 || showType === 'about'">
+        <div class="module-title" v-show="pageInfo.isCourse !== 4">
           <p>关于灯塔</p>
         </div>
         <div class="module-content h5-code" v-if="pageInfo.intro" v-html="pageInfo.intro" >
         </div>
       </div>
-      <div class="how-to-play">
+      <div class="how-to-play" v-show="pageInfo.isCourse !== 4 || showType === 'about'">
         <a href="https://stg.ziwork.com/zikeappstatic/lighthousestatic/howplay/index.html">
           <img src="./../../assets/how2play.png" />
         </a>
@@ -57,8 +62,8 @@
       </div>
 
       <!-- 试读内容 -->
-      <div class="module relevant" v-if="pageInfo.tryCourses&&pageInfo.tryCourses.length>0">
-        <div class="module-title">
+      <div class="module relevant" v-if="pageInfo.tryCourses && pageInfo.tryCourses.length>0 && pageInfo.isCourse === 3 || showType === 'tryCourse'">
+        <div class="module-title" v-show="pageInfo.isCourse !== 4">
           <p>试读内容</p>
           <div class="hr"></div>
         </div>
@@ -73,34 +78,16 @@
         </div>
       </div>
     </div>
-
-    <div class="footer" v-show="completelyShow">
-      <div class="time-clock" v-if="isJoinAgency">
-        <p>开课倒计时</p>
-        <p>{{pageInfo.duration}}</p>
-      </div>
-      <p v-else-if="pageInfo.communityStatus === 2">课程已下线，暂时不可加入</p>
-      <p v-else-if="pageInfo.remainingJoinNum <= 0">课程已满员，暂时不可加入</p>
-      <div class="btn-box" v-else>
-        <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
-                :disabled="!isFreeBtn" v-if="pageInfo.freeJoinNum > 0" @click="freeIn">
-          <span>集Call免费加入</span>
-          <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员'}})</span>
-        </div>
-        <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
-                :disabled="!isPayBtn" @click="payOrFree" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice > 0">
-          <span>付费加入:¥{{pageInfo.joinPrice}}</span>
-          <span v-if="pageInfo.selectCoupon">用券省 
-          	<span class="coupon_price" v-if="pageInfo.selectCoupon.userCoupon.coupon.discount<pageInfo.joinPrice">{{pageInfo.selectCoupon.userCoupon.coupon.discount}}</span> 
-          	<span class="coupon_price" v-else>{{pageInfo.joinPrice}}</span> 元
-          </span>
-        </div>
-        <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
-                :disabled="!isPayBtn" @click="freeJoin" v-if="pageInfo.payJoinNum > 0 && pageInfo.joinPrice === 0">
-          <span>免费加入</span>
-        </div>
-      </div>
-    </div>
+    
+    <!--底部支付按钮-->
+    <payment 
+      v-if="completelyShow"
+      :pageInfo="pageInfo" 
+      :isPassTime="isPassTime"
+      @payOrFree="payOrFree"
+      @freeJoin="freeJoin"
+      @freeIn="freeIn">
+    </payment>
 
     <!--支付弹窗-->
     <div class="pay_window" v-if="toPay" @click="closePya">
@@ -158,6 +145,23 @@
       @cloHint = cloHint
       @hintSucFuc = hintSucFuc
     ></hint-msg>
+    <!--加入训练营弹窗-->
+    <div class="trainingCampAlert" v-if="trainingCampAlert" @click.stop="close">
+      <div class="content" v-if="pageInfo.alterWechatQrcode" @click.stop="">
+        <img class="closeBtn" src="../../assets/icon/icon-close.png" alt="" @click.stop="close" />
+        <h3>恭喜你加入训练营</h3>
+        <p>{{pageInfo.alterTxt}}</p>
+        <img :src="pageInfo.alterWechatQrcode" alt="" />
+        <span>长按保存二维码</span>
+        <div class="copy" @click.stop="copy($event)">复制微信号</div>
+      </div>
+      <div class="textContent" @click.stop="" v-else>
+        <img class="closeBtn" src="../../assets/icon/icon-close.png" alt="" @click.stop="close" />
+        <h3>恭喜你加入训练营</h3>
+        <span id="copy">请添加客服微信：{{pageInfo.consultantCustomerWechat}}</span>
+        <div class="copy" @click.stop="copy">复制微信号</div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -171,6 +175,7 @@
   import WechatMixin from '@/mixins/wechat'
   import {payApi, freePay} from '@/api/pages/pay'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
+  import payment from '@/components/payment/payment'
   Component.registerHooks([
 	  'beforeRouteEnter',
 	  'beforeRouteLeave',
@@ -184,7 +189,8 @@
       communityInfoCard,
       CommunityCard,
       hintMsg,
-      ShareDialog
+      ShareDialog,
+      payment
     },
     computed: {
       // 剩余免费名额
@@ -212,6 +218,12 @@
       },
       isPayBtn () {
         return this.paySurplusPeople > 0
+      },
+      /* 是否错过训练营可加入时间 */
+      isPassTime () {
+        let {startTime, endTime} = this.pageInfo
+        let timestamp = Date.parse(new Date())
+        return timestamp > startTime*1000
       }
     },
     watch: {
@@ -261,7 +273,7 @@
     pageInfo = {}
     dynamicList = []
     disableOperationArr = ['comment', 'praise']
-    completelyShow = true
+    completelyShow = true // 控制介绍页显示模块
     el = ''
     qrSrc = ''
     isEndSock = false  //已结束的锁   
@@ -269,6 +281,8 @@
     selectCouponItem = {}   //当前选择的优惠券信息
     selectedPrice = ''    //选择其他优惠券后的价格
     toPay = false     //是否调起支付窗口
+    showType = 'about' // 训练营课程tab栏显示
+    trainingCampAlert = false // 训练营弹窗开关
 
     endPayType = null //已结束 加入时候的状态
     isHintShow = false   //弹窗
@@ -298,6 +312,24 @@
        }
        this.cloHint()
     }
+    
+    copy () {
+      let text = this.pageInfo.consultantCustomerWechat
+      const input = document.createElement('input')
+      input.setAttribute('readonly', 'readonly')
+      input.setAttribute('value', text)
+      document.body.appendChild(input)
+      input.setSelectionRange(0, 9999)
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+        console.log('复制成功')
+      }
+      document.body.removeChild(input)
+    }
+    
+    close () {
+      this.trainingCampAlert = false
+    }
 
     cloHint (){
       this.isHintShow = false
@@ -305,6 +337,14 @@
 
     openHint (){
       this.isHintShow = true
+    }
+    
+    toggle (classfy) {
+      if (classfy === 1) {
+        this.showType = 'about'
+      } else {
+        this.showType = 'tryCourse'
+      }
     }
 
     pxToRem (_s) {
@@ -424,34 +464,25 @@
       }).then((res) => {
         that.toPay = false;   //关闭支付窗口
         sessionStorage.removeItem("coupon");
-        that.$vux.alert.show({
-          title: '加入成功',
-          content: '快去灯塔里和大家一起进步吧',
-          buttonText: '好的',
-          onHide () {
-            that.pageInit()
-          }
-        })
+        if (that.pageInfo.isCourse === 4) {
+          that.trainingCampAlert = true
+          that.pageInit()
+        } else {
+          that.$vux.alert.show({
+            title: '加入成功',
+            content: '快去灯塔里和大家一起进步吧',
+            buttonText: '好的',
+            onHide () {
+              that.pageInit()
+            }
+          })
+        }
       }).catch((e) => {
         that.$vux.toast.text(e.message, 'bottom')
       })
     }
     toHome () {
       this.$router.replace(`/index`)
-    }
-
-    /**
-     * 点击卡片
-     */
-    handleTapCard (item) {
-      let url = ''
-      if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
-        this.$router.push(`/introduce/${item.communityId}/community`)
-      } else { // 未入社跳到未入社页面
-        url = `/introduce2/${item.communityId}?reload=true`
-      	this.completelyShow=true;
-        this.$router.push(url)
-      }
     }
 
     async payIn () {
@@ -474,9 +505,13 @@
         } else {
           this.onBridgeReady(params)
         }
+        if (this.pageInfo.isCourse === 4) {
+          this.trainingCampAlert = true
+        }
         this.pageInit()
       }
     }
+    /* 支付函数 */
     onBridgeReady (params) {
       let self = this
       /*eslint-disable*/
@@ -510,7 +545,7 @@
     }
     async created () {
       // wxUtil.reloadPage()
-      if (this.$route.name === 'introduce-detail2') {
+      if (this.$route.name === 'introduce-detail2') { // 是否介绍页
         this.completelyShow = false
       }
       const { code='' } = this.$route.query
@@ -560,17 +595,16 @@
       const { communityId } = this.$route.params
       const { saleId: applyId } = this.$route.query
 
-
       console.log(this.$route)
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
-      let Selectcoupon = sessionStorage.getItem("coupon");
+      let Selectcoupon = sessionStorage.getItem("coupon")
 
       this.qrSrc = res.sellImg
       this.pageInfo = res
 
-      //是否调起支付
+      //从优惠券页面列表页过来的，判断是否调起支付
       if(Selectcoupon){
-        this.toPay = true;
+        this.toPay = true
         let CouponItem = sessionStorage.getItem("coupon");
         this.selectCouponItem = JSON.parse(CouponItem);
         if(this.selectCouponItem.userCouponId!==0){
@@ -583,16 +617,15 @@
 
       // 是否已入社
       if (this.completelyShow && this.isJoinAgency) {
-        if(res.isCourse === 3){
+        if(res.isCourse === 3 || res.isCourse === 4){
           this.$router.replace(`/introduce2/${communityId}/community`)
         }else {
           this.$router.replace(`/introduce/${communityId}/community`)
         }
         return
       }else {
-
         //优惠卷进入。判断是否旧的
-        if(res.isCourse !== 3 ){
+        if(res.isCourse !== 3 && res.isCourse !== 4){
           this.$router.replace(`/introduce/${communityId}`)
           return
         }
@@ -612,7 +645,7 @@
           item.videoPlay = false
         }
       })
-      console.log(temp)
+      console.log(temp, 33333333333333333333)
       this.dynamicList = temp
       this.pageInfo.intro = this.pxToRem(this.pageInfo.intro)
     }
@@ -620,7 +653,6 @@
     disableOperationEvents (e) {
       const {eventType} = e
       console.log(eventType, '拦截')
-
       const _this = this
       const isBuy = _this.pageInfo.joinPrice > 0
       this.$vux.confirm.show({
@@ -675,7 +707,6 @@
     box-sizing: border-box;
     overflow-y: auto;
     &.no-pdb {
-    	
       padding-bottom: 0;
     }
 
@@ -830,6 +861,46 @@
       /*overflow-y: scroll;*/
       /*-webkit-overflow-scrolling: touch;  !* 针对 overflow: scroll; 在ios中卡顿问题 *!*/
     }
+    
+    /* 训练营（type：4）tab栏样式 */
+    .tabTitle{
+      margin-bottom: 20px;
+      padding: 0 20px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #DCDCDC;/*no*/
+      width: 100%;
+      height: 40px;
+      background: #FFFFFF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      a{
+        position: relative;
+        display: inline-block;
+        width: 50%;
+        text-align: center;
+        color: #929292;
+        font-size: 15px;
+        font-weight: 300;
+        height: 40px;
+        line-height: 40px;
+      }
+      .item{
+        color: #354048;
+        font-weight:500; 
+        &::after{
+          content: '';
+          display: block;
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60px;
+          height: 3px;
+          background-color: #FFE266;
+        }
+      }
+    }
 
     & .module {
 
@@ -929,154 +1000,6 @@
       }
     }
 
-    & .footer {
-      /*flex: 0 0 auto;*/
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 49px;
-      /*position: relative;*/
-      background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #bcbcbc;
-      z-index: 999;
-      .fontSize(15);
-
-      & p {
-        flex-grow: 1;
-        text-align: center;
-      }
-
-      & .btn-box {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-        flex-grow: 1;
-        height: 100%;
-        .pay-btn {
-					width:225px;
-          color: #354048;
-          background-color: #ffe266;
-          & span:not(:first-of-type) {
-            color: rgba(53, 64, 72, 0.8);
-          }
-          span:nth-child(2){
-          	.coupon_price{
-            	display: inline-block;
-            	.fontSize(12);
-            	line-height:16px;
-            	color:#FB7A37;
-            }
-          }
-					flex-grow:1;
-					& .userCoupon{
-						.fontSize(12);
-					}
-        }
-      }
-
-      & .to-home {
-        flex: 0 0 auto;
-        width: 52px;
-        height: 100%;
-        border-top: solid 1px #dcdcdc;  /* no */
-        border-right: solid 1px #ededed;  /* no */
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-        color: #929292;
-        background-color: #ffffff;
-        & > span {
-          font-size: 11px !important;
-        }
-      }
-
-      & .time-clock {
-        position: absolute;
-        right: 0;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        background-color: #ffffff;
-        box-shadow: 0 -1px 0 0 #dcdcdc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #666666;
-        & p:last-of-type {
-          margin-left: 15px;
-          color: #d7ab70;
-        }
-      }
-
-      & div {
-        flex-grow: 1;
-        height: 100%;
-        .fontSize(13);
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        justify-content: center;
-        border-style: none;
-        border-radius: 0;
-        border-top: solid 1px #dcdcdc;  /* no */
-        &:after {
-          border-style: none;
-        }
-
-        & span {
-        	/*color: #354048;*/
-          display: block;
-          margin-top: 1px;
-        }
-        & span:first-of-type {
-          margin-top: 0;
-          .fontSize(16);
-					line-height:20px;
-        }
-
-        &.free-btn {
-          color: #d7ab70;
-          background-color: #ffffff;
-					/*bing-增加*/
-					flex-grow:1;
-					//width:150px;
-          padding: 0 20px;
-					& span:nth-of-type(2){
-						.fontSize(12);
-						line-height:16px;
-					}
-          & span:nth-of-type(1){
-          }
-					/*bing-增加*/
-        }
-        &.pay-btn {
-					width:225px;
-          color: #354048;
-          background-color: #ffe266;
-          & span:not(:first-of-type) {
-            color: rgba(53, 64, 72, 0.8);
-          }
-					flex-grow:1;
-        }
-        &.free-btn-disable {
-          padding: 0 20px;
-        }
-        &.free-btn-disable, &.pay-btn-disable {
-          color: #bcbcbc;
-          & span:nth-of-type(2){
-            .fontSize(12);
-            line-height:16px;
-          }
-        }
-      }
-    }
-
     & .how-to-play {
       margin-top: 30px;
       padding: 0 15px 25px;
@@ -1124,6 +1047,74 @@
           height: 100%;
           vertical-align: middle;
           text-align: center;
+        }
+      }
+    }
+    /* 训练营弹窗 */
+    .trainingCampAlert{
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      width: 100%;
+      height: 100vh;
+      background:rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .content, .textContent{
+        border-radius: 4px;
+        position: relative;
+        width: 280px;
+        height: 334px;
+        background: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        >.closeBtn{
+          position: absolute;
+          margin-top: 0;
+          top: 15px;
+          right: 15px;
+          width: 15px;
+          height: 15px;
+        }
+        h3{
+          font-size: 18px;
+          font-weight: 500;
+          color: #354048;
+        }
+        p{
+          margin-top: 12px;
+          font-size: 15px;
+          font-weight: 300;
+          color: #666666;
+        }
+        img{
+          margin-top: 13px;
+          width: 122px;
+          height: 122px;
+        }
+        span{
+          font-size: 13;
+          font-weight: 400;
+          color: #BCBCBC;
+          margin-top: 2px;
+        }
+        .copy{
+          font-size: 17px;
+          color: #D7AB70;
+          font-weight: 400;
+          margin-top: 30px;
+        }
+      }
+      .textContent{
+        height: 160px;
+        #copy{
+          color: #666666;
+          margin-top: 12px;
+          font-size: 15px;
         }
       }
     }

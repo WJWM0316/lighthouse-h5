@@ -70,6 +70,11 @@ const homeRoutes = [
     name: 'offline',
     component: resolve => require(['@/views/abnormal/offline'], resolve),
     meta: {navHide: true, hideController:true}
+  },
+  {
+    path: '/campList',
+    name: 'campList',
+    component: resolve => require(['@/views/home/campList'], resolve),
   }
 ]
 

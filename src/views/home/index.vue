@@ -72,6 +72,16 @@
       <div ref="insert" class="insert"  v-if="navTabName === 'picked'">
         <img  class="insert_block" v-for="item, index in insertList" :src="item.imgUrl" @click.prevent.stop="handleTapBanner(item)"></img>
       </div>
+      <!--训练营-->
+      <div v-if="navTabName === 'picked' && trainingCampInfo && trainingCampInfo.pagination.total">
+        <div class="campTitle">训练营</div>
+        <div v-for="(item, index) in trainingCampInfo.lists">
+          <training-camp :item="item"></training-camp>
+        </div>
+        <div class="moreCamp" v-if="trainingCampInfo.pagination.currentPage !== trainingCampInfo.pagination.lastPage">
+          <div class="moreCampBtn" @click.stop="toCampList">查看更多训练营</div>
+        </div>
+      </div>
 
       <!-- <img ref="insert" class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0&& navTabName === 'picked'" @click.prevent.stop="handleTapBanner(insert)"></img> -->
 
@@ -83,7 +93,8 @@
             </swiper-item>
           </swiper>
       </div> -->
-      
+      <!--课程标题-->
+      <div class="courseTitle" v-show="navTabName === 'picked'">职场精品课</div>
        <!-- 分类 -->
       <div ref="tab2" class="classification fs14" v-if="navTabName === 'picked'" @scroll.stop="scrollTab">
         <span v-for="itemTag, indexTag in communityTagList"
@@ -110,7 +121,7 @@
           <div class="module-home communities" :showFreeIdentification="false" v-if="joins && joins.length > 0">
             <!--<p class="module-home-title">已加入</p>-->
             <div class="list">
-              <community-info-card class="community-item" :type="3" :cardType="'joined'" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" v-if="item.communityId != teacherId" />
+              <community-info-card class="community-item" :type="3" :cardType="'joined'" v-for="item in joins" :key="item.communityId" :isCourse="item.isCourse" :community="item" @tap-card="handleTapCard(item)" v-if="item.communityId != teacherId" />
             </div>
           </div>
         </div>
@@ -157,9 +168,8 @@ import { Swiper, SwiperItem } from 'vux'
 import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
 import explore from '@/components/explore/explore'
 import Scroller from '@/components/scroller'
-
 import ListMixin from '@/mixins/list'
-
+import trainingCamp from '@/components/trainingCamp/trainingCamp'
 import { getBeaconsApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdvertisingApi } from '@/api/pages/home'
 
 @Component({
@@ -170,7 +180,8 @@ import { getBeaconsApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdve
     communityInfoCard,
     explore,
     Scroller,
-    appGuide
+    appGuide,
+    trainingCamp
   },
   mixins: [ListMixin]
 })
@@ -200,6 +211,7 @@ export default class HomeIndex extends Vue {
   insertList = '' //广告插页
   advertisingList = [] //广告推荐
   isShowAppBtn = true
+  trainingCampInfo = '' //训练营数据
 
 
 
@@ -224,6 +236,11 @@ export default class HomeIndex extends Vue {
   }
 
   updated(){
+  }
+  
+  /* 去训练营列表 */
+  toCampList () {
+    this.$router.push({path: '/campList'})
   }
 
   /**
@@ -469,15 +486,13 @@ export default class HomeIndex extends Vue {
 
       switch (navTabName) {
         case 'picked':
-          // if (this.communities.length > 0) {
-          //   return
-          // }
           res = await this.getPickedApi({
             ...params,
             ...this.pickedParams
           })
           console.log('精选: ', res)
           const communities = res.list
+          this.trainingCampInfo = res.topTrainingCamp
           this.communities = page === 1 ? communities : this.communities.concat(communities || [])
           allTotal = res.total
           break
@@ -575,28 +590,25 @@ export default class HomeIndex extends Vue {
    * 点击卡片
    */
   handleTapCard (item) {
-    console.log(item.isCourse)
+    console.log(item.isCourse, item.isJoined, 9999999999999999)
     let url = ''
-    if (item.isAuthor === 1 || item.isJoined === 1) { 
+    if (item.isAuthor === 1 || item.isJoined === 1) {
       //如果已经加入并且已入社跳转到入社后页面
       //1 有课。2 无课。3课节
-      if(item.isCourse == 3){
+      if(item.isCourse === 3 || item.isCourse === 4){
         url = `/introduce2/${item.communityId}/community`
       }else {
         url = `/introduce/${item.communityId}/community`
       }
-        
     } else { // 未入社跳到未入社页面
       //1 有课。2 无课。3课节
-      if(item.isCourse == 3){
+      if(item.isCourse == 3 || item.isCourse === 4){
         url = `/introduce2/${item.communityId}`
       }else {
         url = `/introduce/${item.communityId}`
       }
     }
-
     this.$router.push(url)
-
   }
 
   // 点击广告列
@@ -790,6 +802,45 @@ export default class HomeIndex extends Vue {
       }
     }
     
+  }
+  /*训练营标题 ， 课程标题*/
+  .campTitle, .courseTitle{
+    color: #354048;
+    font-size: 18px;
+    font-weight: 500;
+    padding-bottom: 10px;
+    margin-left: 25px;
+    position: relative;
+    &::before{
+      display: block;
+      content: '';
+      height: 19px;
+      width: 19px;
+      background-color: #FFE266;
+      position: absolute;
+      top: 0;
+      left: -10px;
+      z-index: -1;
+    }
+  }
+  /* 查看更多训练营按钮 */
+  .moreCamp{
+    padding: 0 22px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 30px;
+    margin-top: 3px;
+    .moreCampBtn{
+      color: #666666;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: #F8F8F8;
+      border-radius: 20px;
+    }
   }
 
   & .classification {

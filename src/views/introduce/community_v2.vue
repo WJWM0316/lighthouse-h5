@@ -39,7 +39,7 @@
       <!-- container -->
       <div class="container">
         <!-- 主体内容块 -->
-        <div class="fixed-box" ref="community-title" v-if='pageInfo.isCourse == 3'>
+        <div class="fixed-box" ref="community-title">
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
             <a href="#" class="item" @click.prevent.stop="toggle(1)"><span>课程内容</span></a>
             <a href="#" class="item" @click.prevent.stop="toggle(0)"><span>成员交流</span></a>
@@ -136,7 +136,7 @@
     <div class="footer" v-show="!displaySuspensionInput">
     	<!--在这里增加嘉宾判断 -->
       <div v-if="isAuthor || isKayo=='guests'" class="author-operation">
-        <button @click="question" v-if="this.pageInfo.isCourse===3">
+        <button @click="question" v-if="this.pageInfo.isCourse===3 || this.pageInfo.isCourse===4">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count _" v-if=" pageInfo['answerTotal']> 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
         <!-- release -->
@@ -144,7 +144,7 @@
       </div>
       <div class="ask-warp" v-else>
         <!--4.25改版-->
-        <button @click="postQuestions" v-if="this.pageInfo.isCourse===3">
+        <button @click="postQuestions" v-if="this.pageInfo.isCourse===3 || this.pageInfo.isCourse===4">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>我要提问</span>
         </button>
         <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
@@ -366,7 +366,7 @@
 
         // 页面分享信息
         let url = ''
-        if(this.pageInfo.isCourse === 3){
+        if(this.pageInfo.isCourse === 3 || this.pageInfo.isCourse === 4){
           //更新课程列表请求参数
           url = location.origin + `/beaconweb/#/introduce2/${communityId}`
         }else {
@@ -380,21 +380,6 @@
           'imgUrl': shareImg,
           'link': url
         })
-
-        //判断是否有课程，无课程则跳转
-        if(this.pageInfo.isCourse!==3){
-          this.type=0;
-          let type=0;
-          this.displaySuspensionInput = false
-          this.dynamicList = []
-
-          this.showType = type
-          this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-          this.showIdentification = !type
-  
-          this.pagination.end = false // 初始化数据，必定不是最后一页
-          this.getList({page: 1})
-        }
 
         let isFirst = localStorage.getItem("isFirst");
         if(!isFirst){
@@ -422,7 +407,7 @@
     closeShare () {
       this.showShare = false
       let url = ''
-      if(this.pageInfo.isCourse == 3){
+      if(this.pageInfo.isCourse == 3 || this.pageInfo.isCourse == 4){
         url = `/introduce2/${this.pageInfo.communityId}/community`
       }else {
         url = `/introduce/${this.pageInfo.communityId}/community`
@@ -438,10 +423,10 @@
       
       //嘉宾身份
       if(res.isAuthor == 0){
-          let res2 = await this.getRoleInfo(communityId)
-          if(res2.role && (res2.role.code =='guests'||res2.role.code =='special_guests')){
-            res.isAuthor = 1;
-          }
+        let res2 = await this.getRoleInfo(communityId)
+        if(res2.role && (res2.role.code =='guests'||res2.role.code =='special_guests')){
+          res.isAuthor = 1;
+        }
       }
       this.pageInfo = res
       await this.getList({page: 1})
@@ -844,7 +829,7 @@
      */
     handleTapCard (item) {
       let url = ''
-      if(item && item.isCourse == 3){
+      if(item && (item.isCourse == 3 || item.isCourse == 4)){
         url = `/introduce2/${item.communityId}`
       }else {
         url = `/introduce/${item.communityId}`

@@ -150,31 +150,7 @@
 				</div>
 		</template>
     <!-- 未加入 -->
-		<template v-else>
-			<div class="footer">
-			  <p v-if="lessonData.communityStatus === 2">课程已下线，暂时不可加入</p>
-			  <p v-else-if="lessonData.remainingJoinNum <= 0">课程已满员，暂时不可加入</p>
-			  <div class="btn-box" v-else>
-			    <div :class="{'free-btn': isFreeBtn, 'free-btn-disable': !isFreeBtn}"
-			            :disabled="!isFreeBtn" v-if="lessonData.freeJoinNum > 0" @click="freeIn">
-			      <span>集Call免费加入</span>
-			      <span>({{freeSurplusPeople > 0 ? '剩余：' + freeSurplusPeople : '已满员，通道关闭'}})</span>
-			    </div>
-			    <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
-			            :disabled="!isPayBtn" @click="payOrFree" v-if="lessonData.payJoinNum > 0 && lessonData.joinPrice > 0">
-			      <span>付费加入:¥{{lessonData.joinPrice}}</span>
-			      <span v-if="lessonData.selectCoupon">用券省 
-			      	<span class="coupon_price" v-if="lessonData.selectCoupon.userCoupon.coupon.discount<lessonData.joinPrice">{{lessonData.selectCoupon.userCoupon.coupon.discount}}</span> 
-			      	<span class="coupon_price" v-else>{{lessonData.joinPrice}}</span> 元
-			      </span>
-			    </div>
-			    <div :class="{'pay-btn': isPayBtn, 'pay-btn-disable': !isPayBtn}"
-			            :disabled="!isPayBtn" @click="freeJoin" v-if="lessonData.payJoinNum > 0 && lessonData.joinPrice === 0">
-			      <span>免费加入</span>
-			    </div>
-			  </div>
-			</div>
-		</template>
+		<payment v-else :pageInfo="lessonData" :isPassTime="isPassTime" @payOrFree="payOrFree" @freeJoin="freeJoin" @freeIn="freeIn"></payment>
 		<actionsheet v-model="addActionsConfig.show" :menus="isExcellentCard?addActionsConfig.menus2:addActionsConfig.menus" show-cancel @on-click-menu="handleAddActoinItem" />
 
 		<hint-msg 
@@ -218,9 +194,26 @@
 				</div>
 			</div>
 		</div>
-		<div class="posterBox" v-if="showPost" @click.stop="close">
+		<div class="posterBox" v-if="showPost && isPunch !== 0" @click.stop="close">
 		  <poster :name="curPeopleInfo.userInfo.realname" :title="communityCourse.title" @close="close"></poster>
 		</div>
+		<!--加入训练营弹窗-->
+    <div class="trainingCampAlert" v-if="trainingCampAlert" @click.stop="close">
+      <div class="content" v-if="pageInfo.alterWechatQrcode" @click.stop="">
+        <img class="closeBtn" src="../../assets/icon/icon-close.png" alt="" @click.stop="close" />
+        <h3>恭喜你加入训练营</h3>
+        <p>{{pageInfo.alterTxt}}</p>
+        <img :src="pageInfo.alterWechatQrcode" alt="" />
+        <span>长按保存二维码</span>
+        <div class="copy" @click.stop="copy($event)">复制微信号</div>
+      </div>
+      <div class="textContent" @click.stop="" v-else>
+        <img class="closeBtn" src="../../assets/icon/icon-close.png" alt="" @click.stop="close" />
+        <h3>恭喜你加入训练营</h3>
+        <span id="copy">请添加客服微信：{{pageInfo.consultantCustomerWechat}}</span>
+        <div class="copy" @click.stop="copy">复制微信号</div>
+      </div>
+    </div>
 	</div>
 </template>
 
@@ -233,6 +226,7 @@
   import WechatMixin from '@/mixins/wechat'
   import appGuide from '@/util/appGuide'
   import poster from '@/components/poster/poster'
+  import payment from '@/components/payment/payment'
   import { Actionsheet } from 'vux'
   import { lessonContentApi, getCourseCardListApi, setExcellentCourseCardApi } from '@/api/pages/pageInfo'
   import {payApi, freePay} from '@/api/pages/pay'
@@ -248,7 +242,8 @@
       hintMsg,
       audioBox,
       Actionsheet,
-      poster
+      poster,
+      payment
     },
     computed: {
     	// 剩余免费名额
@@ -275,7 +270,13 @@
     	},
     	isPayBtn () {
     	  return this.paySurplusPeople > 0
-    	}
+    	},
+    	/* 是否错过训练营可加入时间 */
+      isPassTime () {
+        let {startTime, endTime} = this.lessonData
+        let timestamp = Date.parse(new Date())
+        return timestamp > startTime*1000
+      }
     },
     watch: {
     },
@@ -287,15 +288,6 @@
   	showIdentification = true
     disableOperationArr = ['comment']
     isPlayList = false
-    //假音频数据
-    /*item = {
-    	files:[{
-				duration:250,
-				fileId:"6237",
-				fileUrl:"https://cdnstatic.ziwork.com/test/audio/2018-08-15/4bd491cb8292450b62b387a595f15ee8.mp3",
-				avatar:"2JVOTrwtULW3VpcKI3whmcDNYTlTMEVQzPpxN3ZDfXOcFYKtUiv7XZwjXolTara2.amr"
-	    }],
-    }*/
     //所有打卡数据
     peopleCourseCardList = ""
     //优秀打卡
@@ -325,13 +317,11 @@
 				}
 			]
 		}
+		trainingCampAlert = false //加入训练营弹窗开关
 
   	//试读。未加入相关
   	lessonData = {}
-  	
-  	events = {
-  		
-  	}
+  	events = {}
 
   	usedUserCouponId = 0    //支付时使用的优惠券id
   	selectCouponItem = {}   //当前选择的优惠券信息
@@ -422,6 +412,7 @@
   	
   	close () {
   	  this.showPost = false
+  	  this.trainingCampAlert = false
   	}
   	
   	//调起底部点赞弹窗
@@ -561,14 +552,19 @@
         userCouponId:this.usedUserCouponId,
 	      productType: 1
 	    }).then((res) => {
-	      that.$vux.alert.show({
-	        title: '加入成功',
-	        content: '快去灯塔里和大家一起进步吧',
-	        buttonText: '好的',
-	        onHide () {
-	      		that.init()
-	        }
-	      })
+	      if (that.lessonData.iscourse === 4) { // 训练营
+          that.trainingCampAlert = true
+          that.init()
+        } else {
+          that.$vux.alert.show({
+            title: '加入成功',
+            content: '快去灯塔里和大家一起进步吧',
+            buttonText: '好的',
+            onHide () {
+              that.init()
+            }
+          })
+        }
 	    }).catch((e) => {
 	      that.$vux.toast.text(e.message, 'bottom')
 	    })
@@ -592,6 +588,13 @@
 	        }
 	      } else {
 	        this.onBridgeReady(params)
+	      }
+	      /* 训练营调起客服弹窗 */
+	      if (this.lessonData.isCourse === 4) {
+	        
+	      }
+	      if (this.lessonData.iscourse === 4) {
+	        this.trainingCampAlert = true
 	      }
 	      this.init()
 	    }
@@ -847,6 +850,76 @@
     background-color: rgba(0,0,0,0.5);
     z-index: 9999;
   }
+  
+  /* 训练营弹窗 */
+  .trainingCampAlert{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 100vh;
+    background:rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .content, .textContent{
+      border-radius: 4px;
+      position: relative;
+      width: 280px;
+      height: 334px;
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      >.closeBtn{
+        position: absolute;
+        margin-top: 0;
+        top: 15px;
+        right: 15px;
+        width: 15px;
+        height: 15px;
+      }
+      h3{
+        font-size: 18px;
+        font-weight: 500;
+        color: #354048;
+      }
+      p{
+        margin-top: 12px;
+        font-size: 15px;
+        font-weight: 300;
+        color: #666666;
+      }
+      img{
+        margin-top: 13px;
+        width: 122px;
+        height: 122px;
+      }
+      span{
+        font-size: 13;
+        font-weight: 400;
+        color: #BCBCBC;
+        margin-top: 2px;
+      }
+      .copy{
+        font-size: 17px;
+        color: #D7AB70;
+        font-weight: 400;
+        margin-top: 30px;
+      }
+    }
+    .textContent{
+      height: 160px;
+      #copy{
+        color: #666666;
+        margin-top: 12px;
+        font-size: 15px;
+      }
+    }
+  }
+  
   /*支付弹窗*/
   .pay_window{
    	position: absolute;

@@ -185,13 +185,13 @@ const routers = [
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/punchDetails'], resolve),
 	},
-  {
-    // 海报图
-    path: '/poster',
-    name: 'poster',
-    meta: {navHide: true, hideController:true},
-    component: resolve => require(['@/views/poster/poster'], resolve),
-  },
+	{
+    // 训练营详情
+    path: '/trainingCampDetail',
+    name: 'trainingCampDetail',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/introduce/trainingCampDetail'], resolve),
+  }
 ]
 
 export default routers

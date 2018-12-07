@@ -6,8 +6,8 @@
       <img class="rotateZ" src="./../../assets/icon/music_loading.png" v-else-if="playStatus === 3">
     </div>
     <div class="audio-left" v-if="isLesson">
-      <img src="./../../assets/icon/playing.png" v-if="playStatus === 1"></img>
-      <img src="./../../assets/icon/playing.gif" v-else-if="playStatus === 2"></img>
+      <img src="./../../assets/icon/music_play.png" v-if="playStatus === 1"></img>
+      <img src="./../../assets/icon/stop@3x.png" v-else-if="playStatus === 2"></img>
       <img class="rotateZ" src="./../../assets/icon/music_loading.png" v-else-if="playStatus === 3">
     </div>
     <div class="audio-right" :class="{'big' : isShowLabel}">
@@ -653,19 +653,27 @@
     }
   }
 .audio-wrapper.lesson {
+  padding:  0 20px;
   width: 335px;
-  height: 60px;
+  height: 71px;
   margin: 0 auto;
   box-sizing: border-box;
-  border-radius: 30px !important;
-  background:rgba(255,226,102,0.12);
+  border-radius: 0px !important;
+  border: 1px solid #EDEDED;
+  background: #FCFCFC;
+  display: flex;
+  align-items: center;
 }
 .audio-wrapper.lesson .audio-left {
-  width: 21%;
+  height: 41px;
+  width: 41px;
+  margin-right: 31px;
+  border: 1px solid #666666;
+  border-radius: 50%;
 }
 .audio-wrapper.lesson .audio-left img {
-  width: 44px;
-  height: 44px;
+  width: 25px;
+  height: 25px;
 }
 .audio-wrapper.lesson .audio-left img.rotateZ {
   width: 22px;
@@ -681,10 +689,11 @@
   content: none;
 }
 .audio-wrapper.lesson .audio-right {
+  display: flex;
   width: 79%;
 }
 .audio-wrapper.lesson .audio-right .audio-time {
-  padding-right: 25px;
+  /*padding-right: 25px;*/
   width: auto !important;
   box-sizing: border-box;
 }

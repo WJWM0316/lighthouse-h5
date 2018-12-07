@@ -5,7 +5,7 @@ import Component from 'vue-class-component'
 @Component({
   name: 'community-info-card',
   props: {
-    // 大咖信息
+    /* 大咖信息 */
     community: {
       type: Object,
       default () {
@@ -24,11 +24,14 @@ import Component from 'vue-class-component'
         return true
       }
     },
-
-    // 类型：1为列表页卡片, 2为详情页卡片, 3为已加入列表
+    /* 类型：1为列表页卡片, 2为详情页卡片, 3为已加入列表 */
     type: {
       type: Number,
       default: 1
+    },
+    /* 课程类型1/2旧课程,3新课程,4训练营 */
+    isCourse: {
+      type: Number
     }
   },
   watch: {
@@ -62,12 +65,26 @@ import Component from 'vue-class-component'
     },
     communityStatus () {
       if (this.type === 3) {
-        if (this.isEnd) {
-          return '已结束'
-        } else if (this.isStart) {
-          return '已开启'
+        if (this.isCourse !== 4) {
+          if (this.isEnd) {
+            return '已结束'
+          } else if (this.isStart) {
+            return '已开启'
+          } else {
+            return '未开启'
+          }
         } else {
-          return '未开启'
+          if (this.isEnd) {
+            return '已结束'
+          } else {
+            if (!this.isStart) {
+              return `未开始哦`
+            } else if (this.community.courseTotalCount > 0) {
+              return `已学 ${this.community.patchCardCount} 个课节／课程更新至 ${this.community.courseTotalCount} 节`
+            } else if (this.community.courseTotalCount = 0) {
+              return '未更新课节'
+            }
+          }
         }
       } else {
         if (this.isEnd) {

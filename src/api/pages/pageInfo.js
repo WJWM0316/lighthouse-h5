@@ -487,3 +487,12 @@ export const delCourseCardCommentApi = (data) => {
     type:'delete'
   })
 }
+
+// 训练营列表
+export const getTrainingsListApi = (data) => {
+  return request({
+    url: `/wap/beacon/trainings`,
+    type:'get',
+    data
+  })
+}

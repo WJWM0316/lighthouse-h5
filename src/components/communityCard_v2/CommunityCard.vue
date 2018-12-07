@@ -10,7 +10,7 @@
       	<img :src="community.icon"/>
       </span>
 
-      <div  class="master" v-if=" community.isCourse === 2 ">
+      <div class="master" v-if=" community.isCourse === 2 ">
         <p class="name" :class="{ round: type === 1 }">
           <span class="text" v-text="community.master && community.masterIntro"></span>
         </p>
@@ -26,41 +26,48 @@
 
       <template v-else>
         <h3 class="title" v-text="community.title" ></h3>
-        <p class="desc" v-text="community.masterIntro"></p>
+        <p class="desc" v-text="community.masterIntro" v-if="community.isCourse === 3"></p>
+        <p class="desc" v-text="community.simpleIntro" v-if="community.isCourse === 4"></p>
       </template>
 
-      <p class="timeMsg" v-if="community.isCourse == 2 && type==1">
-        <span>开塔时间：</span>
-        {{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}</p>
-      <div class="bottom" v-else>
-        <div class="left" v-if="community&&community.menuPeople && community.menuPeople.number>0" @click.prevent.stop="toMore">
-            <p class="residue">
-              <span class="number">{{community.menuPeople.number}}</span> 
-              人
-            </p>
-            <p class="residue">
-              和你一起学
-            </p>
+      <template v-if="community.isCourse !== 4 || community.isJoined === 1">
+        <p class="timeMsg" v-if="community.isCourse == 2 && type==1">
+          <span>开塔时间：</span>
+          {{community.startTime * 1000 | date('YYYY年M月D日')}}-{{community.endTime * 1000 | date('YYYY年M月D日')}}
+        </p>
+        <div class="bottom" v-else>
+          <div class="left" v-if="community&&community.menuPeople && community.menuPeople.number>0" @click.prevent.stop="toMore">
+              <p class="residue">
+                <span class="number">{{community.menuPeople.number}}</span> 
+                人
+              </p>
+              <p class="residue">
+                和你一起学
+              </p>
+          </div>
+  
+          <div class="center"  @click.prevent.stop="toMore" v-if="community.menuPeople&&community.menuPeople.outstandingStudents.length>0">
+                <img class="user_icon" v-for="(item, index) in community.menuPeople.outstandingStudents" :src="item.avatar" v-if="index<3" />
+                <img class="user_icon four" v-if="community.menuPeople.number>3 && community.menuPeople.outstandingStudents.length==3" src="../../assets/icon/firends-call-more.png"/>
+          </div>
+          <div class="right" >
+            <template v-if="community.isJoined === 1 && isCommunityIntroduce">
+              <p v-if="community.isCourse !== 4" class="to_description" @click.prevent.stop="goTointroduceDetail">课程介绍
+                <img class="to_img" src="../../assets/icon/bnt_arrow_int@3x.png"/>
+              </p>
+              <p v-else class="to_description" @click.prevent.stop="goTointroduceDetail">训练营介绍
+                <img class="to_img" src="../../assets/icon/bnt_arrow_int@3x.png"/>
+              </p>
+            </template>
+            <template v-else>
+              <!-- 已结束 -->
+              <p v-if="isEnd">灯塔已结束</p>
+              <!-- 未加入且已开社 -->
+              <p v-else>灯塔已开启</p>
+            </template>
+          </div>
         </div>
-
-        <div class="center"  @click.prevent.stop="toMore" v-if="community.menuPeople&&community.menuPeople.outstandingStudents.length>0">
-              <img class="user_icon" v-for="(item, index) in community.menuPeople.outstandingStudents" :src="item.avatar" v-if="index<3" />
-              <img class="user_icon four" v-if="community.menuPeople.number>3 && community.menuPeople.outstandingStudents.length==3" src="../../assets/icon/firends-call-more.png"/>
-        </div>
-        <div class="right" >
-          <template v-if="community.isJoined === 1 && isCommunityIntroduce">
-            <p class="to_description" @click.prevent.stop="goTointroduceDetail">课程介绍
-              <img class="to_img" src="../../assets/icon/bnt_arrow_int@3x.png"/>
-            </p>
-          </template>
-          <template v-else>
-            <!-- 已结束 -->
-            <p v-if="isEnd">灯塔已结束</p>
-            <!-- 未加入且已开社 -->
-            <p v-else>灯塔已开启</p>
-          </template>
-        </div>
-      </div>
+      </template>
     </div>
   </a>
 </template>
@@ -217,7 +224,7 @@ export default class CommunityCard extends Vue {
 
   goTointroduceDetail(){
     console.log(this.community)
-    if(this.community.isCourse === 3){
+    if(this.community.isCourse === 3 || this.community.isCourse === 4){
       this.$router.push({name: 'introduce-detail2', params: {communityId: this.community.communityId}})
     }else {
       this.$router.push({name: 'introduce-detail', params: {communityId: this.community.communityId}})
@@ -422,13 +429,13 @@ export default class CommunityCard extends Vue {
       font-weight: 300;
       display: block;
       margin-top: 6px;
-      margin-bottom: 20px;
       line-height: 18px;
       .fontSize(12);
       color: #666666;
     }
 
     .bottom {
+      margin-top: 20px;
       display: flex;
       .fontSize(12);
       line-height: 18px;
