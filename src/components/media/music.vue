@@ -14,7 +14,7 @@
       <range class="progressBar"
         ref="range"
         :key="itemIndex"
-        v-show="disabled"
+        v-show="disabled || isLesson"
         v-model="progress"
         minHTML=" " 
         maxHTML=" "
@@ -24,6 +24,7 @@
         @touchstart.native="touchStart" 
         @touchend.native="touchEnd" >
       </range>
+      <div class="audio-time nowTime" v-if="isLesson" v-text="formatTime(transTime(currentTime))"></div>
       <div class="audio-time" v-text="formatTime(transTime(durationData))"></div>
       <div class="curTime" v-show="isShowLabel" v-text="formatTime(transTime(currentTime))" :style="{'left': moveLeft}"></div>
     </div>
@@ -665,11 +666,13 @@
   align-items: center;
 }
 .audio-wrapper.lesson .audio-left {
-  height: 41px;
-  width: 41px;
+  flex-shrink: 0;
+  box-sizing: border-box;
   margin-right: 31px;
   border: 1px solid #666666;
   border-radius: 50%;
+  height: 41px;
+  width: 41px;
 }
 .audio-wrapper.lesson .audio-left img {
   width: 25px;
@@ -678,6 +681,11 @@
 .audio-wrapper.lesson .audio-left img.rotateZ {
   width: 22px;
   height: 22px;
+}
+.audio-wrapper.lesson .audio-right .progressBar{
+  position: absolute;
+  left: 0;
+  top: -8px;
 }
 .audio-wrapper.lesson .audio-right .progressBar .range-handle {
   width: 12px !important;
@@ -691,11 +699,18 @@
 .audio-wrapper.lesson .audio-right {
   display: flex;
   width: 79%;
+  padding: 0;
 }
 .audio-wrapper.lesson .audio-right .audio-time {
   /*padding-right: 25px;*/
   width: auto !important;
   box-sizing: border-box;
+  line-height: 18px;
+  padding-right: 0;
+  top: 35px;
+}
+.audio-wrapper.lesson .audio-right .nowTime {
+  right: 98%;
 }
 .audio-wrapper.lesson .audio-right .range-bar {
   background:#EDEDED !important;
