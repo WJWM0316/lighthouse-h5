@@ -1525,6 +1525,9 @@
           vertical-align: middle;
           text-align: center;
         }
+        p {
+          padding: 0 30px;
+        }
       }
     }
   }

@@ -805,9 +805,10 @@ export default class HomeIndex extends Vue {
   }
   /*训练营标题 ， 课程标题*/
   .campTitle, .courseTitle{
+    margin-top: 30px;
     color: #354048;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 700;
     padding-bottom: 10px;
     margin-left: 25px;
     position: relative;
@@ -818,7 +819,7 @@ export default class HomeIndex extends Vue {
       width: 19px;
       background-color: #FFE266;
       position: absolute;
-      top: 0;
+      top: -2px;
       left: -10px;
       z-index: -1;
     }

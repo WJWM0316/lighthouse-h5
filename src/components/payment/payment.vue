@@ -53,12 +53,15 @@
         </div>
       </div>
     </div>
+    <img @click.stop="disableJoin" v-if="join" class="join" src="../../assets/icon/pic_guide_06_2@3x.png" alt="" />
+    <img @click.stop="disableAdvisory" v-if="advisory" class="advisoryImg" src="../../assets/icon/pic_guide_06_1@3x.png" alt="" />
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import localstorage from '@/util/localstorage/index'
 @Component({
   name: 'payment',
   computed: {},
@@ -94,6 +97,8 @@ export default class payment extends Vue {
   isPayBtn = true
   freeSurplusPeople = ''
   paySurplusPeople = ''
+  join = false //控制加入引导图
+  advisory = false // 控制咨询引导图
   /*isCourse = 课程类型1.2旧课程，3新课程，4训练营 */
   /* 跳转咨询链接 */
   toAdvisory (Link) {
@@ -110,6 +115,20 @@ export default class payment extends Vue {
   }
   nextCamp () {
     this.$router.push(`/introduce2/${this.pageInfo.nextCommunityId}`)
+  }
+  disableJoin () {
+    this.join = false
+    this.advisory = true
+  }
+  disableAdvisory () {
+    this.advisory = false
+  }
+  created () {
+    let isNewUser = localStorage.getItem("isNewUser");
+    if (!isNewUser) {
+      this.join = true
+      localStorage.setItem("isNewUser", true)
+    }
   }
 }
 </script>
@@ -273,6 +292,20 @@ export default class payment extends Vue {
         color: #D7AB70;
         font-weight: 400;
       }
+    }
+    .join{
+      width: 164px;
+      height: 97px;
+      position: absolute;
+      bottom: 50px;
+      right: 15px;
+    }
+    .advisoryImg{
+      position: absolute;
+      width: 241px;
+      height: 97px;
+      bottom: 50px;
+      left: 15px;
     }
   }
 </style>

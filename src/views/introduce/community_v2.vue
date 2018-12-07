@@ -176,8 +176,8 @@
         <div class="Qr">
           <img :src="qrSrc">
         </div>
-        <p>长按识别二维码，关注公众号即可获取</p>
-        <p>{{pageInfo.isSell && pageInfo.isSell === 2 ? '专属海报，邀请好友一起学习' : '专属海报及查询实时奖励'}}</p>
+        <p>长按识别二维码，关注公众号可</p>
+        <p>获取{{pageInfo.isSell && pageInfo.isSell === 2 ? '专属海报，邀请好友一起学习' : '专属海报，及查询奖励'}}</p>
       </div>
     </div>
   </div>

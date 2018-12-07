@@ -57,10 +57,10 @@ export default class camp extends Vue {
       text-align: center;
       padding-top: 4px;
       position: absolute;
-      top: -4px;
+      top: 0px;
       right: 5px;
       width: 63px;
-      height: 52px;
+      height: 55px;
       font-size: 10px;
       color: #FFFFFF;
       font-weight: 300;
@@ -71,6 +71,10 @@ export default class camp extends Vue {
         position: absolute;
         top: 0;
         left: 0;
+      }
+      p{
+        line-height: 14px;
+        margin-bottom: 2px;
       }
       strong{
         line-height: 20px;
