@@ -55,7 +55,6 @@
       </div>
     </div>
     <img @click.stop="disableJoin" v-if="join && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="join" src="../../assets/icon/pic_guide_06_2@3x.png" alt="" />
-    <img @click.stop="disableJoin" v-if="join && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="join" src="../../assets/icon/pic_guide_06_2@3x.png" alt="" />
     <img @click.stop="disableAdvisory" v-if="advisory && pageInfo.consultantLink && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="advisoryImg" src="../../assets/icon/pic_guide_06_1@3x.png" alt="" />
   </div>
 </template>
@@ -97,7 +96,7 @@ import localstorage from '@/util/localstorage/index'
     pageInfo () {
       let isNewUser = localStorage.getItem("isNewUser");
       console.log(!isNewUser, !this.isPassTime)
-      if (!isNewUser && !this.isPassTime && this.pageInfo.remainingJoinNum > 0) {
+      if (!isNewUser && !this.isPassTime && this.pageInfo.remainingJoinNum > 0 && this.pageInfo.consultantLink) {
         this.advisory = true
         localStorage.setItem("isNewUser", true)
       }

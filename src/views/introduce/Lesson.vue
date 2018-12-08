@@ -414,6 +414,32 @@
   	  this.showPost = false
   	  this.trainingCampAlert = false
   	}
+  	/* 复制微信 */
+  	copy () {
+      //要复制文字的节点
+      let text = this.pageInfo.consultantCustomerWechat
+      const input = document.createElement('input')
+      input.setAttribute('readonly', 'readonly')
+      input.setAttribute('value', text)
+      document.body.appendChild(input) 
+      //区分iPhone设备
+      if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+        window.getSelection().removeAllRanges();//这段代码必须放在前面否则无效
+        let range = document.createRange()
+        // 选中需要复制的节点
+        range.selectNode(input)
+        // 执行选中元素
+        window.getSelection().addRange(range)
+        // 执行 copy 操作
+        let successful = document.execCommand('copy')
+        // 移除选中的元素
+        window.getSelection().removeAllRanges()
+      }else{
+        input.select() // 选择对象
+        document.execCommand("Copy") // 执行浏览器复制命令
+      }
+      document.body.removeChild(input)
+    }
   	
   	//调起底部点赞弹窗
   	showEvaluate(item){
