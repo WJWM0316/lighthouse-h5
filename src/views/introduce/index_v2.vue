@@ -505,9 +505,6 @@
         } else {
           this.onBridgeReady(params)
         }
-        if (this.pageInfo.isCourse === 4) {
-          this.trainingCampAlert = true
-        }
         this.pageInit()
       }
     }
@@ -534,6 +531,9 @@
               default:
                 self.$store.dispatch('show_qr', {type: 3})
                 break
+            }
+            if (self.pageInfo.isCourse === 4) {
+              self.trainingCampAlert = true
             }
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
@@ -581,7 +581,7 @@
           'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
           'desc': sharePoint || simpleIntro,
           'imgUrl': shareImg,
-          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
+          'link': location.origin + `/beaconweb/#/introduce2/${communityId}`
         })
       })
       const { autoPay=''} = this.$route.query

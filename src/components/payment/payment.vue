@@ -31,7 +31,8 @@
     </div>
     <!--训练营加入按钮-->
     <div class="footer" v-if="pageInfo.isCourse === 4">
-      <p class="nextCamp" v-if="(isPassTime || pageInfo.remainingJoinNum <= 0) && pageInfo.nextCommunityId" @click.stop="nextCamp">本期报名已结束，下一期已开启，点击查看</p>
+      <p class="nextCamp" v-if="isPassTime && pageInfo.nextCommunityId" @click.stop="nextCamp">本期报名已结束，下一期已开启，点击查看</p>
+      <p class="nextCamp" v-else-if="pageInfo.remainingJoinNum <= 0 && pageInfo.nextCommunityId" @click.stop="nextCamp">已满员，下一期已开启，点击查看</p>
       <p v-else-if="isPassTime && !pageInfo.nextCommunityId">报名已结束</p>
       <p v-else-if="pageInfo.remainingJoinNum <= 0 && !pageInfo.nextCommunityId">已满员</p>
       <div class="btn-box" v-else>
@@ -53,8 +54,9 @@
         </div>
       </div>
     </div>
-    <img @click.stop="disableJoin" v-if="join" class="join" src="../../assets/icon/pic_guide_06_2@3x.png" alt="" />
-    <img @click.stop="disableAdvisory" v-if="advisory" class="advisoryImg" src="../../assets/icon/pic_guide_06_1@3x.png" alt="" />
+    <img @click.stop="disableJoin" v-if="join && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="join" src="../../assets/icon/pic_guide_06_2@3x.png" alt="" />
+    <img @click.stop="disableJoin" v-if="join && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="join" src="../../assets/icon/pic_guide_06_2@3x.png" alt="" />
+    <img @click.stop="disableAdvisory" v-if="advisory && pageInfo.consultantLink && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="advisoryImg" src="../../assets/icon/pic_guide_06_1@3x.png" alt="" />
   </div>
 </template>
 
@@ -83,10 +85,22 @@ import localstorage from '@/util/localstorage/index'
     /* 课程对象 */
     pageInfo: {
       type: Object
-    },
-    /* 是否错过训练营报名时间 */
-    isPassTime: {
-      type: Boolean
+    }
+  },
+  computed: {
+    /* 是否错过训练营可加入时间错过为true 没错过为false */
+    isPassTime () {
+      return this.pageInfo.remainDays <= 0
+    }
+  },
+  watch: {
+    pageInfo () {
+      let isNewUser = localStorage.getItem("isNewUser");
+      console.log(!isNewUser, !this.isPassTime)
+      if (!isNewUser && !this.isPassTime && this.pageInfo.remainingJoinNum > 0) {
+        this.advisory = true
+        localStorage.setItem("isNewUser", true)
+      }
     }
   }
 })
@@ -122,13 +136,7 @@ export default class payment extends Vue {
     this.advisory = false
     this.join = true
   }
-  created () {
-    let isNewUser = localStorage.getItem("isNewUser");
-    if (!isNewUser) {
-      this.advisory = true
-      localStorage.setItem("isNewUser", true)
-    }
-  }
+  created () {}
 }
 </script>
 

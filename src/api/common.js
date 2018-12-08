@@ -70,3 +70,10 @@ export const wechatUploadFileApi = data => request({
   url: '/wap/currency/wxUploadFile',
   data
 })
+
+/* 用户进入app位置统计 */
+export const statisticsCodeApi = data => request({
+  url: '/wap/currency/statisticsCode',
+  type: 'post',
+  data
+})

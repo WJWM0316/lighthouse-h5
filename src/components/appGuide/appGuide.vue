@@ -10,10 +10,10 @@
         </p>
       </div>
     </div>
-    <div class="appBtn" @click.stop="isToApp" v-if="isToGuide">
+    <div class="appBtn" @click.stop="isToApp('Home_DLApp')" v-if="isToGuide">
       打开
     </div>
-    <div class="appBtn guide" @click.stop="isToApp" v-else>
+    <div class="appBtn guide" @click.stop="isToApp('Lesson_DLApp')" v-else>
       打开App<img src="../../assets/icon/btn.png" />
     </div>
   </div>
@@ -23,6 +23,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import appGuide from '@/util/appGuide'
+  import { statisticsCodeApi } from '@/api/common'
   @Component({
     props: {
       isToGuide: {
@@ -32,10 +33,10 @@
     }
   })
   export default class appBtn extends Vue{
-    isToApp () {
+    isToApp (code) {
+      statisticsCodeApi({code: code})
       let path = `ttbeacon://app:8080/launcher%3Ft%3D2%26id%3D${this.$route.params.communityId}`
       appGuide.isToApp(this.isToGuide, path)
-      
     }
   }
 </script>

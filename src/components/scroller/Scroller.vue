@@ -161,7 +161,6 @@ export default class Scroller extends Vue {
    * 滚动监听
    */
   handleScroll (e) {
-//	alert()handlePullup
     e.preventDefault()
     this.$emit('scroll', e)
   }

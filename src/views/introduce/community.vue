@@ -904,7 +904,7 @@
      */
     handleTapCard (item) {
         let url = ''
-        if(item && item.isCourse == 3){
+        if(item && (item.isCourse == 3 || item.isCourse == 4)){
           url = `/introduce2/${item.communityId}`
         }else {
           url = `/introduce/${item.communityId}`
