@@ -74,6 +74,7 @@
               <div class='blo_center'>{{item.title}}</div>
               <div class='blo_right'>试读</div>
             </div>
+            <div class="noTry" v-if="pageInfo.tryCourses && pageInfo.tryCourses.length === 0 && pageInfo.isCourse === 4">暂时没有试读课节哦~</div>
           </div>
         </div>
       </div>
@@ -959,6 +960,11 @@
           display: flex;
           flex-direction: column;
           margin: 15px 15px 15px 20px;
+        }
+        .noTry {
+          text-align: center;
+          color: #666666;
+          font-size: 15px;
         }
         .attempt_block {
           display: flex;

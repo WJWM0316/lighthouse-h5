@@ -584,16 +584,15 @@
 
       // 是否已入社
       if (this.completelyShow && this.isJoinAgency) {
-        if(res.isCourse === 3){
+        if(res.isCourse === 3 || res.isCourse === 4){
           this.$router.replace(`/introduce2/${communityId}/community`)
         }else {
           this.$router.replace(`/introduce/${communityId}/community`)
         }
         return
       }else {
-        console.log('res.isCourse',res.isCourse)
         //优惠卷进入。判断是否旧的
-        if(res.isCourse === 3){
+        if(res.isCourse === 3 || res.isCourse === 4){
           this.$router.replace(`/introduce2/${communityId}`)
           return
         }
