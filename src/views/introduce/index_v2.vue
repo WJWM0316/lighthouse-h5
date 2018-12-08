@@ -519,7 +519,7 @@
         } else {
           this.onBridgeReady(params)
         }
-        this.pageInit()
+//      this.pageInit()
       }
     }
     /* 支付函数 */
@@ -543,11 +543,12 @@
             console.log('communityId', communityId)
             if (self.pageInfo.isCourse === 4) {
               self.trainingCampAlert = true
-            }
-            switch (communityId) {
-              default:
-                self.$store.dispatch('show_qr', {type: 3})
-                break
+            } else {
+              switch (communityId) {
+                default:
+                  self.$store.dispatch('show_qr', {type: 3})
+                  break
+              }
             }
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')
