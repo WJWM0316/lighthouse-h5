@@ -338,6 +338,7 @@
         document.execCommand("Copy") // 执行浏览器复制命令
       }
       document.body.removeChild(input)
+      this.$vux.toast.text('复制成功', 'bottom')
     }
     
     close () {
@@ -540,13 +541,13 @@
             const { communityId } = self.$route.params
             let number = Math.random() * 10 + 1
             console.log('communityId', communityId)
+            if (self.pageInfo.isCourse === 4) {
+              self.trainingCampAlert = true
+            }
             switch (communityId) {
               default:
                 self.$store.dispatch('show_qr', {type: 3})
                 break
-            }
-            if (self.pageInfo.isCourse === 4) {
-              self.trainingCampAlert = true
             }
           } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
             self.$vux.toast.text('已取消支付', 'bottom')

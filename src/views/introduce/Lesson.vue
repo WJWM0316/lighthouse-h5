@@ -439,6 +439,7 @@
         document.execCommand("Copy") // 执行浏览器复制命令
       }
       document.body.removeChild(input)
+      this.$vux.toast.text('复制成功', 'bottom')
     }
   	
   	//调起底部点赞弹窗
