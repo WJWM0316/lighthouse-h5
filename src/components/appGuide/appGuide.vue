@@ -26,6 +26,7 @@
   import { statisticsCodeApi } from '@/api/common'
   @Component({
     props: {
+      /* 是否首页app入口 */
       isToGuide: {
         type: Boolean,
         default: false
@@ -36,7 +37,7 @@
     isToApp (code) {
       statisticsCodeApi({code: code})
       let path = `ttbeacon://app:8080/launcher%3Ft%3D2%26id%3D${this.$route.params.communityId}`
-      appGuide.isToApp(this.isToGuide, path)
+      appGuide.isToApp(this.isToGuide, path) // path 需要跳转的app内部链接
     }
   }
 </script>

@@ -260,7 +260,7 @@
             'title': `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
             'desc': sharePoint || simpleIntro,
             'imgUrl': shareImg,
-            'link': location.origin + `/beaconweb/#/introduce/${communityId}`
+            'link': location.origin + `/beaconweb/#/introduce2/${communityId}`
           })
         })
       }
