@@ -4,6 +4,7 @@ import Component from 'vue-class-component'
 import moment from 'moment'
 import localstorage from '@/util/localstorage/index'
 import appGuide from '@/util/appGuide'
+import { statisticsCodeApi } from '@/api/common'
 
 @Component({
   name: 'course-content',
@@ -151,6 +152,7 @@ export default class dynamicItem extends Vue {
             that.$router.push({ path:`/Lesson?id=${id}&isTry=${isTry}&communityId=${that.communityId}` })
           },
           onConfirm () {
+            statisticsCodeApi({code: 'Lesson_Window_DLApp'})
             that.toApp()
           }
         })
