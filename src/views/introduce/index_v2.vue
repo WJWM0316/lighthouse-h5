@@ -24,8 +24,8 @@
       
       <!-- 介绍和试读tab -->
       <div class="tabTitle" v-if="pageInfo.isCourse === 4">
-        <a href="#" :class="{'item': showType === 'about'}" @click.prevent.stop="toggle(1)"><span>关于课程</span></a>
-        <a href="#" :class="{'item': showType === 'tryCourse'}" @click.prevent.stop="toggle(0)"><span>试读</span></a>
+        <a href="#" :class="{'item': showType === 'about'}" @click.prevent.stop="toggle(1)"><span>训练营介绍</span></a>
+        <a href="#" :class="{'item': showType === 'tryCourse'}" @click.prevent.stop="toggle(0)"><span>试读内容</span></a>
       </div>
       
       <div class="module"  style="min-height: 70vh" v-if="pageInfo.isCourse === 3 || showType === 'about'">
@@ -876,7 +876,7 @@
       /*-webkit-overflow-scrolling: touch;  !* 针对 overflow: scroll; 在ios中卡顿问题 *!*/
     }
     
-    /* 训练营（type：4）tab栏样式 */
+    /* 训练营tab栏样式 */
     .tabTitle{
       margin-bottom: 20px;
       padding: 0 20px;
@@ -901,17 +901,20 @@
       }
       .item{
         color: #354048;
-        font-weight:500; 
-        &::after{
-          content: '';
-          display: block;
-          position: absolute;
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 60px;
-          height: 3px;
-          background-color: #FFE266;
+        font-weight:500;
+        span{
+          position: relative; 
+          &::after{
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 3px;
+            background-color: #FFE266;
+          }
         }
       }
     }

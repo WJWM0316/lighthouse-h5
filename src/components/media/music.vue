@@ -711,7 +711,7 @@
 }
 .audio-wrapper.lesson .audio-right .nowTime {
   white-space: nowrap;
-  right: 90%;
+  right: 87%;
 }
 .audio-wrapper.lesson .audio-right .range-bar {
   background:#EDEDED !important;

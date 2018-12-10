@@ -78,12 +78,14 @@ export default class camp extends Vue {
         margin-bottom: 2px;
       }
       strong{
+        margin-right: 2px;
         line-height: 20px;
         color: #FFE266;
         font-size: 24px;
         font-weight: 600;
       }
       span{
+        vertical-align:top;
         line-height: 16px;
         font-size: 12px;
         font-weight: 500;
