@@ -36,7 +36,7 @@
       <p v-else-if="isPassTime && !pageInfo.nextCommunityId">报名已结束</p>
       <p v-else-if="pageInfo.remainingJoinNum <= 0 && !pageInfo.nextCommunityId">已满员</p>
       <div class="btn-box" v-else>
-        <div class="free-btn advisory" v-if="pageInfo.consultantLink" @click="toAdvisory(pageInfo.consultantLink)">
+        <div class="free-btn advisory" v-if="pageInfo.consultantLink || pageInfo.consultant_link" @click="toAdvisory(pageInfo.consultantLink)">
           <img src="../../assets/icon/icon_advisory@3x.png" />
           <span>咨询</span>
         </div>
@@ -54,8 +54,10 @@
         </div>
       </div>
     </div>
-    <img @click.stop="disableJoin" v-if="join && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="join" src="../../assets/icon/pic_guide_06_2@3x.png" alt="" />
-    <img @click.stop="disableAdvisory" v-if="advisory && pageInfo.consultantLink && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="advisoryImg" src="../../assets/icon/pic_guide_06_1@3x.png" alt="" />
+    <div class="guideImgBox" @click="closeGuide" v-if="join || advisory">
+      <img @click.stop="disableJoin" v-if="join && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="join" src="../../assets/icon/pic_guide_06_2@3x.png" alt="" />
+      <img @click.stop="disableAdvisory" v-if="advisory && pageInfo.consultantLink && pageInfo.remainingJoinNum > 0 && !this.isPassTime" class="advisoryImg" src="../../assets/icon/pic_guide_06_1@3x.png" alt="" />
+    </div>
   </div>
 </template>
 
@@ -114,7 +116,11 @@ export default class payment extends Vue {
   /*isCourse = 课程类型1.2旧课程，3新课程，4训练营 */
   /* 跳转咨询链接 */
   toAdvisory (Link) {
-    window.location.href = Link
+    if (Link) {
+      window.location.href = Link
+    } else {
+      window.location.href = this.pageInfo.consultant_link 
+    }
   }
   freeIn () {
     this.$emit('freeIn')
@@ -134,6 +140,14 @@ export default class payment extends Vue {
   disableAdvisory () {
     this.advisory = false
     this.join = true
+  }
+  closeGuide () {
+    if (this.advisory) {
+      this.advisory = false
+      this.join = true
+    } else {
+      this.join = false
+    }
   }
   created () {}
 }
@@ -298,6 +312,13 @@ export default class payment extends Vue {
         color: #D7AB70;
         font-weight: 400;
       }
+    }
+    .guideImgBox{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
     }
     .join{
       width: 164px;

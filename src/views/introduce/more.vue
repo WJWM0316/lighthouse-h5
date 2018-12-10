@@ -336,7 +336,7 @@
       margin-left: 8px;
       line-height: 18px;
       border-radius: 50px;
-      border: 0.5px solid #D7AB70;
+      border: 1px solid #D7AB70;/*no*/
       display: inline-block;
       text-align: center;
       box-sizing: border-box;

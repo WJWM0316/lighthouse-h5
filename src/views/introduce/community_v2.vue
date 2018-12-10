@@ -143,8 +143,11 @@
         <button @click="posted"><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
       <div class="ask-warp" v-else>
-        <img class="guideMap askImg" v-if="showAskImg" @click.stop="disableAskImg" src="../../assets/icon/askImg.png" alt="" />
-        <img class="guideMap communicateImg" v-if="showCommunicateImg" @click.stop="disableCommunicateImg" src="../../assets/icon/communicateImg.png" alt="" />
+        <div class="guideImgBox" @click.stop="closeGuide" v-if="showAskImg || showCommunicateImg">
+          <img class="guideMap askImg" v-if="showAskImg" @click.stop="disableAskImg" src="../../assets/icon/askImg.png" alt="" />
+          <img class="guideMap communicateImg" v-if="showCommunicateImg" @click.stop="disableCommunicateImg" src="../../assets/icon/communicateImg.png" alt="" />   
+        </div>
+
         <!--4.25改版-->
         <button @click="postQuestions" v-if="this.pageInfo.isCourse===3 || this.pageInfo.isCourse===4">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>我要提问</span>
@@ -338,6 +341,15 @@
         this.showShare = true
       }
       this.init_v2()
+    }
+    /* 关闭引导图 */
+    closeGuide () {
+      if (this.showAskImg) {
+        this.showAskImg = false
+        this.showCommunicateImg = true
+      } else {
+        this.showCommunicateImg = false
+      }
     }
 
     init_v2(){
@@ -1642,11 +1654,19 @@
     		width: 20px;
     		height: 20px;
     	}
+    	.guideImgBox{
+    	  position: fixed;
+    	  top: 0;
+    	  left: 0;
+    	  width: 100%;
+    	  height: 100vh;
+    	}
     	.guideMap{
     	  width: 184px;
     	  height: 102px;
     	  position: absolute;
-    	  top: -102px;
+    	  bottom: 49px;
+    	  /*top: -102px;*/
     	}
     	.askImg{
     	  width: 226px;
