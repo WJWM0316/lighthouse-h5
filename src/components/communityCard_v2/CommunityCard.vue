@@ -168,7 +168,7 @@ export default class CommunityCard extends Vue {
 	/* 复制 */
 	copy () {
     //要复制文字的节点
-    let text = this.pageInfo.consultantCustomerWechat
+    let text = this.community.consultantCustomerWechat
     const input = document.createElement('input')
     input.setAttribute('readonly', 'readonly')
     input.setAttribute('value', text)
@@ -191,6 +191,7 @@ export default class CommunityCard extends Vue {
     }
     document.body.removeChild(input)
     this.$vux.toast.text('复制成功', 'bottom')
+    this.trainingCampAlert = false
   }
 	close () {
     this.trainingCampAlert = false
@@ -366,6 +367,9 @@ export default class CommunityCard extends Vue {
     /*margin-bottom: 10px;*/
     /*height: 226px;*/
     .campKefu{
+      display: flex;
+      align-items: center;
+      justify-content: center;
       white-space: nowrap;
       position: absolute;
       right: 8px;
@@ -373,6 +377,8 @@ export default class CommunityCard extends Vue {
       font-size: 13px;
       color: #D7AB70;
       img{
+        width: 13px;
+        height: 13px;
         margin-right: 5px;
       }
     }
@@ -612,6 +618,7 @@ export default class CommunityCard extends Vue {
         color: #354048;
       }
       p{
+        padding: 0 25px;
         margin-top: 12px;
         font-size: 15px;
         font-weight: 300;

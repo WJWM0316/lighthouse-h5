@@ -604,12 +604,14 @@
       if(topPostStatus == 0){
         addTopApi(data).then(res=>{
           this.isShowTop = true
+          this.$router.go(0)
         },res=>{
           this.$vux.toast.text('失败', res.message)
         })
       }else {
         delTopApi(data).then(res=>{
           this.isShowTop = false
+          this.$router.go(0)
         },res=>{
           this.$vux.toast.text('失败', res.message)
         })
