@@ -256,7 +256,6 @@ export default class HomeIndex extends Vue {
       this.$router.push({name})
       this.init()
 
-      console.log('-0-0-')
       if(this.navTabName !== 'joined'){
         this.getAdvertising()
       }
@@ -318,7 +317,6 @@ export default class HomeIndex extends Vue {
    */
   async joinedInit () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
-    console.log('加入 Tab 初始')
     await this.getList({ page: 1 })
   }
 
@@ -327,7 +325,6 @@ export default class HomeIndex extends Vue {
    */
   async pickedInit () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
-    console.log('精选 Tab 初始')
     this.getAdvertises()
     this.getTagsList()
     await this.getList({ page: 1 })
@@ -391,7 +388,6 @@ export default class HomeIndex extends Vue {
       let advertising = this.$refs.advertising ? parseInt(this.$refs.advertising.clientHeight) : 0
       let insert = this.$refs.insert ? parseInt(this.$refs.insert.clientHeight) : 0
 
-      console.log('===>',tabBanner,advertising,insert)
       if (tabBanner>0 && advertising>0 && insert>0) {
         this.scrollHeight = tabBanner+advertising+insert
 
@@ -445,7 +441,6 @@ export default class HomeIndex extends Vue {
           }
         })
         res[tagIndex].selected = true
-        console.log(res)
 
         this.communityTagList = res
       }
@@ -490,7 +485,6 @@ export default class HomeIndex extends Vue {
             ...params,
             ...this.pickedParams
           })
-          console.log('精选: ', res)
           const communities = res.list
           this.trainingCampInfo = res.topTrainingCamp
           this.communities = page === 1 ? communities : this.communities.concat(communities || [])
@@ -498,7 +492,6 @@ export default class HomeIndex extends Vue {
           break
         case 'joined':
           res = await this.getJoinedApi(params)
-          console.log('已加入: ', res)
           const {creations, joins, recommends} = res
           this.joins = page === 1 ? joins : this.joins.concat(joins || [])
 
@@ -590,7 +583,6 @@ export default class HomeIndex extends Vue {
    * 点击卡片
    */
   handleTapCard (item) {
-    console.log(item.isCourse, item.isJoined, 9999999999999999)
     let url = ''
     if (item.isAuthor === 1 || item.isJoined === 1) {
       //如果已经加入并且已入社跳转到入社后页面
@@ -619,7 +611,6 @@ export default class HomeIndex extends Vue {
   }
 
   toTest (){
-    console.log(1)
     this.$router.push(`/active_11`)
   }
 }
