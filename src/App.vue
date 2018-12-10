@@ -466,7 +466,6 @@ export default class App extends Vue {
         }
         this.$router.push('/index/details/' + this.controllerDetail.circleId + '/?modeType=' + modeType)
       }
-      
     }
   }
   // 悬浮窗开关

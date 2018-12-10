@@ -75,7 +75,7 @@ const homeRoutes = [
     path: '/campList',
     name: 'campList',
     component: resolve => require(['@/views/home/campList'], resolve),
-    meta: {navHide: true, hideController:true}
+    meta: {navHide: true}
   }
 ]
 

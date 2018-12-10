@@ -692,6 +692,7 @@
   height: 12px !important;
   background : #fff !important;
   box-shadow:0px 2px 8px 0px rgba(255,226,102,1) !important;
+  transform: translateX(50%);
 }
 .audio-wrapper.lesson .audio-right .progressBar .range-handle::after {
   content: none;
