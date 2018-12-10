@@ -229,6 +229,7 @@
   import payment from '@/components/payment/payment'
   import { Actionsheet } from 'vux'
   import { lessonContentApi, getCourseCardListApi, setExcellentCourseCardApi } from '@/api/pages/pageInfo'
+  import { statisticsCodeApi } from '@/api/common'
   import {payApi, freePay} from '@/api/pages/pay'
   Component.registerHooks([
 	  'beforeRouteEnter',
@@ -357,6 +358,7 @@
   	}
   	
   	toApp () {
+  	  statisticsCodeApi({code: 'Lesson_More_Clockin'})
   	  let path = `ttbeacon://app:8080/launcher%3Ft%3D2%26id%3D${this.$route.query.communityId}`
   	  appGuide.isToApp(false, path)
   	}
