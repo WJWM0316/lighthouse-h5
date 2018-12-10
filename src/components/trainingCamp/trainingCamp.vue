@@ -50,13 +50,15 @@ export default class camp extends Vue {
     width: 100%;
     height: 100%;
     img{
+      border-radius: 3px;
       width: 100%;
       height: 100%;
     }
     .time{
       z-index: 1;
-      text-align: center;
+      text-align: right;
       padding-top: 4px;
+      padding-right: 9px;
       position: absolute;
       top: 0px;
       right: 5px;
@@ -85,6 +87,7 @@ export default class camp extends Vue {
         font-weight: 600;
       }
       span{
+        margin-right: 4px;
         vertical-align:top;
         line-height: 16px;
         font-size: 12px;

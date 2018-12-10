@@ -6,7 +6,7 @@
       <img class="rotateZ" src="./../../assets/icon/music_loading.png" v-else-if="playStatus === 3">
     </div>
     <div class="audio-left" v-if="isLesson">
-      <img src="./../../assets/icon/music_play.png" v-if="playStatus === 1"></img>
+      <img src="./../../assets/icon/bnt_yyplay copy 4@3x.png" v-if="playStatus === 1"></img>
       <img src="./../../assets/icon/stop@3x.png" v-else-if="playStatus === 2"></img>
       <img class="rotateZ" src="./../../assets/icon/music_loading.png" v-else-if="playStatus === 3">
     </div>
@@ -703,6 +703,7 @@
   padding: 0;
 }
 .audio-wrapper.lesson .audio-right .audio-time {
+  color: #929292 !important;
   /*padding-right: 25px;*/
   width: auto !important;
   box-sizing: border-box;
