@@ -111,18 +111,18 @@
       p{
         text-align: center;
         padding: 0 25px;
-        margin-top: 12px;
+        margin-top: 6px;
         font-size: 15px;
         font-weight: 300;
         color: #666666;
       }
       img{
         margin-top: 13px;
-        width: 122px;
-        height: 122px;
+        width: 125px;
+        height: 125px;
       }
       span{
-        font-size: 13;
+        font-size: 13px;
         font-weight: 400;
         color: #BCBCBC;
         margin-top: 2px;
@@ -131,7 +131,7 @@
         font-size: 17px;
         color: #D7AB70;
         font-weight: 400;
-        margin-top: 30px;
+        margin-top: 25px;
       }
     }
     .textContent{
