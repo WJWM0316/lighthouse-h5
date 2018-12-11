@@ -193,7 +193,6 @@
       },
       // 是否已入社
       isJoinAgency () {
-      	console.log("333333333333",this.pageInfo.isJoined,this.pageInfo.isAuthor)
         return this.pageInfo.isAuthor || this.pageInfo.isJoined
       },
       // 是否已结束
@@ -215,10 +214,10 @@
       }
     },
     watch: {
-      '$route' (route) {
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
-      window.pageYOffset = 0
+      '$route' (route) { // 跳转同个路由时，id不同强制刷新
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+        window.pageYOffset = 0
         if (this.$refs['headCard']) {
           this.$refs['headCard'].stopCountdown()
         }
@@ -232,10 +231,13 @@
             shareIntroduction,  // 分享标题
             communityId
           } = this.pageInfo
-          console.log("222222222",this.pageInfo)
           // 是否已入社
           if (this.completelyShow && this.isJoinAgency) {
-            this.$router.replace(`/introduce/${communityId}/community`)
+            if(res.isCourse === 3 || res.isCourse === 4){
+              this.$router.replace({path: `/introduce2/${communityId}/community`})
+            }else {
+              this.$router.replace(`/introduce/${communityId}/community`)
+            }
             return
           }
 
@@ -593,7 +595,7 @@
       // 是否已入社
       if (this.completelyShow && this.isJoinAgency) {
         if(res.isCourse === 3 || res.isCourse === 4){
-          this.$router.replace(`/introduce2/${communityId}/community`)
+          this.$router.replace({path: `/introduce2/${communityId}/community`})
         }else {
           this.$router.replace(`/introduce/${communityId}/community`)
         }

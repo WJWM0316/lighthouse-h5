@@ -328,8 +328,6 @@
 		
     created () {
     	let titleBoxShow=true;
-      
-
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
       }
