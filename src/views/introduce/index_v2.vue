@@ -1108,6 +1108,7 @@
           color: #354048;
         }
         p{
+          padding: 0 25px;
           margin-top: 12px;
           font-size: 15px;
           font-weight: 300;
