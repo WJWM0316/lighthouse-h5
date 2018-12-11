@@ -23,7 +23,6 @@ import Component from 'vue-class-component'
 })
 export default class camp extends Vue {
   toCamp () {
-    console.log(this.item,8888888888)
     let url = ''
     if (this.item.isAuthor === 1 || this.item.isJoined === 1) {
       // 已加入

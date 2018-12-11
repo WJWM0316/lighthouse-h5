@@ -167,9 +167,10 @@ export default class CommunityCard extends Vue {
 	}
 	/* 复制 */
 	copy () {
+	  let that = this
     setTimeout(function () {
       //要复制文字的节点
-      let text = this.community.consultantCustomerWechat
+      let text = that.community.consultantCustomerWechat
       const input = document.createElement('input')
       input.setAttribute('readonly', 'readonly')
       input.setAttribute('value', text)
@@ -191,8 +192,8 @@ export default class CommunityCard extends Vue {
         document.execCommand("Copy") // 执行浏览器复制命令
       }
       document.body.removeChild(input)
-      this.$vux.toast.text('复制成功', 'bottom')
-      this.trainingCampAlert = false
+      that.$vux.toast.text('复制成功', 'bottom')
+      that.trainingCampAlert = false
     }, 500)
   }
 	close () {
