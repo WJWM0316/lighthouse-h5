@@ -132,7 +132,12 @@ export default class payment extends Vue {
     this.$emit('freeJoin')
   }
   nextCamp () {
-    this.$router.push(`/introduce2/${this.pageInfo.nextCommunityId}`)
+    if (this.pageInfo.nextJoined === 1) {
+      this.$router.push(`/introduce2/${this.pageInfo.nextCommunityId}/community`)
+    } else {
+      this.$router.push(`/introduce2/${this.pageInfo.nextCommunityId}`)
+    }
+    
   }
   disableJoin () {
     this.join = false
