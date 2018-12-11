@@ -957,6 +957,7 @@
       justify-content: space-around;
       align-items: center;
       .blo_icon {
+        flex-shrink: 0;
         height: 20px;
         width: 20px;
         background:rgba(255,226,102,1);

@@ -60,6 +60,7 @@
       flex-wrap: nowrap;
       color: #22292C;
       img{
+        flex-shrink: 0;
         width: 44px;
         height: 44px;
         margin-right: 10px;

@@ -52,6 +52,7 @@ export default class camp extends Vue {
     this.isBusy = true
     this.page += 1
     this.getgetTrainingsList()
+    loaded('done')
   }
   scroll () {}
 }
