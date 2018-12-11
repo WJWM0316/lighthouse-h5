@@ -22,9 +22,16 @@
 			<button type="button" class="u-btn-publish" :disabled="!canPublish" @click="handleSubmit">发表</button>
 		</div>
 		
-		<div class="showTask" @click.stop="showTask" v-if="taskContent.isShowRandomCardContent === 0 && taskContent.courseCardTitle && taskContent.courseCardFile">本节打卡任务 <img src="../../assets/icon/btn_up_task@3x.png"/></div>
+		<div class="showTask" @click.stop="showTask" v-if="taskContent.isShowRandomCardContent === 0 && taskContent.courseCardTitle && taskContent.courseCardFile">
+		  <!--引导图-->
+		  <img class="punchGuide" src="../../assets/icon/punchGuide.png"  v-if="showGuide"/>
+		  <div class="punchGuideBox" v-if="showGuide" @click.stop="close"></div>
+		  本节打卡任务 <img src="../../assets/icon/btn_up_task@3x.png"/>
+		</div>
 		<div class="taskWindow" v-if="showTaskWindow">
-			<div class="taskhead" @click.stop="closeTask">本节打卡任务 <img src="../../assets/icon/btn_packup_task@3x.png"/></div>
+			<div class="taskhead" @click.stop="closeTask">
+			  本节打卡任务 <img src="../../assets/icon/btn_packup_task@3x.png"/>
+			</div>
 			<div class="taskbody">
 				<pre v-html="taskContent.courseCardTitle"></pre>
 				<!--图片-->
@@ -118,6 +125,7 @@
 		wechatCodeModal = {
 			show: false
 		}
+		showGuide = false // 引导图
 
 		sendOK = false
 
@@ -134,6 +142,10 @@
 			}
 
 			return type
+		}
+		/* 关闭引导图*/
+		close () {
+		  this.showGuide = false
 		}
 		
 		//预览普通图片
@@ -187,6 +199,11 @@
 				this.$root.$children[0].audio.pause()
 			}
 			this.form.courseId = this.$route.params.courseId
+			let isFirstInPunch = localStorage.getItem("isFirstInPunch")
+			if (!isFirstInPunch) {
+			  this.showGuide = true
+			  localStorage.setItem('isFirstInPunch', 'false')
+			}
 		}
 		
 		//读取草稿
@@ -627,6 +644,7 @@
 		}
 		/*打卡任务详情*/
 		.showTask{
+		  position: relative;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -638,6 +656,21 @@
 				width: 18px;
 				height: 18px;
 			}
+			.punchGuide{
+        position: absolute;
+        top: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 205px;
+        height: 96px;
+      }
+      .punchGuideBox{
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
 		}
 		/*打卡任务窗口*/
 		.taskWindow{
