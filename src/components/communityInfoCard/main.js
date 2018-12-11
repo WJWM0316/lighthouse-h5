@@ -65,7 +65,7 @@ import Component from 'vue-class-component'
     },
     communityStatus () {
       if (this.type === 3) {
-        if (this.isCourse !== 4) {
+        if (this.community.isCourse !== 4 && this.isCourse !== 4) {
           if (this.isEnd) {
             return '已结束'
           } else if (this.isStart) {
@@ -83,8 +83,6 @@ import Component from 'vue-class-component'
               return `<span style="color:#BCBCBC;">已学 <span style="color:#D7AB70;">${this.community.patchCardCount}</span> 个课节／课程更新至 <span style="color:#D7AB70;">${this.community.courseTotalCount}</span> 节</span>`
             } else if (this.community.courseTotalCount = 0) {
               return '未更新课节'
-            } else {
-              return '已结束'
             }
           }
         }
