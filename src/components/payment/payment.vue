@@ -67,21 +67,6 @@ import Component from 'vue-class-component'
 import localstorage from '@/util/localstorage/index'
 @Component({
   name: 'payment',
-  computed: {},
-  watch: {
-    pageInfo: {
-      handler (newdate, oldData) {
-        this.isJoinAgency = this.pageInfo.isAuthor || this.pageInfo.isJoined
-        // 剩余免费名额
-        this.freeSurplusPeople = parseInt(this.pageInfo.freeJoinNum) - parseInt(this.pageInfo.freeJoinedNum)
-        // 剩余付费名额
-        this.paySurplusPeople = parseInt(this.pageInfo.payJoinNum) - parseInt(this.pageInfo.payJoinedNum)
-        this.isFreeBtn = this.freeSurplusPeople > 0
-        this.isPayBtn = this.paySurplusPeople > 0
-      },
-      immediate: true
-    }
-  },
   props: {
     /* 课程对象 */
     pageInfo: {
@@ -95,22 +80,30 @@ import localstorage from '@/util/localstorage/index'
     }
   },
   watch: {
-    pageInfo () {
+    pageInfo (newData, oldData) {
       let isNewUser = localStorage.getItem("isNewUser");
       console.log(!isNewUser, !this.isPassTime)
-      if (!isNewUser && !this.isPassTime && this.pageInfo.remainingJoinNum > 0 && this.pageInfo.consultantLink) {
+      if (!isNewUser && !this.isPassTime && newData.remainingJoinNum > 0 && newData.consultantLink) {
         this.advisory = true
         localStorage.setItem("isNewUser", true)
       }
+      
+      this.isJoinAgency = newData.isAuthor || newData.isJoined
+      // 剩余免费名额
+      this.freeSurplusPeople = parseInt(newData.freeJoinNum) - parseInt(newData.freeJoinedNum)
+      // 剩余付费名额
+      this.paySurplusPeople = parseInt(newData.payJoinNum) - parseInt(newData.payJoinedNum)
+      this.isFreeBtn = this.freeSurplusPeople > 0
+      this.isPayBtn = this.paySurplusPeople > 0
     }
   }
 })
 export default class payment extends Vue {
-  isJoinAgency = ''
+  isJoinAgency = null
   isFreeBtn = true
   isPayBtn = true
-  freeSurplusPeople = ''
-  paySurplusPeople = ''
+  freeSurplusPeople = null
+  paySurplusPeople = null
   join = false //控制加入引导图
   advisory = false // 控制咨询引导图
   /*isCourse = 课程类型1.2旧课程，3新课程，4训练营 */

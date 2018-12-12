@@ -45,7 +45,7 @@
       const input = document.createElement('input')
       input.setAttribute('readonly', 'readonly')
       input.setAttribute('value', text)
-      document.body.appendChild(input) 
+      document.body.appendChild(input)
       //区分iPhone设备
       if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
         window.getSelection().removeAllRanges();//这段代码必须放在前面否则无效
