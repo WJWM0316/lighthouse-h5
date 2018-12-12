@@ -215,12 +215,6 @@
     },
     watch: {
       '$route' (route) { // 跳转同个路由时，id不同强制刷新
-        document.documentElement.scrollTop = 0
-        document.body.scrollTop = 0
-        window.pageYOffset = 0
-        if (this.$refs['headCard']) {
-          this.$refs['headCard'].stopCountdown()
-        }
         this.pageInit().then(() => {
           const {
             title,
@@ -229,13 +223,14 @@
             shareImg, // 分享图片
             sharePoint, // 分享摘要
             shareIntroduction,  // 分享标题
-            communityId
+            communityId,
+            isCourse
           } = this.pageInfo
           // 是否已入社
           if (this.completelyShow && this.isJoinAgency) {
-            if(res.isCourse === 3 || res.isCourse === 4){
-              this.$router.replace({path: `/introduce2/${communityId}/community`})
-            }else {
+            if(isCourse === 3 || isCourse === 4){
+              this.$router.replace(`/introduce2/${communityId}/community`)
+            } else {
               this.$router.replace(`/introduce/${communityId}/community`)
             }
             return
@@ -572,7 +567,6 @@
       const { communityId } = this.$route.params
       const { saleId: applyId } = this.$route.query
 
-      console.log(this.$route)
       const res = await getCommunityInfoApi({communityId, data: {applyId}})
       let Selectcoupon = sessionStorage.getItem("coupon")
 
