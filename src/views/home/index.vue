@@ -893,7 +893,7 @@ export default class HomeIndex extends Vue {
         display: none;
       }
       li {
-        width: 151px;
+        width: 130px;
         display: inline-block;
         margin-left: 10px;
         vertical-align: top;
@@ -905,7 +905,7 @@ export default class HomeIndex extends Vue {
         }
         .chose-tab-img {
           width: 100%;
-          height: 93px;
+          height: 80px;
           border-radius: 3px;
         }
         .chose-tab-con {
