@@ -801,7 +801,7 @@ export default class HomeIndex extends Vue {
     color: #354048;
     font-size: 18px;
     font-weight: 700;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
     margin-left: 25px;
     position: relative;
     &::before{
@@ -887,8 +887,7 @@ export default class HomeIndex extends Vue {
       overflow-x: scroll;
       line-height: 0;
       &::-webkit-scrollbar {
-        background-color:transparent;
-        width:0;
+        width: 0 !important;
         height: 0;
         display: none;
       }
