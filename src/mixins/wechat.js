@@ -8,8 +8,8 @@ export default {
       wechatConfig: {
         debug: false,
         jsApiList: [
-          'updateAppMessageShareData',
-          'updateTimelineShareData',
+          'onMenuShareTimeline',
+          'onMenuShareAppMessage',
           'startRecord',
           'stopRecord',
           'onVoiceRecordEnd',
@@ -285,41 +285,40 @@ export default {
       // 发起 http 请求，获取公众号配置
       wx.ready(() => {
         // 分享到朋友圈
-//      wx.onMenuShareTimeline({
-//        title: enter.title, // 分享标题
-//        link: enter.link,
-//        imgUrl: enter.imgUrl
-//      })
-//      // 分享到QQ空间
-//      wx.onMenuShareQZone({
-//        title: enter.title, // 分享标题
-//        desc: enter.desc,
-//        link: enter.link,
-//        imgUrl: enter.imgUrl
-//      })
-//      // 分享到好友
-//      wx.onMenuShareAppMessage({
-//        title: enter.titles ? enter.titles : enter.title, // 分享标题
-//        desc: enter.desc,
-//        link: enter.link,
-//        imgUrl: enter.imgUrl
-//      })
-//      // 分享到QQ
-//      wx.onMenuShareQQ({
-//        title: enter.titles ? enter.titles : enter.title, // 分享标题
-//        desc: enter.desc,
-//        link: enter.link,
-//        imgUrl: enter.imgUrl
-//      })
-        
-        // “分享给朋友”及“分享到QQ”
+        wx.onMenuShareTimeline({
+          title: enter.title, // 分享标题
+          link: enter.link,
+          imgUrl: enter.imgUrl
+        })
+        // 分享到QQ空间
+        wx.onMenuShareQZone({
+          title: enter.title, // 分享标题
+          desc: enter.desc,
+          link: enter.link,
+          imgUrl: enter.imgUrl
+        })
+        // 分享到好友
+        wx.onMenuShareAppMessage({
+          title: enter.titles ? enter.titles : enter.title, // 分享标题
+          desc: enter.desc,
+          link: enter.link,
+          imgUrl: enter.imgUrl
+        })
+        // 分享到QQ
+        wx.onMenuShareQQ({
+          title: enter.titles ? enter.titles : enter.title, // 分享标题
+          desc: enter.desc,
+          link: enter.link,
+          imgUrl: enter.imgUrl
+        })
+        // “分享给朋友”及“分享到QQ”(1.4.0新接口)
         wx.updateAppMessageShareData({
           title: enter.titles ? enter.titles : enter.title, // 分享标题
           desc: enter.desc,
           link: enter.link,
           imgUrl: enter.imgUrl
         })
-        // 分享到朋友圈及分享到QQ空间
+        // 分享到朋友圈及分享到QQ空间(1.4.0新接口)
         wx.updateTimelineShareData({
           title: enter.titles ? enter.titles : enter.title, // 分享标题
           desc: enter.desc,
