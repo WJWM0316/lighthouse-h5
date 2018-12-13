@@ -514,8 +514,6 @@
 
     posted(){
     	let code=this.roleInfo.code
-
-      console.log(this.$route.params.communityId,code)
     	// :todo 发帖
       this.$router.push(`/publish/${this.$route.params.communityId}?type=0&code=${code}&codeType=${this.type}&pageForm=isCourse3`)
     }
@@ -655,7 +653,6 @@
           sortNum: courseData.sortNum,
         }
 
-        console.log(courseData.isToStydy)
         //那个方向翻页。不能为空。
         if(courseData.upOrDown && !courseData.isToStydy){
           params.upOrDown = courseData.upOrDown
@@ -699,7 +696,6 @@
       //课节
       if(courses){
         //禁止翻页
-        console.log(courseData.isToStydy,courseData.isIp)
         if(res.courses && res.courses.length < pageSize ){
           if(courseData.upOrDown == 'up'){
             courseData.isIp = false
@@ -751,8 +747,6 @@
      * 下拉刷新
      */
     handleRefresh (loaded) {
-      console.log(44444)
-
       if(this.showType){
         this.lessGetBaseInit()
       }
@@ -816,7 +810,6 @@
      * 帖子置顶 or op
      */
     topOp(){
-      console.log(this.nowUserOpItem)
       let data = {
         communityId: this.communityId,
         postId: this.nowUserOpItem.circleId
@@ -875,7 +868,6 @@
     }
 
     delMsg(){
-      console.log(this.nowUserOpItem)
       let that = this
       if(this.nowUserOpItem.modelType === 'post'){
         let data = {
@@ -893,7 +885,6 @@
     }
 
     opMember(e){
-      console.log('=-=-=',e)
       this.userOpActionsheet.show = true
       this.userOpActionsheet.menus = e.menus
       this.nowUserOpItem = e.item
@@ -924,7 +915,6 @@
       this.getCourseData.sortNum = type.type===1?this.dynamicList[0].sort : this.dynamicList[this.dynamicList.length-1].sort
       this.pagination.end = false
       this.pagination.busy = false
-      console.log(this.getCourseData.sortNum)
       this.getList({page:2})
     }
 

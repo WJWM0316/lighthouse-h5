@@ -49,21 +49,14 @@ import { statisticsCodeApi } from '@/api/common'
     courseList () {},
     lastStudy () {},
     isIp(){},
-    isDown(val){
-      console.log(val)
-      
-    },
+    isDown(val){},
     total(){},
-    isMaster(val){
-      console.log(val)
-    },
+    isMaster(val){},
   }
 })
 export default class dynamicItem extends Vue {
   video = ''
-  created () {
-    console.log('!!!!!!!',this.courseList)
-  }
+  created () {}
   
   lessSort(){
     this.$emit('lessSetSort')
@@ -125,7 +118,6 @@ export default class dynamicItem extends Vue {
   // -------------------- 页面跳转 ------------------------
   //去课节
   toDetails (item) {
-    console.log(item.statusInfo.isUnlock)
     let {id} = item
     let isTry = item.courseType == 2 ? 1: 0
 

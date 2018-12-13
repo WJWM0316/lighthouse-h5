@@ -238,7 +238,6 @@
 
           const {realName, career} = master
           const str = realName ? realName + (career ? '|' + career : '') : ''
-          console.log('location.href', location.href)
           // 页面分享信息
           this.wechatShare({
             'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
@@ -497,7 +496,6 @@
             self.$vux.toast.text('已购买成功', 'bottom')
             const { communityId } = self.$route.params
             let number = Math.random() * 10 + 1
-            console.log('communityId', communityId)
             if (self.pageInfo.isCourse === 4) {
               self.trainingCampAlert = true
             } else {
@@ -545,8 +543,6 @@
         } = self.pageInfo
 
         const {realName, career} = master
-        //  const str = realName ? realName + (career ? '|' + career : '') : ''
-        console.log('location.href', location.href)
         // 页面分享信息
         self.wechatShare({
           'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
@@ -633,7 +629,6 @@
         onCancel () {
         },
         onConfirm () {
-          console.log(_this) // 当前 vm
           if (isBuy) {
             _this.payOrFree()
           }

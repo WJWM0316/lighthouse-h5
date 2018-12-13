@@ -238,11 +238,8 @@ import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
     },
     isMaster(val){
       this.isMaster = val
-      console.log(val)
     },
-    isShowTop(val){
-      console.log(val)
-    }
+    isShowTop(val){}
   }
 })
 export default class dynamicItem extends Vue {
@@ -420,12 +417,10 @@ export default class dynamicItem extends Vue {
     if (this.disableUserClick) {
       return
     }
-    console.log('去个人详情: ', userId)
     this.$router.push(`/userInfo/${userId}/details`)
   }
 
   toDetails () { // 去朋友圈、帖子、问题详情
-  	console.log(this.$parent,"5555555555555555555")
     if (this.disableContentClick) {
       return
     }

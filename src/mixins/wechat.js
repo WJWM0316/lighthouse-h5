@@ -285,34 +285,48 @@ export default {
       // 发起 http 请求，获取公众号配置
       wx.ready(() => {
         // 分享到朋友圈
-        wx.onMenuShareTimeline({
-          title: enter.title, // 分享标题
-          link: enter.link,
-          imgUrl: enter.imgUrl
-        })
-        // 分享到QQ空间
-        wx.onMenuShareQZone({
-          title: enter.title, // 分享标题
-          desc: enter.desc,
-          link: enter.link,
-          imgUrl: enter.imgUrl
-        })
-        // 分享到好友
-        wx.onMenuShareAppMessage({
+//      wx.onMenuShareTimeline({
+//        title: enter.title, // 分享标题
+//        link: enter.link,
+//        imgUrl: enter.imgUrl
+//      })
+//      // 分享到QQ空间
+//      wx.onMenuShareQZone({
+//        title: enter.title, // 分享标题
+//        desc: enter.desc,
+//        link: enter.link,
+//        imgUrl: enter.imgUrl
+//      })
+//      // 分享到好友
+//      wx.onMenuShareAppMessage({
+//        title: enter.titles ? enter.titles : enter.title, // 分享标题
+//        desc: enter.desc,
+//        link: enter.link,
+//        imgUrl: enter.imgUrl
+//      })
+//      // 分享到QQ
+//      wx.onMenuShareQQ({
+//        title: enter.titles ? enter.titles : enter.title, // 分享标题
+//        desc: enter.desc,
+//        link: enter.link,
+//        imgUrl: enter.imgUrl
+//      })
+        // “分享给朋友”及“分享到QQ”
+        wx.updateAppMessageShareData({
           title: enter.titles ? enter.titles : enter.title, // 分享标题
           desc: enter.desc,
           link: enter.link,
           imgUrl: enter.imgUrl
         })
-        // 分享到QQ
-        wx.onMenuShareQQ({
+        // “分享到朋友圈”及“分享到QQ空间”
+        wx.updateAppMessageShareData({
           title: enter.titles ? enter.titles : enter.title, // 分享标题
           desc: enter.desc,
           link: enter.link,
           imgUrl: enter.imgUrl
         })
         // 分享到腾讯微博
-        wx.onMenuShareWeibo({
+        wx.updateTimelineShareData({
           title: enter.title, // 分享标题
           desc: enter.desc,
           link: enter.link,

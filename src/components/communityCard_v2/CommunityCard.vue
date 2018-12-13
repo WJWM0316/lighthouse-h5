@@ -146,9 +146,7 @@ import popus from '@/components/Popups/Popups'
   }
 })
 export default class CommunityCard extends Vue {
-	created(){
-    console.log("我是触发的community",this.isEntentr);
-	}
+	created(){}
 	
   // 卡片类名集合
   cardClasses = {
@@ -167,7 +165,6 @@ export default class CommunityCard extends Vue {
   }
   
   toMore(){
-  	console.log(this.community)
     if(this.community.isJoined !== 1){
       return
     }
@@ -234,7 +231,6 @@ export default class CommunityCard extends Vue {
   }
 
   goTointroduceDetail(){
-    console.log(this.community)
     if(this.community.isCourse === 3 || this.community.isCourse === 4){
       this.$router.push({name: 'introduce-detail2', params: {communityId: this.community.communityId}})
     }else {
