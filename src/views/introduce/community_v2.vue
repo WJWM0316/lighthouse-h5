@@ -15,7 +15,7 @@
       <div class="header">
       	
       	<!--详情页头部组件-->
-        <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false" :isCommunityIntroduce=true>
+        <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false" :isCommunityIntroduce=true @openCustomerService="openCustomerService">
         </community-card>
         <!--详情页头部组件-->
 
@@ -185,6 +185,8 @@
         <p>获取{{pageInfo.isSell && pageInfo.isSell === 2 ? '专属海报，邀请好友一起学习' : '专属海报，及查询奖励'}}</p>
       </div>
     </div>
+    <!--训练营客服弹窗-->
+    <popus :trainingCampAlert="trainingCampAlert" :pageInfo="pageInfo" :isKefu="true" @close="close"></popus>
   </div>
 </template>
 <script>
@@ -204,6 +206,7 @@
   import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
+  import popus from '@/components/Popups/Popups'
 
   import { getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi, topPostListApi, delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi } from '@/api/pages/pageInfo'
 
@@ -226,7 +229,8 @@
       Actionsheet,
       communityInfoCard,
       ShareDialog,
-      appGuide
+      appGuide,
+      popus
     },
     
     computed: {
@@ -325,6 +329,7 @@
     qrSrc = ''
     showAskImg = false // 是否展示提问引导图 
     showCommunicateImg = false // 是否展示交流引导图
+    trainingCampAlert = false // 展示联系客服弹窗
 		
     created () {
     	let titleBoxShow=true;
@@ -340,6 +345,14 @@
       }
       this.init_v2()
     }
+    /* 展示训练营客服弹窗 */
+    openCustomerService () {
+      this.trainingCampAlert = true
+    }
+    close () {
+      this.trainingCampAlert = false
+    }
+    
     /* 关闭引导图 */
     closeGuide () {
       if (this.showAskImg) {

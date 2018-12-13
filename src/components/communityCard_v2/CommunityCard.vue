@@ -73,8 +73,6 @@
         </div>
       </template>
     </div>
-    <!--训练营客服弹窗-->
-    <popus :trainingCampAlert="trainingCampAlert" :pageInfo="community" :isKefu="true" @close="close"></popus>
   </a>
 </template>
 <script>
@@ -140,7 +138,6 @@ import popus from '@/components/Popups/Popups'
     },
 
     community(val){
-      console.log("我是触发的community",val);
       this.community = val
     },
     isCommunityIntroduce(){
@@ -149,13 +146,9 @@ import popus from '@/components/Popups/Popups'
   }
 })
 export default class CommunityCard extends Vue {
-  trainingCampAlert = false
 	created(){
     console.log("我是触发的community",this.isEntentr);
 	}
-	close () {
-    this.trainingCampAlert = false
-  }
 	
   // 卡片类名集合
   cardClasses = {
@@ -191,7 +184,7 @@ export default class CommunityCard extends Vue {
   }
   /* 调起训练营客服弹窗 */
   showKefu () {
-    this.trainingCampAlert = true
+    this.$emit('openCustomerService')
   }
 
   /**
