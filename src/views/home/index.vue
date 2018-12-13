@@ -53,8 +53,13 @@
          <!--  <span @click="toggle('find')">发现</span> -->
         </div>
       </div>
+      <!--广告banner-->
+      <div ref="insert" class="insert"  v-if="navTabName === 'picked'">
+        <img  class="insert_block" v-for="item, index in insertList" :src="item.imgUrl" @click.prevent.stop="handleTapBanner(item)"></img>
+      </div>
       <!-- 选项卡 -->
       <div ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
+        <div class="campTitle">热门推荐</div>
         <ul>
           <li v-for="(item, index) in bannerList" :key="`banner_${index}`" @click.prevent.stop="handleTapBanner(item)">
               <image-item class="chose-tab-img" :src="item.imgUrl" />
@@ -67,10 +72,6 @@
           <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
               <img class="opt_pic" :src="item.imgUrl"></img>
           </div>
-      </div>
-
-      <div ref="insert" class="insert"  v-if="navTabName === 'picked'">
-        <img  class="insert_block" v-for="item, index in insertList" :src="item.imgUrl" @click.prevent.stop="handleTapBanner(item)"></img>
       </div>
       <!--训练营-->
       <div v-if="navTabName === 'picked' && trainingCampInfo && trainingCampInfo.pagination.total">
@@ -796,7 +797,7 @@ export default class HomeIndex extends Vue {
   }
   /*训练营标题 ， 课程标题*/
   .campTitle, .courseTitle{
-    margin-top: 30px;
+    margin-top: 25px;
     color: #354048;
     font-size: 18px;
     font-weight: 700;
@@ -892,9 +893,6 @@ export default class HomeIndex extends Vue {
         width: 151px;
         display: inline-block;
         margin-left: 10px;
-        box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.08);
-        margin-bottom: 18px;
-        border-radius: 3px;
         vertical-align: top;
         &:last-child {
           margin-right: 15px;
@@ -902,34 +900,21 @@ export default class HomeIndex extends Vue {
         .chose-tab-img {
           width: 100%;
           height: 93px;
-          border-radius: 6px 6px 0 0;
+          border-radius: 3px;
         }
         .chose-tab-con {
           white-space: normal;
           width: 132px;
-          height: 36px;
-          .fontSize(14);
+          /*height: 36px;*/
+          .fontSize(13);
           line-height: 1.29;
-          margin: 10px 10px 11px 0; 
-          padding-left: 9px;
+          margin: 6px 8px 0px 1px; 
 
-          //font-family: 'PingFangSC-Medium';
-
-          font-weight: 700;
+          font-weight: 400;
           color: #354048;
           letter-spacing: 0;
           .setEllipsisLn();
           position: relative;
-          &::before {
-            content: '';
-            width: 3px;
-            height: 12px;
-            background-color: #ffe266;
-            display: block;
-            position: absolute;
-            top: 3px;
-            left: 0px;
-          }
         }
       }
     }

@@ -51,6 +51,7 @@ export default {
      * 配置微信sdk
      */
     setWechatConfig () {
+      console.log(this.$wechat, 9999)
       this.$wechat.config(this.wechatConfig)
     },
 
