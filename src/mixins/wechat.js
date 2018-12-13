@@ -8,8 +8,8 @@ export default {
       wechatConfig: {
         debug: false,
         jsApiList: [
-          'onMenuShareTimeline',
-          'onMenuShareAppMessage',
+          'updateAppMessageShareData',
+          'updateTimelineShareData',
           'startRecord',
           'stopRecord',
           'onVoiceRecordEnd',
@@ -318,15 +318,15 @@ export default {
           link: enter.link,
           imgUrl: enter.imgUrl
         })
-        // “分享到朋友圈”及“分享到QQ空间”
-        wx.updateAppMessageShareData({
+        // “分享给朋友”及“分享到QQ”
+        wx.updateTimelineShareData({
           title: enter.titles ? enter.titles : enter.title, // 分享标题
           desc: enter.desc,
           link: enter.link,
           imgUrl: enter.imgUrl
         })
         // 分享到腾讯微博
-        wx.updateTimelineShareData({
+        wx.onMenuShareWeibo({
           title: enter.title, // 分享标题
           desc: enter.desc,
           link: enter.link,
