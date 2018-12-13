@@ -15,8 +15,9 @@ import store from './store/'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
+let vm = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app-box')
+console.log(vm.$wechat, '999999999999999999999999999999')

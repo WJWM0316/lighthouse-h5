@@ -825,6 +825,8 @@ export default class HomeIndex extends Vue {
     margin-bottom: 30px;
     margin-top: 18px;
     .moreCampBtn{
+      font-size: 14px;
+      font-weight: 300;
       color: #666666;
       display: flex;
       justify-content: center;
@@ -885,8 +887,9 @@ export default class HomeIndex extends Vue {
       overflow-x: scroll;
       line-height: 0;
       &::-webkit-scrollbar {
-        //background-color:transparent;
-        width:0; height: 0;
+        background-color:transparent;
+        width:0;
+        height: 0;
         display: none;
       }
       li {
@@ -894,6 +897,9 @@ export default class HomeIndex extends Vue {
         display: inline-block;
         margin-left: 10px;
         vertical-align: top;
+        &:first-child {
+          margin-left: 15px;
+        }
         &:last-child {
           margin-right: 15px;
         }
