@@ -758,7 +758,7 @@ export default class HomeIndex extends Vue {
   .insert_block {
     width: 351px;
     height: 104px;
-    margin: 0 auto 15px auto;
+    margin: 0 auto 13px auto;
     display: block;
     border-radius: 3px;
   }
@@ -823,7 +823,7 @@ export default class HomeIndex extends Vue {
     width: 100%;
     height: 40px;
     margin-bottom: 30px;
-    margin-top: 18px;
+    margin-top: 15px;
     .moreCampBtn{
       font-size: 14px;
       font-weight: 300;
@@ -896,6 +896,7 @@ export default class HomeIndex extends Vue {
         width: 130px;
         display: inline-block;
         margin-left: 10px;
+        margin-bottom: 2px;
         vertical-align: top;
         &:first-child {
           margin-left: 15px;
