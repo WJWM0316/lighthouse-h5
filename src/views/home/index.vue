@@ -881,7 +881,7 @@ export default class HomeIndex extends Vue {
     }
   }
   .chose-tab {
-    ul {
+    ul{
       white-space: nowrap;
       font-size: 0;
       overflow-x: scroll;
