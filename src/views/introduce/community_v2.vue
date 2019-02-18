@@ -58,6 +58,7 @@
                 :isDown = getCourseData.isDown
                 :total = pagination.total
                 :isMaster = isMaster
+                :LastLessonId = "dynamicList[dynamicList.length-1].id"
                 @toLastStudy = toLastStudy 
                 @getLessPage="getLessPage" 
                 @lessSetSort="lessSetSort" 

@@ -39,6 +39,10 @@ import { statisticsCodeApi } from '@/api/common'
     isMaster: {
       type: Boolean,
       default: false,
+    },
+    // 最后一节课的id
+    LastLessonId: {
+      type: Number
     }
   },
   computed: {
@@ -106,7 +110,6 @@ export default class dynamicItem extends Vue {
       })
       localstorage.set('oldTime', current_time)
     } else {
-      console.log(isLastLesson, '********************')
       this.$router.push({ path:`/Lesson?id=${id}&isTry=0&isLastLesson=${isLastLesson}&communityId=${that.communityId}` })
     }
   }
@@ -121,7 +124,8 @@ export default class dynamicItem extends Vue {
   toDetails (item) {
     let {id} = item
     let isTry = item.courseType == 2 ? 1: 0
-    let isLastLesson = this.lastStudy.id === item.id ? 1 : 0
+    let isLastLesson = this.LastLessonId === item.id ? 1 : 0
+    console.log(this.LastLessonId, item.id, '/***/*/**/*/*/*/*/*/*')
 
     if(!this.isMaster && (item.statusInfo.isUnlock===0 && item.courseType !== 2) ){
       this.$vux.toast.text('这节课尚未解锁，快去完成上一节课的打卡任务解锁吧~', 'bottom')
