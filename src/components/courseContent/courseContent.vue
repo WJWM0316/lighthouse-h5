@@ -39,8 +39,7 @@
         <div class="blo_right noneborder" v-else>
           <img class='blo_right_icon' src="./../../assets/icon/icon_unlock@3x.png"  />
         </div>
-        
-        
+
       </div>
     </div>
 

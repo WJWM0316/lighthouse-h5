@@ -140,7 +140,8 @@
 				<div v-if="curPeopleInfo.roleId!==1 && curPeopleInfo.roleId!==2 && trialReading === '0'">
 					<div class="Lesson-footer" v-if="isPunch === 0">
 						<div class="toPunch" @click.stop="toPunch">
-							打卡做任务，解锁下一节课
+							<span v-show="isLastLesson !== '1'">去打卡，解锁下一节课</span>
+							<span v-show="isLastLesson === '1'">去打卡，完成最后一节课</span>
 						</div>
 					</div>
 					<div class="Lesson-footer" v-else>
@@ -276,6 +277,7 @@
   	showIdentification = true
     disableOperationArr = ['comment']
     isPlayList = false
+    isLastLesson = 0 // 是否最后一节课 1:是，0: 不是
     //所有打卡数据
     peopleCourseCardList = ""
     //优秀打卡
@@ -334,6 +336,7 @@
 
   	created(){
   		this.trialReading = this.$route.query.isTry
+  		this.isLastLesson = this.$route.query.isLastLesson
 			//初始化
 			this.init()
   	}
