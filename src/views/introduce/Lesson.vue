@@ -598,30 +598,30 @@
       if(this.selectCouponItem.userCouponId && this.selectCouponItem.userCouponId!==0){
         //选择其他优惠券
         if(this.selectedPrice>0){
-          console.log("我是付费")
+          console.log("付费")
           this.usedUserCouponId = this.selectCouponItem.userCouponId;
           this.payIn()
         }else{
-          console.log("我是免费免费")
+          console.log("免费免费")
           //选择的优惠券金额够大，可以免费加入
           this.usedUserCouponId = this.selectCouponItem.userCouponId;
           this.freeJoin()
         }
-        
+
       }else if(this.selectCouponItem.userCouponId===0 || this.lessonData.selectCoupon===null){
         //选择不使用优惠券 和 无可用优惠券
-        console.log("我是没有优惠券和不用优惠券")
+        console.log("没有优惠券和不用优惠券")
         this.usedUserCouponId = 0;
         this.payIn()
       }else{
         //默认优惠券
         if(this.lessonData.selectCoupon.couponPrice>0){
-          console.log("我是默认优惠券，且优惠券价格比塔价格低，需支付")
+          console.log("默认优惠券，且优惠券价格比塔价格低，需支付")
           //有默认优惠券
           this.usedUserCouponId = this.lessonData.selectCoupon.userCoupon.userCouponId;
           this.payIn()
         }else{
-          console.log("我是默认优惠券，且优惠券价格比塔价格高，不用支付")
+          console.log("默认优惠券，且优惠券价格比塔价格高，不用支付")
           this.usedUserCouponId = this.lessonData.selectCoupon.userCoupon.userCouponId;
           this.freeJoin()
         }

@@ -13,6 +13,7 @@
     @scroll="handleScroll"
     @infinite-scroll="handleInfiniteScroll">
     <template slot="top-block" slot-scope="props">
+      <div></div>
       <div class="top-block">
         <p v-text="props.stateText"></p>
       </div>
