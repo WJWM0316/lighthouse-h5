@@ -267,8 +267,7 @@
         return timestamp > startTime*1000
       }
     },
-    watch: {
-    },
+    watch: {},
     mixins: [WechatMixin],
   })
   export default class Lesson extends Vue {
@@ -546,7 +545,8 @@
 	    }).then((res) => {
 	      if (that.lessonData.isCourse === 4) { // 训练营
           that.trainingCampAlert = true
-          that.init()
+          this.$router.go(-1)
+//        that.init()
         } else {
           that.$vux.alert.show({
             title: '加入成功',
@@ -563,6 +563,7 @@
 	  }
 
 	  async payIn () {
+	    console.log('payIn')
 	    const params = await payApi({
 	      productId: this.lessonData.communityId,
         userCouponId: this.usedUserCouponId,
@@ -585,7 +586,8 @@
 	      if (this.lessonData.isCourse === 4) {
 	        this.trainingCampAlert = true
 	      }
-	      this.init()
+	      this.$router.go(-1)
+//	      this.init()
 	    }
 	  }
 
