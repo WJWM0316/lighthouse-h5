@@ -293,7 +293,6 @@
     	let titleBoxShow=true;
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
-
       }
       console.log('this.showType', this.showType)
       wxUtil.reloadPage()
@@ -440,6 +439,11 @@
       const { communityId } = this.$route.params
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = await this.getCommunity(communityId)
+      // 是否是新型课程塔
+      if(res.isCourse === 3 || res.isCourse === 4){
+        this.$router.replace(`/introduce2/${communityId}/community`)
+        return
+      }
       this.qrSrc = res.sellImg
       //嘉宾身份
       if(res.isAuthor == 0){
