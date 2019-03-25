@@ -129,8 +129,8 @@ import {newCountCodeApi, musicListApi, playAudioApi} from '@/api/pages/pageInfo'
         if (customSharePageName.indexOf(route.name) < 0) {
           // 页面分享信息
           this.wechatShare({
-            'titles': '小灯塔|职场学习平台|照亮你职场的路',
-            'title': '小灯塔|职场学习平台|照亮你职场的路',
+            'titles': '小灯塔|职场分享社区',
+            'title': '小灯塔|职场分享社区',
             'desc': '名师高徒，社群化训练和学习！职场人脉，吸收大咖进阶干货！',
             'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
             'link': location.origin + '/beaconweb/#/'

@@ -229,7 +229,6 @@
             shareIntroduction,  // 分享标题
             communityId
           } = this.pageInfo
-          console.log("222222222",this.pageInfo)
           // 是否已入社
           if (this.completelyShow && this.isJoinAgency) {
             this.$router.replace(`/introduce/${communityId}/community`)
