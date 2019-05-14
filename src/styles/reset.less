@@ -4,6 +4,7 @@
 
 * {
   -webkit-appearance: none; /* 针对ios中会出现的阴影 */
+  -webkit-tap-highlight-color: rgba(200,200,200,0);
 }
 
 html,
@@ -12,6 +13,7 @@ body {
   width: 100%;
   line-height: 1.42857143;
   overflow-x: hidden;
+  background: #fff;
 }
 
 button,
@@ -29,6 +31,9 @@ textarea {
     &:focus {
       outline: none;
     }
+}
+input::-webkit-input-placeholder{
+    color: #BCBCBC;
 }
 
 audio,

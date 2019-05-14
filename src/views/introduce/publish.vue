@@ -10,7 +10,7 @@
         <image-item class="image" mode="auto" :src="item.base64Url || item.fileUrl" />
         <button type="button" class="close u-btn" @click="handleDeleteImage(index, item)"><i class="u-icon-delete-image"></i></button>
       </div>
-      <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd"><i class="u-icon-plus"></i></a>
+      <a href="#" class="add item" v-if="images.length < lengths.imageMax" @click.prevent.stop="handleAdd2"><i class="u-icon-plus"></i></a>
     </div>
 
     <!-- {{serverIds}}<br>
@@ -92,6 +92,8 @@ export default class PublishContent extends Vue {
 
   sendOK=false
 
+  pageForm = false //新课程来的不需要判断身份
+
   // 图文类型： 0:无文件(文本) 1:音频 2:视频 3:图片
   get addonType () {
     let type = 0
@@ -121,7 +123,9 @@ export default class PublishContent extends Vue {
   }
 
   created () {
-  	console.log(this.$route,"12132132132132132")
+  	if (!this.$root.$children[0].audio.paused) {
+      this.$root.$children[0].audio.pause()
+    }
     this.form.communityId = this.$route.params.communityId
   }
 
@@ -277,26 +281,40 @@ export default class PublishContent extends Vue {
         globalLoading: false
       }
 
+      this.pageForm = this.$route.query.pageForm
+      
+      if(this.pageForm === 'isCourse3'){
+          await publishPostApi(params)
+          this.sendOK=true
+          sessionStorage.setItem("loadType",0)
+      }
 			//判断身份发帖还是发布
-			if(this.$route.query.code==='student' || this.$route.query.code==='manager'){
+			else if(this.$route.query.code==='student' || this.$route.query.code==='manager'){
+
 				//学员和管理员
-					if( this.$route.query.code==='manager' && this.$route.query.codeType==='1'){
+					if( this.$route.query.code==='manager' && this.$route.query.codeType==='1'){//管理员
 						await publishApi(params)
             this.sendOK=true
+            sessionStorage.setItem("loadType",1)
 					}else{
 						await publishPostApi(params)
             this.sendOK=true
+            sessionStorage.setItem("loadType",0)
 					}
 				
 			}else if(this.$route.query.code==='special_manager' || this.$route.query.code==='special_master' ||  this.$route.query.code==='special_guests' ){
 				//无课程灯塔内容发帖
 					await publishPostApi(params)
           this.sendOK=true
+          sessionStorage.setItem("loadType",0)
 			}else{
 				//塔主和嘉宾
 				await publishApi(params)
         this.sendOK=true
+        sessionStorage.setItem("loadType",1)
 			}
+
+
       
       this.$vux.toast.text('发布成功', 'bottom')
 
@@ -350,6 +368,15 @@ export default class PublishContent extends Vue {
         this.chooseCustomImages()
       }
     }
+  }
+
+  /**
+   * 点击添加不需要 视频
+   */
+  handleAdd2 () {
+    setTimeout(() => {
+      this.chooseCustomImages()
+    }, 0)
   }
 
   /**

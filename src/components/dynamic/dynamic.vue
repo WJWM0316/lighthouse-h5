@@ -1,6 +1,7 @@
 <template>
   <!-- 朋友圈 -->
   <div class="dynamic-list">
+    
     <dynamic-item v-for="item,index in dynamicList"
                   :item="item"
                   :key="index"
@@ -18,29 +19,65 @@
                   :isFold="isFold"
                   :noBorder="noBorder"
                   :isNeedHot="isNeedHot"
-                  @audioEvent="audioEvent"
+                  :isPlayList='isPlayList'
+                  :isTeacher='isTeacher'
+                  :isTeacherCon='isTeacherCon'
+                  :communityId="communityId"
+                  :isDetailCon="isDetailCon"
+                  :isTower='isTower'
+                  :isUserExchange="isUserExchange"
+                  :isMaster = "isMaster"
+                  :isShowTop = 'isShowTop'
                   @videoEvent="videoEvent"
                   @operation="operation"
+                  @opMember="opMember"
                   ref="dynamic-item"
     ></dynamic-item>
+  
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import dynamicItem from '@/components/dynamicItem/dynamicItem'
-  import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi} from '@/api/pages/pageInfo.js'
+  import {setFavorApi, setSubmitCommentApi, delCommontApi, playAudioApi, getRoleInfoApi } from '@/api/pages/pageInfo.js'
+  import { getInformationApi } from '@/api/pages/center'
   import WechatMixin from '@/mixins/wechat'
 
   @Component({
     name: 'dynamic-list',
     props: {
+      //置顶操作需要
+      communityId: {
+        type: String,
+        default: ''
+      },
       allTotal: {
         type: Number
+      },
+      touerImg: {
+        type: String,
+        default: ''
+      },
+      isTower: {
+        type: Boolean,
+        default: false
       },
       dynamicList: {
         type: Array,
         required: true
+      },
+      isPlayList: {
+        type: Boolean,
+        default: false
+      },
+      isTeacher: {
+        type: Boolean,
+        default: false
+      },
+      isTeacherCon: {
+        type: Boolean,
+        default: false
       },
       isFold: {
         type: Boolean,
@@ -108,10 +145,28 @@
       noBorder: {
         type: Boolean,
         default: false
+      },
+      communityId: {
+        type: String,
+        default: ''
+      },
+      isDetailCon: {
+        type: Boolean,
+        default: false
+      },
+      //是否显示置顶
+      isShowTop: {
+        type: Boolean,
+        default: false
+      },
+      //是否成员交流。1不是 0 是
+      isUserExchange: {
+        type: Number,
+        default: 1
       }
     },
     components: {
-      dynamicItem
+      dynamicItem,
     },
     watch: {
       allTotal (val) {
@@ -120,10 +175,19 @@
       dynamicList (dynamicList) {
         const {item, itemIndex} = this.currentPlay
         if (item.modelType && item.modelType !== dynamicList[itemIndex].modelType) {
-          console.log('暂停')
           this.music.pause()
         }
-      }
+      },
+      isPlayList () {},
+      isTeacherCon () {},
+      isTeacher () {},
+      communityId (val) {
+        this.communityId = val
+      },
+      isUserExchange(val){
+      },
+      isShowTop(){}
+
     },
     mixins: [WechatMixin]
   })
@@ -133,193 +197,35 @@
       itemIndex: -1,
       problemIndex: -1
     }
-    music = ''
     currentVideoIndex = -1
+    isMaster = false
 
     created () {
-      console.log(11111111111111)
-      console.log('allTotal', this.allTotal)
+      this.getMaster()
+      /*try {
+        this.model = getInformationApi().then(res=>{
+        })
+      } catch (error) {
+        this.$vux.toast.text(error.message, 'bottom')
+      }*/
     }
 
     mounted () {
-      const music = new Audio()
-
-      /**
-       * 音频加载中
-       */
-      music.onloadstart = () => {
-        this.audioStateSet('loading')
-      }
-      /**
-       * 可获取音频总时长
-       */
-      music.ondurationchange = () => {
-      }
-      /**
-       * 缓冲时触发
-       */
-      music.onprogress = () => {
-      }
-      /**
-       * 音频处于可播放状态
-       */
-      music.oncanplay = () => {
-        this.audioStateSet('playing')
-      }
-      /**
-       * 当媒介能够无需因缓冲而停止即可播放至结尾时运行脚本
-       */
-      music.oncanplaythrough = () => {
-        this.audioStateSet('playing')
-      }
-      /**
-       * 播放中
-       */
-      music.ontimeupdate = () => {
-        let progress = parseInt((music.currentTime / music.duration).toFixed(2) * 100)
-        this.audioProgressSet(progress)
-      }
-      /**
-       * 播放完成
-       */
-      music.onended = () => {
-        this.audioStateSet()
-        this.audioProgressSet()
-      }
-      /**
-       * 等待数据
-       */
-      music.onwaiting = () => {
-        this.audioStateSet('loading')
-      }
-      /**
-       * 错误
-       */
-      music.onerror = (e) => {
-      }
-      this.music = music
     }
 
     destroyed () {
-      this.music.pause()
-      this.music.src = ''
-      this.music = ''
     }
 
-    /**
-     * 设置当前播放状态
-     * @param state play | playing | loading
-     */
-    audioStateSet (state) {
-      const {itemIndex, problemIndex} = this.currentPlay
-      const item = this.dynamicList[itemIndex]
+    getMaster(){
+      let that = this
+      getRoleInfoApi({communityId: this.communityId}).then(res=>{
+        console.log('=====getRoleInfoApi',res)
+        if(res.role.title === '塔主'){
+          that.isMaster = true
+          console.log('=====isMaster',that.isMaster)
 
-      if (itemIndex < 0) {
-        return
-      }
-
-      let musicState = 0
-      switch (state) {
-        case 'playing':
-          musicState = 1
-          break
-        case 'loading':
-          musicState = 2
-          break
-        default:
-          musicState = 0
-          break
-      }
-
-      if (item.modelType && item.modelType === 'problem') {
-        this.dynamicList[itemIndex].answers[problemIndex].musicState = musicState
-      } else {
-        this.dynamicList[itemIndex].musicState = musicState
-      }
-    }
-
-    /**
-     * 播放进度设置
-     */
-    audioProgressSet (progress) {
-      progress = progress || 0
-      console.log(progress)
-      const {itemIndex, problemIndex} = this.currentPlay
-      const item = this.dynamicList[itemIndex]
-
-      if (itemIndex < 0) {
-        return
-      }
-
-      if (item.modelType && item.modelType === 'problem') {
-        this.dynamicList[itemIndex].answers[problemIndex].progress = progress
-      } else {
-        this.dynamicList[itemIndex].progress = progress
-      }
-    }
-
-    audioEvent (e) {
-      // 如果播放视频 关闭音频
-      if (this.currentVideoIndex > -1) {
-        this.dynamicList[this.currentVideoIndex].videoPlay = false
-        this.$refs['dynamic-item'][this.currentVideoIndex].videoStop()
-      }
-
-      const {eventType, itemIndex, problemIndex} = e
-      const temp = this.dynamicList[itemIndex]
-      let item = temp
-      if (temp.modelType === 'problem') {
-        item = temp.answers[problemIndex]
-      }
-      console.log(eventType, item)
-
-      // 是否听过
-      const {isPlayed, fileId} = item.file || item.files[0]
-      if (!isPlayed && fileId) {
-        playAudioApi({fileId}).then(res => {
-          if (temp.modelType === 'problem') {
-            this.dynamicList[itemIndex].answers[problemIndex].file.isPlayed = true
-          } else {
-            this.dynamicList[itemIndex].files[0].isPlayed = true
-          }
-        })
-      }
-
-      switch (eventType) {
-        case 'play':
-          const {itemIndex: lastItemIndex, problemIndex: lastProblemIndex} = this.currentPlay
-          if (lastItemIndex !== itemIndex) {
-            this.music['src'] = e.url
-            this.audioStateSet()
-            this.audioProgressSet()
-            this.music.play()
-          } else if (temp.modelType === 'problem' && lastProblemIndex !== problemIndex) {
-            this.music['src'] = e.url
-            this.audioStateSet()
-            this.audioProgressSet()
-            this.music.play()
-          } else {
-            console.log(this.music.paused)
-            if (this.music.paused) {
-              this.music.play()
-              this.audioStateSet('playing')
-            } else {
-              this.music.pause()
-              this.audioStateSet()
-            }
-          }
-          this.currentPlay = {
-            item,
-            itemIndex,
-            problemIndex
-          }
-          break
-        case 'pause':
-          this.music.pause()
-          this.audioStateSet()
-          break
-      }
-      this.$emit("saveAudio",{nowaudio:this.music,nowItem:this.dynamicList[itemIndex]});
+        }
+      })
     }
 
     videoEvent (e) {
@@ -347,6 +253,12 @@
       }
     }
 
+    
+
+    opMember(e){
+      console.log(e)
+      this.$emit('opMember', e)
+    }
     /**
      * 操作事件
      * @param e :{eventType, itemIndex} eventType: 事件名称 itemIndex: 触发对象下标
@@ -433,7 +345,6 @@
         })
         this.dynamicList[itemIndex].favors.splice(tempIndex, 1)
       }
-
     }
     /**
      * 删除
@@ -469,7 +380,7 @@
 </script>
 <style lang="less" scoped>
   .dynamic-list {
-
+    
     & .video-box {
       position: absolute;
     }

@@ -1,10 +1,44 @@
 @import "./../../styles/mixins";
 
 .dynamic-item {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   padding: 0 20px;
 	border-bottom: solid 1px #ededed;
+  box-sizing: border-box;
+	&:last-child{
+	    border-bottom: solid 1px transparent;
+	}
+  position: relative;
+  .user_op_cont {
+    position: absolute;
+    right: 15px;
+    top: 55px;
+    width: 134px;
+    background: #ffffff;
+    box-shadow:0px 8px 20px 0px rgba(0,0,0,0.14);
+    border-radius:6px;
+    ul {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      li {
+        height: 55px;
+        line-height: 55px;
+        text-align: center;
+        font-size: 16px;
+        font-family:PingFangSC-Light;
+        color:rgba(53,64,72,1);
+        border-bottom: 1px solid rgba(237,237,237,1)
+      }
+
+      li:last-of-type {
+          border-bottom: none;
+      }
+    }
+  }
   &.testNoBorder {
     border-bottom: none;
   }
@@ -32,6 +66,12 @@
     padding-bottom: 0px;
     //padding-bottom: 10px;
     
+
+    &.right_op_style {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
     &:nth-of-type(2){
         width: 250px;
         display: flex;
@@ -48,6 +88,7 @@
     &.border {
       // border-bottom: solid 1px #ededed; /* no */
     }
+
     //名字和头衔
     & .user-masage{
         display: flex;
@@ -99,7 +140,38 @@
           font-weight: 300;
           .setEllipsis();
         }
+
+        
     }
+
+    //置顶删除
+    .user_op {
+      width: 30px;
+      height: 30px;
+      margin-left: 8px;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    .icon_top_warp {
+      min-width: 20px;
+      height: 20px;
+      margin-left: 8px;
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      //置顶图标
+      .icon_top {
+        width: 20px;
+        height: 20px;
+        background:rgba(255,226,102,1);
+        border-radius: 10px;
+        
+      }
+    }
+    
     //名字和头衔
     
 
@@ -229,7 +301,7 @@
 
   /* 发表内容 */
   & .publish-content {
-      width: 335px;
+      width: 100%;
     // margin-top: 16px;
 		//调整内容位置 
     //margin-right: 20px;
@@ -237,6 +309,7 @@
 
     & .content-text {
       //font-family: PingFangSC-Light;
+      width: 100%;
       font-weight: 300;
       font-size: 16px;
 			//文本超出省略 
@@ -446,15 +519,11 @@
         border-radius: 50%;
         margin-right: 10px;
       }
-
-      & .content-audio {
-        width: 210px;
-        height: 40px;
-      }
     }
 
     &.problem {
       .content-audio {
+        width: 240px;
         margin-top: 0;
       }
     }
@@ -472,7 +541,6 @@
     }
   }
   & .icon-loading, & .icon-play, & .icon-playing {
-    display: none;
     width: 13px;
     height: 13px;
   }

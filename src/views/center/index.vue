@@ -1,5 +1,6 @@
 <template>
   <div class="p-body p-center-index">
+    <app-guide class="guide" :isToGuide="true"></app-guide>
     <div class="header">
       <div class="left">
         <p class="username">{{model.realName}}</p>
@@ -18,6 +19,15 @@
     </div>
 
     <div class="navs">
+      <router-link to="/joined" class="item">
+        <div class="left">
+          <i class="icon u-icon-center-light" />
+          <span class="title">我加入的灯塔</span>
+        </div>
+        <div class="addon">
+          <i class="addon-icon u-icon-center-angle-right" />
+        </div>
+      </router-link>
       <router-link :to="model.isCommunity === 1 ? '/center/liteCenter' : '/center/createLite'" class="item">
         <div class="left">
           <i class="icon u-icon-center-create" />
@@ -36,6 +46,19 @@
           <i class="addon-icon u-icon-center-angle-right" />
         </div>
       </router-link>
+      <!--优惠券-->
+      <router-link to="/center/coupon" class="item">
+        <div class="left">
+          <i class="icon u-icon-center-coupon" />
+          <span class="title">优惠券</span>
+        </div>
+        <div class="addon">
+          <i class="addon-icon u-icon-center-angle-right" />
+          <span class="soonPsat" v-if="model.hasSoonPastCoupon">有即将过期的优惠券</span>
+          <span class="redTip" :class="{'redTipMove':model.hasSoonPastCoupon}"  v-if="model.hasCouponRedDot"></span>
+        </div>
+      </router-link>
+      <!--我的主页-->
       <router-link :to="`/userInfo/${model.userId}/details`" class="item">
         <div class="left">
           <i class="icon u-icon-center-home" />
@@ -45,35 +68,30 @@
           <i class="addon-icon u-icon-center-angle-right" />
         </div>
       </router-link>
-      <router-link :to="`/center/help`" class="item">
-        <div class="left">
-          <i class="icon u-icon-center-help" />
-          <span class="title">使用帮助</span>
-        </div>
-        <div class="addon">
-          <i class="addon-icon u-icon-center-angle-right" />
-        </div>
-      </router-link>
-      <router-link :to="`/center/protocol`" class="item">
-        <div class="left">
-          <i class="icon u-icon-center-protocol" />
-          <span class="title">用户协议</span>
-        </div>
-        <div class="addon">
-          <i class="addon-icon u-icon-center-angle-right" />
-        </div>
-      </router-link>
+
+      <div class="navs_blo">
+        <router-link :to="`/center/help`" class="blo_item">
+            <span class="title">使用帮助</span>
+        </router-link>
+        <router-link :to="`/center/protocol`" class="blo_item">
+            <span class="title">用户协议</span>
+        </router-link>
+      </div>
     </div>
+
   </div>
 </template>
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
+import appGuide from '@/components/appGuide/appGuide'
 import { getInformationApi } from '@/api/pages/center'
 
 @Component({
-  name: 'center-index'
+  name: 'center-index',
+  components: {
+    appGuide
+  }
 })
 export default class HomeIndex extends Vue {
   model = {
@@ -81,6 +99,7 @@ export default class HomeIndex extends Vue {
   isCreated = false // 是否已经成为塔主
 
   created () {
+    
     this.getModel()
   }
 
@@ -99,7 +118,7 @@ export default class HomeIndex extends Vue {
 //    this.$router.push({name: 'center-create'})
     this.$vux.alert.show({
       title: '创建灯塔请联系',
-      content: '小灯塔客服：020-28163063或添加客服微信：zike02',
+      content: '小灯塔客服：020-28163063或添加客服微信：zike03',
       buttonText: '好的'
     })
   }
@@ -110,10 +129,48 @@ export default class HomeIndex extends Vue {
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
+
+.u-icon-center-light {
+  background-image: url("../../assets/icon/icon_list_aboutlh@3x.png");
+  width: 20px;
+  height: 20px;
+}
+.navs_blo {
+  height:20px;
+  text-align: center;
+  margin: 25px 0 0px 0;
+  display: flex;
+  justify-content: center;
+  .blo_item {
+    font-family: PingFangSC-Light;
+    font-weight: 300;
+    color: rgba(188,188,188,1);
+    line-height:20px;
+    font-size:13px;
+    position: relative;
+    &:first-of-type {
+      margin-right: 40px;
+
+      &::before {
+        content: '';
+        width: 1px;
+        height: 18px;
+        border-radius: 22px;
+        background: rgba(220,220,220,1);
+        position: absolute;
+        right: -20px;
+        top: 1px;
+      }
+    } 
+  }
+}
+.p-body{
+	padding-bottom: 53px;
+}
+
 .p-center-index {
   .header {
       .setFlex();
-      margin-bottom: 20px;
       padding: 30px;
       line-height: 23px;
       font-size: 13px;
@@ -132,6 +189,7 @@ export default class HomeIndex extends Vue {
           display: block;
           margin-bottom: 9px;
           color: #929292;
+          .setEllipsisLn(1);
         }
 
         .edit-btn {
@@ -156,7 +214,7 @@ export default class HomeIndex extends Vue {
     }
 
     .navs {
-
+      padding-bottom: 30px;
       .item {
         .setFlex();
         padding: 20px 30px;
@@ -188,6 +246,7 @@ export default class HomeIndex extends Vue {
         }
 
         .addon {
+        	position: relative;
           flex: 0 0 auto;
 
           .addon-icon {
@@ -195,6 +254,30 @@ export default class HomeIndex extends Vue {
             top: auto;
             vertical-align: middle;
           }
+          /*即将过期*/
+          .soonPsat{
+          	position: absolute;
+          	top: 50%;
+          	right: 19px;
+          	transform: translateY(-50%);
+          	white-space: nowrap;
+						font-size:13px;
+						color:rgba(188,188,188,1);
+         	}
+         	/*红点*/
+         	.redTip{
+         		position: absolute;
+         		top: 50%;
+         		right: 21px;
+         		transform: translateY(-50%);
+         		width: 6px;
+         		height: 6px;
+         		border-radius: 50%;
+         		background-color: #FF3434;
+         	}
+         	.redTipMove{
+         		right: 144px;
+         	}
         }
       }
     }

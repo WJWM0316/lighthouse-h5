@@ -22,6 +22,7 @@
                  :isFold="false"
                  :showIdentification = "true"
                  :disableOperationArr="disableOperationArr"
+                 :isDetailCon='true'
                  @disableOperationEvents="disableOperationEvents"
         ></explore>
       </div>

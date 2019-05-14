@@ -4,16 +4,24 @@
     <scroll @refresh="handleRefresh" @pullup="handlePullup">  
         <div class="header">
           <dynamic :dynamicList="dynamicList"
+                   :communityId="communityId"
                    :hideBorder="true"
                    :hideCommentArea="true"
                    :isFold = "false"
                    :disableContentClick="true"
                    :showIdentification="true"
                    :noBorder ="true"
+                   :isPlayList = 'isPlayList'
+                   :isTeacherCon = 'isPlayList'
                    :allTotal = "allTotal"
+                   :isDetailCon = 'true'
+                   :isTower='true'
+                   :isUserExchange="isShowOp"
+                   :isShowTop = 'isShowTop'
                    :disableOperationArr="disableOperationArr"
                    @disableOperationEvents="operation" 
                    @getUserId="getUserId"
+                   @opMember="opMember"
           ></dynamic>
         </div>
     
@@ -89,10 +97,14 @@
                       @send="sendComment"
                       ref="input"
     ></suspension-input>
+
+    <!-- 交流社区帖子置顶删除 -->
+    <actionsheet v-model="userOpActionsheet.show" :menus="userOpActionsheet.menus" show-cancel @on-click-menu="handleUserOpActionsheetItem" />
   </div>
 </template>
 <script>
   import Vue from 'vue'
+  import { Actionsheet } from 'vux'
   import Component from 'vue-class-component'
   import dynamic from '@/components/dynamic/dynamic'
   import discussItem from '@/components/discussItem/discussItem'
@@ -100,7 +112,7 @@
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
-  import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi } from '@/api/pages/pageInfo.js'
+  import { getCircleDetailApi, getPostDetailApi, getProblemDetailApi, getCommentListApi, setFavorApi, setSubmitCommentApi, delCommontApi, getFavorListApi,delTopApi, addTopApi,deltePostApi, } from '@/api/pages/pageInfo.js'
 
   @Component({
     name: 'all-details',
@@ -109,6 +121,7 @@
       discussItem,
       classmateItem,
       Scroll,
+      Actionsheet,
       suspensionInput
     },
     computed: {
@@ -117,6 +130,7 @@
       }
     },
     watch: {
+      isPlayList () {},
       discussItemList () {
       },
       displaySuspensionInput (val) {
@@ -125,6 +139,7 @@
     },
     mixins: [ListMixin]
   })
+
   export default class introduce extends Vue {
     dynamicList = []
     commentTotal = 0
@@ -143,10 +158,32 @@
     modelType = '' // 评论类型
     classmateList = [] // 点赞列表
     isFavorList = false
+    isPlayList = true
+    communityId = ''
 
+    isShowTop = false
+    isShowOp = 1
+    userOpActionsheet = {
+      show: false,
+      menus: [{
+        label: '删除',
+        value: '3'
+      }]
+    }
     created () {
       this.modelType = this.$route.params.type
-      this.pageInit().then(() => {})
+      if (this.modelType == 1) {
+        this.isPlayList = true
+      } else {
+        this.isPlayList = false
+      }
+      this.communityId = this.$route.query.communityId
+      if(this.$route.query.isShowOp){
+        this.isShowOp = 0
+      }
+
+      console.log(this.$route.params)
+      this.pageInit()
     }
     // ------------------- 详情评论区 ----------------------
     operationDetail () {
@@ -167,7 +204,7 @@
           this.del({item, itemIndex, commentType}).then()
           break
         case 'comment-area':
-          this.jumpCommentDetail({item, commentType}).then()
+          this.jumpCommentDetail({item, commentType})
       }
     }
 
@@ -254,12 +291,9 @@
           isFavor: favor     // 是否喜欢：0取消喜欢，1喜欢
         }
       }
-      console.log('favor', favor)
       const res = await setFavorApi(params)
       this.discussItemList[itemIndex].isFavor = favor
       this.discussItemList[itemIndex].favorTotal += favor ? 1 : -1
-      console.log(this.discussItemList[itemIndex])
-      
       if (favor) {
         this.discussItemList[itemIndex].favors = this.discussItemList[itemIndex].favors || []
         this.discussItemList[itemIndex].favors.splice(0, 0, res)
@@ -383,14 +417,13 @@
         this.curData = {}
       })
     } 
-      
-
-
 
     async pageInit () {
       const { sourceId, type } = this.$route.params
       this.pagination.end = false // 初始化数据，必定不是最后一页
       let res = ''
+
+      console.log('type',type)
       if (type === '1') {
         res = await this.getCircleDetailApi(sourceId)
       } else if (type === '2') {
@@ -412,6 +445,12 @@
       }
       this.dynamicList = [res]
       await this.getList({page: 1})
+
+      //是否置顶
+      if (res &&res.topPostStatus && res.topPostStatus === 1){
+        this.isShowTop = true
+      }
+
     }
 
     // ------------------------------------------------
@@ -525,6 +564,82 @@
      */
     handlePullup (loaded) {
       this.loadNext().then(() => { loaded('done') })
+    }
+
+
+    //====== 交流社区置顶删除等操作========================
+    /**
+     * 点击置顶选项item
+     * @param {*} key
+     * @param {*} item
+     */
+    handleUserOpActionsheetItem (key, item) {
+      switch (key) {
+        case '1':
+          this.topOp()
+          break
+        case '2':
+          this.topOp()
+          break
+        case '3':
+          this.delMsg()
+          break
+        default:
+          break
+      }
+    }
+    /**
+     * 帖子置顶 or op
+     */
+    topOp(){
+      console.log(this.item)
+      let data = {
+        communityId: this.communityId,
+        postId: this.item.circleId
+      }
+      let that = this
+      let nowItem = this.item
+      let topPostStatus = nowItem.topPostStatus
+
+      if(topPostStatus == 0){
+        addTopApi(data).then(res=>{
+          this.isShowTop = true
+          this.$router.go(0)
+        },res=>{
+          this.$vux.toast.text('失败', res.message)
+        })
+      }else {
+        delTopApi(data).then(res=>{
+          this.isShowTop = false
+          this.$router.go(0)
+        },res=>{
+          this.$vux.toast.text('失败', res.message)
+        })
+      }
+    }
+
+    delMsg(){
+      
+      if(this.item.modelType === 'post'){
+        let that = this
+        let data = {
+          id: this.item.circleId,
+          modelType : 'post'
+        }
+        deltePostApi(data).then(res=>{
+          that.$router.go(-1)
+          console.log(res)
+        },res=>{
+          that.$vux.toast.text('删除失败', res.message )
+        })
+      }
+      //。删除帖子todo
+    }
+
+    opMember(e){
+      console.log('=-=-=',e)
+      this.userOpActionsheet.show = true
+      this.userOpActionsheet.menus = e.menus
     }
   }
 </script>
@@ -672,3 +787,5 @@
     }
   }
 </style>
+
+

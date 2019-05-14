@@ -9,17 +9,14 @@
       </span>
       <div v-if='type!==1' class="master">
         <p class="name" :class="{ round: type === 1 }">
-          <!--<span class="text" v-text="community.master && community.master.realName"></span>-->
           <span class="text" v-text="community.master && community.masterIntro"></span>
         </p>
-        <!--<span v-if="community.master && community.master.career">/</span>
-        <p class="career" v-text="community.master && community.master.career"></p>-->
       </div>
       <slot name="cover-addon"></slot>
     </div>
     <!--灯塔头部-->
 
-    <div v-if="isEntentr" class="info" :class="{ 'type-2': type === 2 }">
+    <div v-if="isEntentr && isCommunty" class="info" :class="{ 'type-2': type === 2 }" >
       <h3 class="title" v-text="community.title"></h3>
       <p class="desc" v-text="community.simpleIntro"></p>
       <div class="bottom">
@@ -57,6 +54,11 @@ import Component from 'vue-class-component'
 @Component({
   name: 'community-card',
   props: {
+    // 类型：1为列表页卡片，2为详情页卡片
+    isCommunty: {
+      type: Boolean,
+      default: false
+    },
     // 大咖信息
     community: {
       type: Object,
@@ -101,9 +103,9 @@ import Component from 'vue-class-component'
 })
 export default class CommunityCard extends Vue {
 	created(){
-    //console.log("我是触发的community",this.isEntentr);
+    console.log("我是触发的community",this.isEntentr);
 	}
-  // 卡片类名集合
+  // 卡片类名集合 
   cardClasses = {
     [`type-${this.type}`]: true,
     'z-joined': this.community.isAuthor === 1 || this.community.isJoined === 1,
@@ -177,7 +179,7 @@ export default class CommunityCard extends Vue {
 
   /* ---- 父组件调用函数 ---- */
   /**
-   * 停止计数器
+   * 停止计数器 
    */
   stopCountdown () {
     if (this.countdown) {
@@ -191,7 +193,7 @@ export default class CommunityCard extends Vue {
 <style lang="less" type="text/less" scoped="scoped">
 @import "../../styles/variables";
 @import "../../styles/mixins";
-
+@import "../../styles/dprPx";
 .m-community {
   display: block;
 
@@ -208,16 +210,14 @@ export default class CommunityCard extends Vue {
 
       .master {
         border-radius: 0 0 3px 3px;
-        
         .name {
           .text {
             .setEllipsis();
           }
         }
-
         .career {
           .setEllipsis();
-          font-size: 11px;
+          .fontSize(11);
         }
       }
     }
@@ -261,7 +261,6 @@ export default class CommunityCard extends Vue {
 					}
 			}
 			/*新增*/
-
       .master {
         padding-bottom: 10px;
         overflow: hidden;
@@ -269,20 +268,15 @@ export default class CommunityCard extends Vue {
         white-space: nowrap;
       }
     }
-
     .info {
       padding: 0 20px;
     }
   }
 
   &.z-unread {
-
     .cover-container {
-
       .master {
-
         .name {
-
           &::after {
             content: " ";
           }
@@ -304,7 +298,6 @@ export default class CommunityCard extends Vue {
     .master {
     	display: flex;
     	justify-content: center;
-    	/*flex-wrap: nowrap;*/
     	align-items: center;
 	    width: 90%;
       margin: 0 auto;
@@ -313,16 +306,6 @@ export default class CommunityCard extends Vue {
       padding-top: 32px;
       color: #666666;
       line-height: 16px;
-      /*position: absolute;
-      top: 130px;
-      left: 50%;*/
-      /*right: 0;*/
-      /*bottom: 0;*/
-     	/*transform: translateX(-50%);*/
-      /*background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .2));*/
-      /*width: 100%;*/
-      
-
       .name {
       	white-space: nowrap;
         display: inline-block;
@@ -332,15 +315,11 @@ export default class CommunityCard extends Vue {
         font-size: 0;
         font-weight: normal;
         max-width: 100%;
-        
         padding-right:2px;
-
         .text {
-          display: inline-block;
-          
-          /*font-size: 27px;*/
-         line-height: 16px;
-         font-size: 12px;
+          display: inline-block; 
+          line-height: 16px;
+          .fontSize(12);
         }
 
         &.round {
@@ -352,7 +331,7 @@ export default class CommunityCard extends Vue {
 
           .text {
             line-height: 22px;
-            font-size: 13px;
+            .fontSize(13);
           }
         }
 
@@ -376,7 +355,7 @@ export default class CommunityCard extends Vue {
       	white-space: nowrap;
         /*margin-bottom: -7px;*/
         line-height: 16px;
-        font-size: 12px;
+        .fontSize(12);
       }
     }
   }
@@ -388,7 +367,7 @@ export default class CommunityCard extends Vue {
   		position: relative;
   		display: inline-block;
   		color: #354048;
-  		font-size: 18px;
+  		.fontSize(18);
   		line-height: 22px;
   		text-align: center;
   		padding: 0 12%;
@@ -403,7 +382,7 @@ export default class CommunityCard extends Vue {
       display: block;
       line-height: 22px;
       font-weight: 600;
-      font-size: 18px;
+      .fontSize(18);
       color: @font-color-default;
     }
 
@@ -414,13 +393,13 @@ export default class CommunityCard extends Vue {
       margin-top: 6px;
       margin-bottom: 23px;
       line-height: 18px;
-      font-size: 14px;
+      .fontSize(14);
       color: #666666;
     }
 
     .bottom {
       display: flex;
-      font-size: 14px;
+      .fontSize(14);
       line-height: 18px;
       color: #929292;
       //font-family: PingFangSC-Light;

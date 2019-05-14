@@ -13,13 +13,14 @@
     @scroll="handleScroll"
     @infinite-scroll="handleInfiniteScroll">
     <template slot="top-block" slot-scope="props">
+      <div></div>
       <div class="top-block">
         <p v-text="props.stateText"></p>
       </div>
     </template>
 
     <slot></slot>
-    <bottom-loading :status="loadingStatus" v-if="showBottomLoading && infiniteScroll" />
+    <bottom-loading :status="loadingStatus" v-if="showBottomLoading || infiniteScroll" />
 
     <template slot="bottom-block" slot-scope="props">
       <div class="bottom-block">
@@ -56,7 +57,7 @@ import PullTo from 'vue-pull-to'
     // 是否开启无限加载
     infiniteScroll: {
       type: Boolean,
-      default: false
+      default: true
     },
 
     // 开启无限加载的时候是否显示底部loading
@@ -69,6 +70,12 @@ import PullTo from 'vue-pull-to'
     isNoneData: {
       type: Boolean,
       default: false
+    },
+
+    //是否显示地步数据加载提示
+    isShowBottom: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -116,9 +123,9 @@ export default class Scroller extends Vue {
         // case 'loading':
         //   this.loadingStatus = 'loading'
         //   break
-        // case 'ended':
-        //   this.loadingStatus = 'ended'
-        //   break
+//       case 'ended':
+//         this.loadingStatus = 'ended'
+//         break
         default:
           this.loadingStatus = status
       }

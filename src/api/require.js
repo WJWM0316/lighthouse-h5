@@ -63,6 +63,7 @@ async function process(response) {
   // console.log('请求接口路径', url)
   // console.log('接口请求参数', datas)
   // console.log('接口返回数据', data)
+  
   if (typeof data === 'string') { // 转换返回json
     data = JSON.parse(data)
   }
@@ -75,13 +76,19 @@ async function process(response) {
   }
   if (data && data.statusCode === 255) { // 登录时openId cookie失效
     store.dispatch('remove_userinfo')
-    // hideLoading(globalLoading)
-    const hashParams = location.hash.substring(1)
-    const hostname = location.href.split('?')[0]
-    location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}`
+    let hashParams = `${location.hash.substring(1)}`
+    let hostname = location.href.split('?')[0]
+    try {
+      hashParams = encodeURIComponent(hashParams)
+      location.href = `${settings.serverUrl}/wap/wechat/callback?zike_from=${hostname}&key=${hashParams}` 
+    }
+    catch (err) {
+      alert(err, '微信登陆失败')
+    }
     return data.data === undefined ? {} : data.data
   }
   if (data && data.statusCode === 426) { // 没有登录权限,跳去手机号登录
+    //alert("你没有绑定手机。。。。")
     store.dispatch('remove_userinfo')
     // hideLoading(globalLoading)
     router.replace({
@@ -92,17 +99,10 @@ async function process(response) {
   if (data && data.statusCode === 433) { // 支付接口没有登录权限,跳去手机号登录
     store.dispatch('remove_userinfo')
     // hideLoading(globalLoading)
-    if (location.href.endsWith('reload=true') || location.href.indexOf('saleId=') > -1) {
-      router.replace({
-        name: 'login',
-        query: {redirect: encodeURI(location.href + '&autoPay=true')}
-      })
-    } else {
-      router.replace({
-        name: 'login',
-        query: {redirect: encodeURI(location.href + '?autoPay=true')}
-      })
-    }
+    router.replace({
+      name: 'login',
+      query: {redirect: encodeURI(location.href)}
+    })
   }
   if (data && data.statusCode === 430) {
     router.replace({
@@ -114,6 +114,8 @@ async function process(response) {
     // hideLoading(globalLoading)
     const hashParams = location.hash.substring(1)
     const hostname = location.href.split('?')[0]
+    
+    encodeURIComponent(hashParams)
     // location.href = encodeURI(`${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`)
     let {redirectUrl} = await request({
       url: '/wap/wechat/snsapiUserinfo',
@@ -128,13 +130,15 @@ async function process(response) {
   if (data && data.statusCode === 432) { // 需要授权
     // hideLoading(globalLoading)
     var hashParams = location.hash.substring(1)
-    console.log('xxxx', hashParams, hashParams.endsWith('reload=true'))
-    if (hashParams.endsWith('reload=true')) {
-      hashParams = hashParams + '&autoPay=true'
-    } else {
-      hashParams = hashParams + '?autoPay=true'
-    }
+    // console.log('xxxx', hashParams, hashParams.endsWith('reload=true'))
+    // if (hashParams.endsWith('reload=true')) {
+    //   hashParams = hashParams + '&autoPay=true'
+    // } else {
+    //   hashParams = hashParams + '?autoPay=true'
+    // }
     const hostname = location.href.split('?')[0]
+
+    encodeURIComponent(hashParams)
     // location.href = encodeURI(`${settings.serverUrl}/wap/wechat/snsapiUserinfo?zike_from=${hostname}&key=${hashParams}`)
     let {redirectUrl} = await request({
       url: '/wap/wechat/snsapiUserinfo',
@@ -167,7 +171,6 @@ async function process(response) {
     }
     return {}
   }
-
   // hideLoading(globalLoading)
   return Promise.reject(data)
 }
@@ -177,13 +180,14 @@ export const request = ({type = 'post', url, data = {}, config = {}} = {}) => {
   // let datas = type === 'get' ? {params: data} :data
   // let globalLoading = true
   if (data.globalLoading !== undefined) {
-    globalLoading = data.globalLoading
-    delete data.globalLoading
+    delete data.globalL
+    globalLoading = data.globalLoadingoading
   }
-
-  // data.TestUid = 3
-
-
+  
+  // 开发环境才要绑定测试账号
+  if (window.location.host !== 'demo2016.thetiger.com.cn' && window.location.host !== 'www.ziwork.com') {
+    data.TestUid = 4
+  }
   // showLoading(globalLoading)
   let datas = type === 'get' ? {params: {...data}} : {...data}
   return Vue.axios[type](url, datas, config)

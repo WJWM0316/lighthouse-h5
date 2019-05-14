@@ -1,7 +1,9 @@
 
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import audioBox from '@/components/media/music'
 import moment from 'moment'
+import { delTopApi, addTopApi   } from '@/api/pages/pageInfo'
 
 @Component({
   name: 'dynamic-item',
@@ -9,6 +11,10 @@ import moment from 'moment'
     item: {
       type: Object,
       required: true
+    },
+    isTower: {
+      type: Boolean,
+      default: false
     },
     isFold: {
       type: Boolean,
@@ -75,8 +81,45 @@ import moment from 'moment'
     noBorder: {
       type: Boolean,
       default: false
+    },
+    communityId: {
+      type: String,
+      default: ''
+    },
+    isPlayList: {
+      type: Boolean,
+      default: false
+    },
+    isTeacher: {
+      type: Boolean,
+      default: false
+    },
+    isTeacherCon: {
+      type: Boolean,
+      default: false
+    },
+    isDetailCon: {
+      type: Boolean,
+      default: false
+    },
+    //是否成员交流。1不是 0 是
+    isUserExchange: {
+      type: Number,
+      default: 1
+    },
+    //是否塔主
+    isMaster: {
+      type: Boolean,
+      default: false
+    },
+    //是否显示置顶
+    isShowTop: {
+      type: Boolean,
+      default: false
     }
-    
+  },
+  components: {
+    audioBox
   },
   computed: {
     picList () {
@@ -186,23 +229,45 @@ import moment from 'moment'
       }
       return timeStr
     }
+  },
+  watch: {
+    isPlayList () {},
+    isTeacherCon () {},
+    isTeacher () {},
+    isUserExchange(val){
+    },
+    isMaster(val){
+      this.isMaster = val
+    },
+    isShowTop(val){}
   }
 })
 export default class dynamicItem extends Vue {
   video = ''
   role = this.item.releaseUser.role || {}
+  type = 0
   created () {
-  	console.log(this.item,"******************************")
+    const {modelType, circleId, problemId, isCanSee, circleType} = this.item
+    switch (modelType) {
+      case 'circle':
+        this.type = 1
+        break
+      case 'post':
+        this.type = 2
+        break
+      case 'problem':
+        this.type = 3
+        break
+    }
   }
   
   beforeMount(){
-//	console.log(this.item,"******************************")
   }
 
   mounted () {
     this.video = this.$refs['video']
-//  console.log(this.item,"=================================+++")
   }
+
   
   
   isFullText (ref) {
@@ -210,17 +275,13 @@ export default class dynamicItem extends Vue {
       const el = this.$refs[ref]
       if (el && el.firstChild) {
         const contentText = el.firstChild
-
         if (contentText.scrollHeight > contentText.offsetHeight) {
-          console.log(el.firstChild)
-          console.log(contentText.scrollHeight, contentText.offsetHeight)
           const fullText = document.createElement('span')
           fullText.className = 'full-text open'
           fullText.innerText = '展开全文'
           fullText.onclick = (e) => {
             e.preventDefault()
             e.stopPropagation()
-
             if (fullText.innerText === '展开全文') {
               contentText.classList.remove('ellipsis')
               fullText.innerText = '收起全文'
@@ -233,10 +294,13 @@ export default class dynamicItem extends Vue {
           }
           el.lastChild.innerHTML = ''
           el.lastChild.appendChild(fullText)
+        } else {
+          // 删除倒叙后不符合条件的展开全文标识
+          if (el.lastChild.firstChild) {
+            el.lastChild.removeChild(el.lastChild.firstChild)
+          }
         }
       }
-
-      
     })
   }
 
@@ -260,25 +324,7 @@ export default class dynamicItem extends Vue {
       itemIndex
     })
   }
-  /**
-   * 播放对应音频
-   */
-  audioPlay (problemIndex) {
-    let url = ''
-    const itemIndex = this.itemIndex
-    if (problemIndex >= 0) {
-      url = this.item.answers[problemIndex].file.fileUrl
-    } else {
-      url = this.item.files[0].fileUrl
-    }
 
-    this.$emit('audioEvent', {
-      eventType: 'play',
-      url,
-      itemIndex,
-      problemIndex
-    })
-  }
   /**
    * 点击预览图片
    */
@@ -303,6 +349,7 @@ export default class dynamicItem extends Vue {
       url
     })
   }
+
   videoClick () {
     const itemIndex = this.itemIndex
     this.$emit('videoEvent', {
@@ -310,6 +357,7 @@ export default class dynamicItem extends Vue {
       itemIndex
     })
   }
+
   videoPlay () {
     this.video.currentTime = 0
     this.video.src = this.item.files[0].fileUrl
@@ -319,6 +367,38 @@ export default class dynamicItem extends Vue {
   videoStop () {
     this.video.pause()
     this.video.src = ''
+  }
+
+  op_member(res){
+    let menus = []
+    let itemIndex = this.itemIndex
+    let item = this.item
+    if(this.isMaster){
+      if(this.item.topPostStatus == 0){
+        menus.push({
+          label: '置顶',
+          value: '1'
+        })
+      }else {
+        menus.push({
+          label: '取消置顶',
+          value: '2'
+        })
+      }
+      menus.push({
+        label: '删除',
+        value: '3'
+      })
+
+    }
+
+    if(menus.length>0){
+      item.itemIndex = itemIndex
+      this.$emit('opMember', {
+        item: item,
+        menus,
+      })
+    }
   }
 
   /**
@@ -337,37 +417,35 @@ export default class dynamicItem extends Vue {
     if (this.disableUserClick) {
       return
     }
-    console.log('去个人详情: ', userId)
     this.$router.push(`/userInfo/${userId}/details`)
   }
+
   toDetails () { // 去朋友圈、帖子、问题详情
     if (this.disableContentClick) {
       return
     }
     const item = this.item
     const {modelType, circleId, problemId, isCanSee} = item
+
     if (isCanSee === 0) {
       this.$vux.toast.text('您未加入该灯塔，不能查看。', 'bottom')
       return
     }
-    let type = 0
-    switch (modelType) {
-      case 'circle':
-        type = 1
-        break
-      case 'post':
-        type = 2
-        break
-      case 'problem':
-        type = 3
-        break
-    }
-    if (type) {
+
+    if (this.type) {
       // 跳转详情页 sourceId type
       const sourceId = circleId || problemId
-      console.log('跳转详情页: ', sourceId, type)
+      const communityId = this.communityId
       // this.$router.push({name: 'all-details', params: {sourceId, type}})
-      this.$router.push(`/details/${sourceId}/${type}`)
+
+      //成员交流详情需要显示操作栏
+      let url = ''
+      if(this.isUserExchange===0){
+        url = `/details/${sourceId}/${this.type}?communityId=${communityId}&isShowOp=${1}`
+      }else {
+        url = `/details/${sourceId}/${this.type}?communityId=${communityId}`
+      }
+      this.$router.push(url)
     }
   }
 

@@ -117,6 +117,8 @@
       height: 32px;
       line-height: 32px;
       padding: 0px;
+      position: absolute;
+      right: 15px;
     }
     .btn-common {
       font-size: 15px;
@@ -124,6 +126,8 @@
       line-height: 32px;
       border-radius: 16px;
       background: #ffe266;
+      position: absolute;
+      right: 15px;
     }
     .not-btn {
       font-size: 15px;

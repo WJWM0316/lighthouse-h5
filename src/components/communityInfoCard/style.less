@@ -1,5 +1,5 @@
 @import "../../styles/mixins";
-
+@import "../../styles/dprPx";
 .community-info-card {
   padding: 0 15px 15px;
   border-bottom: solid 1px #ededed; /* no */
@@ -8,7 +8,7 @@
     display: flex;
     color: #666666;
     font-weight: 300;
-    font-size: 13px;
+    .fontSize(13);
     justify-content: space-between;
 
     .left {
@@ -20,28 +20,26 @@
       flex: 1;
 
       & .community-title {
-        font-size: 16px;
+        .fontSize(15);
         font-weight: 700;
         color: #354048;
-        margin-top: 1px;
-        line-height: 20px;
-        //font-family: PingFangSC-Medium;
+        margin-top: 2px;
+        line-height: 19px;
         letter-spacing: 0;
         .setEllipsisLn(1)
       }
 
       & .community-desc {
-        //font-family: 'PingFangSC-Light';
         font-weight: 300;
-        line-height: 18px;
-        font-size: 14px;
+        line-height: 17px;
+        .fontSize(13);
         letter-spacing: 0;
-        margin-top: 2px;
+        margin-top: 3px;
         .setEllipsisLn(1);
       }
 
       & .left-desc {
-        margin-bottom: 1px;
+        margin-bottom: 2px;
       }
 
       & .community-status-box {
@@ -59,11 +57,10 @@
         width: 100%;
         & span {
           flex: 1;
-          //font-family: 'PingFangSC-Regular';
         }
         .price {
           color: #d7ab70;
-          font-size: 14px;
+          .fontSize(13);
           line-height: 18px;
           font-weight: 300;
           flex: none;
@@ -71,7 +68,7 @@
         .job {
           flex-basis: 150px;
           color: #929292;
-          font-size: 12px;
+          .fontSize(12);
           line-height: 16px;
           padding-left: 30px;
           text-align: right;
@@ -82,12 +79,12 @@
         }
         .status {
           color: #d7ab70;
-          font-size: 14px;
+          .fontSize(14);
           line-height: 18px;
         }
         .end {
           color: #bcbcbc;
-          font-size: 14px;
+          .fontSize(14);
           line-height: 18px;
         }
       }
@@ -128,7 +125,7 @@
   .additional {
     margin-top: 15px;
     font-weight: 300;
-    font-size: 13px;
+    .fontSize(13);
     color: #929292;
   }
 }

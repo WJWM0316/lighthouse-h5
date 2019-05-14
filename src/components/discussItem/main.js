@@ -2,13 +2,15 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import moment from 'moment'
+import { courseCardFavorApi, delCourseCardCommentApi } from '@/api/pages/pageInfo'
 
 @Component({
   name: 'discuss-item',
   props: {
     item: {
       type: Object,
-      required: true
+      required: true,
+      
     },
     commentType: {
       type: String,
@@ -72,7 +74,6 @@ import moment from 'moment'
   watch: {
     item (val) {
       this.role = val.reviewer.role || {}
-      console.log(1111, this.role)
     }
   },
   computed: {
@@ -131,7 +132,13 @@ import moment from 'moment'
 })
 export default class discussItem extends Vue {
   role = {}
+  favorList = "" //点赞列表数据
   created () {
+  	if(this.$route.path !== "/PunchDetails"){
+	  		this.favorList = this.item.favors
+	  	}else{
+	  		this.favorList = this.item.favorList
+	  	}
   }
 
   /**
@@ -139,49 +146,139 @@ export default class discussItem extends Vue {
    */
   comment () {
     const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'comment',
-      itemIndex,
-      item: this.item,
-      commentType: this.commentType
-    })
+    if(this.$route.path === "/PunchDetails"){
+    	this.$emit('operation', {
+	      eventType: 'comment',
+	      param:{
+	      	itemIndex,
+		      item: this.item,
+		      type: 2
+	      }
+	    })
+    }else{
+    	this.$emit('operation', {
+	      eventType: 'comment',
+	      itemIndex,
+	      item: this.item,
+	      commentType: this.commentType
+	    })
+    }
   }
   /**
    * 点赞
    */
   praise () {
     const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'praise',
-      itemIndex,
-      item: this.item,
-      commentType: this.commentType
-    })
+    if(this.$route.path === "/PunchDetails"){
+    	let nowFavor;
+	    if(this.item.isFavor === 1){
+	    	this.item.isFavor = 0
+	    	nowFavor = 0
+	    }else{
+	    	this.item.isFavor = 1
+	    	nowFavor = 1
+	    }
+	    let param= {
+	  		isFavor:nowFavor,
+	  		type:2,
+	  		sourceId:this.item.commentId //打卡信息id
+	  	}
+	    //发送点赞请求
+	    courseCardFavorApi(param).then(res=>{
+	    	if(nowFavor === 1){
+	    		this.item.favorTotal+=1;
+	    		this.item.favorList.push(this.item.currentUser)
+	    		this.favorList = this.item.favorList
+	    	}else{
+	    		this.item.favorTotal-=1;
+	    		this.item.favorList.forEach((item, index) => {
+	          if (item.userId === this.item.currentUser.userId) {
+	            this.item.favorList.splice(index, 1)
+	          }
+	        })
+	    		this.favorList = this.item.favorList
+	    	}
+	    })
+
+//			this.$emit('operation', {
+//		    eventType: 'praise',
+//		    param:{
+//		    	itemIndex,
+//			    item: this.item
+//		    }
+//		  })
+			
+    }else{
+    	this.$emit('operation', {
+		    eventType: 'praise',
+		    itemIndex,
+		    item: this.item,
+		    commentType: this.commentType
+		  })
+    	if(this.$route.path !== "/PunchDetails"){
+	  		this.favorList = this.item.favors
+	  	}
+    }
+    
   }
   /**
    * 删除
    */
   del () {
     const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'del',
-      itemIndex,
-      item: this.item,
-      commentType: this.commentType
-    })
+    if(this.$route.path === "/PunchDetails"){
+    	let _this = this;
+    	this.$vux.confirm.show({
+        content: '确定要删除吗？',
+        confirmText: '确定',
+        cancelText: '取消',
+        onCancel () {
+        },
+        onConfirm () {
+          delCourseCardCommentApi(_this.item.commentId).then(res=>{
+		    		_this.item = ""
+		    		_this.$emit('delItem',{itemIndex})
+		    		_this.$vux.toast.text('删除成功', 'bottom')
+		    	}).catch(e => {
+            _this.$vux.toast.text('删除失败', 'bottom')
+          })
+        }
+      })
+    }else{
+    	this.$emit('operation', {
+	      eventType: 'del',
+	      itemIndex,
+	      item: this.item,
+	      commentType: this.commentType
+	    })
+    }
+    
   }
   /**
    * 评论区点击
    */
   commentAreaClick () {
     const itemIndex = this.itemIndex
-    this.$emit('operation', {
-      eventType: 'comment-area',
-      itemIndex,
-      item: this.item,
-      type: this.commentType,
-      commentType: this.commentType
-    })
+    if(this.$route.path === "/PunchDetails"){
+    	this.$emit('operation', {
+	      eventType: 'comment-area',
+	      param:{
+	      	itemIndex,
+		      item: this.item,
+		      type: this.commentType,
+		      commentType: this.commentType
+	      }
+	    })
+    }else{
+    	this.$emit('operation', {
+      	eventType: 'comment-area',
+	      itemIndex,
+	      item: this.item,
+	      type: this.commentType,
+	      commentType: this.commentType
+	    })
+    }
+    
   }
 
   // -------------------- 页面跳转 ------------------------

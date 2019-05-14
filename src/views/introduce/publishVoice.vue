@@ -47,6 +47,9 @@ export default class PublishVoice extends Vue {
 
   created () {
     this.form.communityId = this.$route.params.communityId
+    if (!this.$root.$children[0].audio.paused) {
+      this.$root.$children[0].audio.pause()
+    }
   }
 
   beforeDestroy () {
@@ -74,6 +77,7 @@ export default class PublishVoice extends Vue {
       //   this.$router.replace(path);
       sessionStorage.setItem("isNewLoad",true);  
       sessionStorage.setItem("scrollTop",0);
+      sessionStorage.setItem("loadType",1)
       this.$router.go(-1)
     } catch (error) {
       this.$vux.toast.text(error.message, 'bottom')

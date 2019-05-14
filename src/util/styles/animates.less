@@ -1,0 +1,26 @@
+// ======== 动画 ========
+
+[class*="a-"] {
+  animation-duration: .3s;
+  animation-fill-mode: both;
+
+  &.long-1s {
+    animation-duration: 1s;
+  }
+}
+
+@keyframes kf-slide-in-down {
+  from {
+    opacity: .2;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.a-fade-in-down {
+  animation-name: kf-slide-in-down;
+}

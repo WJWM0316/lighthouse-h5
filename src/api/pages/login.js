@@ -47,10 +47,26 @@ export const smsApi = (data) => {
   })
 }
 
+// 获取短信验
+export const appSmsApi = (data) => {
+  return request({
+    url: '/wap/h5/sms',
+    data
+  })
+}
+
 // 获取验证码图片
 export const getCodeImg = (data) => {
   return request({
     url: '/wap/captchas',
+    data
+  })
+}
+
+// 获取验证码图片
+export const getAppCodeImg = (data) => {
+  return request({
+    url: '/wap/h5/captchas',
     data
   })
 }

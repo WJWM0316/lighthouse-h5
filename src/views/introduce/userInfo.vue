@@ -39,7 +39,7 @@
           <!--收起和展开-->
 	        <div v-if="communityList.length > 2" class="control-display" @click="isDisplay"><span>{{displayText}}</span>
 	        	<img v-if="isShowTower" class="take-up-icon" src='./../../assets/icon/btn_enter copy@hhx.png'/>
-	        	<img v-else class="take-up-icon" src='./../../assets/icon/btn_levea copy@hhx.png'/>
+	        	<img v-else class="take-up-icon" src='./../../assets/icon/btn_levea_copy@hhx.png'/>
 	        </div>
         
         </div>
@@ -166,11 +166,23 @@
      * 点击卡片
      */
     handleTap (item) {
-      if (item.isJoined) { // 如果已经加入跳转到入社后页面
-        this.$router.push(`/introduce/${item.communityId}/community`)
+      let url = ''
+      if (item.isJoined || item.isAuthor) { // 如果已经加入跳转到入社后页面
+        //1 有课。2 无课。3课节
+        if(item.isCourse == 3){
+          url = `/introduce2/${item.communityId}/community`
+        }else {
+          url = `/introduce/${item.communityId}/community`
+        }
       } else { // 未入社跳到未入社页面
-        this.$router.push(`/introduce/${item.communityId}`)
+        //1 有课。2 无课。3课节
+        if(item.isCourse == 3){
+          url = `/introduce2/${item.communityId}`
+        }else {
+          url = `/introduce/${item.communityId}`
+        }
       }
+      this.$router.push(url)
     }
     
     //控制tower显示

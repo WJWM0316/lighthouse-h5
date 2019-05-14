@@ -1,7 +1,7 @@
 <template>
   <div class="p-body p-center-help">
     <div class="rich-text">
-      <h3 style="text-align: center; ">“小灯塔Lite”小程序使用帮助</h3>
+      <h3 style="text-align: center; ">“小灯塔”使用帮助</h3>
       <p><b><br></b></p>
       <p><b><br></b></p><h4>给学员的使用帮助</h4>
       <p><b><br></b></p>
@@ -73,7 +73,7 @@ export default class CenterHelp extends Vue {
     this.wechatShare({
       'titles': '小灯塔使用帮助',
       'title': '小灯塔使用帮助',
-      'desc': '百万职场人的知识学习平台，等你加入~',
+      'desc': '百万职场人的职场分享社区，等你加入~',
       'imgUrl': 'https://cdnstatic.zike.com/Uploads/static/beacon/lighthouse-logo.png',
       'link': location.href
     })

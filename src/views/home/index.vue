@@ -1,11 +1,22 @@
 <template>
   <div class="p-body p-home-index" :class="[{'hasBanner' : (isFlex || !bannerList && bannerList.length === 0)  && navTabName === 'picked'}, navTabName]">
+    <!-- <div class="test_blo" @click="toTest">活动测试跳转</div> -->
     <div class="fixed">
       <!-- tab -->
-      <div class="nav-bar fs15" :class="navTabName">
-        <span @click="toggle('picked')">精选</span>
-        <span class="join" :class="{'message': isMessage}" @click="toggle('joined')">已加入</span>
-        <span class="create" @click="toggle('center-create-lite')">创建灯塔</span>
+      <div class="nav-bar fs15" :class="navTabName" v-show="!isShowAppBtn">
+        <span class="tit" @click="toggle('picked')">
+          精选
+          <i class="txt">精选</i>
+          <i class="pick_border" v-if="navTabName === 'picked'"></i>
+        </span>
+        <span class="tit join" :class="{'message': isMessage}" @click="toggle('joined')">
+          已加入
+          <i class="txt">已加入</i>
+          <i class="pick_border" v-if="navTabName !== 'picked'"></i>
+        </span>
+
+
+        <span class="create" @click="toggleCreate()">创建灯塔</span>
        <!--  <span @click="toggle('find')">发现</span> -->
       </div>
        <!-- 分类  用于悬浮顶格-->
@@ -17,22 +28,64 @@
               @click="tagSelected(indexTag)"></span>
       </div>
     </div>
-    <scroller @refresh="handleRefresh" @pullup="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+
+    <scroller @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
+      <!--头部引导打开app-->
+      <div class="appBtn">
+        <app-guide :isToGuide="true"></app-guide>
+      </div>
+      <div class="tab" ref="tab">
+        <!-- tab -->
+        <div class="nav-bar fs15" :class="navTabName" v-show="isShowAppBtn">
+          <span class="tit" @click="toggle('picked')">
+            精选
+            <i class="txt">精选</i>
+            <i class="pick_border" v-if="navTabName === 'picked'"></i>
+          </span>
+          <span class="tit join" :class="{'message': isMessage}" @click="toggle('joined')">
+            已加入
+            <i class="txt">已加入</i>
+            <i class="pick_border" v-if="navTabName !== 'picked'"></i>
+          </span>
+  
+  
+          <span class="create" @click="toggleCreate()">创建灯塔</span>
+         <!--  <span @click="toggle('find')">发现</span> -->
+        </div>
+      </div>
+      <!--广告banner-->
+      <div ref="insert" class="insert"  v-if="navTabName === 'picked'">
+        <img  class="insert_block" v-for="item, index in insertList" :src="item.imgUrl" @click.prevent.stop="handleTapBanner(item)"></img>
+      </div>
       <!-- 选项卡 -->
-      <div  ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
+      <div ref="tabBanner" class="chose-tab" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
+        <div class="campTitle">热门推荐</div>
         <ul>
           <li v-for="(item, index) in bannerList" :key="`banner_${index}`" @click.prevent.stop="handleTapBanner(item)">
               <image-item class="chose-tab-img" :src="item.imgUrl" />
-              <p class="chose-tab-con">{{item.title}}</p>
+              <p class="chose-tab-con">{{item.name}}</p>
           </li>
         </ul>
       </div>
 
-      <div class="advertising_list" v-if="navTabName === 'picked'&&advertisingList&&advertisingList.length>0">
+      <div ref="advertising" class="advertising_list" v-if="navTabName === 'picked'&&advertisingList&&advertisingList.length>0">
           <div class="opt_blo" v-for='item in advertisingList' @click='toAdvertising(item.url)'>
               <img class="opt_pic" :src="item.imgUrl"></img>
           </div>
       </div>
+      <!--训练营-->
+      <div v-if="navTabName === 'picked' && trainingCampInfo && trainingCampInfo.pagination.total">
+        <div class="campTitle">训练营</div>
+        <div v-for="(item, index) in trainingCampInfo.lists">
+          <training-camp :item="item"></training-camp>
+        </div>
+        <div class="moreCamp" v-if="trainingCampInfo.pagination.currentPage !== trainingCampInfo.pagination.lastPage">
+          <div class="moreCampBtn" @click.stop="toCampList">查看更多训练营</div>
+        </div>
+      </div>
+
+      <!-- <img ref="insert" class="insert" :src="insert.imgUrl" v-if="insert && insert.imgUrl && insert.imgUrl.length>0&& navTabName === 'picked'" @click.prevent.stop="handleTapBanner(insert)"></img> -->
+
       <!-- 轮播图 -->
       <!-- <div class="banners" v-if="bannerList && bannerList.length > 0 && navTabName === 'picked'">
           <swiper class="m-banner-swiper" dots-class="banner-dots" dots-position="center" :show-desc-mask="false" :auto="true" :interval="5000" :aspect-ratio="290 / 345">
@@ -41,19 +94,18 @@
             </swiper-item>
           </swiper>
       </div> -->
-      
+      <!--课程标题-->
+      <div class="courseTitle" v-show="navTabName === 'picked'">职场精品课</div>
        <!-- 分类 -->
-      <div ref="tab2" class="classification fs14" v-if="navTabName === 'picked'" v-show="!isFlex" @scroll.stop="scrollTab">
+      <div ref="tab2" class="classification fs14" v-if="navTabName === 'picked'" @scroll.stop="scrollTab">
         <span v-for="itemTag, indexTag in communityTagList"
               :key="indexTag"
               :class="{selected: itemTag.selected}"
               v-text="itemTag.tagName"
-              @click="tagSelected(indexTag)"></span>
+              @click="tagSelected(indexTag)"
+              v-show="!isFlex"></span>
       </div>
    
-
-    
-
       <!-- 已加入 -->
       <div v-show="navTabName === 'joined'">
 
@@ -70,7 +122,7 @@
           <div class="module-home communities" :showFreeIdentification="false" v-if="joins && joins.length > 0">
             <!--<p class="module-home-title">已加入</p>-->
             <div class="list">
-              <community-info-card class="community-item" :type="3" :cardType="'joined'" v-for="item in joins" :key="item.communityId" :community="item" @tap-card="handleTapCard(item)" />
+              <community-info-card class="community-item" :type="3" :cardType="'joined'" v-for="item in joins" :key="item.communityId" :isCourse="item.isCourse" :community="item" @tap-card="handleTapCard(item)" v-if="item.communityId != teacherId" />
             </div>
           </div>
         </div>
@@ -98,33 +150,28 @@
         </div>
       </div>
 
-      
-
       <!-- 精选 -->
       <div v-show="navTabName === 'picked'">
         <div class="communities" v-if="communities && communities.length > 0">
           <div class="list">
-            <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" />
+            <community-info-card class="community-item" v-for="item in communities" :key="item.communityId" :cardType="'picked'" :community="item" @tap-card="handleTapCard(item)" v-if="item.communityId != teacherId"/>
           </div>
         </div>
-
       </div>
     </scroller>
-
   </div>
 </template>
 <script>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
+import appGuide from '@/components/appGuide/appGuide'
 import { Swiper, SwiperItem } from 'vux'
 import communityInfoCard from '@/components/communityInfoCard/communityInfoCard'
 import explore from '@/components/explore/explore'
 import Scroller from '@/components/scroller'
-
 import ListMixin from '@/mixins/list'
-
-import { getBeaconsApi, getBannersApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdvertisingApi } from '@/api/pages/home'
+import trainingCamp from '@/components/trainingCamp/trainingCamp'
+import { getBeaconsApi, getTagsListApi, getJoineListdApi, getTabBardApi, getAdvertisingApi } from '@/api/pages/home'
 
 @Component({
   name: 'home-index',
@@ -133,7 +180,9 @@ import { getBeaconsApi, getBannersApi, getTagsListApi, getJoineListdApi, getTabB
     SwiperItem,
     communityInfoCard,
     explore,
-    Scroller
+    Scroller,
+    appGuide,
+    trainingCamp
   },
   mixins: [ListMixin]
 })
@@ -148,7 +197,6 @@ export default class HomeIndex extends Vue {
   isFlex = false
   scrollTabLeft = 0 // tab
   scrollHeight = 0 // 计算banner 跟 tab 的高度
-  advertisingList = []
   // ******************* 已加入 **********************
   creations = []
   joins = []
@@ -161,16 +209,39 @@ export default class HomeIndex extends Vue {
   pickedParams = { // 页面所需参数
     tagId: 0
   }
+  insertList = '' //广告插页
+  advertisingList = [] //广告推荐
+  isShowAppBtn = true
+  trainingCampInfo = '' //训练营数据
 
+
+
+
+  teacherId="38ecff5824a5436f604d4b0362b7c6be" // 活动结束记得要删掉
   created () {
     const routeName = this.$route.name
     if (routeName === 'home') {
       this.navTabName = 'picked'
     } else {
-      this.navTabName = routeName
+      
+      this.navTabName = 'joined'
     }
+    this.init()
+  }
 
-    this.init().then(() => {})
+  beforeMount(){
+  }
+
+  mounted(){
+    this.getAdvertising()
+  }
+
+  updated(){
+  }
+  
+  /* 去训练营列表 */
+  toCampList () {
+    this.$router.push({path: '/campList'})
   }
 
   /**
@@ -182,11 +253,20 @@ export default class HomeIndex extends Vue {
       // this.joins = []
       // this.communities = []
       this.navTabName = targetName
-      const name = targetName === 'picked' ? 'home' : targetName
+      const name = targetName === 'picked' ? 'home' : 'joined'
       this.$router.push({name})
-      this.init().then(() => {
-      })
+      this.init()
+
+      if(this.navTabName !== 'joined'){
+        this.getAdvertising()
+      }
+
+
     }
+  }
+
+  toggleCreate () {
+    this.$router.push({name: 'center-create-lite'})
   }
 
   /**
@@ -200,8 +280,8 @@ export default class HomeIndex extends Vue {
 
     this.pickedParams.tagId = communityTagList[tagIndex].id
     this.communities = []
-    this.getBanners()
-    this.pickedInit().then(() => {})
+
+    this.pickedInit()
   }
 
   scrollTab (e) {
@@ -227,7 +307,6 @@ export default class HomeIndex extends Vue {
         await this.joinedInit()
         break
       default:
-        await this.getBanners()
         await this.pickedInit()
         break
     }
@@ -239,8 +318,6 @@ export default class HomeIndex extends Vue {
    */
   async joinedInit () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
-    console.log('加入 Tab 初始')
-
     await this.getList({ page: 1 })
   }
 
@@ -249,10 +326,8 @@ export default class HomeIndex extends Vue {
    */
   async pickedInit () {
     this.pagination.end = false // 初始化数据，必定不是最后一页
-    console.log('精选 Tab 初始')
-
-    await this.getTagsList()
-    await this.getAdvertising()
+    this.getAdvertises()
+    this.getTagsList()
     await this.getList({ page: 1 })
   }
 
@@ -270,6 +345,12 @@ export default class HomeIndex extends Vue {
   getPickedApi (params) {
     return getBeaconsApi(params)
   }
+
+  //获取广告
+  getAdvertises () {
+    this.getInsert()
+    this.getBanners()
+  }
   /**
    * 获取banner列表
    */
@@ -277,32 +358,76 @@ export default class HomeIndex extends Vue {
     if (this.bannerList.length > 0) {
       return
     }
-    return getBannersApi().then(res => {
-      this.bannerList = res
-      if (res.length > 0) {
-        this.$nextTick(() => {
-          this.scrollHeight = this.$refs.tabBanner.clientHeight
-        })
-      }
+    let test = 40
+    return getAdvertisingApi({
+      adType: test
+    }).then(res => {
+      this.bannerList = res.ads
+      
     })
   }
+
   /**
    * 获取三个广告位
    */
   getAdvertising () {
-    let test = 42
-    if (this.advertisingList.length > 0) {
+    let id = 42
+    return getAdvertisingApi({
+      adType: id
+    }).then((res) => {
+      this.advertisingList = res.ads
+      setTimeout(()=>{
+        this.setStick()
+      },100)
+    })
+  }
+
+  // 置顶
+  setStick () {
+    this.$nextTick(() => {
+      let tabBanner = this.$refs.tabBanner ? parseInt(this.$refs.tabBanner.clientHeight) : 0
+      let advertising = this.$refs.advertising ? parseInt(this.$refs.advertising.clientHeight) : 0
+      let insert = this.$refs.insert ? parseInt(this.$refs.insert.clientHeight) : 0
+
+      if (tabBanner>0 && advertising>0 && insert>0) {
+        this.scrollHeight = tabBanner+advertising+insert
+
+      }else if(tabBanner>0 && advertising>0){
+        this.scrollHeight = tabBanner+advertising
+
+      }else if(tabBanner>0 && insert>0){
+        this.scrollHeight = tabBanner+insert
+        
+      }else if(advertising>0 && insert>0){
+        this.scrollHeight = advertising+insert
+
+      }else if(advertising>0){
+        this.scrollHeight = advertising
+
+      }else if(insert>0){
+        this.scrollHeight = insert
+        
+      }else if(tabBanner>0){
+        this.scrollHeight = tabBanner
+      }
+    })
+  }
+
+  /**
+   * 获取广告插页
+   */
+  getInsert () {
+    let id = 101
+    if (this.insertList) {
       return
     }
     return getAdvertisingApi({
-      adType: test
+      adType: id
     }).then((res) => {
-      console.log('=========',res)
-      this.advertisingList = res.ads
-    }).catch(e => {
-      console.log('=========',e)
+      this.insertList = res.ads
     })
   }
+
   /**
    * 获取tab列表
    */
@@ -317,7 +442,6 @@ export default class HomeIndex extends Vue {
           }
         })
         res[tagIndex].selected = true
-        console.log(res)
 
         this.communityTagList = res
       }
@@ -358,21 +482,17 @@ export default class HomeIndex extends Vue {
 
       switch (navTabName) {
         case 'picked':
-          // if (this.communities.length > 0) {
-          //   return
-          // }
           res = await this.getPickedApi({
             ...params,
             ...this.pickedParams
           })
-          console.log('精选: ', res)
           const communities = res.list
+          this.trainingCampInfo = res.topTrainingCamp
           this.communities = page === 1 ? communities : this.communities.concat(communities || [])
           allTotal = res.total
           break
         case 'joined':
           res = await this.getJoinedApi(params)
-          console.log('已加入: ', res)
           const {creations, joins, recommends} = res
           this.joins = page === 1 ? joins : this.joins.concat(joins || [])
 
@@ -385,9 +505,9 @@ export default class HomeIndex extends Vue {
 
           // todo
           if(this.joins.length == 0 && this,creations.length == 0){
-              this.joinLd = true;
+            this.joinLd = true;
           }else {
-              this.joinLd = false;
+            this.joinLd = false;
           }
 
 
@@ -433,8 +553,16 @@ export default class HomeIndex extends Vue {
    */
   scroll (e) {
     const {scrollTop} = e.target
+    const tab = this.$refs.tab
+    if (scrollTop >= tab.clientHeight) {
+      this.isShowAppBtn = false
+    } else {
+      this.isShowAppBtn = true
+    }
+    
     if (this.navTabName === 'picked') {
-      if (scrollTop >= this.scrollHeight) {
+      //if (scrollTop >= this.scrollHeight) {
+      if (scrollTop >= this.$refs.tab2.offsetTop) {
         this.isFlex = true
         this.$refs.tab1.scrollLeft = this.scrollTabLeft
       } else {
@@ -456,39 +584,59 @@ export default class HomeIndex extends Vue {
    * 点击卡片
    */
   handleTapCard (item) {
-    if (item.isAuthor === 1 || item.isJoined === 1) { // 如果已经加入并且已入社跳转到入社后页面
-      this.$router.push(`/introduce/${item.communityId}/community`)
+    let url = ''
+    if (item.isAuthor === 1 || item.isJoined === 1) {
+      //如果已经加入并且已入社跳转到入社后页面
+      //1 有课。2 无课。3课节
+      if(item.isCourse === 3 || item.isCourse === 4){
+        url = `/introduce2/${item.communityId}/community`
+      }else {
+        url = `/introduce/${item.communityId}/community`
+      }
     } else { // 未入社跳到未入社页面
-      this.$router.push(`/introduce/${item.communityId}`)
+      //1 有课。2 无课。3课节
+      if(item.isCourse == 3 || item.isCourse === 4){
+        url = `/introduce2/${item.communityId}`
+      }else {
+        url = `/introduce/${item.communityId}`
+      }
     }
+    this.$router.push(url)
   }
 
   // 点击广告列
   toAdvertising (type) {
-    console.log(type)
     if (type) {
       this.$router.push(`/advertising/${type}`)
     }
+  }
+
+  toTest (){
+    this.$router.push(`/active_11`)
   }
 }
 </script>
 <style lang="less" scoped>
 @import "../../styles/variables";
 @import "../../styles/mixins";
+@import "../../styles/dprPx";
+.test_blo {
+  width: 100px;
+  height: 100px;
+  margin-left: 40px;
+  background: yellowgreen;
+  text-align: center;
+  line-height: 100px;
 
-
+}
 .p-home-index {
-  //padding: 50px 0;
-  padding: 44px 0 50px;
+  /*padding: 50px 0 50px;*/
   box-sizing: border-box;
-
   &.picked {
-    // padding: 113px 0 50px;
-    padding: 44px 0 50px;
+    /*padding: 50px 0 50px;*/
   }
   &.hasBanner {
-     padding: 89px 0 50px;
-    // padding: 259px 0 50px;
+     /*padding: 89px 0 50px;*/
   }
 
   & .fixed {
@@ -511,13 +659,19 @@ export default class HomeIndex extends Vue {
     margin-top: 0;
     z-index: 99;
   }
+  
+  .tab{
+    width: 100%;
+    min-height: 57px;
+  }
 
   & .nav-bar {
+    min-height: 57px;
     box-sizing: border-box;
     color: #929292;
-    font-size: 18px;
+    .fontSize(18);
     line-height: 1.22;
-    padding: 12px 15px 10px ;
+    padding: 18px 15px 15px ;
     background-color: #ffffff;
     /* box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);  */
 
@@ -539,43 +693,86 @@ export default class HomeIndex extends Vue {
       position: relative;
       margin-right: 22px;
       vertical-align: top;
-      font-size: 18px;
+      .fontSize(18);
       color: #929292;
       letter-spacing: 0;
       line-height: 22px;
+      z-index: 2;
+      &.tit {
+        text-align: center;
+        color: rgba(0,0,0,0);
+      }
       &:nth-of-type(3) {
         margin-right: 0;
         float: right;
-        font-size: 15px;
+        .fontSize(15);
         color: #354048;
         //font-family: 'PingFangSC-Light';
         font-weight: 300;
         letter-spacing: 0;
         //line-height: 40px;
       }
+      .pick_border {
+        width: 100%;
+        height: 6px;
+        background: #ffe266;
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        opacity: .8;
+        z-index: 1;
+      }
+      .txt {
+        position: absolute;
+        left: 0;
+        z-index: 2;
+        font-style: initial;
+        color: #929292;
+      }
     }
     &.joined span:nth-of-type(2),
     &.picked span:nth-of-type(1) {
       //font-family: PingFangSC-Medium;
       font-weight: 700;
-      font-size: 24px;
+      .fontSize(24);
       position: relative;
-      color: #354048;
+      //color: #354048;
       letter-spacing: -0.26px;
+      .txt {
+        color: #354048;
+      }
+      /*&::after {
+        content: '';
+        width: 100%;
+        height: 4px;
+        border-radius: 22px;
+        background: #ffe266;
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        opacity: .8;
+        z-index: 1;
+      }*/
     }
   }
-
+  .insert_block {
+    width: 351px;
+    height: 104px;
+    margin: 0 auto 13px auto;
+    display: block;
+    border-radius: 3px;
+  }
   .advertising_list {
     margin: 0 12px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding-bottom: 15px;
-    padding-top: 8px;
+    padding-top: 6px;
     .opt_blo {
       width: 111px;
       height: 48px;
-      border-radius: 5px;
+      border-radius: 3px;
       position: relative;
       line-height: 48px;
       text-align: left;
@@ -590,13 +787,55 @@ export default class HomeIndex extends Vue {
       }
       text {
         //font-family: 'PingFangSC-Regular';
-        font-size: 14px;
+        .fontSize(14);
         color: #354048;
         letter-spacing: 0;
         margin-left: 12px;
       }
     }
     
+  }
+  /*训练营标题 ， 课程标题*/
+  .campTitle, .courseTitle{
+    margin-top: 25px;
+    color: #354048;
+    font-size: 18px;
+    font-weight: 700;
+    padding-bottom: 8px;
+    margin-left: 25px;
+    position: relative;
+    &::before{
+      display: block;
+      content: '';
+      height: 19px;
+      width: 19px;
+      background-color: #FFE266;
+      position: absolute;
+      top: -2px;
+      left: -10px;
+      z-index: -1;
+    }
+  }
+  /* 查看更多训练营按钮 */
+  .moreCamp{
+    padding: 0 22px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 30px;
+    margin-top: 15px;
+    .moreCampBtn{
+      font-size: 14px;
+      font-weight: 300;
+      color: #666666;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: #F8F8F8;
+      border-radius: 20px;
+    }
   }
 
   & .classification {
@@ -642,82 +881,51 @@ export default class HomeIndex extends Vue {
     }
   }
   .chose-tab {
-    ul {
+    ul{
       white-space: nowrap;
       font-size: 0;
       overflow-x: scroll;
       line-height: 0;
       &::-webkit-scrollbar {
-        //background-color:transparent;
-        width:0; height: 0;
-        display: none;
+        background:rgba(0,0,0,0);
+        width: 0 !important;
+        height: 0;
       }
       li {
-        width: 151px;
+        width: 130px;
         display: inline-block;
         margin-left: 10px;
-        box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.08);
-        margin-bottom: 10px;
-        border-radius: 6px;
+        margin-bottom: 2px;
         vertical-align: top;
+        &:first-child {
+          margin-left: 15px;
+        }
         &:last-child {
           margin-right: 15px;
         }
         .chose-tab-img {
           width: 100%;
-          height: 93px;
-          border-radius: 6px 6px 0 0;
+          height: 80px;
+          border-radius: 3px;
         }
         .chose-tab-con {
           white-space: normal;
           width: 132px;
-          height: 36px;
-          font-size: 14px;
+          /*height: 36px;*/
+          .fontSize(13);
           line-height: 1.29;
-          margin: 10px 10px 11px 0; 
-          padding-left: 9px;
+          margin: 6px 8px 0px 1px; 
 
-          //font-family: 'PingFangSC-Medium';
-
-          font-weight: 700;
+          font-weight: 400;
           color: #354048;
           letter-spacing: 0;
           .setEllipsisLn();
           position: relative;
-          &::before {
-            content: '';
-            width: 3px;
-            height: 12px;
-            background-color: #ffe266;
-            display: block;
-            position: absolute;
-            top: 3px;
-            left: 0px;
-          }
         }
       }
     }
   }
-  /* .banners {
-    margin: 13px 15px 0px;
-    border-radius: 3px;
-    font-size: 0;
-    line-height: 1;
-    overflow: hidden;
 
-    .m-banner-swiper {
-      height: 100%;
-      border-radius: 3px;
-      overflow: hidden;
-
-      .image-item {
-        width: 100%;
-        height: 100%;
-        border-radius: 3px;
-        overflow: hidden;
-      }
-    }
-  } */
 
   .joined-list {
     margin-top: 2px;
@@ -731,7 +939,7 @@ export default class HomeIndex extends Vue {
       margin-bottom: 10px;
       line-height: 30px;
       font-weight: bold;
-      font-size: 20px;
+      .fontSize(20);
     }
 
     .community-item:not(:last-child) {
@@ -745,7 +953,7 @@ export default class HomeIndex extends Vue {
 
   & .module-home {
     & .module-home-title {
-      font-size: 21px;
+      .fontSize(21);
       font-weight: 500;
       color: #bcbcbc;
       padding: 0 15px 15px;

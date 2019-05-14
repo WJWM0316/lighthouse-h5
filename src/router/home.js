@@ -11,7 +11,6 @@ const homeRoutes = [
   {
     path: '/index',
     name: 'home',
-    meta:{keepAlive:true},
     component: resolve => require(['@/views/home/index'], resolve),
   },
   {
@@ -19,6 +18,24 @@ const homeRoutes = [
     name: 'advertising',
     meta: {navHide: true},
     component: resolve => require(['@/views/home/advertising'], resolve),
+  },
+  {
+    path: '/teacherActivity',
+    name: 'teacherActivity',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/activity/teacher/teacherActivity'], resolve),
+  },
+  {
+    path: '/trainCamp',
+    name: 'trainCamp',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/activity/trainCamp/trainCamp'], resolve),
+  },
+  {
+    path: '/active_11',
+    name: 'active_11',
+    meta: {navHide: true},
+    component: resolve => require(['@/views/activity/active_11/active_11'], resolve),
   },
   {
     path: '/index/details/:sourceId',
@@ -40,18 +57,24 @@ const homeRoutes = [
     path: '/undefined',
     name: 'undefined',
     component: resolve => require(['@/views/abnormal/notFound'], resolve),
-    meta: {navHide: true}
+    meta: {navHide: true, hideController:true}
   },
   {
     path: '/404',
     name: '404',
     component: resolve => require(['@/views/abnormal/404'], resolve),
-    meta: {navHide: true}
+    meta: {navHide: true, hideController:true}
   },
   {
     path: '/offline',
     name: 'offline',
     component: resolve => require(['@/views/abnormal/offline'], resolve),
+    meta: {navHide: true, hideController:true}
+  },
+  {
+    path: '/campList',
+    name: 'campList',
+    component: resolve => require(['@/views/home/campList'], resolve),
     meta: {navHide: true}
   }
 ]

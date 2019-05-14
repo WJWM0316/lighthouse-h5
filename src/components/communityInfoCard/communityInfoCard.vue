@@ -6,7 +6,6 @@
         <img :src="community.icon" alt="">
       </div>
       <div class="left">
-
         <div class="left-info">
           <p class="community-title" v-text="community.title"></p>
           <p class="community-desc" v-text="community.simpleIntro"></p>
@@ -16,36 +15,17 @@
           <div class="community-status-box">
             <div class="community-status">
               <!-- <span v-text="community.master && community.master.realName"></span> -->
-              <span v-if="communityStatus && cardType === 'joined'" class="status" :class="communityStatus === '已结束' ? 'end' : ''">{{communityStatus}}</span>
+              <span v-if="communityStatus && cardType === 'joined'" class="status" :class="communityStatus === '已结束' ? 'end' : ''" v-html="communityStatus"></span>
               <template v-if="cardType === 'picked'">
                   <span v-if="community.joinPrice > 0 && showFreeIdentification" class="price">¥ {{community.joinPrice}}</span>
                   <span v-if="community.joinPrice === 0 && showFreeIdentification" class="price">免费</span>
                   <span v-text="community.master && community.masterIntro" class="job"></span>
               </template>
-              
-              
             </div>
-            
           </div>
-          
         </div>
-
       </div>
-
-      
-
     </div>
-
-    <!-- 额外内容区 -->
-    <!--<div class="additional">-->
-      <!--&lt;!&ndash; 已结束 &ndash;&gt;-->
-      <!--<p v-if="isEnd">社区已结束</p>-->
-      <!--&lt;!&ndash; 未开社 &ndash;&gt;-->
-      <!--<p v-else-if="duration"><span style="color: #d7ab70;">{{duration | duration}}</span>后开启</p>-->
-      <!--&lt;!&ndash; 已开社 &ndash;&gt;-->
-      <!--<p v-else>社区已开启</p>-->
-    <!--</div>-->
-
   </div>
 </template>
 

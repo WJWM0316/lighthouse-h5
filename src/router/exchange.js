@@ -15,19 +15,19 @@ const routes = [
     path: '/exchange/list',
     name: 'exchange-list',
     component: resolve => require(['@/views/exchange/list'], resolve),
-    meta: {navHide: true}
+    meta: {navHide: true, hideController:true}
   },
   {
     path: '/exchange/detail/:id/:userId/:type',
     name: 'exchange-detail',
     component: resolve => require(['@/views/exchange/detail'], resolve),
-    meta: {navHide: true}
+    meta: {navHide: true, hideController:true}
   },
   {
     path: '/exchange/apply/:userId',
     name: 'exchange-apply',
     component: resolve => require(['@/views/exchange/apply'], resolve),
-    meta: {navHide: true}
+    meta: {navHide: true, hideController:true}
   }
 ]
 

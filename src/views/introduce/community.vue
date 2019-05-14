@@ -12,57 +12,28 @@
     <scroll :pullupable="true" :infinite-scroll="true" @refresh="handleRefresh" @infinite-scroll="handlePullup" @scroll="scroll" :is-none-data="pagination.end">
       <!-- header -->
       <div class="header">
-      	
       	<!--详情页头部组件-->
-        <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false">
-        	<!--介绍-->
-          <!--<router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon">
-            介绍 <img class="icon" src="../../assets/icon/icon_angle_right_white.png" />
-          </router-link>-->
-          
-          <!--<router-link :to="{name: 'introduce-detail'}" class="addon-text" slot="cover-addon-more">:to="{name: 'introduce-more'}"-->
-      		<div :starTime="starTime" @click.prevent.stop="toMore" class="addon-text" slot="cover-addon-more">
-             <img class="icon" src="../../assets/icon/bnt_more@3x.png" />
-          </div>
-        </community-card>
+        <community-card class="community-item" :community="pageInfo" :type="2" :isEntentr="false" :isCommunityIntroduce=true></community-card>
         <!--详情页头部组件-->
-
         <div class="share-group">
-          <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
-          <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button>
-          <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">分享赚¥{{pageInfo.sellPrice}}</button>
-          <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
+          <div class="group_wrap">
+            <button type="button" class="home u-btn" @click="toHome"><i class="u-icon-community-home"></i></button>
+            <button type="button" class="invite u-btn" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">邀请函</button> 
+            <button type="button" class="money u-btn" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1"  @click="showSell = true">
+              ¥{{pageInfo.sellPrice}}
+            </button>
+            <button type="button" class="share u-btn" v-else @click="showShare = true"><i class="u-icon-share-community"></i></button>
+          </div>
+          <span class="money_other" v-if="!pageInfo.isAudit && pageInfo.isSell === 1">
+            分享赚
+            <img src="../../assets/icon/bg_share.png" />
+          </span>
         </div>
 
-        <!--<div class="share-btn-3" v-if="!pageInfo.isAudit && pageInfo.isSell === 2" @click="showSell = true">-->
-          <!--<span>邀请函</span>-->
-        <!--</div>-->
-        <!--<div class="share-btn-2" v-else-if="!pageInfo.isAudit && pageInfo.isSell === 1" @click="showSell = true">-->
-          <!--<span>分享赚¥{{pageInfo.sellPrice}}</span>-->
-        <!--</div>-->
-        <!--<div class="share-btn" v-else @click="showShare = true">-->
-          <!--<img class="share-icon" src="./../../assets/icon/icon_share.png" />-->
-          <!--<span>分享</span>-->
-        <!--</div>-->
       </div>
 
       <!-- container -->
       <div class="container">
-
-        <!-- 同学的列表 -->
-        <!--<div class="classmate-list" v-if="pageInfo.peoples && pageInfo.peoples.length > 0" @click="toMemberList">
-          <div class="flex-1">
-            <img :src="item['avatar']" v-for="(item, index) in pageInfo['peoples']" v-if="index < 6" />
-            <img src="./../../assets/icon/firends-call-more.png" v-else-if="pageInfo.remainingJoinNum > 7" />
-            <img :src="item['avatar']" v-else />
-          </div>
-          <div class="people-count">
-            <img class="icon" src="./../../assets/icon/member.png" />
-            <span>{{pageInfo['joinedNum']}}</span>
-            <img class="icon" src="./../../assets/icon/mypage_arrow.png" />
-          </div>
-        </div>-->
-
         <!-- 主体内容块 -->
         <div class="fixed-box" ref="community-title" v-if='pageInfo.isCourse==1'>
           <div :class="{'big-shot-community-title': true, 'circles': showType, 'forum': !showType}" v-if="!isCommunityTitleFixed">
@@ -72,13 +43,43 @@
         </div>
         <div class="big-shot-community-content" >
           <div class="module-content" v-if="dynamicList && dynamicList.length > 0">
+
+            <template v-if="!showType">
+              <div class="course_top" v-if="dynamicList.length>0" :class="{'one':pageInfo.isCourse == 2}">
+                <div class="top_left">共有<span class="le_sp">{{pagination.total}}</span>篇帖子</div>
+                <div class="top_right" @click.prevent.stop="setSort">
+                  <img class='right_icon' src="./../../assets/icon/bnt_order@3x.png"/>
+                  <span v-if="userSort == 1">正序</span>
+                  <span v-else>倒序</span>
+                </div>
+              </div>
+              <div class="recommend_list" v-if="topList.length>0" v-for="item,index in topList">
+                <div class="rem_blo" @click.stop="toDetails(index)">
+                  <img class='blo_icon' src="./../../assets/icon/icon_topping@3x.png"/>
+                  <p class="blo_tit ellipsis">{{item.tit}}{{item.content}}</p>
+
+                  <div class="blo_to_warp">
+                    <img class='blo_icon_to' src="./../../assets/icon/bnt_arrow_topping@3x.png"/>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            
             <dynamic :dynamicList="dynamicList"
                      :showDelBtn="true"
                      :isNeedHot="true"
+                     :communityId="pageInfo.communityId"
                      :showIdentification="showIdentification"
                      :disableOperationArr="disableOperationArr"
+                     :isPlayList="isPlayList"
+                     :isTeacher="isPlayList"
+                     :isTower='true'
+                     :isUserExchange="showType"
+                     :isMaster = isMaster
                      @disableOperationEvents="operation"
-                     @saveAudio="controlAudio"
+                     @opMember="opMember"
+
             ></dynamic>
           </div>
           <div class="blank" v-else>
@@ -99,19 +100,14 @@
         <button @click="question" v-if="this.pageInfo.isCourse===1">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>回答问题<i class="answer-count _" v-if=" pageInfo['answerTotal']> 0">{{pageInfo['answerTotal']}}</i></span>
         </button>
-        <!--<button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布动态</button>-->
-        <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发布内容</button>
+        <button @click="release"><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
       <div class="ask-warp" v-else>
-      <!--<div class="ask-btn" @click="askBtnClick" v-else>-->
-        <!--<img src="./../../assets/icon/icon_question.png" v-if="showType" />
-        <img src="./../../assets/icon/icon_writing.png" v-else />
-        <span style="margin-top: 10px;">{{showType ? '提问' : '发帖'}}</span>-->
         <!--4.25改版-->
         <button @click="postQuestions" v-if="this.pageInfo.isCourse===1">
           <span class="desc"><img src="../../assets/icon/bnt_askquestion@3x.png"/>我要提问</span>
         </button>
-        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发布内容</button>
+        <button @click="posted" class="post-tip" v-if="isKayo=='manager' && type===1"><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
         <button @click="posted" class="post-tip" v-else><img src="../../assets/icon/bnt_post@3x.png"/>发帖子</button>
       </div>
     </div>
@@ -130,6 +126,9 @@
 
     <actionsheet v-model="releaseActionsheet.show" :menus="pageInfo.isCourse===1?releaseActionsheet.menus:releaseActionsheet_no.menus" show-cancel @on-click-menu="handleReleaseActionsheetItem" />
 
+    <!-- 帖子置顶删除 -->
+    <actionsheet v-model="userOpActionsheet.show" :menus="userOpActionsheet.menus" show-cancel @on-click-menu="handleUserOpActionsheetItem" />
+
     <div class="home-mask" v-if="showSell">
       <div class="sell-container">
         <i class="u-icon-close icon-close" @click="showSell = false"></i>
@@ -147,12 +146,12 @@
   import Component from 'vue-class-component'
   import { Actionsheet } from 'vux'
   import dynamic from '@/components/dynamic/dynamic'
-  import CommunityCard from '@/components/communityCard'
+  import CommunityCard from '@/components/communityCard_v2'
   import suspensionInput from '@/components/suspensionInput/suspensionInput'
   import Scroll from '@/components/scroller'
   import ListMixin from '@/mixins/list'
   import wxUtil from '@/util/wx/index'
-  import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi } from '@/api/pages/pageInfo'
+  import { getCirclesApi, getCommunityApi, getCommunicationsApi, setSubmitCommentApi, getRoleInfoApi ,delTopApi, addTopApi, getRecommendApi, deltePostApi, getLessMsgApi, topPostListApi} from '@/api/pages/pageInfo'
 
   import WechatMixin from '@/mixins/wechat'
   import ShareDialog from '@/components/shareDialog/ShareDialog'
@@ -207,9 +206,8 @@
     roleInfo=''
     code=''
     type=1
-    saveAudio={}
     nowItem={}
-    
+    isPlayList = true
     //显示标题模式
     titleBoxShow=false;
 
@@ -243,10 +241,20 @@
     }
     
     qrSrc = ''
-    
+
+    userOpActionsheet = {
+      show: false,
+      menus: [{
+        label: '删除',
+        value: '3'
+      }]
+    }
+    topList = []  //置顶列表
+    relevantList = [] //相关推荐
+    userSort = 1   //学员排序
+    isMaster = false
     //路由刚进入的时候
     beforeRouteEnter(to,from,next){
-    	
 				let nowCommunity=sessionStorage.getItem("nowCommunity");
 			if(!nowCommunity){
 				sessionStorage.setItem("nowCommunity",to.params.communityId)
@@ -255,11 +263,6 @@
 			}else{
 				if(nowCommunity===to.params.communityId){
 					to.meta.keepAlive = true;
-//					if(from.name==="publish-content" || from.name==="publish-voice"){
-//						sessionStorage.setItem("isNewLoad",true)
-//					}else{
-//						sessionStorage.setItem("isNewLoad",false)
-//					}
 					console.log(to,"community相同时候打印我")
 				}else{
 					sessionStorage.setItem('scrollTop',0);
@@ -271,24 +274,12 @@
 			}
 			
 			//是否从列表页进来
-//  		if( from.path==="/joined" || 
-//        from.path==="/index" || 
-//        from.path==="/advertising/115" || 
-//        from.path==="/advertising/116" || 
-//        from.path==="/advertising/117" || 
-//        from.name==="userInfo-details")
-//      {
-//        to.meta.keepAlive = false;
-//        console.log(to,"我是当前路由信息")
-//      }
-			
 			next();
    }
 		
 		//页面离开前
 		beforeRouteLeave(to, from, next) {
 		  if((this.nowItem.answer && this.nowItem.answer[0].type===2) || this.nowItem.circleType===1){
-        this.saveAudio.pause();
         if(this.nowItem.modelType && this.nowItem.modelType==="problem"){
           this.nowItem.answers[0].musicState=0;
         }else{
@@ -300,10 +291,8 @@
 	
     created () {
     	let titleBoxShow=true;
-    	console.log("5555555555555555",this.$route.query);
       if (this.$route.query.type !== undefined) {
         this.showType = this.$route.query.type
-//      this.type = this.$route.query.type
       }
       console.log('this.showType', this.showType)
       wxUtil.reloadPage()
@@ -341,10 +330,11 @@
         //判断嘉宾身份
         this.getRoleInfo(communityId).then(res=>{
         	this.roleInfo=res.role;
-        	console.log(this.roleInfo,"8888888888888888888888888888")
+          if(res.role.title =='塔主'){
+            this.isMaster = true
+          }
         }).catch(res => {
         		this.roleInfo=res.data.role;
-        		console.log(this.roleInfo,"999999999999999999999999")
 				})
         
         //判断是否有课程，无课程则跳转
@@ -355,93 +345,88 @@
 	        this.dynamicList = []
 
 	        this.showType = type
-//	        debugger
 	        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-//	        debugger
 	        this.showIdentification = !type
 	
 	        this.pagination.end = false // 初始化数据，必定不是最后一页
 	        this.getList({page: 1}).then(() => {})
         }
+
+        this.getRecommendList(communityId)
+        this.getTopList(communityId)
      })
-      
-      
+       
     }
    
+   //发布内容后刷新数据
    	activated(){
    		const scrollDom=document.getElementsByClassName('scroll-container')[0];
     	scrollDom.scrollTop=sessionStorage.getItem("scrollTop");
     	if(JSON.parse(sessionStorage.getItem("isNewLoad"))){
     		sessionStorage.setItem("isNewLoad",false)
+    		this.isCommunityTitleFixed=false
     		//重试请求数据
-    			this.pageInit().then(() => {
-		        const {
-		          title,
-		          simpleIntro,
-		          master,
-		          shareImg, // 分享图片
-		          sharePoint, // 分享摘要
-		          shareIntroduction,  // 分享标题
-		          communityId,
-		          startTime
-		        } = this.pageInfo
-		        const {realName, career} = master
-		        this.communityId=communityId
-		        this.starTime=startTime
-		        const str = realName ? realName + (career ? '|' + career : '') : ''
-		        // 页面分享信息
-		        this.wechatShare({
-		          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-		          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
-		          'desc': sharePoint || simpleIntro,
-		          'imgUrl': shareImg,
-		          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
-		        })
-		        
-		        //判断嘉宾身份
-		        this.getRoleInfo(communityId).then(res=>{
-		        	this.roleInfo=res.role;
-		        	console.log(this.roleInfo,"8888888888888888888888888888")
-		        }).catch(res => {
-		        		this.roleInfo=res.data.role;
-		        		console.log(this.roleInfo,"999999999999999999999999")
-						})
-		        
-		        //判断是否有课程，无课程则跳转
-		        if(this.pageInfo.isCourse===2){
-		        	this.type=0;
-		        	let type=0;
-		        	this.displaySuspensionInput = false
-			        this.dynamicList = []
+    		this.pageInit().then(() => {
+	        const {
+	          title,
+	          simpleIntro,
+	          master,
+	          shareImg, // 分享图片
+	          sharePoint, // 分享摘要
+	          shareIntroduction,  // 分享标题
+	          communityId,
+	          startTime
+	        } = this.pageInfo
+	        const {realName, career} = master
+	        this.communityId=communityId
+	        this.starTime=startTime
+	        const str = realName ? realName + (career ? '|' + career : '') : ''
+	        // 页面分享信息
+	        this.wechatShare({
+	          'titles': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+	          'title': shareIntroduction || `我正在关注${realName}老师的灯塔【${title}】快来一起加入吧`,
+	          'desc': sharePoint || simpleIntro,
+	          'imgUrl': shareImg,
+	          'link': location.origin + `/beaconweb/#/introduce/${communityId}`
+	        })
+	        
+	        //判断嘉宾身份
+	        this.getRoleInfo(communityId).then(res=>{
+	        	this.roleInfo=res.role;
+
+            console.log(res.role.title)
+            if(res.role.title =='塔主'){
+              this.isMaster = true
+            }
+	        }).catch(res => {
+	        		this.roleInfo=res.data.role;
+					})
+	        
+	        //判断是否有课程，无课程则跳转
+	        if(this.pageInfo.isCourse===2){
+	        	this.type=0;
+	        	let type=0;
+	        	this.displaySuspensionInput = false
+		        this.dynamicList = []
+	
+		        this.showType = type
+		        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
+		        this.showIdentification = !type
 		
-			        this.showType = type
-		//	        debugger
-			        this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
-		//	        debugger
-			        this.showIdentification = !type
-			
-			        this.pagination.end = false // 初始化数据，必定不是最后一页
-			        this.getList({page: 1}).then(() => {})
-		        }
-		     })
-    	}
+		        this.pagination.end = false // 初始化数据，必定不是最后一页
+		        this.getList({page: 1}).then(() => {})
+	        }
+	     })
+    			
+    	} 
    	}
    	
     mounted(){
-    	console.log("修改成功了")
     }
 
-    //控制音频
-    controlAudio(e){
-      this.saveAudio=e.nowaudio;
-      this.nowItem=e.nowItem;
-      console.log(e,"我是传递过来的对象")
-    }
     
     //路由跳转more
     toMore(){
-    	
-    	console.log(this.communityId);
     	let that=this;
     	this.$router.push({path:'/introduce/:communityId/more',query:{communityId:this.communityId,classmateNum:this.pageInfo.joinedNum}})
     }
@@ -452,61 +437,28 @@
     }
     async pageInit () {
       const { communityId } = this.$route.params
-
-      switch (communityId) {
-        case '64074da38681f864082708b9be959e08':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-          //新增
-      	case 'aa3b415b564bd95b27da2f0e9c986e6a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '25c2ff088da3f757b685a318ab050b5a':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-      	case '8fd72f707af6071a2a7d7bc6693a8ace':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-        case '67917ba04abd74c3247245576b1168b0':
-          this.qrSrc = require('@/assets/page/qr_gzh_2.png')
-          break
-          //新增
-        default:
-          this.qrSrc = require('@/assets/page/qr_gzh_1.png')
-          break
-      }
-
       this.pagination.end = false // 初始化数据，必定不是最后一页
-
       let res = await this.getCommunity(communityId)
-
-      console.log('=========',res)
+      // 是否是新型课程塔
+      if(res.isCourse === 3 || res.isCourse === 4){
+        this.$router.replace(`/introduce2/${communityId}/community`)
+        return
+      }
+      this.qrSrc = res.sellImg
       //嘉宾身份
       if(res.isAuthor == 0){
           let res2 = await this.getRoleInfo(communityId)
           if(res2.role && (res2.role.code =='guests'||res2.role.code =='special_guests')){
             res.isAuthor = 1;
           }
-          console.log('+++++++++++++++++++++',res2)
       }
       this.pageInfo = res
-      
-//    let role= await this.getRoleInfo(communityId)
-//    this.roleInfo=role
-//    console.log(role)
-
-//			this.getRoleInfo(communityId).then(res=>{
-////				console.log("77777777777777",res)
-//			})
-      
       await this.getList({page: 1})
 
       this.$nextTick(() => {
       	if(this.$refs['community-title']){
       		this.communityTitleTop = this.$refs['community-title'].offsetTop
       	}
-        console.log(this.$refs)
-        //console.log(this.$refs['community-title'].offsetTop)
       })
 
 
@@ -519,8 +471,12 @@
         this.displaySuspensionInput = false
         this.dynamicList = []
         this.showType = type
-//      this.$router.replace(`/introduce/${this.$route.params.communityId}/community?type=${type}`)
         this.showIdentification = !type
+        if (type === 1) {
+          this.isPlayList = true
+        } else {
+          this.isPlayList = false
+        }
 				this.pagination.busy = false
         this.pagination.end = false // 初始化数据，必定不是最后一页
         this.getList({page: 1}).then(() => {})
@@ -550,7 +506,6 @@
     }
     posted(){
     	let code=this.roleInfo.code
-    	console.log(code)
     	// :todo 发帖
         this.$router.push(`/publish/${this.$route.params.communityId}?type=0&code=${code}&codeType=${this.type}`)
     }
@@ -666,7 +621,6 @@
      * 获取朋友圈列表
      **/
     getCirclesList (params) {
-
 					return getCirclesApi(params)
     }
     /**
@@ -687,10 +641,15 @@
       }
       page = page || this.pagination.page || 1
       pageSize = pageSize || this.pagination.pageSize
+
       const params = {
         communityId: this.$route.params.communityId,
         page: page,
-        pageCount: pageSize
+        pageCount: pageSize,
+      }
+
+      if(!this.showType){
+        params.sort = this.userSort
       }
 
       this.pagination.busy = true
@@ -718,7 +677,6 @@
         }
       })
 
-      console.log(temp)
       if (page === 1) {
         this.dynamicList = temp
       } else {
@@ -731,7 +689,6 @@
       this.pagination.end = this.isLastPage
       this.pagination.busy = false
 
-      console.log('-------',this.pagination.end)
     }
 
     /**
@@ -781,9 +738,6 @@
     }
 
     scroll (e) {
-//  	e.target.scrollTop=sessionStorage.getItem("scrollTop")
-//  	e.target.scrollTop=1000;
-//  	console.log(e.target,"我是scroll信息")
       if (this.displaySuspensionInput) {
         this.displaySuspensionInput = false
       }
@@ -791,17 +745,286 @@
       const {scrollTop} = e.target
       sessionStorage.setItem('scrollTop',scrollTop);
       if (communityTitleTop) {
-//      const {scrollTop} = e.target
-//      sessionStorage.setItem('scrollTop',scrollTop);
         this.isCommunityTitleFixed = scrollTop >= communityTitleTop
       }
+    }
+
+
+    /**
+     * 获取相关推荐
+     */
+    getRecommendList(communityId){
+      let data = {
+        communityId: communityId,
+      }
+      getRecommendApi(data).then(res=>{
+        console.log(res)
+        this.relevantList = res
+      })
+    }
+    //置顶列表
+    getTopList(communityId){
+      if(communityId){
+        topPostListApi({communityId: communityId}).then((res)=>{
+          if(res.length>0){
+            let tit = ''
+            for(let i = 0;res.length>i;i++){
+              tit = ''
+              switch (res[i].circleType) {
+                case 1:
+                  tit = '【音频】'
+                  break
+                case 2:
+                  tit = '【视频】'
+                  break
+                case 3:
+                  tit = '【图片】'
+                  break
+                case 4:
+                  tit = '【文件】'
+                  break
+              }
+              res[i].tit = tit
+            }
+          }
+          this.topList = res
+        })
+      }
+    }
+
+    setSort(){
+      this.userSort = this.userSort == 1? 2 : 1
+      this.pagination.end = false
+      this.pagination.busy = false
+      this.getList({page: 1})
+    }
+
+    opMember(e){
+      this.userOpActionsheet.show = true
+      this.userOpActionsheet.menus = e.menus
+      this.nowUserOpItem = e.item
+    }
+
+    handleUserOpActionsheetItem (key, item) {
+      switch (key) {
+        case '1':
+          this.topOp()
+          break
+        case '2':
+          this.topOp()
+          break
+        case '3':
+          this.delMsg()
+          break
+        default:
+          break
+      }
+    }
+    /**
+     * 帖子置顶 or op
+     */
+    topOp(){
+      console.log(this.nowUserOpItem)
+      let data = {
+        communityId: this.communityId,
+        postId: this.nowUserOpItem.circleId
+      }
+      let that = this
+      let nowItem = this.nowUserOpItem
+      let topPostStatus = nowItem.topPostStatus
+
+      if(topPostStatus == 0){
+        if(this.topList.length==3){
+          this.$vux.confirm.show({
+            content: '置顶这条帖子将会自动取消第一条置顶的帖子，请确认哦',
+            confirmText: '确定',
+            cancelText: '取消',
+            // 组件除show外的属性
+            onCancel () {
+            },
+            onConfirm () {
+              that.topList.pop()
+              that.topOp()
+            }
+          })
+          return
+        }
+        addTopApi(data).then(res=>{
+          that.opTopList(1,nowItem)
+          that.dynamicList[nowItem.itemIndex].topPostStatus = !that.dynamicList[nowItem.itemIndex].topPostStatus
+          that.nowUserOpItem = {}
+        },res=>{
+          this.$vux.toast.text('失败', res.message)
+        })
+      }else {
+        delTopApi(data).then(res=>{
+          that.opTopList(2,nowItem)
+          that.dynamicList[nowItem.itemIndex].topPostStatus = !that.dynamicList[nowItem.itemIndex].topPostStatus
+          that.nowUserOpItem = {}
+        },res=>{
+          this.$vux.toast.text('失败', res.message)
+        })
+      }
+    }
+
+    //1增加 2删除
+    opTopList(type,item){
+      if( type && item){
+        if(type == 1){  
+          
+          let circleType = item.circleType
+          let tit = ''
+
+          switch (circleType) {
+            case 1:
+              tit = '【音频】'
+              break
+            case 2:
+              tit = '【视频】'
+              break
+            case 3:
+              tit = '【图片】'
+              break
+            case 4:
+              tit = '【文件】'
+              break
+          }
+          item.tit = tit
+          this.topList.unshift(item)
+        }else if(type === 2){
+          for(let i = 0;this.topList.length>i;i++){
+            if(this.topList[i].circleId == item.circleId){
+              this.topList.splice(i,1)
+              return
+            }
+          }
+        }
+      }
+    }
+
+    /**
+     * 点击卡片
+     */
+    handleTapCard (item) {
+        let url = ''
+        if(item && (item.isCourse == 3 || item.isCourse == 4)){
+          url = `/introduce2/${item.communityId}`
+        }else {
+          url = `/introduce/${item.communityId}`
+        }
+        this.$router.push(url)
+    }
+
+    delMsg(){
+      let that = this
+      if(this.nowUserOpItem.modelType === 'post'){
+        let data = {
+          id: this.nowUserOpItem.circleId,
+          modelType : 'post'
+        }
+        deltePostApi(data).then(res=>{
+          that.dynamicList.splice(that.nowUserOpItem.itemIndex,1)
+        },res=>{
+          that.$vux.toast.text('删除失败', res.message )
+        })
+      }
+      //。删除帖子todo
+    }
+
+    toDetails (index) { // 去朋友圈、帖子、问题详情
+      let item = this.topList[index]
+      let {circleType, circleId} = item
+      //成员交流详情需要显示操作栏
+      let url = ''
+      if(!this.showType){
+        url = `/details/${circleId}/2?communityId=${this.communityId}&isShowOp=${1}`
+      }else {
+        url = `/details/${circleId}/2?communityId=${this.communityId}`
+      }
+      this.$router.push(url)
     }
   }
 </script>
 <style lang="less" scoped type="text/less">
   @import "../../styles/variables";
   @import "../../styles/mixins";
+  @import "../../styles/dprPx";
 
+  .recommend_list {
+    padding-left: 20px;
+    .rem_blo {
+      height: 50px;
+      border-bottom: 0.5px solid #cccccc;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      .blo_icon {
+        flex-shrink: 0;
+        height: 20px;
+        width: 20px;
+        background:rgba(255,226,102,1);
+        border-radius: 50%;
+        margin-right: 8px;
+
+      }
+      .blo_tit {
+        .fontSize(16);
+        font-family: PingFangSC-Light;
+        color: rgba(53,64,72,1);
+        line-height: 20px;
+      }
+      .blo_to_warp {
+        flex: 1;
+        height: 15px;
+        min-width: 15px;
+        margin-left: 2px;
+        margin-right: 20px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      .blo_icon_to {
+        height: 15px;
+        width: 15px;
+      }
+    }
+  }
+  .course_top {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .fontSize(14);
+    font-family: PingFangSC-Light;
+    align-items: center;
+    margin: 0 15px 0px 20px;
+    &.one {
+      background:rgba(249,249,249,1);
+      padding: 0 15px 0px 20px;
+      margin: 0;
+    }
+    .top_left {
+      color: rgba(146,146,146,1);
+      line-height: 40px;
+      .le_sp {
+        color: #D7AB70;
+      }
+    }
+    .top_right {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      color: #D7AB70;
+      .right_icon {
+        background: rgba(255,255,255,0.01);
+        margin-right: 3px;
+        width: 15px;
+        height: 15px;
+      }
+    }
+  }
   .big-shot-community {
     box-sizing: border-box;
     height: 100%;
@@ -825,7 +1048,7 @@
         height: 32px;
         border-radius: 50px 0 0 50px;
         background-color: rgba(255, 255, 255, .8);
-        font-size: 15px;
+        .fontSize(15);
         line-height: 32px;
         color: #d7ab70;
         display: flex;
@@ -849,7 +1072,7 @@
         padding-left: 10px;
         min-width: 85px;
         background-color: #ffe266;
-        font-size: 13px;
+        .fontSize(13);
         color: #354048;
         z-index: 99;
       }
@@ -860,7 +1083,7 @@
         padding-right: 7px;
         background-color: #ffe266;
         width: inherit;
-        font-size: 13px;
+        .fontSize(13);
         color: #354048;
         z-index: 99;
       }
@@ -868,15 +1091,43 @@
       .share-group {
         position: absolute;
         right: 10px;
-        top: 15px;
-        background: #fff;
+        top: 25px;
         line-height: 1;
         font-size: 0;
-        border-radius: 16px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
-        overflow: hidden;
         z-index: 99;
+        border-radius: 16px;
+        height: 32px;
+        .group_wrap {
+          overflow: hidden;
+          width: 100%;
+          height: 32px;
+          border-radius: 16px;
+          background: #fff;
+        }
+        .money_other {
+          width: 60px;
+          height: 23px;
+          position: absolute;
+          right: 0;
+          top: -20px;
+          border-raidus: 40px;
+          .fontSize(12);
+          font-family:PingFangSC-Regular;
+          color:rgba(53,64,72,1);
+          line-height:18px;
+          text-align: center;
+          z-index: 100;
 
+          img {
+            width: 60px;
+            height: 23px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: -1;
+          }
+        }
         &.fixed {
           position: fixed;
         }
@@ -884,15 +1135,15 @@
         .u-btn {
           position: relative;
           line-height: 18px;
-          font-size: 13px;
+          .fontSize(12);
           color: @font-color-default;
 
           &:first-child {
-            padding: 8px 12px 6px 15px;
+            padding: 8px 10px 6px 12px;
           }
 
           &:last-child {
-            padding: 8px 15px 6px 12px;
+            padding: 8px 13px 6px 10px;
           }
 
           &.home,
@@ -903,7 +1154,12 @@
               background: #f1f1f1;
             }
           }
-
+          &.type_2 {
+            padding: 8px 10px 6px 12px;
+          }
+          &.type_3 {
+            padding: 6px 11px 6px 10px;
+          }
           &.share:after {
             content: " ";
             display: block;
@@ -917,6 +1173,8 @@
 
           &.invite,
           &.money {
+            height: 32px;
+            padding: 0px 15px 0px 12px;
             background: #ffe266;
           }
         }
@@ -939,7 +1197,7 @@
           /*padding: 0 10px;*/
           /*background: none;*/
           line-height: 28px;
-          font-size: 13px;
+          .fontSize(13);
           /*color: rgba(255, 255, 255, .8);*/
          	color:#000;
          	background: #FFE266;
@@ -975,7 +1233,7 @@
         display: block;
         flex: 1 1 auto;
         text-align: center;
-        font-size: 16px;
+        .fontSize(16);
         //font-family: PingFangSC-Medium;
         font-weight: 300;
         &:active {
@@ -1021,7 +1279,7 @@
     }
 
     & .container {
-      font-size: 15px;
+      .fontSize(15);
 
       & .classmate-list {
         margin: 20px 15px 0 15px;
@@ -1034,7 +1292,7 @@
         align-content: center;
         height: 30px;
         color: #929292;
-        font-size: 12px;
+        .fontSize(12);
 
         & .people-count {
           display: flex;
@@ -1043,7 +1301,7 @@
 
           & span {
             padding: 0 14px;
-            font-size: 15px;
+            .fontSize(15);
           }
           & .icon {
             width: 16px;
@@ -1080,7 +1338,7 @@
           justify-content: center;
           align-items: center;
 
-          font-size: 13px;
+          .fontSize(13);
           color: #bcbcbc;
 
           & img {
@@ -1108,7 +1366,7 @@
       flex-flow: column nowrap;
       justify-content: center;
       align-items: center;
-      font-size: 11px;
+      .fontSize(12);
       color: #d7ab70;
 
       & img {
@@ -1133,7 +1391,7 @@
         border-radius: 0;
         height: 50px;
         line-height: 50px;
-        font-size: 16px;
+        .fontSize(16);
         border-style: none;
         //font-family: PingFangSC-Regular;
         color: #354048;
@@ -1151,7 +1409,7 @@
           position: absolute;
           right:  -2px;
           top: 3px;
-          font-size: 11px;
+          .fontSize(12);
           /*background-color: #ff4949;*/
           /*border-radius: 50%;*/
           /*line-height: 1;*/
@@ -1184,7 +1442,7 @@
         height: 50px;
         line-height: 50px;
         color: #666666;
-        font-size: 16px;
+        .fontSize(16);
         border-style: none;
         color: #354048;
         & .desc {
@@ -1200,7 +1458,7 @@
           position: absolute;
           right: -2px;
           top: 3px;
-          font-size: 10px;
+          .fontSize(12);
           /*background-color: #ff4949;*/
           /*border-radius: 50%;*/
           /*line-height: 1;*/
@@ -1256,7 +1514,7 @@
         justify-content: center;
         align-items: center;
         padding: 45px 0;
-        font-size: 15px;
+        .fontSize(15);
         color: #666666;
 
         & .Qr {
@@ -1270,6 +1528,9 @@
           height: 100%;
           vertical-align: middle;
           text-align: center;
+        }
+        p {
+          padding: 0 30px;
         }
       }
     }
