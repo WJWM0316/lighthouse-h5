@@ -178,14 +178,14 @@ export default class App extends Vue {
     {
       icon: require('./assets/icon/tab-massage-2@3x.png'),
       selectIcon: require('./assets/icon/tab-massage-1@3x.png'),
-      src: '/message',
-      label: '消息'
+      src: '/joined',
+      label: '我的课程'
     },
     {
       icon: require('./assets/icon/tab-me-2@3x.png'),
       selectIcon: require('./assets/icon/tab-me-1@3x.png'),
       src: '/center',
-      label: '我的'
+      label: '个人中心'
     }
   ]
   data () {

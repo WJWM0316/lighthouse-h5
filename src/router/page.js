@@ -191,6 +191,13 @@ const routers = [
     name: 'trainingCampDetail',
     meta: {navHide: true},
     component: resolve => require(['@/views/introduce/trainingCampDetail'], resolve),
+  },
+  {
+    // 直播
+    path: '/liveDetail',
+    name: 'liveDetail',
+    meta: {navHide: true,keepAlive:true},
+    component: resolve => require(['@/views/introduce/live/liveDetail'], resolve),
   }
 ]
 

@@ -46,7 +46,7 @@ const homeRoutes = [
   {
     path: '/joined',
     name: 'joined',
-    component: resolve => require(['@/views/home/index'], resolve),
+    component: resolve => require(['@/views/home/joined'], resolve),
   },
   // {
   //   path: '/find',

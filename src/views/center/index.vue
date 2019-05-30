@@ -18,8 +18,23 @@
       </div>
     </div>
 
+
+    <ul class="center_nav">
+      <li class="" @click="navTo('home')">
+        <img src="./../../assets/page/empty.png" alt="">
+        <div class="">我的主页</div>
+      </li>
+      <li class="" @click="navTo('joined')">
+        <img src="./../../assets/page/empty.png" alt="">
+        <div class="">我的课程</div>
+      </li>
+      <li class="" @click="navTo('message')">
+        <img src="./../../assets/page/empty.png" alt="">
+        <div class="">我的消息</div>
+      </li>
+    </ul>
     <div class="navs">
-      <router-link to="/joined" class="item">
+      <!-- <router-link to="/joined" class="item">
         <div class="left">
           <i class="icon u-icon-center-light" />
           <span class="title">我加入的灯塔</span>
@@ -27,7 +42,7 @@
         <div class="addon">
           <i class="addon-icon u-icon-center-angle-right" />
         </div>
-      </router-link>
+      </router-link> -->
       <router-link :to="model.isCommunity === 1 ? '/center/liteCenter' : '/center/createLite'" class="item">
         <div class="left">
           <i class="icon u-icon-center-create" />
@@ -59,7 +74,7 @@
         </div>
       </router-link>
       <!--我的主页-->
-      <router-link :to="`/userInfo/${model.userId}/details`" class="item">
+      <!-- <router-link :to="`/userInfo/${model.userId}/details`" class="item">
         <div class="left">
           <i class="icon u-icon-center-home" />
           <span class="title">我的主页</span>
@@ -67,7 +82,7 @@
         <div class="addon">
           <i class="addon-icon u-icon-center-angle-right" />
         </div>
-      </router-link>
+      </router-link> -->
 
       <div class="navs_blo">
         <router-link :to="`/center/help`" class="blo_item">
@@ -111,11 +126,16 @@ export default class HomeIndex extends Vue {
     }
   }
 
+  navTo (type) {
+    console.log(type)
+    this.$router.push({name: type})
+  }
+
   /**
    * 创建灯塔
    */
   handleCreate () {
-//    this.$router.push({name: 'center-create'})
+    //this.$router.push({name: 'center-create'})
     this.$vux.alert.show({
       title: '创建灯塔请联系',
       content: '小灯塔客服：020-28163063或添加客服微信：zike03',
@@ -124,11 +144,40 @@ export default class HomeIndex extends Vue {
   }
 }
 </script>
-
-<style lang="less" type="text/less">
+<!--  -->
+<style lang="less"  type="text/less">
 @import "../../styles/variables";
 @import "../../styles/mixins";
-
+.center_nav {
+  width: 330px;
+  height: 78px;
+  background: rgba(255,255,255,1);
+  box-shadow: 0px 8px 26px 0px rgba(169,166,151,0.16);
+  border-radius: 3px;
+  margin: auto;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  li {
+    height: 78px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    font-size:12px;
+    font-family:PingFangSC-Light;
+    font-weight:300;
+    color:rgba(102,102,102,1);
+    line-height:16px;
+    img {
+      width:24px;
+      margin: 0 auto;
+      height:24px;
+      margin-bottom: 6px;
+    }
+  }
+}
 
 .u-icon-center-light {
   background-image: url("../../assets/icon/icon_list_aboutlh@3x.png");
